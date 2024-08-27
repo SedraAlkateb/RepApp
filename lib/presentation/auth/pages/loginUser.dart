@@ -1,4 +1,5 @@
 import 'package:domina_app/home.dart';
+import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:flutter/material.dart';
 
 class MyLogin extends StatefulWidget {
@@ -16,7 +17,7 @@ class _MyLoginState extends State<MyLogin> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('lib/Assets/Images/login.png'),
+            image: AssetImage(ImageAssets.login),
             fit: BoxFit.cover),
       ),
       child: Scaffold(
