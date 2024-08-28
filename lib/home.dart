@@ -1,7 +1,6 @@
 import 'package:domina_app/Products.dart';
-import 'package:domina_app/places.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:vertical_card_pager/vertical_card_pager.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({
@@ -115,9 +114,10 @@ final List<Widget> images = [
                 leading: const Icon(Icons.location_city),
                 title: const Text(' All Places'),
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(builder: (context) => const Places()),
+                    Routes.places
+
                   );
                 },
               ),

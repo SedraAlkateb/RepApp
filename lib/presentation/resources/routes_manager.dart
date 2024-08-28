@@ -1,5 +1,5 @@
-import 'package:domina_app/places.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
+import 'package:domina_app/presentation/places/pages/places.dart';
 import 'package:domina_app/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 class Routes {
@@ -16,7 +16,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>    const MyLogin());
       case Routes.places:
       //     initLoginModule();
-        return MaterialPageRoute(builder: (_) =>    const Places());
+        return MaterialPageRoute(builder: (_) =>     Places());
       default:
         return unDefinedRoute();
     }

@@ -1,8 +1,10 @@
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
  
 class Places extends StatelessWidget {
-  const Places({super.key});
-
+   Places({super.key});
+List<String> places=["d","D","d","d","D","d"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,127 +13,54 @@ class Places extends StatelessWidget {
         title: Text(
             'Representative Places'),
       ),
-      body: Container(
-        child: ListView(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal:8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
-            ListTile(
-              subtitle: Column(
-                children: <Widget>[
-                  Row(crossAxisAlignment: CrossAxisAlignment.center,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+
+                children: [
+                  Icon(Icons.location_city),
+
+                  Text("   All Place",style: Theme.of(context).textTheme.titleMedium,),
+                ],
+              ),
+
+            ),
+            Text("click to show all Doctor,Pharmacy,Hospital in place",),
+            Expanded(
+              child: ListView.builder
+                (
+                  itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.all(AppPadding.p8),
+                  padding: EdgeInsets.all(AppPadding.p16),
+                  //    height: AppSize.s150,
+                  decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    border:
+                    Border.all(color: ColorManager.hintGrey),
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(AppSize.s8)),
+                    //        color: ColorManager.card,
+                  ),
+                  child: Row(
                     children: [
-                      Wrap(runSpacing: 8, spacing: 8, children: [
-                        ActionChip(
-                          label: Text("Damar"),
-                          labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                          backgroundColor: Color.fromARGB(255, 20, 38, 48),
-                          onPressed: () => print("Perform some action here"),
-                        )
-                      ]),
-                   
-                      Wrap(runSpacing: 8, spacing: 8, children: [
-                        ActionChip(
-                          label: Text("Midan"),
-                          labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                          backgroundColor: Color.fromARGB(255, 20, 38, 48),
-                          onPressed: () => print("Perform some action here"),
-                        )
-                      ]),
-                      Wrap(runSpacing: 8, spacing: 8, children: [
-                        ActionChip(
-                          label: Text("Mazzah"),
-                          labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                          backgroundColor: Color.fromARGB(255, 20, 38, 48),
-                          onPressed: () => print("Perform some action here"),
-                        )
-                      ]),
+                      Text(places[index])
                     ],
                   ),
-                  Text(
-                    'First week',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  MaterialButton(
-                      color: Color.fromARGB(255, 20, 38, 48),
-                      child: Text(
-                          style: TextStyle(color: Colors.white),
-                          'Show the daily plan for this week'),
-                      onPressed: () {})
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 0.02,
-            ),
-            ListTile(
-              subtitle: Column(
-                children: <Widget>[
-                  Text(
-                    'Second week',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  MaterialButton(
-                      color: Color.fromARGB(255, 20, 38, 48),
-                      child: Text(
-                          style: TextStyle(color: Colors.white),
-                          'Show the daily plan for this week'),
-                      onPressed: () {})
-                ],
-              ),
-            ),
-            ListTile(
-              subtitle: Column(
-                children: <Widget>[
-                  Text(
-                    'Third week',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  MaterialButton(
-                      color: Color.fromARGB(255, 20, 38, 48),
-                      child: Text(
-                          style: TextStyle(color: Colors.white),
-                          'Show the daily plan for this week'),
-                      onPressed: () {})
-                ],
-              ),
-            ),
-            ListTile(
-              subtitle: Column(
-                children: <Widget>[
-                  Text(
-                    'Fourth week',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  MaterialButton(
-                      color: Color.fromARGB(255, 20, 38, 48),
-                      child: Text(
-                          style: TextStyle(color: Colors.white),
-                          'Show the daily plan for this week'),
-                      onPressed: () {})
-                ],
-              ),
+                );
+              }, itemCount: places.length),
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }
