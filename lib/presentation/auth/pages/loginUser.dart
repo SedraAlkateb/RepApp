@@ -1,5 +1,6 @@
 import 'package:domina_app/home.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 
 class MyLogin extends StatefulWidget {
@@ -96,14 +97,11 @@ class _MyLoginState extends State<MyLogin> {
                                       onPressed: () {
                                         if (formKey.currentState!.validate())
                                        {
-                                          Navigator.push(
+                                          Navigator.pushNamed(
                                           context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MyHomePage()),
+                                            Routes.places
                                         );
                                            formKey.currentState!.save();
-
                                         }
 
                                       },

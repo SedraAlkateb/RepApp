@@ -7,13 +7,8 @@ class Places extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 20, 38, 48),
+
         title: Text(
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'DancingScript',
-              fontSize: 20,
-            ),
             'Representative Places'),
       ),
       body: Container(
