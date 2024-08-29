@@ -19,7 +19,9 @@ mixin _$LoginObject {
   String get userName => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginObjectCopyWith<LoginObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$LoginObjectCopyWithImpl<$Res, $Val extends LoginObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LoginObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,6 +85,8 @@ class __$$LoginObjectImplCopyWithImpl<$Res>
       _$LoginObjectImpl _value, $Res Function(_$LoginObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LoginObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -129,7 +135,9 @@ class _$LoginObjectImpl implements _LoginObject {
   @override
   int get hashCode => Object.hash(runtimeType, userName, password);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginObjectImplCopyWith<_$LoginObjectImpl> get copyWith =>
@@ -144,8 +152,11 @@ abstract class _LoginObject implements LoginObject {
   String get userName;
   @override
   String get password;
+
+  /// Create a copy of LoginObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginObjectImplCopyWith<_$LoginObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -154,7 +165,9 @@ abstract class _LoginObject implements LoginObject {
 mixin _$ProfileObject {
   int get user_id => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ProfileObjectCopyWith<ProfileObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -178,6 +191,8 @@ class _$ProfileObjectCopyWithImpl<$Res, $Val extends ProfileObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ProfileObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -211,6 +226,8 @@ class __$$ProfileObjectImplCopyWithImpl<$Res>
       _$ProfileObjectImpl _value, $Res Function(_$ProfileObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -249,7 +266,9 @@ class _$ProfileObjectImpl implements _ProfileObject {
   @override
   int get hashCode => Object.hash(runtimeType, user_id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ProfileObjectImplCopyWith<_$ProfileObjectImpl> get copyWith =>
@@ -261,8 +280,11 @@ abstract class _ProfileObject implements ProfileObject {
 
   @override
   int get user_id;
+
+  /// Create a copy of ProfileObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProfileObjectImplCopyWith<_$ProfileObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -283,7 +305,9 @@ mixin _$SignUpObject {
   File? get image => throw _privateConstructorUsedError;
   int get university_id => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignUpObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SignUpObjectCopyWith<SignUpObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -320,6 +344,8 @@ class _$SignUpObjectCopyWithImpl<$Res, $Val extends SignUpObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SignUpObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -426,6 +452,8 @@ class __$$SignUpObjectImplCopyWithImpl<$Res>
       _$SignUpObjectImpl _value, $Res Function(_$SignUpObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignUpObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -595,7 +623,9 @@ class _$SignUpObjectImpl implements _SignUpObject {
       image,
       university_id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignUpObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignUpObjectImplCopyWith<_$SignUpObjectImpl> get copyWith =>
@@ -644,8 +674,11 @@ abstract class _SignUpObject implements SignUpObject {
   File? get image;
   @override
   int get university_id;
+
+  /// Create a copy of SignUpObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignUpObjectImplCopyWith<_$SignUpObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -666,7 +699,9 @@ mixin _$UpdateStudentObject {
   File? get image => throw _privateConstructorUsedError;
   int? get university_id => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateStudentObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateStudentObjectCopyWith<UpdateStudentObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -703,6 +738,8 @@ class _$UpdateStudentObjectCopyWithImpl<$Res, $Val extends UpdateStudentObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateStudentObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -809,6 +846,8 @@ class __$$UpdateStudentObjectImplCopyWithImpl<$Res>
       $Res Function(_$UpdateStudentObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateStudentObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -977,7 +1016,9 @@ class _$UpdateStudentObjectImpl implements _UpdateStudentObject {
       image,
       university_id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateStudentObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateStudentObjectImplCopyWith<_$UpdateStudentObjectImpl> get copyWith =>
@@ -1026,8 +1067,11 @@ abstract class _UpdateStudentObject implements UpdateStudentObject {
   File? get image;
   @override
   int? get university_id;
+
+  /// Create a copy of UpdateStudentObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateStudentObjectImplCopyWith<_$UpdateStudentObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1038,7 +1082,9 @@ mixin _$ResetPasswordObject {
   int get code => throw _privateConstructorUsedError;
   String get newPassword => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResetPasswordObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResetPasswordObjectCopyWith<ResetPasswordObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1062,6 +1108,8 @@ class _$ResetPasswordObjectCopyWithImpl<$Res, $Val extends ResetPasswordObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResetPasswordObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1105,6 +1153,8 @@ class __$$ResetPasswordObjectImplCopyWithImpl<$Res>
       $Res Function(_$ResetPasswordObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResetPasswordObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1160,7 +1210,9 @@ class _$ResetPasswordObjectImpl implements _ResetPasswordObject {
   @override
   int get hashCode => Object.hash(runtimeType, email, code, newPassword);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResetPasswordObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResetPasswordObjectImplCopyWith<_$ResetPasswordObjectImpl> get copyWith =>
@@ -1179,8 +1231,11 @@ abstract class _ResetPasswordObject implements ResetPasswordObject {
   int get code;
   @override
   String get newPassword;
+
+  /// Create a copy of ResetPasswordObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResetPasswordObjectImplCopyWith<_$ResetPasswordObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1191,7 +1246,9 @@ mixin _$LostItemObject {
   String get description => throw _privateConstructorUsedError;
   File? get image => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LostItemObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LostItemObjectCopyWith<LostItemObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1215,6 +1272,8 @@ class _$LostItemObjectCopyWithImpl<$Res, $Val extends LostItemObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LostItemObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1258,6 +1317,8 @@ class __$$LostItemObjectImplCopyWithImpl<$Res>
       _$LostItemObjectImpl _value, $Res Function(_$LostItemObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LostItemObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1313,7 +1374,9 @@ class _$LostItemObjectImpl implements _LostItemObject {
   @override
   int get hashCode => Object.hash(runtimeType, tripId, description, image);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LostItemObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LostItemObjectImplCopyWith<_$LostItemObjectImpl> get copyWith =>
@@ -1332,8 +1395,11 @@ abstract class _LostItemObject implements LostItemObject {
   String get description;
   @override
   File? get image;
+
+  /// Create a copy of LostItemObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LostItemObjectImplCopyWith<_$LostItemObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1347,7 +1413,9 @@ mixin _$DailyReservationObject {
   int get seet => throw _privateConstructorUsedError;
   String get fcm_token => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DailyReservationObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DailyReservationObjectCopyWith<DailyReservationObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1378,6 +1446,8 @@ class _$DailyReservationObjectCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DailyReservationObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1445,6 +1515,8 @@ class __$$DailyReservationObjectImplCopyWithImpl<$Res>
       $Res Function(_$DailyReservationObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DailyReservationObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1527,7 +1599,9 @@ class _$DailyReservationObjectImpl implements _DailyReservationObject {
   int get hashCode => Object.hash(
       runtimeType, tripId, name, phone, transfer_position_id, seet, fcm_token);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DailyReservationObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DailyReservationObjectImplCopyWith<_$DailyReservationObjectImpl>
@@ -1556,8 +1630,11 @@ abstract class _DailyReservationObject implements DailyReservationObject {
   int get seet;
   @override
   String get fcm_token;
+
+  /// Create a copy of DailyReservationObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DailyReservationObjectImplCopyWith<_$DailyReservationObjectImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1568,7 +1645,9 @@ mixin _$ChangePasswordObject {
   String get oldPassword => throw _privateConstructorUsedError;
   String get newPassword => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChangePasswordObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChangePasswordObjectCopyWith<ChangePasswordObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1596,6 +1675,8 @@ class _$ChangePasswordObjectCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChangePasswordObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1642,6 +1723,8 @@ class __$$ChangePasswordObjectImplCopyWithImpl<$Res>
       $Res Function(_$ChangePasswordObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChangePasswordObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1702,7 +1785,9 @@ class _$ChangePasswordObjectImpl implements _ChangePasswordObject {
   int get hashCode => Object.hash(
       runtimeType, newPassword_confirmation, oldPassword, newPassword);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChangePasswordObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChangePasswordObjectImplCopyWith<_$ChangePasswordObjectImpl>
@@ -1723,8 +1808,11 @@ abstract class _ChangePasswordObject implements ChangePasswordObject {
   String get oldPassword;
   @override
   String get newPassword;
+
+  /// Create a copy of ChangePasswordObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChangePasswordObjectImplCopyWith<_$ChangePasswordObjectImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1738,7 +1826,9 @@ mixin _$CreateSalonObject {
   String get lat => throw _privateConstructorUsedError;
   String get lng => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateSalonObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CreateSalonObjectCopyWith<CreateSalonObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1768,6 +1858,8 @@ class _$CreateSalonObjectCopyWithImpl<$Res, $Val extends CreateSalonObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CreateSalonObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1832,6 +1924,8 @@ class __$$CreateSalonObjectImplCopyWithImpl<$Res>
       $Res Function(_$CreateSalonObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CreateSalonObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1912,7 +2006,9 @@ class _$CreateSalonObjectImpl implements _CreateSalonObject {
   int get hashCode =>
       Object.hash(runtimeType, name, desc, image, status, lat, lng);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateSalonObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CreateSalonObjectImplCopyWith<_$CreateSalonObjectImpl> get copyWith =>
@@ -1941,8 +2037,11 @@ abstract class _CreateSalonObject implements CreateSalonObject {
   String get lat;
   @override
   String get lng;
+
+  /// Create a copy of CreateSalonObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateSalonObjectImplCopyWith<_$CreateSalonObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1953,7 +2052,9 @@ mixin _$CreateAdminObject {
   String? get password => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateAdminObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CreateAdminObjectCopyWith<CreateAdminObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1977,6 +2078,8 @@ class _$CreateAdminObjectCopyWithImpl<$Res, $Val extends CreateAdminObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CreateAdminObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2020,6 +2123,8 @@ class __$$CreateAdminObjectImplCopyWithImpl<$Res>
       $Res Function(_$CreateAdminObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CreateAdminObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2075,7 +2180,9 @@ class _$CreateAdminObjectImpl implements _CreateAdminObject {
   @override
   int get hashCode => Object.hash(runtimeType, name, password, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateAdminObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CreateAdminObjectImplCopyWith<_$CreateAdminObjectImpl> get copyWith =>
@@ -2094,8 +2201,11 @@ abstract class _CreateAdminObject implements CreateAdminObject {
   String? get password;
   @override
   int? get id;
+
+  /// Create a copy of CreateAdminObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateAdminObjectImplCopyWith<_$CreateAdminObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2109,7 +2219,9 @@ mixin _$CreateServiceObject {
   String get price => throw _privateConstructorUsedError;
   int get employeeId => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateServiceObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CreateServiceObjectCopyWith<CreateServiceObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2139,6 +2251,8 @@ class _$CreateServiceObjectCopyWithImpl<$Res, $Val extends CreateServiceObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CreateServiceObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2203,6 +2317,8 @@ class __$$CreateServiceObjectImplCopyWithImpl<$Res>
       $Res Function(_$CreateServiceObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CreateServiceObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2284,7 +2400,9 @@ class _$CreateServiceObjectImpl implements _CreateServiceObject {
   int get hashCode =>
       Object.hash(runtimeType, name, desc, image, status, price, employeeId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateServiceObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CreateServiceObjectImplCopyWith<_$CreateServiceObjectImpl> get copyWith =>
@@ -2313,8 +2431,11 @@ abstract class _CreateServiceObject implements CreateServiceObject {
   String get price;
   @override
   int get employeeId;
+
+  /// Create a copy of CreateServiceObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateServiceObjectImplCopyWith<_$CreateServiceObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2325,7 +2446,9 @@ mixin _$CreateEmployeeObject {
   String get salary => throw _privateConstructorUsedError;
   File? get image => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateEmployeeObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CreateEmployeeObjectCopyWith<CreateEmployeeObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2350,6 +2473,8 @@ class _$CreateEmployeeObjectCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CreateEmployeeObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2393,6 +2518,8 @@ class __$$CreateEmployeeObjectImplCopyWithImpl<$Res>
       $Res Function(_$CreateEmployeeObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CreateEmployeeObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2447,7 +2574,9 @@ class _$CreateEmployeeObjectImpl implements _CreateEmployeeObject {
   @override
   int get hashCode => Object.hash(runtimeType, name, salary, image);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateEmployeeObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CreateEmployeeObjectImplCopyWith<_$CreateEmployeeObjectImpl>
@@ -2467,8 +2596,11 @@ abstract class _CreateEmployeeObject implements CreateEmployeeObject {
   String get salary;
   @override
   File? get image;
+
+  /// Create a copy of CreateEmployeeObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateEmployeeObjectImplCopyWith<_$CreateEmployeeObjectImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -2481,7 +2613,9 @@ mixin _$CreateProductObject {
   String get quantity => throw _privateConstructorUsedError;
   String get price => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateProductObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CreateProductObjectCopyWith<CreateProductObject> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2506,6 +2640,8 @@ class _$CreateProductObjectCopyWithImpl<$Res, $Val extends CreateProductObject>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CreateProductObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2560,6 +2696,8 @@ class __$$CreateProductObjectImplCopyWithImpl<$Res>
       $Res Function(_$CreateProductObjectImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CreateProductObject
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2633,7 +2771,9 @@ class _$CreateProductObjectImpl implements _CreateProductObject {
   int get hashCode =>
       Object.hash(runtimeType, name, desc, image, quantity, price);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CreateProductObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CreateProductObjectImplCopyWith<_$CreateProductObjectImpl> get copyWith =>
@@ -2659,8 +2799,11 @@ abstract class _CreateProductObject implements CreateProductObject {
   String get quantity;
   @override
   String get price;
+
+  /// Create a copy of CreateProductObject
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateProductObjectImplCopyWith<_$CreateProductObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -34,7 +34,7 @@ class DioFactory{
     };
     String  to=await _appPreferences.getToken()??"";
     String token ="Bearer " + to;
-    String language ="en";
+    String language ="ar";
 
     Map<String,String> headers={
       CONTENT_TYPE:MULTIPART,

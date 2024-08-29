@@ -1,13 +1,32 @@
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
+import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
  
-class Places extends StatelessWidget {
+class Places extends StatefulWidget {
    Places({super.key});
-List<String> places=["d","D","d","d","D","d"];
+
+  @override
+  State<Places> createState() => _PlacesState();
+}
+
+class _PlacesState extends State<Places> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent(117));
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+        drawer: DrawerPage(),
       appBar: AppBar(
 
         title: Text(
@@ -35,28 +54,45 @@ List<String> places=["d","D","d","d","D","d"];
             ),
             Text("click to show all Doctor,Pharmacy,Hospital in place",),
             Expanded(
-              child: ListView.builder
-                (
-                  itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.all(AppPadding.p8),
-                  padding: EdgeInsets.all(AppPadding.p16),
-                  //    height: AppSize.s150,
-                  decoration: BoxDecoration(
-                    color: ColorManager.white,
-                    border:
-                    Border.all(color: ColorManager.hintGrey),
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(AppSize.s8)),
-                    //        color: ColorManager.card,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(places[index])
-                    ],
-                  ),
-                );
-              }, itemCount: places.length),
+              child: BlocConsumer<PlaceBloc, PlaceState>(
+  listener: (context, state) {
+    if(state is AllPlaceErrorState){
+      error(context, state.failure.massage, state.failure.code);
+    }
+  },
+  builder: (context, state) {
+    if(state is AllPlaceState){
+      List<PlaceModel> placeModel=state.places;
+      success(context);
+      return ListView.builder
+        (
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.all(AppPadding.p8),
+              padding: EdgeInsets.all(AppPadding.p16),
+              //    height: AppSize.s150,
+              decoration: BoxDecoration(
+                color: ColorManager.white,
+                border:
+                Border.all(color: ColorManager.hintGrey),
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(AppSize.s8)),
+                //        color: ColorManager.card,
+              ),
+              child: Row(
+                children: [
+                  Text(placeModel[index].title)
+                ],
+              ),
+            );
+          }, itemCount: placeModel.length);
+    }
+    if(state is AllPlaceLoadingState){
+      loading(context);
+    }
+    return SizedBox();
+  },
+),
             ),
           ],
         ),
