@@ -148,6 +148,16 @@ class Token {
   String token;
   Token(this.token);
 }
+class PlaceModel {
+  String id;
+  String title;
+  PlaceModel(this.id,this.title);
+}
+class SpecModel {
+  String id;
+  String title;
+  SpecModel(this.id,this.title);
+}
 
 class UpdateUser {
   String? first_name;

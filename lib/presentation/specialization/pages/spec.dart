@@ -3,21 +3,22 @@ import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  
-class Places extends StatelessWidget {
-   Places({super.key});
+class SpecializationsPage extends StatelessWidget {
+  SpecializationsPage({super.key});
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent(117));
+    BlocProvider.of<SpecializationBloc>(context).add(SpecEvent(117));
     return Scaffold(
-        drawer: DrawerPage(),
+    //  drawer:   DrawerPage(),
       appBar: AppBar(
 
         title: Text(
-            'Representative Places'),
+            'Representative Spec'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
@@ -34,22 +35,21 @@ class Places extends StatelessWidget {
                 children: [
                   Icon(Icons.location_city),
 
-                  Text("   All Place",style: Theme.of(context).textTheme.titleMedium,),
+                  Text("   All spec",style: Theme.of(context).textTheme.titleMedium,),
                 ],
               ),
 
             ),
-            Text("click to show all Doctor,Pharmacy,Hospital in place",),
             Expanded(
-              child: BlocConsumer<PlaceBloc, PlaceState>(
+              child: BlocConsumer<SpecializationBloc, SpecializationState>(
   listener: (context, state) {
-    if(state is AllPlaceErrorState){
+    if(state is AllSpecErrorState){
       error(context, state.failure.massage, state.failure.code);
     }
   },
   builder: (context, state) {
-    if(state is AllPlaceState){
-      List<PlaceModel> placeModel=state.places;
+    if(state is AllSpecState){
+      List<SpecModel> placeModel=state.Specs;
       success(context);
       return ListView.builder
         (
@@ -74,7 +74,7 @@ class Places extends StatelessWidget {
             );
           }, itemCount: placeModel.length);
     }
-    if(state is AllPlaceLoadingState){
+    if(state is AllSpecLoadingState){
       loading(context);
     }
     return SizedBox();

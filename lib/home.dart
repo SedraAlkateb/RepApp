@@ -1,4 +1,5 @@
 import 'package:domina_app/Products.dart';
+import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -75,64 +76,6 @@ final List<Widget> images = [
             ),
           ),
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: const EdgeInsets.all(0),
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 20, 38, 48),
-                ), //BoxDecoration
-                child: UserAccountsDrawerHeader(
-                  decoration:
-                      BoxDecoration(color: Color.fromARGB(255, 20, 38, 48)),
-                  accountName: Text(
-                    "Lina Al-Mahayni",
-                    style: TextStyle(fontSize: 18),
-                  ),
-
-                  currentAccountPictureSize: Size.square(50),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 20, 38, 48),
-                    child: Text(
-                      "L",
-                      style: TextStyle(fontSize: 30.0, color: Colors.blue),
-                    ), //Text
-                  ),
-                  accountEmail: null,
-                  //circleAvatar
-                ), //UserAccountDrawerHeader
-              ),
-              ListTile(
-                leading: const Icon(Icons.ballot),
-                title: const Text('All Plans'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ), //DrawerHeader
-              ListTile(
-                leading: const Icon(Icons.location_city),
-                title: const Text(' All Places'),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.places
-
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.medication),
-                title: const Text('All Products'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Products()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ));
+        drawer: DrawerPage());
   }
 }

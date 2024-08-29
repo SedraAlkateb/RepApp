@@ -3,10 +3,10 @@ import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/data/responses/responses.dart';
 
 abstract class RemoteDataSource{
-  Future<MessageResponse> logout(
-      );
+  Future<MessageResponse> logout();
   Future<TokenResponse > login(LoginRequest loginRequest);
-
+  Future<AllPlaceBaseResponse > allPlaces(int id);
+  Future<AllSpcBaseResponse> allSpecializations(int repDet);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -27,4 +27,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     throw UnimplementedError();
   }
 
+  @override
+  Future<AllPlaceBaseResponse> allPlaces(int id) async{
+  return await _appServiceClient.allPlace(id);
+  }
+
+  @override
+  Future<AllSpcBaseResponse> allSpecializations(int repDet) async{
+    return await _appServiceClient.allSpecializations(repDet);
+  }
 }

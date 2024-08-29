@@ -1,11 +1,13 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/places/pages/places.dart';
 import 'package:domina_app/presentation/resources/strings_manager.dart';
+import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:flutter/material.dart';
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
-  static const String createAdmin = "/createAdmin";
+  static const String spec = "/spec";
 
 }
 class RouteGenerator {
@@ -15,8 +17,11 @@ class RouteGenerator {
    //     initLoginModule();
         return MaterialPageRoute(builder: (_) =>    const MyLogin());
       case Routes.places:
-      //     initLoginModule();
+        initPlacesModule();
         return MaterialPageRoute(builder: (_) =>     Places());
+      case Routes.spec:
+        initSpecModule();
+        return MaterialPageRoute(builder: (_) =>     SpecializationsPage());
       default:
         return unDefinedRoute();
     }
