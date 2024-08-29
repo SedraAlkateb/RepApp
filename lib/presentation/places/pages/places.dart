@@ -7,11 +7,24 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  
-class Places extends StatelessWidget {
+class Places extends StatefulWidget {
    Places({super.key});
+
+  @override
+  State<Places> createState() => _PlacesState();
+}
+
+class _PlacesState extends State<Places> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent(117));
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent(117));
+
     return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(

@@ -45,10 +45,7 @@ class DrawerPage extends StatelessWidget {
             title: const Text(' All Places'),
             onTap: () {
               Navigator.pushNamed(
-                  context,
-                  Routes.places
-
-              );
+                context, Routes.places);
             },
           ),
           ListTile(

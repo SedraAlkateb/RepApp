@@ -48,3 +48,98 @@ extension AllSpecResponseMapper on AllSpcBaseResponse? {
     return spec;
   }
 }
+
+extension PharmacyResponseMapper on PharmacyResponse? {
+  PharmacyModel toDomain() {
+    return PharmacyModel(
+      this?.id ?? Constants.empty,
+      this?.title ?? Constants.empty,
+      this?.placeId ?? Constants.empty,
+      this?.address ?? Constants.empty,
+
+    );
+  }
+}
+extension AllPharmacyResponseMapper on AllPharmacyBaseResponse? {
+  List<PharmacyModel> toDomain() {
+    List<PharmacyModel> Pharmacy =(this?.data.pharmacy.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<PharmacyModel>()
+        .toList();
+    return Pharmacy;
+  }
+}
+
+extension BrandResponseMapper on BrandResponse? {
+  BrandModel toDomain() {
+    return BrandModel(
+      this?.id ?? Constants.empty,
+      this?.title ?? Constants.empty,
+      this?.phTitle ?? Constants.empty,
+    );
+  }
+}
+extension AllBrandResponseMapper on AllBrandBaseResponse? {
+  List<BrandModel> toDomain() {
+    List<BrandModel> Brand =(this?.data.brands.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<BrandModel>()
+        .toList();
+    return Brand;
+  }
+}
+
+extension CityResponseMapper on CityResponse? {
+  CityModel toDomain() {
+    return CityModel(
+      this?.id ?? Constants.empty,
+      this?.name ?? Constants.empty,
+    );
+  }
+}
+extension AllCityResponseMapper on AllCityBaseResponse? {
+  List<CityModel> toDomain() {
+    List<CityModel> City =(this?.data.city.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<CityModel>()
+        .toList();
+    return City;
+  }
+}
+
+extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
+  MedicalVisits toDomain() {
+    return MedicalVisits(
+      this?.visID ?? Constants.empty,
+      this?.visitDate ?? Constants.empty,
+      this?.title ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.note ?? Constants.empty,
+      this?.issue ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.special ?? Constants.empty,
+      this?.brands ?? Constants.empty
+    );
+
+  }
+}
+extension AllMedicalVisitsResponseMapper on AllMedicalVisitBaseResponse? {
+  List<MedicalVisits> toDomain() {
+    List<MedicalVisits> medicalVisits =(this?.data.medicalVisits.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<MedicalVisits>()
+        .toList();
+    return medicalVisits;
+  }
+}
+
+extension MedicalRepresentativeResponseMapper on AllMedicalRepresentativeBaseResponse? {
+  List<CityModel> toDomain() {
+    List<CityModel> City =(this?.data.MedicalRepresentative.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<CityModel>()
+        .toList();
+    return City;
+  }
+}
+

@@ -1,6 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
-import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
@@ -8,15 +7,27 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  
-class SpecializationsPage extends StatelessWidget {
+class SpecializationsPage extends StatefulWidget {
   SpecializationsPage({super.key});
+
+  @override
+  State<SpecializationsPage> createState() => _SpecializationsPageState();
+}
+
+class _SpecializationsPageState extends State<SpecializationsPage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<SpecializationBloc>(context).add(SpecEvent(117));
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SpecializationBloc>(context).add(SpecEvent(117));
+ //   context.read<SpecializationBloc>().add(SpecEvent(117));
     return Scaffold(
-    //  drawer:   DrawerPage(),
+      drawer:   DrawerPage(),
       appBar: AppBar(
-
         title: Text(
             'Representative Spec'),
       ),
@@ -46,6 +57,9 @@ class SpecializationsPage extends StatelessWidget {
     if(state is AllSpecErrorState){
       error(context, state.failure.massage, state.failure.code);
     }
+    if(state is AllSpecLoadingState){
+      loading(context);
+    }
   },
   builder: (context, state) {
     if(state is AllSpecState){
@@ -74,9 +88,7 @@ class SpecializationsPage extends StatelessWidget {
             );
           }, itemCount: placeModel.length);
     }
-    if(state is AllSpecLoadingState){
-      loading(context);
-    }
+
     return SizedBox();
   },
 ),

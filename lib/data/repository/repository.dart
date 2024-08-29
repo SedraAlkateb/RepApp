@@ -91,4 +91,119 @@ class RepositoryImp implements Repository {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, List<CityModel>>> allMedicalRepresentative(int id) async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.allMedicalRepresentative(id);
+      if (response.st == null) {
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BrandModel>>> allBrand()  async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.allBrand();
+      if (response.st == null) {
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CityModel>>> allCity() async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.allCity();
+      if (response.st == null) {
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+  @override
+  Future<Either<Failure, List<MedicalVisits>>> allVisitDoctor(int id)  async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.allVisitDoctor(id);
+      if (response.st == null) {
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(int repDet)  async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.getAllPharmacy(repDet);
+      if (response.st == null) {
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+
 }

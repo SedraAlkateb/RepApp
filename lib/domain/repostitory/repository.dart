@@ -10,5 +10,10 @@ abstract class Repository{
   Future<Either<Failure,MessageResponse>>logout();
   Future<Either<Failure,List<PlaceModel>>>allPlace(int id);
   Future<Either<Failure,List<SpecModel>>>allSpec(int id);
+  Future<Either<Failure,List<MedicalVisits>>>allVisitDoctor(int id);
+  Future<Either<Failure,List<CityModel>>>allCity();
+  Future<Either<Failure,List<BrandModel>>>allBrand();
+  Future<Either<Failure,List<CityModel>>>allMedicalRepresentative(int id);
+  Future<Either<Failure,List<PharmacyModel>>>getAllPharmacy(int repDet);
 
 }
