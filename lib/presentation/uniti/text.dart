@@ -24,7 +24,7 @@ class TextRach extends StatelessWidget {
             TextSpan(
               text:
               s1,
-              style: textStyle!=null?textStyle:Theme.of(context).textTheme.displaySmall,
+              style: textStyle!=null?textStyle:Theme.of(context).textTheme.labelLarge,
               children: <TextSpan>[
                 TextSpan(
                   text: s2,

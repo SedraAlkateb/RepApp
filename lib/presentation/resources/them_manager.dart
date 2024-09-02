@@ -31,9 +31,9 @@ ThemeData getApplicationTheme() {
         color: ColorManager.primary,
 
       ),
-      toolbarHeight: 70,
+      toolbarHeight: 60,
       backgroundColor: ColorManager.secondaryColor,
-      elevation: 30,
+   //   elevation: 30,
       titleTextStyle: getRegularStyle(fontSize: FontSize.s16, color: ColorManager.white),
     ),
     buttonTheme: ButtonThemeData(

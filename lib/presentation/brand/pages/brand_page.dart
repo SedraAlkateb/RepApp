@@ -1,19 +1,22 @@
+
+
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/brand/bloc/brand_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
-import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Places extends StatelessWidget {
-   Places({super.key});
+class BrandPage extends StatelessWidget {
+  BrandPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent(117));
+      BlocProvider.of<BrandBloc>(context).add(AllBrandEvent());
     });    return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(
@@ -33,7 +36,7 @@ class Places extends StatelessWidget {
           },
         ),
         title: Text(
-            'Representative Places'),
+            'Representative Brands'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
@@ -50,29 +53,29 @@ class Places extends StatelessWidget {
                 children: [
                   Icon(Icons.location_city),
 
-                  Text("   All Place",style: Theme.of(context).textTheme.titleMedium,),
+                  Text("   All Brand",style: Theme.of(context).textTheme.titleMedium,),
                 ],
               ),
 
             ),
-            Text("click to show all Doctor,Pharmacy,Hospital in place",),
+            Text("your brands",),
             Expanded(
-              child: BlocConsumer<PlaceBloc, PlaceState>(
+              child: BlocConsumer<BrandBloc, BrandState>(
                 listener: (context, state) {
-                  if(state is AllPlaceErrorState){
+                  if(state is AllBrandErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       error(context, state.failure.massage, state.failure.code);
                     });
                   }
-                  if(state is AllPlaceLoadingState){
+                  if(state is AllBrandLoadingState){
                     loading(context);
                   }
-                  if(state is AllPlaceState){
+                  if(state is AllBrandState){
     success(context);}
                 },
   builder: (context, state) {
-    if(state is AllPlaceState){
-      List<PlaceModel> placeModel=state.places;
+    if(state is AllBrandState){
+      List<BrandModel> brandModel=state.brand;
       return ListView.builder
         (
           itemBuilder: (context, index) {
@@ -88,13 +91,15 @@ class Places extends StatelessWidget {
                     Radius.circular(AppSize.s8)),
                 //        color: ColorManager.card,
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Text(placeModel[index].title)
+                  TextRach(s1: "title", s2: brandModel[index].title),
+                  TextRach(s1: "phTitle", s2: brandModel[index].phTitle)
+
                 ],
               ),
             );
-          }, itemCount: placeModel.length);
+          }, itemCount: brandModel.length);
     }
 
 

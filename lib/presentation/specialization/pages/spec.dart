@@ -6,96 +6,140 @@ import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
- 
-class SpecializationsPage extends StatefulWidget {
+
+class SpecializationsPage extends StatelessWidget {
   SpecializationsPage({super.key});
 
   @override
-  State<SpecializationsPage> createState() => _SpecializationsPageState();
-}
-
-class _SpecializationsPageState extends State<SpecializationsPage> {
-  @override
-  void initState() {
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<SpecializationBloc>(context).add(SpecEvent(117));
     });
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
- //   context.read<SpecializationBloc>().add(SpecEvent(117));
     return Scaffold(
-      drawer:   DrawerPage(),
-      appBar: AppBar(
-        title: Text(
-            'Representative Spec'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-
+        drawer: DrawerPage(),
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+                  Icons.menu,
+                  color: ColorManager.white,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+          title: Text('Representative Spec'),
+        ),
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-
-                children: [
-                  Icon(Icons.location_city),
-
-                  Text("   All spec",style: Theme.of(context).textTheme.titleMedium,),
-                ],
-              ),
-
+            Container(
+              decoration: BoxDecoration(color: ColorManager.secondaryColor),
             ),
-            Expanded(
-              child: BlocConsumer<SpecializationBloc, SpecializationState>(
-  listener: (context, state) {
-    if(state is AllSpecErrorState){
-      error(context, state.failure.massage, state.failure.code);
-    }
-    if(state is AllSpecLoadingState){
-      loading(context);
-    }
-  },
-  builder: (context, state) {
-    if(state is AllSpecState){
-      List<SpecModel> placeModel=state.Specs;
-      success(context);
-      return ListView.builder
-        (
-          itemBuilder: (context, index) {
-            return Container(
-              margin: EdgeInsets.all(AppPadding.p8),
-              padding: EdgeInsets.all(AppPadding.p16),
-              //    height: AppSize.s150,
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-                border:
-                Border.all(color: ColorManager.hintGrey),
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(AppSize.s8)),
-                //        color: ColorManager.card,
-              ),
-              child: Row(
-                children: [
-                  Text(placeModel[index].title)
-                ],
-              ),
-            );
-          }, itemCount: placeModel.length);
-    }
+            SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 0.6,
+                        color: ColorManager.white,
+                        spreadRadius: 0.5,
+                        offset: Offset(2, 3))
+                  ],
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(AppPadding.p16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.location_city),
+                            Text(
+                              "   All spec",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                      BlocConsumer<SpecializationBloc, SpecializationState>(
+                        listener: (context, state) {
+                          if (state is AllSpecLoadingState) {
+                            loading(context);
+                          }
+                          if (state is AllSpecErrorState) {
+                            error(context, state.failure.massage,
+                                state.failure.code);
+                          }
+                          if (state is AllSpecState) {
+                            success(context);
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is AllSpecState) {
+                            List<SpecModel> placeModel = state.Specs;
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // عدد الأعمدة في كل صف
+                                crossAxisSpacing:
+                                    8.0, // المسافة الأفقية بين الأعمدة
+                                mainAxisSpacing:
+                                    8.0, // المسافة العمودية بين الصفوف
+                                childAspectRatio:
+                                    1, // نسبة العرض إلى الارتفاع لكل عنصر (يمكنك تعديلها حسب الحاجة)
+                              ),
+                              itemCount: placeModel.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.all(AppPadding.p16),
+                                  padding: EdgeInsets.all(AppPadding.p16),
+                                  width: 2,
+                                  decoration: BoxDecoration(
+                                    color: ColorManager.secondaryColor3,
+                                    border: Border.all(
+                                        color: ColorManager.secondaryColor),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(AppSize.s25),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      placeModel[index].title,
+                                      style: TextStyle(
+                                          color: ColorManager.secondaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
 
-    return SizedBox();
-  },
-),
+                          return Expanded(
+                              child: Container(
+                            color: Colors.white,
+                          ));
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
-        ),
-      )
-    );
+        ));
   }
 }

@@ -38,6 +38,21 @@ void error(BuildContext context,String massage,int code)
 
 
 }
+
+void errorFullScreen(BuildContext context,String massage,int code)
+{
+  ErrorState ( StateRendererType.fullScreenErrorState,
+      massage )
+      .dismissDialog(context);
+  ErrorState(StateRendererType.fullScreenErrorState,
+      massage)
+      .showPopup(
+      context,
+      StateRendererType.fullScreenErrorState,
+      massage);
+
+
+}
 void success(BuildContext context){
   ContentState().dismissDialog(context);
 
