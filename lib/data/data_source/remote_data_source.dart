@@ -13,7 +13,8 @@ abstract class RemoteDataSource{
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(int repDet);
   Future<AllBrandBaseResponse> allBrand();
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet);
-
+ Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
+  Future<AllHospitalBaseResponse> getAllHospital(int repDet);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -24,13 +25,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<TokenResponse> login(LoginRequest loginRequest) {
-    // TODO: implement login
+  
     throw UnimplementedError();
   }
 
   @override
   Future<MessageResponse> logout() {
-    // TODO: implement logout
+
     throw UnimplementedError();
   }
 
@@ -67,5 +68,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet) async{
     return await _appServiceClient.getAllPharmacy(repDet);
+  }
+  
+  @override
+  Future<AllDoctorsBaseResponse> getAllDoctor(int repDet)async{
+    return await _appServiceClient.getAllDoctor(repDet);
+  }
+  
+  @override
+  Future<AllHospitalBaseResponse> getAllHospital(int repDet) async{
+    return await _appServiceClient.getAllHospital(repDet);
   }
 }

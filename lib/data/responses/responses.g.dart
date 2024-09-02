@@ -333,3 +333,82 @@ Map<String, dynamic> _$AllPharmacyBaseResponseToJson(
       'message': instance.message,
       'Pharmacy': instance.data,
     };
+
+DoctorResponse _$DoctorResponseFromJson(Map<String, dynamic> json) =>
+    DoctorResponse(
+      json['id'] as String?,
+      json['title'] as String?,
+      json['placeId'] as String?,
+      json['address'] as String?,
+      json['placeTitle'] as String?,
+      json['visits'] as String?,
+      json['spTitle'] as String?,
+    );
+
+Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'placeId': instance.placeId,
+      'address': instance.address,
+      'placeTitle': instance.placeTitle,
+      'visits': instance.visits,
+      'spTitle': instance.spTitle,
+    };
+
+AllDoctorResponse _$AllDoctorResponseFromJson(Map<String, dynamic> json) =>
+    AllDoctorResponse(
+      (json['Doctors'] as List<dynamic>)
+          .map((e) => DoctorResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllDoctorResponseToJson(AllDoctorResponse instance) =>
+    <String, dynamic>{
+      'Doctors': instance.doctor,
+    };
+
+AllDoctorsBaseResponse _$AllDoctorsBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllDoctorsBaseResponse(
+      AllDoctorResponse.fromJson(json['Doctors'] as Map<String, dynamic>),
+    )
+      ..st = (json['st'] as num?)?.toInt()
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllDoctorsBaseResponseToJson(
+        AllDoctorsBaseResponse instance) =>
+    <String, dynamic>{
+      'st': instance.st,
+      'message': instance.message,
+      'Doctors': instance.data,
+    };
+
+AllHospitalResponse _$AllHospitalResponseFromJson(Map<String, dynamic> json) =>
+    AllHospitalResponse(
+      (json['Hospital'] as List<dynamic>)
+          .map((e) => DoctorResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllHospitalResponseToJson(
+        AllHospitalResponse instance) =>
+    <String, dynamic>{
+      'Hospital': instance.doctor,
+    };
+
+AllHospitalBaseResponse _$AllHospitalBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllHospitalBaseResponse(
+      AllDoctorResponse.fromJson(json['Hospital'] as Map<String, dynamic>),
+    )
+      ..st = (json['st'] as num?)?.toInt()
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllHospitalBaseResponseToJson(
+        AllHospitalBaseResponse instance) =>
+    <String, dynamic>{
+      'st': instance.st,
+      'message': instance.message,
+      'Hospital': instance.data,
+    };

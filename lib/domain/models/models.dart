@@ -54,3 +54,20 @@ class PharmacyModel {
   String address;
   PharmacyModel(this.id,this.title,this.placeId,this.address);
 }
+class DoctorModel{
+
+  String  id;
+
+  String title;
+
+  String placeId;
+
+  String address;
+
+  String placeTitle;
+  
+  String visits;
+   
+  String spTitle;
+  DoctorModel(this.id,this.title,this.placeId,this.address,this.placeTitle,this.visits,this.spTitle);
+}

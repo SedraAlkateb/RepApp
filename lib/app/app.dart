@@ -1,5 +1,7 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
             create: (_) =>instance<SpecializationBloc>()
+        ),
+        BlocProvider(
+            create: (_) =>instance<DoctorsBloc>()
         ),
     ],
     child: MaterialApp(
