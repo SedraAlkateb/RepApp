@@ -1,5 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:domina_app/presentation/brand/bloc/brand_bloc.dart';
+import 'package:domina_app/presentation/pharmacy/bloc/pharmacy_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +22,19 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (_) => AuthBloc()
+            create: (_) => instance<AuthBloc>()
         ),
         BlocProvider(
             create: (_) =>instance<PlaceBloc>()
         ),
         BlocProvider(
             create: (_) =>instance<SpecializationBloc>()
+        ),
+        BlocProvider(
+            create: (_) =>instance<BrandBloc>()
+        ),
+        BlocProvider(
+            create: (_) =>instance<PharmacyBloc>()
         ),
     ],
     child: MaterialApp(

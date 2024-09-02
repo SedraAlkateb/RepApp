@@ -1,10 +1,13 @@
+import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 class DrawerPage extends StatelessWidget {
-  const DrawerPage({super.key});
-
+   DrawerPage({super.key});
   @override
   Widget build(BuildContext context) {
+
     return Drawer(
       child: ListView(
         padding: const EdgeInsets.all(0),
@@ -33,29 +36,63 @@ class DrawerPage extends StatelessWidget {
               //circleAvatar
             ), //UserAccountDrawerHeader
           ),
-          ListTile(
-            leading: const Icon(Icons.ballot),
-            title: const Text('All Plans'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ), //DrawerHeader
+
           ListTile(
             leading: const Icon(Icons.location_city),
             title: const Text(' All Places'),
             onTap: () {
-              Navigator.pushNamed(
-                context, Routes.places);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.places,
+                  (route) => false,
+                );
+
+              });
             },
           ),
           ListTile(
             leading: const Icon(Icons.medication),
             title: const Text('All spec'),
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                Routes.spec
-              );
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.spec,(route) => false,
+                );
+
+              });
+
+
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.branding_watermark_outlined),
+            title: const Text('All brand'),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.brand,(route) => true,
+                );
+
+              });
+
+
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.local_pharmacy),
+            title: const Text('All Pharmacy'),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.pharmacy,(route) => true,
+                );
+
+              });
+
+
             },
           ),
         ],
