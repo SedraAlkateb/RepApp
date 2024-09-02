@@ -2,7 +2,6 @@ import 'package:domina_app/data/network/sqllite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 class AppSqlApi {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
