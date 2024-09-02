@@ -143,7 +143,7 @@ Failure  getFailure(){
 
 
      case DataSource.TABLE_NOT_FOUND:
-       return Failure(ResponseCode.NO_INTERNET_CONNECTION, ResponseMassage.NO_INTERNET_CONNECTION);
+       return Failure(ResponseCode.TABLE_NOT_FOUND, ResponseMassage.TABLE_NOT_FOUND);
      case DataSource.SYNTAX_ERROR:
        return Failure(ResponseCode.SYNTAX_ERROR, ResponseMassage.SYNTAX_ERROR);
      case DataSource.CONSTRAINT_VIOLATION:

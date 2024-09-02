@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (_) => AuthBloc()
+            create: (_) => instance<AuthBloc>()
         ),
         BlocProvider(
             create: (_) =>instance<PlaceBloc>()

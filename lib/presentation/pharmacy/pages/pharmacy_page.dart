@@ -17,7 +17,7 @@ class PharmacyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<PharmacyBloc>(context).add(AllPharmacyEvent(117));
+      BlocProvider.of<PharmacyBloc>(context).add(AllPharmacyEvent());
     });    return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(

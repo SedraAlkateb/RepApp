@@ -13,7 +13,7 @@ class Places extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent(117));
+      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     });    return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(

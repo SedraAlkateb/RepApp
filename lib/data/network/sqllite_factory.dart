@@ -1,4 +1,3 @@
-import 'package:domina_app/domain/models/models.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

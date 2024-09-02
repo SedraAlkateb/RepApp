@@ -13,7 +13,7 @@ class SpecializationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<SpecializationBloc>(context).add(SpecEvent(117));
+      BlocProvider.of<SpecializationBloc>(context).add(SpecEvent());
     });
     return Scaffold(
         drawer: DrawerPage(),

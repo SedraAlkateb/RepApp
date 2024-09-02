@@ -27,22 +27,5 @@ final class AllBrandLoadingState extends BrandState {
   @override
   List<Object?> get props =>[];
 }
-final class InsertAllBrandState extends BrandState {
 
-  InsertAllBrandState();
-  @override
-  List<Object?> get props =>[];
-}
-final class InsertAllBrandErrorState extends BrandState {
-  final Failure failure;
-  InsertAllBrandErrorState({required this.failure});
-  @override
 
-  List<Object?> get props =>[failure];
-}
-final class InsertAllBrandLoadingState extends BrandState {
-  @override
-  InsertAllBrandLoadingState();
-  @override
-  List<Object?> get props =>[];
-}
