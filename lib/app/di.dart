@@ -18,6 +18,7 @@ import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
+import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_brands_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_place_sql_usecase.dart';
@@ -80,8 +81,10 @@ Future<void>initLoginModule() async{
     instance.registerFactory<AllPlaceUsecase>(() =>AllPlaceUsecase(instance()));
     instance.registerFactory<InsertAllSpecsSqlUsecase>(() =>InsertAllSpecsSqlUsecase(instance()));
     instance.registerFactory<AllSpeUsecase>(() =>AllSpeUsecase(instance()));
+    instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
+
     instance.registerFactory<AuthBloc>(() =>AuthBloc(instance(),instance(),
-        instance(),instance(),instance(),instance(),instance(),instance()));
+        instance(),instance(),instance(),instance(),instance(),instance(),instance()));
    }
 
 }

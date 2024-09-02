@@ -50,7 +50,7 @@ class DatabaseHelper {
     ''');
     await db.execute('''
       CREATE TABLE place (
-    id INTEGER PRIMARY KEY,
+    placeId INTEGER PRIMARY KEY,
     title TEXT NOT NULL
     );
     ''');
@@ -67,7 +67,7 @@ class DatabaseHelper {
     title TEXT NOT NULL,
     address TEXT NOT NULL,
     placeId INTEGER NOT NULL,
-    FOREIGN KEY (placeId) REFERENCES place(id)
+    FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
   }
