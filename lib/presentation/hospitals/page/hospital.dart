@@ -9,28 +9,32 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  
-class Hospital extends StatefulWidget {
+class Hospital extends StatelessWidget {
    Hospital({super.key});
 
   @override
-  State<Hospital> createState() => _DoctorsState();
-}
-
-class _DoctorsState extends State<Hospital> {
-  @override
-  void initState() {
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<HospitalsBloc>(context).add(AllHospitalEvent(203));
     });
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-
     return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(
-
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                size: AppSize.s30,
+                Icons.menu,
+                color:
+                ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
         title: Text(
             ' Hopital'),
       ),
@@ -45,10 +49,8 @@ class _DoctorsState extends State<Hospital> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-
                 children: [
                   Icon(Icons.location_city),
-
                   Text("   All Hospital",style: Theme.of(context).textTheme.titleMedium,),
                 ],
               ),
@@ -59,14 +61,19 @@ class _DoctorsState extends State<Hospital> {
               child: BlocConsumer<HospitalsBloc, HospitalsState>(
   listener: (context, state) {
     if(state is AllHospitalErrorState){
-      error(context, state.failure.massage, state.failure.code);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        error(context, state.failure.massage, state.failure.code);
+      });
     }
+    if(state is AllHospitalLoadingState){
+      loading(context);
+    }
+    if(state is AllHospitalsState){
+      success(context);}
   },
   builder: (context, state) {
     if(state is AllHospitalsState){
-      print("hhh");
       List<DoctorModel> doctormodel=state.hospital;
-      success(context);
       return ListView.builder
         (
           itemBuilder: (context, index) {
@@ -89,9 +96,6 @@ class _DoctorsState extends State<Hospital> {
               ),
             );
           }, itemCount: doctormodel.length);
-    }
-    if(state is AllHospitalLoadingState){
-      loading(context);
     }
     return SizedBox();
   },

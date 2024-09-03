@@ -1,4 +1,5 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/presentation/auth/pages/async_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital.dart';
@@ -18,6 +19,8 @@ class Routes {
     static const String hospital = "/hospital";
   static const String brand = "/brand";
   static const String pharmacy = "/pharmacy";
+  static const String syncData = "/syncData";
+
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -43,6 +46,9 @@ class RouteGenerator {
       case Routes.pharmacy:
         initPharmacyModule();
         return MaterialPageRoute(builder: (_) =>     PharmacyPage());
+      case Routes.syncData:
+        return MaterialPageRoute(builder: (_) =>     AsyncPage());
+
       default:
         return unDefinedRoute();
     }

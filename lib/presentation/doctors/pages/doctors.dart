@@ -8,28 +8,32 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  
-class Doctors extends StatefulWidget {
+class Doctors extends StatelessWidget {
    Doctors({super.key});
 
   @override
-  State<Doctors> createState() => _DoctorsState();
-}
-
-class _DoctorsState extends State<Doctors> {
-  @override
-  void initState() {
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<DoctorsBloc>(context).add(AllDoctorEvent(117));
     });
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-
     return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(
-
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                size: AppSize.s30,
+                Icons.menu,
+                color:
+                ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
         title: Text(
             ' Doctors'),
       ),
@@ -60,11 +64,17 @@ class _DoctorsState extends State<Doctors> {
     if(state is AllDoctorErrorState){
       error(context, state.failure.massage, state.failure.code);
     }
+    if(state is AllDoctorState){
+      success(context);
+    }
+    if(state is AllDoctorLoadingState){
+      loading(context);
+    }
   },
   builder: (context, state) {
     if(state is AllDoctorState){
       List<DoctorModel> doctormodel=state.doctor;
-      success(context);
+
       return ListView.builder
         (
           itemBuilder: (context, index) {
@@ -88,9 +98,7 @@ class _DoctorsState extends State<Doctors> {
             );
           }, itemCount: doctormodel.length);
     }
-    if(state is AllDoctorLoadingState){
-      loading(context);
-    }
+
     return SizedBox();
   },
 ),

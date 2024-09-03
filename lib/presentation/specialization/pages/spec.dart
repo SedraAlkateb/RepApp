@@ -128,10 +128,9 @@ class SpecializationsPage extends StatelessWidget {
                             );
                           }
 
-                          return Expanded(
-                              child: Container(
-                            color: Colors.white,
-                          ));
+                          return Container(
+                                                      color: Colors.white,
+                                                    );
                         },
                       ),
                     ],
