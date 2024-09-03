@@ -28,7 +28,7 @@ extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
 extension PlaceResponseMapper on PlaceResponse? {
   PlaceModel toDomain() {
     return PlaceModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
     );
   }
@@ -36,7 +36,7 @@ extension PlaceResponseMapper on PlaceResponse? {
 extension SpecResponseMapper on SpecResponse? {
   SpecModel toDomain() {
     return SpecModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
     );
   }
@@ -55,7 +55,7 @@ extension AllSpecResponseMapper on AllSpcBaseResponse? {
 extension PharmacyResponseMapper on PharmacyResponse? {
   PharmacyModel toDomain() {
     return PharmacyModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
       this?.placeId ?? Constants.empty,
       this?.address ?? Constants.empty,
@@ -76,7 +76,7 @@ extension AllPharmacyResponseMapper on AllPharmacyBaseResponse? {
 extension BrandResponseMapper on BrandResponse? {
   BrandModel toDomain() {
     return BrandModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
       this?.phTitle ?? Constants.empty,
     );
@@ -95,7 +95,7 @@ extension AllBrandResponseMapper on AllBrandBaseResponse? {
 extension CityResponseMapper on CityResponse? {
   CityModel toDomain() {
     return CityModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0") ,
       this?.name ?? Constants.empty,
     );
   }

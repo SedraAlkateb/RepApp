@@ -256,6 +256,9 @@ class AllMedicalRepresentativeBaseResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$AllMedicalRepresentativeBaseResponseToJson(this);
 }
+
+
+
 @JsonSerializable()
 class BrandResponse {
   @JsonKey(name: "id")

@@ -4,8 +4,7 @@ part of 'place_bloc.dart';
 abstract class PlaceEvent  extends Equatable{}
 class AllPlaceEvent extends PlaceEvent{
   @override
- final int id;
-  AllPlaceEvent(this.id);
-  List<Object?> get props => [id];
+  AllPlaceEvent();
+  List<Object?> get props => [];
 
 }

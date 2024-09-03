@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/network/failure.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ErrorHandler implements Exception{
 late Failure failure;
@@ -10,8 +11,12 @@ ErrorHandler.handle(dynamic error){
 print("error.message??""");
     //dio error so its an error from response of the api or from dio itself
     failure=_handleError(error);
+  }
 
-  }else{
+  else if(error is DatabaseException ){
+    failure=_handleErrorSql(error);
+  }
+  else{
     print(error);
     // default error
     failure=DataSource.DEFAULT.getFailure();
@@ -50,7 +55,30 @@ Failure _handleError(DioError error){
       return DataSource.DEFAULT.getFailure();
   }
 }
+Failure _handleErrorSql(DatabaseException error) {
+  String errorMessage = error.result.toString();
+  if (errorMessage.contains("no such table")) {
+    return DataSource.TABLE_NOT_FOUND.getFailure();
+  } else if (errorMessage.contains("syntax error")) {
+    return DataSource.SYNTAX_ERROR.getFailure();
+  } else if (errorMessage.contains("constraint failed")) {
+    return DataSource.CONSTRAINT_VIOLATION.getFailure();
+  } else if (errorMessage.contains("database is locked")) {
+    return DataSource.DB_LOCKED.getFailure();
+  } else if (errorMessage.contains("readonly database")) {
+    return DataSource.READ_ONLY.getFailure();
+  } else {
+    return DataSource.DEFAULT.getFailure();
+  }
+}
+
+
 enum DataSource {
+  TABLE_NOT_FOUND,
+  SYNTAX_ERROR,
+  CONSTRAINT_VIOLATION,
+  DB_LOCKED,
+  READ_ONLY,
   SUCCESS,
   NO_CONTENT,
   BAD_REQUEST,
@@ -69,6 +97,7 @@ enum DataSource {
   NO_INTERNET_CONNECTION,
   DEFAULT,
 }
+
 extension DataSouceExtension on DataSource{
 Failure  getFailure(){
    switch(this){
@@ -113,6 +142,16 @@ Failure  getFailure(){
        return Failure(ResponseCode.DEFAULT, ResponseMassage.DEFAULT);
 
 
+     case DataSource.TABLE_NOT_FOUND:
+       return Failure(ResponseCode.TABLE_NOT_FOUND, ResponseMassage.TABLE_NOT_FOUND);
+     case DataSource.SYNTAX_ERROR:
+       return Failure(ResponseCode.SYNTAX_ERROR, ResponseMassage.SYNTAX_ERROR);
+     case DataSource.CONSTRAINT_VIOLATION:
+       return Failure(ResponseCode.CONSTRAINT_VIOLATION, ResponseMassage.CONSTRAINT_VIOLATION);
+     case DataSource.DB_LOCKED:
+       return Failure(ResponseCode.DB_LOCKED, ResponseMassage.DB_LOCKED);
+     case DataSource.READ_ONLY:
+       return Failure(ResponseCode.READ_ONLY, ResponseMassage.READ_ONLY);
    }
   }
 }
@@ -134,9 +173,21 @@ class ResponseCode{
   static const int SEND_TIMOUT =-4;//
   static const int CACHE_ERROR =-5;//
   static const int NO_INTERNET_CONNECTION =-6;//
-static const int DEFAULT=-7;
+  static const int SYNTAX_ERROR =-7;//
+  static const int READ_ONLY =-8;//
+  static const int DB_LOCKED =-9;//
+  static const int TABLE_NOT_FOUND =-10;//
+  static const int CONSTRAINT_VIOLATION =-11;//
+
+  static const int DEFAULT=-7;
 }
 class ResponseMassage{
+  static const String TABLE_NOT_FOUND ="TABLE_NOT_FOUND";//success with data
+  static const String DB_LOCKED ="DB_LOCKED";//success with data
+  static const String READ_ONLY ="READ_ONLY";//success with data
+  static const String SYNTAX_ERROR ="SYNTAX_ERROR";//success with data
+  static const String CONSTRAINT_VIOLATION ="CONSTRAINT_VIOLATION";//success with data
+
   static const String SUCCESS ="success";//success with data
   static const String NO_CONTENT ="success";//success with no data (no content)
   static const String BAD_REQUEST ="Bad request ,Try again later";//failure ,Api rejected request

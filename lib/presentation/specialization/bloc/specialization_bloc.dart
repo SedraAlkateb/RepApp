@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
+import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -9,7 +9,7 @@ part 'specialization_event.dart';
 part 'specialization_state.dart';
 
 class SpecializationBloc extends Bloc<SpecializationEvent, SpecializationState> {
-  AllSpeUsecase allSpeUsecase;
+  AllSpecsSqlUsecase allSpeUsecase;
   SpecializationBloc(
       this.allSpeUsecase
       ) : super(SpecializationInitial()) {
@@ -17,7 +17,7 @@ class SpecializationBloc extends Bloc<SpecializationEvent, SpecializationState> 
       if(event is SpecEvent){
         emit(AllSpecLoadingState());
         (
-            await allSpeUsecase.execute(event.id)).fold(
+            await allSpeUsecase.execute()).fold(
       (failure)  {
       emit(AllSpecErrorState(failure: failure));
       },
