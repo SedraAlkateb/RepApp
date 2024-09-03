@@ -206,6 +206,51 @@ class RepositoryImp implements Repository {
     }
   }
 
-
-
+@override
+  Future<Either<Failure, List<DoctorModel>>> getAllDoctor(int repDet) async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.getAllDoctor(repDet);
+      if (response.st == null) {
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+  
+  @override
+  Future<Either<Failure, List<DoctorModel>>> getAllHospital(int repDet)  async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.getAllHospital(repDet);
+     
+      if (response.st == null) {
+        print("hddddddddhh");
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
 }
