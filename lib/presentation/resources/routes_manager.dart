@@ -1,6 +1,8 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/auth/pages/async_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
+import 'package:domina_app/presentation/doctors/pages/doctors.dart';
+import 'package:domina_app/presentation/hospitals/page/hospital.dart';
 import 'package:domina_app/presentation/brand/pages/brand_page.dart';
 import 'package:domina_app/presentation/pharmacy/pages/pharmacy_page.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
@@ -13,6 +15,8 @@ class Routes {
   static const String login = "/login";
   static const String places = "/Places";
   static const String spec = "/spec";
+  static const String doctors = "/doctors";
+    static const String hospital = "/hospital";
   static const String brand = "/brand";
   static const String pharmacy = "/pharmacy";
   static const String syncData = "/syncData";
@@ -30,6 +34,12 @@ class RouteGenerator {
       case Routes.spec:
         initSpecModule();
         return MaterialPageRoute(builder: (_) =>     SpecializationsPage());
+         case Routes.doctors:
+        initdoctorModule();
+        return MaterialPageRoute(builder: (_) =>     Doctors());
+           case Routes.hospital:
+        inithospitalModule();
+        return MaterialPageRoute(builder: (_) =>     Hospital());
       case Routes.brand:
         initBrandModule();
         return MaterialPageRoute(builder: (_) =>     BrandPage());

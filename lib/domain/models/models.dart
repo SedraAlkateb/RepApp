@@ -133,6 +133,25 @@ class PharmacyModel {
   }
 
 }
+
+class DoctorModel{
+
+  String  id;
+
+  String title;
+
+  String placeId;
+
+  String address;
+
+  String placeTitle;
+  
+  String visits;
+   
+  String spTitle;
+  DoctorModel(this.id,this.title,this.placeId,this.address,this.placeTitle,this.visits,this.spTitle);
+}
+
 class CityModel {
   int id;
   String name;
@@ -150,4 +169,3 @@ class CityModel {
     );
   }
 }
-
