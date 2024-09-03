@@ -386,21 +386,24 @@ Map<String, dynamic> _$AllDoctorsBaseResponseToJson(
 
 AllHospitalResponse _$AllHospitalResponseFromJson(Map<String, dynamic> json) =>
     AllHospitalResponse(
-      (json['Hospital'] as List<dynamic>)
-          .map((e) => DoctorResponse.fromJson(e as Map<String, dynamic>))
+      (json['Hospital'] as List<dynamic>?)
+          ?.map((e) => DoctorResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$AllHospitalResponseToJson(
         AllHospitalResponse instance) =>
     <String, dynamic>{
-      'Hospital': instance.doctor,
+      'Hospital': instance.hospital,
     };
 
 AllHospitalBaseResponse _$AllHospitalBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllHospitalBaseResponse(
-      AllDoctorResponse.fromJson(json['Hospital'] as Map<String, dynamic>),
+      json['Hospital'] == null
+          ? null
+          : AllHospitalResponse.fromJson(
+              json['Hospital'] as Map<String, dynamic>),
     )
       ..st = (json['st'] as num?)?.toInt()
       ..message = json['message'] as String?;

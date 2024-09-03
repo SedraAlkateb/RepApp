@@ -3,7 +3,6 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:equatable/equatable.dart';
-
 part 'doctors_event.dart';
 part 'doctors_state.dart';
 

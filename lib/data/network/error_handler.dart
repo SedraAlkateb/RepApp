@@ -7,9 +7,10 @@ class ErrorHandler implements Exception{
 late Failure failure;
 ErrorHandler.handle(dynamic error){
   if(error is DioError){
-
+print("error.message??""");
     //dio error so its an error from response of the api or from dio itself
     failure=_handleError(error);
+
   }else{
     print(error);
     // default error

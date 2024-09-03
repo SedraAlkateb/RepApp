@@ -394,8 +394,8 @@ class AllDoctorsBaseResponse extends BaseResponse{
 @JsonSerializable()
 class AllHospitalResponse{
   @JsonKey(name: "Hospital")
-  List<DoctorResponse> doctor;
-  AllHospitalResponse(this.doctor);
+  List<DoctorResponse>? hospital;
+  AllHospitalResponse(this.hospital);
   // from json
   factory AllHospitalResponse.fromJson(Map<String,dynamic>json)=>
       _$AllHospitalResponseFromJson(json);
@@ -407,7 +407,7 @@ class AllHospitalResponse{
 class
 AllHospitalBaseResponse extends BaseResponse{
   @JsonKey(name: "Hospital")
-  AllDoctorResponse data;
+  AllHospitalResponse? data;
   AllHospitalBaseResponse(this.data);
   // from json
   factory AllHospitalBaseResponse.fromJson(Map<String,dynamic>json)=>

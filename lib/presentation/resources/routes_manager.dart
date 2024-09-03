@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
+import 'package:domina_app/presentation/hospitals/page/hospital.dart';
 import 'package:domina_app/presentation/places/pages/places.dart';
 import 'package:domina_app/presentation/resources/strings_manager.dart';
 import 'package:domina_app/presentation/specialization/pages/spec.dart';
@@ -10,6 +11,7 @@ class Routes {
   static const String places = "/Places";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
+    static const String hospital = "/hospital";
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -26,6 +28,9 @@ class RouteGenerator {
          case Routes.doctors:
         initdoctorModule();
         return MaterialPageRoute(builder: (_) =>     Doctors());
+           case Routes.hospital:
+        inithospitalModule();
+        return MaterialPageRoute(builder: (_) =>     Hospital());
       default:
         return unDefinedRoute();
     }

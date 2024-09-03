@@ -174,7 +174,7 @@ extension DoctorResponseMapper on DoctorResponse? {
 }
 extension AllHospitalResponseMapper on AllHospitalBaseResponse? {
   List<DoctorModel> toDomain() {
-    List<DoctorModel> doctorModel =(this?.data.doctor.map((response) => response.toDomain()) ??
+    List<DoctorModel> doctorModel =(this?.data?.hospital?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<DoctorModel>()
         .toList();

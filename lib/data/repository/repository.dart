@@ -234,7 +234,9 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.getAllHospital(repDet);
+     
       if (response.st == null) {
+        print("hddddddddhh");
         //success
         //return either right
         //return data

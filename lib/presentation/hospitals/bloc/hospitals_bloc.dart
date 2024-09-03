@@ -10,20 +10,20 @@ part 'hospitals_state.dart';
 
 
 class HospitalsBloc extends Bloc<HospitalsEvent, HospitalsState> {
-  AlHospitalsUsecase allhospital;
+  AllHospitalUsecase allHospitalUsecase;
   HospitalsBloc(
-    this.allDoctorUsecase
-  ) : super(DoctorsInitial()) {
-    on<DoctorsEvent>((event, emit)async {
- if(event is AllDoctorEvent){
-        emit(AllDoctorLoadingState());
+    this.allHospitalUsecase
+  ) : super(HospitalsInitial()) {
+    on<HospitalsEvent>((event, emit)async {
+ if(event is AllHospitalEvent){
+        emit(AllHospitalLoadingState());
         (
-            await allDoctorUsecase.execute(event.id)).fold(
+            await allHospitalUsecase.execute(event.id)).fold(
       (failure)  {
-      emit(AllDoctorErrorState(failure: failure));
+      emit(AllHospitalErrorState(failure: failure));
       },
       (data)  async{
-      emit(AllDoctorState(data));
+      emit(AllHospitalsState(data));
       }
 
       );

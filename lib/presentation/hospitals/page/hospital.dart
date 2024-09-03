@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
+import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -8,18 +9,18 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  
-class Doctors extends StatefulWidget {
-   Doctors({super.key});
+class Hospital extends StatefulWidget {
+   Hospital({super.key});
 
   @override
-  State<Doctors> createState() => _DoctorsState();
+  State<Hospital> createState() => _DoctorsState();
 }
 
-class _DoctorsState extends State<Doctors> {
+class _DoctorsState extends State<Hospital> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<DoctorsBloc>(context).add(AllDoctorEvent(117));
+      BlocProvider.of<HospitalsBloc>(context).add(AllHospitalEvent(203));
     });
     super.initState();
   }
@@ -31,7 +32,7 @@ class _DoctorsState extends State<Doctors> {
       appBar: AppBar(
 
         title: Text(
-            ' Doctors'),
+            ' Hopital'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
@@ -48,22 +49,23 @@ class _DoctorsState extends State<Doctors> {
                 children: [
                   Icon(Icons.location_city),
 
-                  Text("   All Doctors",style: Theme.of(context).textTheme.titleMedium,),
+                  Text("   All Hospital",style: Theme.of(context).textTheme.titleMedium,),
                 ],
               ),
 
             ),
-            Text("click to show all Doctor",),
+            Text("click to show all Hospital",),
             Expanded(
-              child: BlocConsumer<DoctorsBloc, DoctorsState>(
+              child: BlocConsumer<HospitalsBloc, HospitalsState>(
   listener: (context, state) {
-    if(state is AllDoctorErrorState){
+    if(state is AllHospitalErrorState){
       error(context, state.failure.massage, state.failure.code);
     }
   },
   builder: (context, state) {
-    if(state is AllDoctorState){
-      List<DoctorModel> doctormodel=state.doctor;
+    if(state is AllHospitalsState){
+      print("hhh");
+      List<DoctorModel> doctormodel=state.hospital;
       success(context);
       return ListView.builder
         (
@@ -88,7 +90,7 @@ class _DoctorsState extends State<Doctors> {
             );
           }, itemCount: doctormodel.length);
     }
-    if(state is AllDoctorLoadingState){
+    if(state is AllHospitalLoadingState){
       loading(context);
     }
     return SizedBox();

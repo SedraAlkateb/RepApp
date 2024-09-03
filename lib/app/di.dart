@@ -7,10 +7,12 @@ import 'package:domina_app/data/network/network_info.dart';
 import 'package:domina_app/data/repository/repository.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
+import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -74,5 +76,11 @@ Future<void>initdoctorModule() async{
   if(!GetIt.I.isRegistered<AllDoctorUsecase>()){
     instance.registerFactory<AllDoctorUsecase>(() =>AllDoctorUsecase(instance()));
     instance.registerFactory<DoctorsBloc>(() =>DoctorsBloc(instance()));
+  }
+}
+Future<void>inithospitalModule() async{
+  if(!GetIt.I.isRegistered<AllHospitalUsecase>()){
+    instance.registerFactory<AllHospitalUsecase>(() =>AllHospitalUsecase(instance()));
+    instance.registerFactory<HospitalsBloc>(() =>HospitalsBloc(instance()));
   }
 }

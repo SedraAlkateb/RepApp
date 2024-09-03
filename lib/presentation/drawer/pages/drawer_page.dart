@@ -70,6 +70,17 @@ class DrawerPage extends StatelessWidget {
               
             },
           ),
+            ListTile(
+            leading: const Icon(Icons.group),
+            title: const Text('All Hospital'),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.hospital
+              );
+              
+            },
+          ),
         ],
       ),
     );
