@@ -25,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   InsertAllPlacesSqlUsecase insertAllPlacesSqlUsecase;
   AllSpeUsecase allSpeUsecase;
   InsertAllSpecsSqlUsecase insertAllSpecsSqlUsecase;
+  DeleteSqlUsecase deleteSqlUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
@@ -38,16 +39,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       this.allPlaceUsecase,
       this.insertAllPlacesSqlUsecase,
       this.allSpeUsecase,
-      this.insertAllSpecsSqlUsecase)
+      this.insertAllSpecsSqlUsecase,
+      this.deleteSqlUsecase)
       : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
-      if (event is AsyncData) {
+      if (event is AsyncDataEvent) {
         emit(SyncDataLoadingState());
-        getData();
+        (await deleteSqlUsecase.execute()).fold((failure) {
+          emit(SyncDataErrorState(failure: failure));
+          return false;
+        }, (data) async {
+       await getData();
+       await setData();
+        });
+
       }
     });
   }
+
   Future<bool> getData() async {
+    brands=[];
+    places=[];
+    pharmacies=[];
+    spec=[];
     (await allBrandsUsecase.execute()).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
@@ -73,7 +87,48 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return false;
     }, (data) async {
       spec = data;
+
     });
+  //  emit(SyncDataState());
+    return true;
+  }
+  Future<bool> setData() async {
+    (await insertAllBrandsSqlUsecase.execute(brands)).fold((failure) {
+      emit(SyncDataErrorState(failure: failure));
+      return false;
+    }, (data) async {
+      print("brand");
+      brands = [];
+    });
+    (await insertAllPlacesSqlUsecase.execute(places)).fold((failure) {
+  
+      emit(SyncDataErrorState(failure: failure));
+
+      return false;
+    }, (data) async {
+      print("places");
+      places = [];
+    });
+    (await insertAllPharmacysSqlUsecase.execute(pharmacies)).fold((failure) {
+      emit(SyncDataErrorState(failure: failure));
+      return false;
+    }, (data) async {
+      pharmacies = [];
+      print("pharmacies");
+
+    });
+
+    (await insertAllSpecsSqlUsecase.execute(spec)).fold((failure) {
+      emit(SyncDataErrorState(failure: failure));
+
+      return false;
+    }, (data) async {
+      print("spec");
+
+      spec = [];
+
+    });
+    emit(SyncDataState());
     return true;
   }
 }

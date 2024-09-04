@@ -13,7 +13,8 @@ abstract class RemoteDataSource{
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(int repDet);
   Future<AllBrandBaseResponse> allBrand();
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet);
-
+ Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
+  Future<AllHospitalBaseResponse> getAllHospital(int repDet);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
