@@ -12,6 +12,7 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/them_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
