@@ -9,8 +9,6 @@ Future <bool>get isConnected;
 class NetWorkInfoImpl implements NetworkInfo{
 final  InternetConnectionChecker _internetConnectionChecker;
   NetWorkInfoImpl(this._internetConnectionChecker);
-
   @override
   Future<bool> get isConnected async => await _internetConnectionChecker.isActivelyChecking;
-
 }
