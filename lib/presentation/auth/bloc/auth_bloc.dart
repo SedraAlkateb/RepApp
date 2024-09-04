@@ -5,6 +5,7 @@ import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
+import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_brands_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_place_sql_usecase.dart';

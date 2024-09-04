@@ -75,5 +75,14 @@ class AppSqlApi {
       return SpecModel.fromMap(maps[i]);
     });
   }
+  Future<void> clearDatabase() async {
+    final db = await databaseHelper.database;
+    final tables = ['brand', 'pharmacy', 'place', 'specialization'];
+    Batch batch = db.batch();
+    for (var table in tables) {
+      batch.delete(table);
+    }
+    await batch.commit(noResult: true);
+  }
 
 }

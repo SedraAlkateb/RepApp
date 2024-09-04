@@ -4,18 +4,18 @@ class Token {
   Token(this.token);
 }
 class PlaceModel {
-  int id;
+  int placeId;
   String title;
-  PlaceModel(this.id,this.title);
+  PlaceModel(this.placeId,this.title);
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'placeId': placeId,
       'title': title,
     };
   }
   factory PlaceModel.fromMap(Map<String, dynamic> map) {
     return PlaceModel(
-      map['id'],
+      map['placeId'],
       map['title'],
     );
   }
@@ -133,6 +133,25 @@ class PharmacyModel {
   }
 
 }
+
+class DoctorModel{
+
+  String  id;
+
+  String title;
+
+  String placeId;
+
+  String address;
+
+  String placeTitle;
+  
+  String visits;
+   
+  String spTitle;
+  DoctorModel(this.id,this.title,this.placeId,this.address,this.placeTitle,this.visits,this.spTitle);
+}
+
 class CityModel {
   int id;
   String name;
@@ -150,4 +169,3 @@ class CityModel {
     );
   }
 }
-

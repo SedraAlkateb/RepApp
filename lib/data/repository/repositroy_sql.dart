@@ -84,6 +84,7 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertPharmacy(pharmacyModel);
       return Right(response);
     } catch (e) {
+      print(e);
       return Left(ErrorHandler
           .handle(e)
           .failure);
@@ -110,6 +111,19 @@ class RepositroySqlImp extends RepositorySql {
       // عملية قاعدة بيانات قد تفشل
       final response = await _databaseHelper.insertSpec(specModel);
       return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> clearDatabase() async {
+    try {
+      // عملية قاعدة بيانات قد تفشل
+      final response = await _databaseHelper.clearDatabase();
+      return Right(null);
     } catch (e) {
       return Left(ErrorHandler
           .handle(e)

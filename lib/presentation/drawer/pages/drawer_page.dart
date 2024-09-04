@@ -61,8 +61,28 @@ class DrawerPage extends StatelessWidget {
                 );
 
               });
-
-
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.group),
+            title: const Text('All Doctors'),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.doctors
+              );
+              
+            },
+          ),
+            ListTile(
+            leading: const Icon(Icons.group),
+            title: const Text('All Hospital'),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.hospital
+              );
+                         
             },
           ),
           ListTile(
@@ -91,7 +111,6 @@ class DrawerPage extends StatelessWidget {
                 );
 
               });
-
 
             },
           ),

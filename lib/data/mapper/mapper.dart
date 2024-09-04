@@ -143,3 +143,38 @@ extension MedicalRepresentativeResponseMapper on AllMedicalRepresentativeBaseRes
   }
 }
 
+extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
+  List<DoctorModel> toDomain() {
+    List<DoctorModel> doctorModel =(this?.data.doctor.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorModel>()
+        .toList();
+    return doctorModel;
+  }
+}
+
+
+extension DoctorResponseMapper on DoctorResponse? {
+ DoctorModel toDomain() {
+    return DoctorModel(
+      this?.id ?? Constants.empty,
+      this?.title ?? Constants.empty,
+      this?.placeId ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.placeTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.visits ?? Constants.empty,
+     
+    );
+
+  }
+}
+extension AllHospitalResponseMapper on AllHospitalBaseResponse? {
+  List<DoctorModel> toDomain() {
+    List<DoctorModel> doctorModel =(this?.data?.hospital?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorModel>()
+        .toList();
+    return doctorModel;
+  }
+}

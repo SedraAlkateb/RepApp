@@ -98,7 +98,7 @@ class _MyLoginState extends State<MyLogin> {
                                        {
                                           Navigator.pushNamed(
                                           context,
-                                            Routes.places
+                                            Routes.syncData
                                         );
                                            formKey.currentState!.save();
                                         }
