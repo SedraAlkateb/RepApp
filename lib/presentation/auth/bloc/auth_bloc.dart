@@ -101,6 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       brands = [];
     });
     (await insertAllPlacesSqlUsecase.execute(places)).fold((failure) {
+      print(failure.message);
       emit(SyncDataErrorState(failure: failure));
 
       return false;
