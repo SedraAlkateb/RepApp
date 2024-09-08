@@ -1,10 +1,11 @@
 
 import 'package:json_annotation/json_annotation.dart';
-
 part 'responses.g.dart';
 
+@JsonSerializable()
 class BaseResponse {
-  int? st;
+  @JsonKey(name: "status")
+  String? status;
   String? message;
 
 }
@@ -35,10 +36,18 @@ class MessageResponse extends BaseResponse{
       _$MessageResponseToJson(this);
 }
 @JsonSerializable()
-class TokenResponse extends BaseResponse{
+class TokenResponse {
   @JsonKey(name: "token")
   String? token;
-  TokenResponse(this.token);
+  @JsonKey(name: "repId")
+  String? repId;
+  @JsonKey(name: "planId")
+  int? planId;
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "percentage")
+  int? percentage;
+  TokenResponse(this.token,this.repId,this.planId,this.name,this.percentage);
   // from json
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>
       _$TokenResponseFromJson(json);
@@ -46,6 +55,19 @@ class TokenResponse extends BaseResponse{
   // to json
   Map<String,dynamic>toJson()=>
       _$TokenResponseToJson(this);
+}
+@JsonSerializable()
+class LoginResponse extends BaseResponse{
+  @JsonKey(name: "data")
+  TokenResponse? data;
+  LoginResponse(this.data);
+  // from json
+  factory LoginResponse.fromJson(Map<String,dynamic>json)=>
+      _$LoginResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$LoginResponseToJson(this);
 }
 @JsonSerializable()
 class PlaceResponse {

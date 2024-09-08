@@ -6,40 +6,70 @@ part of 'responses.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse()
+  ..status = json['status'] as String?
+  ..message = json['message'] as String?;
+
+Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
 Message1Response _$Message1ResponseFromJson(Map<String, dynamic> json) =>
     Message1Response()
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$Message1ResponseToJson(Message1Response instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
     };
 
 MessageResponse _$MessageResponseFromJson(Map<String, dynamic> json) =>
     MessageResponse(
       json['message'] as String?,
-    )..st = (json['st'] as num?)?.toInt();
+    )..status = json['status'] as String?;
 
 Map<String, dynamic> _$MessageResponseToJson(MessageResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
     };
 
 TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
     TokenResponse(
       json['token'] as String?,
-    )
-      ..st = (json['st'] as num?)?.toInt()
-      ..message = json['message'] as String?;
+      json['repId'] as String?,
+      (json['planId'] as num?)?.toInt(),
+      json['name'] as String?,
+      (json['percentage'] as num?)?.toInt(),
+    );
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
-      'message': instance.message,
       'token': instance.token,
+      'repId': instance.repId,
+      'planId': instance.planId,
+      'name': instance.name,
+      'percentage': instance.percentage,
+    };
+
+LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
+    LoginResponse(
+      json['data'] == null
+          ? null
+          : TokenResponse.fromJson(json['data'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.data,
     };
 
 PlaceResponse _$PlaceResponseFromJson(Map<String, dynamic> json) =>
@@ -71,13 +101,13 @@ AllPlaceBaseResponse _$AllPlaceBaseResponseFromJson(
     AllPlaceBaseResponse(
       AllPlaceResponse.fromJson(json['Places'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllPlaceBaseResponseToJson(
         AllPlaceBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Places': instance.data,
     };
@@ -109,12 +139,12 @@ AllSpcBaseResponse _$AllSpcBaseResponseFromJson(Map<String, dynamic> json) =>
     AllSpcBaseResponse(
       AllSpcResponse.fromJson(json['Specializations'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllSpcBaseResponseToJson(AllSpcBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Specializations': instance.data,
     };
@@ -167,13 +197,13 @@ AllMedicalVisitBaseResponse _$AllMedicalVisitBaseResponseFromJson(
       AllMedicalVisitResponse.fromJson(
           json['Medical Representative Visits'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllMedicalVisitBaseResponseToJson(
         AllMedicalVisitBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Medical Representative Visits': instance.data,
     };
@@ -205,13 +235,13 @@ AllCityBaseResponse _$AllCityBaseResponseFromJson(Map<String, dynamic> json) =>
     AllCityBaseResponse(
       AllCityResponse.fromJson(json['City'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllCityBaseResponseToJson(
         AllCityBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'City': instance.data,
     };
@@ -236,13 +266,13 @@ AllMedicalRepresentativeBaseResponse
           AllMedicalRepresentativeResponse.fromJson(
               json['Medical Representative'] as Map<String, dynamic>),
         )
-          ..st = (json['st'] as num?)?.toInt()
+          ..status = json['status'] as String?
           ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllMedicalRepresentativeBaseResponseToJson(
         AllMedicalRepresentativeBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Medical Representative': instance.data,
     };
@@ -278,13 +308,13 @@ AllBrandBaseResponse _$AllBrandBaseResponseFromJson(
     AllBrandBaseResponse(
       AllBrandResponse.fromJson(json['Brands'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllBrandBaseResponseToJson(
         AllBrandBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Brands': instance.data,
     };
@@ -323,13 +353,13 @@ AllPharmacyBaseResponse _$AllPharmacyBaseResponseFromJson(
     AllPharmacyBaseResponse(
       AllPharmacyResponse.fromJson(json['Pharmacy'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllPharmacyBaseResponseToJson(
         AllPharmacyBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Pharmacy': instance.data,
     };
@@ -373,13 +403,13 @@ AllDoctorsBaseResponse _$AllDoctorsBaseResponseFromJson(
     AllDoctorsBaseResponse(
       AllDoctorResponse.fromJson(json['Doctors'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllDoctorsBaseResponseToJson(
         AllDoctorsBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Doctors': instance.data,
     };
@@ -405,13 +435,13 @@ AllHospitalBaseResponse _$AllHospitalBaseResponseFromJson(
           : AllHospitalResponse.fromJson(
               json['Hospital'] as Map<String, dynamic>),
     )
-      ..st = (json['st'] as num?)?.toInt()
+      ..status = json['status'] as String?
       ..message = json['message'] as String?;
 
 Map<String, dynamic> _$AllHospitalBaseResponseToJson(
         AllHospitalBaseResponse instance) =>
     <String, dynamic>{
-      'st': instance.st,
+      'status': instance.status,
       'message': instance.message,
       'Hospital': instance.data,
     };

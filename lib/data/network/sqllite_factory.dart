@@ -34,12 +34,15 @@ class DatabaseHelper {
 
   }
   Future _onCreate(Database db, int version) async {
+
     await db.execute('''
-      CREATE TABLE representatives (
-    id INTEGER PRIMARY KEY,
-    username TEXT NOT NULL,
-    password TEXT NOT NULL,
-    id_plan INTEGER
+      CREATE TABLE rep (
+    token  TEXT NOT NULL,
+    repId TEXT NOT NULL,
+    planId TEXT NOT NULL,
+    userName TEXT NOT NULL,
+    isLogin INTEGER NOT NULL DEFAULT 0
+
     );
     ''');
     await db.execute('''

@@ -35,15 +35,12 @@ class _MyAppState extends State<MyApp> {
             create: (_) =>instance<SpecializationBloc>()
         ),
         BlocProvider(
-
             create: (_) =>instance<DoctorsBloc>()
         ),
     BlocProvider(
-
     create: (_) =>instance<HospitalsBloc>()
     ),
     BlocProvider(
-
     create: (_) =>instance<BrandBloc>()
     ),
         BlocProvider(

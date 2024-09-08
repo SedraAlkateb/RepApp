@@ -58,3 +58,23 @@ final class SyncDataLoadingState extends AuthState {
   @override
   List<Object?> get props =>[];
 }
+
+final class LoginState extends AuthState {
+  final LoginModel loginModel;
+  LoginState(this.loginModel);
+  @override
+  List<Object?> get props =>[loginModel];
+}
+final class LoginErrorState extends AuthState {
+  final Failure failure;
+  LoginErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class LoginLoadingState extends AuthState {
+  @override
+  LoginLoadingState();
+  @override
+  List<Object?> get props =>[];
+}

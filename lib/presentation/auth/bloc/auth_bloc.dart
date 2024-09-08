@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_usecase.dart';
@@ -10,13 +11,18 @@ import 'package:domina_app/domain/usecase/insert_all_brands_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_spec_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  LoginUsecase loginUsecase;
+  LoginSqlUsecase loginSqlUsecase;
   AllBrandsUsecase allBrandsUsecase;
   InsertAllBrandsSqlUsecase insertAllBrandsSqlUsecase;
   AllPharmacyUsecase allPharmacyUsecase;
@@ -32,6 +38,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   List<SpecModel> spec = [];
 
   AuthBloc(
+      this.loginSqlUsecase,
+      this.loginUsecase,
       this.allBrandsUsecase,
       this.insertAllBrandsSqlUsecase,
       this.allPharmacyUsecase,
@@ -54,9 +62,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         });
 
       }
+      if(event is LoginEvent){
+        emit(LoginLoadingState());
+        (await loginUsecase.execute(LoginRequest(event.userName, event.password))).
+        fold((failure) {
+          emit(LoginErrorState(failure: failure));
+        }, (data) async {
+          LoginModel loginModel=data;
+          print("object1");
+
+          emit(LoginState(loginModel));
+        });
+      }
+      if(event is LoginInsertEvent){
+
+        (await loginSqlUsecase.execute(event.loginModel)).fold((failure) {
+          emit(SyncDataErrorState(failure: failure));
+        }, (data) async {
+          print("object");
+          emit(SyncDataState());
+        });
+
+      }
     });
   }
-
   Future<bool> getData() async {
     brands=[];
     places=[];

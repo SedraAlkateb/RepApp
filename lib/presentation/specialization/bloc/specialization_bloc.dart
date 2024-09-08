@@ -15,7 +15,7 @@ class SpecializationBloc extends Bloc<SpecializationEvent, SpecializationState> 
       ) : super(SpecializationInitial()) {
     on<SpecializationEvent>((event, emit)async {
       if(event is SpecEvent){
-        emit(AllSpecLoadingState());
+ //       emit(AllSpecLoadingState());
         (
             await allSpeUsecase.execute()).fold(
       (failure)  {

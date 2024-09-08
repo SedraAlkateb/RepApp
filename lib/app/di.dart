@@ -25,6 +25,8 @@ import 'package:domina_app/domain/usecase/insert_all_brands_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_all_spec_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
@@ -86,9 +88,11 @@ Future<void>initLoginModule() async{
     instance.registerFactory<InsertAllSpecsSqlUsecase>(() =>InsertAllSpecsSqlUsecase(instance()));
     instance.registerFactory<AllSpeUsecase>(() =>AllSpeUsecase(instance()));
     instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
+    instance.registerFactory<LoginUsecase>(() =>LoginUsecase(instance()));
+    instance.registerFactory<LoginSqlUsecase>(() =>LoginSqlUsecase(instance()));
 
-    instance.registerFactory<AuthBloc>(() =>AuthBloc(instance(),instance(),
-        instance(),instance(),instance(),instance(),instance(),instance(),instance()));
+    instance.registerFactory<AuthBloc>(() =>AuthBloc(instance(),instance(),instance(),
+        instance(),instance(),instance(),instance(),instance(),instance(),instance(),instance()));
    }
 
 }

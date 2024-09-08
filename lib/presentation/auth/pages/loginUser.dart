@@ -1,24 +1,27 @@
+import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
   @override
   _MyLoginState createState() => _MyLoginState();
 }
+
 class _MyLoginState extends State<MyLogin> {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
-  
-  late String _username, _pass;
+  final TextEditingController userName = TextEditingController();
+  final TextEditingController password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage(ImageAssets.login),
-            fit: BoxFit.cover),
+            image: AssetImage(ImageAssets.login), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -48,7 +51,7 @@ class _MyLoginState extends State<MyLogin> {
                               validator: (val) => val!.length < 3
                                   ? "UserName is Required "
                                   : null,
-                              onSaved: (val) => _username = val!,
+                              controller: userName,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   fillColor: Colors.grey.shade100,
@@ -62,8 +65,8 @@ class _MyLoginState extends State<MyLogin> {
                               height: 30,
                             ),
                             TextFormField(
-                              onSaved: (val) => _pass = val!,
-                              validator: (val) => val!.length < 6
+                              controller: password,
+                              validator: (val) => val!.length < 2
                                   ? "Password length should be Greater than 6"
                                   : null,
                               style: TextStyle(),
@@ -88,25 +91,39 @@ class _MyLoginState extends State<MyLogin> {
                                       fontSize: 27,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Color(0xff4c505b),
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        if (formKey.currentState!.validate())
-                                       {
-                                          Navigator.pushNamed(
-                                          context,
-                                            Routes.syncData
-                                        );
-                                           formKey.currentState!.save();
-                                        }
-
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward,
-                                      )),
+                                BlocListener<AuthBloc, AuthState>(
+                                  listener: (context, state) {
+                                    if (state is LoginLoadingState) {
+                                      loading(context);
+                                    }
+                                    if (state is LoginState) {
+                                      BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent(state.loginModel));}
+                                    if(state is SyncDataState){
+                                      success(context);
+                                      Navigator.pushNamed(context, Routes.syncData);}
+                                    if (state is LoginErrorState) {
+                                      error(context, state.failure.massage,
+                                          state.failure.code);
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Color(0xff4c505b),
+                                    child: IconButton(
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            BlocProvider.of<AuthBloc>(context)
+                                                .add(LoginEvent(userName.text,
+                                                    password.text));
+                                            formKey.currentState!.save();
+                                          }
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_forward,
+                                        )),
+                                  ),
                                 )
                               ],
                             ),

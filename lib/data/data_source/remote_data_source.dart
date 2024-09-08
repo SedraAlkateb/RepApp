@@ -5,7 +5,7 @@ import 'package:domina_app/data/responses/responses.dart';
 abstract class RemoteDataSource{
 
   Future<MessageResponse> logout();
-  Future<TokenResponse > login(LoginRequest loginRequest);
+  Future<LoginResponse > login(LoginRequest loginRequest);
   Future<AllPlaceBaseResponse > allPlaces(int id);
   Future<AllSpcBaseResponse> allSpecializations(int repDet);
   Future<AllMedicalVisitBaseResponse> allVisitDoctor( int repDet,);
@@ -24,9 +24,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl(this._appServiceClient);
 
   @override
-  Future<TokenResponse> login(LoginRequest loginRequest) {
-  
-    throw UnimplementedError();
+  Future<LoginResponse> login(LoginRequest loginRequest) async{
+    return await _appServiceClient.login(loginRequest.email,loginRequest.password);
   }
 
   @override

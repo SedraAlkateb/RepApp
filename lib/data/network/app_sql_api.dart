@@ -37,6 +37,12 @@ class AppSqlApi {
     }
     await batch.commit(noResult: true);
   }
+  insertLogin(LoginModel loginModel) async {
+    Database? mydb =await databaseHelper.database;
+    Batch batch =mydb.batch();
+    batch.insert('rep',loginModel.toMap());
+    await batch.commit(noResult: true);
+  }
 
 
   Future<List<BrandModel>> getBrands() async {
@@ -79,6 +85,7 @@ class AppSqlApi {
     final db = await databaseHelper.database;
     final tables = ['brand', 'pharmacy', 'place', 'specialization'];
     Batch batch = db.batch();
+    //    batch.execute('DROP TABLE IF EXISTS rep');
     for (var table in tables) {
       batch.delete(table);
     }

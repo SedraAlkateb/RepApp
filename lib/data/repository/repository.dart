@@ -18,18 +18,13 @@ class RepositoryImp implements Repository {
   RepositoryImp(this._remoteDataSource,this._networkInfo);
 
   @override
-  Future<Either<Failure, Token>> login(LoginRequest loginRequest) async {
+  Future<Either<Failure, LoginModel>> login(LoginRequest loginRequest) async {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.login(loginRequest);
-      if (response.st == null) {
-        //success
-        //return either right
-        //return data
+      if (response.status == "200") {
         return Right(response.toDomain());
       } else {
-        //return either left
-        //failure --business error
         return Left(Failure(ApiInternalStatus.FAILURE,
             response.message ?? ResponseMassage.DEFAULT));
       }
@@ -43,16 +38,10 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, List<PlaceModel>>> allPlace(int id)  async {
     try {
-      //connect to internet,its safe to call Api
       final response = await _remoteDataSource.allPlaces(id);
-      if (response.st == null) {
-        //success
-        //return either right
-        //return data
+      if (response.status == null) {
         return Right(response.toDomain());
       } else {
-        //return either left
-        //failure --business error
         return Left(Failure(ApiInternalStatus.FAILURE,
             response.message ?? ResponseMassage.DEFAULT));
       }
@@ -74,7 +63,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.allSpecializations(id);
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -97,7 +86,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.allMedicalRepresentative(id);
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -120,7 +109,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.allBrand();
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -143,7 +132,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.allCity();
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -165,7 +154,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.allVisitDoctor(id);
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -188,7 +177,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.getAllPharmacy(repDet);
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -211,7 +200,7 @@ class RepositoryImp implements Repository {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.getAllDoctor(repDet);
-      if (response.st == null) {
+      if (response.status == null) {
         //success
         //return either right
         //return data
@@ -235,7 +224,7 @@ class RepositoryImp implements Repository {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.getAllHospital(repDet);
      
-      if (response.st == null) {
+      if (response.status == null) {
         print("hddddddddhh");
         //success
         //return either right

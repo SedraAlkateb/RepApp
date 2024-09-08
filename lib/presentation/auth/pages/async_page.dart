@@ -1,5 +1,7 @@
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,25 +12,42 @@ class AsyncPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-           if(state is SyncDataErrorState){
-             error(context, state.failure.massage, state.failure.code);
-           }
-           if(state is SyncDataLoadingState){
-             loading(context);
-           }
-           if(state is SyncDataState){
-             success(context);
-             Navigator.pushNamed(context, Routes.places);
-           }
-          },
-          child: InkWell(
-              onTap: () {
-                BlocProvider.of<AuthBloc>(context).add(AsyncDataEvent());
+      body: Padding(
+        padding: const EdgeInsets.all(AppPadding.p40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              ImageAssets.domina,width: 300,),
+            Text(
+              textAlign: TextAlign.center,
+              "تاكد من وجود الانترنت واضغط على تحميل البيانات لبدء العمل على التطبيق ",
+            style: Theme.of(context).textTheme.titleLarge,
+            ),
+            SizedBox(
+              height: AppSize.s50
+            ),
+            BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+               if(state is SyncDataErrorState){
+                 error(context, state.failure.massage, state.failure.code);
+               }
+               if(state is SyncDataLoadingState){
+                 loading(context);
+               }
+               if(state is SyncDataState){
+                 success(context);
+                 Navigator.pushNamed(context, Routes.places);
+               }
               },
-              child: Text("async")),
+              child: ElevatedButton(onPressed: (){
+                BlocProvider.of<AuthBloc>(context).add(AsyncDataEvent());
+              }, child: Text(
+                  "تحميل البيانات",
+              )),
+            ),
+          ],
         ),
       ),
     );

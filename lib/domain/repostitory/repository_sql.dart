@@ -16,5 +16,7 @@ abstract class RepositorySql {
   Future<Either<Failure,Null>>insertSpec(List<SpecModel> specModel);
   Future<Either<Failure,List<SpecModel>>>getSpecSql();
   Future<Either<Failure,Null>>clearDatabase();
+  Future<Either<Failure,Null>>loginSql(LoginModel loginModel);
+
 
 }

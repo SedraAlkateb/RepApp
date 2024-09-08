@@ -6,14 +6,6 @@ import 'package:domina_app/domain/models/models.dart';
 
 import '../../domain/models/models.dart';
 
-extension UserResponseMapper on TokenResponse? {
-  Token toDomain() {
-    return Token(
-      this?.token ?? Constants.empty,
-
-    );
-  }
-}
 
 extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   List<PlaceModel> toDomain() {
@@ -57,7 +49,7 @@ extension PharmacyResponseMapper on PharmacyResponse? {
     return PharmacyModel(
       int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
-      this?.placeId ?? Constants.empty,
+      int.parse(this?.placeId ?? "0") ,
       this?.address ?? Constants.empty,
 
     );
@@ -126,6 +118,20 @@ extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
 
   }
 }
+
+extension LoginResponseMapper on LoginResponse? {
+  LoginModel toDomain() {
+    return LoginModel(
+        this?.data?.token ?? Constants.empty,
+        this?.data?.repId ?? Constants.empty,
+        this?.data?.planId ?? Constants.zero,
+      this?.data?.name ?? Constants.empty,
+      this?.data?.percentage ?? Constants.zero,
+      true
+    );
+  }
+}
+
 extension AllMedicalVisitsResponseMapper on AllMedicalVisitBaseResponse? {
   List<MedicalVisits> toDomain() {
     List<MedicalVisits> medicalVisits =(this?.data.medicalVisits.map((response) => response.toDomain()) ??

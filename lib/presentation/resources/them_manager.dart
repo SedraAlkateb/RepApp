@@ -11,7 +11,7 @@ ThemeData getApplicationTheme() {
     tabBarTheme: TabBarTheme(
       labelColor: ColorManager.secondaryColor
     ),
-    primaryColor: ColorManager.primary,
+    primaryColor: ColorManager.secondaryColor4,
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(
       primary: ColorManager.primary,
@@ -47,7 +47,7 @@ ThemeData getApplicationTheme() {
         padding: const EdgeInsets.symmetric(horizontal: AppPadding.p28, vertical: AppPadding.p14),
         textStyle: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s20),
         shadowColor: ColorManager.shadow1,
-        backgroundColor: ColorManager.secondaryColor,
+        backgroundColor: ColorManager.secondaryColor1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s20),
         ),
@@ -61,7 +61,7 @@ ThemeData getApplicationTheme() {
       titleMedium: getSemiBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s16),
       bodySmall: getRegularStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s14),
       bodyLarge: getRegularStyle(color: Colors.black, fontSize: FontSize.s18),
-      titleLarge: getBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s20),
+      titleLarge: getBoldStyle(color: ColorManager.secondaryColor1, fontSize: FontSize.s25),
       labelLarge: getSemiBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s20),
       labelMedium: getBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s14),
       labelSmall: getMediumStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s16),
