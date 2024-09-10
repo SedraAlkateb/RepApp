@@ -91,7 +91,7 @@ class PlaceResponse {
 @JsonSerializable()
 class AllPlaceResponse {
   @JsonKey(name: "Places")
-  List<PlaceResponse> places;
+  List<PlaceResponse>? places;
   AllPlaceResponse(this.places);
   // from json
   factory AllPlaceResponse.fromJson(Map<String,dynamic>json)=>
@@ -103,7 +103,7 @@ class AllPlaceResponse {
 @JsonSerializable()
 class AllPlaceBaseResponse extends BaseResponse{
   @JsonKey(name: "Places")
-  AllPlaceResponse data;
+  AllPlaceResponse? data;
   AllPlaceBaseResponse(this.data);
   // from json
   factory AllPlaceBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -129,7 +129,7 @@ class SpecResponse {
 @JsonSerializable()
 class AllSpcResponse {
   @JsonKey(name: "Specializations")
-  List<SpecResponse> specializations;
+  List<SpecResponse> ?specializations;
   AllSpcResponse(this.specializations);
   // from json
   factory AllSpcResponse.fromJson(Map<String,dynamic>json)=>
@@ -141,7 +141,7 @@ class AllSpcResponse {
 @JsonSerializable()
 class AllSpcBaseResponse extends BaseResponse{
   @JsonKey(name: "Specializations")
-  AllSpcResponse data;
+  AllSpcResponse? data;
   AllSpcBaseResponse(this.data);
   // from json
   factory AllSpcBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -192,7 +192,7 @@ class MedicalVisitsResponse {
 @JsonSerializable()
 class AllMedicalVisitResponse {
   @JsonKey(name: "Medical Representative Visits")
-  List<MedicalVisitsResponse> medicalVisits;
+  List<MedicalVisitsResponse>? medicalVisits;
   AllMedicalVisitResponse(this.medicalVisits);
   // from json
   factory AllMedicalVisitResponse.fromJson(Map<String,dynamic>json)=>
@@ -204,7 +204,7 @@ class AllMedicalVisitResponse {
 @JsonSerializable()
 class AllMedicalVisitBaseResponse extends BaseResponse{
   @JsonKey(name: "Medical Representative Visits")
-  AllMedicalVisitResponse data;
+  AllMedicalVisitResponse ?data;
   AllMedicalVisitBaseResponse(this.data);
   // from json
   factory AllMedicalVisitBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -232,7 +232,7 @@ class CityResponse {
 @JsonSerializable()
 class AllCityResponse {
   @JsonKey(name: "City")
-  List<CityResponse> city;
+  List<CityResponse>? city;
   AllCityResponse(this.city);
   // from json
   factory AllCityResponse.fromJson(Map<String,dynamic>json)=>
@@ -244,7 +244,7 @@ class AllCityResponse {
 @JsonSerializable()
 class AllCityBaseResponse extends BaseResponse{
   @JsonKey(name: "City")
-  AllCityResponse data;
+  AllCityResponse ?data;
   AllCityBaseResponse(this.data);
   // from json
   factory AllCityBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -257,7 +257,7 @@ class AllCityBaseResponse extends BaseResponse{
 @JsonSerializable()
 class AllMedicalRepresentativeResponse {
   @JsonKey(name: "Medical Representative")
-  List<CityResponse> MedicalRepresentative;
+  List<CityResponse> ?MedicalRepresentative;
   AllMedicalRepresentativeResponse(this.MedicalRepresentative);
   // from json
   factory AllMedicalRepresentativeResponse.fromJson(Map<String,dynamic>json)=>
@@ -269,7 +269,7 @@ class AllMedicalRepresentativeResponse {
 @JsonSerializable()
 class AllMedicalRepresentativeBaseResponse extends BaseResponse{
   @JsonKey(name: "Medical Representative")
-  AllMedicalRepresentativeResponse data;
+  AllMedicalRepresentativeResponse? data;
   AllMedicalRepresentativeBaseResponse(this.data);
   // from json
   factory AllMedicalRepresentativeBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -289,7 +289,11 @@ class BrandResponse {
   String? title;
   @JsonKey(name: "phTitle")
   String? phTitle;
-  BrandResponse(this.id,this.title,this.phTitle);
+  @JsonKey(name: "falg")
+  int? falg;
+  @JsonKey(name: "sampleCoast")
+  String? sampleCoast;
+  BrandResponse(this.id,this.title,this.phTitle,this.falg,this.sampleCoast);
   // from json
   factory BrandResponse.fromJson(Map<String,dynamic>json)=>
       _$BrandResponseFromJson(json);
@@ -300,7 +304,7 @@ class BrandResponse {
 @JsonSerializable()
 class AllBrandResponse {
   @JsonKey(name: "Brands")
-  List<BrandResponse> brands;
+  List<BrandResponse>? brands;
   AllBrandResponse(this.brands);
   // from json
   factory AllBrandResponse.fromJson(Map<String,dynamic>json)=>
@@ -312,7 +316,7 @@ class AllBrandResponse {
 @JsonSerializable()
 class AllBrandBaseResponse extends BaseResponse{
   @JsonKey(name: "Brands")
-  AllBrandResponse data;
+  AllBrandResponse ?data;
   AllBrandBaseResponse(this.data);
   // from json
   factory AllBrandBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -344,7 +348,7 @@ class PharmacyResponse {
 @JsonSerializable()
 class AllPharmacyResponse {
   @JsonKey(name: "Pharmacy")
-  List<PharmacyResponse> pharmacy;
+  List<PharmacyResponse>? pharmacy;
   AllPharmacyResponse(this.pharmacy);
   // from json
   factory AllPharmacyResponse.fromJson(Map<String,dynamic>json)=>
@@ -356,7 +360,7 @@ class AllPharmacyResponse {
 @JsonSerializable()
 class AllPharmacyBaseResponse extends BaseResponse{
   @JsonKey(name: "Pharmacy")
-  AllPharmacyResponse data;
+  AllPharmacyResponse ?data;
   AllPharmacyBaseResponse(this.data);
   // from json
   factory AllPharmacyBaseResponse.fromJson(Map<String,dynamic>json)=>
@@ -393,7 +397,7 @@ class DoctorResponse {
 @JsonSerializable()
 class AllDoctorResponse{
   @JsonKey(name: "Doctors")
-  List<DoctorResponse> doctor;
+  List<DoctorResponse> ?doctor;
   AllDoctorResponse(this.doctor);
   // from json
   factory AllDoctorResponse.fromJson(Map<String,dynamic>json)=>
@@ -405,7 +409,7 @@ class AllDoctorResponse{
 @JsonSerializable()
 class AllDoctorsBaseResponse extends BaseResponse{
   @JsonKey(name: "Doctors")
-  AllDoctorResponse data;
+  AllDoctorResponse? data;
   AllDoctorsBaseResponse(this.data);
   // from json
   factory AllDoctorsBaseResponse.fromJson(Map<String,dynamic>json)=>

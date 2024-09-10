@@ -284,11 +284,15 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllBrandBaseResponse> allBrand() async {
+  Future<AllBrandBaseResponse> allBrand(int repDet) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanId',
+      repDet.toString(),
+    ));
     final _options = _setStreamType<AllBrandBaseResponse>(Options(
       method: 'POST',
       headers: _headers,

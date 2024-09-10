@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
-
+  Batch? batch;
   factory DatabaseHelper() {
     return _instance;
   }
@@ -35,14 +35,14 @@ class DatabaseHelper {
   }
   Future _onCreate(Database db, int version) async {
 
-    await db.execute('''
+    await db.execute ('''
       CREATE TABLE rep (
     token  TEXT NOT NULL,
-    repId TEXT NOT NULL,
-    planId TEXT NOT NULL,
-    userName TEXT NOT NULL,
+    repId INTEGER NOT NULL,
+    planId INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    percentage INTEGER NOT NULL,
     isLogin INTEGER NOT NULL DEFAULT 0
-
     );
     ''');
     await db.execute('''
@@ -58,13 +58,6 @@ class DatabaseHelper {
     );
     ''');
     await db.execute('''
-      CREATE TABLE brand (
-    id INTEGER PRIMARY KEY,
-    title TEXT NOT NULL,
-     phTitle TEXT NOT NULL
-    );
-    ''');
-    await db.execute('''
       CREATE TABLE pharmacy (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
@@ -73,6 +66,16 @@ class DatabaseHelper {
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
+    await db.execute('''
+      CREATE TABLE brand (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+     phTitle TEXT NOT NULL,
+     falg INTEGER NOT NULL,
+     sampleCoast INTEGER NOT NULL
+    );
+    ''');
+
   }
 
 

@@ -11,7 +11,7 @@ abstract class RemoteDataSource{
   Future<AllMedicalVisitBaseResponse> allVisitDoctor( int repDet,);
   Future<AllCityBaseResponse> allCity();
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(int repDet);
-  Future<AllBrandBaseResponse> allBrand();
+  Future<AllBrandBaseResponse> allBrand(int id);
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet);
  Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
   Future<AllHospitalBaseResponse> getAllHospital(int repDet);
@@ -45,20 +45,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllBrandBaseResponse> allBrand() async{
-    return await _appServiceClient.allBrand();
+  Future<AllBrandBaseResponse> allBrand(id) async{
+    return await _appServiceClient.allBrand(id);
   }
-
   @override
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(int repDet) async{
     return await _appServiceClient.allMedicalRepresentative(repDet);
   }
-
   @override
   Future<AllCityBaseResponse> allCity() async{
     return await _appServiceClient.allCity();
   }
-
   @override
   Future<AllMedicalVisitBaseResponse> allVisitDoctor(int repDet) async{
     return await _appServiceClient.allVisitDoctor(repDet);

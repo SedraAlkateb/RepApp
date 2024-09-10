@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -28,7 +28,7 @@ class AsyncPage extends StatelessWidget {
             SizedBox(
               height: AppSize.s50
             ),
-            BlocListener<AuthBloc, AuthState>(
+            BlocListener<AsyncBloc, AsyncState>(
               listener: (context, state) {
                if(state is SyncDataErrorState){
                  error(context, state.failure.massage, state.failure.code);
@@ -42,7 +42,7 @@ class AsyncPage extends StatelessWidget {
                }
               },
               child: ElevatedButton(onPressed: (){
-                BlocProvider.of<AuthBloc>(context).add(AsyncDataEvent());
+                BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
               }, child: Text(
                   "تحميل البيانات",
               )),

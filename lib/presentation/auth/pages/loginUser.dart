@@ -30,9 +30,9 @@ class _MyLoginState extends State<MyLogin> {
           child: Stack(
             children: [
               Container(
-                padding: EdgeInsets.only(left: 35, top: 130),
+                padding: EdgeInsets.only(right: 35, top: 130),
                 child: Text(
-                  'Welcome\nTo Domina',
+                  'مرحبا بك\nفي Domina',
                   style: TextStyle(color: Colors.white, fontSize: 33),
                 ),
               ),
@@ -49,14 +49,14 @@ class _MyLoginState extends State<MyLogin> {
                           children: [
                             TextFormField(
                               validator: (val) => val!.length < 3
-                                  ? "UserName is Required "
+                                  ? "حقل الاسم مطلوب "
                                   : null,
                               controller: userName,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   fillColor: Colors.grey.shade100,
                                   filled: true,
-                                  hintText: "UserName",
+                                  hintText: "الاسم",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   )),
@@ -67,14 +67,14 @@ class _MyLoginState extends State<MyLogin> {
                             TextFormField(
                               controller: password,
                               validator: (val) => val!.length < 2
-                                  ? "Password length should be Greater than 6"
+                                  ? "كلمة السر يجب ان تكون اطول من 6"
                                   : null,
                               style: TextStyle(),
                               obscureText: true,
                               decoration: InputDecoration(
                                   fillColor: Colors.grey.shade100,
                                   filled: true,
-                                  hintText: "Password",
+                                  hintText: "كلمة السر",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   )),
@@ -86,7 +86,7 @@ class _MyLoginState extends State<MyLogin> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Sign in',
+                                  'تسجيل الدخول',
                                   style: TextStyle(
                                       fontSize: 27,
                                       fontWeight: FontWeight.w700),
@@ -98,10 +98,14 @@ class _MyLoginState extends State<MyLogin> {
                                     }
                                     if (state is LoginState) {
                                       BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent(state.loginModel));}
-                                    if(state is SyncDataState){
+                                    if(state is InsertLoginState){
                                       success(context);
                                       Navigator.pushNamed(context, Routes.syncData);}
                                     if (state is LoginErrorState) {
+                                      error(context, state.failure.massage,
+                                          state.failure.code);
+                                    }
+                                    if (state is InsertLoginErrorState) {
                                       error(context, state.failure.massage,
                                           state.failure.code);
                                     }

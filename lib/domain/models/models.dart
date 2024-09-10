@@ -80,11 +80,15 @@ class BrandModel {
   int id;
   String title;
   String phTitle;
+  int falg;
+  int sampleCoast;
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'phTitle': phTitle,
+      'falg':falg,
+      'sampleCoast':sampleCoast
     };
   }
 
@@ -93,10 +97,11 @@ class BrandModel {
       map['id'],
       map['title'],
       map['phTitle'],
+      map['falg'],
+      map['sampleCoast'],
     );
   }
-
-  BrandModel(this.id, this.title, this.phTitle);
+  BrandModel(this.id, this.title, this.phTitle,this.falg,this.sampleCoast);
 }
 
 class PharmacyModel {
@@ -164,11 +169,11 @@ class CityModel {
 
 class LoginModel {
   String token;
-  String repId;
+  int repId;
   int planId;
   int percentage;
   String name;
-  bool isLogin;
+  int isLogin;
 
   LoginModel(this.token, this.repId, this.planId, this.name, this.percentage,
       this.isLogin);

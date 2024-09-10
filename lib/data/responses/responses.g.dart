@@ -86,8 +86,8 @@ Map<String, dynamic> _$PlaceResponseToJson(PlaceResponse instance) =>
 
 AllPlaceResponse _$AllPlaceResponseFromJson(Map<String, dynamic> json) =>
     AllPlaceResponse(
-      (json['Places'] as List<dynamic>)
-          .map((e) => PlaceResponse.fromJson(e as Map<String, dynamic>))
+      (json['Places'] as List<dynamic>?)
+          ?.map((e) => PlaceResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -99,7 +99,9 @@ Map<String, dynamic> _$AllPlaceResponseToJson(AllPlaceResponse instance) =>
 AllPlaceBaseResponse _$AllPlaceBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllPlaceBaseResponse(
-      AllPlaceResponse.fromJson(json['Places'] as Map<String, dynamic>),
+      json['Places'] == null
+          ? null
+          : AllPlaceResponse.fromJson(json['Places'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -125,8 +127,8 @@ Map<String, dynamic> _$SpecResponseToJson(SpecResponse instance) =>
 
 AllSpcResponse _$AllSpcResponseFromJson(Map<String, dynamic> json) =>
     AllSpcResponse(
-      (json['Specializations'] as List<dynamic>)
-          .map((e) => SpecResponse.fromJson(e as Map<String, dynamic>))
+      (json['Specializations'] as List<dynamic>?)
+          ?.map((e) => SpecResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -137,7 +139,10 @@ Map<String, dynamic> _$AllSpcResponseToJson(AllSpcResponse instance) =>
 
 AllSpcBaseResponse _$AllSpcBaseResponseFromJson(Map<String, dynamic> json) =>
     AllSpcBaseResponse(
-      AllSpcResponse.fromJson(json['Specializations'] as Map<String, dynamic>),
+      json['Specializations'] == null
+          ? null
+          : AllSpcResponse.fromJson(
+              json['Specializations'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -180,8 +185,9 @@ Map<String, dynamic> _$MedicalVisitsResponseToJson(
 AllMedicalVisitResponse _$AllMedicalVisitResponseFromJson(
         Map<String, dynamic> json) =>
     AllMedicalVisitResponse(
-      (json['Medical Representative Visits'] as List<dynamic>)
-          .map((e) => MedicalVisitsResponse.fromJson(e as Map<String, dynamic>))
+      (json['Medical Representative Visits'] as List<dynamic>?)
+          ?.map(
+              (e) => MedicalVisitsResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -194,8 +200,10 @@ Map<String, dynamic> _$AllMedicalVisitResponseToJson(
 AllMedicalVisitBaseResponse _$AllMedicalVisitBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllMedicalVisitBaseResponse(
-      AllMedicalVisitResponse.fromJson(
-          json['Medical Representative Visits'] as Map<String, dynamic>),
+      json['Medical Representative Visits'] == null
+          ? null
+          : AllMedicalVisitResponse.fromJson(
+              json['Medical Representative Visits'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -221,8 +229,8 @@ Map<String, dynamic> _$CityResponseToJson(CityResponse instance) =>
 
 AllCityResponse _$AllCityResponseFromJson(Map<String, dynamic> json) =>
     AllCityResponse(
-      (json['City'] as List<dynamic>)
-          .map((e) => CityResponse.fromJson(e as Map<String, dynamic>))
+      (json['City'] as List<dynamic>?)
+          ?.map((e) => CityResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -233,7 +241,9 @@ Map<String, dynamic> _$AllCityResponseToJson(AllCityResponse instance) =>
 
 AllCityBaseResponse _$AllCityBaseResponseFromJson(Map<String, dynamic> json) =>
     AllCityBaseResponse(
-      AllCityResponse.fromJson(json['City'] as Map<String, dynamic>),
+      json['City'] == null
+          ? null
+          : AllCityResponse.fromJson(json['City'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -249,8 +259,8 @@ Map<String, dynamic> _$AllCityBaseResponseToJson(
 AllMedicalRepresentativeResponse _$AllMedicalRepresentativeResponseFromJson(
         Map<String, dynamic> json) =>
     AllMedicalRepresentativeResponse(
-      (json['Medical Representative'] as List<dynamic>)
-          .map((e) => CityResponse.fromJson(e as Map<String, dynamic>))
+      (json['Medical Representative'] as List<dynamic>?)
+          ?.map((e) => CityResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -263,8 +273,10 @@ Map<String, dynamic> _$AllMedicalRepresentativeResponseToJson(
 AllMedicalRepresentativeBaseResponse
     _$AllMedicalRepresentativeBaseResponseFromJson(Map<String, dynamic> json) =>
         AllMedicalRepresentativeBaseResponse(
-          AllMedicalRepresentativeResponse.fromJson(
-              json['Medical Representative'] as Map<String, dynamic>),
+          json['Medical Representative'] == null
+              ? null
+              : AllMedicalRepresentativeResponse.fromJson(
+                  json['Medical Representative'] as Map<String, dynamic>),
         )
           ..status = json['status'] as String?
           ..message = json['message'] as String?;
@@ -282,6 +294,8 @@ BrandResponse _$BrandResponseFromJson(Map<String, dynamic> json) =>
       json['id'] as String?,
       json['title'] as String?,
       json['phTitle'] as String?,
+      (json['falg'] as num?)?.toInt(),
+      json['sampleCoast'] as String?,
     );
 
 Map<String, dynamic> _$BrandResponseToJson(BrandResponse instance) =>
@@ -289,12 +303,14 @@ Map<String, dynamic> _$BrandResponseToJson(BrandResponse instance) =>
       'id': instance.id,
       'title': instance.title,
       'phTitle': instance.phTitle,
+      'falg': instance.falg,
+      'sampleCoast': instance.sampleCoast,
     };
 
 AllBrandResponse _$AllBrandResponseFromJson(Map<String, dynamic> json) =>
     AllBrandResponse(
-      (json['Brands'] as List<dynamic>)
-          .map((e) => BrandResponse.fromJson(e as Map<String, dynamic>))
+      (json['Brands'] as List<dynamic>?)
+          ?.map((e) => BrandResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -306,7 +322,9 @@ Map<String, dynamic> _$AllBrandResponseToJson(AllBrandResponse instance) =>
 AllBrandBaseResponse _$AllBrandBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllBrandBaseResponse(
-      AllBrandResponse.fromJson(json['Brands'] as Map<String, dynamic>),
+      json['Brands'] == null
+          ? null
+          : AllBrandResponse.fromJson(json['Brands'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -337,8 +355,8 @@ Map<String, dynamic> _$PharmacyResponseToJson(PharmacyResponse instance) =>
 
 AllPharmacyResponse _$AllPharmacyResponseFromJson(Map<String, dynamic> json) =>
     AllPharmacyResponse(
-      (json['Pharmacy'] as List<dynamic>)
-          .map((e) => PharmacyResponse.fromJson(e as Map<String, dynamic>))
+      (json['Pharmacy'] as List<dynamic>?)
+          ?.map((e) => PharmacyResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -351,7 +369,10 @@ Map<String, dynamic> _$AllPharmacyResponseToJson(
 AllPharmacyBaseResponse _$AllPharmacyBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllPharmacyBaseResponse(
-      AllPharmacyResponse.fromJson(json['Pharmacy'] as Map<String, dynamic>),
+      json['Pharmacy'] == null
+          ? null
+          : AllPharmacyResponse.fromJson(
+              json['Pharmacy'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -388,8 +409,8 @@ Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
 
 AllDoctorResponse _$AllDoctorResponseFromJson(Map<String, dynamic> json) =>
     AllDoctorResponse(
-      (json['Doctors'] as List<dynamic>)
-          .map((e) => DoctorResponse.fromJson(e as Map<String, dynamic>))
+      (json['Doctors'] as List<dynamic>?)
+          ?.map((e) => DoctorResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -401,7 +422,9 @@ Map<String, dynamic> _$AllDoctorResponseToJson(AllDoctorResponse instance) =>
 AllDoctorsBaseResponse _$AllDoctorsBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllDoctorsBaseResponse(
-      AllDoctorResponse.fromJson(json['Doctors'] as Map<String, dynamic>),
+      json['Doctors'] == null
+          ? null
+          : AllDoctorResponse.fromJson(json['Doctors'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;

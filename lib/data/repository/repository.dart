@@ -105,10 +105,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<BrandModel>>> allBrand()  async {
+  Future<Either<Failure, List<BrandModel>>> allBrand(int id)  async {
     try {
       //connect to internet,its safe to call Api
-      final response = await _remoteDataSource.allBrand();
+      final response = await _remoteDataSource.allBrand(id);
       if (response.status == null) {
         //success
         //return either right

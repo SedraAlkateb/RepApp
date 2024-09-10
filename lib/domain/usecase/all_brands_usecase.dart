@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 class AllBrandsUsecase extends Equatable {
   Repository _repository;
   AllBrandsUsecase(this._repository);
-  Future<Either<Failure, List<BrandModel>>> execute() async{
-    return await _repository.allBrand();
+  Future<Either<Failure, List<BrandModel>>> execute(int id) async{
+    return await _repository.allBrand(id);
   }
 
   @override

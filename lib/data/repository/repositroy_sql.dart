@@ -143,4 +143,57 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, LoginModel?>> getRep()   async {
+    try {
+      final response = await _databaseHelper.getRep();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PharmacyModel>>> getPharmaciesByPlaceId(int placeId) async {
+    try {
+      final response = await _databaseHelper.getPharmaciesByPlaceId(placeId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> asyncData
+      (List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs)async {
+    try {
+      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs);
+      if(response==""){
+        return Right(response);
+      }else{
+        return Left(Failure(6, response));
+      }
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag()  async {
+    try {
+      final response = await _databaseHelper.getBrandsWithFlag();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }
