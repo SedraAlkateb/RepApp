@@ -40,21 +40,36 @@ final class InsertAllBrandLoadingState extends AuthState {
   List<Object?> get props =>[];
 }
 
-final class SyncDataState extends AuthState {
-  SyncDataState();
+
+final class LoginState extends AuthState {
+  final LoginModel loginModel;
+  LoginState(this.loginModel);
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props =>[loginModel];
 }
-final class SyncDataErrorState extends AuthState {
+final class LoginErrorState extends AuthState {
   final Failure failure;
-  SyncDataErrorState({required this.failure});
+  LoginErrorState({required this.failure});
   @override
 
   List<Object?> get props =>[failure];
 }
-final class SyncDataLoadingState extends AuthState {
+final class LoginLoadingState extends AuthState {
   @override
-  SyncDataLoadingState();
+  LoginLoadingState();
   @override
   List<Object?> get props =>[];
+}
+
+final class InsertLoginState extends AuthState {
+  InsertLoginState();
+  @override
+  List<Object?> get props =>[];
+}
+final class InsertLoginErrorState extends AuthState {
+  final Failure failure;
+  InsertLoginErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
 }

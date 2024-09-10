@@ -12,9 +12,17 @@ abstract class RepositorySql {
 
   Future<Either<Failure,Null>>insertPlace(List<PlaceModel> placeModel);
   Future<Either<Failure,List<PlaceModel>>>getPlaceSql();
-
   Future<Either<Failure,Null>>insertSpec(List<SpecModel> specModel);
   Future<Either<Failure,List<SpecModel>>>getSpecSql();
   Future<Either<Failure,Null>>clearDatabase();
+  Future<Either<Failure,Null>>loginSql(LoginModel loginModel);
+  Future<Either<Failure,LoginModel?>>getRep();
+  Future<Either<Failure,List<PharmacyModel>>>getPharmaciesByPlaceId(int placeId);
+  Future<Either<Failure,String>>asyncData(
+      List<BrandModel> brands,
+      List<PharmacyModel> pharmacies,
+      List<PlaceModel> places,
+      List<SpecModel> specs);
+  Future<Either<Failure,List<BrandModel>>>getBrandsWithFlag();
 
 }

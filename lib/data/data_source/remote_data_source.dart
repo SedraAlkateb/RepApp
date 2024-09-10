@@ -5,13 +5,13 @@ import 'package:domina_app/data/responses/responses.dart';
 abstract class RemoteDataSource{
 
   Future<MessageResponse> logout();
-  Future<TokenResponse > login(LoginRequest loginRequest);
+  Future<LoginResponse > login(LoginRequest loginRequest);
   Future<AllPlaceBaseResponse > allPlaces(int id);
   Future<AllSpcBaseResponse> allSpecializations(int repDet);
   Future<AllMedicalVisitBaseResponse> allVisitDoctor( int repDet,);
   Future<AllCityBaseResponse> allCity();
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(int repDet);
-  Future<AllBrandBaseResponse> allBrand();
+  Future<AllBrandBaseResponse> allBrand(int id);
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet);
  Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
   Future<AllHospitalBaseResponse> getAllHospital(int repDet);
@@ -24,9 +24,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl(this._appServiceClient);
 
   @override
-  Future<TokenResponse> login(LoginRequest loginRequest) {
-  
-    throw UnimplementedError();
+  Future<LoginResponse> login(LoginRequest loginRequest) async{
+    return await _appServiceClient.login(loginRequest.email,loginRequest.password);
   }
 
   @override
@@ -46,20 +45,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllBrandBaseResponse> allBrand() async{
-    return await _appServiceClient.allBrand();
+  Future<AllBrandBaseResponse> allBrand(id) async{
+    return await _appServiceClient.allBrand(id);
   }
-
   @override
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(int repDet) async{
     return await _appServiceClient.allMedicalRepresentative(repDet);
   }
-
   @override
   Future<AllCityBaseResponse> allCity() async{
     return await _appServiceClient.allCity();
   }
-
   @override
   Future<AllMedicalVisitBaseResponse> allVisitDoctor(int repDet) async{
     return await _appServiceClient.allVisitDoctor(repDet);

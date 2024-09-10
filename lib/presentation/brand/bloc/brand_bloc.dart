@@ -14,7 +14,7 @@ class BrandBloc extends Bloc<BrandEvent, BrandState> {
       ) : super(BrandInitial()) {
     on<BrandEvent>((event, emit)async {
       if(event is AllBrandEvent){
-        emit(AllBrandLoadingState());
+      //  emit(AllBrandLoadingState());
         (
             await allBrandsSqlUsecase.execute()).fold(
       (failure)  {

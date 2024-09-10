@@ -4,10 +4,24 @@ part of 'auth_bloc.dart';
 sealed class AuthEvent extends Equatable{
 
 }
-class AsyncDataEvent extends AuthEvent{
+
+class LoginEvent extends AuthEvent{
+
+  final String userName;
+  final String password;
+  LoginEvent(this.userName,this.password);
   @override
 
   List<Object?> get props => throw UnimplementedError();
+
+
+}
+class LoginInsertEvent extends AuthEvent{
+
+  final LoginModel loginModel;
+  LoginInsertEvent(this.loginModel);
+  @override
+  List<Object?> get props => [loginModel];
 
 
 }

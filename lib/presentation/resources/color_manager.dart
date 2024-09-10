@@ -22,9 +22,11 @@ class ColorManager {
   static Color primary =const  Color(0xffFDF8F5);
   static Color secondaryColor=const  Color(0xff3A434D);
 
-  static Color secondaryColor1=const  Color(0xff59BEE6);
+  static Color secondaryColor4=const  Color(0xff59BEE6);
   static Color secondaryColor2=const  Color(0xffF4AC47);
   static Color secondaryColor3=const  Color(0x243a434d);
+  static Color secondaryColor1=const  Color(0xff18355d);
+
 
 
 

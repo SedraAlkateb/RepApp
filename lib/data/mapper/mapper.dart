@@ -6,18 +6,10 @@ import 'package:domina_app/domain/models/models.dart';
 
 import '../../domain/models/models.dart';
 
-extension UserResponseMapper on TokenResponse? {
-  Token toDomain() {
-    return Token(
-      this?.token ?? Constants.empty,
-
-    );
-  }
-}
 
 extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   List<PlaceModel> toDomain() {
-    List<PlaceModel> places =(this?.data.places.map((response) => response.toDomain()) ??
+    List<PlaceModel> places =(this?.data?.places?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<PlaceModel>()
         .toList();
@@ -44,7 +36,7 @@ extension SpecResponseMapper on SpecResponse? {
 
 extension AllSpecResponseMapper on AllSpcBaseResponse? {
   List<SpecModel> toDomain() {
-    List<SpecModel> spec =(this?.data.specializations.map((response) => response.toDomain()) ??
+    List<SpecModel> spec =(this?.data?.specializations?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<SpecModel>()
         .toList();
@@ -57,7 +49,7 @@ extension PharmacyResponseMapper on PharmacyResponse? {
     return PharmacyModel(
       int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
-      this?.placeId ?? Constants.empty,
+      int.parse(this?.placeId ?? "0") ,
       this?.address ?? Constants.empty,
 
     );
@@ -65,7 +57,7 @@ extension PharmacyResponseMapper on PharmacyResponse? {
 }
 extension AllPharmacyResponseMapper on AllPharmacyBaseResponse? {
   List<PharmacyModel> toDomain() {
-    List<PharmacyModel> Pharmacy =(this?.data.pharmacy.map((response) => response.toDomain()) ??
+    List<PharmacyModel> Pharmacy =(this?.data?.pharmacy?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<PharmacyModel>()
         .toList();
@@ -79,12 +71,14 @@ extension BrandResponseMapper on BrandResponse? {
       int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
       this?.phTitle ?? Constants.empty,
+      this?.falg ?? Constants.zero,
+      int.parse(this?.sampleCoast ?? "0") ,
     );
   }
 }
 extension AllBrandResponseMapper on AllBrandBaseResponse? {
   List<BrandModel> toDomain() {
-    List<BrandModel> Brand =(this?.data.brands.map((response) => response.toDomain()) ??
+    List<BrandModel> Brand =(this?.data?.brands?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<BrandModel>()
         .toList();
@@ -102,7 +96,7 @@ extension CityResponseMapper on CityResponse? {
 }
 extension AllCityResponseMapper on AllCityBaseResponse? {
   List<CityModel> toDomain() {
-    List<CityModel> City =(this?.data.city.map((response) => response.toDomain()) ??
+    List<CityModel> City =(this?.data?.city?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<CityModel>()
         .toList();
@@ -126,9 +120,23 @@ extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
 
   }
 }
+
+extension LoginResponseMapper on LoginResponse? {
+  LoginModel toDomain() {
+    return LoginModel(
+        this?.data?.token ?? Constants.empty,
+        int.parse(this?.data?.repId ?? "0") ,
+        this?.data?.planId ?? Constants.zero,
+      this?.data?.name ?? Constants.empty,
+      this?.data?.percentage ?? Constants.zero,
+      1
+    );
+  }
+}
+
 extension AllMedicalVisitsResponseMapper on AllMedicalVisitBaseResponse? {
   List<MedicalVisits> toDomain() {
-    List<MedicalVisits> medicalVisits =(this?.data.medicalVisits.map((response) => response.toDomain()) ??
+    List<MedicalVisits> medicalVisits =(this?.data?.medicalVisits?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<MedicalVisits>()
         .toList();
@@ -138,7 +146,7 @@ extension AllMedicalVisitsResponseMapper on AllMedicalVisitBaseResponse? {
 
 extension MedicalRepresentativeResponseMapper on AllMedicalRepresentativeBaseResponse? {
   List<CityModel> toDomain() {
-    List<CityModel> City =(this?.data.MedicalRepresentative.map((response) => response.toDomain()) ??
+    List<CityModel> City =(this?.data?.MedicalRepresentative?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<CityModel>()
         .toList();
@@ -148,7 +156,7 @@ extension MedicalRepresentativeResponseMapper on AllMedicalRepresentativeBaseRes
 
 extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
   List<DoctorModel> toDomain() {
-    List<DoctorModel> doctorModel =(this?.data.doctor.map((response) => response.toDomain()) ??
+    List<DoctorModel> doctorModel =(this?.data?.doctor?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<DoctorModel>()
         .toList();

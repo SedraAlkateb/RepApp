@@ -1,10 +1,42 @@
 import 'package:domina_app/data/network/sqllite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
-
 class AppSqlApi {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
+  Future<String> asyncData(
+      List<BrandModel> brands,
+      List<PharmacyModel> pharmacies,
+      List<PlaceModel> places,
+      List<SpecModel> specs) async {
+    try {
+      Database? mydb = await databaseHelper.database;
+      await mydb!.transaction((txn) async {
+        Batch batch = txn.batch();
+        for(var place in places){
+          batch.insert('place',place.toMap());
+        }
+        for(var brand in brands){
+          batch.insert('brand',brand.toMap());
+        }
+        for(var pharmacy in pharmacies){
+          batch.insert('pharmacy',pharmacy.toMap());
+        }
+
+
+        for(var spec in specs){
+          batch.insert('specialization',spec.toMap());
+
+        }
+
+        await batch.commit(noResult: true);
+      });
+      return "";
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
   insertBrands(List<BrandModel> brands) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
@@ -38,51 +70,108 @@ class AppSqlApi {
     await batch.commit(noResult: true);
   }
 
-
+  insertLogin(LoginModel loginModel) async {
+    Database? mydb =await databaseHelper.database;
+    Batch batch =mydb.batch();
+    batch.insert('rep',loginModel.toMap());
+    await batch.commit(noResult: true);
+  }
   Future<List<BrandModel>> getBrands() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('brand');
 
-    // Convert List<Map<String, dynamic>> to List<Brand>
-    return List.generate(maps.length, (i) {
-      return BrandModel.fromMap(maps[i]);
-    });
+    if(maps!=null){
+      return List.generate(maps.length, (i) {
+        return BrandModel.fromMap(maps[i]);
+      });
+    }else{
+      return [];
+    }
   }
   Future<List<PharmacyModel>> getPharmacy() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('pharmacy');
+    if(maps!=null){
+      return List.generate(maps.length, (i) {
+        return PharmacyModel.fromMap(maps[i]);
+      });
+    }else{
+      return [];
+    }
 
-    // Convert List<Map<String, dynamic>> to List<Brand>
-    return List.generate(maps.length, (i) {
-      return PharmacyModel.fromMap(maps[i]);
-    });
   }
   Future<List<PlaceModel>> getPlace() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('place');
 
-    // Convert List<Map<String, dynamic>> to List<Brand>
-    return List.generate(maps.length, (i) {
-      return PlaceModel.fromMap(maps[i]);
-    });
+   if(maps!=null){
+     return List.generate(maps.length, (i) {
+       return PlaceModel.fromMap(maps[i]);
+     });
+   }else{
+     return [];
+   }
+
   }
   Future<List<SpecModel>> getSpec() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('specialization');
 
-    // Convert List<Map<String, dynamic>> to List<Brand>
-    return List.generate(maps.length, (i) {
-      return SpecModel.fromMap(maps[i]);
-    });
+    if(maps!=null){
+      return List.generate(maps.length, (i) {
+        return SpecModel.fromMap(maps[i]);
+      });
+    }else{
+      return [];
+    }
+
   }
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
     final tables = ['brand', 'pharmacy', 'place', 'specialization'];
     Batch batch = db.batch();
+    //    batch.execute('DROP TABLE IF EXISTS rep');
     for (var table in tables) {
       batch.delete(table);
     }
     await batch.commit(noResult: true);
   }
+  Future<LoginModel?> getRep() async {
+    final db = await databaseHelper.database;
+    Batch batch = db.batch();
+    batch.rawQuery('SELECT token, repId, planId, name, percentage, isLogin FROM rep LIMIT 1');
+    List<dynamic> results = await batch.commit();
+    if (results.isNotEmpty && results[0].isNotEmpty) {
+      Map<String, dynamic> firstRow = results[0][0];
+      return LoginModel.fromMap(firstRow);
+    } else {
+      return null;
+    }
+  }
+  Future<List<BrandModel>> getBrandsWithFlag() async {
+    final db = await databaseHelper.database;
+    List<Map<String, dynamic>> brands = await db.query(
+      'brand',
+      where: 'falg = ?',
+      whereArgs: [1],
+    );
+    if(brands!=null){
+      return List.generate(brands.length, (i) {
+        return BrandModel.fromMap(brands[i]);
+      });
+    }else{
+      return [];
+    }
+  }
 
+  Future<List<PharmacyModel>> getPharmaciesByPlaceId( int placeId) async {
+    final db = await databaseHelper.database;
+    List<Map<String, dynamic>> result = await db.query(
+      'pharmacy',
+      where: 'placeId = ?',
+      whereArgs: [placeId],
+    );
+    List<PharmacyModel> pharmacies = result.map((map) => PharmacyModel.fromMap(map)).toList();
+    return pharmacies;
+  }
 }

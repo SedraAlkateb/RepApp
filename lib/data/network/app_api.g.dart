@@ -57,8 +57,8 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<TokenResponse> login(
-    String email,
+  Future<LoginResponse> login(
+    String userName,
     String password,
   ) async {
     final _extra = <String, dynamic>{};
@@ -66,21 +66,21 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
-      'email',
-      email,
+      'userName',
+      userName,
     ));
     _data.fields.add(MapEntry(
       'password',
       password,
     ));
-    final _options = _setStreamType<TokenResponse>(Options(
+    final _options = _setStreamType<LoginResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/loginSuperAdmin',
+          '/loginU.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -90,9 +90,9 @@ class _AppServiceClient implements AppServiceClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late TokenResponse _value;
+    late LoginResponse _value;
     try {
-      _value = TokenResponse.fromJson(_result.data!);
+      _value = LoginResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -284,11 +284,15 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllBrandBaseResponse> allBrand() async {
+  Future<AllBrandBaseResponse> allBrand(int repDet) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanId',
+      repDet.toString(),
+    ));
     final _options = _setStreamType<AllBrandBaseResponse>(Options(
       method: 'POST',
       headers: _headers,

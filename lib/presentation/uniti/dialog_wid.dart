@@ -3,8 +3,8 @@ import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 class DialogFilter extends StatelessWidget {
-  const DialogFilter({super.key, required this.widget,required this.text});
-  final  Widget widget;
+  const DialogFilter({super.key,required this.text});
+
   final String text;
  // final  int index;
   @override
@@ -46,7 +46,8 @@ class DialogFilter extends StatelessWidget {
                             padding:  const EdgeInsets.only(right: AppPadding.p8),
                             child:  Text(text,style: const TextStyle(fontSize: 20)),
                           ),
-                          widget
+                          ElevatedButton(onPressed: (){}, child:
+                          Text("data"))
 
                         ],
                       ),

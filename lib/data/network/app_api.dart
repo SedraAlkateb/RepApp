@@ -10,9 +10,9 @@ abstract class AppServiceClient {
   @POST("/logout")
   Future<MessageResponse> logout(
       );
-  @POST("/loginSuperAdmin")
-  Future<TokenResponse> login(
-      @Part(name: "email") String email,
+  @POST("/loginU.php")
+  Future<LoginResponse> login(
+      @Part(name: "userName") String userName,
       @Part(name: "password") String password,
       );
   @POST("/getAllPlace.php")
@@ -36,6 +36,7 @@ abstract class AppServiceClient {
       );
   @POST("/getAllBrand.php")
   Future<AllBrandBaseResponse> allBrand(
+      @Part(name: "repPlanId") int repPlanId,
       );
   @POST("/getAllPharmacy.php")
   Future<AllPharmacyBaseResponse> getAllPharmacy(
