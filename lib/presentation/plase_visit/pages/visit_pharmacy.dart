@@ -82,7 +82,6 @@ class VisitPharmacy extends StatelessWidget {
                       );
                     }
                     return CustomDropDown(
-
                       hintText: "العينات",
                       items: [],
                       prefixIcon: null,
