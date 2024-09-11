@@ -1,5 +1,8 @@
 part of 'place_visit_bloc.dart';
 
+import 'package:domina_app/domain/models/models.dart';
+import 'package:equatable/equatable.dart';
+
 @immutable
 sealed class PlaceVisitEvent extends Equatable{
 }
