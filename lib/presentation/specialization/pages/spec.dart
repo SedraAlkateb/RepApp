@@ -72,16 +72,19 @@ class SpecializationsPage extends StatelessWidget {
                       ),
                       BlocConsumer<SpecializationBloc, SpecializationState>(
                         listener: (context, state) {
+                         /*
                           if (state is AllSpecLoadingState) {
                             loading(context);
-                          }
-                          if (state is AllSpecErrorState) {
-                            error(context, state.failure.massage,
-                                state.failure.code);
                           }
                           if (state is AllSpecState) {
                             success(context);
                           }
+                          */
+                          if (state is AllSpecErrorState) {
+                            error(context, state.failure.massage,
+                                state.failure.code);
+                          }
+
                         },
                         builder: (context, state) {
                           if (state is AllSpecState) {

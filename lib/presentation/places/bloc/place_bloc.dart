@@ -16,7 +16,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       ) : super(PlaceInitial()) {
     on<PlaceEvent>((event, emit)async {
       if(event is AllPlaceEvent){
-       emit(AllPlaceLoadingState());
+    //   emit(AllPlaceLoadingState());
         (
             await allPlaceUsecase.execute()).fold(
       (failure)  {

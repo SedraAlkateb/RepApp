@@ -67,11 +67,14 @@ class BrandPage extends StatelessWidget {
                       error(context, state.failure.massage, state.failure.code);
                     });
                   }
+                  /*
                   if(state is AllBrandLoadingState){
                     loading(context);
                   }
                   if(state is AllBrandState){
     success(context);}
+
+                   */
                 },
   builder: (context, state) {
     if(state is AllBrandState){
