@@ -1,14 +1,19 @@
 
+// ignore_for_file: must_be_immutable
+
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:equatable/equatable.dart';
-class AllBrandsUsecase extends Equatable {
-  Repository _repository;
-  AllBrandsUsecase(this._repository);
-  Future<Either<Failure, List<BrandModel>>> execute(int id) async{
-    return await _repository.allBrand(id);
+
+
+class LoginSqlUsecase extends Equatable {
+  RepositorySql _repository;
+  LoginSqlUsecase(this._repository);
+  Future<Either<Failure, Null>> execute(LoginModel loginModel) async{
+    return await _repository.loginSql(loginModel);
   }
 
   @override

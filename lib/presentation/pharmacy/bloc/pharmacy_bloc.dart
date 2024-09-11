@@ -14,7 +14,7 @@ class PharmacyBloc extends Bloc<PharmacyEvent, PharmacyState> {
   PharmacyBloc(this.allPharmacyUsecase) : super(PharmacyInitial()) {
     on<PharmacyEvent>((event, emit) async{
       if(event is AllPharmacyEvent){
-        emit(AllPharmacyLoadingState());
+    //    emit(AllPharmacyLoadingState());
         (
             await allPharmacyUsecase.execute()).fold(
       (failure)  {

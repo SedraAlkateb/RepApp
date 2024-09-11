@@ -54,7 +54,7 @@ class DrawerPage extends StatelessWidget {
             leading: const Icon(Icons.medication),
             title: const Text('All spec'),
             onTap: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
+             WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.spec,(route) => false,
@@ -67,9 +67,9 @@ class DrawerPage extends StatelessWidget {
             leading: const Icon(Icons.group),
             title: const Text('All Doctors'),
             onTap: () {
-              Navigator.pushNamed(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                Routes.doctors
+                Routes.doctors,(route) => false,
               );
               
             },
@@ -78,9 +78,9 @@ class DrawerPage extends StatelessWidget {
             leading: const Icon(Icons.group),
             title: const Text('All Hospital'),
             onTap: () {
-              Navigator.pushNamed(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                Routes.hospital
+                Routes.hospital,(route) => false,
               );
                          
             },
@@ -114,6 +114,7 @@ class DrawerPage extends StatelessWidget {
 
             },
           ),
+
         ],
       ),
     );

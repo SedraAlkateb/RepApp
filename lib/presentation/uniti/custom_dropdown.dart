@@ -13,16 +13,16 @@ class CustomDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool tablet=MediaQuery.of(context).size.width>800;
-
     return   DropdownButtonFormField<dynamic>(
       elevation: 3,
       validator: validator,
-      hint: Text(hintText,style:  TextStyle(fontSize:tablet?17: 12),
+      hint: Text(
+        hintText,style:  TextStyle(fontSize:tablet?17: 12,color: Colors.black),
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: ColorManager.grey,
+        fillColor: ColorManager.secondaryColor3,
         prefixIcon: prefixIcon,
         //  focusedBorder:InputBorder.none,
         border:InputBorder.none,
@@ -30,10 +30,17 @@ class CustomDropDown extends StatelessWidget {
       ),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
       // borderRadius: BorderRadius.circular(20),
+      isExpanded: true,
       items: items.map(( dynamic val){
         return DropdownMenuItem(
             value: val,
-            child: Text(val.name.toString(),style: TextStyle(fontSize: tablet?19:14)));
+            child: Row(
+              children: [
+                Text(val.title.toString(),style: TextStyle(fontSize: tablet?19:14,color: Colors.black)),
+                Text(val.phTitle.toString(),style: TextStyle(fontSize: tablet?19:14,color: Colors.black)),
+
+              ],
+            ));
       }).toList(),
       onChanged: onChanged,
       onTap: (){
