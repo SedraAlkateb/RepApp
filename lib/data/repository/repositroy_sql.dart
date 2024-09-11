@@ -121,8 +121,7 @@ class RepositroySqlImp extends RepositorySql {
   @override
   Future<Either<Failure, Null>> clearDatabase() async {
     try {
-      // عملية قاعدة بيانات قد تفشل
-      final response = await _databaseHelper.clearDatabase();
+     await _databaseHelper.clearDatabase();
       return Right(null);
     } catch (e) {
       return Left(ErrorHandler

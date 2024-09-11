@@ -6,7 +6,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 class AllDoctorUsecase extends Equatable {
-  Repository _repository;
+ final Repository _repository;
   AllDoctorUsecase(this._repository);
   Future<Either<Failure, List<DoctorModel>>> execute(int id) async{
     return await _repository.getAllDoctor(id);

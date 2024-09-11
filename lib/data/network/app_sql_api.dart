@@ -11,7 +11,7 @@ class AppSqlApi {
       List<SpecModel> specs) async {
     try {
       Database? mydb = await databaseHelper.database;
-      await mydb!.transaction((txn) async {
+      await mydb.transaction((txn) async {
         Batch batch = txn.batch();
         for(var place in places){
           batch.insert('place',place.toMap());

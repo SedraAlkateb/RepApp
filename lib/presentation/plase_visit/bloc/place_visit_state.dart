@@ -1,8 +1,5 @@
 part of 'place_visit_bloc.dart';
 
-import 'package:domina_app/data/network/failure.dart';
-import 'package:domina_app/domain/models/models.dart';
-
 @immutable
 sealed class PlaceVisitState extends Equatable {}
 

@@ -1,15 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:domina_app/domain/usecase/insert_all_brands_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/insert_all_pharmacy_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/insert_all_place_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/insert_all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
@@ -78,7 +73,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     117
     )).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
-
       return false;
     }, (data) async {
       places = data;
