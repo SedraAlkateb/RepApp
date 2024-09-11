@@ -94,7 +94,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     117
     )).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
-
       return false;
     }, (data) async {
       places = data;

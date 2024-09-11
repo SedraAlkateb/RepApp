@@ -1,5 +1,7 @@
 part of 'place_visit_bloc.dart';
 
+
+
 @immutable
 sealed class PlaceVisitEvent extends Equatable{
 }
