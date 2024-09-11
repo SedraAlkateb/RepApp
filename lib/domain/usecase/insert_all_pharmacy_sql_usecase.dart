@@ -5,7 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:equatable/equatable.dart';
 class InsertAllPharmacysSqlUsecase extends Equatable {
- final RepositorySql _repositorySql;
+  final  RepositorySql _repositorySql;
   InsertAllPharmacysSqlUsecase(this._repositorySql);
   Future<Either<Failure, Null>> execute(List<PharmacyModel>pharmacyModel) async{
     return await _repositorySql.insertPharmacy(pharmacyModel);

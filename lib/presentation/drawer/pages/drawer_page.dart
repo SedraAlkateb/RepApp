@@ -1,13 +1,9 @@
-import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 class DrawerPage extends StatelessWidget {
    DrawerPage({super.key});
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       child: ListView(
         padding: const EdgeInsets.all(0),

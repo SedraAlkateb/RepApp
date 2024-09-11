@@ -27,6 +27,37 @@ final class AllPharmacyByPlaceLoadingState extends PlaceVisitState {
   List<Object?> get props =>[];
 }
 
+final class AllDoctorByPlaceErrorState extends PlaceVisitState {
+  final Failure failure;
+  AllDoctorByPlaceErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllDoctorByPlaceState extends PlaceVisitState {
+  final List<DoctorModel> data;
+  @override
+  AllDoctorByPlaceState(this.data);
+  @override
+  List<Object?> get props =>[data];
+}
+
+
+final class AllHospitalByPlaceErrorState extends PlaceVisitState {
+  final Failure failure;
+  AllHospitalByPlaceErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllHospitalByPlaceState extends PlaceVisitState {
+  final List<DoctorModel> data;
+  @override
+  AllHospitalByPlaceState(this.data);
+  @override
+  List<Object?> get props =>[data];
+}
+
 final class BrandFlagState extends PlaceVisitState {
   final List<BrandModel> brands;
   BrandFlagState(this.brands);
@@ -41,7 +72,6 @@ final class BrandFlagErrorState extends PlaceVisitState {
   List<Object?> get props =>[failure];
 }
 class SelectBrandState extends PlaceVisitState{
-  @override
   final List<BrandModel> brands;
   SelectBrandState(this.brands);
   List<Object?> get props => [brands];

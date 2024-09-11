@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
@@ -112,24 +111,24 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertSpec(specModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler
-          .handle(e)
-          .failure);
+      return Left(
+          ErrorHandler.handle(e).failure
+      );
     }
   }
-
   @override
   Future<Either<Failure, Null>> clearDatabase() async {
     try {
-     await _databaseHelper.clearDatabase();
+  await _databaseHelper.clearDatabase();
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler
+      return Left(
+          ErrorHandler
           .handle(e)
-          .failure);
+          .failure
+      );
     }
   }
-
   @override
   Future<Either<Failure, Null>> loginSql( LoginModel loginModel)
   async {
@@ -142,7 +141,6 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
-
   @override
   Future<Either<Failure, LoginModel?>> getRep()   async {
     try {
@@ -154,7 +152,6 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
-
   @override
   Future<Either<Failure, List<PharmacyModel>>> getPharmaciesByPlaceId(int placeId) async {
     try {
@@ -166,12 +163,14 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
-
   @override
   Future<Either<Failure, String>> asyncData
-      (List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs)async {
+      (List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs,
+      List<DoctorModel>doctors,
+      List<DoctorModel>hospitals
+      )async {
     try {
-      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs);
+      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals);
       if(response==""){
         return Right(response);
       }else{
@@ -183,7 +182,6 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
-
   @override
   Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag()  async {
     try {
@@ -195,4 +193,72 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+  @override
+  Future<Either<Failure, Null>> insertDoctor(
+      List<DoctorModel> doctorModel) async {
+    try {
+      final response = await _databaseHelper.insertdoctor(doctorModel);
+      return Right(response);
+    } catch (e) {print(e);
+    return Left(ErrorHandler.handle(e).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DoctorModel>>> getHospitalSql() async {
+    try {
+      final response = await _databaseHelper.getHospital();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler.handle(e).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> insertHospital(
+      List<DoctorModel> hospitalModel) async {
+    try {
+      // عملية قاعدة بيانات قد تفشل
+      final response = await _databaseHelper.inserthospital(hospitalModel);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler.handle(e).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DoctorModel>>> getDoctorSql() async {
+    try {
+      // عملية قاعدة بيانات قد تفشل
+      final response = await _databaseHelper.getDotors();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler.handle(e).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DoctorModel>>> getDoctorByPlaceId(int placeId)async {
+    try {
+      final response = await _databaseHelper.getDoctorByPlaceId(placeId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DoctorModel>>> getHospitalByPlaceId(int placeId)async {
+    try {
+      final response = await _databaseHelper.getHospitalByPlaceId(placeId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
 }

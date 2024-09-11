@@ -8,6 +8,7 @@ class CustomDropDown extends StatelessWidget {
   final Icon? prefixIcon;
   final double? width;
   final ValueSetter<dynamic> onChanged;
+
   final FormFieldValidator<dynamic> validator;
   final String? value;
   @override

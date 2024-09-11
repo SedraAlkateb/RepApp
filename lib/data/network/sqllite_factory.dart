@@ -66,6 +66,7 @@ class DatabaseHelper {
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
+
     await db.execute('''
       CREATE TABLE brand (
     id INTEGER PRIMARY KEY,
@@ -73,6 +74,35 @@ class DatabaseHelper {
      phTitle TEXT NOT NULL,
      falg INTEGER NOT NULL,
      sampleCoast INTEGER NOT NULL
+    );
+    ''');
+
+    await db.execute('''
+     CREATE TABLE doctor (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    address TEXT NOT NULL,
+    placeId TEXT NOT NULL,
+    placeTitle TEXT NOT NULL, 
+    visits TEXT NOT NULL,
+    spTitle TEXT NOT NULL,
+    spId TEXT NOT NULL,
+    FOREIGN KEY (placeId) REFERENCES place(placeId)
+);
+
+    ''');
+
+    await db.execute('''
+      CREATE TABLE hospital (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    address TEXT NOT NULL,
+    placeId TEXT NOT NULL,
+    placeTitle TEXT NOT NULL,
+    visits TEXT  NOT NULL ,
+    spTitle   TEXT  NOT NULL ,
+    spId TEXT NOT NULL,
+      FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
 

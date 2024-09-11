@@ -24,22 +24,22 @@ class DoctorVisit extends StatelessWidget {
             Expanded(
               child: BlocConsumer<PlaceVisitBloc, PlaceVisitState>(
                 listener: (context, state) {
-                  if(state is AllPharmacyByPlaceErrorState){
+                  if(state is AllDoctorByPlaceErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       error(context, state.failure.massage, state.failure.code);
                     });
                   }
                   /*
-                  if(state is AllPharmacyByPlaceLoadingState){
+                  if(state is AllDoctorByPlaceLoadingState){
                     loading(context);
                   }
-                  if(state is AllPharmacyByPlaceState){
+                  if(state is AllDoctorByPlaceState){
     success(context);}
                  */
                 },
                 builder: (context, state) {
-                  if(state is AllPharmacyByPlaceState){
-                    List<PharmacyModel> pharmacyModel=state.pharmacy;
+                  if(state is AllDoctorByPlaceState){
+                    List<DoctorModel> doctorModel=state.data;
                     return ListView.builder
                       (
                         itemBuilder: (context, index) {
@@ -58,12 +58,12 @@ class DoctorVisit extends StatelessWidget {
                             child:
                             Column(
                               children: [
-                                TextRach(s1: "title : ", s2: pharmacyModel[index].title),
-                                TextRach(s1: "address : ", s2: pharmacyModel[index].address)
+                                TextRach(s1: "title : ", s2: doctorModel[index].title),
+                                TextRach(s1: "address : ", s2: doctorModel[index].address)
                               ],
                             ),
                           );
-                        }, itemCount: pharmacyModel.length);
+                        }, itemCount: doctorModel.length);
                   }
                   return SizedBox(
                   );

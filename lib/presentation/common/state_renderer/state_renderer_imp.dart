@@ -1,6 +1,5 @@
 import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/presentation/common/state_renderer/state_renderer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 abstract class FlowState{

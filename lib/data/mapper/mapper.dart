@@ -165,10 +165,11 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
 extension DoctorResponseMapper on DoctorResponse? {
  DoctorModel toDomain() {
     return DoctorModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0"),
       this?.title ?? Constants.empty,
       this?.placeId ?? Constants.empty,
       this?.address ?? Constants.empty,
+      this?.spId ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
       this?.spTitle ?? Constants.empty,
       this?.visits ?? Constants.empty,

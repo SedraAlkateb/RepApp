@@ -5,7 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:equatable/equatable.dart';
 class InsertAllSpecsSqlUsecase extends Equatable {
-final  RepositorySql _repositorySql;
+  final RepositorySql _repositorySql;
   InsertAllSpecsSqlUsecase(this._repositorySql);
   Future<Either<Failure, Null>> execute(List<SpecModel>specModel) async{
     return await _repositorySql.insertSpec(specModel);

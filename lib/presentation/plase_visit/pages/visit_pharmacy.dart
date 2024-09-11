@@ -1,10 +1,8 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/place_visit_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -78,7 +76,9 @@ class VisitPharmacy extends StatelessWidget {
                         items: brands,
                         prefixIcon: null,
                         onChanged: (value) {},
-                        validator: (value) {},
+                        validator: (value) {
+
+                        },
                       );
                     }
                     return CustomDropDown(
@@ -86,13 +86,33 @@ class VisitPharmacy extends StatelessWidget {
                       items: [],
                       prefixIcon: null,
                       onChanged: (value) {
+                        print("ssssssssssssssssssssssssssssssssssssssssssssssssss");
                         BrandModel brand=value;
                         BlocProvider.of<PlaceVisitBloc>(context).add(SelectBrandEvent(brand));
                       },
-                      validator: (value) {},
+
+                      validator: (value) {
+
+                      },
                     );
                   },
-                )
+                ),
+                BlocConsumer<PlaceVisitBloc, PlaceVisitState>(
+  listener: (context, state) {
+
+  },
+  builder: (context, state) {
+    if(state is SelectBrandState){
+      List<BrandModel>brands=state.brands;
+      return ListView.builder(
+        itemCount:brands.length ,
+        itemBuilder: (context, index) {
+Text(brands[index].title,style: TextStyle(color: Colors.black),);
+        },);
+    }
+return SizedBox();
+  },
+)
               ],
             ),
           )

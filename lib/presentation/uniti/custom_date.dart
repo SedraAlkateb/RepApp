@@ -1,6 +1,4 @@
-// ignore_for_file: must_be_immutable
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/decoration.dart';
@@ -12,7 +10,7 @@ class CustomDate extends StatelessWidget {
   final double width;
   var onChanged;
    final FormFieldValidator<dynamic>? validator;
-   String ? hint;
+   final  String ? hint;
    @override
   Widget build(BuildContext context) {
     return    SizedBox(

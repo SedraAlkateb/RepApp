@@ -5,8 +5,8 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:equatable/equatable.dart';
 class AllBrandsSqlUsecase extends Equatable {
- final RepositorySql _repositorySql;
-   AllBrandsSqlUsecase(this._repositorySql);
+  final RepositorySql _repositorySql;
+  AllBrandsSqlUsecase(this._repositorySql);
   Future<Either<Failure, List<BrandModel>>> execute() async{
     return await _repositorySql.getBrandsSql();
   }

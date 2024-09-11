@@ -19,7 +19,8 @@ class AsyncPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image.asset(
-              ImageAssets.domina,width: 300,),
+              ImageAssets.domina,width: 300,
+            ),
             Text(
               textAlign: TextAlign.center,
               "تاكد من وجود الانترنت واضغط على تحميل البيانات لبدء العمل على التطبيق ",
@@ -43,7 +44,8 @@ class AsyncPage extends StatelessWidget {
               },
               child: ElevatedButton(onPressed: (){
                 BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
-              }, child: Text(
+              },
+                  child: Text(
                   "تحميل البيانات",
               )),
             ),

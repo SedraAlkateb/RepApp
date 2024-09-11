@@ -130,7 +130,7 @@ class PharmacyModel {
 }
 
 class DoctorModel {
-  String id;
+  int id;
 
   String title;
 
@@ -143,9 +143,34 @@ class DoctorModel {
   String visits;
 
   String spTitle;
+  String spId;
+  DoctorModel(this.id, this.title, this.placeId, this.address, this.spId,
+      this.placeTitle, this.visits, this.spTitle);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'placeId': placeId,
+      'address': address,
+      "placeTitle": placeTitle,
+      "visits": visits,
+      "spTitle": spTitle,
+      "spId" :spId,
+    };
+  }
 
-  DoctorModel(this.id, this.title, this.placeId, this.address, this.placeTitle,
-      this.visits, this.spTitle);
+  factory DoctorModel.fromMap(Map<String, dynamic> map) {
+    return DoctorModel(
+      map['id'],
+      map['title'],
+      map['placeId'],
+      map['address'],
+      map["placeTitle"],
+      map["visits"],
+      map["spTitle"],
+      map["spId"],
+    );
+  }
 }
 
 class CityModel {

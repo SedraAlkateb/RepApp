@@ -1,32 +1,16 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'responses.dart';
 
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
-BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse()
-  ..status = json['status'] as String?
-  ..message = json['message'] as String?;
-
-Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-    };
 
 Message1Response _$Message1ResponseFromJson(Map<String, dynamic> json) =>
     Message1Response()
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
-
 Map<String, dynamic> _$Message1ResponseToJson(Message1Response instance) =>
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,
     };
-
 MessageResponse _$MessageResponseFromJson(Map<String, dynamic> json) =>
     MessageResponse(
       json['message'] as String?,
@@ -391,9 +375,10 @@ DoctorResponse _$DoctorResponseFromJson(Map<String, dynamic> json) =>
       json['title'] as String?,
       json['placeId'] as String?,
       json['address'] as String?,
+        json['spId'] as String?,
       json['placeTitle'] as String?,
       json['visits'] as String?,
-      json['spTitle'] as String?,
+      json['spTitle'] as String?
     );
 
 Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
@@ -402,6 +387,7 @@ Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
       'title': instance.title,
       'placeId': instance.placeId,
       'address': instance.address,
+      'spId': instance.spId,
       'placeTitle': instance.placeTitle,
       'visits': instance.visits,
       'spTitle': instance.spTitle,
