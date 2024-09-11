@@ -5,14 +5,12 @@ import 'package:domina_app/presentation/doctors/pages/doctors.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital.dart';
 import 'package:domina_app/presentation/brand/pages/brand_page.dart';
 import 'package:domina_app/presentation/pharmacy/pages/pharmacy_page.dart';
-import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/places/pages/places.dart';
 import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_pharmacy.dart';
 import 'package:domina_app/presentation/resources/strings_manager.dart';
 import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";

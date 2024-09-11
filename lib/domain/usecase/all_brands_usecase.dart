@@ -5,7 +5,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 class AllBrandsUsecase extends Equatable {
-  Repository _repository;
+  final  Repository _repository;
   AllBrandsUsecase(this._repository);
   Future<Either<Failure, List<BrandModel>>> execute(int id) async{
     return await _repository.allBrand(id);

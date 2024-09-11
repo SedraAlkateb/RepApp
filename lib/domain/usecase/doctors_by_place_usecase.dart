@@ -1,14 +1,13 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:equatable/equatable.dart';
-class InsertAllSpecsSqlUsecase extends Equatable {
-  final RepositorySql _repositorySql;
-  InsertAllSpecsSqlUsecase(this._repositorySql);
-  Future<Either<Failure, Null>> execute(List<SpecModel>specModel) async{
-    return await _repositorySql.insertSpec(specModel);
+class DoctorsByPlaceUsecase extends Equatable {
+  final  RepositorySql _repositorySql;
+  DoctorsByPlaceUsecase(this._repositorySql);
+  Future<Either<Failure, List<DoctorModel>>> execute(int id) async{
+    return await _repositorySql.getDoctorByPlaceId(id);
   }
 
   @override

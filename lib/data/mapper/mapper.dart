@@ -2,9 +2,6 @@
 import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/models/models.dart';
-
-import '../../domain/models/models.dart';
 
 
 extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
@@ -168,10 +165,11 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
 extension DoctorResponseMapper on DoctorResponse? {
  DoctorModel toDomain() {
     return DoctorModel(
-      this?.id ?? Constants.empty,
+      int.parse(this?.id ?? "0"),
       this?.title ?? Constants.empty,
       this?.placeId ?? Constants.empty,
       this?.address ?? Constants.empty,
+      this?.spId ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
       this?.spTitle ?? Constants.empty,
       this?.visits ?? Constants.empty,

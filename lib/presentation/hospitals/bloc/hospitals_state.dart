@@ -2,7 +2,7 @@ part of 'hospitals_bloc.dart';
 
 sealed class HospitalsState extends Equatable {
   const HospitalsState();
-  
+
 }
 
 final class HospitalsInitial extends HospitalsState {
@@ -12,7 +12,7 @@ final class HospitalsInitial extends HospitalsState {
 }
 
 final class AllHospitalsState extends HospitalsState {
-final List<DoctorModel> hospital;
+  final List<DoctorModel> hospital;
   AllHospitalsState(this.hospital);
   @override
   List<Object?> get props =>[hospital];

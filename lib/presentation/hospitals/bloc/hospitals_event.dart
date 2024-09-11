@@ -6,9 +6,9 @@ abstract class HospitalsEvent extends Equatable {
 
 }
 class AllHospitalEvent extends HospitalsEvent {
- int id;
-  AllHospitalEvent(this.id);
-  
+
+  AllHospitalEvent();
+
   @override
 
   List<Object?> get props => throw UnimplementedError();
