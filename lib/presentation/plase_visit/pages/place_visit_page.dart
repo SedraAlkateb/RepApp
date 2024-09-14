@@ -1,7 +1,8 @@
-import 'package:domina_app/presentation/plase_visit/bloc/place_visit_bloc.dart';
+import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/doctor_visit.dart';
 import 'package:domina_app/presentation/plase_visit/widget/hospital_visit.dart';
 import 'package:domina_app/presentation/plase_visit/widget/pharmacy_visit.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 class PlaceVisitPage extends StatelessWidget {
@@ -14,22 +15,37 @@ class PlaceVisitPage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor:ColorManager.secondaryColor7,
         bottom:
         TabBar(
             onTap: (value) {
               print(value);
               if(value==0){
-                BlocProvider.of<PlaceVisitBloc>(context).add(PharmacyByPlace(placeId));
+                BlocProvider.of<VisitPlaceBloc>(context).add(PharmacyByPlace(placeId,value));
               }else if(value==1){
-                BlocProvider.of<PlaceVisitBloc>(context).add(DoctorByPlace(placeId));
+                BlocProvider.of<VisitPlaceBloc>(context).add(DoctorByPlace(placeId,value));
               }else{
-                BlocProvider.of<PlaceVisitBloc>(context).add(HospitalByPlace(placeId));
+                BlocProvider.of<VisitPlaceBloc>(context).add(HospitalByPlace(placeId,value));
               }
             },
             tabs: [
-              Tab(icon: Icon(Icons.local_pharmacy_sharp),text: 'Pharmacy',),
-              Tab(icon: Icon(Icons.groups),text: 'Doctors',),
-              Tab(icon: Icon(Icons.local_hospital),text: 'Hospitals',),
+              Tab(icon:
+              context.watch<VisitPlaceBloc>().current==0?
+              Icon(
+                  Icons.local_pharmacy_sharp,color: ColorManager.secondaryColor1):
+              Icon(
+                  Icons.local_pharmacy_sharp)
+
+                ,text: 'الصيدليات',),
+              Tab(icon:
+              context.watch<VisitPlaceBloc>().current==1?
+              Icon(Icons.groups,color: ColorManager.secondaryColor1,):
+              Icon(Icons.groups)
+                ,text: 'الأطباء',),
+
+              Tab(icon:
+
+              Icon(Icons.local_hospital),text: 'المشافي',),
             ]
         ),
       ),

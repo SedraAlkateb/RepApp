@@ -7,11 +7,11 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 //presentation
 ThemeData getApplicationTheme() {
   return ThemeData(
-    fontFamily: 'Almarai',
+    fontFamily: 'Cairo',
     tabBarTheme: TabBarTheme(
       labelColor: ColorManager.white,
-      indicatorColor: ColorManager.secondaryColor4,
-        //unselectedLabelColor: ColorManager.secondaryColor4
+      indicatorColor: ColorManager.secondaryColor1,
+        unselectedLabelColor: ColorManager.secondaryColor1
     ),
     primaryColor: ColorManager.secondaryColor4,
     brightness: Brightness.light,
@@ -29,14 +29,15 @@ ThemeData getApplicationTheme() {
       ),
     ),
     appBarTheme: AppBarTheme(
-      iconTheme: IconThemeData(
-        color: ColorManager.primary,
 
+      iconTheme: IconThemeData(
+        color: ColorManager.secondaryColor1,
       ),
       toolbarHeight: 60,
-      backgroundColor: ColorManager.secondaryColor,
-   //   elevation: 30,
-      titleTextStyle: getRegularStyle(fontSize: FontSize.s16, color: ColorManager.white),
+      backgroundColor: ColorManager.white,
+      elevation: 9,
+      shadowColor: ColorManager.secondaryColor3,
+      titleTextStyle: getBoldStyle(fontSize: FontSize.s20, color: ColorManager.secondaryColor1),
     ),
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),
@@ -64,10 +65,10 @@ ThemeData getApplicationTheme() {
       bodySmall: getRegularStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s14),
       bodyLarge: getRegularStyle(color: Colors.black, fontSize: FontSize.s18),
       titleLarge: getBoldStyle(color: ColorManager.secondaryColor1, fontSize: FontSize.s25),
-      labelLarge: getSemiBoldStyle(color: ColorManager.secondaryColor2, fontSize: FontSize.s20),
+      labelLarge: getBoldStyle(color: ColorManager.secondaryColor1, fontSize: AppSize.s20),
       labelMedium: getBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s14),
       labelSmall: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s12),
-      titleSmall: getSemiBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s18),
+      titleSmall: getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s20),
       bodyMedium: getRegularStyle(color: Colors.black, fontSize: FontSize.s14),
     ),
     inputDecorationTheme: InputDecorationTheme(

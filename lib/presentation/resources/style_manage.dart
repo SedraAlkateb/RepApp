@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 TextStyle _getTextStyle(double fontSize,FontWeight fontWeight, Color color){
   return TextStyle(
     fontSize: fontSize,
-   // fontFamily: FontConstants.fontFamily,
+    fontFamily: FontConstants.fontFamily,
     color: color,
     fontWeight: fontWeight,
 

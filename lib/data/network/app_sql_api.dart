@@ -89,50 +89,33 @@ class AppSqlApi {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('brand');
 
-    if(maps!=null){
-      return List.generate(maps.length, (i) {
-        return BrandModel.fromMap(maps[i]);
-      });
-    }else{
-      return [];
-    }
+    return List.generate(maps.length, (i) {
+      return BrandModel.fromMap(maps[i]);
+    });
   }
   Future<List<PharmacyModel>> getPharmacy() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('pharmacy');
-    if(maps!=null){
-      return List.generate(maps.length, (i) {
-        return PharmacyModel.fromMap(maps[i]);
-      });
-    }else{
-      return [];
-    }
+    return List.generate(maps.length, (i) {
+      return PharmacyModel.fromMap(maps[i]);
+    });
 
   }
   Future<List<PlaceModel>> getPlace() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('place');
-
-   if(maps!=null){
-     return List.generate(maps.length, (i) {
-       return PlaceModel.fromMap(maps[i]);
-     });
-   }else{
-     return [];
-   }
+    return List.generate(maps.length, (i) {
+      return PlaceModel.fromMap(maps[i]);
+    });
 
   }
   Future<List<SpecModel>> getSpec() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('specialization');
 
-    if(maps!=null){
       return List.generate(maps.length, (i) {
-        return SpecModel.fromMap(maps[i]);
-      });
-    }else{
-      return [];
-    }
+      return SpecModel.fromMap(maps[i]);
+    });
 
   }
   Future<void> clearDatabase() async {
@@ -164,13 +147,9 @@ class AppSqlApi {
       where: 'falg = ?',
       whereArgs: [1],
     );
-    if(brands!=null){
-      return List.generate(brands.length, (i) {
-        return BrandModel.fromMap(brands[i]);
-      });
-    }else{
-      return [];
-    }
+    return List.generate(brands.length, (i) {
+      return BrandModel.fromMap(brands[i]);
+    });
   }
 
   Future<List<PharmacyModel>> getPharmaciesByPlaceId( int placeId) async {

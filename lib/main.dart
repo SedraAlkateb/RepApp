@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 Future<int?> sss()async{
   IsLoginSqlUsecase isLoginSqlUsecase=IsLoginSqlUsecase(instance());
   (await isLoginSqlUsecase.execute()).fold((failure) {
-    print("object");
   }, (data) async {
     if(data!=null&&UserInfo.isLogging==1){
       UserInfo.name=data.name;
@@ -16,9 +15,7 @@ Future<int?> sss()async{
       UserInfo.percentage=data.percentage;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;
-      print("DDDDDDDDDDDDDDDDDDddddd");
     }else{
-      print("dddddddddd");
       UserInfo.isLogging=data?.isLogin??0;
     }
    return data??0;
