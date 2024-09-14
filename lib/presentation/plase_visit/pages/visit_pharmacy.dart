@@ -96,6 +96,7 @@ class VisitPharmacy extends StatelessWidget {
                       );
                     },
                   ),
+
                   BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
   builder: (context, state) {
     if(state is SelectBrandState){
