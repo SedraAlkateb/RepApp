@@ -17,7 +17,7 @@ class Places extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     });
-    //DialogFilter( text: "اختر احد الاماكن لاضهار ادكاترة , الصيادلة , المشافي في هذا المكان");
+    //DialogFilter( text: "اختر أحد الأماكن  لاظهار الدكاترة , الصيادلة , المشافي في هذا المكان");
     return Scaffold(
         drawer: DrawerPage(),
         appBar: AppBar(
@@ -35,7 +35,7 @@ class Places extends StatelessWidget {
               );
             },
           ),
-          title: Text('الأماكن المتاحة '),
+          title: Text('المناطق'),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -45,20 +45,10 @@ class Places extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  //        crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "   كل الاماكن ",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    Icon(Icons.location_city),
-                  ],
-                ),
+               
               ),
               Text(
-                "اختر المكان لاضهار الدكاترة و الصيدليات المشافي في هذه المنطقة ",
+                "اختر المناطق لاظهار الأطباء و الصيدليات و المشافي في هذه المنطقة:",
               ),
               Expanded(
                 child: BlocConsumer<PlaceBloc, PlaceState>(
