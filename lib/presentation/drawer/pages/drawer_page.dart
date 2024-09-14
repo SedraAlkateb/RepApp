@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 class DrawerPage extends StatelessWidget {
@@ -8,13 +9,13 @@ class DrawerPage extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(0),
         children: [
-          const DrawerHeader(
+           DrawerHeader(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 20, 38, 48),
+              color: ColorManager.secondaryColor,
             ), //BoxDecoration
             child: UserAccountsDrawerHeader(
               decoration:
-              BoxDecoration(color: Color.fromARGB(255, 20, 38, 48)),
+              BoxDecoration(color: ColorManager.secondaryColor),
               accountName: Text(
                 "Lina Al-Mahayni",
                 style: TextStyle(fontSize: 18),
@@ -22,7 +23,7 @@ class DrawerPage extends StatelessWidget {
 
               currentAccountPictureSize: Size.square(50),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 20, 38, 48),
+                backgroundColor: ColorManager.secondaryColor,
                 child: Text(
                   "L",
                   style: TextStyle(fontSize: 30.0, color: Colors.blue),
@@ -34,8 +35,8 @@ class DrawerPage extends StatelessWidget {
           ),
 
           ListTile(
-            leading: const Icon(Icons.location_city),
-            title: const Text(' All Places'),
+   leading:Icon(Icons.location_city_outlined,color: ColorManager.secondaryColor4),
+            title: const Text('الأماكن '),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -47,8 +48,8 @@ class DrawerPage extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.medication),
-            title: const Text('All spec'),
+             leading:  Icon(Icons.medical_services_outlined  ,color: ColorManager.secondaryColor4),
+            title: const Text('الاختصاصات'),
             onTap: () {
              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -60,8 +61,8 @@ class DrawerPage extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.group),
-            title: const Text('All Doctors'),
+            leading:  Icon(Icons.group_outlined ,color: ColorManager.secondaryColor4),
+            title: const Text('الأطباء '),
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -71,8 +72,10 @@ class DrawerPage extends StatelessWidget {
             },
           ),
             ListTile(
-            leading: const Icon(Icons.group),
-            title: const Text('All Hospital'),
+               leading:  Icon(Icons.local_hospital_outlined
+,color: ColorManager.secondaryColor4),
+
+            title: const Text('المشافي '),
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -82,8 +85,8 @@ class DrawerPage extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.branding_watermark_outlined),
-            title: const Text('All brand'),
+            leading:  Icon(Icons. medication_outlined,color: ColorManager.secondaryColor4),
+            title: const Text('الأصناف'),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -97,8 +100,8 @@ class DrawerPage extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.local_pharmacy),
-            title: const Text('All Pharmacy'),
+            leading:  Icon(Icons.local_pharmacy_outlined,color: ColorManager.secondaryColor4),
+            title: const Text('الصيدليات'),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(

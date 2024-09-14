@@ -36,7 +36,7 @@ class PharmacyPage extends StatelessWidget {
           },
         ),
         title: Text(
-            'Representative Pharmacies'),
+            'الصيدليات '),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
@@ -45,20 +45,8 @@ class PharmacyPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-
-                children: [
-                  Icon(Icons.location_city),
-
-                  Text("   All Pharmacy",style: Theme.of(context).textTheme.titleMedium,),
-                ],
-              ),
-
-            ),
-            Text("your pharmacys",),
+          
+            
             Expanded(
               child: BlocConsumer<PharmacyBloc, PharmacyState>(
                 listener: (context, state) {

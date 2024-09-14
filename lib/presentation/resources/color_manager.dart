@@ -20,7 +20,7 @@ class ColorManager {
   static Color myGrays2=const Color(0xffA3A09D);
   static Color myGrays3=const Color(0xffA3A09D);
   static Color primary =const  Color(0xffFDF8F5);
-  static Color secondaryColor=const  Color(0xff3A434D);
+  static Color secondaryColor=Color.fromARGB(255, 20, 38, 48);
 
   static Color secondaryColor4=const  Color(0xff59BEE6);
   static Color secondaryColor2=const  Color(0xffF4AC47);
