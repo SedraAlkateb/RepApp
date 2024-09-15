@@ -32,7 +32,7 @@ class SpecializationsPage extends StatelessWidget {
               );
             },
           ),
-          title: Text('Representative Spec'),
+          title: Text('الاختصاصات'),
         ),
         body: Stack(
           children: [
@@ -96,9 +96,9 @@ class SpecializationsPage extends StatelessWidget {
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2, // عدد الأعمدة في كل صف
                                 crossAxisSpacing:
-                                    8.0, // المسافة الأفقية بين الأعمدة
+                                  2.0, // المسافة الأفقية بين الأعمدة
                                 mainAxisSpacing:
-                                    8.0, // المسافة العمودية بين الصفوف
+                                  2.0, // المسافة العمودية بين الصفوف
                                 childAspectRatio:
                                     1, // نسبة العرض إلى الارتفاع لكل عنصر (يمكنك تعديلها حسب الحاجة)
                               ),

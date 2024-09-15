@@ -34,29 +34,15 @@ class Doctors extends StatelessWidget {
             },
           ),
           title: Text(
-              'كافة الدكاترة'),
+              'الأطباء'),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal:8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-
-                  children: [
-                    Icon(Icons.location_city),
-
-                    Text("   All Doctors",style: Theme.of(context).textTheme.titleMedium,),
-                  ],
-                ),
-
-              ),
-              Text("click to show all Doctor",),
+      
               Expanded(
                 child: BlocConsumer<DoctorsBloc, DoctorsState>(
                   listener: (context, state) {
