@@ -109,9 +109,7 @@ class VisitPharmacy extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return    Text(context.watch<VisitPlaceBloc>().selectBrand[index].title,style: TextStyle(color: Colors.black,fontSize: 50),);
                       },
-                  );
-  },
-)
+                  );},)
                 ],
               ),
             )
