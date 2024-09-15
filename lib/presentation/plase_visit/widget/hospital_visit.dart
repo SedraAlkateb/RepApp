@@ -1,5 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/place_visit_bloc.dart';
+import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -22,7 +22,7 @@ class HospitalVisit extends StatelessWidget {
           children: [
             Text("كل الدكاترة",),
             Expanded(
-              child: BlocConsumer<PlaceVisitBloc, PlaceVisitState>(
+              child: BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
                 listener: (context, state) {
                   if(state is AllHospitalByPlaceErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -17,15 +17,14 @@ Future<int?> sss()async{
       UserInfo.percentage=data.percentage;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;
-      print("DDDDDDDDDDDDDDDDDDddddd");
     }else{
-      print("dddddddddd");
       UserInfo.isLogging=data?.isLogin??0;
     }
    return data??0;
   });
   return null;
 }
+
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();

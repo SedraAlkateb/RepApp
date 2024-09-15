@@ -1,40 +1,40 @@
-part of 'place_visit_bloc.dart';
+part of 'visit_place_bloc.dart';
 
 @immutable
-sealed class PlaceVisitState extends Equatable {}
+sealed class VisitPlaceState extends Equatable {}
 
-final class PlaceVisitInitial extends PlaceVisitState {
+final class VisitPlaceInitial extends VisitPlaceState {
   @override
   List<Object?> get props => [];
 }
-final class AllPharmacyByPlaceState extends PlaceVisitState {
+final class AllPharmacyByPlaceState extends VisitPlaceState {
   final List<PharmacyModel> pharmacy;
   AllPharmacyByPlaceState(this.pharmacy);
   @override
   List<Object?> get props =>[pharmacy];
 }
-final class AllPharmacyByPlaceErrorState extends PlaceVisitState {
+final class AllPharmacyByPlaceErrorState extends VisitPlaceState {
   final Failure failure;
   AllPharmacyByPlaceErrorState({required this.failure});
   @override
 
   List<Object?> get props =>[failure];
 }
-final class AllPharmacyByPlaceLoadingState extends PlaceVisitState {
+final class AllPharmacyByPlaceLoadingState extends VisitPlaceState {
   @override
   AllPharmacyByPlaceLoadingState();
   @override
   List<Object?> get props =>[];
 }
 
-final class AllDoctorByPlaceErrorState extends PlaceVisitState {
+final class AllDoctorByPlaceErrorState extends VisitPlaceState {
   final Failure failure;
   AllDoctorByPlaceErrorState({required this.failure});
   @override
 
   List<Object?> get props =>[failure];
 }
-final class AllDoctorByPlaceState extends PlaceVisitState {
+final class AllDoctorByPlaceState extends VisitPlaceState {
   final List<DoctorModel> data;
   @override
   AllDoctorByPlaceState(this.data);
@@ -43,14 +43,14 @@ final class AllDoctorByPlaceState extends PlaceVisitState {
 }
 
 
-final class AllHospitalByPlaceErrorState extends PlaceVisitState {
+final class AllHospitalByPlaceErrorState extends VisitPlaceState {
   final Failure failure;
   AllHospitalByPlaceErrorState({required this.failure});
   @override
 
   List<Object?> get props =>[failure];
 }
-final class AllHospitalByPlaceState extends PlaceVisitState {
+final class AllHospitalByPlaceState extends VisitPlaceState {
   final List<DoctorModel> data;
   @override
   AllHospitalByPlaceState(this.data);
@@ -58,20 +58,20 @@ final class AllHospitalByPlaceState extends PlaceVisitState {
   List<Object?> get props =>[data];
 }
 
-final class BrandFlagState extends PlaceVisitState {
+final class BrandFlagState extends VisitPlaceState {
   final List<BrandModel> brands;
   BrandFlagState(this.brands);
   @override
   List<Object?> get props =>[brands];
 }
-final class BrandFlagErrorState extends PlaceVisitState {
+final class BrandFlagErrorState extends VisitPlaceState {
   final Failure failure;
   BrandFlagErrorState({required this.failure});
   @override
 
   List<Object?> get props =>[failure];
 }
-class SelectBrandState extends PlaceVisitState{
+class SelectBrandState extends VisitPlaceState{
   final List<BrandModel> brands;
   SelectBrandState(this.brands);
   List<Object?> get props => [brands];

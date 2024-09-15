@@ -8,7 +8,7 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return   Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 16),
       child: Row(
         children: [
           Expanded(
@@ -20,16 +20,16 @@ class SearchField extends StatelessWidget {
                 fillColor: ColorManager.white,
                   border:InputBorder.none,
                   isDense: true,
-                  //  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                prefixIcon:Icon(Icons.search,color: ColorManager.secondaryColor1,size: AppSize.s28,) ,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                  enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
                   focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-                  hintText: 'Search here....',
-
-                  hintStyle: const TextStyle(fontSize: 12,overflow: TextOverflow.fade,),
+                  hintText: 'ابحث هنا ....',
+                  hintStyle: const TextStyle(fontSize: AppSize.s16,overflow: TextOverflow.fade ),
               ),
             ),
           ),
-          IconButton(onPressed:onPressed , icon: Icon(Icons.search,color: ColorManager.secondaryColor,size: AppSize.s28,))
+       //   IconButton(onPressed:onPressed , icon: Icon(Icons.search,color: ColorManager.secondaryColor,size: AppSize.s28,))
         ],
       ),
     );

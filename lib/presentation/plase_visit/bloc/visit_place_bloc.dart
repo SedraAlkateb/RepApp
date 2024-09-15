@@ -6,40 +6,44 @@ import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacies_by_place_usecase.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
-part 'place_visit_event.dart';
-part 'place_visit_state.dart';
+part 'visit_place_event.dart';
+part 'visit_place_state.dart';
 
-class PlaceVisitBloc extends Bloc<PlaceVisitEvent, PlaceVisitState> {
+class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   PharmaciesByPlaceUsecase pharmaciesByPlaceUsecase;
   AllBrandsFlagSqlUsecase allBrandsFlagSqlUsecase;
   DoctorsByPlaceUsecase doctorsByPlaceUsecase;
   HospitalsByPlaceUsecase hospitalsByPlaceUsecase;
   List<BrandModel> selectBrand=[];
-  PlaceVisitBloc(
+  List<BrandModel> bandFlag=[];
+  int current =0;
+  VisitPlaceBloc(
       this.pharmaciesByPlaceUsecase,
       this.allBrandsFlagSqlUsecase,
       this.doctorsByPlaceUsecase,
       this.hospitalsByPlaceUsecase
-      ) : super(PlaceVisitInitial()) {
-    on<PlaceVisitEvent>((event, emit)async {
+      )  : super(VisitPlaceInitial()) {
+    on<VisitPlaceEvent>((event, emit) async {
       if(event is PharmacyByPlace){
+        current=event.current;
         (
             await pharmaciesByPlaceUsecase.execute(event.placeId)).fold(
-      (failure)  {
-        emit(AllPharmacyByPlaceErrorState(failure: failure));
-      },
-      (data)  async{
-      emit(AllPharmacyByPlaceState(data));
-      print("dshhhhhhhhhhhhhhbbbbbbbbbbbbbbhhhd");
-      print(data.length);
+                (failure)  {
+              emit(AllPharmacyByPlaceErrorState(failure: failure));
+            },
+                (data)  async{
+              emit(AllPharmacyByPlaceState(data));
+              print("dshhhhhhhhhhhhhhbbbbbbbbbbbbbbhhhd");
+              print(data.length);
+            }
+        );
       }
-      );
-    }
       if(event is HospitalByPlace){
+        current=event.current;
         (
+
             await hospitalsByPlaceUsecase.execute(event.placeId)).fold(
                 (failure)  {
               emit(AllHospitalByPlaceErrorState(failure: failure));
@@ -52,7 +56,8 @@ class PlaceVisitBloc extends Bloc<PlaceVisitEvent, PlaceVisitState> {
 
         );
       }
-      if(event is DoctorByPlace){
+      if(event is DoctorByPlace)
+      {  current=event.current;
         (
             await doctorsByPlaceUsecase.execute(event.placeId)).fold(
                 (failure)  {
@@ -66,24 +71,25 @@ class PlaceVisitBloc extends Bloc<PlaceVisitEvent, PlaceVisitState> {
 
         );
       }
-      if(event is BrandFlagEvent){
+      if(event is BrandFlagEvent)
+      {
         (
-            await allBrandsFlagSqlUsecase.execute()).fold(
+            await allBrandsFlagSqlUsecase.execute()
+        ).fold
+          (
                 (failure)  {
-              print("dsd");
               emit(BrandFlagErrorState(failure: failure));
             },
-                (data)  async{
-                  print("DSsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-                  emit(BrandFlagState(data));
+                (data)  async {
+              bandFlag=data;
+              emit(BrandFlagState(data));
             }
-
         );
       }
       if(event is SelectBrandEvent)
       {
         selectBrand.add(event.brandModel);
-        SelectBrandState(selectBrand);
+        emit(SelectBrandState(selectBrand));
       }
     });
   }

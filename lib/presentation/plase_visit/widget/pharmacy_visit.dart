@@ -1,5 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/place_visit_bloc.dart';
+import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_pharmacy.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -18,11 +18,9 @@ class PharmacyVisit extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
-            Text("الصيدليات",),
             Expanded(
-              child: BlocConsumer<PlaceVisitBloc, PlaceVisitState>(
+              child: BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
                 listener: (context, state) {
                   if(state is AllPharmacyByPlaceErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -45,16 +43,20 @@ class PharmacyVisit extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              BlocProvider.of<PlaceVisitBloc>(context).add(BrandFlagEvent());
+                              BlocProvider.of<VisitPlaceBloc>(context).add(BrandFlagEvent());
                               Navigator.push(context, MaterialPageRoute(builder: (context) {
                               return  VisitPharmacy(pharmacyModel: pharmacyModel[index],);
                               },));
                             },
                             child: Container(
                               margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p16),
+                              padding: EdgeInsets.all(AppPadding.p8),
                               //    height: AppSize.s150,
                               decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(color: ColorManager.secondaryColor4)
+
+                                ],
                                 color: ColorManager.white,
                                 border:
                                 Border.all(color: ColorManager.hintGrey),
@@ -64,8 +66,12 @@ class PharmacyVisit extends StatelessWidget {
                               ),
                               child:
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextRach(s1: "الاسم : ", s2: pharmacyModel[index].title),
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    pharmacyModel[index].title,style: Theme.of(context).textTheme.labelLarge,),
                                   TextRach(s1: "العنوان : ", s2: pharmacyModel[index].address)
                                 ],
                               ),

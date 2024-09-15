@@ -14,14 +14,18 @@ class TextRach extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Text.rich(
+            textAlign: TextAlign.center,
             softWrap: false,
             maxLines: 3,
             overflow:
             TextOverflow.ellipsis,
             TextSpan(
+
               text:
               s1,
               style: textStyle!=null?textStyle:Theme.of(context).textTheme.labelLarge,
