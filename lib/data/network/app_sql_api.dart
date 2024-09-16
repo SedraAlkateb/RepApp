@@ -225,7 +225,9 @@ class AppSqlApi {
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
-    batch.insert('visit_pharmacy',visitPharmacyModel.toMap());
+    batch.insert('visit_pharmacy',visitPharmacyModel.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     await batch.commit(noResult: true);
   }
 }

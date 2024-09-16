@@ -76,9 +76,6 @@ TextEditingController searchController =TextEditingController();
         k = 1;
       }
     });
-
-
-    //DialogFilter( text: "اختر احد الاماكن لاضهار ادكاترة , الصيادلة , المشافي في هذا المكان");
     return Scaffold(
         drawer: DrawerPage(),
         appBar: AppBar(
@@ -94,9 +91,7 @@ TextEditingController searchController =TextEditingController();
           ),
         */
           leading: Builder(
-
             builder: (BuildContext context) {
-
               return Center(
                 child: IconButton(
                   icon: Icon(

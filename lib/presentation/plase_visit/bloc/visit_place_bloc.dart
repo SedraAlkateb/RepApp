@@ -99,6 +99,19 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         selectBrand = updatedList;
         emit(SelectBrandState(selectBrand));
       }
+      if(event is InsertVisitPharmacyEvent)
+      {
+      (
+          await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel)).fold(
+              (failure)  {
+            emit(InsertVisitPharmacyErrorState(failure: failure));
+          },
+              (data)  async{
+            emit(InsertVisitPharmacyState());
+          }
+
+      );
+      }
     });
   }
 }
