@@ -70,9 +70,11 @@ final class BrandFlagErrorState extends VisitPlaceState {
   @override
   List<Object?> get props =>[failure];
 }
+
 class SelectBrandState extends VisitPlaceState{
   final List<BrandModel> brands;
   SelectBrandState(this.brands);
   List<Object?> get props => [brands];
 }
+
 
