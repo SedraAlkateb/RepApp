@@ -1,18 +1,22 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VisitPharmacy extends StatelessWidget {
-  const VisitPharmacy({super.key, this.pharmacyModel});
+   VisitPharmacy({super.key, this.pharmacyModel});
   final PharmacyModel? pharmacyModel;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    print("object8");
     return Scaffold(
+      appBar: null,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,7 +25,7 @@ class VisitPharmacy extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: 250,
               decoration: BoxDecoration(
-                color: ColorManager.secondaryColor,
+                color: ColorManager.secondaryColor1,
                 borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
               child: Column(
@@ -61,55 +65,55 @@ class VisitPharmacy extends StatelessWidget {
                     "اختر العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
+                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
                     listener: (context, state) {
                       if(state is BrandFlagErrorState) {
+                        print("object");
                         error(context, state.failure.massage, state.failure.code);
                       }
                       },
-                    builder: (context, state) {
-                      if (state is BrandFlagState) {
+                   child: CustomDropDown(
+                     hintText: "العينات",
+                     items: context.watch<VisitPlaceBloc>().bandFlag,
+                     prefixIcon: null,
+                     onChanged: (value) {
 
-                        return CustomDropDown(
-                          hintText: "العينات",
-                          items: context.watch<VisitPlaceBloc>().bandFlag,
-                          prefixIcon: null,
-                          onChanged: (value) {
-                            BrandModel brand=value;
-                            BlocProvider.of<VisitPlaceBloc>(context).add(SelectBrandEvent(brand));
-                            },
-                          validator: (value) {
-                            return null;
-                          },);
-                      }
-                      return CustomDropDown(
-                        hintText: "العينات",
-                        items:  context.read<VisitPlaceBloc>().bandFlag,
-                        prefixIcon: null,
-                        onChanged: (value) {
-                          BrandModel brand=value;
-                          BlocProvider.of<VisitPlaceBloc>(context).add(SelectBrandEvent(brand));
-                        },
-                        validator: (value) {
-                          return null;
+                       BrandModel brand=value;
+                       BlocProvider.of<VisitPlaceBloc>(context).add(SelectBrandEvent(brand));
+                     },
+                     validator: (value) {
+                       return null;
+                     },),
+                  ),
+                  BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                    builder: (context, state) {
+                      // Rebuild the ListView when selectBrand is updated
+                      return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: context.watch<VisitPlaceBloc>().selectBrand.length,
+                        itemBuilder: (context, index) {
+                          return Text(
+                            context.watch<VisitPlaceBloc>().selectBrand[index].title,
+                            style: TextStyle(color: Colors.black, fontSize: 20),
+                          );
                         },
                       );
                     },
                   ),
-
-                  BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-  builder: (context, state) {
-    if(state is SelectBrandState){
-      print("ddddddddddddddddddddddddddddd");
-    }
-    return ListView.builder (
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount:context.watch<VisitPlaceBloc>().selectBrand.length ,
-                    itemBuilder: (context, index) {
-                      return    Text(context.watch<VisitPlaceBloc>().selectBrand[index].title,style: TextStyle(color: Colors.black,fontSize: 50),);
-                      },
-                  );},)
+                  BoxTextField(
+                    keyboardType:
+                    TextInputType.text,
+                    prefixIcon: null,
+                    maxLines: 10,
+                    validator: (value) {},
+                    controller:
+                    _controller,
+                    obscureText: false,
+                    minLines: 5,
+                    inputFormatters: [],
+                  ),
+                  ElevatedButton(onPressed: (){}, child: Text("ارسال"))
                 ],
               ),
             )

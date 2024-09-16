@@ -221,5 +221,13 @@ class AppSqlApi {
       return DoctorModel.fromMap(maps[i]);
     });
   }
-
+//////////////////////////////////////////////////////////////////
+  insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) async {
+    Database? mydb =await databaseHelper.database;
+    Batch batch =mydb.batch();
+    batch.insert('visit_pharmacy',visitPharmacyModel.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    await batch.commit(noResult: true);
+  }
 }

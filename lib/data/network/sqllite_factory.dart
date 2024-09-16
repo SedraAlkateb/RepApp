@@ -89,9 +89,8 @@ class DatabaseHelper {
     spId TEXT NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
 );
-
-    ''');
-
+ '''
+    );
     await db.execute('''
       CREATE TABLE hospital (
     id INTEGER PRIMARY KEY,
@@ -105,7 +104,64 @@ class DatabaseHelper {
       FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
+    ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////
+    await db.execute('''
+     CREATE TABLE visit_doctor (
+    id INTEGER PRIMARY KEY,
+    data TEXT NOT NULL,
+    kaswn TEXT NOT NULL,
+    science TEXT NOT NULL,
+    additaion TEXT NOT NULL, 
+    doctorId TEXT NOT NULL,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+);
+ ''');
+    await db.execute('''
+     CREATE TABLE visit_hospital (
+    id INTEGER PRIMARY KEY,
+    data TEXT NOT NULL,
+    kaswn TEXT NOT NULL,
+    science TEXT NOT NULL,
+    additaion TEXT NOT NULL, 
+    hospitalId TEXT NOT NULL,
+    FOREIGN KEY (hospitalId) REFERENCES hospital(id)
+);
+ ''');
+    await db.execute('''
+     CREATE TABLE visit_pharmacy(
+    id INTEGER PRIMARY KEY,
+    data TEXT NOT NULL,
+    note TEXT NOT NULL,
+    pharmacyId INTEGER NOT NULL,
+    FOREIGN KEY (pharmacyId) REFERENCES pharmacy(id))
+ ''');
+    await db.execute('''
+  CREATE TABLE visit_brand_doctor(
+    id INTEGER PRIMARY KEY,
+    doctorId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    FOREIGN KEY (doctorId) REFERENCES visit_doctor(id),
+    FOREIGN KEY (brandId) REFERENCES brand(id)
+  )
+''');
 
+    await db.execute('''
+     CREATE TABLE visit_brand_pharmacy(
+    id INTEGER PRIMARY KEY,
+    pharmacyId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    FOREIGN KEY (pharmacyId) REFERENCES visit_pharmacy(id),
+    FOREIGN KEY (brandId) REFERENCES brand(id))
+ ''');
+    await db.execute('''
+     CREATE TABLE visit_brand_hospital(
+    id INTEGER PRIMARY KEY,
+    hospitalId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    FOREIGN KEY (hospitalId) REFERENCES visit_hospital(id),
+    FOREIGN KEY (brandId) REFERENCES brand(id)
+    )
+ ''');
   }
 
 
