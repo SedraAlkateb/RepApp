@@ -51,3 +51,13 @@ class SelectBrandEvent extends VisitPlaceEvent{
   List<Object?> get props => [brandModel];
 
 }
+
+class InsertVisitPharmacyEvent extends VisitPlaceEvent{
+  final  VisitPharmacyModel visitPharmacyModel;
+  InsertVisitPharmacyEvent(this.visitPharmacyModel);
+  @override
+
+
+  List<Object?> get props => [visitPharmacyModel];
+
+}

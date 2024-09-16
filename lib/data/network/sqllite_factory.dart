@@ -150,7 +150,6 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY,
     pharmacyId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
-
     FOREIGN KEY (pharmacyId) REFERENCES visit_pharmacy(id),
     FOREIGN KEY (brandId) REFERENCES brand(id))
  ''');

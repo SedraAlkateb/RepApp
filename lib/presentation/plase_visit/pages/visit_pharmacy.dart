@@ -112,9 +112,8 @@ class VisitPharmacy extends StatelessWidget {
                     obscureText: false,
                     minLines: 5,
                     inputFormatters: [],
-
-
-                  )
+                  ),
+                  ElevatedButton(onPressed: (){}, child: Text("ارسال"))
                 ],
               ),
             )
