@@ -261,4 +261,16 @@ class RepositroySqlImp extends RepositorySql {
     }
   }
 
+  @override
+  Future<Either<Failure, Null>> insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) async {
+    try {
+     await _databaseHelper.insertVisitPharmacy(visitPharmacyModel);
+      return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
 }

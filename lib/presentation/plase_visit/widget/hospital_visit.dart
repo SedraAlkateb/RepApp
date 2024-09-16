@@ -18,17 +18,17 @@ class HospitalVisit extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
             Text("كل الدكاترة",),
             Expanded(
-              child: BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
+              child: BlocListener<VisitPlaceBloc, VisitPlaceState>(
                 listener: (context, state) {
                   if(state is AllHospitalByPlaceErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       error(context, state.failure.massage, state.failure.code);
                     });
                   }
+
                   /*
                   if(state is AllHospitalByPlaceLoadingState){
                     loading(context);
@@ -36,38 +36,31 @@ class HospitalVisit extends StatelessWidget {
                   if(state is AllHospitalByPlaceState){
     success(context);}
                  */
-                },
-                builder: (context, state) {
-                  if(state is AllHospitalByPlaceState){
-                    List<DoctorModel> doctorModel=state.data;
-                    return ListView.builder
-                      (
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.all(AppPadding.p8),
-                            padding: EdgeInsets.all(AppPadding.p16),
-                            //    height: AppSize.s150,
-                            decoration: BoxDecoration(
-                              color: ColorManager.white,
-                              border:
-                              Border.all(color: ColorManager.hintGrey),
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(AppSize.s8)),
-                              //        color: ColorManager.card,
-                            ),
-                            child:
-                            Column(
-                              children: [
-                                TextRach(s1: "title : ", s2: doctorModel[index].title),
-                                TextRach(s1: "address : ", s2: doctorModel[index].address)
-                              ],
-                            ),
-                          );
-                        }, itemCount: doctorModel.length);
-                  }
-                  return SizedBox(
-                  );
-                },
+                },child: ListView.builder
+                (
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.all(AppPadding.p8),
+                      padding: EdgeInsets.all(AppPadding.p16),
+                      //    height: AppSize.s150,
+                      decoration: BoxDecoration(
+                        color: ColorManager.white,
+                        border:
+                        Border.all(color: ColorManager.hintGrey),
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(AppSize.s8)),
+                        //        color: ColorManager.card,
+                      ),
+                      child:
+                      Column(
+                        children: [
+                          TextRach(s1: "title : ", s2:  context.watch<VisitPlaceBloc>().hospitals[index].title),
+                          TextRach(s1: "address : ", s2: context.watch<VisitPlaceBloc>().hospitals[index].address)
+                        ],
+                      ),
+                    );
+                  }, itemCount: context.watch<VisitPlaceBloc>().hospitals.length),
+
               ),
             ),
           ],

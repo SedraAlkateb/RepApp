@@ -1,3 +1,30 @@
+class VisitPharmacyModel {
+  int id;
+  String data;
+  String note;
+  int pharmacyId;
+
+  VisitPharmacyModel(this.id, this.data, this.note, this.pharmacyId);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'data': data,
+      'note': note,
+      'pharmacyId': pharmacyId,
+    };
+  }
+
+  factory VisitPharmacyModel.fromMap(Map<String, dynamic> map) {
+    return VisitPharmacyModel(
+      map['id'],
+      map['data'],
+      map['note'],
+      map['pharmacyId'],
+    );
+  }
+
+}
+
 class PlaceModel {
   int placeId;
   String title;
