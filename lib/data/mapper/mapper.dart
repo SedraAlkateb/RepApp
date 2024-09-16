@@ -104,7 +104,7 @@ extension AllCityResponseMapper on AllCityBaseResponse? {
 extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
   MedicalVisits toDomain() {
     return MedicalVisits(
-      this?.visID ?? Constants.empty,
+        int.parse(this?.visID ?? "0") ,
       this?.visitDate ?? Constants.empty,
       this?.title ?? Constants.empty,
       this?.address ?? Constants.empty,
@@ -167,13 +167,12 @@ extension DoctorResponseMapper on DoctorResponse? {
     return DoctorModel(
       int.parse(this?.id ?? "0"),
       this?.title ?? Constants.empty,
-      this?.placeId ?? Constants.empty,
+      int.parse(this?.placeId ?? "0") ,
       this?.address ?? Constants.empty,
-      this?.spId ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
-      this?.spTitle ?? Constants.empty,
       this?.visits ?? Constants.empty,
-     
+      this?.spTitle ?? Constants.empty,
+      int.parse(this?.spId ?? "0") ,
     );
 
   }

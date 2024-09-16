@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/pharmacy/bloc/pharmacy_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
+import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/them_manager.dart';
@@ -40,7 +41,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<PharmacyBloc>()),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
         BlocProvider(create: (_) => instance<VisitPlaceBloc>()),
-
+        BlocProvider(create: (_) => instance<VisitBloc>()),
       ],
       child: MaterialApp(
         locale: Locale('ar'),

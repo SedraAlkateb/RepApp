@@ -1,4 +1,3 @@
-import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
@@ -6,15 +5,15 @@ import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../domain/models/models.dart';
 
-class VisitPharmacy extends StatelessWidget {
-   VisitPharmacy({super.key,required this.pharmacyModel});
-  final PharmacyModel pharmacyModel;
+class VisitDoctor extends StatelessWidget {
+   VisitDoctor({super.key,required this.doctorModel});
+  final DoctorModel doctorModel;
   final TextEditingController _noteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    print("object8");
     return Scaffold(
       appBar: null,
       body: SingleChildScrollView(
@@ -43,14 +42,14 @@ class VisitPharmacy extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    pharmacyModel?.title ?? " ",
+                    doctorModel?.title ?? " ",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "عنوان الصيدلية : ${pharmacyModel?.address ?? " "}",
+                    "عنوان الصيدلية : ${doctorModel?.address ?? " "}",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
@@ -116,13 +115,11 @@ class VisitPharmacy extends StatelessWidget {
                   ElevatedButton(onPressed: (){
                     if(_noteController.text.isNotEmpty||context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
                       DateTime now = DateTime.now();
-                      VisitPharmacyModel visitPharmacyModel= VisitPharmacyModel(0,
+                      VisitDoctorModel visitDoctorModel= VisitDoctorModel(0,
                           now.toString()
-                          , _noteController.text, pharmacyModel.id);
-                      BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitPharmacyEvent(visitPharmacyModel));
-                      if(context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
-                 //       BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitPharmacyEvent(visitPharmacyModel));
-                      }
+                          , _noteController.text, _noteController.text, _noteController.text,doctorModel.id);
+                      BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitDoctorEvent(visitDoctorModel));
+
                     }
                   }, child: Text("ارسال"))
                 ],

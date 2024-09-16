@@ -113,7 +113,20 @@ class DrawerPage extends StatelessWidget {
 
             },
           ),
+          ListTile(
+            leading:  Icon(Icons.local_pharmacy_outlined,color: ColorManager.secondaryColor4),
+            title: const Text('الزيارات'),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.visits,(route) => true,
+                );
 
+              });
+
+            },
+          ),
         ],
       ),
     );

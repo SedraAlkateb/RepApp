@@ -61,3 +61,12 @@ class InsertVisitPharmacyEvent extends VisitPlaceEvent{
   List<Object?> get props => [visitPharmacyModel];
 
 }
+class InsertVisitDoctorEvent extends VisitPlaceEvent{
+  final  VisitDoctorModel visitDoctorModel;
+  InsertVisitDoctorEvent(this.visitDoctorModel);
+  @override
+
+
+  List<Object?> get props => [visitDoctorModel];
+
+}
