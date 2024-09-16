@@ -42,6 +42,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       if(event is PharmacyByPlace){
         current=event.current;
         (
+          
             await pharmaciesByPlaceUsecase.execute(event.placeId)).fold(
                 (failure)  {
               emit(AllPharmacyByPlaceErrorState(failure: failure));
