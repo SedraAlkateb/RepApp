@@ -47,7 +47,7 @@ ThemeData getApplicationTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p28, vertical: AppPadding.p14),
+        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p28, vertical: AppPadding.p5),
         textStyle: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s20),
         shadowColor: ColorManager.shadow1,
         backgroundColor: ColorManager.secondaryColor1,
@@ -67,7 +67,7 @@ ThemeData getApplicationTheme() {
       titleLarge: getBoldStyle(color: ColorManager.secondaryColor1, fontSize: FontSize.s25),
       labelLarge: getBoldStyle(color: ColorManager.secondaryColor1, fontSize: AppSize.s20),
       labelMedium: getBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s14),
-      labelSmall: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s12),
+      labelSmall: getSemiBoldStyle(color: ColorManager.primaryField, fontSize: FontSize.s12),
       titleSmall: getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s20),
       bodyMedium: getRegularStyle(color: Colors.black, fontSize: FontSize.s14),
     ),
@@ -78,7 +78,7 @@ ThemeData getApplicationTheme() {
 
       errorStyle: getRegularStyle(color: ColorManager.error),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ColorManager.secondaryColor, width: AppSize.s1_5),
+        borderSide: BorderSide(color: ColorManager.secondaryColor3, width: AppSize.s1_5),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s16)),
       ),
       focusedBorder: OutlineInputBorder(
