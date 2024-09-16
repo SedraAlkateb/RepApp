@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VisitPharmacy extends StatelessWidget {
-  VisitPharmacy({super.key, this.pharmacyModel});
-  final PharmacyModel? pharmacyModel;
-  final TextEditingController _controller = TextEditingController();
+   VisitPharmacy({super.key,required this.pharmacyModel});
+  final PharmacyModel pharmacyModel;
+  final TextEditingController _noteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -259,4 +259,38 @@ class VisitPharmacy extends StatelessWidget {
                           );
                         },
                       );
-                      */
+                    },
+                  ),
+                  BoxTextField(
+                    keyboardType:
+                    TextInputType.text,
+                    prefixIcon: null,
+                    maxLines: 10,
+                    validator: (value) {},
+                    controller:
+                    _noteController,
+                    obscureText: false,
+                    minLines: 5,
+                    inputFormatters: [],
+                  ),
+                  ElevatedButton(onPressed: (){
+                    if(_noteController.text.isNotEmpty||context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
+                      DateTime now = DateTime.now();
+                      VisitPharmacyModel visitPharmacyModel= VisitPharmacyModel(0,
+                          now.toString()
+                          , _noteController.text, pharmacyModel.id);
+                      BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitPharmacyEvent(visitPharmacyModel));
+                      if(context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
+                 //       BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitPharmacyEvent(visitPharmacyModel));
+                      }
+                    }
+                  }, child: Text("ارسال"))
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

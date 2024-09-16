@@ -91,3 +91,16 @@ final class InsertVisitPharmacyState extends VisitPlaceState {
   List<Object?> get props =>[];
 }
 
+final class InsertVisitDoctorErrorState extends VisitPlaceState {
+  final Failure failure;
+  InsertVisitDoctorErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class InsertVisitDoctorState extends VisitPlaceState {
+  @override
+  InsertVisitDoctorState();
+  @override
+  List<Object?> get props =>[];
+}

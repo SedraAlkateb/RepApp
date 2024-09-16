@@ -7,7 +7,6 @@ class VisitPharmacyModel {
   VisitPharmacyModel(this.id, this.data, this.note, this.pharmacyId);
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'data': data,
       'note': note,
       'pharmacyId': pharmacyId,
@@ -22,7 +21,37 @@ class VisitPharmacyModel {
       map['pharmacyId'],
     );
   }
+}
 
+class VisitDoctorModel {
+  int id;
+  String data;
+  String kaswn;
+  String science;
+  String additaion;
+  int doctorId;
+  VisitDoctorModel(this.id, this.data, this.kaswn, this.science, this.additaion,
+      this.doctorId);
+  Map<String, dynamic> toMap() {
+    return {
+      'data': data,
+      'kaswn': kaswn,
+      'science': science,
+      'additaion': additaion,
+      'doctorId': doctorId,
+    };
+  }
+
+  factory VisitDoctorModel.fromMap(Map<String, dynamic> map) {
+    return VisitDoctorModel(
+      map['id'],
+      map['data'],
+      map['kaswn'],
+      map['science'],
+      map['additaion'],
+      map['doctorId'],
+    );
+  }
 }
 
 class PlaceModel {
@@ -64,7 +93,7 @@ class SpecModel {
 }
 
 class MedicalVisits {
-  String visID;
+  int visID;
   String visitDate;
   String title;
   String address;
@@ -114,8 +143,8 @@ class BrandModel {
       'id': id,
       'title': title,
       'phTitle': phTitle,
-      'falg':falg,
-      'sampleCoast':sampleCoast
+      'falg': falg,
+      'sampleCoast': sampleCoast
     };
   }
 
@@ -128,7 +157,7 @@ class BrandModel {
       map['sampleCoast'],
     );
   }
-  BrandModel(this.id, this.title, this.phTitle,this.falg,this.sampleCoast);
+  BrandModel(this.id, this.title, this.phTitle, this.falg, this.sampleCoast);
 }
 
 class PharmacyModel {
@@ -158,11 +187,8 @@ class PharmacyModel {
 
 class DoctorModel {
   int id;
-
   String title;
-
-  String placeId;
-
+  int placeId;
   String address;
 
   String placeTitle;
@@ -170,9 +196,17 @@ class DoctorModel {
   String visits;
 
   String spTitle;
-  String spId;
-  DoctorModel(this.id, this.title, this.placeId, this.address, this.spId,
-      this.placeTitle, this.visits, this.spTitle);
+  int spId;
+  DoctorModel(
+    this.id,
+    this.title,
+    this.placeId,
+    this.address,
+    this.placeTitle,
+    this.visits,
+    this.spTitle,
+    this.spId,
+  );
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -182,7 +216,7 @@ class DoctorModel {
       "placeTitle": placeTitle,
       "visits": visits,
       "spTitle": spTitle,
-      "spId" :spId,
+      "spId": spId,
     };
   }
 
@@ -195,7 +229,7 @@ class DoctorModel {
       map["placeTitle"],
       map["visits"],
       map["spTitle"],
-      map["spId"],
+      map['placeId'],
     );
   }
 }

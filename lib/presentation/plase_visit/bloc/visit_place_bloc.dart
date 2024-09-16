@@ -4,6 +4,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacies_by_place_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -18,6 +19,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   DoctorsByPlaceUsecase doctorsByPlaceUsecase;
   HospitalsByPlaceUsecase hospitalsByPlaceUsecase;
   InsertVisitPharmacySqlUsecase insertVisitPharmacySqlUsecase;
+  InsertVisitDoctorSqlUsecase insertVisitDoctorSqlUsecase;
+
   List<BrandModel> selectBrand=[];
   List<BrandModel> bandFlag=[];
   List<PharmacyModel> pharmacies=[];
@@ -30,7 +33,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       this.allBrandsFlagSqlUsecase,
       this.doctorsByPlaceUsecase,
       this.hospitalsByPlaceUsecase,
-      this.insertVisitPharmacySqlUsecase
+      this.insertVisitPharmacySqlUsecase,
+      this.insertVisitDoctorSqlUsecase,
+
       )  : super(VisitPlaceInitial()) {
     on<VisitPlaceEvent>((event, emit) async {
       print("objectssssssssss");
@@ -105,14 +110,23 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       (
           await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel)).fold(
               (failure)  {
+                print(failure.massage);
             emit(InsertVisitPharmacyErrorState(failure: failure));
-          },
-              (data)  async{
+          }, (data)  async{
             emit(InsertVisitPharmacyState());
-          }
+              });}
+      if(event is InsertVisitDoctorEvent)
+      {
+        (await insertVisitDoctorSqlUsecase.execute(event.visitDoctorModel)).fold(
+                (failure)  {
+              print(failure.massage);
+              emit(InsertVisitDoctorErrorState(failure: failure));
+            },
+                (data)  async{
 
-      );
-      }
+              emit(InsertVisitDoctorState());
+            });}
+
     });
   }
 }

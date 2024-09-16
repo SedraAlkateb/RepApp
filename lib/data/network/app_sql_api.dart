@@ -221,11 +221,35 @@ class AppSqlApi {
       return DoctorModel.fromMap(maps[i]);
     });
   }
-//////////////////////////////////////////////////////////////////
+
+  Future<List<VisitPharmacyModel>> getVisitPharmacy() async {
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
+    return List.generate(maps.length, (i) {
+      return VisitPharmacyModel.fromMap(maps[i]);
+    });
+  }
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
     batch.insert('visit_pharmacy',visitPharmacyModel.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    await batch.commit(noResult: true);
+  }
+  
+  //////////////////////////////////
+  Future<List<VisitDoctorModel>> getVisitDoctor() async {
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_doctor');
+    return List.generate(maps.length, (i) {
+      return VisitDoctorModel.fromMap(maps[i]);
+    });
+  }
+  insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
+    Database? mydb =await databaseHelper.database;
+    Batch batch =mydb.batch();
+    batch.insert('visit_doctor',visitDoctorModel.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     await batch.commit(noResult: true);
