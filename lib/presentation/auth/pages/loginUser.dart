@@ -30,7 +30,8 @@ class _MyLoginState extends State<MyLogin> {
           child: Stack(
             children: [
               Container(
-                padding: EdgeInsets.only(right: 35, top: 130),
+               
+               padding: EdgeInsets.only(right: 117,top:73 ),
                 child: Text(
                   'مرحبا بك\nفي Domina',
                   style: TextStyle(color: Colors.white, fontSize: 33),
@@ -48,9 +49,8 @@ class _MyLoginState extends State<MyLogin> {
                         child: Column(
                           children: [
                             TextFormField(
-                              validator: (val) => val!.length < 3
-                                  ? "حقل الاسم مطلوب "
-                                  : null,
+                              validator: (val) =>
+                                  val!.length < 3 ? "حقل الاسم مطلوب " : null,
                               controller: userName,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
@@ -97,10 +97,14 @@ class _MyLoginState extends State<MyLogin> {
                                       loading(context);
                                     }
                                     if (state is LoginState) {
-                                      BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent(state.loginModel));}
-                                    if(state is InsertLoginState){
+                                      BlocProvider.of<AuthBloc>(context).add(
+                                          LoginInsertEvent(state.loginModel));
+                                    }
+                                    if (state is InsertLoginState) {
                                       success(context);
-                                      Navigator.pushNamed(context, Routes.syncData);}
+                                      Navigator.pushNamed(
+                                          context, Routes.syncData);
+                                    }
                                     if (state is LoginErrorState) {
                                       error(context, state.failure.massage,
                                           state.failure.code);

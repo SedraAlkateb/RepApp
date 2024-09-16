@@ -1,5 +1,3 @@
-
-
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/pharmacy/bloc/pharmacy_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
@@ -17,90 +15,87 @@ class PharmacyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<PharmacyBloc>(context).add(AllPharmacyEvent());
-    });    return Scaffold(
+    });
+    return Scaffold(
         drawer: DrawerPage(),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.menu,
-                color:
-                ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+                  Icons.menu,
+                  color: ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+          title: Text('الصيدليات '),
         ),
-        title: Text(
-            'الصيدليات '),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-          
-            
-            Expanded(
-              child: BlocConsumer<PharmacyBloc, PharmacyState>(
-                listener: (context, state) {
-                  if(state is AllPharmacyErrorState){
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      error(context, state.failure.massage, state.failure.code);
-                    });
-                  }
-                /*
+            children: [
+              Expanded(
+                child: BlocConsumer<PharmacyBloc, PharmacyState>(
+                  listener: (context, state) {
+                    if (state is AllPharmacyErrorState) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      });
+                    }
+                    /*
                   if(state is AllPharmacyLoadingState){
                     loading(context);
                   }
                   if(state is AllPharmacyState){
     success(context);}
                  */
-                },
-  builder: (context, state) {
-    if(state is AllPharmacyState){
-      List<PharmacyModel> pharmacyModel=state.pharmacy;
-      return ListView.builder
-        (
-          itemBuilder: (context, index) {
-            return Container(
-              margin: EdgeInsets.all(AppPadding.p8),
-              padding: EdgeInsets.all(AppPadding.p16),
-              //    height: AppSize.s150,
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-                border:
-                Border.all(color: ColorManager.hintGrey),
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(AppSize.s8)),
-                //        color: ColorManager.card,
+                  },
+                  builder: (context, state) {
+                    if (state is AllPharmacyState) {
+                      List<PharmacyModel> pharmacyModel = state.pharmacy;
+                      return ListView.builder(
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.all(AppPadding.p8),
+                              padding: EdgeInsets.all(AppPadding.p16),
+                              //    height: AppSize.s150,
+                              decoration: BoxDecoration(
+                                color: ColorManager.white,
+                                border:
+                                    Border.all(color: ColorManager.hintGrey),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(AppSize.s8)),
+                                //        color: ColorManager.card,
+                              ),
+                              child: Column(
+                                children: [
+                                  TextRach(
+                                      s1: "title : ",
+                                      s2: pharmacyModel[index].title),
+                                  TextRach(
+                                      s1: "address : ",
+                                      s2: pharmacyModel[index].address)
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: pharmacyModel.length);
+                    }
+
+                    return SizedBox();
+                  },
+                ),
               ),
-              child: Column(
-                children: [
-                  TextRach(s1: "title : ", s2: pharmacyModel[index].title),
-                  TextRach(s1: "address : ", s2: pharmacyModel[index].address)
-
-                ],
-              ),
-            );
-          }, itemCount: pharmacyModel.length);
-    }
-
-
-    return SizedBox(
-    );
-  },
-),
-            ),
-          ],
-        ),
-      )
-    );
+            ],
+          ),
+        ));
   }
 }
