@@ -19,7 +19,7 @@ class AsyncPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image.asset(
-              ImageAssets.domina,width: 300,
+              ImageAssets.domina,width: 200,
             ),
             Text(
               textAlign: TextAlign.center,

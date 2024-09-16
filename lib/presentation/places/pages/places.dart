@@ -49,7 +49,7 @@ TextEditingController searchController =TextEditingController();
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  " اختر احد المناطق لاظهار (الاطباء , الصيادلة , المشافي) في المنطقة المختارة",
+                                  " :اختر احد المناطق لاظهار (الأطباء,الصيادلة,المشافي) في المنطقة المختارة",
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: ColorManager.secondaryColor1,
