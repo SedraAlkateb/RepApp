@@ -20,7 +20,7 @@ class PharmacyVisit extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
+              child: BlocListener<VisitPlaceBloc, VisitPlaceState>(
                 listener: (context, state) {
                   if(state is AllPharmacyByPlaceErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -35,53 +35,46 @@ class PharmacyVisit extends StatelessWidget {
     success(context);}
                  */
                 },
-                builder: (context, state) {
-                  if(state is AllPharmacyByPlaceState){
-                    List<PharmacyModel> pharmacyModel=state.pharmacy;
-                    return ListView.builder
-                      (
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(BrandFlagEvent());
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return  VisitPharmacy(pharmacyModel: pharmacyModel[index],);
-                              },));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p8),
-                              //    height: AppSize.s150,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(color: ColorManager.secondaryColor4)
+                child: ListView.builder
+                  (
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          BlocProvider.of<VisitPlaceBloc>(context).add(BrandFlagEvent());
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return  VisitPharmacy(pharmacyModel: context.watch<VisitPlaceBloc>().pharmacies[index],);
+                          },));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(AppPadding.p8),
+                          padding: EdgeInsets.all(AppPadding.p8),
+                          //    height: AppSize.s150,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: ColorManager.secondaryColor4)
 
-                                ],
-                                color: ColorManager.white,
-                                border:
-                                Border.all(color: ColorManager.hintGrey),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(AppSize.s8)),
-                                //        color: ColorManager.card,
-                              ),
-                              child:
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    textAlign: TextAlign.center,
-                                    pharmacyModel[index].title,style: Theme.of(context).textTheme.labelLarge,),
-                                  TextRach(s1: "العنوان : ", s2: pharmacyModel[index].address)
-                                ],
-                              ),
-                            ),
-                          );
-                        }, itemCount: pharmacyModel.length);
-                  }
-                  return SizedBox(
-                  );
-                },
+                            ],
+                            color: ColorManager.white,
+                            border:
+                            Border.all(color: ColorManager.hintGrey),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(AppSize.s8)),
+                            //        color: ColorManager.card,
+                          ),
+                          child:
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                textAlign: TextAlign.center,
+                                context.watch<VisitPlaceBloc>().pharmacies[index].title,style: Theme.of(context).textTheme.labelLarge,),
+                              TextRach(s1: "العنوان : ", s2:  context.watch<VisitPlaceBloc>().pharmacies[index].address)
+                            ],
+                          ),
+                        ),
+                      );
+                    }, itemCount:  context.watch<VisitPlaceBloc>().pharmacies.length),
               ),
             ),
           ],
