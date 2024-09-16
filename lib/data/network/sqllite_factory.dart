@@ -82,11 +82,11 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     address TEXT NOT NULL,
-    placeId TEXT NOT NULL,
+    placeId INTEGER NOT NULL,
     placeTitle TEXT NOT NULL, 
     visits TEXT NOT NULL,
     spTitle TEXT NOT NULL,
-    spId TEXT NOT NULL,
+    spId INTEGER NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
 );
  '''
@@ -96,40 +96,39 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     address TEXT NOT NULL,
-    placeId TEXT NOT NULL,
+    placeId INTEGER NOT NULL,
     placeTitle TEXT NOT NULL,
     visits TEXT  NOT NULL ,
     spTitle   TEXT  NOT NULL ,
-    spId TEXT NOT NULL,
       FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
     ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////
     await db.execute('''
      CREATE TABLE visit_doctor (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     kaswn TEXT NOT NULL,
     science TEXT NOT NULL,
     additaion TEXT NOT NULL, 
-    doctorId TEXT NOT NULL,
+    doctorId INTEGER NOT NULL,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
  ''');
     await db.execute('''
      CREATE TABLE visit_hospital (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     kaswn TEXT NOT NULL,
     science TEXT NOT NULL,
     additaion TEXT NOT NULL, 
-    hospitalId TEXT NOT NULL,
+    hospitalId INTEGER NOT NULL,
     FOREIGN KEY (hospitalId) REFERENCES hospital(id)
 );
  ''');
     await db.execute('''
      CREATE TABLE visit_pharmacy(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     note TEXT NOT NULL,
     pharmacyId INTEGER NOT NULL,

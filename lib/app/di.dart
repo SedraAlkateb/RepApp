@@ -23,10 +23,13 @@ import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
+import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
@@ -40,6 +43,7 @@ import 'package:domina_app/presentation/pharmacy/bloc/pharmacy_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
+import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,18 +108,28 @@ Future<void>initLoginModule() async{
     instance.registerFactory<AuthBloc>(() =>AuthBloc(instance(),instance()));
   }
 }
-Future<void>initPlaceVisitModule() async {if(!GetIt.I.isRegistered<PharmaciesByPlaceUsecase>()){
+Future<void>initPlaceVisitModule() async {
+  if(!GetIt.I.isRegistered<PharmaciesByPlaceUsecase>()){
     instance.registerFactory<PharmaciesByPlaceUsecase>(() =>PharmaciesByPlaceUsecase(instance()));
     instance.registerFactory<DoctorsByPlaceUsecase>(() =>DoctorsByPlaceUsecase(instance()));
     instance.registerFactory<HospitalsByPlaceUsecase>(() =>HospitalsByPlaceUsecase(instance()));
     instance.registerFactory<AllBrandsFlagSqlUsecase>(() =>AllBrandsFlagSqlUsecase(instance()));
     instance.registerFactory<InsertVisitPharmacySqlUsecase>(() =>InsertVisitPharmacySqlUsecase(instance()));
-    instance.registerFactory<VisitPlaceBloc>(() =>VisitPlaceBloc(instance(),instance(),instance(),instance(),instance()));}}
-
+    instance.registerFactory<InsertVisitDoctorSqlUsecase>(() =>InsertVisitDoctorSqlUsecase(instance()));
+    instance.registerFactory<VisitPlaceBloc>(() =>VisitPlaceBloc(instance(),instance(),
+        instance(),instance(),instance(),instance()));}
+}
 Future<void>initPlacesModule() async{
   if(!GetIt.I.isRegistered<AllPlacesSqlUsecase>()){
     instance.registerFactory<AllPlacesSqlUsecase>(() =>AllPlacesSqlUsecase(instance()));
     instance.registerFactory<PlaceBloc>(() =>PlaceBloc(instance()));
+  }
+}
+Future<void>initVisitsModule() async{
+  if(!GetIt.I.isRegistered<AllVisitPharmacySqlUsecase>()){
+    instance.registerFactory<AllVisitPharmacySqlUsecase>(() =>AllVisitPharmacySqlUsecase(instance()));
+    instance.registerFactory<AllVisitDoctorSqlUsecase>(() =>AllVisitDoctorSqlUsecase(instance()));
+    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance()));
   }
 }
 
