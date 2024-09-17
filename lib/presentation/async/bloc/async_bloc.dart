@@ -16,7 +16,6 @@ import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:flutter/material.dart';
 part 'async_event.dart';
 part 'async_state.dart';
-
 class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllBrandsUsecase allBrandsUsecase;
   AllPharmacyUsecase allPharmacyUsecase;
