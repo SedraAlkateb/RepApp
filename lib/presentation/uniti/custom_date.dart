@@ -8,7 +8,7 @@ class CustomDate extends StatelessWidget {
    CustomDate({Key? key,required this.dateInput,required this.width,required this.onChanged, this.validator,this.hint='YY-MM-DD'}) : super(key: key);
   final TextEditingController dateInput;
   final double width;
-  var onChanged;
+ final  onChanged;
    final FormFieldValidator<dynamic>? validator;
    final  String ? hint;
    @override

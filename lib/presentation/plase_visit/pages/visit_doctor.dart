@@ -42,14 +42,14 @@ class VisitDoctor extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    doctorModel?.title ?? " ",
+                    doctorModel.title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "عنوان الصيدلية : ${doctorModel?.address ?? " "}",
+                    "عنوان الصيدلية : ${doctorModel.address }",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
@@ -105,7 +105,9 @@ class VisitDoctor extends StatelessWidget {
                     TextInputType.text,
                     prefixIcon: null,
                     maxLines: 10,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller:
                     _noteController,
                     obscureText: false,

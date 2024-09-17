@@ -1,8 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/font_manager.dart';
-import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
@@ -47,14 +45,14 @@ class VisitPharmacy extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    pharmacyModel?.title ?? " ",
+                    pharmacyModel.title ,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "عنوان الصيدلية : ${pharmacyModel?.address ?? " "}",
+                    "عنوان الصيدلية : ${pharmacyModel.address}",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
@@ -73,8 +71,10 @@ class VisitPharmacy extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
-                    controller: _controller,
+                    validator: (value) {
+                      return null;
+                    },
+                    controller: _noteController,
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
@@ -293,4 +293,4 @@ class VisitPharmacy extends StatelessWidget {
       ),
     );
   }
-}
+}*/

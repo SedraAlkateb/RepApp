@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Places extends StatelessWidget {
   Places({super.key});
-TextEditingController searchController =TextEditingController();
+ final TextEditingController searchController =TextEditingController();
   int k=0;
   @override
   Widget build(BuildContext context) {
