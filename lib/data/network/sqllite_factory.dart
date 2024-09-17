@@ -98,9 +98,20 @@ class DatabaseHelper {
     address TEXT NOT NULL,
     placeId INTEGER NOT NULL,
     placeTitle TEXT NOT NULL,
-    visits TEXT  NOT NULL ,
-    spTitle   TEXT  NOT NULL ,
-      FOREIGN KEY (placeId) REFERENCES place(placeId)
+    FOREIGN KEY (placeId) REFERENCES place(placeId)
+    );
+    ''');
+    await db.execute('''
+      CREATE TABLE hospitalSp (
+    id INTEGER PRIMARY KEY,
+    hospitalId INTEGER NOT NULL,
+    spId INTEGER NOT NULL,
+    totalDocs INTEGER NOT NULL,
+    rate TEXT NOT NULL,
+    visit INTEGER NOT NULL,
+    FOREIGN KEY (hospitalId) REFERENCES hospital(id),
+    FOREIGN KEY (spId) REFERENCES specialization(id)
+
     );
     ''');
     ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////

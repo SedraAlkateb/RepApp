@@ -51,7 +51,7 @@ final class AllHospitalByPlaceErrorState extends VisitPlaceState {
   List<Object?> get props =>[failure];
 }
 final class AllHospitalByPlaceState extends VisitPlaceState {
-  final List<DoctorModel> data;
+  final List<HospitalModel> data;
   @override
   AllHospitalByPlaceState(this.data);
   @override
