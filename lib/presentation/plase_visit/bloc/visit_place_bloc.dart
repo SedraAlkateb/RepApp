@@ -25,7 +25,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   List<BrandModel> bandFlag=[];
   List<PharmacyModel> pharmacies=[];
   List<DoctorModel> doctors=[];
-  List<DoctorModel> hospitals=[];
+  List<HospitalModel> hospitals=[];
 
   int current =0;
   VisitPlaceBloc(

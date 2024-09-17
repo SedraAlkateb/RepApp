@@ -8,8 +8,8 @@ class AsyncDataSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   AsyncDataSqlUsecase(this._repositorySql);
   Future<Either<Failure, String>> execute(List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs,List<DoctorModel>doctors,
-      List<DoctorModel>hospitals) async{
-    return await _repositorySql.asyncData(brands, pharmacies, places, specs,doctors,hospitals);
+      List<HospitalModel>hospitals,  List<HospitalSpModel>hospitalSps) async{
+    return await _repositorySql.asyncData(brands, pharmacies, places, specs,doctors,hospitals,hospitalSps);
   }
 
   @override

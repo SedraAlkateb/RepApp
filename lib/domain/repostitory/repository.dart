@@ -14,6 +14,8 @@ abstract class Repository{
   Future<Either<Failure,List<CityModel>>>allMedicalRepresentative(int id);
   Future<Either<Failure,List<PharmacyModel>>>getAllPharmacy(int repDet);
   Future<Either<Failure,List<DoctorModel>>>getAllDoctor(int repDet);
-  Future<Either<Failure,List<DoctorModel>>>getAllHospital(int repDet);
+  Future<Either<Failure,List<HospitalModel>>>getAllHospital(int repDet);
+  Future<Either<Failure,List<HospitalSpModel>>>getAllHospitalSp(int repDet);
+
 
 }

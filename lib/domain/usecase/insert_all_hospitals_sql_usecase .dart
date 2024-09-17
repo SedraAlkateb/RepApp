@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class InsertAllHospitalsSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   InsertAllHospitalsSqlUsecase(this._repositorySql);
-  Future<Either<Failure, Null>> execute(List<DoctorModel> doctorModel) async {
+  Future<Either<Failure, Null>> execute(List<HospitalModel> doctorModel) async {
     return await _repositorySql.insertHospital(doctorModel);
   }
 

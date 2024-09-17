@@ -213,11 +213,36 @@ class RepositoryImp implements Repository {
   }
   
   @override
-  Future<Either<Failure, List<DoctorModel>>> getAllHospital(int repDet)  async {
+  Future<Either<Failure, List<HospitalModel>>> getAllHospital(int repDet)  async {
     try {
       //connect to internet,its safe to call Api
       final response = await _remoteDataSource.getAllHospital(repDet);
      
+      if (response.status == null) {
+        print("hddddddddhh");
+        //success
+        //return either right
+        //return data
+        return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<HospitalSpModel>>> getAllHospitalSp(int repDet) async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.getAllHospitalSp(repDet);
+
       if (response.status == null) {
         print("hddddddddhh");
         //success

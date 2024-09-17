@@ -229,11 +229,77 @@ class DoctorModel {
       map["placeTitle"],
       map["visits"],
       map["spTitle"],
-      map['placeId'],
+      map['spId'],
+    );
+  }
+}
+class HospitalSpModel {
+  int id;
+  int hospitalId;
+  int spId;
+  int totalDocs;
+  String rate;
+  int visit;
+  HospitalSpModel(this.id, this.hospitalId, this.spId, this.totalDocs,
+      this.rate, this.visit);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'hospitalId': hospitalId,
+      'spId': spId,
+      'totalDocs': totalDocs,
+      "rate": rate,
+      "visit": visit,
+    };
+  }
+  factory HospitalSpModel.fromMap(Map<String, dynamic> map) {
+    return HospitalSpModel(
+      map['id'],
+      map['hospitalId'],
+      map['spId'],
+      map['totalDocs'],
+      map["rate"],
+      map["visit"],
     );
   }
 }
 
+class HospitalModel {
+  int id;
+  String title;
+  int placeId;
+  String address;
+
+  String placeTitle;
+
+  HospitalModel(
+      this.id,
+      this.title,
+      this.placeId,
+      this.address,
+      this.placeTitle
+      );
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'placeId': placeId,
+      'address': address,
+      "placeTitle": placeTitle
+    };
+  }
+
+  factory HospitalModel.fromMap(Map<String, dynamic> map) {
+    return HospitalModel(
+      map['id'],
+      map['title'],
+      map['placeId'],
+      map['address'],
+      map["placeTitle"],
+    );
+  }
+}
 class CityModel {
   int id;
   String name;

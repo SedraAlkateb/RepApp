@@ -51,8 +51,10 @@ abstract class AppServiceClient {
   Future<AllHospitalBaseResponse> getAllHospital(
       @Part(name: "repDet") int repDet,
        );
-  // @POST("/getAllHospital.php")
-  // Future<Null> getAllVisitPharmacy(
-  //     @Part(name: "repDet") List<VisitPharmacyModel> visitPharmacy,
-  //     );
+
+  @POST("/getAllHospitalSp.php")
+  Future<AllHospitalSpBaseResponse> getAllHospitalSp(
+      @Part(name: "repDet") int repDet,
+      );
+
 }

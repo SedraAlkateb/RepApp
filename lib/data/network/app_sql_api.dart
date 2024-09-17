@@ -10,7 +10,8 @@ class AppSqlApi {
       List<PlaceModel> places,
       List<SpecModel> specs,
       List<DoctorModel>doctors,
-      List<DoctorModel>hospitals
+      List<HospitalModel>hospitals,
+      List<HospitalSpModel>hospitalSps,
       ) async {
     try {
       Database? mydb = await databaseHelper.database;
@@ -28,16 +29,16 @@ class AppSqlApi {
         for(var brand in brands){
           batch.insert('brand',brand.toMap());
         }
-        for(var pharmacy in pharmacies){
-          batch.insert('pharmacy',pharmacy.toMap());
+        for(var pharmacy in pharmacies) {
+          batch.insert('pharmacy', pharmacy.toMap());
         }
-
-
         for(var spec in specs){
           batch.insert('specialization',spec.toMap());
 
         }
-
+        for(var hospitalSp in hospitalSps){
+          batch.insert('hospitalSp',hospitalSp.toMap());
+        }
         await batch.commit(noResult: true);
       });
       return "";
@@ -51,6 +52,14 @@ class AppSqlApi {
     Batch batch =mydb.batch();
     for(var brand in brands){
       batch.insert('brand',brand.toMap());
+    }
+    await batch.commit(noResult: true);
+  }
+  insertHospitalSp(List<HospitalSpModel> hospitalSps) async {
+    Database? mydb =await databaseHelper.database;
+    Batch batch =mydb.batch();
+    for(var hospitalSps in hospitalSps){
+      batch.insert('hospitalSp',hospitalSps.toMap());
     }
     await batch.commit(noResult: true);
   }
@@ -172,14 +181,14 @@ class AppSqlApi {
     List<DoctorModel> doctors = result.map((map) => DoctorModel.fromMap(map)).toList();
     return doctors;
   }
-  Future<List<DoctorModel>> getHospitalByPlaceId( int placeId) async {
+  Future<List<HospitalModel>> getHospitalByPlaceId( int placeId) async {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> result = await db.query(
       'hospital',
       where: 'placeId = ?',
       whereArgs: [placeId],
     );
-    List<DoctorModel> hospitals = result.map((map) => DoctorModel.fromMap(map)).toList();
+    List<HospitalModel> hospitals = result.map((map) => HospitalModel.fromMap(map)).toList();
     return hospitals;
   }
 
@@ -203,22 +212,22 @@ class AppSqlApi {
   }
 
 
-  inserthospital(List<DoctorModel> doctors) async {
+  inserthospital(List<HospitalModel> hospitals) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
-    for(var doctor in doctors){
-      batch.insert('hospital',doctor.toMap());
+    for(var hospital in hospitals){
+      batch.insert('hospital',hospital.toMap());
     }
     await batch.commit(noResult: true);
   }
 
-  Future<List<DoctorModel>> getHospital() async {
+  Future<List<HospitalModel>> getHospital() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('hospital');
 
     // Convert List<Map<String, dynamic>> to List<Brand>
     return List.generate(maps.length, (i) {
-      return DoctorModel.fromMap(maps[i]);
+      return HospitalModel.fromMap(maps[i]);
     });
   }
 

@@ -67,7 +67,7 @@ class Hospital extends StatelessWidget {
                   },
                   builder: (context, state) {
                     if(state is AllHospitalsState){
-                      List<DoctorModel> doctormodel=state.hospital;
+                      List<HospitalModel> doctormodel=state.hospital;
                       return ListView.builder
                         (
                           itemBuilder: (context, index) {

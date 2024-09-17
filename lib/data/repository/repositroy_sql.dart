@@ -167,10 +167,11 @@ class RepositroySqlImp extends RepositorySql {
   Future<Either<Failure, String>> asyncData
       (List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs,
       List<DoctorModel>doctors,
-      List<DoctorModel>hospitals
+      List<HospitalModel>hospitals,
+      List<HospitalSpModel>hospitalSps
       )async {
     try {
-      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals);
+      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals,hospitalSps);
       if(response==""){
         return Right(response);
       }else{
@@ -205,7 +206,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<DoctorModel>>> getHospitalSql() async {
+  Future<Either<Failure, List<HospitalModel>>> getHospitalSql() async {
     try {
       final response = await _databaseHelper.getHospital();
       return Right(response);
@@ -216,7 +217,7 @@ class RepositroySqlImp extends RepositorySql {
 
   @override
   Future<Either<Failure, Null>> insertHospital(
-      List<DoctorModel> hospitalModel) async {
+      List<HospitalModel> hospitalModel) async {
     try {
       // عملية قاعدة بيانات قد تفشل
       final response = await _databaseHelper.inserthospital(hospitalModel);
@@ -250,7 +251,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<DoctorModel>>> getHospitalByPlaceId(int placeId)async {
+  Future<Either<Failure, List<HospitalModel>>> getHospitalByPlaceId(int placeId)async {
     try {
       final response = await _databaseHelper.getHospitalByPlaceId(placeId);
       return Right(response);
@@ -301,6 +302,18 @@ class RepositroySqlImp extends RepositorySql {
   Future<Either<Failure, Null>> insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     try {
       final response = await _databaseHelper.insertVisitDoctor(visitDoctorModel);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> insertHospitalSp(List<HospitalSpModel> hospitalSps) async {
+    try {
+      final response = await _databaseHelper.insertHospitalSp(hospitalSps);
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler
