@@ -46,14 +46,14 @@ class VisitPharmacy extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    pharmacyModel?.title ?? " ",
+                    pharmacyModel.title ,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "عنوان الصيدلية : ${pharmacyModel?.address ?? " "}",
+                    "عنوان الصيدلية : ${pharmacyModel.address}",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
@@ -72,7 +72,9 @@ class VisitPharmacy extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _noteController,
                     obscureText: false,
                     minLines: 3,

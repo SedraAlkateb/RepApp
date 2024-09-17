@@ -229,7 +229,20 @@ class VisitDoctor extends StatelessWidget {
                           : SizedBox();
                     },
                   ),
-                 
+                  BoxTextField(
+                    keyboardType:
+                    TextInputType.text,
+                    prefixIcon: null,
+                    maxLines: 10,
+                    validator: (value) {
+                      return null;
+                    },
+                    controller:
+                    _noteController,
+                    obscureText: false,
+                    minLines: 5,
+                    inputFormatters: [],
+                  ),
                   ElevatedButton(onPressed: (){
                     if(_noteController.text.isNotEmpty||context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
                       DateTime now = DateTime.now();

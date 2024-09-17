@@ -26,7 +26,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   List<PharmacyModel> pharmacies=[];
   List<DoctorModel> doctors=[];
   List<HospitalModel> hospitals=[];
-
+List<VisitBrandPharmacyModel>visitBrandPharmacyModel=[];
   int current =0;
   VisitPlaceBloc(
       this.pharmaciesByPlaceUsecase,
@@ -71,16 +71,15 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       if(event is DoctorByPlace)
       {  current=event.current;
         (
-            await doctorsByPlaceUsecase.execute(event.placeId)).fold(
-                (failure)  {
+            await doctorsByPlaceUsecase.execute(event.placeId)
+        ).fold(
+                (failure) {
               emit(AllDoctorByPlaceErrorState(failure: failure));
-            },
-                (data)  async{
+            },(data) async {
                   doctors=data;
                   print(doctors.length);
               emit(AllDoctorByPlaceState(data));
             }
-
         );
       }
       if(event is BrandFlagEvent)
@@ -107,8 +106,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       }
       if(event is InsertVisitPharmacyEvent)
       {
-      (
-          await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel)).fold(
+      (await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel)).fold(
               (failure)  {
                 print(failure.massage);
             emit(InsertVisitPharmacyErrorState(failure: failure));
