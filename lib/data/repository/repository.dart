@@ -244,10 +244,7 @@ class RepositoryImp implements Repository {
       final response = await _remoteDataSource.getAllHospitalSp(repDet);
 
       if (response.status == null) {
-        print("hddddddddhh");
-        //success
-        //return either right
-        //return data
+
         return Right(response.toDomain());
       } else {
         //return either left

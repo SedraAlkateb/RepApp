@@ -265,6 +265,35 @@ class HospitalSpModel {
   }
 }
 
+class VisitBrandPharmacyModel {
+  int id;
+  int doctorId;
+  int brandId;
+  int quantity;
+  VisitBrandPharmacyModel(
+      this.id,
+      this.doctorId,
+      this.brandId,
+      this.quantity,
+      );
+  Map<String, dynamic> toMap() {
+    return {
+      'doctorId': doctorId,
+      'brandId': brandId,
+      'quantity': quantity
+    };
+  }
+
+  factory VisitBrandPharmacyModel.fromMap(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+      map['id'],
+      map['doctorId'],
+      map['brandId'],
+      map['quantity'],
+    );
+  }
+}
+
 class HospitalModel {
   int id;
   String title;
