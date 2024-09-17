@@ -12,7 +12,7 @@ final class HospitalsInitial extends HospitalsState {
 }
 
 final class AllHospitalsState extends HospitalsState {
-  final List<DoctorModel> hospital;
+  final List<HospitalModel> hospital;
   AllHospitalsState(this.hospital);
   @override
   List<Object?> get props =>[hospital];

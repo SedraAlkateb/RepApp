@@ -38,7 +38,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
             },
                 (data)  async{
               emit(VisitDoctorState());
-            });}
+            });
+      }
     });
   }
 }

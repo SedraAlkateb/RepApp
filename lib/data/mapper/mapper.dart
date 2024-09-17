@@ -160,6 +160,18 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
     return doctorModel;
   }
 }
+extension HospitalResponseMapper on HospitalResponse? {
+  HospitalModel toDomain() {
+    return HospitalModel(
+      int.parse(this?.id ?? "0"),
+      this?.title ?? Constants.empty,
+      int.parse(this?.placeId ?? "0") ,
+      this?.address ?? Constants.empty,
+      this?.placeTitle ?? Constants.empty,
+    );
+
+  }
+}
 
 
 extension DoctorResponseMapper on DoctorResponse? {
@@ -171,18 +183,39 @@ extension DoctorResponseMapper on DoctorResponse? {
       this?.address ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
       this?.visits ?? Constants.empty,
-      this?.spTitle ?? Constants.empty,
-      int.parse(this?.spId ?? "0") ,
+      this?.spTitle ?? Constants.empty,      int.parse(this?.spId ?? "0") ,
     );
 
   }
 }
 extension AllHospitalResponseMapper on AllHospitalBaseResponse? {
-  List<DoctorModel> toDomain() {
-    List<DoctorModel> doctorModel =(this?.data?.hospital?.map((response) => response.toDomain()) ??
+  List<HospitalModel> toDomain() {
+    List<HospitalModel> doctorModel =(this?.data?.hospital?.map((response) => response.toDomain()) ??
         const Iterable.empty())
-        .cast<DoctorModel>()
+        .cast<HospitalModel>()
         .toList();
     return doctorModel;
+  }
+}
+extension HospitalSpResponseMapper on HospitalSpResponse? {
+  HospitalSpModel toDomain() {
+    return HospitalSpModel(
+      int.parse(this?.id ?? "0"),
+      int.parse(this?.hospitalId ?? "0") ,
+      int.parse(this?.spId ?? "0") ,
+      int.parse(this?.totalDocs ?? "0") ,
+      this?.rate ?? Constants.empty,
+      int.parse(this?.visit ?? "0") ,
+    );
+
+  }
+}
+extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
+  List<HospitalSpModel> toDomain() {
+    List<HospitalSpModel> hospitalSpModel =(this?.data?.HospitalSp?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<HospitalSpModel>()
+        .toList();
+    return hospitalSpModel;
   }
 }

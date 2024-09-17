@@ -23,20 +23,22 @@ abstract class RepositorySql {
       List<PlaceModel> places,
       List<SpecModel> specs,
       List<DoctorModel>doctors,
-      List<DoctorModel>hospitals
+      List<HospitalModel>hospitals,
+      List<HospitalSpModel>hospitalSps
       );
   Future<Either<Failure,List<BrandModel>>>getBrandsWithFlag();
   Future<Either<Failure,Null>>insertDoctor(List<DoctorModel> doctorModel);
   Future<Either<Failure,List<DoctorModel>>>getDoctorSql();
 
 
-  Future<Either<Failure,Null>>insertHospital(List<DoctorModel> hospitalModel);
-  Future<Either<Failure,List<DoctorModel>>>getHospitalSql();
+  Future<Either<Failure,Null>>insertHospital(List<HospitalModel> hospitalModel);
+  Future<Either<Failure,List<HospitalModel>>>getHospitalSql();
   Future<Either<Failure,List<PharmacyModel>>>getPharmaciesByPlaceId(int placeId);
   Future<Either<Failure,List<DoctorModel>>>getDoctorByPlaceId( int placeId) ;
-  Future<Either<Failure,List<DoctorModel>>> getHospitalByPlaceId( int placeId);
+  Future<Either<Failure,List<HospitalModel>>> getHospitalByPlaceId( int placeId);
   Future<Either<Failure,Null>>insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) ;
   Future<Either<Failure,List<VisitPharmacyModel>>> getVisitPharmacy();
   Future<Either<Failure,Null>>insertVisitDoctor(VisitDoctorModel visitDoctorModel) ;
   Future<Either<Failure,List<VisitDoctorModel>>> getVisitDoctor();
+  Future<Either<Failure,Null>>insertHospitalSp(List<HospitalSpModel> hospitalSps);
 }

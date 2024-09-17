@@ -5,11 +5,11 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
-class AllHospitalUsecase extends Equatable {
+class AllHospialSpUsecase  extends Equatable {
   final Repository _repository;
-  AllHospitalUsecase(this._repository);
-  Future<Either<Failure, List<HospitalModel>>> execute(int id) async{
-    return await _repository.getAllHospital(id);
+  AllHospialSpUsecase(this._repository);
+  Future<Either<Failure, List<HospitalSpModel>>> execute(int id) async{
+    return await _repository.getAllHospitalSp(id);
   }
 
   @override

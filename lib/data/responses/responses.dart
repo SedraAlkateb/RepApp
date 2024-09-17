@@ -369,6 +369,28 @@ class AllPharmacyBaseResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$AllPharmacyBaseResponseToJson(this);
 }
+@JsonSerializable()
+class HospitalResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "title")
+  String? title;
+  @JsonKey(name: "placeId")
+  String? placeId;
+  @JsonKey(name: "address")
+  String? address;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "placeTitle")
+  String? placeTitle;
+  HospitalResponse(this.id,this.title,this.placeId,this.address,this.spId,this.placeTitle);
+  // from json
+  factory HospitalResponse.fromJson(Map<String,dynamic>json)=>
+      _$HospitalResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$HospitalResponseToJson(this);
+}
 //////
 @JsonSerializable()
 class DoctorResponse {
@@ -425,7 +447,7 @@ class AllDoctorsBaseResponse extends BaseResponse{
 @JsonSerializable()
 class AllHospitalResponse{
   @JsonKey(name: "Hospital")
-  List<DoctorResponse>? hospital;
+  List<HospitalResponse>? hospital;
   AllHospitalResponse(this.hospital);
   // from json
   factory AllHospitalResponse.fromJson(Map<String,dynamic>json)=>
@@ -447,3 +469,53 @@ AllHospitalBaseResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$AllHospitalBaseResponseToJson(this);
 }
+
+@JsonSerializable()
+class AllHospitalSpResponse{
+  @JsonKey(name: "HospitalSp")
+  List<HospitalSpResponse>? HospitalSp;
+  AllHospitalSpResponse(this.HospitalSp);
+  // from json
+  factory AllHospitalSpResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllHospitalSpResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllHospitalSpResponseToJson(this);
+}
+@JsonSerializable()
+class
+AllHospitalSpBaseResponse extends BaseResponse{
+  @JsonKey(name: "Hospital")
+  AllHospitalSpResponse? data;
+  AllHospitalSpBaseResponse(this.data);
+  // from json
+  factory AllHospitalSpBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllHospitalSpBaseResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllHospitalSpBaseResponseToJson(this);
+}
+@JsonSerializable()
+class HospitalSpResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "hospitalId")
+  String? hospitalId;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "totalDocs")
+  String? totalDocs;
+  @JsonKey(name: "rate")
+  String? rate;
+  @JsonKey(name: "visit")
+  String? visit;
+
+  HospitalSpResponse(this.id, this.hospitalId, this.spId, this.totalDocs,
+      this.rate, this.visit); // from json
+  factory HospitalSpResponse.fromJson(Map<String,dynamic>json)=>
+      _$HospitalSpResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$HospitalSpResponseToJson(this);
+}
+
