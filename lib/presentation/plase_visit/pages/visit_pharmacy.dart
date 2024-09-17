@@ -1,8 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/font_manager.dart';
-import 'package:domina_app/presentation/resources/style_manage.dart';
+
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
@@ -74,7 +73,7 @@ class VisitPharmacy extends StatelessWidget {
                     prefixIcon: null,
                     maxLines: 4,
                     validator: (value) {},
-                    controller: _controller,
+                    controller: _noteController,
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
@@ -293,4 +292,4 @@ class VisitPharmacy extends StatelessWidget {
       ),
     );
   }
-}
+}*/
