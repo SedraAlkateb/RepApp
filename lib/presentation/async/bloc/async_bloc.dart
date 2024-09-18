@@ -14,6 +14,7 @@ import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:flutter/material.dart';
 part 'async_event.dart';
 part 'async_state.dart';
+
 class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllBrandsUsecase allBrandsUsecase;
   AllPharmacyUsecase allPharmacyUsecase;
@@ -41,29 +42,30 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.asyncDataSqlUsecase,
       this.allDoctorUsecase,
       this.allhospitalUsecase,
-      this.allHospialSpUsecase
-      ) : super(AsyncInitial()) {
-    on<AsyncEvent>((event, emit)async {
+      this.allHospialSpUsecase)
+      : super(AsyncInitial()) {
+    on<AsyncEvent>((event, emit) async {
+
       if (event is AsyncDataEvent) {
         emit(SyncDataLoadingState());
         (await deleteSqlUsecase.execute()).fold((failure) {
-      emit(SyncDataErrorState(failure: failure));
-      return false;
-      }, (data) async {
-     bool b = await getData();
-     if(b){
-      await setData();
-     }
-      });
-    }
+          emit(SyncDataErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          bool b = await getData();
+          if (b) {
+            await setData();
+          }
+        });
+      }
     });
 
   }
   Future<bool> getData() async {
-    brands=[];
-    places=[];
-    pharmacies=[];
-    spec=[];
+    brands = [];
+    places = [];
+    pharmacies = [];
+    spec = [];
     (await allBrandsUsecase.execute(117)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
@@ -82,61 +84,70 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     }, (data) async {
       hospitals = data;
     });
-    (await allPharmacyUsecase.execute(
-      117
-       // UserInfo.repId
-    )).fold((failure) {
+    (await allPharmacyUsecase.execute(117
+      // UserInfo.repId
+    ))
+        .fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
       pharmacies = data;
     });
     (await allPlaceUsecase.execute(
-       // UserInfo.repId
-    117
-    )).fold((failure) {
+      // UserInfo.repId
+        117)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
       places = data;
     });
     (await allSpeUsecase.execute(
-        //UserInfo.repId
-    117
-    )).fold((failure) {
+      //UserInfo.repId
+        117)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
 
       return false;
     }, (data) async {
       spec = data;
-
     });
     (await allHospialSpUsecase.execute(
       //UserInfo.repId
-        117
-    )).fold((failure) {
+        117)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
 
       return false;
     }, (data) async {
       hospitalSps = data;
-
     });
     return true;
   }
   Future<bool> setData() async {
-    (await asyncDataSqlUsecase.execute(brands,pharmacies,places,spec,doctors,hospitals,hospitalSps)).fold((failure) {
+    final result = await asyncDataSqlUsecase.execute(
+      brands,
+      pharmacies,
+      places,
+      spec,
+      doctors,
+      hospitals,
+      hospitalSps,
+    );
+    result.fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
-    }, (data) async {
+    }, (data) {
       print("brand");
       brands = [];
-      pharmacies=[];
-      places=[];
-      spec=[];
+      pharmacies = [];
+      places = [];
+      spec = [];
+      hospitalSps=[];
       emit(SyncDataState());
+
       return true;
     });
-return false;
+
+    return false;
   }
+
+
 }

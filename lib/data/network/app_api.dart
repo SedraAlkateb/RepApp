@@ -1,6 +1,7 @@
 import 'package:domina_app/app/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/responses/responses.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 part 'app_api.g.dart';
@@ -50,10 +51,12 @@ abstract class AppServiceClient {
   Future<AllHospitalBaseResponse> getAllHospital(
       @Part(name: "repDet") int repDet,
        );
-
-  @POST("/getAllHospitalSp.php")
+  @POST("/getAllHospital.php")
   Future<AllHospitalSpBaseResponse> getAllHospitalSp(
       @Part(name: "repDet") int repDet,
       );
-
+  @POST("/test.php")
+  Future<MessageResponse> testt(
+      @Body() List<VisitPharmacyModel> list,
+      );
 }

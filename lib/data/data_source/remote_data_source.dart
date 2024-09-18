@@ -1,6 +1,7 @@
 import 'package:domina_app/data/network/app_api.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/data/responses/responses.dart';
+import 'package:domina_app/domain/models/models.dart';
 
 abstract class RemoteDataSource{
 
@@ -16,6 +17,7 @@ abstract class RemoteDataSource{
  Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
   Future<AllHospitalBaseResponse> getAllHospital(int repDet);
   Future<AllHospitalSpBaseResponse> getAllHospitalSp(int repDet,);
+  Future<MessageResponse> testt(List<VisitPharmacyModel> list);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -80,6 +82,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<AllHospitalSpBaseResponse> getAllHospitalSp(int repDet)async{
     return await _appServiceClient.getAllHospitalSp(repDet);
+  }
+
+  @override
+  Future<MessageResponse> testt(List<VisitPharmacyModel> list) async{
+    return await _appServiceClient.testt(list);
   }
 
 }

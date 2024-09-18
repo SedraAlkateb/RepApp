@@ -1,6 +1,7 @@
 import 'package:domina_app/data/network/sqllite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:vertical_card_pager/vertical_card_pager.dart';
 class AppSqlApi {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
@@ -241,7 +242,7 @@ class AppSqlApi {
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
-    batch.insert('visit_pharmacy',visitPharmacyModel.toMap(),
+    batch.insert('visit_pharmacy',visitPharmacyModel.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     await batch.commit(noResult: true);
@@ -263,4 +264,32 @@ class AppSqlApi {
     );
     await batch.commit(noResult: true);
   }
+  Future<void> insertVisitBrandPharmacy(
+      VisitPharmacyModel visitPharmacyModel,
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels
+      ) async {
+    final mydb = await databaseHelper.database;
+    await mydb.transaction((txn) async {
+      try {
+        int visitId = await txn.insert(
+          'visit_pharmacy',
+          visitPharmacyModel.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        for (var visitBrand in visitBrandPharmacyModels) {
+          visitBrand.visitId = visitId;
+          await txn.insert(
+            'visit_brand_pharmacy',
+            visitBrand.toJson(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      } catch (e) {
+        print('Error inserting visit and brands: $e');
+        rethrow;
+      }
+    });
+  }
+
+
 }
