@@ -10,7 +10,6 @@ class PlaceVisitPage extends StatelessWidget {
  final int placeId;
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(

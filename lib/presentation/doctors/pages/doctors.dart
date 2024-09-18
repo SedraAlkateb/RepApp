@@ -12,9 +12,7 @@ class Doctors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<DoctorsBloc>(context).add(AllDoctorEvent());
-    });
+
     return Scaffold(
         drawer: DrawerPage(),
         appBar: AppBar(

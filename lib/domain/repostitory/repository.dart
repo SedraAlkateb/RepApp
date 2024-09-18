@@ -2,6 +2,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';
+import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 
 abstract class Repository{
@@ -16,6 +17,7 @@ abstract class Repository{
   Future<Either<Failure,List<DoctorModel>>>getAllDoctor(int repDet);
   Future<Either<Failure,List<HospitalModel>>>getAllHospital(int repDet);
   Future<Either<Failure,List<HospitalSpModel>>>getAllHospitalSp(int repDet);
+  Future<Either<Failure,MessageResponse>>testt(List<VisitPharmacyModel> list);
 
 
 }

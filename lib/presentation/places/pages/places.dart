@@ -14,17 +14,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Places extends StatelessWidget {
   Places({super.key});
  final TextEditingController searchController =TextEditingController();
-  int k=0;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (k == 0) {
+      if (context.read<PlaceBloc>().k == 0) {
         showDialog(
             context: context,
             builder: (context) {
@@ -63,7 +57,7 @@ class Places extends StatelessWidget {
                               CustomButton(
                                   text: "ok",
                                   onPressed: () {
-                                    k = 1;
+                                    context.read<PlaceBloc>().k = 1;
                                     Navigator.pop(context);
                                   })
                             ],
@@ -73,7 +67,7 @@ class Places extends StatelessWidget {
                     )),
               );
             });
-        k = 1;
+        context.read<PlaceBloc>().k=1;
       }
     });
     return Scaffold(
@@ -178,7 +172,6 @@ SizedBox(height: 10,),
                       itemCount: placeModel.length),
                 );
               }
-
               return SizedBox();
             },
           ),

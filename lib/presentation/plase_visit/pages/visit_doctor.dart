@@ -94,9 +94,8 @@ class VisitDoctor extends StatelessWidget {
                      items: context.watch<VisitPlaceBloc>().bandFlag,
                      prefixIcon: null,
                      onChanged: (value) {
-
                        BrandModel brand=value;
-                       BlocProvider.of<VisitPlaceBloc>(context).add(SelectBrandEvent(brand));
+                       BlocProvider.of<VisitPlaceBloc>(context).add(SelectBrandEvent(brand,doctorModel.id));
                      },
                      validator: (value) {
                        return null;
@@ -104,7 +103,6 @@ class VisitDoctor extends StatelessWidget {
                   ),
                                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                     builder: (context, state) {
-                      // الوصول إلى selectBrand من VisitPlaceBloc
                       final selectBrand =
                           context.watch<VisitPlaceBloc>().selectBrand;
 

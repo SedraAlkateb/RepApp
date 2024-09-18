@@ -10,7 +10,7 @@ part 'place_state.dart';
 
 class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
-
+int k=0;
   PlaceBloc(
       this.allPlaceUsecase
       ) : super(PlaceInitial()) {

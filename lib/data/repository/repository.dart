@@ -6,6 +6,7 @@ import 'package:domina_app/data/network/error_handler.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/data/network/network_info.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';
+import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 
@@ -246,6 +247,28 @@ class RepositoryImp implements Repository {
       if (response.status == null) {
 
         return Right(response.toDomain());
+      } else {
+        //return either left
+        //failure --business error
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler
+          .handle(error)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, MessageResponse>> testt(List<VisitPharmacyModel> list) async {
+    try {
+      //connect to internet,its safe to call Api
+      final response = await _remoteDataSource.testt(list);
+
+      if (response.status == null) {
+
+        return Right(response);
       } else {
         //return either left
         //failure --business error

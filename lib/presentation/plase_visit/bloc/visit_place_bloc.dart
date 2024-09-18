@@ -4,15 +4,14 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_visit_brand_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacies_by_place_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'visit_place_event.dart';
 part 'visit_place_state.dart';
-
 class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   PharmaciesByPlaceUsecase pharmaciesByPlaceUsecase;
   AllBrandsFlagSqlUsecase allBrandsFlagSqlUsecase;
@@ -20,13 +19,13 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   HospitalsByPlaceUsecase hospitalsByPlaceUsecase;
   InsertVisitPharmacySqlUsecase insertVisitPharmacySqlUsecase;
   InsertVisitDoctorSqlUsecase insertVisitDoctorSqlUsecase;
-
+  InsertVisitBrandPharmacySqlUsecase insertVisitBrandPharmacySqlUsecase;
   List<BrandModel> selectBrand=[];
   List<BrandModel> bandFlag=[];
   List<PharmacyModel> pharmacies=[];
   List<DoctorModel> doctors=[];
   List<HospitalModel> hospitals=[];
-List<VisitBrandPharmacyModel>visitBrandPharmacyModel=[];
+List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
   int current =0;
   VisitPlaceBloc(
       this.pharmaciesByPlaceUsecase,
@@ -35,14 +34,13 @@ List<VisitBrandPharmacyModel>visitBrandPharmacyModel=[];
       this.hospitalsByPlaceUsecase,
       this.insertVisitPharmacySqlUsecase,
       this.insertVisitDoctorSqlUsecase,
-
+      this.insertVisitBrandPharmacySqlUsecase
       )  : super(VisitPlaceInitial()) {
     on<VisitPlaceEvent>((event, emit) async {
-      print("objectssssssssss");
       if(event is PharmacyByPlace){
         current=event.current;
         (
-          
+
             await pharmaciesByPlaceUsecase.execute(event.placeId)).fold(
                 (failure)  {
               emit(AllPharmacyByPlaceErrorState(failure: failure));
@@ -99,6 +97,8 @@ List<VisitBrandPharmacyModel>visitBrandPharmacyModel=[];
       }
       if(event is SelectBrandEvent)
       {
+        final VisitBrandPharmacyModel v= VisitBrandPharmacyModel(0, event.pharmacyId, event.brandModel.id, 0);
+        visitBrandPharmacys.add(v);
         List<BrandModel> updatedList = List.from(selectBrand);
         updatedList.add(event.brandModel);
         selectBrand = updatedList;
@@ -106,6 +106,7 @@ List<VisitBrandPharmacyModel>visitBrandPharmacyModel=[];
       }
       if(event is InsertVisitPharmacyEvent)
       {
+        emit(InsertVisitPharmacyLoadingState());
       (await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel)).fold(
               (failure)  {
                 print(failure.massage);
@@ -124,7 +125,21 @@ List<VisitBrandPharmacyModel>visitBrandPharmacyModel=[];
 
               emit(InsertVisitDoctorState());
             });}
+      if( event is InsertBrandVisitEvent){
+        emit(AllVisitBrandPharmacyLoadingState());
+        (
+            await insertVisitBrandPharmacySqlUsecase.execute(visitBrandPharmacys,event.visitPharmacyModel)).fold(
+                (failure)  {
+                  selectBrand=[];
+              emit(AllVisitBrandPharmacyErrorState(failure: failure));
+            },
+                (data)  async{
+                 selectBrand=[];
+              emit(AllVisitBrandPharmacyState());
+            }
 
+        );
+      }
     });
   }
 }
