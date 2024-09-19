@@ -27,3 +27,10 @@ final class AllPlaceLoadingState extends PlaceState {
   @override
   List<Object?> get props =>[];
 }
+
+final class SearchPlaceState extends PlaceState {
+final List<PlaceModel> places;
+  SearchPlaceState(this.places);
+  @override
+  List<Object?> get props =>[places];
+}

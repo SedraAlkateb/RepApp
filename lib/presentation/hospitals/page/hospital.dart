@@ -25,7 +25,7 @@ class Hospital extends StatelessWidget {
                   size: AppSize.s30,
                   Icons.menu,
                   color:
-                  ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+                  ColorManager.secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -34,7 +34,7 @@ class Hospital extends StatelessWidget {
             },
           ),
           title: Text(
-              ' Hopital'),
+              ' المشافي'),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal:8),
@@ -47,14 +47,12 @@ class Hospital extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.location_city),
-                    Text("   All Hospital",style: Theme.of(context).textTheme.titleMedium,),
-                  ],
+                
+                    
                 ),
 
               ),
-              Text("click to show all Hospital",),
+            
               Expanded(
                 child: BlocConsumer<HospitalsBloc, HospitalsState>(
                   listener: (context, state) {

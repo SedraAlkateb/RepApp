@@ -1,6 +1,7 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -12,7 +13,8 @@ class VisitDoctor extends StatelessWidget {
    VisitDoctor({super.key,required this.doctorModel});
   final DoctorModel doctorModel;
   final TextEditingController _noteController = TextEditingController();
-
+ //final TextEditingController _noteController = TextEditingController();
+  //final TextEditingController _noteController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,10 +67,37 @@ class VisitDoctor extends StatelessWidget {
               child: Column (
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [Text(
-                    "أضف ملاحظاتك :",
+                    " ملاحظات للمكتب العلمي :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   BoxTextField(
+                    keyboardType: TextInputType.text,
+                    prefixIcon: null,
+                    maxLines: 4,
+                    validator: (value) {},
+                    controller: _noteController,
+                    obscureText: false,
+                    minLines: 3,
+                    inputFormatters: [],
+
+                  ),Text(
+                    "ملاحظات لمستودع قاسيون  :",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                    BoxTextField(
+                    keyboardType: TextInputType.text,
+                    prefixIcon: null,
+                    maxLines: 4,
+                    validator: (value) {},
+                    controller: _noteController,
+                    obscureText: false,
+                    minLines: 3,
+                    inputFormatters: [],
+                  ),Text(
+                    "طلبات شخصية:",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                    BoxTextField(
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
@@ -82,6 +111,7 @@ class VisitDoctor extends StatelessWidget {
                     "اختر العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
+                  SizedBox(height: 0.9,),
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
                     listener: (context, state) {
                       if(state is BrandFlagErrorState) {
@@ -89,10 +119,10 @@ class VisitDoctor extends StatelessWidget {
                         error(context, state.failure.massage, state.failure.code);
                       }
                       },
-                   child: CustomDropDown(
+                   child: CustomDropDownSearch(
                      hintText: "العينات",
                      items: context.watch<VisitPlaceBloc>().bandFlag,
-                     prefixIcon: null,
+                   //  prefixIcon: null,
                      onChanged: (value) {
 
                        BrandModel brand=value;
@@ -100,7 +130,7 @@ class VisitDoctor extends StatelessWidget {
                      },
                      validator: (value) {
                        return null;
-                     },),
+                     }, errorText: '',),
                   ),
                                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                     builder: (context, state) {
@@ -135,11 +165,9 @@ class VisitDoctor extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('نوع العينة',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
+                                        child: Text('نوع العينة ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -152,7 +180,7 @@ class VisitDoctor extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
-                                          child: Text('',
+                                          child: Text('حذف العينة',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                         ),
@@ -229,20 +257,7 @@ class VisitDoctor extends StatelessWidget {
                           : SizedBox();
                     },
                   ),
-                  BoxTextField(
-                    keyboardType:
-                    TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 10,
-                    validator: (value) {
-                      return null;
-                    },
-                    controller:
-                    _noteController,
-                    obscureText: false,
-                    minLines: 5,
-                    inputFormatters: [],
-                  ),
+          
                   ElevatedButton(onPressed: (){
                     if(_noteController.text.isNotEmpty||context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
                       DateTime now = DateTime.now();
@@ -252,7 +267,7 @@ class VisitDoctor extends StatelessWidget {
                       BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitDoctorEvent(visitDoctorModel));
 
                     }
-                  }, child: Text("ارسال"))
+                  }, child: Text("تمت الزيارة"))
                 ],
               ),
             )

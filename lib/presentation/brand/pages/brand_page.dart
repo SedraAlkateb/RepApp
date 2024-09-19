@@ -27,7 +27,7 @@ class BrandPage extends StatelessWidget {
                 size: AppSize.s30,
                 Icons.menu,
                 color:
-                ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+                ColorManager.secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
@@ -36,7 +36,7 @@ class BrandPage extends StatelessWidget {
           },
         ),
         title: Text(
-            'Representative Brands'),
+            'جميع الأصناف'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
@@ -45,20 +45,7 @@ class BrandPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-
-                children: [
-                  Icon(Icons.location_city),
-
-                  Text("   All Brand",style: Theme.of(context).textTheme.titleMedium,),
-                ],
-              ),
-
-            ),
-            Text("your brands",),
+           
             Expanded(
               child: BlocConsumer<BrandBloc, BrandState>(
                 listener: (context, state) {
@@ -96,8 +83,8 @@ class BrandPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  TextRach(s1: "title", s2: brandModel[index].title),
-                  TextRach(s1: "phTitle", s2: brandModel[index].phTitle)
+                  TextRach(s1: "الصنف: ", s2: brandModel[index].title),
+                  TextRach(s1: "نوع الصنف: ", s2: brandModel[index].phTitle)
 
                 ],
               ),

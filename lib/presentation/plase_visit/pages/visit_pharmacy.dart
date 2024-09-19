@@ -1,7 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
@@ -10,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VisitPharmacy extends StatelessWidget {
-   VisitPharmacy({super.key,required this.pharmacyModel});
+  VisitPharmacy({super.key, required this.pharmacyModel});
   final PharmacyModel pharmacyModel;
   final TextEditingController _noteController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     print("object8");
@@ -46,7 +45,7 @@ class VisitPharmacy extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    pharmacyModel.title ,
+                    pharmacyModel.title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
@@ -73,7 +72,9 @@ class VisitPharmacy extends StatelessWidget {
                     prefixIcon: null,
                     maxLines: 4,
                     validator: (value) {
-                      return null;
+                      if (value == null || value.isEmpty) {
+                        return 'ادخل الملاخطاتك من فضلك';
+                      }
                     },
                     controller: _noteController,
                     obscureText: false,
@@ -159,9 +160,10 @@ class VisitPharmacy extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
-                                          child: Text('',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                          child: IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {},
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -187,7 +189,7 @@ class VisitPharmacy extends StatelessWidget {
                                           child: TextField(
                                             keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
-                                              hintText: ' ',
+                                              hintText: '1 ',
                                               hintStyle: Theme.of(context)
                                                   .textTheme
                                                   .labelSmall,
@@ -236,7 +238,15 @@ class VisitPharmacy extends StatelessWidget {
                           : SizedBox();
                     },
                   ),
-                  ElevatedButton(onPressed: () {}, child: Text("ارسال"))
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('يي')),
+                          );
+                        }
+                      },
+                      child: Text("تمت الزيارة"))
                 ],
               ),
             )

@@ -3,13 +3,14 @@ import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Doctors extends StatelessWidget {
   Doctors({super.key});
-
+  final TextEditingController searchDocController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -24,8 +25,8 @@ class Doctors extends StatelessWidget {
                 icon: Icon(
                   size: AppSize.s30,
                   Icons.menu,
-                  color:
-                  ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+                  color: ColorManager
+                      .secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -33,50 +34,59 @@ class Doctors extends StatelessWidget {
               );
             },
           ),
-          title: Text(
-              'الأطباء'),
+          title: Text('الأطباء'),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal:8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-      
+              SearchField(searchController: searchDocController),
               Expanded(
                 child: BlocConsumer<DoctorsBloc, DoctorsState>(
                   listener: (context, state) {
-                    if(state is AllDoctorErrorState){
+                    if (state is AllDoctorErrorState) {
                       error(context, state.failure.massage, state.failure.code);
                     }
-
                   },
                   builder: (context, state) {
-                    if(state is AllDoctorState){
-                      List<DoctorModel> doctormodel=state.doctor;
+                    if (state is AllDoctorState) {
+                      List<DoctorModel> doctormodel = state.doctor;
 
-                      return ListView.builder
-                        (
+                      return ListView.builder(
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p16),
-                              //    height: AppSize.s150,
-                              decoration: BoxDecoration(
-                                color: ColorManager.white,
-                                border:
-                                Border.all(color: ColorManager.hintGrey),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(AppSize.s8)),
-                                //        color: ColorManager.card,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(doctormodel[index].title)
-                                ],
+                            return Center(
+                              child: Container(
+                                margin: EdgeInsets.all(AppPadding.p8),
+                                padding: EdgeInsets.all(AppPadding.p16),
+                                //    height: AppSize.s150,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    ColorManager.secondaryColor6,
+                                    ColorManager.secondaryColor7,
+                                    ColorManager.secondaryColor7,
+                                  ]),
+                                  color: ColorManager.white,
+
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(AppSize.s8)),
+                                  //        color: ColorManager.card,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(doctormodel[index].title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall)
+                                  ],
+                                ),
                               ),
                             );
-                          }, itemCount: doctormodel.length);
+                          },
+                          itemCount: doctormodel.length);
                     }
 
                     return SizedBox();
@@ -85,7 +95,6 @@ class Doctors extends StatelessWidget {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

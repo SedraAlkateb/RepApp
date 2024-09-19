@@ -46,8 +46,7 @@ class CustomDropDown extends StatelessWidget {
         return DropdownMenuItem(
             value: val,
             onTap: onTap ?? () {},
-            child: Expanded(
-              child:  Text(
+            child:  Text(
                    "${ val.title.toString()} ${  val.phTitle.toString()}",  
                     style: TextStyle(
                       fontSize: tablet ? 19 : 14,
@@ -56,9 +55,7 @@ class CustomDropDown extends StatelessWidget {
                     softWrap: false,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                 
-            ));
+                  ),);
       }).toList(),
       onChanged: onChanged,
       onTap: () {

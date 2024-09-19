@@ -25,7 +25,7 @@ class PharmacyPage extends StatelessWidget {
                 icon: Icon(
                   size: AppSize.s30,
                   Icons.menu,
-                  color: ColorManager.white, // هنا يمكنك تحديد لون الأيقونة
+                  color: ColorManager.secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -78,10 +78,10 @@ class PharmacyPage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   TextRach(
-                                      s1: "title : ",
-                                      s2: pharmacyModel[index].title),
+                                      s2: " ",
+                                      s1: pharmacyModel[index].title),
                                   TextRach(
-                                      s1: "address : ",
+                                      s1: "العنوان : ",
                                       s2: pharmacyModel[index].address)
                                 ],
                               ),

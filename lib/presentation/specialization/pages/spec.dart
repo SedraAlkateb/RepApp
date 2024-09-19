@@ -24,7 +24,7 @@ class SpecializationsPage extends StatelessWidget {
                 icon: Icon(
                   size: AppSize.s30,
                   Icons.menu,
-                  color: ColorManager.white,
+                  color: ColorManager.secondaryColor1,
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -37,7 +37,7 @@ class SpecializationsPage extends StatelessWidget {
         body: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(color: ColorManager.secondaryColor),
+              decoration: BoxDecoration(color: ColorManager.white),
             ),
             SingleChildScrollView(
               child: Container(
@@ -57,22 +57,9 @@ class SpecializationsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(AppPadding.p16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.location_city),
-                            Text(
-                              "   All spec",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                      ),
                       BlocConsumer<SpecializationBloc, SpecializationState>(
                         listener: (context, state) {
-                         /*
+                          /*
                           if (state is AllSpecLoadingState) {
                             loading(context);
                           }
@@ -84,7 +71,6 @@ class SpecializationsPage extends StatelessWidget {
                             error(context, state.failure.massage,
                                 state.failure.code);
                           }
-
                         },
                         builder: (context, state) {
                           if (state is AllSpecState) {
@@ -96,22 +82,25 @@ class SpecializationsPage extends StatelessWidget {
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2, // عدد الأعمدة في كل صف
                                 crossAxisSpacing:
-                                  2.0, // المسافة الأفقية بين الأعمدة
+                                    1.0, // المسافة الأفقية بين الأعمدة
                                 mainAxisSpacing:
-                                  2.0, // المسافة العمودية بين الصفوف
+                                    2.0, // المسافة العمودية بين الصفوف
                                 childAspectRatio:
                                     1, // نسبة العرض إلى الارتفاع لكل عنصر (يمكنك تعديلها حسب الحاجة)
                               ),
                               itemCount: placeModel.length,
                               itemBuilder: (context, index) {
                                 return Container(
-                                  margin: EdgeInsets.all(AppPadding.p16),
-                                  padding: EdgeInsets.all(AppPadding.p16),
-                                  width: 2,
+                                  margin: EdgeInsets.all(AppPadding.p10),
+                                  padding: EdgeInsets.all(AppPadding.p5),
+                                  width: 6,
                                   decoration: BoxDecoration(
-                                    color: ColorManager.secondaryColor3,
-                                    border: Border.all(
-                                        color: ColorManager.secondaryColor),
+                                    gradient: LinearGradient(colors: [
+                                      ColorManager.secondaryColor6,
+                                      ColorManager.secondaryColor7,
+                                    ]),
+                                    color: ColorManager.white,
+                                  
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(AppSize.s25),
                                     ),
@@ -121,7 +110,7 @@ class SpecializationsPage extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                       placeModel[index].title,
                                       style: TextStyle(
-                                          color: ColorManager.secondaryColor,
+                                          color: ColorManager.white,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 25),
                                     ),
@@ -132,8 +121,8 @@ class SpecializationsPage extends StatelessWidget {
                           }
 
                           return Container(
-                                                      color: Colors.white,
-                                                    );
+                            color: Colors.white,
+                          );
                         },
                       ),
                     ],

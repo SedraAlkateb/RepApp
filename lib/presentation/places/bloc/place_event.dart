@@ -8,3 +8,12 @@ class AllPlaceEvent extends PlaceEvent{
   List<Object?> get props => [];
 
 }
+class SearchPlaceEvent extends PlaceEvent{
+
+  final String value;
+  SearchPlaceEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
+
+}

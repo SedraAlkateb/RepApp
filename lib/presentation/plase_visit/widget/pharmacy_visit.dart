@@ -40,7 +40,7 @@ class PharmacyVisit extends StatelessWidget {
                       return InkWell(
                         onTap: () {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   BlocProvider.of<VisitPlaceBloc>(context).add(BrandFlagEvent());
+       BlocProvider.of<VisitPlaceBloc>(context).add(BrandFlagEvent());
     }); 
   Navigator.push(context, MaterialPageRoute(builder: (context) {
     return VisitPharmacy(
