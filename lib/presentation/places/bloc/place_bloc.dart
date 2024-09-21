@@ -12,6 +12,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
 List<PlaceModel> placeModel =[];
 List<PlaceModel> placeSearchModel =[];
+VisitPharmacyUsecase visitPharmacyUsecase;
 int k=0;
 /*
 List<VisitPharmacyModel> vi=[

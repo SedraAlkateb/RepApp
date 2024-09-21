@@ -60,32 +60,22 @@ class Places extends StatelessWidget {
                                       decoration: TextDecoration.none),
                                 ),
                               ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                              CustomButton(
-                                  text: "ok",
-                                  onPressed: () {
-                                    context.read<PlaceBloc>().k = 1;
-                                    Navigator.pop(context);
-                                  })
+              SizedBox(
+              height: 13,
+              ),
+              CustomButton(
+              text: "موافق",
+              onPressed: () {
+              context.read<PlaceBloc>().k  = 1;
+              Navigator.pop(context);
+              })
                             ],
                           ),
-                          SizedBox(
-                            height: 13,
-                          ),
-                          CustomButton(
-                              text: "موافق",
-                              onPressed: () {
-                                k = 1;
-                                Navigator.pop(context);
-                              })
-                        ],
-                      ),
                     ),
                   ),
                 )),
-              );
+              )
+              ));
             });
         context.read<PlaceBloc>().k=1;
       }

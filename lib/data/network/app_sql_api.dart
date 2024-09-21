@@ -1,7 +1,6 @@
 import 'package:domina_app/data/network/sqllite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:vertical_card_pager/vertical_card_pager.dart';
 class AppSqlApi {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
