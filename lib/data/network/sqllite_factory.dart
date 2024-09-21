@@ -145,6 +145,15 @@ class DatabaseHelper {
     FOREIGN KEY (pharmacyId) REFERENCES pharmacy(id))
  ''');
     await db.execute('''
+     CREATE TABLE visit_brand_pharmacy(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    visitId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    quantity TEXT NOT NULL,
+    FOREIGN KEY (visitId) REFERENCES visit_pharmacy(id),
+    FOREIGN KEY (brandId) REFERENCES brand(id))
+ ''');
+    await db.execute('''
   CREATE TABLE visit_brand_doctor(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     doctorId INTEGER NOT NULL,
@@ -155,15 +164,7 @@ class DatabaseHelper {
   )
 ''');
 
-    await db.execute('''
-     CREATE TABLE visit_brand_pharmacy(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    visitId INTEGER NOT NULL,
-    brandId INTEGER NOT NULL,
-    quantity TEXT NOT NULL,
-    FOREIGN KEY (visitId) REFERENCES visit_pharmacy(id),
-    FOREIGN KEY (brandId) REFERENCES brand(id))
- ''');
+
     await db.execute('''
      CREATE TABLE visit_brand_hospital(
     id INTEGER PRIMARY KEY AUTOINCREMENT,

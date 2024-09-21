@@ -1,9 +1,30 @@
 
 import 'package:domina_app/app/constants.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 
-
+extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
+  VisitPharmacyRequest toDomain() {
+    return VisitPharmacyRequest(
+        this?.id.toString() ?? Constants.empty,
+        UserInfo.planId.toString(),
+        UserInfo.repId.toString(),
+        this!.pharmacyId.toString(),
+        this?.data?? Constants.empty,
+        this?.note?? Constants.empty,
+    );
+  }
+}
+extension ListVisitPharmacyRequestMapper on List<VisitPharmacyModel>? {
+  List<VisitPharmacyRequest> toDomain() {
+    List<VisitPharmacyRequest> visitPharmacyRequest =(this?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<VisitPharmacyRequest>()
+        .toList();
+    return visitPharmacyRequest;
+  }
+}
 extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   List<PlaceModel> toDomain() {
     List<PlaceModel> places =(this?.data?.places?.map((response) => response.toDomain()) ??

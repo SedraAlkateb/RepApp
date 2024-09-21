@@ -88,7 +88,6 @@ class AppSqlApi {
     }
     await batch.commit(noResult: true);
   }
-
   insertLogin(LoginModel loginModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
@@ -109,7 +108,6 @@ class AppSqlApi {
     return List.generate(maps.length, (i) {
       return PharmacyModel.fromMap(maps[i]);
     });
-
   }
   Future<List<PlaceModel>> getPlace() async {
     final db = await databaseHelper.database;
@@ -117,7 +115,6 @@ class AppSqlApi {
     return List.generate(maps.length, (i) {
       return PlaceModel.fromMap(maps[i]);
     });
-
   }
   Future<List<SpecModel>> getSpec() async {
     final db = await databaseHelper.database;
@@ -126,7 +123,6 @@ class AppSqlApi {
       return List.generate(maps.length, (i) {
       return SpecModel.fromMap(maps[i]);
     });
-
   }
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
@@ -161,7 +157,6 @@ class AppSqlApi {
       return BrandModel.fromMap(brands[i]);
     });
   }
-
   Future<List<PharmacyModel>> getPharmaciesByPlaceId( int placeId) async {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> result = await db.query(
@@ -192,7 +187,6 @@ class AppSqlApi {
     List<HospitalModel> hospitals = result.map((map) => HospitalModel.fromMap(map)).toList();
     return hospitals;
   }
-
   insertdoctor(List<DoctorModel> doctors) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
@@ -201,7 +195,6 @@ class AppSqlApi {
     }
     await batch.commit(noResult: true);
   }
-
   Future<List<DoctorModel>> getDotors() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('doctor');
@@ -211,8 +204,6 @@ class AppSqlApi {
       return DoctorModel.fromMap(maps[i]);
     });
   }
-
-
   inserthospital(List<HospitalModel> hospitals) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
@@ -221,7 +212,6 @@ class AppSqlApi {
     }
     await batch.commit(noResult: true);
   }
-
   Future<List<HospitalModel>> getHospital() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('hospital');
@@ -231,7 +221,6 @@ class AppSqlApi {
       return HospitalModel.fromMap(maps[i]);
     });
   }
-
   Future<List<VisitPharmacyModel>> getVisitPharmacy() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
@@ -247,7 +236,6 @@ class AppSqlApi {
     );
     await batch.commit(noResult: true);
   }
-  
   //////////////////////////////////
   Future<List<VisitDoctorModel>> getVisitDoctor() async {
     final db = await databaseHelper.database;
@@ -259,15 +247,15 @@ class AppSqlApi {
   insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
-    batch.insert('visit_doctor',visitDoctorModel.toMap(),
+    batch.insert('visit_doctor',visitDoctorModel.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     await batch.commit(noResult: true);
   }
   Future<void> insertVisitBrandPharmacy(
       VisitPharmacyModel visitPharmacyModel,
-      List<VisitBrandPharmacyModel> visitBrandPharmacyModels
-      ) async {
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels)
+  async {
     final mydb = await databaseHelper.database;
     await mydb.transaction((txn) async {
       try {
@@ -290,6 +278,4 @@ class AppSqlApi {
       }
     });
   }
-
-
 }

@@ -448,7 +448,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/getAllHospital.php',
+          '/getAllHospitalSp.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -469,7 +469,41 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<MessageResponse> testt(List<VisitPharmacyModel> list) async {
+  Future<Message1Response> visitPharmacy(VisitPharmacyRequestBody list1) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(list1.toJson());
+    final _options = _setStreamType<Message1Response>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/pharmacyVisit.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<MessageResponse> visitDoctor(List<VisitPharmacyRequest> list) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -481,7 +515,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/test.php',
+          '/visitDoctor.php',
           queryParameters: queryParameters,
           data: _data,
         )

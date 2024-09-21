@@ -17,7 +17,7 @@ abstract class Repository{
   Future<Either<Failure,List<DoctorModel>>>getAllDoctor(int repDet);
   Future<Either<Failure,List<HospitalModel>>>getAllHospital(int repDet);
   Future<Either<Failure,List<HospitalSpModel>>>getAllHospitalSp(int repDet);
-  Future<Either<Failure,MessageResponse>>testt(List<VisitPharmacyModel> list);
+  Future<Either<Failure,Message1Response>>visitPharmacy(VisitPharmacyRequestBody list1);
 
 
 }

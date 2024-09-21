@@ -261,10 +261,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, MessageResponse>> testt(List<VisitPharmacyModel> list) async {
+  Future<Either<Failure, Message1Response>> visitPharmacy(VisitPharmacyRequestBody list1) async {
     try {
       //connect to internet,its safe to call Api
-      final response = await _remoteDataSource.testt(list);
+      final response = await _remoteDataSource.visitPharmacy(list1);
 
       if (response.status == null) {
 
