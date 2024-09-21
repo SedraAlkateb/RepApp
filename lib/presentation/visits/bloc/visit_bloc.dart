@@ -11,22 +11,22 @@ part 'visit_state.dart';
 class VisitBloc extends Bloc<VisitEvent, VisitState> {
   AllVisitPharmacySqlUsecase allVisitPharmacySqlUsecase;
   AllVisitDoctorSqlUsecase allVisitDoctorSqlUsecase;
-
   VisitBloc(
       this.allVisitPharmacySqlUsecase,
       this.allVisitDoctorSqlUsecase
       ) : super(VisitInitial()) {
     on<VisitEvent>((event, emit)async {
       if(event is VisitPharmacyEvent)
-      {
-        (
+      {(
             await allVisitPharmacySqlUsecase.execute()).fold(
       (failure)  {
       print(failure.massage);
       emit(VisitPharmacyErrorState(failure: failure));
       },
       (data)  async{
-      emit(VisitPharmacyState());
+        print(data.length);
+
+        emit(VisitPharmacyState());
       });}
       if(event is VisitDoctorEvent)
       {(await allVisitDoctorSqlUsecase.execute()).fold(

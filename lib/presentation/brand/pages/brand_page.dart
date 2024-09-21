@@ -15,9 +15,7 @@ class BrandPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<BrandBloc>(context).add(AllBrandEvent());
-    });    return Scaffold(
+       return Scaffold(
         drawer: DrawerPage(),
       appBar: AppBar(
         leading: Builder(

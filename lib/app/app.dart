@@ -33,15 +33,58 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => instance<AuthBloc>()),
-        BlocProvider(create: (_) => instance<PlaceBloc>()),
-        BlocProvider(create: (_) => instance<SpecializationBloc>()),
-        BlocProvider(create: (_) => instance<DoctorsBloc>()),
-        BlocProvider(create: (_) => instance<HospitalsBloc>()),
-        BlocProvider(create: (_) => instance<BrandBloc>()),
-        BlocProvider(create: (_) => instance<PharmacyBloc>()),
+        BlocProvider<PharmacyBloc>(
+          create: (context) {
+            final bloc = instance<PharmacyBloc>();
+            bloc.add(AllPharmacyEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<VisitPlaceBloc>(
+          create: (context) {
+            final bloc = instance<VisitPlaceBloc>();
+            bloc.add(BrandFlagEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<PlaceBloc>(
+          create: (context) {
+            final bloc = instance<PlaceBloc>();
+            bloc.add(AllPlaceEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<BrandBloc>(
+          create: (context) {
+            final bloc = instance<BrandBloc>();
+            bloc.add(AllBrandEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<DoctorsBloc>(
+          create: (context) {
+            final bloc = instance<DoctorsBloc>();
+            bloc.add(AllDoctorEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<HospitalsBloc>(
+          create: (context) {
+            final bloc = instance<HospitalsBloc>();
+            bloc.add(AllHospitalEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<SpecializationBloc>(
+          create: (context) {
+            final bloc = instance<SpecializationBloc>();
+            bloc.add(SpecEvent());
+            return bloc;
+          },
+        ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
-        BlocProvider(create: (_) => instance<VisitPlaceBloc>()),
-        BlocProvider(create: (_) => instance<VisitBloc>()),
+        BlocProvider(create: (_) => instance<VisitBloc>())
+
       ],
       child: MaterialApp(
         locale: Locale('ar'),

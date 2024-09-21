@@ -44,7 +44,8 @@ class BrandFlagEvent extends VisitPlaceEvent{
 }
 class SelectBrandEvent extends VisitPlaceEvent{
   final  BrandModel brandModel;
-  SelectBrandEvent(this.brandModel);
+  final int pharmacyId;
+  SelectBrandEvent(this.brandModel,this.pharmacyId);
   @override
 
 
@@ -59,6 +60,13 @@ class InsertVisitPharmacyEvent extends VisitPlaceEvent{
 
 
   List<Object?> get props => [visitPharmacyModel];
+
+}
+class InsertBrandVisitEvent extends VisitPlaceEvent{
+  VisitPharmacyModel visitPharmacyModel;
+  InsertBrandVisitEvent(this.visitPharmacyModel);
+  @override
+  List<Object?> get props => [];
 
 }
 class InsertVisitDoctorEvent extends VisitPlaceEvent{

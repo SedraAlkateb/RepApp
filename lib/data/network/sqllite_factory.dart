@@ -22,7 +22,6 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database.db');
-
     return await openDatabase(
       path,
       version: 1,
@@ -159,10 +158,10 @@ class DatabaseHelper {
     await db.execute('''
      CREATE TABLE visit_brand_pharmacy(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    pharmacyId INTEGER NOT NULL,
+    visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     quantity TEXT NOT NULL,
-    FOREIGN KEY (pharmacyId) REFERENCES visit_pharmacy(id),
+    FOREIGN KEY (visitId) REFERENCES visit_pharmacy(id),
     FOREIGN KEY (brandId) REFERENCES brand(id))
  ''');
     await db.execute('''

@@ -13,17 +13,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Places extends StatelessWidget {
   Places({super.key});
-  final TextEditingController searchController = TextEditingController();
-  int k = 0;
+ final TextEditingController searchController =TextEditingController();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (k == 0) {
+      if (context.read<PlaceBloc>().k == 0) {
         showDialog(
             context: context,
             builder: (context) {
@@ -40,21 +35,40 @@ class Places extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, top: 20, bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              "اختر أحد المناطق لاظهار(الأطباء,الصيادلة,المشافي) في المنطقة المختارة",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: ColorManager.secondaryColor1,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.none),
-                            ),
+                      child: Container(
+                        height: size.height / 3,
+                        decoration: BoxDecoration(
+                            color: ColorManager.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 20, bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  " :اختر احد المناطق لاظهار (الأطباء,الصيادلة,المشافي) في المنطقة المختارة",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: ColorManager.secondaryColor1,
+                                      fontWeight: FontWeight.normal,
+                                      decoration: TextDecoration.none),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              CustomButton(
+                                  text: "ok",
+                                  onPressed: () {
+                                    context.read<PlaceBloc>().k = 1;
+                                    Navigator.pop(context);
+                                  })
+                            ],
                           ),
                           SizedBox(
                             height: 13,
@@ -72,7 +86,7 @@ class Places extends StatelessWidget {
                 )),
               );
             });
-        k = 1;
+        context.read<PlaceBloc>().k=1;
       }
     });
     return Scaffold(

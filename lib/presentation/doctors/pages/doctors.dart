@@ -13,9 +13,7 @@ class Doctors extends StatelessWidget {
   final TextEditingController searchDocController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<DoctorsBloc>(context).add(AllDoctorEvent());
-    });
+
     return Scaffold(
         drawer: DrawerPage(),
         appBar: AppBar(

@@ -33,7 +33,6 @@ class DoctorVisit extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          BlocProvider.of<VisitPlaceBloc>(context).add(BrandFlagEvent());
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return  VisitDoctor(doctorModel: context.watch<VisitPlaceBloc>().doctors[index],);
                           },));

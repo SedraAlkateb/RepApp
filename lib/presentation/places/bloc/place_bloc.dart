@@ -12,7 +12,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
 List<PlaceModel> placeModel =[];
 List<PlaceModel> placeSearchModel =[];
-
+int k=0;
   PlaceBloc(
       this.allPlaceUsecase
       ) : super(PlaceInitial()) {
