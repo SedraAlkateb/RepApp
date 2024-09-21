@@ -5,11 +5,11 @@ import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
-class TestUsecase extends Equatable {
+class VisitPharmacyUsecase extends Equatable {
   final  Repository _repository;
-  TestUsecase(this._repository);
-  Future<Either<Failure, MessageResponse>> execute(List<VisitPharmacyModel> list) async{
-    return await _repository.testt(list);
+  VisitPharmacyUsecase(this._repository);
+  Future<Either<Failure, Message1Response>> execute(VisitPharmacyRequestBody list1) async{
+    return await _repository.visitPharmacy(list1);
   }
   @override
   List<Object?> get props => [_repository];

@@ -125,7 +125,8 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
 
               emit(InsertVisitDoctorState());
             });}
-      if( event is InsertBrandVisitEvent){
+      if( event is InsertBrandVisitEvent)
+      {
         emit(AllVisitBrandPharmacyLoadingState());
         (
             await insertVisitBrandPharmacySqlUsecase.execute(visitBrandPharmacys,event.visitPharmacyModel)).fold(
@@ -139,6 +140,9 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
             }
 
         );
+      }
+      if(event is EditAmountBrandEvent){
+        visitBrandPharmacys[event.index].amount=event.brand;
       }
     });
   }

@@ -1,6 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -171,31 +170,31 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                   ),
                                 ],
                               ),
-                              ...selectBrand.map((brand) {
+                              ...selectBrand.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final brand = entry.value;
                                 return TableRow(
                                   children: [
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 8),
+                                      padding: const EdgeInsets.only(top: 8),
                                       child: Text(
                                         brand.title,
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 8),
-                                      child: Text(brand.phTitle,
-                                          textAlign: TextAlign.center),
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Text(brand.phTitle, textAlign: TextAlign.center),
                                     ),
                                     IntrinsicHeight(
                                       child: TextField(
+                                        onChanged: (value) {
+                                          BlocProvider.of<VisitPlaceBloc>(context).add(EditAmountBrandEvent(index, int.parse(value)));
+                                        },
                                         keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
-                                          hintText: ' ',
-                                          hintStyle: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall,
+                                          hintText: '1',
+                                          hintStyle: Theme.of(context).textTheme.labelSmall,
                                           errorText: null,
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
@@ -209,30 +208,26 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                               width: AppSize.s1_5,
                                             ),
                                           ),
-                                          focusedErrorBorder:
-                                          OutlineInputBorder(
+                                          focusedErrorBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color: Colors.transparent,
                                               width: AppSize.s1_5,
                                             ),
                                           ),
                                           fillColor: ColorManager.white,
-                                          filled:
-                                          true,
+                                          filled: true,
                                         ),
-                                        cursorColor: Colors
-                                            .black,
+                                        cursorColor: Colors.black,
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 8),
-                                      child: Text('',
-                                          textAlign: TextAlign.center),
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Text('', textAlign: TextAlign.center),
                                     ),
                                   ],
                                 );
                               }).toList(),
+
                             ],
                           ),
                         ):SizedBox();

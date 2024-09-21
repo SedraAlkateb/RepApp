@@ -51,12 +51,31 @@ abstract class AppServiceClient {
   Future<AllHospitalBaseResponse> getAllHospital(
       @Part(name: "repDet") int repDet,
        );
-  @POST("/getAllHospital.php")
+  @POST("/getAllHospitalSp.php")
   Future<AllHospitalSpBaseResponse> getAllHospitalSp(
       @Part(name: "repDet") int repDet,
       );
-  @POST("/test.php")
-  Future<MessageResponse> testt(
-      @Body() List<VisitPharmacyModel> list,
+  @POST("/pharmacyVisit.php")
+  Future<Message1Response> visitPharmacy(
+      @Body() VisitPharmacyRequestBody list1
       );
+
+  @POST("/visitDoctor.php")
+  Future<MessageResponse> visitDoctor(
+      @Body() List<VisitPharmacyRequest> list
+      );
+/*
+  @POST("/visitDoctorBrand.php")
+  Future<MessageResponse> visitDoctorBrand(
+      @Body() List<VisitBrandDoctorModel> list
+      );
+  @POST("/visitHospital.php")
+  Future<MessageResponse> visitHospital(
+      @Body() List<VisitHospitalModel> list
+      );
+  @POST("/visitHospitalBrand.php")
+  Future<MessageResponse> visitHospitalBrand(
+      @Body() List<VisitBrandHospitalModel> list
+      );
+ */
 }

@@ -17,7 +17,7 @@ abstract class RemoteDataSource{
  Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
   Future<AllHospitalBaseResponse> getAllHospital(int repDet);
   Future<AllHospitalSpBaseResponse> getAllHospitalSp(int repDet,);
-  Future<MessageResponse> testt(List<VisitPharmacyModel> list);
+  Future<Message1Response> visitPharmacy(VisitPharmacyRequestBody list1);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -85,8 +85,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<MessageResponse> testt(List<VisitPharmacyModel> list) async{
-    return await _appServiceClient.testt(list);
+  Future<Message1Response> visitPharmacy(VisitPharmacyRequestBody list1) async{
+    return await _appServiceClient.visitPharmacy(list1);
   }
+
+
+
 
 }

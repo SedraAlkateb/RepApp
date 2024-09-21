@@ -3,7 +3,6 @@ class VisitPharmacyModel {
   String data;
   String note;
   int pharmacyId;
-
   VisitPharmacyModel(this.id, this.data, this.note, this.pharmacyId);
   Map<String, dynamic> toJson() {
     return {
@@ -12,7 +11,6 @@ class VisitPharmacyModel {
       'pharmacyId': pharmacyId,
     };
   }
-
   factory VisitPharmacyModel.fromMap(Map<String, dynamic> map) {
     return VisitPharmacyModel(
       map['id'],
@@ -23,22 +21,53 @@ class VisitPharmacyModel {
   }
 
 }
+class VisitPharmacyRequest {
+  String id;
+  String VisitDate;
+  String note;
+  String pharmacyId;
+  String repPlanId;
+  String representativeId;
+
+  VisitPharmacyRequest(this.id,this.repPlanId,this.representativeId,this.pharmacyId, this.VisitDate, this.note);
+  Map<String, dynamic> toJson() {
+    return {
+      'id':id,
+      'repPlanId':repPlanId,
+      'representativeId':representativeId,
+      'pharmacyId': pharmacyId,
+      'VisitDate': VisitDate,
+      'note': note
+    };
+  }
+  factory VisitPharmacyRequest.fromMap(Map<String, dynamic> map) {
+    return VisitPharmacyRequest(
+      map['id'],
+      map['repPlanId'],
+      map['representativeId'],
+      map['pharmacyId'],
+      map['VisitDate'],
+      map['note'],
+    );
+  }
+
+}
 class VisitBrandPharmacyModel {
   int id;
   int visitId;
   int brandId;
-  int quantity;
+  int amount;
   VisitBrandPharmacyModel(
       this.id,
       this.visitId,
       this.brandId,
-      this.quantity,
+      this.amount,
       );
   Map<String, dynamic> toJson() {
     return {
       'visitId': visitId,
       'brandId': brandId,
-      'quantity': quantity
+      'amount': amount
     };
   }
 
@@ -47,10 +76,23 @@ class VisitBrandPharmacyModel {
       map['id'],
       map['visitId'],
       map['brandId'],
-      map['quantity'],
+      map['amount'],
     );
   }
 }
+class VisitPharmacyRequestBody {
+  List<VisitPharmacyRequest> list1;
+  List<VisitBrandPharmacyModel> list2;
+  VisitPharmacyRequestBody(this.list1, this.list2);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': list1.map((e) => e.toJson()).toList(),
+      'list2': list2.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
 class VisitDoctorModel {
   int id;
   String data;
@@ -60,7 +102,7 @@ class VisitDoctorModel {
   int doctorId;
   VisitDoctorModel(this.id, this.data, this.kaswn, this.science, this.additaion,
       this.doctorId);
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'data': data,
       'kaswn': kaswn,
@@ -81,7 +123,6 @@ class VisitDoctorModel {
     );
   }
 }
-
 class PlaceModel {
   int placeId;
   String title;
