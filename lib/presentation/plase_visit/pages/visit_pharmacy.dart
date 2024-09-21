@@ -1,7 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
@@ -9,10 +8,11 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VisitPharmacy extends StatefulWidget {
-   VisitPharmacy({super.key,required this.pharmacyModel});
+class VisitPharmacy extends StatelessWidget {
+  VisitPharmacy({super.key, required this.pharmacyModel});
   final PharmacyModel pharmacyModel;
-
+  final TextEditingController _noteController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   State<VisitPharmacy> createState() => _VisitPharmacyState();
 }
@@ -55,7 +55,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    widget.pharmacyModel.title ,
+                    pharmacyModel.title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
@@ -82,7 +82,9 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                     prefixIcon: null,
                     maxLines: 4,
                     validator: (value) {
-                      return null;
+                      if (value == null || value.isEmpty) {
+                        return 'ادخل الملاخطاتك من فضلك';
+                      }
                     },
                     controller: _noteController,
                     obscureText: false,
@@ -136,38 +138,107 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                             children: [
                               TableRow(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text('العينات',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
+                                  TableRow(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text('العينات',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text('نوع العينة',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text('الكمية',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text('نوع العينة',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text('الكمية',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text('',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
+                                  ...selectBrand.map((brand) {
+                                    return TableRow(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            brand.title,
+                                            textAlign: TextAlign.center,
+                                          ), // عرض البيانات من BrandModel
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: Text(brand.phTitle,
+                                              textAlign: TextAlign.center),
+                                        ),
+                                        IntrinsicHeight(
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                              hintText: '1 ',
+                                              hintStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall,
+                                              errorText: null,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: AppSize.s1_5,
+                                                ),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: AppSize.s1_5,
+                                                ),
+                                                // borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
+                                              ),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: AppSize.s1_5,
+                                                ),
+                                                // borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
+                                              ),
+                                              fillColor: ColorManager.white,
+                                              filled:
+                                                  true, // لجعل الخلفية بيضاء
+                                            ),
+                                            cursorColor: Colors
+                                                .black, // تعيين لون المؤشر (الخط الوامض)
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: Text('',
+                                              textAlign: TextAlign.center),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
                                 ],
                               ),
                               ...selectBrand.asMap().entries.map((entry) {

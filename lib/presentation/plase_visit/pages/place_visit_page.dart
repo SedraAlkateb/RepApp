@@ -16,7 +16,8 @@ class PlaceVisitPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor:ColorManager.secondaryColor7,
         bottom:
-        TabBar(
+        TabBar(labelPadding:EdgeInsets.all(0.9) ,
+          
             onTap: (value) {
               print(value);
               if(value==0){
@@ -43,6 +44,7 @@ class PlaceVisitPage extends StatelessWidget {
                 ,text: 'الأطباء',),
               Tab(icon:
               Icon(Icons.local_hospital),text: 'المشافي',),
+           
             ]
         ),
       ),

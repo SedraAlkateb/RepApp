@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class SearchField extends StatelessWidget {
    const SearchField({super.key,required this.searchController,this.onPressed});
   final TextEditingController searchController;
-   final  VoidCallback? onPressed;
+   final  Function(String)? onPressed;
   @override
   Widget build(BuildContext context) {
     return   Padding(
@@ -14,8 +14,7 @@ class SearchField extends StatelessWidget {
           Expanded(
             child: TextFormField(
               controller: searchController,
-              onChanged: (value) {
-              },
+              onChanged: onPressed,
               decoration: InputDecoration(
                 fillColor: ColorManager.white,
                   border:InputBorder.none,
