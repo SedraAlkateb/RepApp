@@ -10,6 +10,8 @@ part 'place_state.dart';
 
 class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
+List<PlaceModel> placeModel =[];
+List<PlaceModel> placeSearchModel =[];
 int k=0;
   PlaceBloc(
       this.allPlaceUsecase
@@ -23,10 +25,25 @@ int k=0;
       emit(AllPlaceErrorState(failure: failure));
       },
       (data)  async{
+        placeModel=data;
+        placeSearchModel=data;
       emit(AllPlaceState(data));
       }
 
       );
+    }
+    if(event is SearchPlaceEvent){
+   placeSearchModel = placeModel
+      .where((value) {
+if(value.title.contains(event.value)){
+  return true;
+}else{
+  return false;
+}
+      
+      }  )
+      .toList();
+      emit(SearchPlaceState(placeSearchModel));
     }
     });
   }

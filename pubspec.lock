@@ -214,6 +214,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  custom_dropdown_search:
+    dependency: "direct main"
+    description:
+      name: custom_dropdown_search
+      sha256: "93a8344d8c4e5159d8960ac4353547cea30df7d26b60c7f83d75bc18bd9d65d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:

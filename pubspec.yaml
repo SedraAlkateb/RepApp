@@ -62,6 +62,7 @@ dependencies:
   build_runner: ^2.2.1
   retrofit_generator: ^8.1.0
   json_serializable: ^6.4.1
+  custom_dropdown_search: ^1.0.0
 
 
 dev_dependencies:
