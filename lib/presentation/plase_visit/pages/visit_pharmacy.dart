@@ -164,12 +164,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: IconButton(
-                                        icon: Icon(Icons.delete),
-                                        onPressed: () {},
-                                      ),
-                                    ),
+
                                   ),
                                 ],
                               ),
@@ -224,8 +219,13 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 8),
-                                      child: Text('', textAlign: TextAlign.center),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () {},
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 );
