@@ -8,7 +8,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VisitPharmacy extends StatelessWidget {
+class VisitPharmacy extends StatefulWidget {
   VisitPharmacy({super.key, required this.pharmacyModel});
   final PharmacyModel pharmacyModel;
   final TextEditingController _noteController = TextEditingController();
@@ -55,7 +55,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Text(
-                    pharmacyModel.title,
+                   widget.pharmacyModel.title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
@@ -138,107 +138,39 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                             children: [
                               TableRow(
                                 children: [
-                                  TableRow(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('العينات',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('نوع العينة',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('الكمية',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: IconButton(
-                                            icon: Icon(Icons.delete),
-                                            onPressed: () {},
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('العينات',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    ),
                                   ),
-                                  ...selectBrand.map((brand) {
-                                    return TableRow(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: Text(
-                                            brand.title,
-                                            textAlign: TextAlign.center,
-                                          ), // عرض البيانات من BrandModel
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: Text(brand.phTitle,
-                                              textAlign: TextAlign.center),
-                                        ),
-                                        IntrinsicHeight(
-                                          child: TextField(
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                              hintText: '1 ',
-                                              hintStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .labelSmall,
-                                              errorText: null,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: AppSize.s1_5,
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: AppSize.s1_5,
-                                                ),
-                                                // borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: AppSize.s1_5,
-                                                ),
-                                                // borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
-                                              ),
-                                              fillColor: ColorManager.white,
-                                              filled:
-                                                  true, // لجعل الخلفية بيضاء
-                                            ),
-                                            cursorColor: Colors
-                                                .black, // تعيين لون المؤشر (الخط الوامض)
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: Text('',
-                                              textAlign: TextAlign.center),
-                                        ),
-                                      ],
-                                    );
-                                  }).toList(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('نوع العينة',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('الكمية',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                               ...selectBrand.asMap().entries.map((entry) {
@@ -354,49 +286,3 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
 
 
 
-        /*  ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: context.watch<VisitPlaceBloc>().selectBrand.length,
-                        itemBuilder: (context, index) {
-                          return Text(
-                            context.watch<VisitPlaceBloc>().selectBrand[index].title,
-                            style: TextStyle(color: Colors.black, fontSize: 20),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  BoxTextField(
-                    keyboardType:
-                    TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 10,
-                    validator: (value) {},
-                    controller:
-                    _noteController,
-                    obscureText: false,
-                    minLines: 5,
-                    inputFormatters: [],
-                  ),
-                  ElevatedButton(onPressed: (){
-                    if(_noteController.text.isNotEmpty||context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
-                      DateTime now = DateTime.now();
-                      VisitPharmacyModel visitPharmacyModel= VisitPharmacyModel(0,
-                          now.toString()
-                          , _noteController.text, pharmacyModel.id);
-                      BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitPharmacyEvent(visitPharmacyModel));
-                      if(context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
-                 //       BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitPharmacyEvent(visitPharmacyModel));
-                      }
-                    }
-                  }, child: Text("ارسال"))
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}*/
