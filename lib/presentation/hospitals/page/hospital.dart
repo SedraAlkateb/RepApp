@@ -3,12 +3,14 @@ import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Hospital extends StatelessWidget {
   Hospital({super.key});
+  final TextEditingController searchDocController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +43,7 @@ class Hospital extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                
-                    
-                ),
-
-              ),
-            
+              SearchField(searchController: searchDocController),
               Expanded(
                 child: BlocConsumer<HospitalsBloc, HospitalsState>(
                   listener: (context, state) {
@@ -72,16 +65,31 @@ class Hospital extends StatelessWidget {
                               padding: EdgeInsets.all(AppPadding.p16),
                               //    height: AppSize.s150,
                               decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  ColorManager.secondaryColor6,
+                                  ColorManager.secondaryColor7,
+                                  ColorManager.secondaryColor7,
+                                ]),
                                 color: ColorManager.white,
-                                border:
-                                Border.all(color: ColorManager.hintGrey),
+
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                                 //        color: ColorManager.card,
                               ),
-                              child: Row(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+
                                 children: [
-                                  Text(doctormodel[index].title)
+                                  Text(doctormodel[index].title, style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall),
+                                  Text("العنوان : ${doctormodel[index].address} ", style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall),
+                                  Text("المكان : ${doctormodel[index].placeTitle}", style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall)
                                 ],
                               ),
                             );

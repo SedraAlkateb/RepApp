@@ -72,17 +72,25 @@ class BrandPage extends StatelessWidget {
               padding: EdgeInsets.all(AppPadding.p16),
               //    height: AppSize.s150,
               decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  ColorManager.secondaryColor6,
+                  ColorManager.secondaryColor7,
+                  ColorManager.secondaryColor7,
+                ]),
                 color: ColorManager.white,
-                border:
-                Border.all(color: ColorManager.hintGrey),
+
                 borderRadius: const BorderRadius.all(
                     Radius.circular(AppSize.s8)),
                 //        color: ColorManager.card,
               ),
               child: Column(
                 children: [
-                  TextRach(s1: "الصنف: ", s2: brandModel[index].title),
-                  TextRach(s1: "نوع الصنف: ", s2: brandModel[index].phTitle)
+                  Text(" الصنف : ${brandModel[index].title} ", style: Theme.of(context)
+                      .textTheme
+                      .titleSmall),
+                  Text(" نوع الصنف : ${brandModel[index].phTitle} ", style: Theme.of(context)
+                      .textTheme
+                      .titleSmall),
 
                 ],
               ),

@@ -3,18 +3,30 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
 
-class VisitDoctor extends StatelessWidget {
+class VisitDoctor extends StatefulWidget {
   VisitDoctor({super.key, required this.doctorModel});
   final DoctorModel doctorModel;
+
+  @override
+  State<VisitDoctor> createState() => _VisitDoctorState();
+}
+
+class _VisitDoctorState extends State<VisitDoctor> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
+  @override
+  void initState() {
+    BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +59,7 @@ class VisitDoctor extends StatelessWidget {
                               color: ColorManager.white))),
                   Center(
                     child: Text(
-                      doctorModel.title,
+                      widget.doctorModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -56,7 +68,7 @@ class VisitDoctor extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "العنوان: ${doctorModel?.address ?? " "}",
+                      "العنوان: ${widget.doctorModel?.address ?? " "}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -128,11 +140,10 @@ class VisitDoctor extends StatelessWidget {
                     child: CustomDropDownSearch(
                       hintText: "العينات",
                       items: context.watch<VisitPlaceBloc>().bandFlag,
-                      //  prefixIcon: null,
                       onChanged: (value) {
                         BrandModel brand = value;
-                        BlocProvider.of<VisitPlaceBloc>(context)
-                            .add(SelectBrandEvent(brand, doctorModel.id));
+                        BlocProvider.of<VisitPlaceBloc>(context).add(
+                            SelectBrandEvent(brand, widget.doctorModel.id));
                       },
                       validator: (value) {
                         return null;
@@ -140,170 +151,233 @@ class VisitDoctor extends StatelessWidget {
                       errorText: 'لايوجد نتيجة',
                     ),
                   ),
+                  SizedBox(
+                    height: 8,
+                  ),
                   BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                     builder: (context, state) {
                       final selectBrand =
                           context.watch<VisitPlaceBloc>().selectBrand;
+                      final visitBrand =
+                          context.watch<VisitPlaceBloc>().visitBrandPharmacys;
 
-                      return context
-                              .watch<VisitPlaceBloc>()
-                              .selectBrand
-                              .isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Table(
-                                border: TableBorder.all(), // إضافة حدود للجدول
-                                columnWidths: {
-                                  0: FlexColumnWidth(1),
-                                  1: FlexColumnWidth(1),
-                                  2: FlexColumnWidth(1),
-                                  3: FlexColumnWidth(1),
-                                },
+                      if (state is SelectBrandState ||
+                          state is DeleteBrandState||state is  EditAmountBrandState) {
+                        print(
+                            "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
+                        return selectBrand.isNotEmpty
+                            ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Table(
+                            border: TableBorder.all(),
+                            columnWidths: {
+                              0: FlexColumnWidth(1),
+                              1: FlexColumnWidth(1),
+                              2: FlexColumnWidth(1),
+                              3: FlexColumnWidth(1),
+                            },
+                            children: [
+                              TableRow(
                                 children: [
-                                  TableRow(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('العينات',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('نوع العينة ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('الكمية',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('حذف العينة',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('العينات',
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold)),
+                                    ),
                                   ),
-                                  ...selectBrand.map((brand) {
-                                    return TableRow(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: Text(
-                                            brand.title,
-                                            textAlign: TextAlign.center,
-                                          ), // عرض البيانات من BrandModel
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: Text(brand.phTitle,
-                                              textAlign: TextAlign.center),
-                                        ),
-                                        IntrinsicHeight(
-                                          child: TextField(
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                              hintText: ' ',
-                                              hintStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .labelSmall,
-                                              errorText: null,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: AppSize.s1_5,
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: AppSize.s1_5,
-                                                ),
-                                                // borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: AppSize.s1_5,
-                                                ),
-                                                // borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
-                                              ),
-                                              fillColor: ColorManager.white,
-                                              filled:
-                                                  true, // لجعل الخلفية بيضاء
-                                            ),
-                                            cursorColor: Colors
-                                                .black, // تعيين لون المؤشر (الخط الوامض)
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: IconButton(
-                                              color: const Color.fromARGB(
-                                                  255, 155, 23, 14),
-                                              icon: Icon(Icons.delete_forever),
-                                              onPressed: () {
-                                                BlocProvider.of<VisitPlaceBloc>(
-                                                        context)
-                                                    .add(RemoveBrandEvent(
-                                                        brand));
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }).toList(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('نوع العينة',
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('الكمية',
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('حذف العينة',
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold)),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            )
-                          : SizedBox();
+                              ...selectBrand.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final brand = entry.value;
+                                TextEditingController amount=TextEditingController();
+                                amount.text=visitBrand[index].amount.toString();
+                                return TableRow(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        brand.title,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 8),
+                                      child: Text(brand.phTitle,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                    IntrinsicHeight(
+                                      child: TextField(
+                                        controller:amount ,
+                                        onChanged: (value) {
+                                          if (value.isEmpty) {
+                                            BlocProvider.of<
+                                                VisitPlaceBloc>(
+                                                context)
+                                                .add(EditAmountBrandEvent(
+                                                index, 1));
+                                          } else {
+                                            BlocProvider.of<
+                                                VisitPlaceBloc>(
+                                                context)
+                                                .add(EditAmountBrandEvent(
+                                                index,
+                                                int.parse(value)));
+                                          }
+                                        },
+                                        keyboardType:
+                                        TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: '1',
+                                          hintStyle: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall,
+                                          errorText: null,
+                                          enabledBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: AppSize.s1_5,
+                                            ),
+                                          ),
+                                          focusedBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: AppSize.s1_5,
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: AppSize.s1_5,
+                                            ),
+                                          ),
+                                          fillColor: ColorManager.white,
+                                          filled: true,
+                                        ),
+                                        cursorColor: Colors.black,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: IconButton(
+                                          color: const Color.fromARGB(
+                                              255, 155, 23, 14),
+                                          icon:
+                                          Icon(Icons.delete_forever),
+                                          onPressed: () {
+                                            BlocProvider.of<
+                                                VisitPlaceBloc>(
+                                                context)
+                                                .add(RemoveBrandEvent(
+                                                brand));
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ],
+                          ),
+                        )
+                            : SizedBox();
+                      }
+                      return SizedBox();
                     },
                   ),
-                  ElevatedButton(
-                      onPressed: () {if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
-
-
-
-                          error(context, "يرجى إدخال الملاحظات",1);
-                      }
-                        else if (
+                  SizedBox(
+                    height: 8,
+                  ),
+                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
+  listener: (context, state) {
+    if (state is InsertVisitDoctorLoadingState) {
+      loading(context);
+    }
+    if (state is InsertVisitDoctorErrorState) {
+      error(
+          context, state.failure.massage, state.failure.code);
+    }
+    if (state is InsertVisitDoctorState) {
+      success(context);
+      SnackBarMessage().showSuccessSnackBar(
+          message: "succsec",
+          context: context,
+          btnOkOnPress: "d");
+      Navigator.pop(context);
+    }
+    if (state is AllVisitBrandDoctorLoadingState) {
+      loading(context);
+    }
+    if (state is AllVisitBrandDoctorErrorState) {
+      error(
+          context, state.failure.massage, state.failure.code);
+    }
+    if (state is AllVisitBrandDoctorState) {
+      success(context);
+      SnackBarMessage().showSuccessSnackBar(
+          message: "succsec",
+          context: context,
+          btnOkOnPress: "d");
+      Navigator.pop(context);
+    }
+  },
+  child: ElevatedButton(
+                      onPressed: () {
+                        if (_noteController.text.isNotEmpty ||
                             context
                                 .read<VisitPlaceBloc>()
                                 .selectBrand
-                                .isNotEmpty) 
-                                
-                                
-                                
-                                
-                                {
+                                .isNotEmpty) {
                           DateTime now = DateTime.now();
                           VisitDoctorModel visitDoctorModel = VisitDoctorModel(
                               0,
                               now.toString(),
                               _noteController.text,
-                             _issueController .text,
-                              _noteeController.text,
-                              doctorModel.id);
+                              _noteController.text,
+                              _noteController.text,
+                              widget.doctorModel.id);
                           BlocProvider.of<VisitPlaceBloc>(context)
                               .add(InsertVisitDoctorEvent(visitDoctorModel));
                         }
                       },
-                      child: Text("تمت الزيارة"))
+                      child: Text("تمت الزيارة")),
+)
                 ],
               ),
             )
