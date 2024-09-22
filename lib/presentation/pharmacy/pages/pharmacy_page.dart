@@ -65,21 +65,25 @@ class PharmacyPage extends StatelessWidget {
                               padding: EdgeInsets.all(AppPadding.p16),
                               //    height: AppSize.s150,
                               decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  ColorManager.secondaryColor6,
+                                  ColorManager.secondaryColor7,
+                                  ColorManager.secondaryColor7,
+                                ]),
                                 color: ColorManager.white,
-                                border:
-                                    Border.all(color: ColorManager.hintGrey),
+
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                                 //        color: ColorManager.card,
                               ),
                               child: Column(
                                 children: [
-                                  TextRach(
-                                      s2: " ",
-                                      s1: pharmacyModel[index].title),
-                                  TextRach(
-                                      s1: "العنوان : ",
-                                      s2: pharmacyModel[index].address)
+                                  Text("${pharmacyModel[index].title} ", style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall),
+                                  Text(" العنوان : ${pharmacyModel[index].address} ", style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall),
                                 ],
                               ),
                             );
