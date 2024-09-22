@@ -133,6 +133,7 @@ visitBrandPharmacys = updatedList;
               });}
       if(event is InsertVisitDoctorEvent)
       {
+
         (await insertVisitDoctorSqlUsecase.execute(event.visitDoctorModel)).fold(
                 (failure)  {
               print(failure.massage);

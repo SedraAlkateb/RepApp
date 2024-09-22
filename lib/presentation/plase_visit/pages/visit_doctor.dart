@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
+import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -322,7 +323,43 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       return SizedBox();
                     },
                   ),
-                  ElevatedButton(
+                  SizedBox(
+                    height: 8,
+                  ),
+                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
+  listener: (context, state) {
+    if (state is InsertVisitDoctorLoadingState) {
+      loading(context);
+    }
+    if (state is InsertVisitDoctorErrorState) {
+      error(
+          context, state.failure.massage, state.failure.code);
+    }
+    if (state is InsertVisitDoctorState) {
+      success(context);
+      SnackBarMessage().showSuccessSnackBar(
+          message: "succsec",
+          context: context,
+          btnOkOnPress: "d");
+      Navigator.pop(context);
+    }
+    if (state is AllVisitBrandDoctorLoadingState) {
+      loading(context);
+    }
+    if (state is AllVisitBrandDoctorErrorState) {
+      error(
+          context, state.failure.massage, state.failure.code);
+    }
+    if (state is AllVisitBrandDoctorState) {
+      success(context);
+      SnackBarMessage().showSuccessSnackBar(
+          message: "succsec",
+          context: context,
+          btnOkOnPress: "d");
+      Navigator.pop(context);
+    }
+  },
+  child: ElevatedButton(
                       onPressed: () {
                         if (_noteController.text.isNotEmpty ||
                             context
@@ -341,7 +378,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               .add(InsertVisitDoctorEvent(visitDoctorModel));
                         }
                       },
-                      child: Text("تمت الزيارة"))
+                      child: Text("تمت الزيارة")),
+)
                 ],
               ),
             )
