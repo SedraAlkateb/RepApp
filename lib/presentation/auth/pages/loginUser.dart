@@ -67,7 +67,7 @@ class _MyLoginState extends State<MyLogin> {
                             TextFormField(
                               controller: password,
                               validator: (val) => val!.length < 2
-                                  ? "كلمة السر يجب ان تكون اطول من 6"
+                                  ? "كلمة السر يجب ان تكون اطول من 2"
                                   : null,
                               style: TextStyle(),
                               obscureText: true,

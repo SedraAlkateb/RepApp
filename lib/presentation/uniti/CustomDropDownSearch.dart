@@ -65,7 +65,7 @@ class CustomDropDownSearch extends StatelessWidget {
                 //  contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
                   focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-                  hintText: 'Search here....',
+                  hintText: 'ابحث هنا',
 
                   hintStyle: TextStyle(fontSize: tablet?17:12,overflow: TextOverflow.fade,),
 

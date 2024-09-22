@@ -11,11 +11,11 @@ class DrawerPage extends StatelessWidget {
         children: [
            DrawerHeader(
             decoration: BoxDecoration(
-              color: ColorManager.secondaryColor,
+              color: ColorManager.secondaryColor7,
             ), //BoxDecoration
             child: UserAccountsDrawerHeader(
               decoration:
-              BoxDecoration(color: ColorManager.secondaryColor),
+              BoxDecoration(color: ColorManager.secondaryColor7),
               accountName: Text(
                 "Lina Al-Mahayni",
                 style: TextStyle(fontSize: 18),
@@ -23,7 +23,7 @@ class DrawerPage extends StatelessWidget {
 
               currentAccountPictureSize: Size.square(50),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: ColorManager.secondaryColor,
+                backgroundColor: ColorManager.secondaryColor5,
                 child: Text(
                   "L",
                   style: TextStyle(fontSize: 30.0, color: Colors.blue),

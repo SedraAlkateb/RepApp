@@ -23,7 +23,7 @@ class AsyncPage extends StatelessWidget {
             ),
             Text(
               textAlign: TextAlign.center,
-              "تاكد من وجود الانترنت واضغط على تحميل البيانات لبدء العمل على التطبيق ",
+              "تأكد من اتصالك بالانترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق ",
             style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(

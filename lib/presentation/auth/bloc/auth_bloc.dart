@@ -39,7 +39,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           print("object");
           emit(InsertLoginState());
         });
-
       }
     });
   }

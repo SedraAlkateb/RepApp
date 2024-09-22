@@ -88,3 +88,12 @@ class EditAmountBrandEvent extends VisitPlaceEvent{
   List<Object?> get props => [index,brand];
 
 }
+class RemoveBrandEvent extends VisitPlaceEvent {
+ 
+  final  BrandModel brandModel;
+  RemoveBrandEvent(this.brandModel);
+  
+  @override
+  
+  List<Object?> get props => [brandModel];
+}
