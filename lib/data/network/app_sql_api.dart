@@ -220,25 +220,26 @@ class AppSqlApi {
       return HospitalModel.fromMap(maps[i]);
     });
   }
-/*
-  Future<List<VisitPharmacyModel>> getVisitPharmacy() async {
-    final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
-    return List.generate(maps.length, (i) {
-      return VisitPharmacyModel.fromMap(maps[i]);
-    });
-  }
- */
   Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.rawQuery('''
-    SELECT visit_pharmacy.*, pharmacy.*
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''
+    SELECT 
+      visit_pharmacy.id as visit_pharmacy_id, 
+      visit_pharmacy.data as visit_pharmacy_data, 
+      visit_pharmacy.note as visit_pharmacy_note, 
+      visit_pharmacy.pharmacyId as visit_pharmacy_pharmacyId,
+      pharmacy.id as pharmacy_id, 
+      pharmacy.title as pharmacy_title, 
+      pharmacy.address as pharmacy_address,
+      pharmacy.placeId as pharmacy_placeId
     FROM visit_pharmacy
     JOIN pharmacy ON visit_pharmacy.pharmacyId = pharmacy.id
-  ''');
+    '''
+    );
     return List.generate(maps.length, (i) {
-      VisitPharmacyModel visitPharmacyModel=VisitPharmacyModel.fromMap(maps[i]);
-      PharmacyModel pharmacyModel=PharmacyModel.fromMap(maps[i]);
+      VisitPharmacyModel visitPharmacyModel=VisitPharmacyModel.fromMap1(maps[i]);
+      PharmacyModel pharmacyModel=PharmacyModel.fromMap1(maps[i]);
       VisitPharmacyAndPharmacy visitPharmacyAndPharmacy=VisitPharmacyAndPharmacy(pharmacyModel, visitPharmacyModel);
       return visitPharmacyAndPharmacy;
     });
@@ -292,6 +293,23 @@ class AppSqlApi {
         print('Error inserting visit and brands: $e');
         rethrow;
       }
+    });
+  }
+  Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId) async {
+    Database? mydb =await databaseHelper.database;
+
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+      SELECT 
+      brand.id as id, 
+      brand.title as title, 
+      brand.phTitle as phTitle,  
+      visit_brand_pharmacy.amount as amount
+      FROM brand
+      JOIN visit_brand_pharmacy ON visit_brand_pharmacy.visitId = brand.id
+      WHERE visit_brand_pharmacy.visitId = ?
+    ''', [visitId]);
+    return List.generate(maps.length, (i) {
+      return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
 }

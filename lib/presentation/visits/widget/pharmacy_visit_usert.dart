@@ -11,7 +11,6 @@ class PharmacyVisitUser extends StatelessWidget {
   const PharmacyVisitUser({super.key});
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<VisitBloc>(context).add(VisitPharmacyEvent());
     return  Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
@@ -20,7 +19,7 @@ class PharmacyVisitUser extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocListener<VisitBloc, VisitState>(
+              child: BlocConsumer<VisitBloc, VisitState>(
                 listener: (context, state) {
                   if(state is VisitPharmacyErrorState){
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -35,12 +34,12 @@ class PharmacyVisitUser extends StatelessWidget {
     success(context);}
                  */
                 },
-                child: ListView.builder
+              builder: (context, state) =>
+                ListView.builder
                   (
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return InfoVisitPharmacy(
                               pharmacyModel: context.watch<VisitBloc>().pharmacies[index],

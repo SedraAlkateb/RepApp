@@ -19,8 +19,97 @@ class VisitPharmacyModel {
       map['pharmacyId'],
     );
   }
-
+  factory VisitPharmacyModel.fromMap1(Map<String, dynamic> map) {
+    return VisitPharmacyModel(
+      map['visit_pharmacy_id'],
+      map['visit_pharmacy_data'],
+      map['visit_pharmacy_note'],
+      map['visit_pharmacy_pharmacyId'],
+    );
+  }
 }
+
+class VisitBrandPharmacyModel {
+  int id;
+  int visitId;
+  int brandId;
+  int amount=1;
+  VisitBrandPharmacyModel(
+      this.id,
+      this.visitId,
+      this.brandId,
+      this.amount,
+      );
+  Map<String, dynamic> toJson() {
+    return {
+      'visitId': visitId,
+      'brandId': brandId,
+      'amount': amount==0?1:amount
+    };
+  }
+
+  factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+      map['id'],
+      map['visitId'],
+      map['brandId'],
+      map['amount'],
+    );
+  }
+}
+class BrandModel {
+  int id;
+  String title;
+  String phTitle;
+  int falg;
+  int sampleCoast;
+  Map<String, dynamic> toMap(
+      ) {
+    return {
+      'id': id,
+      'title': title,
+      'phTitle': phTitle,
+      'falg': falg,
+      'sampleCoast': sampleCoast
+    };
+  }
+
+  factory BrandModel.fromMap(Map<String, dynamic> map) {
+    return BrandModel(
+      map['id'],
+      map['title'],
+      map['phTitle'],
+      map['falg'],
+      map['sampleCoast'],
+    );
+  }
+  BrandModel(this.id, this.title, this.phTitle, this.falg, this.sampleCoast);
+}
+class PharmacyBrandModel {
+  int id;
+  String title;
+  String phTitle;
+  String? amount;
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'phTitle': phTitle,
+      'amount': amount,
+    };
+  }
+
+  factory PharmacyBrandModel.fromMap(Map<String, dynamic> map) {
+    return PharmacyBrandModel(
+      map['id'],
+      map['title'],
+      map['phTitle'],
+      map['amount'],
+    );
+  }
+  PharmacyBrandModel(this.id, this.title, this.phTitle, this.amount);
+}
+
 class VisitPharmacyRequest {
   String id;
   String VisitDate;
@@ -51,34 +140,6 @@ class VisitPharmacyRequest {
     );
   }
 
-}
-class VisitBrandPharmacyModel {
-  int id;
-  int visitId;
-  int brandId;
-  int amount=1;
-  VisitBrandPharmacyModel(
-      this.id,
-      this.visitId,
-      this.brandId,
-      this.amount,
-      );
-  Map<String, dynamic> toJson() {
-    return {
-      'visitId': visitId,
-      'brandId': brandId,
-      'amount': amount
-    };
-  }
-
-  factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-      map['id'],
-      map['visitId'],
-      map['brandId'],
-      map['amount'],
-    );
-  }
 }
 class VisitPharmacyRequestBody {
   List<VisitPharmacyRequest> list1;
@@ -145,7 +206,6 @@ class PlaceModel {
     );
   }
 }
-
 class SpecModel {
   int id;
   String title;
@@ -164,7 +224,6 @@ class SpecModel {
     );
   }
 }
-
 class MedicalVisits {
   int visID;
   String visitDate;
@@ -205,34 +264,6 @@ class MedicalVisits {
   }
 }
 
-class BrandModel {
-  int id;
-  String title;
-  String phTitle;
-  int falg;
-  int sampleCoast;
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'phTitle': phTitle,
-      'falg': falg,
-      'sampleCoast': sampleCoast
-    };
-  }
-
-  factory BrandModel.fromMap(Map<String, dynamic> map) {
-    return BrandModel(
-      map['id'],
-      map['title'],
-      map['phTitle'],
-      map['falg'],
-      map['sampleCoast'],
-    );
-  }
-  BrandModel(this.id, this.title, this.phTitle, this.falg, this.sampleCoast);
-}
-
 class PharmacyModel {
   int id;
   String title;
@@ -250,10 +281,18 @@ class PharmacyModel {
 
   factory PharmacyModel.fromMap(Map<String, dynamic> map) {
     return PharmacyModel(
-      map['id'],
+     map['id'],
       map['title'],
       map['placeId'],
       map['address'],
+    );
+  }
+  factory PharmacyModel.fromMap1(Map<String, dynamic> map) {
+    return PharmacyModel(
+      (map['pharmacy_id']),
+      map['pharmacy_title'],
+      map['pharmacy_placeId'],
+      map['pharmacy_address'],
     );
   }
 }
