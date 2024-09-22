@@ -35,7 +35,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
         emit(VisitPharmacyState());
       });}
       if(event is VisitDoctorEvent)
-      {(await allVisitDoctorSqlUsecase.execute()).fold(
+      {
+        (await allVisitDoctorSqlUsecase.execute()).fold(
                 (failure)  {
               print(failure.massage);
               emit(VisitDoctorErrorState(failure: failure));
