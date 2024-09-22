@@ -54,33 +54,47 @@ class Doctors extends StatelessWidget {
 
                       return ListView.builder(
                           itemBuilder: (context, index) {
-                            return Center(
-                              child: Container(
-                                margin: EdgeInsets.all(AppPadding.p8),
-                                padding: EdgeInsets.all(AppPadding.p16),
-                                //    height: AppSize.s150,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    ColorManager.secondaryColor6,
-                                    ColorManager.secondaryColor7,
-                                    ColorManager.secondaryColor7,
-                                  ]),
-                                  color: ColorManager.white,
+                            return Container(
+                              margin: EdgeInsets.all(AppPadding.p8),
+                              padding: EdgeInsets.all(AppPadding.p16),
+                              //    height: AppSize.s150,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  ColorManager.secondaryColor6,
+                                  ColorManager.secondaryColor7,
+                                  ColorManager.secondaryColor7,
+                                ]),
+                                color: ColorManager.white,
 
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(AppSize.s8)),
-                                  //        color: ColorManager.card,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(doctormodel[index].title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall)
-                                  ],
-                                ),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(AppSize.s8)),
+                                //        color: ColorManager.card,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(doctormodel[index].title,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
+                                  Text(" العنوان : ${doctormodel[index].address}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
+                                  Text(" المكان : ${doctormodel[index].placeTitle}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
+                                  Text(" عدد الزيارات : ${doctormodel[index].visits}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
+                                  Text(" الاختصاص : ${doctormodel[index].spTitle}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall)
+                                ],
                               ),
                             );
                           },

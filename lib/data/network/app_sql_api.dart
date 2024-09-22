@@ -304,8 +304,8 @@ class AppSqlApi {
       brand.title as title, 
       brand.phTitle as phTitle,  
       visit_brand_pharmacy.amount as amount
-      FROM brand
-      JOIN visit_brand_pharmacy ON visit_brand_pharmacy.visitId = brand.id
+      FROM visit_brand_pharmacy
+      JOIN brand  ON visit_brand_pharmacy.brandId = brand.id
       WHERE visit_brand_pharmacy.visitId = ?
     ''', [visitId]);
     return List.generate(maps.length, (i) {

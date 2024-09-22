@@ -109,6 +109,13 @@ final class InsertVisitPharmacyLoadingState extends VisitPlaceState {
 
   List<Object?> get props =>[];
 }
+final class InsertVisitDoctorLoadingState extends VisitPlaceState {
+
+  @override
+
+  List<Object?> get props =>[];
+}
+
 final class InsertVisitPharmacyState extends VisitPlaceState {
   @override
   InsertVisitPharmacyState();
@@ -146,6 +153,24 @@ final class AllVisitBrandPharmacyState extends VisitPlaceState {
 final class AllVisitBrandPharmacyLoadingState extends VisitPlaceState {
   @override
   AllVisitBrandPharmacyLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllVisitBrandDoctorErrorState extends VisitPlaceState {
+  final Failure failure;
+  AllVisitBrandDoctorErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+final class AllVisitBrandDoctorState extends VisitPlaceState {
+  @override
+  AllVisitBrandDoctorState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllVisitBrandDoctorLoadingState extends VisitPlaceState {
+  @override
+  AllVisitBrandDoctorLoadingState();
   @override
   List<Object?> get props =>[];
 }
