@@ -378,6 +378,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               .add(InsertVisitDoctorEvent(visitDoctorModel));
                         }
                       },
+
                       child: Text("تمت الزيارة")),
 )
                 ],
