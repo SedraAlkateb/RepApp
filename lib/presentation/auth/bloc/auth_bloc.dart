@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/domain/models/models.dart';
@@ -28,7 +29,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(LoginErrorState(failure: failure));
         }, (data) async {
           LoginModel loginModel=data;
-          print("object1");
+          UserInfo.repId= loginModel.repId;
+          UserInfo.planId= loginModel.planId;
+          UserInfo.percentage= loginModel.percentage;
+          UserInfo.token= loginModel.token;
+          UserInfo.name= loginModel.name;
+          UserInfo.isLogging= 1;
           emit(LoginState(loginModel));
         });
       }
@@ -39,7 +45,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           print("object");
           emit(InsertLoginState());
         });
-
       }
     });
   }

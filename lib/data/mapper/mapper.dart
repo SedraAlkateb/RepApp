@@ -151,7 +151,6 @@ extension LoginResponseMapper on LoginResponse? {
     );
   }
 }
-
 extension AllMedicalVisitsResponseMapper on AllMedicalVisitBaseResponse? {
   List<MedicalVisits> toDomain() {
     List<MedicalVisits> medicalVisits =(this?.data?.medicalVisits?.map((response) => response.toDomain()) ??

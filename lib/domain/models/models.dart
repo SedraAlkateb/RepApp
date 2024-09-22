@@ -92,7 +92,11 @@ class VisitPharmacyRequestBody {
     };
   }
 }
-
+class VisitPharmacyAndPharmacy{
+  PharmacyModel pharmacyModel;
+  VisitPharmacyModel visitPharmacyModel;
+  VisitPharmacyAndPharmacy(this.pharmacyModel,this.visitPharmacyModel);
+}
 class VisitDoctorModel {
   int id;
   String data;
@@ -333,8 +337,6 @@ class HospitalSpModel {
     );
   }
 }
-
-
 class HospitalModel {
   int id;
   String title;
