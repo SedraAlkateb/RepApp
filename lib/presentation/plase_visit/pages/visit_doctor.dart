@@ -19,9 +19,7 @@ class VisitDoctor extends StatefulWidget {
 
 class _VisitDoctorState extends State<VisitDoctor> {
   final TextEditingController _noteController = TextEditingController();
-
   final TextEditingController _issueController = TextEditingController();
-
   final TextEditingController _noteeController = TextEditingController();
   @override
   void initState() {
