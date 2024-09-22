@@ -43,7 +43,8 @@ class PlaceVisitPage extends StatelessWidget {
               Icon(Icons.groups)
                 ,text: 'الأطباء',),
               Tab(icon:
-              Icon(Icons.local_hospital),text: 'المشافي',),
+              context.watch<VisitPlaceBloc>().current==2?
+              Icon(Icons.local_hospital,color: ColorManager.secondaryColor1,): Icon(Icons.local_hospital),text: 'المشافي',),
            
             ]
         ),

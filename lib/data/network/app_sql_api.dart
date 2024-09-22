@@ -295,6 +295,32 @@ class AppSqlApi {
       }
     });
   }
+  Future<void> insertVisitBrandDoctor(
+      VisitDoctorModel visitDoctorModel,
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels)
+  async {
+    final mydb = await databaseHelper.database;
+    await mydb.transaction((txn) async {
+      try {
+        int visitId = await txn.insert(
+          'visit_pharmacy',
+          visitDoctorModel.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        for (var visitBrand in visitBrandPharmacyModels) {
+          visitBrand.visitId = visitId;
+          await txn.insert(
+            'visit_brand_pharmacy',
+            visitBrand.toJson(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      } catch (e) {
+        print('Error inserting visit and brands: $e');
+        rethrow;
+      }
+    });
+  }
   Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId) async {
     Database? mydb =await databaseHelper.database;
 
