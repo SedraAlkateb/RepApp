@@ -74,6 +74,20 @@ class SelectBrandState extends VisitPlaceState{
   SelectBrandState(this.brands);
   List<Object?> get props => [brands];
 }
+class EditAmountBrandState extends VisitPlaceState{
+  final List<VisitBrandPharmacyModel> brands;
+  EditAmountBrandState(this.brands);
+  List<Object?> get props => [brands];
+}
+
+class  EditBrandState extends VisitPlaceState{
+  final List<BrandModel> brands;
+  EditBrandState(this.brands);
+  List<Object?> get props => [brands];
+}
+
+
+
 class DeleteBrandState extends VisitPlaceState{
   @override
   final List<BrandModel> brands;
