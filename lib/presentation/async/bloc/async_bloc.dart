@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
@@ -66,25 +67,25 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     places = [];
     pharmacies = [];
     spec = [];
-    (await allBrandsUsecase.execute(117)).fold((failure) {
+    (await allBrandsUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
       brands = data;
     });
-    (await allDoctorUsecase.execute(117)).fold((failure) {
+    (await allDoctorUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
       doctors = data;
     });
-    (await allhospitalUsecase.execute(117)).fold((failure) {
+    (await allhospitalUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
       hospitals = data;
     });
-    (await allPharmacyUsecase.execute(117
+    (await allPharmacyUsecase.execute(UserInfo.repId
       // UserInfo.repId
     ))
         .fold((failure) {
@@ -95,7 +96,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     });
     (await allPlaceUsecase.execute(
       // UserInfo.repId
-        117)).fold((failure) {
+        UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
@@ -103,7 +104,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     });
     (await allSpeUsecase.execute(
       //UserInfo.repId
-        117)).fold((failure) {
+        UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
 
       return false;
@@ -112,7 +113,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     });
     (await allHospialSpUsecase.execute(
       //UserInfo.repId
-        117)).fold((failure) {
+        UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
 
       return false;

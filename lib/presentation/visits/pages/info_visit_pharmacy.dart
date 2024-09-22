@@ -4,25 +4,25 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
-import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VisitPharmacy extends StatefulWidget {
-  VisitPharmacy({super.key, required this.pharmacyModel});
-  final PharmacyModel pharmacyModel;
+class InfoVisitPharmacy extends StatefulWidget {
+  InfoVisitPharmacy({super.key, required this.pharmacyModel});
+  final VisitPharmacyAndPharmacy pharmacyModel;
 
   @override
-  State<VisitPharmacy> createState() => _VisitPharmacyState();
+  State<InfoVisitPharmacy> createState() => _InfoVisitPharmacyState();
 }
 
-class _VisitPharmacyState extends State<VisitPharmacy> {
+class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
   final TextEditingController _noteController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
+    _noteController.text=widget.pharmacyModel.visitPharmacyModel.note;
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
     super.initState();
   }
@@ -60,14 +60,18 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                             icon: Icon(Icons.arrow_back_sharp,
                                 color: ColorManager.white))),
                     Text(
-                      widget.pharmacyModel.title,
+                      widget.pharmacyModel.pharmacyModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      "عنوان الصيدلية : ${widget.pharmacyModel.address}",
+                      "عنوان الصيدلية : ${widget.pharmacyModel.pharmacyModel.address}",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      "تاريخ الزيارة : ${widget.pharmacyModel.visitPharmacyModel.data}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
@@ -80,7 +84,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "أضف ملاحظاتك :",
+                    "لتعديل  ملاحظاتك :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   BoxTextField(
@@ -117,7 +121,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       onChanged: (value) {
                         BrandModel brand = value;
                         BlocProvider.of<VisitPlaceBloc>(context).add(
-                            SelectBrandEvent(brand, widget.pharmacyModel.id));
+                            SelectBrandEvent(brand, widget.pharmacyModel.pharmacyModel.id));
                       },
                       validator: (value) {
                         return null;
@@ -263,53 +267,9 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                   ),
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
                     listener: (context, state) {
-                      if (state is InsertVisitPharmacyLoadingState) {
-                        loading(context);
-                      }
-                      if (state is InsertVisitPharmacyErrorState) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      }
-                      if (state is InsertVisitPharmacyState) {
-                        success(context);
-                        SnackBarMessage().showSuccessSnackBar(message: "succsec", context: context, btnOkOnPress: "d");
-                        Navigator.pop(context);
-                      }
-                      if (state is AllVisitBrandPharmacyLoadingState) {
-                        loading(context);
-                      }
-                      if (state is AllVisitBrandPharmacyErrorState) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      }
-                      if (state is AllVisitBrandPharmacyState) {
-                        success(context);
-                        SnackBarMessage().showSuccessSnackBar(message: "succsec", context: context, btnOkOnPress: "d");
-                        Navigator.pop(context);
-                      }
                     },
                     child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()&&_noteController.text.isNotEmpty) {
-                            DateTime now = DateTime.now();
-                            VisitPharmacyModel visitPharmacyModel =
-                                VisitPharmacyModel(
-                                    0,
-                                    now.toString(),
-                                    _noteController.text,
-                                    widget.pharmacyModel.id);
-                            if (context
-                                .read<VisitPlaceBloc>()
-                                .selectBrand
-                                .isNotEmpty) {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  InsertBrandVisitEvent(visitPharmacyModel));
-                            } else {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  InsertVisitPharmacyEvent(visitPharmacyModel));
-                            }
-                          }
-                        },
+                        onPressed: () {},
                         child: Text("ارسال")),
                   )
                 ],

@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
-class DialogFilter extends StatelessWidget {
+class DialogFilter extends StatelessWidget{
   const DialogFilter({super.key,required this.text});
 
   final String text;
- // final  int index;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -27,7 +26,6 @@ class DialogFilter extends StatelessWidget {
               ),
             ),
           ),
-          // Your ovrlay content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

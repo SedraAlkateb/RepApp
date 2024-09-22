@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_pharmacy_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -11,6 +12,8 @@ part 'visit_state.dart';
 class VisitBloc extends Bloc<VisitEvent, VisitState> {
   AllVisitPharmacySqlUsecase allVisitPharmacySqlUsecase;
   AllVisitDoctorSqlUsecase allVisitDoctorSqlUsecase;
+  int current =0;
+  List<VisitPharmacyAndPharmacy> pharmacies=[];
   VisitBloc(
       this.allVisitPharmacySqlUsecase,
       this.allVisitDoctorSqlUsecase
@@ -24,8 +27,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       emit(VisitPharmacyErrorState(failure: failure));
       },
       (data)  async{
-        print(data.length);
-
+        pharmacies=data;
         emit(VisitPharmacyState());
       });}
       if(event is VisitDoctorEvent)
@@ -35,6 +37,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(VisitDoctorErrorState(failure: failure));
             },
                 (data)  async{
+
               emit(VisitDoctorState());
             });
       }
