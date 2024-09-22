@@ -97,14 +97,25 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
         );
       }
       if(event is SelectBrandEvent)
-      {
-        final VisitBrandPharmacyModel v= VisitBrandPharmacyModel(0, event.pharmacyId, event.brandModel.id, 0);
+      { 
+        final existingIndex = selectBrand.indexWhere((brand) => brand.id == event.brandModel.id);
+    print(existingIndex);
+        print("existingIndex");
+
+ if (existingIndex != -1) {
+   List<VisitBrandPharmacyModel> updatedList = List.from(visitBrandPharmacys);
+    updatedList[existingIndex].amount= updatedList[existingIndex].amount+1;
+visitBrandPharmacys = updatedList;
+     emit(EditAmountBrandState(visitBrandPharmacys));
+   }else{
+  final VisitBrandPharmacyModel v= VisitBrandPharmacyModel(0, event.pharmacyId, event.brandModel.id, 0);
         visitBrandPharmacys.add(v);
         List<BrandModel> updatedList = List.from(selectBrand);
         updatedList.add(event.brandModel);
         selectBrand = updatedList;
         emit(SelectBrandState(selectBrand));
-      }
+   }
+   }
       if(event is InsertVisitPharmacyEvent)
       {
         emit(InsertVisitPharmacyLoadingState());
@@ -143,9 +154,10 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
         );
       }
       if(event is EditAmountBrandEvent){
-        visitBrandPharmacys[event.index].amount=event.brand;
-        print(visitBrandPharmacys[event.index].amount);
-                print(event.index);
+        visitBrandPharmacys[event.index].amount+=event.brand;
+
+      //  print(visitBrandPharmacys[event.index].amount);
+              //  print(event.index);
       }
        if (event is RemoveBrandEvent) { 
         List<BrandModel> updatedList = List.from(selectBrand);

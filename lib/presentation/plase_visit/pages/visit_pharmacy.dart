@@ -45,7 +45,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
               child: Form(
-                key: _formKey,
+               
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -132,8 +132,11 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                     builder: (context, state) {
                       final selectBrand =
                           context.watch<VisitPlaceBloc>().selectBrand;
+                           final visitBrand =
+                          context.watch<VisitPlaceBloc>().visitBrandPharmacys;
+                          
                       if (state is SelectBrandState ||
-                          state is DeleteBrandState) {
+                          state is DeleteBrandState||state is  EditAmountBrandState) {
                         print(
                             "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
                         return selectBrand.isNotEmpty
@@ -177,19 +180,22 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                                         FontWeight.bold)),
                                           ),
                                         ),
-                                   Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text('حذف العينة',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: Text('حذف العينة',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
                                         ),
-                                      ),
                                       ],
                                     ),
                                     ...selectBrand.asMap().entries.map((entry) {
                                       final index = entry.key;
                                       final brand = entry.value;
+                                      TextEditingController amount=TextEditingController();
+                                      amount.text=visitBrand[index].amount.toString();
                                       return TableRow(
                                         children: [
                                           Padding(
@@ -208,6 +214,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                           ),
                                           IntrinsicHeight(
                                             child: TextField(
+                                              controller:amount ,
                                               onChanged: (value) {
                                                 if (value.isEmpty) {
                                                   BlocProvider.of<
@@ -299,7 +306,10 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       }
                       if (state is InsertVisitPharmacyState) {
                         success(context);
-                        SnackBarMessage().showSuccessSnackBar(message: "succsec", context: context, btnOkOnPress: "d");
+                        SnackBarMessage().showSuccessSnackBar(
+                            message: "succsec",
+                            context: context,
+                            btnOkOnPress: "d");
                         Navigator.pop(context);
                       }
                       if (state is AllVisitBrandPharmacyLoadingState) {
@@ -311,13 +321,17 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       }
                       if (state is AllVisitBrandPharmacyState) {
                         success(context);
-                        SnackBarMessage().showSuccessSnackBar(message: "succsec", context: context, btnOkOnPress: "d");
+                        SnackBarMessage().showSuccessSnackBar(
+                            message: "succsec",
+                            context: context,
+                            btnOkOnPress: "d");
                         Navigator.pop(context);
                       }
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()&&_noteController.text.isNotEmpty) {
+                          if (_formKey.currentState!.validate() &&
+                              _noteController.text.isNotEmpty) {
                             DateTime now = DateTime.now();
                             VisitPharmacyModel visitPharmacyModel =
                                 VisitPharmacyModel(
