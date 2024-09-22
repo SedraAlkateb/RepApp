@@ -56,7 +56,7 @@ class VisitBrandPharmacyModel {
   int id;
   int visitId;
   int brandId;
-  int amount;
+  int amount=1;
   VisitBrandPharmacyModel(
       this.id,
       this.visitId,

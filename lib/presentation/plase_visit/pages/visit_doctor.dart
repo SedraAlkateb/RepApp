@@ -13,8 +13,8 @@ class VisitDoctor extends StatelessWidget {
    VisitDoctor({super.key,required this.doctorModel});
   final DoctorModel doctorModel;
   final TextEditingController _noteController = TextEditingController();
- //final TextEditingController _noteController = TextEditingController();
-  //final TextEditingController _noteController = TextEditingController();
+ final TextEditingController _issueController = TextEditingController();
+  final TextEditingController _noteeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,8 +45,8 @@ class VisitDoctor extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Center(
-                    child: Text(
-                      doctorModel?.title ?? " ",
+                    child: Text(  doctorModel.title,
+                      
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -89,7 +89,7 @@ class VisitDoctor extends StatelessWidget {
                     prefixIcon: null,
                     maxLines: 4,
                     validator: (value) {},
-                    controller: _noteController,
+                    controller: _issueController,
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
@@ -102,7 +102,7 @@ class VisitDoctor extends StatelessWidget {
                     prefixIcon: null,
                     maxLines: 4,
                     validator: (value) {},
-                    controller: _noteController,
+                    controller: _noteeController,
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
@@ -129,7 +129,7 @@ class VisitDoctor extends StatelessWidget {
                      },
                      validator: (value) {
                        return null;
-                     }, errorText: '',),
+                     }, errorText: 'لايوجد نتيجة',),
                   ),
                                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                     builder: (context, state) {
@@ -241,11 +241,23 @@ class VisitDoctor extends StatelessWidget {
                                           ),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: Text('',
-                                              textAlign: TextAlign.center),
-                                        ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: IconButton(
+                                                color: const Color.fromARGB(
+                                                    255, 155, 23, 14),
+                                                icon:
+                                                    Icon(Icons.delete_forever),
+                                                onPressed: () {
+                                                  BlocProvider.of<
+                                                              VisitPlaceBloc>(
+                                                          context)
+                                                      .add(RemoveBrandEvent(
+                                                          brand));
+                                                },
+                                              ),
+                                            ),
+                                          ),
                                       ],
                                     );
                                   }).toList(),

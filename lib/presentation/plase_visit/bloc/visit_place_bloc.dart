@@ -66,6 +66,7 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
 
         );
       }
+
       if(event is DoctorByPlace)
       {  current=event.current;
         (
@@ -143,7 +144,21 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
       }
       if(event is EditAmountBrandEvent){
         visitBrandPharmacys[event.index].amount=event.brand;
+        print(visitBrandPharmacys[event.index].amount);
+                print(event.index);
       }
+       if (event is RemoveBrandEvent) { 
+        List<BrandModel> updatedList = List.from(selectBrand);
+         updatedList.removeWhere(
+           (v) => v.id == event.brandModel.id,
+         );
+        selectBrand = updatedList;
+         visitBrandPharmacys.removeWhere(
+           (v) => v.brandId == event.brandModel.id,
+         );
+        emit(DeleteBrandState(updatedList));
+      }
+      
     });
   }
 }

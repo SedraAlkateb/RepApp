@@ -2,6 +2,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
@@ -110,10 +111,9 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                             context, state.failure.massage, state.failure.code);
                       }
                     },
-                    child: CustomDropDown(
+                    child: CustomDropDownSearch(
                       hintText: "العينات",
                       items: context.watch<VisitPlaceBloc>().bandFlag,
-                      prefixIcon: null,
                       onChanged: (value) {
                         BrandModel brand = value;
                         BlocProvider.of<VisitPlaceBloc>(context).add(
@@ -122,6 +122,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       validator: (value) {
                         return null;
                       },
+                      errorText: 'لايوجد نتيجة',
                     ),
                   ),
                   SizedBox(
@@ -131,7 +132,10 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                     builder: (context, state) {
                       final selectBrand =
                           context.watch<VisitPlaceBloc>().selectBrand;
-                      if (state is SelectBrandState) {
+                      if (state is SelectBrandState ||
+                          state is DeleteBrandState) {
+                        print(
+                            "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
                         return selectBrand.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -173,9 +177,14 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                                         FontWeight.bold)),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                   Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text('حذف العينة',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
                                         ),
+                                      ),
                                       ],
                                     ),
                                     ...selectBrand.asMap().entries.map((entry) {
@@ -200,11 +209,20 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                           IntrinsicHeight(
                                             child: TextField(
                                               onChanged: (value) {
-                                                BlocProvider.of<VisitPlaceBloc>(
-                                                        context)
-                                                    .add(EditAmountBrandEvent(
-                                                        index,
-                                                        int.parse(value)));
+                                                if (value.isEmpty) {
+                                                  BlocProvider.of<
+                                                              VisitPlaceBloc>(
+                                                          context)
+                                                      .add(EditAmountBrandEvent(
+                                                          index, 1));
+                                                } else {
+                                                  BlocProvider.of<
+                                                              VisitPlaceBloc>(
+                                                          context)
+                                                      .add(EditAmountBrandEvent(
+                                                          index,
+                                                          int.parse(value)));
+                                                }
                                               },
                                               keyboardType:
                                                   TextInputType.number,
@@ -245,8 +263,17 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Center(
                                               child: IconButton(
-                                                icon: Icon(Icons.delete),
-                                                onPressed: () {},
+                                                color: const Color.fromARGB(
+                                                    255, 155, 23, 14),
+                                                icon:
+                                                    Icon(Icons.delete_forever),
+                                                onPressed: () {
+                                                  BlocProvider.of<
+                                                              VisitPlaceBloc>(
+                                                          context)
+                                                      .add(RemoveBrandEvent(
+                                                          brand));
+                                                },
                                               ),
                                             ),
                                           ),
@@ -310,7 +337,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                             }
                           }
                         },
-                        child: Text("ارسال")),
+                        child: Text("تمت الزيارة")),
                   )
                 ],
               ),
