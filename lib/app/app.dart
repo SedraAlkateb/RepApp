@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
           },
         ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
-        BlocProvider(create: (_) => instance<VisitBloc>())
+        BlocProvider(create: (_) => instance<VisitBloc>()..add(VisitPharmacyEvent()))
 
       ],
       child: MaterialApp(

@@ -10,6 +10,7 @@ import 'package:domina_app/data/repository/repository.dart';
 import 'package:domina_app/data/repository/repositroy_sql.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_brands_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sql_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
@@ -137,7 +138,8 @@ Future<void>initVisitsModule() async{
   if(!GetIt.I.isRegistered<AllVisitPharmacySqlUsecase>()){
     instance.registerFactory<AllVisitPharmacySqlUsecase>(() =>AllVisitPharmacySqlUsecase(instance()));
     instance.registerFactory<AllVisitDoctorSqlUsecase>(() =>AllVisitDoctorSqlUsecase(instance()));
-    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance()));
+    instance.registerFactory<AllBrandsPharmacyVisitsSqlUsecase>(() =>AllBrandsPharmacyVisitsSqlUsecase(instance()));
+    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance(),instance()));
   }
 }
 Future<void>initSpecModule() async{

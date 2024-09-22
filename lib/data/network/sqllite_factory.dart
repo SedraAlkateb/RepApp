@@ -44,19 +44,24 @@ class DatabaseHelper {
     isLogin INTEGER NOT NULL DEFAULT 0
     );
     ''');
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE specialization (
     id INTEGER PRIMARY KEY ,
     title TEXT NOT NULL
     );
-    ''');
-    await db.execute('''
+    '''
+    );
+    await db.execute(
+        '''
       CREATE TABLE place (
     placeId INTEGER PRIMARY KEY,
     title TEXT NOT NULL
     );
-    ''');
-    await db.execute('''
+    '''
+    );
+    await db.execute(
+        '''
       CREATE TABLE pharmacy (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
@@ -64,8 +69,8 @@ class DatabaseHelper {
     placeId INTEGER NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
-    ''');
-
+    '''
+    );
     await db.execute('''
       CREATE TABLE brand (
     id INTEGER PRIMARY KEY,

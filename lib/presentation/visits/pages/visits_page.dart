@@ -11,6 +11,7 @@ class VisitsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<VisitBloc>(context).add(VisitPharmacyEvent());
     return DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -19,6 +20,13 @@ class VisitsPage extends StatelessWidget {
             bottom:
             TabBar(labelPadding:EdgeInsets.all(0.9) ,
                 onTap: (value) {
+                  if(value==0){
+                    BlocProvider.of<VisitBloc>(context).add(VisitPharmacyEvent());
+                  }else if(value==1){
+                    BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
+                  }else{
+                    BlocProvider.of<VisitBloc>(context).add(VisitHospitalEvent());
+                  }
                 },
                 tabs: [
                   Tab(icon:

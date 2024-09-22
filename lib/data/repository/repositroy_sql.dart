@@ -302,7 +302,8 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> insertHospitalSp(List<HospitalSpModel> hospitalSps) async {
+  Future<Either<Failure, Null>> insertHospitalSp(List<HospitalSpModel> hospitalSps)
+  async {
     try {
       final response = await _databaseHelper.insertHospitalSp(hospitalSps);
       return Right(response);
@@ -329,4 +330,15 @@ class RepositroySqlImp extends RepositorySql {
     }
   }
 
+  @override
+  Future<Either<Failure, List<PharmacyBrandModel>>> getBrandsPharmacyByVisitId(int visitId)  async {
+    try {
+      final response = await _databaseHelper.getBrandsPharmacyByVisitId(visitId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

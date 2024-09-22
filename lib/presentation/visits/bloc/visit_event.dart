@@ -15,11 +15,26 @@ class VisitDoctorEvent extends VisitEvent{
   @override
   List<Object?> get props => [];
 
+  
+}
+class VisitHospitalEvent extends VisitEvent{
+
+  VisitHospitalEvent();
+  @override
+  List<Object?> get props => [];
+
 }
 class VisitBrandPharmacyEvent extends VisitEvent{
 
   VisitBrandPharmacyEvent();
   @override
   List<Object?> get props => [];
+
+}
+class BrandPharmacyVisitEvent extends VisitEvent{
+final int visitId;
+  BrandPharmacyVisitEvent(this.visitId);
+  @override
+  List<Object?> get props => [visitId];
 
 }
