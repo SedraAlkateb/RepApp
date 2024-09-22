@@ -220,6 +220,7 @@ class AppSqlApi {
       return HospitalModel.fromMap(maps[i]);
     });
   }
+/*
   Future<List<VisitPharmacyModel>> getVisitPharmacy() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
@@ -227,6 +228,22 @@ class AppSqlApi {
       return VisitPharmacyModel.fromMap(maps[i]);
     });
   }
+ */
+  Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy() async {
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+    SELECT visit_pharmacy.*, pharmacy.*
+    FROM visit_pharmacy
+    JOIN pharmacy ON visit_pharmacy.pharmacyId = pharmacy.id
+  ''');
+    return List.generate(maps.length, (i) {
+      VisitPharmacyModel visitPharmacyModel=VisitPharmacyModel.fromMap(maps[i]);
+      PharmacyModel pharmacyModel=PharmacyModel.fromMap(maps[i]);
+      VisitPharmacyAndPharmacy visitPharmacyAndPharmacy=VisitPharmacyAndPharmacy(pharmacyModel, visitPharmacyModel);
+      return visitPharmacyAndPharmacy;
+    });
+  }
+
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();

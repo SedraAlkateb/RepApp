@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class AllVisitPharmacySqlUsecase extends Equatable {
  final RepositorySql _repositorySql;
  AllVisitPharmacySqlUsecase(this._repositorySql);
-  Future<Either<Failure, List<VisitPharmacyModel>>> execute() async{
+  Future<Either<Failure, List<VisitPharmacyAndPharmacy>>> execute() async{
     return await _repositorySql.getVisitPharmacy();
   }
 

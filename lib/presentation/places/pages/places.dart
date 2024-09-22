@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Places extends StatelessWidget {
   Places({super.key});
- final TextEditingController searchController =TextEditingController();
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -24,11 +24,11 @@ class Places extends StatelessWidget {
             context: context,
             builder: (context) {
               return Container(
-                child: Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 20, bottom: 20),
-                  child: Container(
+                  child: Center(
+                      child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 20, bottom: 20),
+                child: Container(
                     height: size.height / 3,
                     decoration: BoxDecoration(
                         color: ColorManager.white,
@@ -60,24 +60,23 @@ class Places extends StatelessWidget {
                                       decoration: TextDecoration.none),
                                 ),
                               ),
-              SizedBox(
-              height: 13,
-              ),
-              CustomButton(
-              text: "موافق",
-              onPressed: () {
-              context.read<PlaceBloc>().k  = 1;
-              Navigator.pop(context);
-              })
+                              SizedBox(
+                                height: 13,
+                              ),
+                              CustomButton(
+                                  text: "موافق",
+                                  onPressed: () {
+                                    context.read<PlaceBloc>().k = 1;
+                                    Navigator.pop(context);
+                                  })
                             ],
                           ),
-                    ),
-                  ),
-                )),
-              )
-              ));
+                        ),
+                      ),
+                    )),
+              )));
             });
-        context.read<PlaceBloc>().k=1;
+        context.read<PlaceBloc>().k = 1;
       }
     });
     return Scaffold(

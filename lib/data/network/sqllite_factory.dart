@@ -149,7 +149,7 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
-    quantity TEXT NOT NULL,
+    amount TEXT NOT NULL,
     FOREIGN KEY (visitId) REFERENCES visit_pharmacy(id),
     FOREIGN KEY (brandId) REFERENCES brand(id))
  ''');
@@ -158,7 +158,7 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     doctorId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
-    quantity TEXT NOT NULL,
+    amount TEXT NOT NULL,
     FOREIGN KEY (doctorId) REFERENCES visit_doctor(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
   )
@@ -170,7 +170,7 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     hospitalId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
-    quantity TEXT NOT NULL,
+    amount TEXT NOT NULL,
     FOREIGN KEY (hospitalId) REFERENCES visit_hospital(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
     )

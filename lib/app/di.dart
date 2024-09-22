@@ -140,7 +140,6 @@ Future<void>initVisitsModule() async{
     instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance()));
   }
 }
-
 Future<void>initSpecModule() async{
   if(!GetIt.I.isRegistered<AllSpecsSqlUsecase>()){
     instance.registerFactory<AllSpecsSqlUsecase>(() =>AllSpecsSqlUsecase(instance()));

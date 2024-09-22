@@ -1,0 +1,90 @@
+
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/uniti/text.dart';
+import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
+import 'package:domina_app/presentation/visits/pages/info_visit_pharmacy.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+class PharmacyVisitUser extends StatelessWidget {
+  const PharmacyVisitUser({super.key});
+  @override
+  Widget build(BuildContext context) {
+    BlocProvider.of<VisitBloc>(context).add(VisitPharmacyEvent());
+    return  Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal:8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: BlocListener<VisitBloc, VisitState>(
+                listener: (context, state) {
+                  if(state is VisitPharmacyErrorState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      error(context, state.failure.massage, state.failure.code);
+                    });
+                  }
+                  /*
+                  if(state is AllPharmacyByPlaceLoadingState){
+                    loading(context);
+                  }
+                  if(state is AllPharmacyByPlaceState){
+    success(context);}
+                 */
+                },
+                child: ListView.builder
+                  (
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return InfoVisitPharmacy(
+                              pharmacyModel: context.watch<VisitBloc>().pharmacies[index],
+                            );
+                          }));
+                        },
+
+                        child: Container(
+                          margin: EdgeInsets.all(AppPadding.p8),
+                          padding: EdgeInsets.all(AppPadding.p8),
+                          //    height: AppSize.s150,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: ColorManager.secondaryColor4)
+
+                            ],
+                            color: ColorManager.white,
+                            border:
+                            Border.all(color: ColorManager.hintGrey),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(AppSize.s8)),
+                            //        color: ColorManager.card,
+                          ),
+                          child:
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                textAlign: TextAlign.center,
+                                context.watch<VisitBloc>().pharmacies[index].pharmacyModel.title,
+                                style: Theme.of(context).textTheme.labelLarge,),
+                              TextRach(s1: "العنوان : ", s2:  context.watch<VisitBloc>().pharmacies[index].pharmacyModel.address)
+                            ],
+                          ),
+                        ),
+                      );
+                    }, itemCount:  context.watch<VisitBloc>().pharmacies.length),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+    );
+  }
+}
