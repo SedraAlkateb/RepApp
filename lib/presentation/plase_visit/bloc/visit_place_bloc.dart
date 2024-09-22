@@ -104,7 +104,12 @@ List<VisitBrandPharmacyModel>visitBrandPharmacys=[];
 
  if (existingIndex != -1) {
    List<VisitBrandPharmacyModel> updatedList = List.from(visitBrandPharmacys);
-    updatedList[existingIndex].amount= updatedList[existingIndex].amount+1;
+   updatedList[existingIndex] = VisitBrandPharmacyModel(
+       updatedList[existingIndex].id,
+       updatedList[existingIndex].visitId,
+       updatedList[existingIndex].brandId,
+       updatedList[existingIndex].amount + 1 // زيادة الكمية
+   );
 visitBrandPharmacys = updatedList;
      emit(EditAmountBrandState(visitBrandPharmacys));
    }else{
@@ -155,9 +160,6 @@ visitBrandPharmacys = updatedList;
       }
       if(event is EditAmountBrandEvent){
         visitBrandPharmacys[event.index].amount+=event.brand;
-
-      //  print(visitBrandPharmacys[event.index].amount);
-              //  print(event.index);
       }
        if (event is RemoveBrandEvent) { 
         List<BrandModel> updatedList = List.from(selectBrand);
