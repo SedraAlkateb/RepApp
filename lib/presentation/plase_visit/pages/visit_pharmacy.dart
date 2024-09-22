@@ -4,7 +4,6 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class VisitPharmacy extends StatefulWidget {
 }
 
 class _VisitPharmacyState extends State<VisitPharmacy> {
-  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _notephController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -94,7 +93,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       }
                       return null;
                     },
-                    controller: _noteController,
+                    controller: _notephController,
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
@@ -329,36 +328,33 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       }
                     },
                     child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate() &&
-                              _noteController.text.isNotEmpty) {
-                            DateTime now = DateTime.now();
-                            VisitPharmacyModel visitPharmacyModel =
-                                VisitPharmacyModel(
-                                    0,
-                                    now.toString(),
-                                    _noteController.text,
-                                    widget.pharmacyModel.id);
-                            if (context
-                                .read<VisitPlaceBloc>()
-                                .selectBrand
-                                .isNotEmpty) {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  InsertBrandVisitEvent(visitPharmacyModel));
-                            } else {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  InsertVisitPharmacyEvent(visitPharmacyModel));
-                            }
-                          }
-                        },
-                        child: Text("تمت الزيارة")),
-                  )
-                ],
+                onPressed: () {
+                  // تحقق من أن الحقل ليس فارغًا
+                  if (_notephController.text.isEmpty) {
+                  
+                    error(context, "يرجى إدخال الملاحظات",1);
+                  } else {
+                  
+                    DateTime now = DateTime.now();
+                    VisitPharmacyModel visitPharmacyModel = VisitPharmacyModel(
+                        0, now.toString(), _notephController.text, widget.pharmacyModel.id);
+                    
+                  
+                    if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
+                      BlocProvider.of<VisitPlaceBloc>(context)
+                          .add(InsertBrandVisitEvent(visitPharmacyModel));
+                    } else {
+                      BlocProvider.of<VisitPlaceBloc>(context)
+                          .add(InsertVisitPharmacyEvent(visitPharmacyModel));
+                    }
+                  }
+                },
+                child: Text("تمت الزيارة"),
               ),
             )
           ],
         ),
       ),
-    );
+    ])));
   }
 }
