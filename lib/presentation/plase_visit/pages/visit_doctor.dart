@@ -10,10 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
 
 class VisitDoctor extends StatelessWidget {
-   VisitDoctor({super.key,required this.doctorModel});
+  VisitDoctor({super.key, required this.doctorModel});
   final DoctorModel doctorModel;
   final TextEditingController _noteController = TextEditingController();
- final TextEditingController _issueController = TextEditingController();
+  final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,8 @@ class VisitDoctor extends StatelessWidget {
               height: 250,
               decoration: BoxDecoration(
                 color: ColorManager.secondaryColor1,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,8 +46,8 @@ class VisitDoctor extends StatelessWidget {
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
                   Center(
-                    child: Text(  doctorModel.title,
-                      
+                    child: Text(
+                      doctorModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -63,10 +64,11 @@ class VisitDoctor extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Column (
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(
+                children: [
+                  Text(
                     " ملاحظات للمكتب العلمي :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
@@ -79,12 +81,12 @@ class VisitDoctor extends StatelessWidget {
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
-
-                  ),Text(
+                  ),
+                  Text(
                     "ملاحظات لمستودع قاسيون  :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                    BoxTextField(
+                  BoxTextField(
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
@@ -93,11 +95,12 @@ class VisitDoctor extends StatelessWidget {
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
-                  ),Text(
+                  ),
+                  Text(
                     "طلبات شخصية:",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                    BoxTextField(
+                  BoxTextField(
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
@@ -111,27 +114,33 @@ class VisitDoctor extends StatelessWidget {
                     "اختر العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  SizedBox(height: 0.9,),
+                  SizedBox(
+                    height: 0.9,
+                  ),
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
                     listener: (context, state) {
-                      if(state is BrandFlagErrorState) {
+                      if (state is BrandFlagErrorState) {
                         print("object");
-                        error(context, state.failure.massage, state.failure.code);
+                        error(
+                            context, state.failure.massage, state.failure.code);
                       }
+                    },
+                    child: CustomDropDownSearch(
+                      hintText: "العينات",
+                      items: context.watch<VisitPlaceBloc>().bandFlag,
+                      //  prefixIcon: null,
+                      onChanged: (value) {
+                        BrandModel brand = value;
+                        BlocProvider.of<VisitPlaceBloc>(context)
+                            .add(SelectBrandEvent(brand, doctorModel.id));
                       },
-                   child: CustomDropDownSearch(
-                     hintText: "العينات",
-                     items: context.watch<VisitPlaceBloc>().bandFlag,
-                   //  prefixIcon: null,
-                     onChanged: (value) {
-                       BrandModel brand=value;
-                       BlocProvider.of<VisitPlaceBloc>(context).add(SelectBrandEvent(brand,doctorModel.id));
-                     },
-                     validator: (value) {
-                       return null;
-                     }, errorText: 'لايوجد نتيجة',),
+                      validator: (value) {
+                        return null;
+                      },
+                      errorText: 'لايوجد نتيجة',
+                    ),
                   ),
-                                   BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                  BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                     builder: (context, state) {
                       final selectBrand =
                           context.watch<VisitPlaceBloc>().selectBrand;
@@ -241,23 +250,21 @@ class VisitDoctor extends StatelessWidget {
                                           ),
                                         ),
                                         Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                              child: IconButton(
-                                                color: const Color.fromARGB(
-                                                    255, 155, 23, 14),
-                                                icon:
-                                                    Icon(Icons.delete_forever),
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                              VisitPlaceBloc>(
-                                                          context)
-                                                      .add(RemoveBrandEvent(
-                                                          brand));
-                                                },
-                                              ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: IconButton(
+                                              color: const Color.fromARGB(
+                                                  255, 155, 23, 14),
+                                              icon: Icon(Icons.delete_forever),
+                                              onPressed: () {
+                                                BlocProvider.of<VisitPlaceBloc>(
+                                                        context)
+                                                    .add(RemoveBrandEvent(
+                                                        brand));
+                                              },
                                             ),
                                           ),
+                                        ),
                                       ],
                                     );
                                   }).toList(),
@@ -267,17 +274,36 @@ class VisitDoctor extends StatelessWidget {
                           : SizedBox();
                     },
                   ),
-          
-                  ElevatedButton(onPressed: (){
-                    if(_noteController.text.isNotEmpty||context.read<VisitPlaceBloc>().selectBrand.isNotEmpty){
-                      DateTime now = DateTime.now();
-                      VisitDoctorModel visitDoctorModel= VisitDoctorModel(0,
-                          now.toString()
-                          , _noteController.text, _noteController.text, _noteController.text,doctorModel.id);
-                      BlocProvider.of<VisitPlaceBloc>(context).add(InsertVisitDoctorEvent(visitDoctorModel));
+                  ElevatedButton(
+                      onPressed: () {if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
 
-                    }
-                  }, child: Text("تمت الزيارة"))
+
+
+                          error(context, "يرجى إدخال الملاحظات",1);
+                      }
+                        else if (
+                            context
+                                .read<VisitPlaceBloc>()
+                                .selectBrand
+                                .isNotEmpty) 
+                                
+                                
+                                
+                                
+                                {
+                          DateTime now = DateTime.now();
+                          VisitDoctorModel visitDoctorModel = VisitDoctorModel(
+                              0,
+                              now.toString(),
+                              _noteController.text,
+                             _issueController .text,
+                              _noteeController.text,
+                              doctorModel.id);
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(InsertVisitDoctorEvent(visitDoctorModel));
+                        }
+                      },
+                      child: Text("تمت الزيارة"))
                 ],
               ),
             )

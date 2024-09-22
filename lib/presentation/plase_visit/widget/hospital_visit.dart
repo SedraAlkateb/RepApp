@@ -18,7 +18,7 @@ class HospitalVisit extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("كل الدكاترة",),
+        
             Expanded(
               child: BlocListener<VisitPlaceBloc, VisitPlaceState>(
                 listener: (context, state) {
@@ -53,8 +53,8 @@ class HospitalVisit extends StatelessWidget {
                       child:
                       Column(
                         children: [
-                          TextRach(s1: "title : ", s2:  context.watch<VisitPlaceBloc>().hospitals[index].title),
-                          TextRach(s1: "address : ", s2: context.watch<VisitPlaceBloc>().hospitals[index].address)
+                          Text(  context.watch<VisitPlaceBloc>().hospitals[index].title,style: Theme.of(context).textTheme.labelLarge,),
+                          TextRach(s1: "العنوان : ", s2: context.watch<VisitPlaceBloc>().hospitals[index].address)
                         ],
                       ),
                     );
