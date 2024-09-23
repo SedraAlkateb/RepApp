@@ -1,4 +1,5 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -38,24 +39,33 @@ class HospitalVisit extends StatelessWidget {
                 },child: ListView.builder
                 (
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(AppPadding.p8),
-                      padding: EdgeInsets.all(AppPadding.p16),
-                      //    height: AppSize.s150,
-                      decoration: BoxDecoration(
-                        color: ColorManager.white,
-                        border:
-                        Border.all(color: ColorManager.hintGrey),
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(AppSize.s8)),
-                        //        color: ColorManager.card,
-                      ),
-                      child:
-                      Column(
-                        children: [
-                          Text(  context.watch<VisitPlaceBloc>().hospitals[index].title,style: Theme.of(context).textTheme.labelLarge,),
-                           TextRach(s1: "العنوان : ", s2:  context.watch<VisitPlaceBloc>().pharmacies[index].address)
-                        ],
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return VisitHospital(
+                            hospitalModel: context.watch<VisitPlaceBloc>().hospitals[index],
+                          );
+                        }));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(AppPadding.p8),
+                        padding: EdgeInsets.all(AppPadding.p16),
+                        //    height: AppSize.s150,
+                        decoration: BoxDecoration(
+                          color: ColorManager.white,
+                          border:
+                          Border.all(color: ColorManager.hintGrey),
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(AppSize.s8)),
+                          //        color: ColorManager.card,
+                        ),
+                        child:
+                        Column(
+                          children: [
+                            Text(  context.watch<VisitPlaceBloc>().hospitals[index].title,style: Theme.of(context).textTheme.labelLarge,),
+                            TextRach(s1: "العنوان : ", s2: context.watch<VisitPlaceBloc>().hospitals[index].address)
+                          ],
+                        ),
                       ),
                     );
                   }, itemCount: context.watch<VisitPlaceBloc>().hospitals.length),

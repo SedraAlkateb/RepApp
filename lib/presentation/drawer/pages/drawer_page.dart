@@ -6,8 +6,8 @@ class DrawerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+
       child: ListView(
-        padding: const EdgeInsets.all(0),
         children: [
            DrawerHeader(
             decoration: BoxDecoration(
