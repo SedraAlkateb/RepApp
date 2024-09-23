@@ -158,6 +158,11 @@ class VisitPharmacyAndPharmacy{
   VisitPharmacyModel visitPharmacyModel;
   VisitPharmacyAndPharmacy(this.pharmacyModel,this.visitPharmacyModel);
 }
+class VisitDoctorAndDoctor{
+  DoctorModel doctorModel;
+  VisitDoctorModel visitDoctorModel;
+  VisitDoctorAndDoctor(this.doctorModel,this.visitDoctorModel);
+}
 class VisitDoctorModel {
   int id;
   String data;
@@ -176,7 +181,6 @@ class VisitDoctorModel {
       'doctorId': doctorId
     };
   }
-
   factory VisitDoctorModel.fromMap(Map<String, dynamic> map) {
     return VisitDoctorModel(
       map['id'],
@@ -187,7 +191,57 @@ class VisitDoctorModel {
       map['doctorId']
     );
   }
+  factory VisitDoctorModel.fromMap1(Map<String, dynamic> map) {
+    return VisitDoctorModel(
+      map['visit_doctor_id'],
+      map['visit_doctor_data'],
+      map['visit_doctor_kaswn'],
+      map['visit_doctor_science'],
+      map['visit_doctor_additaion'],
+      map['visit_doctor_doctorId'],
+    );
+  }
 }
+class VisitHospitalModel {
+  int id;
+  String data;
+  String kaswn;
+  String science;
+  String additaion;
+  int hospitalId;
+  VisitHospitalModel(this.id, this.data, this.kaswn, this.science, this.additaion,
+      this.hospitalId);
+  Map<String, dynamic> toJson() {
+    return {
+      'data': data,
+      'kaswn': kaswn,
+      'science': science,
+      'additaion': additaion,
+      'hospitalId': hospitalId
+    };
+  }
+  factory VisitHospitalModel.fromMap(Map<String, dynamic> map) {
+    return VisitHospitalModel(
+        map['id'],
+        map['data'],
+        map['kaswn'],
+        map['science'],
+        map['additaion'],
+        map['hospitalId']
+    );
+  }
+  factory VisitHospitalModel.fromMap1(Map<String, dynamic> map) {
+    return VisitHospitalModel(
+      map['visit_doctor_id'],
+      map['visit_doctor_data'],
+      map['visit_doctor_kaswn'],
+      map['visit_doctor_science'],
+      map['visit_doctor_additaion'],
+      map['visit_doctor_doctorId'],
+    );
+  }
+}
+
 class PlaceModel {
   int placeId;
   String title;
@@ -342,6 +396,18 @@ class DoctorModel {
       map["visits"],
       map["spTitle"],
       map['spId'],
+    );
+  }
+  factory DoctorModel.fromMap1(Map<String, dynamic> map) {
+    return DoctorModel(
+      (map['doctor_id']),
+      map['doctor_title'],
+      map['doctor_placeId'],
+      map['doctor_address'],
+      map['doctor_placeTitle'],
+      map['doctor_visits'],
+      map['doctor_spTitle'],
+      map['doctor_spId'],
     );
   }
 }

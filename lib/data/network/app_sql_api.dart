@@ -32,10 +32,7 @@ class AppSqlApi {
         for(var pharmacy in pharmacies) {
           batch.insert('pharmacy', pharmacy.toMap());
         }
-        for(var spec in specs){
-          batch.insert('specialization',spec.toMap());
-
-        }
+        for(var spec in specs){batch.insert('specialization',spec.toMap());}
         for(var hospitalSp in hospitalSps){
           batch.insert('hospitalSp',hospitalSp.toMap());
         }
@@ -254,13 +251,37 @@ class AppSqlApi {
     await batch.commit(noResult: true);
   }
   //////////////////////////////////
-  Future<List<VisitDoctorModel>> getVisitDoctor() async {
+  Future<List<VisitDoctorAndDoctor>> getVisitDoctor() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_doctor');
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''
+    SELECT 
+      visit_doctor.id as visit_doctor_id, 
+      visit_doctor.data as visit_doctor_data, 
+      visit_doctor.kaswn as visit_doctor_kaswn, 
+      visit_doctor.science as visit_doctor_science, 
+      visit_doctor.additaion as visit_doctor_additaion,
+      visit_doctor.doctorId as visit_doctor_doctorId,
+      doctor.id as doctor_id, 
+      doctor.title as doctor_title, 
+      doctor.address as doctor_address,
+      doctor.placeId as doctor_placeId,
+      doctor.placeTitle as doctor_placeTitle,
+      doctor.visits as doctor_visits,
+      doctor.spId as doctor_spId,
+      doctor.spTitle as doctor_spTitle
+    FROM visit_doctor
+    JOIN doctor ON visit_doctor.doctorId = doctor.id
+    '''
+    );
     return List.generate(maps.length, (i) {
-      return VisitDoctorModel.fromMap(maps[i]);
+      VisitDoctorModel visitDoctorModel=VisitDoctorModel.fromMap1(maps[i]);
+      DoctorModel doctorModel=DoctorModel.fromMap1(maps[i]);
+      VisitDoctorAndDoctor visitDoctorAndDoctor=VisitDoctorAndDoctor(doctorModel, visitDoctorModel);
+      return visitDoctorAndDoctor;
     });
   }
+
   insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
@@ -303,14 +324,14 @@ class AppSqlApi {
     await mydb.transaction((txn) async {
       try {
         int visitId = await txn.insert(
-          'visit_pharmacy',
+          'visit_doctor',
           visitDoctorModel.toJson(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
         for (var visitBrand in visitBrandPharmacyModels) {
           visitBrand.visitId = visitId;
           await txn.insert(
-            'visit_brand_pharmacy',
+            'visit_brand_doctor',
             visitBrand.toJson(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
@@ -338,4 +359,35 @@ class AppSqlApi {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
+  Future<List<PharmacyBrandModel>> getBrandsDoctorByVisitId(int visitId) async {
+    Database? mydb =await databaseHelper.database;
+
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+      SELECT 
+      brand.id as id, 
+      brand.title as title, 
+      brand.phTitle as phTitle,  
+      visit_brand_Doctor.amount as amount
+      FROM visit_brand_Doctor
+      JOIN brand  ON visit_brand_Doctor.brandId = brand.id
+      WHERE visit_brand_Doctor.visitId = ?
+    ''', [visitId]);
+    return List.generate(maps.length, (i) {
+      return PharmacyBrandModel.fromMap(maps[i]);
+    });
+  }
+  Future<List<SpecModel>> SpecializationByHospitalIdD(int hospitalId) async {
+    Database? mydb =await databaseHelper.database;
+
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+      SELECT specialization.*
+      FROM specialization
+      JOIN hospitalSp  ON hospitalSp.brandId = brand.id
+      WHERE hospitalSp.hospitalId = ?
+    ''', [hospitalId]);
+    return List.generate(maps.length, (i) {
+      return SpecModel.fromMap(maps[i]);
+    });
+  }
+
 }

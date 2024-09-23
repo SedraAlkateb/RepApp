@@ -63,10 +63,17 @@ class InsertVisitPharmacyEvent extends VisitPlaceEvent{
 
 }
 class InsertBrandVisitEvent extends VisitPlaceEvent{
-  VisitPharmacyModel visitPharmacyModel;
+  final VisitPharmacyModel visitPharmacyModel;
   InsertBrandVisitEvent(this.visitPharmacyModel);
   @override
   List<Object?> get props => [];
+
+}
+class InsertBrandVisitDoctorEvent extends VisitPlaceEvent{
+  final VisitDoctorModel visitDoctorModel;
+  InsertBrandVisitDoctorEvent(this.visitDoctorModel);
+  @override
+  List<Object?> get props => [visitDoctorModel];
 
 }
 class InsertVisitDoctorEvent extends VisitPlaceEvent{
@@ -78,6 +85,25 @@ class InsertVisitDoctorEvent extends VisitPlaceEvent{
   List<Object?> get props => [visitDoctorModel];
 
 }
+
+
+ class InsertBrandVisitHospitalEvent extends VisitPlaceEvent{
+ final VisitHospitalModel visitHospitalModel;
+  InsertBrandVisitHospitalEvent(this.visitHospitalModel);
+  @override
+  List<Object?> get props => [visitHospitalModel];
+
+}
+class InsertVisitHospitalEvent extends VisitPlaceEvent{
+  final  VisitHospitalModel visitHospitalModel;
+  InsertVisitHospitalEvent(this.visitHospitalModel);
+  @override
+
+
+  List<Object?> get props => [visitHospitalModel];
+
+}
+
 class EditAmountBrandEvent extends VisitPlaceEvent{
   final  int index;
   final int brand;

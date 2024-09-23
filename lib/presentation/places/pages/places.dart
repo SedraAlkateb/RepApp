@@ -132,8 +132,8 @@ class Places extends StatelessWidget {
         ),
         Expanded(
           child: BlocConsumer<PlaceBloc, PlaceState>(
-            listener: (context, state) {
-              if (state is AllPlaceErrorState) {
+            listener: (context, state){
+              if (state is AllPlaceErrorState){
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   error(context, state.failure.massage, state.failure.code);
                 });

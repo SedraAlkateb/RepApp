@@ -38,3 +38,10 @@ final int visitId;
   List<Object?> get props => [visitId];
 
 }
+class BrandDoctorVisitEvent extends VisitEvent{
+  final int visitId;
+  BrandDoctorVisitEvent(this.visitId);
+  @override
+  List<Object?> get props => [visitId];
+
+}

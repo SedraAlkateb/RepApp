@@ -39,11 +39,12 @@ abstract class RepositorySql {
   Future<Either<Failure,Null>>insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel) ;
   Future<Either<Failure,List<VisitPharmacyAndPharmacy>>> getVisitPharmacy();
   Future<Either<Failure,Null>>insertVisitDoctor(VisitDoctorModel visitDoctorModel) ;
-  Future<Either<Failure,List<VisitDoctorModel>>> getVisitDoctor();
+  Future<Either<Failure,List<VisitDoctorAndDoctor>>> getVisitDoctor();
   Future<Either<Failure,Null>>insertHospitalSp(List<HospitalSpModel> hospitalSps);
   Future<Either<Failure,Null>>insertVisitBrandPharmacy(List<VisitBrandPharmacyModel> visitBrandPharmacyModels, VisitPharmacyModel visitPharmacyModel);
   Future<Either<Failure,Null>>insertVisitBrandDoctor(List<VisitBrandPharmacyModel> visitBrandDoctorModels, VisitDoctorModel visitDoctorModel);
 
   Future<Either<Failure,List<PharmacyBrandModel>>> getBrandsPharmacyByVisitId(int visitId);
+  Future<Either<Failure,List<PharmacyBrandModel>>> getBrandsDoctorByVisitId(int visitId);
 
 }
