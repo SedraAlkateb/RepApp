@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/pharmacy/bloc/pharmacy_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PharmacyPage extends StatelessWidget {
   PharmacyPage({super.key});
-
+  final TextEditingController searchphController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +38,11 @@ class PharmacyPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: [  SearchField(searchController: searchphController,onPressed: (value) {
+                        BlocProvider.of<PharmacyBloc>(context).add(SearchphEvent(value));
+
+                      },
+                      ),
               Expanded(
                 child: BlocConsumer<PharmacyBloc, PharmacyState>(
                   listener: (context, state) {
@@ -80,7 +85,7 @@ class PharmacyPage extends StatelessWidget {
                                 children: [
                                   Text("${pharmacyModel[index].title} ", style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall),
+                                      .labelLarge,textAlign: TextAlign.center,),
                                   Text(" العنوان : ${pharmacyModel[index].address} ", style: Theme.of(context)
                                       .textTheme
                                       .titleSmall),

@@ -8,3 +8,10 @@ class SpecEvent extends SpecializationEvent{
   List<Object?> get props => [];
 
 }
+class SearchSpecEvent extends SpecializationEvent{
+  final String contan;
+  SearchSpecEvent(this.contan);
+  @override
+  List<Object?> get props => [contan];
+
+}

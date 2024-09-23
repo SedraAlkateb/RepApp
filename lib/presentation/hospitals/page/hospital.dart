@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Hospital extends StatelessWidget {
   Hospital({super.key});
-  final TextEditingController searchDocController = TextEditingController();
+  final TextEditingController searchhosController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,11 @@ class Hospital extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              SearchField(searchController: searchDocController),
+              SearchField(searchController: searchhosController,onPressed: (value) {
+                        BlocProvider.of<HospitalsBloc>(context).add(SearchhosEvent(value));
+
+                      },
+                      ),
               Expanded(
                 child: BlocConsumer<HospitalsBloc, HospitalsState>(
                   listener: (context, state) {
@@ -83,10 +87,10 @@ class Hospital extends StatelessWidget {
                                 children: [
                                   Text(doctormodel[index].title, style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall),
+                                      .labelLarge,textAlign: TextAlign.center,),
                                   Text("العنوان : ${doctormodel[index].address} ", style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall),
+                                      .titleSmall,textAlign: TextAlign.center,),
                                   Text("المكان : ${doctormodel[index].placeTitle}", style: Theme.of(context)
                                       .textTheme
                                       .titleSmall)

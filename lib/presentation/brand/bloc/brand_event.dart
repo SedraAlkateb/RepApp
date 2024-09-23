@@ -8,3 +8,12 @@ class AllBrandEvent extends BrandEvent{
   List<Object?> get props => [];
 
 }
+class SearchbradEvent extends BrandEvent {
+  final String contant;
+  SearchbradEvent(this.contant);
+  @override
+  List<Object?> get props => [contant];
+
+
+
+}

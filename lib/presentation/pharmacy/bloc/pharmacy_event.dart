@@ -9,3 +9,13 @@ class AllPharmacyEvent extends PharmacyEvent{
   List<Object?> get props => [];
 
 }
+
+class SearchphEvent extends PharmacyEvent {
+  final String contant;
+  SearchphEvent(this.contant);
+  @override
+  List<Object?> get props => [contant];
+
+
+
+}

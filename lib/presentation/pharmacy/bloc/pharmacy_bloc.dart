@@ -10,6 +10,7 @@ part 'pharmacy_state.dart';
 
 class PharmacyBloc extends Bloc<PharmacyEvent, PharmacyState> {
   AllPharmacySqlUsecase allPharmacyUsecase;
+  List<PharmacyModel> Pharmacy=[];
   PharmacyBloc(this.allPharmacyUsecase) : super(PharmacyInitial()) {
     on<PharmacyEvent>((event, emit) async{
       if(event is AllPharmacyEvent){
@@ -20,11 +21,28 @@ class PharmacyBloc extends Bloc<PharmacyEvent, PharmacyState> {
       emit(AllPharmacyErrorState(failure: failure));
       },
       (data)  async{
+         Pharmacy=data;
       emit(AllPharmacyState(data));
       }
 
       );
-    }
+    }  if (event is SearchphEvent) {
+        List<PharmacyModel> PharmacyModelist ;
+
+       PharmacyModelist=Pharmacy.where((value) {
+          if (value.title.contains(event.contant)) {
+          return true;
+          }  if (value.address.contains(event.contant)) {
+          return true;
+          } 
+        
+             
+           
+          return false;
+        }).toList();
+          
+        emit(AllPharmacyState(PharmacyModelist));
+      }
     });
   }
 }

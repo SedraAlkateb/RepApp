@@ -40,7 +40,11 @@ class Doctors extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchField(searchController: searchDocController),
+              SearchField(searchController: searchDocController,onPressed: (value) {
+                        BlocProvider.of<DoctorsBloc>(context).add(SearchDocEvent(value));
+
+                      },
+                      ),
               Expanded(
                 child: BlocConsumer<DoctorsBloc, DoctorsState>(
                   listener: (context, state) {
@@ -77,8 +81,8 @@ class Doctors extends StatelessWidget {
                                   Text(doctormodel[index].title,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .titleSmall),
-                                  Text(" العنوان : ${doctormodel[index].address}",
+                                          .labelLarge),
+                                  Text(" العنوان : ${doctormodel[index].address}",textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
