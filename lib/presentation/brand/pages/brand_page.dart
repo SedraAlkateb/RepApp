@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/brand/bloc/brand_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BrandPage extends StatelessWidget {
   BrandPage({super.key});
-
+  final TextEditingController searchbrandController = TextEditingController();
   @override
   Widget build(BuildContext context) {
        return Scaffold(
@@ -43,7 +44,8 @@ class BrandPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-           
+            SearchField(searchController: searchbrandController,onPressed: (value) {
+                        BlocProvider.of<BrandBloc>(context).add(SearchbradEvent(value));} ),
             Expanded(
               child: BlocConsumer<BrandBloc, BrandState>(
                 listener: (context, state) {
@@ -85,12 +87,12 @@ class BrandPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(" الصنف : ${brandModel[index].title} ", style: Theme.of(context)
+                  Text(" ${brandModel[index].title} ", style: Theme.of(context)
                       .textTheme
-                      .titleSmall),
+                      .labelLarge),
                   Text(" نوع الصنف : ${brandModel[index].phTitle} ", style: Theme.of(context)
                       .textTheme
-                      .titleSmall),
+                      .titleSmall,textAlign: TextAlign.center,),
 
                 ],
               ),

@@ -10,25 +10,33 @@ part 'brand_state.dart';
 
 class BrandBloc extends Bloc<BrandEvent, BrandState> {
   AllBrandsSqlUsecase allBrandsSqlUsecase;
-  BrandBloc(this.allBrandsSqlUsecase
-      ) : super(BrandInitial()) {
-    on<BrandEvent>((event, emit)async {
-      if(event is AllBrandEvent){
-      //  emit(AllBrandLoadingState());
-        (
-            await allBrandsSqlUsecase.execute()).fold(
-      (failure)  {
-      emit(AllBrandErrorState(failure: failure));
-      },
-      (data)  async{
-      emit(AllBrandState(data));
+  List<BrandModel> brand = [];
+  BrandBloc(this.allBrandsSqlUsecase) : super(BrandInitial()) {
+    on<BrandEvent>((event, emit) async {
+      if (event is AllBrandEvent) {
+        //  emit(AllBrandLoadingState());
+        (await allBrandsSqlUsecase.execute()).fold((failure) {
+          emit(AllBrandErrorState(failure: failure));
+        }, (data) async {
+          brand = data;
+          emit(AllBrandState(data));
+        });
       }
+      if (event is SearchbradEvent) {
+        List<BrandModel> brandlist;
+        brandlist = brand.where((value) {
+          if (value.title.contains(event.contant)) {
+            return true;
+          }
+          if (value.phTitle.contains(event.contant)) {
+            return true;
+          }
 
-      );
-    }
+          return false;
+        }).toList();
 
-    }
-
-    );
+        emit(AllBrandState(brandlist));
+      }
+    });
   }
 }

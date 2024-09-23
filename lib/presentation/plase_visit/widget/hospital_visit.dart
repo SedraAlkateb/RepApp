@@ -54,7 +54,7 @@ class HospitalVisit extends StatelessWidget {
                       Column(
                         children: [
                           Text(  context.watch<VisitPlaceBloc>().hospitals[index].title,style: Theme.of(context).textTheme.labelLarge,),
-                          TextRach(s1: "العنوان : ", s2: context.watch<VisitPlaceBloc>().hospitals[index].address)
+                           TextRach(s1: "العنوان : ", s2:  context.watch<VisitPlaceBloc>().pharmacies[index].address)
                         ],
                       ),
                     );

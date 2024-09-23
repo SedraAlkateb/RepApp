@@ -8,6 +8,7 @@ part 'doctors_state.dart';
 
 class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
   AllDoctorsSqlUsecase allDoctorsqlUsecase;
+      List<DoctorModel> doctor=[];
   DoctorsBloc(
       this.allDoctorsqlUsecase
       ) : super(DoctorsInitial()) {
@@ -21,12 +22,34 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
               print(failure.massage);
             },
                 (data)  async{
+                  doctor=data;
               emit(AllDoctorState(data));
-              print("object");
+          
             }
 
         );
+      }     if (event is SearchDocEvent) {
+        List<DoctorModel> doctorlist ;
+
+        doctorlist=doctor.where((value) {
+          if (value.title.contains(event.contant)) {
+          return true;
+          }  if (value.address.contains(event.contant)) {
+          return true;
+          } 
+            if (value.placeTitle.contains(event.contant)) {
+          return true;
+          }
+              if (value.spTitle.contains(event.contant)) {
+          return true;
+          }
+           
+          return false;
+        }).toList();
+          
+        emit(AllDoctorState(doctorlist));
       }
+      
     });
   }
 }

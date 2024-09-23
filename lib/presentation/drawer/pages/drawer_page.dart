@@ -36,7 +36,7 @@ class DrawerPage extends StatelessWidget {
 
           ListTile(
    leading:Icon(Icons.location_city_outlined,color: ColorManager.secondaryColor4),
-            title: const Text('الأماكن '),
+            title: const Text('المناطق '),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
