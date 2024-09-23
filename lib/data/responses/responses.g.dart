@@ -391,7 +391,6 @@ HospitalResponse _$HospitalResponseFromJson(Map<String, dynamic> json) =>
       json['title'] as String?,
       json['placeId'] as String?,
       json['address'] as String?,
-      json['spId'] as String?,
       json['placeTitle'] as String?,
     );
 
@@ -401,7 +400,6 @@ Map<String, dynamic> _$HospitalResponseToJson(HospitalResponse instance) =>
       'title': instance.title,
       'placeId': instance.placeId,
       'address': instance.address,
-      'spId': instance.spId,
       'placeTitle': instance.placeTitle,
     };
 

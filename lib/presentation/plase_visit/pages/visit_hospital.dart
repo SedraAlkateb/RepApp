@@ -9,15 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
 
-class VisitDoctor extends StatefulWidget {
-  VisitDoctor({super.key, required this.doctorModel});
-  final DoctorModel doctorModel;
+class VisitHospital extends StatefulWidget {
+  VisitHospital({super.key, required this.hospitalModel});
+  final HospitalModel hospitalModel;
 
   @override
-  State<VisitDoctor> createState() => _VisitDoctorState();
+  State<VisitHospital> createState() => _VisitDoctorState();
 }
 
-class _VisitDoctorState extends State<VisitDoctor> {
+class _VisitDoctorState extends State<VisitHospital> {
+
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
@@ -26,7 +27,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +59,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               color: ColorManager.white))),
                   Center(
                     child: Text(
-                      widget.doctorModel.title,
+                      widget.hospitalModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -68,7 +68,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                   ),
                   Center(
                     child: Text(
-                      "العنوان: ${widget.doctorModel?.address ?? " "}",
+                      "العنوان: ${widget.hospitalModel?.address ?? " "}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -123,6 +123,35 @@ class _VisitDoctorState extends State<VisitDoctor> {
                     inputFormatters: [],
                   ),
                   Text(
+                    "اختر الاختصاص :",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  SizedBox(
+                    height: 0.9,
+                  ),
+                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                    listener: (context, state) {
+                      if (state is BrandFlagErrorState) {
+                        print("object");
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      }
+                    },
+                    child: CustomDropDownSearch(
+                      hintText: "الاختصاصات",
+                      items: context.watch<VisitPlaceBloc>().bandFlag,
+                      onChanged: (value) {
+                        BrandModel brand = value;
+                        BlocProvider.of<VisitPlaceBloc>(context).add(
+                            SelectBrandEvent(brand, widget.hospitalModel.id));
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                      errorText: 'لايوجد نتيجة',
+                    ),
+                  ),
+                  Text(
                     "اختر العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
@@ -143,7 +172,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       onChanged: (value) {
                         BrandModel brand = value;
                         BlocProvider.of<VisitPlaceBloc>(context).add(
-                            SelectBrandEvent(brand, widget.doctorModel.id));
+                            SelectBrandEvent(brand, widget.hospitalModel.id));
                       },
                       validator: (value) {
                         return null;
@@ -365,19 +394,19 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                 .selectBrand
                                 .isNotEmpty) {
                           DateTime now = DateTime.now();
-                          VisitDoctorModel visitDoctorModel = VisitDoctorModel(
+                          VisitHospitalModel visitHospitalModel = VisitHospitalModel(
                               0,
                               now.toString(),
                               _noteeController.text,
                               _issueController.text,
                               _noteeController.text,
-                              widget.doctorModel.id);
+                              widget.hospitalModel.id);
                           if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
                             BlocProvider.of<VisitPlaceBloc>(context)
-                                .add(InsertBrandVisitDoctorEvent(visitDoctorModel));
+                                .add(InsertBrandVisitHospitalEvent(visitHospitalModel));
                           } else {
                             BlocProvider.of<VisitPlaceBloc>(context)
-                                .add(InsertVisitDoctorEvent(visitDoctorModel));
+                                .add(InsertVisitHospitalEvent(visitHospitalModel));
                           }
                         }
 

@@ -111,9 +111,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     }, (data) async {
       spec = data;
     });
-    (await allHospialSpUsecase.execute(
-      //UserInfo.repId
-        UserInfo.repId)).fold((failure) {
+    (await allHospialSpUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
 
       return false;

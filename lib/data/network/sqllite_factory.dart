@@ -161,22 +161,20 @@ class DatabaseHelper {
     await db.execute('''
   CREATE TABLE visit_brand_doctor(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    doctorId INTEGER NOT NULL,
+    visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     amount TEXT NOT NULL,
-    FOREIGN KEY (doctorId) REFERENCES visit_doctor(id),
+    FOREIGN KEY (visitId) REFERENCES visit_doctor(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
   )
 ''');
-
-
     await db.execute('''
      CREATE TABLE visit_brand_hospital(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    hospitalId INTEGER NOT NULL,
+    visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     amount TEXT NOT NULL,
-    FOREIGN KEY (hospitalId) REFERENCES visit_hospital(id),
+    FOREIGN KEY (visitId) REFERENCES visit_hospital(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
     )
  ''');
