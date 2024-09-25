@@ -26,7 +26,6 @@ class _VisitHospitalState extends State<VisitHospital> {
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
-
     BlocProvider.of<VisitPlaceBloc>(context).add(SpecializationHospitalEvent(widget.hospitalModel.id)) ;
     super.initState();
   }
@@ -60,20 +59,18 @@ class _VisitHospitalState extends State<VisitHospital> {
                           padding: EdgeInsets.only(right: 15),
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
-                  Center(
-                    child: Text(
-                      widget.hospitalModel.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    widget.hospitalModel.title,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Center(
-                    child: Text(
-                      "العنوان: ${widget.hospitalModel?.address ?? " "}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    "العنوان: ${widget.hospitalModel?.address ?? " "}",
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
@@ -392,21 +389,19 @@ class _VisitHospitalState extends State<VisitHospital> {
                           VisitHospitalModel visitHospitalModel = VisitHospitalModel(
                               0,
                               now.toString(),
-                              _noteeController.text,
                               _issueController.text,
+                              _noteController.text,
                               _noteeController.text,
-                         context.read<VisitPlaceBloc>().spec);
+                         0);
                           if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
                             BlocProvider.of<VisitPlaceBloc>(context)
-                                .add(InsertBrandVisitHospitalEvent(visitHospitalModel));
+                                .add(InsertBrandVisitHospitalEvent(visitHospitalModel,widget.hospitalModel.id));
                           } else {
                             BlocProvider.of<VisitPlaceBloc>(context)
-                                .add(InsertVisitHospitalEvent(visitHospitalModel));
+                                .add(InsertVisitHospitalEvent(visitHospitalModel,widget.hospitalModel.id));
                           }
                         }
-
                       },
-
                       child: Text("تمت الزيارة")),
 )
                 ],

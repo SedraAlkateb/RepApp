@@ -75,15 +75,17 @@ class SpecializationHospitalEvent extends VisitPlaceEvent{
 }
 class InsertBrandVisitHospitalEvent extends VisitPlaceEvent{
  final VisitHospitalModel visitHospitalModel;
-  InsertBrandVisitHospitalEvent(this.visitHospitalModel);
+ final int hospitalId;
+  InsertBrandVisitHospitalEvent(this.visitHospitalModel,this.hospitalId);
   @override
-  List<Object?> get props => [visitHospitalModel];
+  List<Object?> get props => [visitHospitalModel,hospitalId];
 }
 class InsertVisitHospitalEvent extends VisitPlaceEvent{
   final  VisitHospitalModel visitHospitalModel;
-  InsertVisitHospitalEvent(this.visitHospitalModel);
+  final int hospitalId;
+  InsertVisitHospitalEvent(this.visitHospitalModel,this.hospitalId);
   @override
-  List<Object?> get props => [visitHospitalModel];
+  List<Object?> get props => [visitHospitalModel,hospitalId];
 }
 class EditAmountBrandEvent extends VisitPlaceEvent{
   final  int index;

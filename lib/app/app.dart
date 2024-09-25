@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> {
         },
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: UserInfo.isLogging == 0 ? Routes.login : Routes.places,
+        initialRoute: UserInfo.isLogging == 0 ? Routes.login  : UserInfo.isLogging == 1 ? Routes.syncData: Routes.places,
         theme: getApplicationTheme(),
       ),
     );

@@ -18,10 +18,17 @@ class LoginEvent extends AuthEvent{
 }
 class LoginInsertEvent extends AuthEvent{
 
-  final LoginModel loginModel;
-  LoginInsertEvent(this.loginModel);
+
+  LoginInsertEvent();
   @override
-  List<Object?> get props => [loginModel];
+  List<Object?> get props => [];
+
+
+}
+class DeleteDataEvent extends AuthEvent{
+
+  @override
+  List<Object?> get props => [];
 
 
 }

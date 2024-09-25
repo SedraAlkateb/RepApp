@@ -98,7 +98,11 @@ class _MyLoginState extends State<MyLogin> {
                                     }
                                     if (state is LoginState) {
                                       BlocProvider.of<AuthBloc>(context).add(
-                                          LoginInsertEvent(state.loginModel));
+                                          DeleteDataEvent());
+                                    }
+                                    if (state is DeleteState) {
+                                      BlocProvider.of<AuthBloc>(context).add(
+                                          LoginInsertEvent());
                                     }
                                     if (state is InsertLoginState) {
                                       success(context);

@@ -163,6 +163,12 @@ class VisitDoctorAndDoctor{
   VisitDoctorModel visitDoctorModel;
   VisitDoctorAndDoctor(this.doctorModel,this.visitDoctorModel);
 }
+class VisitHospitalAndHospital{
+  HospitalModel hospitalModel;
+  VisitHospitalModel visitHospitalModel;
+  SpecModel specModel;
+  VisitHospitalAndHospital(this.hospitalModel,this.visitHospitalModel,this.specModel);
+}
 class VisitDoctorModel {
   int id;
   String data;
@@ -237,7 +243,7 @@ class VisitHospitalModel {
       map['visit_hospital_kaswn'],
       map['visit_hospital_science'],
       map['visit_hospital_additaion'],
-      map['visit_hospital_hospitalId'],
+      map['visit_hospital_hospitalSpId'],
     );
   }
 }
@@ -275,6 +281,12 @@ class SpecModel {
     return SpecModel(
       map['id'],
       map['title'],
+    );
+  }
+  factory SpecModel.fromMap1(Map<String, dynamic> map) {
+    return SpecModel(
+      map['specialization_id'],
+      map['specialization_title'],
     );
   }
 }
@@ -441,6 +453,16 @@ class HospitalSpModel {
       map["visit"],
     );
   }
+  factory HospitalSpModel.fromMap1(Map<String, dynamic> map) {
+    return HospitalSpModel(
+      map['hospitalSp_id'],
+      map['hospitalId'],
+      map['spId'],
+      map['totalDocs'],
+      map["rate"],
+      map["visit"],
+    );
+  }
 }
 class HospitalModel {
   int id;
@@ -474,6 +496,15 @@ class HospitalModel {
       map['placeId'],
       map['address'],
       map["placeTitle"],
+    );
+  }
+  factory HospitalModel.fromMap1(Map<String, dynamic> map) {
+    return HospitalModel(
+      map['hospital_id'],
+      map['hospital_title'],
+      map['hospital_placeId'],
+      map['hospital_address'],
+      map["hospital_placeTitle"],
     );
   }
 }

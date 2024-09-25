@@ -40,14 +40,24 @@ abstract class RepositorySql {
   Future<Either<Failure,List<VisitPharmacyAndPharmacy>>> getVisitPharmacy();
   Future<Either<Failure,Null>>insertVisitDoctor(VisitDoctorModel visitDoctorModel) ;
   Future<Either<Failure,List<VisitDoctorAndDoctor>>> getVisitDoctor();
+  Future<Either<Failure,List<VisitHospitalAndHospital>>> getVisitHospital();
+
   Future<Either<Failure,Null>>insertHospitalSp(List<HospitalSpModel> hospitalSps);
   Future<Either<Failure,Null>>insertVisitBrandPharmacy(List<VisitBrandPharmacyModel> visitBrandPharmacyModels, VisitPharmacyModel visitPharmacyModel);
   Future<Either<Failure,Null>>insertVisitBrandDoctor(List<VisitBrandPharmacyModel> visitBrandDoctorModels, VisitDoctorModel visitDoctorModel);
   Future<Either<Failure,List<PharmacyBrandModel>>> getBrandsPharmacyByVisitId(int visitId);
   Future<Either<Failure,List<PharmacyBrandModel>>> getBrandsDoctorByVisitId(int visitId);
+  Future<Either<Failure,List<PharmacyBrandModel>>> getBrandsHospitalByVisitId(int visitId);
+
   Future<Either<Failure,List<SpecModel>>> specializationByHospitalId(int hospitalId);
-  Future<Either<Failure,Null>>insertVisitBrandHospital (VisitHospitalModel visitHospitalModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels);
-  Future<Either<Failure,Null>>insertVisitHospital(VisitHospitalModel visitHospitalModel);
+  Future<Either<Failure,Null>>insertVisitBrandHospital (VisitHospitalModel visitHospitalModel,
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels
+      ,int hos, int spec
+      );
+  Future<Either<Failure,Null>>insertVisitHospital(VisitHospitalModel visitHospitalModel,int hos,
+      int spec);
+  Future<Either<Failure,Null>>editIsLogin(int repId, int isLogin);
+
 
 
 }
