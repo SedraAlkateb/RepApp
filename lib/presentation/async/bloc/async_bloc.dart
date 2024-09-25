@@ -67,6 +67,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     places = [];
     pharmacies = [];
     spec = [];
+    hospitalSps=[];
+    hospitals=[];
     (await allBrandsUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;

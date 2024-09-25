@@ -370,4 +370,45 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, List<SpecModel>>> specializationByHospitalId(int hospitalId) async {
+    try {
+      final response = await _databaseHelper.specializationByHospitalId(hospitalId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> insertVisitBrandHospital(VisitHospitalModel visitHospitalModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels)
+  async {
+    try {
+      await _databaseHelper.
+      insertVisitBrandHospital(
+          visitHospitalModel,
+          visitBrandPharmacyModels
+      );
+      return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> insertVisitHospital(VisitHospitalModel visitHospitalModel)async {
+    try {
+      final response = await _databaseHelper.insertVisitHospital(visitHospitalModel);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

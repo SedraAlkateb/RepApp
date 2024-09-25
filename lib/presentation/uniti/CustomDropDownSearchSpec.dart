@@ -2,8 +2,8 @@ import 'package:custom_dropdown_search/custom_dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 
-class CustomDropDownSearch extends StatelessWidget {
-  const CustomDropDownSearch({Key? key,required this.validator,required this.onChanged,required this.items,this.icon
+class Customdropdownsearchspec extends StatelessWidget {
+  const Customdropdownsearchspec({Key? key,required this.validator,required this.onChanged,required this.items,this.icon
     ,required this.hintText
   ,
     required this.errorText
@@ -35,13 +35,16 @@ class CustomDropDownSearch extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-          title: Text('${item.title}  ${item.phTitle}'),
+          title: Text('${item.title}'),
                   onTap: () {
                     onChanged(item);
                   },
                 ),
                 Divider(color:Colors.grey[200],height: 0.2,), // إضافة الفاصل هنا
-              ],);},
+              ],
+            );
+          },
+
           errorBuilder: (context, searchEntry, exception) =>
               Container(
              //   height: MediaQuery.of(context).size.height /17,

@@ -468,7 +468,7 @@ AllHospitalBaseResponse extends BaseResponse{
 
 @JsonSerializable()
 class AllHospitalSpResponse{
-  @JsonKey(name: "HospitalSp")
+  @JsonKey(name: "Hospital")
   List<HospitalSpResponse>? HospitalSp;
   AllHospitalSpResponse(this.HospitalSp);
   // from json
@@ -481,7 +481,7 @@ class AllHospitalSpResponse{
 @JsonSerializable()
 class
 AllHospitalSpBaseResponse extends BaseResponse{
-  @JsonKey(name: "Hospital")
+  @JsonKey(name: "HospitalSp")
   AllHospitalSpResponse? data;
   AllHospitalSpBaseResponse(this.data);
   // from json
