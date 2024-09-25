@@ -25,6 +25,8 @@ class _VisitHospitalState extends State<VisitHospital> {
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
+
     BlocProvider.of<VisitPlaceBloc>(context).add(SpecializationHospitalEvent(widget.hospitalModel.id)) ;
     super.initState();
   }
