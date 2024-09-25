@@ -130,14 +130,14 @@ class DatabaseHelper {
  ''');
     await db.execute(
         '''
-    CREATE TABLE visit_hospital (
+    CREATE TABLE visit_hospital(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     kaswn TEXT NOT NULL,
     science TEXT NOT NULL,
     additaion TEXT NOT NULL, 
-    hospitalId INTEGER NOT NULL,
-    FOREIGN KEY (hospitalId) REFERENCES hospitalSp(id)
+    hospitalSpId INTEGER NOT NULL,
+    FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
 );'''
     );
     await db.execute('''

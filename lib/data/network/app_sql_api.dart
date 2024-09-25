@@ -123,9 +123,24 @@ class AppSqlApi {
       return SpecModel.fromMap(maps[i]);
     });
   }
+  Future<void> editIsLogin(int repId, int isLogin) async {
+    final mydb = await databaseHelper.database;
+    await mydb.update(
+      'rep',
+      {'isLogin': isLogin},
+      where: 'repId = ?',
+      whereArgs: [repId],
+    );
+  }
+
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
-    final tables = ['brand',"doctor","hospital", 'pharmacy', 'place', 'specialization'];
+    final tables =['brand',"doctor","hospital", 'pharmacy',
+      'place', 'specialization','hospitalSp'
+      ,'visit_doctor','visit_hospital'
+      ,'visit_pharmacy','visit_brand_pharmacy'
+      ,'visit_brand_doctor','visit_brand_hospital'
+    ];
     Batch batch = db.batch();
     //    batch.execute('DROP TABLE IF EXISTS rep');
     for (var table in tables) {
@@ -345,12 +360,28 @@ class AppSqlApi {
       }
     });
   }
-  Future<void> insertVisitBrandHospital
-      (VisitHospitalModel visitHospitalModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels)
-  async {
+  Future<void> insertVisitBrandHospital(
+      VisitHospitalModel visitHospitalModel,
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
+      int hos,
+      int spec
+      ) async {
     final mydb = await databaseHelper.database;
+
     await mydb.transaction((txn) async {
       try {
+        final List<Map<String, dynamic>> result = await txn.rawQuery(
+            '''
+        SELECT id FROM hospitalSp 
+        WHERE hospitalId = ? AND spId = ?
+        ''',
+            [hos, spec]
+        );
+        if (result.isEmpty) {
+          throw Exception('No hospitalSp found for the given hospitalId and spId.');
+        }
+        int hospitalSpId = result.first['id'];
+        visitHospitalModel.hospitalSpId = hospitalSpId;
         int visitId = await txn.insert(
           'visit_hospital',
           visitHospitalModel.toJson(),
@@ -370,13 +401,39 @@ class AppSqlApi {
       }
     });
   }
-  insertVisitHospital(VisitHospitalModel visitHospitalModel) async {
+
+  insertVisitHospital(VisitHospitalModel visitHospitalModel,
+      int hos,
+      int spec
+      ) async {
+
+
     Database? mydb =await databaseHelper.database;
-    Batch batch =mydb.batch();
-    batch.insert('visit_hospital',visitHospitalModel.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    await batch.commit(noResult: true);
+    await mydb.transaction((txn) async {
+      try {
+        final List<Map<String, dynamic>> result = await txn.rawQuery(
+            '''
+        SELECT id FROM hospitalSp 
+        WHERE hospitalId = ? AND spId = ?
+        ''',
+            [hos, spec]
+        );
+        if (result.isEmpty) {
+          throw Exception('No hospitalSp found for the given hospitalId and spId.');
+        }
+        int hospitalSpId = result.first['id'];
+        visitHospitalModel.hospitalSpId = hospitalSpId;
+        int visitId = await txn.insert(
+          'visit_hospital',
+          visitHospitalModel.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      } catch (e) {
+        print('Error inserting visit and brands: $e');
+        rethrow;
+      }
+    });
+
   }
   Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId) async {
     Database? mydb =await databaseHelper.database;

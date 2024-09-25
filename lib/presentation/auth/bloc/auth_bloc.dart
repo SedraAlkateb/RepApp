@@ -3,6 +3,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -15,10 +16,12 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   LoginUsecase loginUsecase;
   LoginSqlUsecase loginSqlUsecase;
-
+  DeleteSqlUsecase deleteSqlUsecase;
+  LoginModel? loginModel;
   AuthBloc(
       this.loginSqlUsecase,
       this.loginUsecase,
+      this.deleteSqlUsecase
       )
       : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
@@ -28,22 +31,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         fold((failure) {
           emit(LoginErrorState(failure: failure));
         }, (data) async {
-          LoginModel loginModel=data;
-          UserInfo.repId= loginModel.repId;
-          UserInfo.planId= loginModel.planId;
-          UserInfo.percentage= loginModel.percentage;
-          UserInfo.token= loginModel.token;
-          UserInfo.name= loginModel.name;
+           loginModel=data;
+          UserInfo.repId= loginModel!.repId;
+          UserInfo.planId= loginModel!.planId;
+          UserInfo.percentage= loginModel!.percentage;
+          UserInfo.token= loginModel!.token;
+          UserInfo.name= loginModel!.name;
           UserInfo.isLogging= 1;
-          emit(LoginState(loginModel));
+          emit(LoginState());
         });
       }
-      if(event is LoginInsertEvent){
-        (await loginSqlUsecase.execute(event.loginModel)).fold((failure) {
+      if(event is LoginInsertEvent) {
+        (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
           emit(InsertLoginErrorState(failure: failure));
         }, (data) async {
           print("object");
-          emit(InsertLoginState());
+        });
+        emit(InsertLoginState());
+      }
+      if(event is DeleteDataEvent){
+        (await deleteSqlUsecase.execute()).fold((failure) {
+          emit(DeleteStateError(failure: failure));
+          return false;
+        }, (data) async {
+      emit(DeleteState());
         });
       }
     });

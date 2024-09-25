@@ -42,10 +42,10 @@ final class InsertAllBrandLoadingState extends AuthState {
 
 
 final class LoginState extends AuthState {
-  final LoginModel loginModel;
-  LoginState(this.loginModel);
+ // final LoginModel loginModel;
+//  LoginState(this.loginModel);
   @override
-  List<Object?> get props =>[loginModel];
+  List<Object?> get props =>[];
 }
 final class LoginErrorState extends AuthState {
   final Failure failure;
@@ -72,4 +72,17 @@ final class InsertLoginErrorState extends AuthState {
   @override
 
   List<Object?> get props =>[failure];
+}
+final class DeleteStateError extends AuthState {
+  final Failure failure;
+  DeleteStateError({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class DeleteState extends AuthState {
+
+  @override
+
+  List<Object?> get props =>[];
 }

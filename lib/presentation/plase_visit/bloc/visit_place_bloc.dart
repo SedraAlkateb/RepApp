@@ -8,6 +8,7 @@ import 'package:domina_app/domain/usecase/insert_visit_brand_doctor_sql_usecase.
 import 'package:domina_app/domain/usecase/insert_visit_brand_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacies_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
@@ -26,6 +27,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   InsertVisitBrandPharmacySqlUsecase insertVisitBrandPharmacySqlUsecase;
   InsertVisitBrandDoctorSqlUsecase insertVisitBrandDoctorSqlUsecase;
   InsertVisitBrandHospitalSqlUsecase insertVisitBrandHospitalSqlUsecase;
+  InsertVisitHospitalSqlUsecase insertVisitHospitalSqlUsecase;
 
   SpHospitalSqlUsecase spHospitalSqlUsecase;
   List<BrandModel> selectBrand = [];
@@ -47,7 +49,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       this.insertVisitBrandPharmacySqlUsecase,
       this.insertVisitBrandDoctorSqlUsecase,
       this.spHospitalSqlUsecase,
-      this.insertVisitBrandHospitalSqlUsecase
+      this.insertVisitBrandHospitalSqlUsecase,
+      this.insertVisitHospitalSqlUsecase
       )
       : super(VisitPlaceInitial()) {
     on<VisitPlaceEvent>((event, emit) async {
@@ -164,7 +167,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
 
       if (event is InsertBrandVisitHospitalEvent) {
         (await insertVisitBrandHospitalSqlUsecase.execute(
-            visitBrandPharmacys, event.visitHospitalModel))
+            visitBrandPharmacys, event.visitHospitalModel,event.hospitalId,spec))
             .fold((failure) {
           selectBrand = [];
           emit(AllVisitBrandHospitalErrorState(failure: failure));
@@ -173,8 +176,18 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(AllVisitBrandHospitalState());
         });
       }
-      
-      
+
+      if (event is InsertVisitHospitalEvent) {
+        (await insertVisitHospitalSqlUsecase.execute(
+             event.visitHospitalModel,event.hospitalId,spec))
+            .fold((failure) {
+          selectBrand = [];
+          emit(AllVisitBrandHospitalErrorState(failure: failure));
+        }, (data) async {
+          selectBrand = [];
+          emit(AllVisitBrandHospitalState());
+        });
+      }
       
       if (event is EditAmountBrandEvent) {
         visitBrandPharmacys[event.index].amount += event.brand;

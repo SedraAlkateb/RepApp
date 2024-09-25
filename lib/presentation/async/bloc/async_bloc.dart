@@ -7,6 +7,7 @@ import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_usecase.dart';
@@ -21,11 +22,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllPharmacyUsecase allPharmacyUsecase;
   AllPlaceUsecase allPlaceUsecase;
   AllSpeUsecase allSpeUsecase;
-  DeleteSqlUsecase deleteSqlUsecase;
   AsyncDataSqlUsecase asyncDataSqlUsecase;
   AllHospitalUsecase allhospitalUsecase;
   AllDoctorUsecase allDoctorUsecase;
   AllHospialSpUsecase allHospialSpUsecase;
+  EditIsLoginSqlUsecase editIsLoginSqlUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
@@ -39,24 +40,29 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.allPharmacyUsecase,
       this.allPlaceUsecase,
       this.allSpeUsecase,
-      this.deleteSqlUsecase,
       this.asyncDataSqlUsecase,
       this.allDoctorUsecase,
       this.allhospitalUsecase,
-      this.allHospialSpUsecase)
+      this.allHospialSpUsecase,
+      this.editIsLoginSqlUsecase
+      )
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
-
       if (event is AsyncDataEvent) {
         emit(SyncDataLoadingState());
-        (await deleteSqlUsecase.execute()).fold((failure) {
+        bool b = await getData();
+        if (b) {
+          await setData();
+
+        }
+
+      }
+      if(event is EditEvent){
+        (await editIsLoginSqlUsecase.execute(UserInfo.repId,2)).fold((failure) {
           emit(SyncDataErrorState(failure: failure));
           return false;
         }, (data) async {
-          bool b = await getData();
-          if (b) {
-            await setData();
-          }
+
         });
       }
     });
@@ -143,12 +149,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       spec = [];
       hospitalSps=[];
       emit(SyncDataState());
-
-      return true;
     });
 
     return false;
   }
+
 
 
 }

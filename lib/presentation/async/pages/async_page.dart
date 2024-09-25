@@ -39,6 +39,7 @@ class AsyncPage extends StatelessWidget {
                    loading(context);
                  }
                  if(state is SyncDataState){
+                   BlocProvider.of<AsyncBloc>(context).add(EditEvent());
                    success(context);
                    Navigator.pushNamed(context, Routes.places);
                  }
