@@ -492,7 +492,7 @@ Map<String, dynamic> _$AllHospitalBaseResponseToJson(
 AllHospitalSpResponse _$AllHospitalSpResponseFromJson(
         Map<String, dynamic> json) =>
     AllHospitalSpResponse(
-      (json['HospitalSp'] as List<dynamic>?)
+      (json['Hospital'] as List<dynamic>?)
           ?.map((e) => HospitalSpResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -500,16 +500,16 @@ AllHospitalSpResponse _$AllHospitalSpResponseFromJson(
 Map<String, dynamic> _$AllHospitalSpResponseToJson(
         AllHospitalSpResponse instance) =>
     <String, dynamic>{
-      'HospitalSp': instance.HospitalSp,
+      'Hospital': instance.HospitalSp,
     };
 
 AllHospitalSpBaseResponse _$AllHospitalSpBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllHospitalSpBaseResponse(
-      json['Hospital'] == null
+      json['HospitalSp'] == null
           ? null
           : AllHospitalSpResponse.fromJson(
-              json['Hospital'] as Map<String, dynamic>),
+              json['HospitalSp'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -519,7 +519,7 @@ Map<String, dynamic> _$AllHospitalSpBaseResponseToJson(
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,
-      'Hospital': instance.data,
+      'HospitalSp': instance.data,
     };
 
 HospitalSpResponse _$HospitalSpResponseFromJson(Map<String, dynamic> json) =>

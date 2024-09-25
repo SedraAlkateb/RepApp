@@ -208,16 +208,16 @@ class VisitHospitalModel {
   String kaswn;
   String science;
   String additaion;
-  int hospitalId;
+  int hospitalSpId;
   VisitHospitalModel(this.id, this.data, this.kaswn, this.science, this.additaion,
-      this.hospitalId);
+      this.hospitalSpId);
   Map<String, dynamic> toJson() {
     return {
       'data': data,
       'kaswn': kaswn,
       'science': science,
       'additaion': additaion,
-      'hospitalId': hospitalId
+      'hospitalSpId': hospitalSpId
     };
   }
   factory VisitHospitalModel.fromMap(Map<String, dynamic> map) {
@@ -227,17 +227,17 @@ class VisitHospitalModel {
         map['kaswn'],
         map['science'],
         map['additaion'],
-        map['hospitalId']
+        map['hospitalSpId']
     );
   }
   factory VisitHospitalModel.fromMap1(Map<String, dynamic> map) {
     return VisitHospitalModel(
-      map['visit_doctor_id'],
-      map['visit_doctor_data'],
-      map['visit_doctor_kaswn'],
-      map['visit_doctor_science'],
-      map['visit_doctor_additaion'],
-      map['visit_doctor_doctorId'],
+      map['visit_hospital_id'],
+      map['visit_hospital_data'],
+      map['visit_hospital_kaswn'],
+      map['visit_hospital_science'],
+      map['visit_hospital_additaion'],
+      map['visit_hospital_hospitalId'],
     );
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/data_source/remote_data_source.dart';
 import 'package:domina_app/data/mapper/mapper.dart';
@@ -13,9 +12,9 @@ import 'package:domina_app/domain/repostitory/repository.dart';
 class RepositoryImp implements Repository {
   final RemoteDataSource _remoteDataSource;
 
- final NetworkInfo _networkInfo;
+  final NetworkInfo _networkInfo;
 
-  RepositoryImp(this._remoteDataSource,this._networkInfo);
+  RepositoryImp(this._remoteDataSource, this._networkInfo);
 
   @override
   Future<Either<Failure, LoginModel>> login(LoginRequest loginRequest) async {
@@ -28,14 +27,12 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<PlaceModel>>> allPlace(int id)  async {
+  Future<Either<Failure, List<PlaceModel>>> allPlace(int id) async {
     try {
       final response = await _remoteDataSource.allPlaces(id);
       if (response.status == null) {
@@ -45,12 +42,9 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
-
 
   @override
   Future<Either<Failure, List<SpecModel>>> allSpec(int id) async {
@@ -65,33 +59,28 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<CityModel>>> allMedicalRepresentative(int id) async {
+  Future<Either<Failure, List<CityModel>>> allMedicalRepresentative(
+      int id) async {
     try {
       final response = await _remoteDataSource.allMedicalRepresentative(id);
       if (response.status == null) {
-
         return Right(response.toDomain());
       } else {
-
         return Left(Failure(ApiInternalStatus.FAILURE,
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<BrandModel>>> allBrand(int id)  async {
+  Future<Either<Failure, List<BrandModel>>> allBrand(int id) async {
     try {
       final response = await _remoteDataSource.allBrand(id);
       if (response.status == null) {
@@ -101,12 +90,9 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
-
   @override
   Future<Either<Failure, List<CityModel>>> allCity() async {
     try {
@@ -118,13 +104,11 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
   @override
-  Future<Either<Failure, List<MedicalVisits>>> allVisitDoctor(int id)  async {
+  Future<Either<Failure, List<MedicalVisits>>> allVisitDoctor(int id) async {
     try {
       final response = await _remoteDataSource.allVisitDoctor(id);
       if (response.status == null) {
@@ -134,14 +118,12 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
-
   @override
-  Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(int repDet)  async {
+  Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(
+      int repDet) async {
     try {
       final response = await _remoteDataSource.getAllPharmacy(repDet);
       if (response.status == null) {
@@ -151,13 +133,11 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 
-@override
+  @override
   Future<Either<Failure, List<DoctorModel>>> getAllDoctor(int repDet) async {
     try {
       final response = await _remoteDataSource.getAllDoctor(repDet);
@@ -168,17 +148,14 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
-  
+
   @override
-  Future<Either<Failure, List<HospitalModel>>> getAllHospital(int repDet)  async {
+  Future<Either<Failure, List<HospitalModel>>> getAllHospital(int repDet) async {
     try {
       final response = await _remoteDataSource.getAllHospital(repDet);
-     
       if (response.status == null) {
         print("hddddddddhh");
         return Right(response.toDomain());
@@ -187,9 +164,7 @@ class RepositoryImp implements Repository {
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 
@@ -199,33 +174,29 @@ class RepositoryImp implements Repository {
       final response = await _remoteDataSource.getAllHospitalSp(repDet);
       if (response.status == null) {
         return Right(response.toDomain());
-      } else {
+      }
+      else {
         return Left(Failure(ApiInternalStatus.FAILURE,
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 
   @override
-  Future<Either<Failure, Message1Response>> visitPharmacy(VisitPharmacyRequestBody list1) async {
+  Future<Either<Failure, Message1Response>> visitPharmacy(
+      VisitPharmacyRequestBody list1) async {
     try {
       final response = await _remoteDataSource.visitPharmacy(list1);
-
       if (response.status == null) {
-
         return Right(response);
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
             response.message ?? ResponseMassage.DEFAULT));
       }
     } catch (error) {
-      return Left(ErrorHandler
-          .handle(error)
-          .failure);
+      return Left(ErrorHandler.handle(error).failure);
     }
   }
 }

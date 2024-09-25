@@ -2,6 +2,7 @@ import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
+import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -14,17 +15,19 @@ class VisitHospital extends StatefulWidget {
   final HospitalModel hospitalModel;
 
   @override
-  State<VisitHospital> createState() => _VisitDoctorState();
+  State<VisitHospital> createState() => _VisitHospitalState();
 }
 
-class _VisitDoctorState extends State<VisitHospital> {
-
+class _VisitHospitalState extends State<VisitHospital> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
+
+    BlocProvider.of<VisitPlaceBloc>(context).add(SpecializationHospitalEvent(widget.hospitalModel.id)) ;
     super.initState();
   }
   @override
@@ -137,13 +140,13 @@ class _VisitDoctorState extends State<VisitHospital> {
                             context, state.failure.massage, state.failure.code);
                       }
                     },
-                    child: CustomDropDownSearch(
+                    child: Customdropdownsearchspec(
                       hintText: "الاختصاصات",
-                      items: context.watch<VisitPlaceBloc>().bandFlag,
+                      items: context.watch<VisitPlaceBloc>().specialization,
                       onChanged: (value) {
-                        BrandModel brand = value;
+                        SpecModel specModel = value;
                         BlocProvider.of<VisitPlaceBloc>(context).add(
-                            SelectBrandEvent(brand, widget.hospitalModel.id));
+                            SelectSpecEvent( specModel.id));
                       },
                       validator: (value) {
                         return null;
@@ -161,11 +164,9 @@ class _VisitDoctorState extends State<VisitHospital> {
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
                     listener: (context, state) {
                       if (state is BrandFlagErrorState) {
-                        print("object");
-                        error(
-                            context, state.failure.massage, state.failure.code);
+                        error(context, state.failure.massage, state.failure.code);
                       }
-                    },
+                      },
                     child: CustomDropDownSearch(
                       hintText: "العينات",
                       items: context.watch<VisitPlaceBloc>().bandFlag,
@@ -353,16 +354,13 @@ class _VisitDoctorState extends State<VisitHospital> {
                   SizedBox(
                     height: 8,
                   ),
-                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                  BlocListener<VisitPlaceBloc,VisitPlaceState>(
   listener: (context, state) {
-    if (state is InsertVisitDoctorLoadingState) {
-      loading(context);
-    }
-    if (state is InsertVisitDoctorErrorState) {
+    if (state is InsertVisitHospitalErrorState) {
       error(
           context, state.failure.massage, state.failure.code);
     }
-    if (state is InsertVisitDoctorState) {
+    if (state is InsertVisitHospitalState) {
       success(context);
       SnackBarMessage().showSuccessSnackBar(
           message: "succsec",
@@ -370,14 +368,11 @@ class _VisitDoctorState extends State<VisitHospital> {
           btnOkOnPress: "d");
       Navigator.pop(context);
     }
-    if (state is AllVisitBrandDoctorLoadingState) {
-      loading(context);
-    }
-    if (state is AllVisitBrandDoctorErrorState) {
+    if (state is AllVisitBrandHospitalErrorState) {
       error(
           context, state.failure.massage, state.failure.code);
     }
-    if (state is AllVisitBrandDoctorState) {
+    if (state is AllVisitBrandHospitalState) {
       success(context);
       SnackBarMessage().showSuccessSnackBar(
           message: "succsec",
@@ -400,7 +395,7 @@ class _VisitDoctorState extends State<VisitHospital> {
                               _noteeController.text,
                               _issueController.text,
                               _noteeController.text,
-                              widget.hospitalModel.id);
+                         context.read<VisitPlaceBloc>().spec);
                           if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
                             BlocProvider.of<VisitPlaceBloc>(context)
                                 .add(InsertBrandVisitHospitalEvent(visitHospitalModel));
