@@ -424,4 +424,37 @@ class AppSqlApi {
     });
   }
 
+Future<void> updateVisitData({
+  required int visitId,
+  required int visitBrandId,
+  String? newNote,
+  String? newAmount,
+}) async {
+  Database? mydb =await databaseHelper.database;// الحصول على اتصال بقاعدة البيانات
+
+  // تحديث الـ note إذا تم تمرير newNote
+  if (newNote != null) {
+    await mydb.update(
+      'visit_pharmacy',
+      {'note': newNote}, // البيانات التي نرغب بتحديثها
+      where: 'id = ?',   // تحديد الصف بناءً على الـ id
+      whereArgs: [visitId], // القيمة الخاصة بـ visitId لتحديد السطر المراد تعديله
+    );
+  }
+
+  // تحديث الـ amount إذا تم تمرير newAmount
+  if (newAmount != null) {
+    await mydb.update(
+      'visit_brand_pharmacy',
+      {'amount': newAmount}, // البيانات التي نرغب بتحديثها
+      where: 'id = ?',  // تحديد الصف بناءً على الـ id
+      whereArgs: [visitBrandId], // القيمة الخاصة بـ visitBrandId لتحديد السطر المراد تعديله
+    );
+  }
+}
+
+
+
+
+
 }

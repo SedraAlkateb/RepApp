@@ -63,6 +63,7 @@ dependencies:
   retrofit_generator: ^8.1.0
   json_serializable: ^6.4.1
   custom_dropdown_search: ^1.0.0
+
 #  awesome_dialog: ^3.2.1
 
 

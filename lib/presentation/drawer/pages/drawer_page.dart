@@ -11,6 +11,7 @@ class DrawerPage extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
            DrawerHeader(
+            
             decoration: BoxDecoration(
               gradient:  LinearGradient(colors: [
                                   ColorManager.secondaryColor6,
