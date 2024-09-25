@@ -19,7 +19,7 @@ class CustomButton extends StatelessWidget {
       padding:  EdgeInsets.symmetric(horizontal:size.width*0.2),
       child: Material(
         elevation: 5.0,
-        color: color??ColorManager.secondaryColor,
+        color: color??ColorManager.secondaryColor1,
         borderRadius: BorderRadius.circular(15.0),
         child: MaterialButton(
 

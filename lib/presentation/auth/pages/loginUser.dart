@@ -31,9 +31,9 @@ class _MyLoginState extends State<MyLogin> {
             children: [
               Container(
                
-               padding: EdgeInsets.only(right: 117,top:73 ),
+               padding: EdgeInsets.only(right: 150,top:130 ),
                 child: Text(
-                  'مرحبا بك\nفي Domina',
+                  'مرحبا بك\nفي Domina',textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white, fontSize: 33),
                 ),
               ),

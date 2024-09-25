@@ -41,9 +41,7 @@ class Places extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: ColorManager.white,
                             borderRadius: BorderRadius.circular(15)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 20, bottom: 20),
+                        child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -52,16 +50,16 @@ class Places extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  " :اختر احد المناطق لاظهار (الأطباء,الصيادلة,المشافي) في المنطقة المختارة",
+                              "اختر أحد المناطق لاظهار(الأطباء,الصيادلة,المشافي) في المنطقة المختارة" ,
                                   style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 20,
                                       color: ColorManager.secondaryColor1,
-                                      fontWeight: FontWeight.normal,
+                                      fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.none),
                                 ),
                               ),
                               SizedBox(
-                                height: 13,
+                                height: 7,
                               ),
                               CustomButton(
                                   text: "موافق",
