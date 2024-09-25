@@ -13,43 +13,45 @@ class AsyncPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(AppPadding.p40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset(
-              ImageAssets.domina,width: 200,
-            ),
-            Text(
-              textAlign: TextAlign.center,
-              "تأكد من اتصالك بالانترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق ",
-            style: Theme.of(context).textTheme.titleLarge,
-            ),
-            SizedBox(
-              height: AppSize.s50
-            ),
-            BlocListener<AsyncBloc, AsyncState>(
-              listener: (context, state) {
-               if(state is SyncDataErrorState){
-                 error(context, state.failure.massage, state.failure.code);
-               }
-               if(state is SyncDataLoadingState){
-                 loading(context);
-               }
-               if(state is SyncDataState){
-                 success(context);
-                 Navigator.pushNamed(context, Routes.places);
-               }
-              },
-              child: ElevatedButton(onPressed: (){
-                BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
-              },
-                  child: Text(
-                  "تحميل البيانات",
-              )),
-            ),
-          ],
+        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p40, vertical: AppPadding.p120),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                ImageAssets.domina,width: 200,
+              ),
+              Text(
+                textAlign: TextAlign.center,
+                "تأكد من اتصالك بالانترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق ",
+              style: Theme.of(context).textTheme.titleLarge,
+              ),
+              SizedBox(
+                height: AppSize.s50
+              ),
+              BlocListener<AsyncBloc, AsyncState>(
+                listener: (context, state) {
+                 if(state is SyncDataErrorState){
+                   error(context, state.failure.massage, state.failure.code);
+                 }
+                 if(state is SyncDataLoadingState){
+                   loading(context);
+                 }
+                 if(state is SyncDataState){
+                   success(context);
+                   Navigator.pushNamed(context, Routes.places);
+                 }
+                },
+                child: ElevatedButton(onPressed: (){
+                  BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
+                },
+                    child: Text(
+                    "تحميل البيانات",
+                )),
+              ),
+            ],
+          ),
         ),
       ),
     );

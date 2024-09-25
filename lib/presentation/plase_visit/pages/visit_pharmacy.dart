@@ -43,35 +43,32 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
-              child: Form(
-               
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            iconSize: 30,
-                            padding: EdgeInsets.only(right: 15),
-                            icon: Icon(Icons.arrow_back_sharp,
-                                color: ColorManager.white))),
-                    Text(
-                      widget.pharmacyModel.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "عنوان الصيدلية : ${widget.pharmacyModel.address}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          iconSize: 30,
+                          padding: EdgeInsets.only(right: 15),
+                          icon: Icon(Icons.arrow_back_sharp,
+                              color: ColorManager.white))),
+                  Text(
+                    widget.pharmacyModel.title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "عنوان الصيدلية : ${widget.pharmacyModel.address}",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -89,7 +86,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                     maxLines: 4,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'ادخل الملاخطاتك من فضلك';
+                        return 'ادخل ملاخطاتك من فضلك';
                       }
                       return null;
                     },
@@ -105,7 +102,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
                     listener: (context, state) {
                       if (state is BrandFlagErrorState) {
-                        print("object");
+                      
                         error(
                             context, state.failure.massage, state.failure.code);
                       }
@@ -136,8 +133,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                           
                       if (state is SelectBrandState ||
                           state is DeleteBrandState||state is  EditAmountBrandState) {
-                        print(
-                            "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
+                       
                         return selectBrand.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),

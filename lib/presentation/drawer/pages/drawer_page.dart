@@ -1,38 +1,46 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 class DrawerPage extends StatelessWidget {
    DrawerPage({super.key});
-  @override
+  @override 
   Widget build(BuildContext context) {
     return Drawer(
-
-      child: ListView(
+      child: ListView(       
+        padding: EdgeInsets.zero,
         children: [
            DrawerHeader(
             decoration: BoxDecoration(
-              color: ColorManager.secondaryColor7,
+              gradient:  LinearGradient(colors: [
+                                  ColorManager.secondaryColor6,
+                                  ColorManager.secondaryColor7,
+                                  ColorManager.secondaryColor7,
+                                ]),
+              color: ColorManager.white,
             ), //BoxDecoration
-            child: UserAccountsDrawerHeader(
-              decoration:
-              BoxDecoration(color: ColorManager.secondaryColor7),
-              accountName: Text(
-                "Lina Al-Mahayni",
-                style: TextStyle(fontSize: 18),
+            child:Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p18,vertical: AppPadding.p5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                          CircleAvatar(
+                           maxRadius: 35, 
+                  backgroundColor: ColorManager.secondaryColor5,
+                  child: Text(
+                    "L",
+                    style: TextStyle(fontSize: 30.0, color: Colors.blue),
+                  ), //Text
+                ),
+                  Text(
+              " Lina Mahayni ",
+                  style: TextStyle(fontSize: 18),
+                ),
+                    
+                ],
               ),
-
-              currentAccountPictureSize: Size.square(50),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: ColorManager.secondaryColor5,
-                child: Text(
-                  "L",
-                  style: TextStyle(fontSize: 30.0, color: Colors.blue),
-                ), //Text
-              ),
-              accountEmail: null,
-              //circleAvatar
-            ), //UserAccountDrawerHeader
-          ),
+            )  ),
 
           ListTile(
    leading:Icon(Icons.location_city_outlined,color: ColorManager.secondaryColor4),
@@ -127,6 +135,20 @@ class DrawerPage extends StatelessWidget {
 
             },
           ),
+           ListTile(
+             leading:  Icon(Icons.sync_outlined  ,color: ColorManager.secondaryColor4),
+            title: const Text('المزامنة'),
+            onTap: () {
+             WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.syncData,
+                );
+
+              });
+            },
+          ),
+         
         ],
       ),
     );

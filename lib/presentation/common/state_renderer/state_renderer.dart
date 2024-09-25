@@ -46,7 +46,7 @@ class StateRenderer extends StatelessWidget {
         return _getPopupDialog(context,[
             _getAnimatedImage(JsonAssets.error),
             _getMessage(message),
-            _getRetryButton("ok",context)
+            _getRetryButton("موافق",context)
 
         ]);
 
@@ -72,7 +72,7 @@ class StateRenderer extends StatelessWidget {
         return _getPopupDialog(context, [
           _getMessage(title),
           _getMessage(message),
-          _getRetryButton("Ok", context)
+          _getRetryButton("موافق", context)
         ]);
       default:
         return Container();

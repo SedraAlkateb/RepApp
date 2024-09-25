@@ -5,7 +5,6 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +22,7 @@ class PharmacyPage extends StatelessWidget {
                 icon: Icon(
                   size: AppSize.s30,
                   Icons.menu,
-                  color: ColorManager.secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
+                  color: ColorManager.secondaryColor1, 
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();

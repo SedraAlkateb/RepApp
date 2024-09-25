@@ -1,4 +1,3 @@
-
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:domina_app/presentation/visits/widget/Doctor_visit_usert.dart';
