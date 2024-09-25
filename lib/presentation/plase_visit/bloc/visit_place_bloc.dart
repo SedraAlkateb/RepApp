@@ -5,10 +5,12 @@ import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_doctor_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_visit_brand_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacies_by_place_usecase.dart';
+import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'visit_place_event.dart';
@@ -23,11 +25,16 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   InsertVisitDoctorSqlUsecase insertVisitDoctorSqlUsecase;
   InsertVisitBrandPharmacySqlUsecase insertVisitBrandPharmacySqlUsecase;
   InsertVisitBrandDoctorSqlUsecase insertVisitBrandDoctorSqlUsecase;
+  InsertVisitBrandHospitalSqlUsecase insertVisitBrandHospitalSqlUsecase;
+
+  SpHospitalSqlUsecase spHospitalSqlUsecase;
   List<BrandModel> selectBrand = [];
   List<BrandModel> bandFlag = [];
   List<PharmacyModel> pharmacies = [];
   List<DoctorModel> doctors = [];
   List<HospitalModel> hospitals = [];
+  List<SpecModel> specialization = [];
+  int spec=0;
   List<VisitBrandPharmacyModel> visitBrandPharmacys = [];
   int current = 0;
   VisitPlaceBloc(
@@ -38,7 +45,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       this.insertVisitPharmacySqlUsecase,
       this.insertVisitDoctorSqlUsecase,
       this.insertVisitBrandPharmacySqlUsecase,
-      this.insertVisitBrandDoctorSqlUsecase
+      this.insertVisitBrandDoctorSqlUsecase,
+      this.spHospitalSqlUsecase,
+      this.insertVisitBrandHospitalSqlUsecase
       )
       : super(VisitPlaceInitial()) {
     on<VisitPlaceEvent>((event, emit) async {
@@ -60,7 +69,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(AllHospitalByPlaceState(data));
         });
       }
-
+      if(event is SelectSpecEvent){
+        spec=event.spec;
+      }
       if (event is DoctorByPlace) {
         current = event.current;
         (await doctorsByPlaceUsecase.execute(event.placeId)).fold((failure) {
@@ -149,6 +160,22 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(AllVisitBrandDoctorState());
         });
       }
+
+
+      if (event is InsertBrandVisitHospitalEvent) {
+        (await insertVisitBrandHospitalSqlUsecase.execute(
+            visitBrandPharmacys, event.visitHospitalModel))
+            .fold((failure) {
+          selectBrand = [];
+          emit(AllVisitBrandHospitalErrorState(failure: failure));
+        }, (data) async {
+          selectBrand = [];
+          emit(AllVisitBrandHospitalState());
+        });
+      }
+      
+      
+      
       if (event is EditAmountBrandEvent) {
         visitBrandPharmacys[event.index].amount += event.brand;
       }
@@ -162,6 +189,15 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           (v) => v.brandId == event.brandModel.id,
         );
         emit(DeleteBrandState(updatedList));
+      }
+      if (event is SpecializationHospitalEvent) {
+        (await spHospitalSqlUsecase.execute(event.hospitalId))
+            .fold((failure) {
+          emit(SpecializationHospitalErrorState(failure: failure));
+        }, (data) async {
+          specialization=data;
+          emit(SpecializationHospitalState());
+        });
       }
     });
   }

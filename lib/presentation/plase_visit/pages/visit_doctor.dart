@@ -24,6 +24,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
+
     super.initState();
   }
 

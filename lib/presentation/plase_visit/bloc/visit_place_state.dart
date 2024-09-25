@@ -137,6 +137,19 @@ final class InsertVisitDoctorState extends VisitPlaceState {
   List<Object?> get props =>[];
 }
 
+final class InsertVisitHospitalErrorState extends VisitPlaceState {
+  final Failure failure;
+  InsertVisitHospitalErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class InsertVisitHospitalState extends VisitPlaceState {
+  @override
+  InsertVisitHospitalState();
+  @override
+  List<Object?> get props =>[];
+}
 
 final class AllVisitBrandPharmacyErrorState extends VisitPlaceState {
   final Failure failure;
@@ -173,4 +186,31 @@ final class AllVisitBrandDoctorLoadingState extends VisitPlaceState {
   AllVisitBrandDoctorLoadingState();
   @override
   List<Object?> get props =>[];
+}
+
+final class AllVisitBrandHospitalState extends VisitPlaceState {
+  @override
+  AllVisitBrandHospitalState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllVisitBrandHospitalErrorState extends VisitPlaceState {
+  final Failure failure;
+  AllVisitBrandHospitalErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+
+
+final class SpecializationHospitalState extends VisitPlaceState {
+  @override
+  SpecializationHospitalState();
+  @override
+  List<Object?> get props =>[];
+}
+final class SpecializationHospitalErrorState extends VisitPlaceState {
+  final Failure failure;
+  SpecializationHospitalErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
 }
