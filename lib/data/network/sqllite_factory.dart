@@ -104,7 +104,8 @@ class DatabaseHelper {
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE hospitalSp (
     id INTEGER PRIMARY KEY,
     hospitalId INTEGER NOT NULL,
@@ -115,7 +116,8 @@ class DatabaseHelper {
     FOREIGN KEY (hospitalId) REFERENCES hospital(id),
     FOREIGN KEY (spId) REFERENCES specialization(id)
     );
-    ''');
+    '''
+    );
     ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////
     await db.execute('''
      CREATE TABLE visit_doctor (

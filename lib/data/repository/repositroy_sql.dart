@@ -426,4 +426,28 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, List<PharmacyBrandModel>>> getBrandsHospitalByVisitId(int visitId) async {
+    try {
+      final response = await _databaseHelper.getBrandsHospitalByVisitId(visitId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitHospitalAndHospital>>> getVisitHospital()async {
+    try {
+      final response = await _databaseHelper.getVisitHospital();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

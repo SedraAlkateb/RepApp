@@ -59,20 +59,18 @@ class _VisitHospitalState extends State<VisitHospital> {
                           padding: EdgeInsets.only(right: 15),
                           icon: Icon(Icons.arrow_back_sharp,
                               color: ColorManager.white))),
-                  Center(
-                    child: Text(
-                      widget.hospitalModel.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    widget.hospitalModel.title,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Center(
-                    child: Text(
-                      "العنوان: ${widget.hospitalModel?.address ?? " "}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    "العنوان: ${widget.hospitalModel?.address ?? " "}",
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
@@ -391,8 +389,8 @@ class _VisitHospitalState extends State<VisitHospital> {
                           VisitHospitalModel visitHospitalModel = VisitHospitalModel(
                               0,
                               now.toString(),
-                              _noteController.text,
                               _issueController.text,
+                              _noteController.text,
                               _noteeController.text,
                          0);
                           if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {

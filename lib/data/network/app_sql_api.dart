@@ -300,6 +300,43 @@ class AppSqlApi {
     });
   }
 
+  Future<List<VisitHospitalAndHospital>> getVisitHospital() async {
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''
+    SELECT 
+      visit_hospital.id as visit_hospital_id, 
+      visit_hospital.data as visit_hospital_data, 
+      visit_hospital.kaswn as visit_hospital_kaswn, 
+      visit_hospital.science as visit_hospital_science, 
+      visit_hospital.additaion as visit_hospital_additaion,
+      visit_hospital.hospitalSpId as visit_hospital_hospitalSpId,
+      
+      hospital.id as hospital_id, 
+      hospital.title as hospital_title, 
+      hospital.address as hospital_address,
+      hospital.placeId as hospital_placeId,
+      hospital.placeTitle as hospital_placeTitle,
+      
+      specialization.id as specialization_id,
+      specialization.title as specialization_title
+      
+    FROM visit_hospital
+    JOIN hospitalSp ON visit_hospital.hospitalSpId = hospitalSp.id
+    JOIN hospital ON hospitalSp.hospitalId = hospital.id
+    JOIN specialization ON hospitalSp.spId = specialization.id
+
+    '''
+    );
+    return List.generate(maps.length, (i) {
+      VisitHospitalModel visitHospitalModel = VisitHospitalModel.fromMap1(maps[i]);
+      HospitalModel hospitalModel = HospitalModel.fromMap1(maps[i]);
+      SpecModel specModel=SpecModel.fromMap1(maps[i]);
+      VisitHospitalAndHospital visitHospitalAndHospital = VisitHospitalAndHospital(hospitalModel, visitHospitalModel,specModel);
+      return visitHospitalAndHospital;
+    });
+  }
+
   insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     Database? mydb =await databaseHelper.database;
     Batch batch =mydb.batch();
@@ -462,6 +499,22 @@ class AppSqlApi {
       FROM visit_brand_Doctor
       JOIN brand  ON visit_brand_Doctor.brandId = brand.id
       WHERE visit_brand_Doctor.visitId = ?
+    ''', [visitId]);
+    return List.generate(maps.length, (i) {
+      return PharmacyBrandModel.fromMap(maps[i]);
+    });
+  }
+  Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(int visitId) async {
+    Database? mydb =await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+      SELECT 
+      brand.id as id, 
+      brand.title as title, 
+      brand.phTitle as phTitle,  
+      visit_brand_hospital.amount as amount
+      FROM visit_brand_Hospital
+      JOIN brand  ON visit_brand_hospital.brandId = brand.id
+      WHERE visit_brand_Hospital.visitId = ?
     ''', [visitId]);
     return List.generate(maps.length, (i) {
       return PharmacyBrandModel.fromMap(maps[i]);

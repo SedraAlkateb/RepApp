@@ -11,6 +11,7 @@ import 'package:domina_app/data/repository/repositroy_sql.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/domain/usecase/all_brands_doctor_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_brands_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sql_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
@@ -27,6 +28,7 @@ import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
@@ -151,7 +153,10 @@ Future<void>initVisitsModule() async{
     instance.registerFactory<AllVisitDoctorSqlUsecase>(() =>AllVisitDoctorSqlUsecase(instance()));
     instance.registerFactory<AllBrandsPharmacyVisitsSqlUsecase>(() =>AllBrandsPharmacyVisitsSqlUsecase(instance()));
     instance.registerFactory<AllBrandsDoctorVisitsSqlUsecase>(() =>AllBrandsDoctorVisitsSqlUsecase(instance()));
-    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance(),instance(),instance()));
+    instance.registerFactory<AllBrandsHospitalVisitsSqlUsecase>(() =>AllBrandsHospitalVisitsSqlUsecase(instance()));
+    instance.registerFactory<AllVisitHospitalSqlUsecase>(() =>AllVisitHospitalSqlUsecase(instance()));
+
+    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance(),instance(),instance(),instance(),instance()));
   }
 }
 Future<void>initSpecModule() async{

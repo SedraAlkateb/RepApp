@@ -44,7 +44,7 @@ class DoctorVisitUser extends StatelessWidget {
                             return InfoVisitDoctor(
                               doctorModel: context
                                   .watch<VisitBloc>()
-                                  .pharmaciesDoctor[index],
+                                  .doctors[index],
                             );
                           }));
                         },
@@ -70,7 +70,7 @@ class DoctorVisitUser extends StatelessWidget {
                                 textAlign: TextAlign.center,
                                 context
                                     .watch<VisitBloc>()
-                                    .pharmaciesDoctor[index]
+                                    .doctors[index]
                                     .doctorModel
                                     .title,
                                 style: Theme.of(context).textTheme.labelLarge,
@@ -79,7 +79,7 @@ class DoctorVisitUser extends StatelessWidget {
                                   s1: "العنوان : ",
                                   s2: context
                                       .watch<VisitBloc>()
-                                      .pharmaciesDoctor[index]
+                                      .doctors[index]
                                       .doctorModel
                                       .address)
                             ],
@@ -88,7 +88,7 @@ class DoctorVisitUser extends StatelessWidget {
                       );
                     },
                     itemCount:
-                        context.watch<VisitBloc>().pharmaciesDoctor.length),
+                        context.watch<VisitBloc>().doctors.length),
               ),
             ),
           ],
