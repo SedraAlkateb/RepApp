@@ -23,7 +23,7 @@ class SearchField extends StatelessWidget {
                 contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                   enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
                   focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-                  hintText: 'ابحث هنا ....',
+                  hintText: 'ابحث هنا',
                   hintStyle: const TextStyle(fontSize: AppSize.s16,overflow: TextOverflow.fade ),
               ),
             ),

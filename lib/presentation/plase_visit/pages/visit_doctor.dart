@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
@@ -300,10 +301,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                           context.watch<VisitPlaceBloc>().visitBrandPharmacys;
 
                       if (state is SelectBrandState ||
-                          state is DeleteBrandState ||
-                          state is EditAmountBrandState) {
-                        print(
-                            "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
+                          state is DeleteBrandState||state is  EditAmountBrandState) {
+                       
                         return selectBrand.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -466,47 +465,54 @@ class _VisitDoctorState extends State<VisitDoctor> {
                     height: 8,
                   ),
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                    listener: (context, state) {
-                      if (state is InsertVisitDoctorLoadingState) {
-                        loading(context);
+  listener: (context, state) {
+    if (state is InsertVisitDoctorLoadingState) {
+      loading(context);
+    }
+    if (state is InsertVisitDoctorErrorState) {
+      error(
+          context, state.failure.massage, state.failure.code);
+    }
+    if (state is InsertVisitDoctorState) {
+      success(context);
+      SnackBarMessage().showSuccessSnackBar(
+          message: "succsec",
+          context: context,
+          btnOkOnPress: "d");
+      Navigator.pop(context);
+    }
+    if (state is AllVisitBrandDoctorLoadingState) {
+      loading(context);
+    }
+    if (state is AllVisitBrandDoctorErrorState) {
+      error(
+          context, state.failure.massage, state.failure.code);
+    }
+    if (state is AllVisitBrandDoctorState) {
+      success(context);
+      SnackBarMessage().showSuccessSnackBar(
+          message: "succsec",
+          context: context,
+          btnOkOnPress: "d");
+      Navigator.pop(context);
+    }
+  },
+  child: ElevatedButton(
+                      onPressed: () {if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
+
+
+
+                          error(context, "يرجى إدخال الملاحظات",1);
                       }
-                      if (state is InsertVisitDoctorErrorState) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      }
-                      if (state is InsertVisitDoctorState) {
-                        success(context);
-                        SnackBarMessage().showSuccessSnackBar(
-                            message: "succsec",
-                            context: context,
-                            btnOkOnPress: "d");
-                        Navigator.pop(context);
-                      }
-                      if (state is AllVisitBrandDoctorLoadingState) {
-                        loading(context);
-                      }
-                      if (state is AllVisitBrandDoctorErrorState) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      }
-                      if (state is AllVisitBrandDoctorState) {
-                        success(context);
-                        SnackBarMessage().showSuccessSnackBar(
-                            message: "succsec",
-                            context: context,
-                            btnOkOnPress: "d");
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (_noteController.text.isNotEmpty ||
-                              context
-                                  .read<VisitPlaceBloc>()
-                                  .selectBrand
-                                  .isNotEmpty) {
-                            DateTime now = DateTime.now();
-                            VisitDoctorModel visitDoctorModel =
+                        else if (_noteController.text.isNotEmpty ||
+                            context
+                                .read<VisitPlaceBloc>()
+                                .selectBrand
+                                .isNotEmpty) {
+                          DateTime now = DateTime.now(); 
+                         String formattedTime = DateFormat('EEEE: dd-MM-yyyy','ar').format(now);
+                         
+                         VisitDoctorModel visitDoctorModel =
                                 VisitDoctorModel(
                                     0,
                                     now.toString(),
@@ -518,7 +524,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                 .read<VisitPlaceBloc>()
                                 .selectBrand
                                 .isNotEmpty) {
-
                               BlocProvider.of<VisitPlaceBloc>(context).add(
                                   InsertBrandVisitDoctorEvent(
                                       visitDoctorModel));
@@ -526,7 +531,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               BlocProvider.of<VisitPlaceBloc>(context).add(
                                   InsertVisitDoctorEvent(visitDoctorModel));
                             }
-                          }
                         },
                         child: Text("تمت الزيارة")),
                   )

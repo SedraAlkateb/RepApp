@@ -20,13 +20,15 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _noteController.text=widget.doctorModel.visitDoctorModel.science;
-    _issueController.text=widget.doctorModel.visitDoctorModel.kaswn;
-    _noteeController.text=widget.doctorModel.visitDoctorModel.additaion;
+    _noteController.text = widget.doctorModel.visitDoctorModel.science;
+    _issueController.text = widget.doctorModel.visitDoctorModel.kaswn;
+    _noteeController.text = widget.doctorModel.visitDoctorModel.additaion;
 
-    BlocProvider.of<VisitBloc>(context).add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id) );
+    BlocProvider.of<VisitBloc>(context)
+        .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +69,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       height: 10,
                     ),
                     Text(
-                      "عنوان الصيدلية : ${widget.doctorModel.doctorModel.address}",
+                      "عنوان الطبيب : ${widget.doctorModel.doctorModel.address}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "تاريخ الزيارة : ${widget.doctorModel.visitDoctorModel.data}",
+                      "تاريخ الزيارة : \n${widget.doctorModel.visitDoctorModel.data}",
+                      textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
@@ -87,7 +90,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     "لتعديل  الملاحظات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-
                   BoxTextField(
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
@@ -135,10 +137,10 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                   ),
                   BlocBuilder<VisitBloc, VisitState>(
                     builder: (context, state) {
-                       List<PharmacyBrandModel> selectBrand =
+                      List<PharmacyBrandModel> selectBrand =
                           context.watch<VisitBloc>().brands;
                       if (state is BrandPharmacyVisitState) {
-                        selectBrand =state.brands;
+                        selectBrand = state.brands;
                       }
                       return selectBrand.isNotEmpty
                           ? Padding(
@@ -212,11 +214,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                   ),
 
                                 ],
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      )
+                              ),
+                            )
                           : SizedBox();
                     },
                   ),
