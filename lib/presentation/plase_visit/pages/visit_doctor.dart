@@ -129,7 +129,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                     items: type,
                     prefixIcon: null,
                     onChanged: (value) {
-                      _noteeController.text="";
+                      _noteeController.text = "";
 
                       BlocProvider.of<VisitPlaceBloc>(context)
                           .add(TypeAdditionEvent(value));
@@ -176,17 +176,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                 "اختر عينات :",
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
-
                               CustomDropDownSearch(
                                 hintText: "العينات",
-                                items: context
-                                    .watch<VisitPlaceBloc>()
-                                    .bandFlag,
+                                items: context.watch<VisitPlaceBloc>().bandFlag,
                                 onChanged: (value) {
                                   BrandModel brand = value;
-                                  BlocProvider.of<VisitPlaceBloc>(context)
-                                      .add(SelectBrandAddEvent(
-                                      " ${brand.title} ${brand.phTitle} , "));
+                                  BlocProvider.of<VisitPlaceBloc>(context).add(
+                                      SelectBrandAddEvent(
+                                          " ${brand.title} ${brand.phTitle} , "));
                                 },
                                 validator: (value) {
                                   return null;
@@ -198,11 +195,12 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                   return current is SelectBrandAddState;
                                 },
                                 builder: (context, state) {
-                                  if(state is SelectBrandAddState){
-                                    _noteeController.text=state.brands;
+                                  if (state is SelectBrandAddState) {
+                                    _noteeController.text = state.brands;
                                   }
                                   return Padding(
-                                    padding:  EdgeInsets.symmetric(vertical: AppPadding.p12),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: AppPadding.p12),
                                     child: BoxTextField(
                                       keyboardType: TextInputType.text,
                                       prefixIcon: null,
@@ -215,7 +213,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                       minLines: 3,
                                       inputFormatters: [],
                                     ),
-                                  ) ;
+                                  );
                                 },
                               ),
                             ],
@@ -226,41 +224,46 @@ class _VisitDoctorState extends State<VisitDoctor> {
                     ),
                   ),
                   BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-  builder: (context, state) {
-    print("object");
-    return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    builder: (context, state) {
+                      print("object");
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Checkbox(
-                            focusColor: ColorManager.secondaryColor2,
-                            activeColor: ColorManager.secondaryColor2,
-                            value: context.watch<VisitPlaceBloc>().isScience,
-                            splashRadius: 30,
-                            onChanged:(value) {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(IsScienceEvent(true));                            },
+                          Row(
+                            children: [
+                              Checkbox(
+                                focusColor: ColorManager.secondaryColor2,
+                                activeColor: ColorManager.secondaryColor2,
+                                value:
+                                    context.watch<VisitPlaceBloc>().isScience,
+                                splashRadius: 30,
+                                onChanged: (value) {
+                                  BlocProvider.of<VisitPlaceBloc>(context)
+                                      .add(IsScienceEvent(true));
+                                },
+                              ),
+                              Text('مكتب علمي'),
+                            ],
                           ),
-                          Text('مكتب علمي'),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            focusColor: ColorManager.secondaryColor2,
-                            activeColor: ColorManager.secondaryColor2,
-                            value: !context.watch<VisitPlaceBloc>().isScience,
-                            onChanged:(value) {
-                            BlocProvider.of<VisitPlaceBloc>(context).add(IsScienceEvent(false));
-                            },
+                          Row(
+                            children: [
+                              Checkbox(
+                                focusColor: ColorManager.secondaryColor2,
+                                activeColor: ColorManager.secondaryColor2,
+                                value:
+                                    !context.watch<VisitPlaceBloc>().isScience,
+                                onChanged: (value) {
+                                  BlocProvider.of<VisitPlaceBloc>(context)
+                                      .add(IsScienceEvent(false));
+                                },
+                              ),
+                              Text('مع الخطة'),
+                            ],
                           ),
-                          Text('مع الخطة'),
                         ],
-                      ),
-                    ],
-                  );
-  },
-),
+                      );
+                    },
+                  ),
                   Text(
                     "اختر العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
@@ -301,8 +304,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                           context.watch<VisitPlaceBloc>().visitBrandPharmacys;
 
                       if (state is SelectBrandState ||
-                          state is DeleteBrandState||state is  EditAmountBrandState) {
-                       
+                          state is DeleteBrandState ||
+                          state is EditAmountBrandState) {
                         return selectBrand.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -465,57 +468,58 @@ class _VisitDoctorState extends State<VisitDoctor> {
                     height: 8,
                   ),
                   BlocListener<VisitPlaceBloc, VisitPlaceState>(
-  listener: (context, state) {
-    if (state is InsertVisitDoctorLoadingState) {
-      loading(context);
-    }
-    if (state is InsertVisitDoctorErrorState) {
-      error(
-          context, state.failure.massage, state.failure.code);
-    }
-    if (state is InsertVisitDoctorState) {
-      success(context);
-      SnackBarMessage().showSuccessSnackBar(
-          message: "succsec",
-          context: context,
-          btnOkOnPress: "d");
-      Navigator.pop(context);
-    }
-    if (state is AllVisitBrandDoctorLoadingState) {
-      loading(context);
-    }
-    if (state is AllVisitBrandDoctorErrorState) {
-      error(
-          context, state.failure.massage, state.failure.code);
-    }
-    if (state is AllVisitBrandDoctorState) {
-      success(context);
-      SnackBarMessage().showSuccessSnackBar(
-          message: "succsec",
-          context: context,
-          btnOkOnPress: "d");
-      Navigator.pop(context);
-    }
-  },
-  child: ElevatedButton(
-                      onPressed: () {if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
-
-
-
-                          error(context, "يرجى إدخال الملاحظات",1);
+                    listener: (context, state) {
+                      if (state is InsertVisitDoctorLoadingState) {
+                        loading(context);
                       }
-                        else if (_noteController.text.isNotEmpty ||
-                            context
-                                .read<VisitPlaceBloc>()
-                                .selectBrand
-                                .isNotEmpty) {
-                          DateTime now = DateTime.now(); 
-                         String formattedTime = DateFormat('EEEE: dd-MM-yyyy','ar').format(now);
-                         
-                         VisitDoctorModel visitDoctorModel =
+                      if (state is InsertVisitDoctorErrorState) {
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      }
+                      if (state is InsertVisitDoctorState) {
+                        success(context);
+                        SnackBarMessage().showSuccessSnackBar(
+                            message: "succsec",
+                            context: context,
+                            btnOkOnPress: "d");
+                        Navigator.pop(context);
+                      }
+                      if (state is AllVisitBrandDoctorLoadingState) {
+                        loading(context);
+                      }
+                      if (state is AllVisitBrandDoctorErrorState) {
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      }
+                      if (state is AllVisitBrandDoctorState) {
+                        success(context);
+                        SnackBarMessage().showSuccessSnackBar(
+                            message: "succsec",
+                            context: context,
+                            btnOkOnPress: "d");
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_noteController.text.isEmpty ||
+                              _issueController.text.isEmpty ||
+                              _noteeController.text.isEmpty) {
+                            error(context, "يرجى إدخال الملاحظات", 1);
+                          } else if (_noteController.text.isNotEmpty ||
+                              context
+                                  .read<VisitPlaceBloc>()
+                                  .selectBrand
+                                  .isNotEmpty) {
+                            DateTime now = DateTime.now();
+                            String formattedTime =
+                                DateFormat('EEEE: dd-MM-yyyy', 'ar')
+                                    .format(now);
+
+                            VisitDoctorModel visitDoctorModel =
                                 VisitDoctorModel(
                                     0,
-                                    now.toString(),
+                                    formattedTime,
                                     _noteController.text,
                                     _issueController.text,
                                     _noteeController.text,
@@ -531,6 +535,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               BlocProvider.of<VisitPlaceBloc>(context).add(
                                   InsertVisitDoctorEvent(visitDoctorModel));
                             }
+                          }
                         },
                         child: Text("تمت الزيارة")),
                   )
