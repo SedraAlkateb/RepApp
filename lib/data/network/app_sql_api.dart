@@ -578,7 +578,6 @@ class AppSqlApi {
       }
     });
   }
-
   Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(
       int visitId) async {
     Database? mydb = await databaseHelper.database;
