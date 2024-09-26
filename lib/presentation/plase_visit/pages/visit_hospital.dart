@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
@@ -379,16 +380,22 @@ class _VisitHospitalState extends State<VisitHospital> {
     }
   },
   child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: ()  {if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
+
+
+
+                          error(context, "يرجى إدخال الملاحظات",1);
+                      }
                         if (_noteController.text.isNotEmpty ||
                             context
                                 .read<VisitPlaceBloc>()
                                 .selectBrand
                                 .isNotEmpty) {
                           DateTime now = DateTime.now();
+                          String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
                           VisitHospitalModel visitHospitalModel = VisitHospitalModel(
                               0,
-                              now.toString(),
+                            formattedTime,
                               _issueController.text,
                               _noteController.text,
                               _noteeController.text,

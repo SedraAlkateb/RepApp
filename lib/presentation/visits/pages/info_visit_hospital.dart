@@ -69,8 +69,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      "عنوان الصيدلية : ${widget.hospitalModel.hospitalModel.address}",
+                    Text(textAlign: TextAlign.center,
+                      "عنوان المشفى : ${widget.hospitalModel.hospitalModel.address}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(

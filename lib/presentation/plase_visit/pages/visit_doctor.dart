@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
@@ -69,7 +70,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                   ),
                   Center(
                     child: Text(
-                      "العنوان: ${widget.doctorModel?.address ?? " "}",
+                      " عنوان الطبيب: ${widget.doctorModel?.address ?? " "}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -164,8 +165,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
 
                       if (state is SelectBrandState ||
                           state is DeleteBrandState||state is  EditAmountBrandState) {
-                        print(
-                            "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
+                       
                         return selectBrand.isNotEmpty
                             ? Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -359,16 +359,22 @@ class _VisitDoctorState extends State<VisitDoctor> {
     }
   },
   child: ElevatedButton(
-                      onPressed: () {
-                        if (_noteController.text.isNotEmpty ||
+                      onPressed: () {if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
+
+
+
+                          error(context, "يرجى إدخال الملاحظات",1);
+                      }
+                        else if (_noteController.text.isNotEmpty ||
                             context
                                 .read<VisitPlaceBloc>()
                                 .selectBrand
                                 .isNotEmpty) {
-                          DateTime now = DateTime.now();
+                          DateTime now = DateTime.now(); 
+                         String formattedTime = DateFormat('EEEE: dd-MM-yyyy','ar').format(now);
                           VisitDoctorModel visitDoctorModel = VisitDoctorModel(
                               0,
-                              now.toString(),
+                             formattedTime,
                               _noteeController.text,
                               _issueController.text,
                               _noteeController.text,

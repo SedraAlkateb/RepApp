@@ -332,12 +332,12 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                   if (_notephController.text.isEmpty) {
                   
                     error(context, "يرجى إدخال الملاحظات",1);
-                  } else {
+                  } else  {
                   
                     DateTime now = DateTime.now();
-                    //String formattedTime = DateFormat('yyyy-MM-dd – HH:mm').format(now);
+            String formattedTime = DateFormat('EEEE: dd-MM-yyyy','ar').format(now);
                     VisitPharmacyModel visitPharmacyModel = VisitPharmacyModel(
-                        0, now.toString(), _notephController.text, widget.pharmacyModel.id);
+                        0, formattedTime, _notephController.text, widget.pharmacyModel.id);
                     
                   
                     if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
