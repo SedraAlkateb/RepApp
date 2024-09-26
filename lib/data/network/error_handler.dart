@@ -15,6 +15,8 @@ print("error.message??""");
 
   else if(error is DatabaseException ){
     failure=_handleErrorSql(error);
+  }else if(error is FormatException){
+    failure=Failure(0, error.message);
   }
   else{
     print(error);

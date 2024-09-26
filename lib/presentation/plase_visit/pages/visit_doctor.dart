@@ -302,7 +302,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
                           context.watch<VisitPlaceBloc>().selectBrand;
                       final visitBrand =
                           context.watch<VisitPlaceBloc>().visitBrandPharmacys;
-
                       if (state is SelectBrandState ||
                           state is DeleteBrandState ||
                           state is EditAmountBrandState) {
@@ -512,14 +511,11 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                   .selectBrand
                                   .isNotEmpty) {
                             DateTime now = DateTime.now();
-                            String formattedTime =
-                                DateFormat('EEEE: dd-MM-yyyy', 'ar')
-                                    .format(now);
 
                             VisitDoctorModel visitDoctorModel =
                                 VisitDoctorModel(
                                     0,
-                                    formattedTime,
+                                    now.toIso8601String(),
                                     _noteController.text,
                                     _issueController.text,
                                     _noteeController.text,
