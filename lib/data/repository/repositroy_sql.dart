@@ -372,7 +372,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<SpecModel>>> specializationByHospitalId(int hospitalId) async {
+  Future<Either<Failure, List<SpecHospitalSp>>> specializationByHospitalId(int hospitalId) async {
     try {
       final response = await _databaseHelper.specializationByHospitalId(hospitalId);
       return Right(response);

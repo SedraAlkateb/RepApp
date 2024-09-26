@@ -137,9 +137,6 @@ class AppSqlApi {
     final db = await databaseHelper.database;
     final tables =['brand',"doctor","hospital", 'pharmacy',
       'place', 'specialization','hospitalSp'
-      ,'visit_doctor','visit_hospital'
-      ,'visit_pharmacy','visit_brand_pharmacy'
-      ,'visit_brand_doctor','visit_brand_hospital'
     ];
     Batch batch = db.batch();
     //    batch.execute('DROP TABLE IF EXISTS rep');
@@ -520,17 +517,23 @@ class AppSqlApi {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
-  Future<List<SpecModel>> specializationByHospitalId(int hospitalId) async {
+  Future<List<SpecHospitalSp>> specializationByHospitalId(int hospitalId) async {
     Database? mydb =await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
-      SELECT specialization.*
+      SELECT hospitalSp.*, 
+      specialization.id as specialization_id,
+      specialization.title as specialization_title
+      
       FROM specialization
       JOIN hospitalSp  ON hospitalSp.spId = specialization.id
       WHERE hospitalSp.hospitalId = ?
     ''',
         [hospitalId]);
     return List.generate(maps.length, (i) {
-      return SpecModel.fromMap(maps[i]);
+      SpecModel specModel=SpecModel.fromMap1(maps[i]);
+      HospitalSpModel hospitalSpModel=HospitalSpModel.fromMap(maps[i]);
+      SpecHospitalSp specHospitalSp=SpecHospitalSp(specModel, hospitalSpModel);
+      return specHospitalSp;
     });
   }
 

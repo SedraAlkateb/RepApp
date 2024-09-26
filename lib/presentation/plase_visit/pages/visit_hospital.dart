@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
+import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -113,15 +114,142 @@ class _VisitHospitalState extends State<VisitHospital> {
                     "طلبات شخصية:",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  BoxTextField(
-                    keyboardType: TextInputType.text,
+                  CustomDropDown(
+                    hintText: "نوع الطلب",
+                    items: type,
                     prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {},
-                    controller: _noteeController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
+                    onChanged: (value) {
+                      _noteeController.text="";
+
+                      BlocProvider.of<VisitPlaceBloc>(context)
+                          .add(TypeAdditionEvent(value));
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
+                    child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      buildWhen: (previous, current) {
+                        return current is BoxState || current is DropDownState;
+                      },
+                      builder: (context, state) {
+                        if (state is BoxState) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "اكتب ملاحظاتك:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              BoxTextField(
+                                keyboardType: TextInputType.text,
+                                prefixIcon: null,
+                                maxLines: 4,
+                                validator: (value) {
+                                  return null;
+                                },
+                                controller: _noteeController,
+                                obscureText: false,
+                                minLines: 3,
+                                inputFormatters: [],
+                              ),
+                            ],
+                          );
+                        }
+                        if (state is DropDownState) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "اختر عينات :",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+
+                              CustomDropDownSearch(
+                                hintText: "العينات",
+                                items: context
+                                    .watch<VisitPlaceBloc>()
+                                    .bandFlag,
+                                onChanged: (value) {
+                                  BrandModel brand = value;
+                                  BlocProvider.of<VisitPlaceBloc>(context)
+                                      .add(SelectBrandAddEvent(
+                                      " ${brand.title} ${brand.phTitle} , "));
+                                },
+                                validator: (value) {
+                                  return null;
+                                },
+                                errorText: 'لايوجد نتيجة',
+                              ),
+                              BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                                buildWhen: (previous, current) {
+                                  return current is SelectBrandAddState;
+                                },
+                                builder: (context, state) {
+                                  if(state is SelectBrandAddState){
+                                    _noteeController.text=state.brands;
+                                  }
+                                  return Padding(
+                                    padding:  EdgeInsets.symmetric(vertical: AppPadding.p12),
+                                    child: BoxTextField(
+                                      keyboardType: TextInputType.text,
+                                      prefixIcon: null,
+                                      maxLines: 4,
+                                      validator: (value) {
+                                        return null;
+                                      },
+                                      controller: _noteeController,
+                                      obscureText: false,
+                                      minLines: 3,
+                                      inputFormatters: [],
+                                    ),
+                                  ) ;
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                        return SizedBox();
+                      },
+                    ),
+                  ),
+                  BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                    builder: (context, state) {
+                      print("object");
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                focusColor: ColorManager.secondaryColor,
+                                activeColor: ColorManager.secondaryColor4,
+                                value: context.watch<VisitPlaceBloc>().isScience,
+                                splashRadius: 30,
+                                onChanged:(value) {
+                                  BlocProvider.of<VisitPlaceBloc>(context).add(IsScienceEvent(true));                            },
+                              ),
+                              Text('مكتب علمي'),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                focusColor: ColorManager.secondaryColor,
+                                activeColor: ColorManager.secondaryColor4,
+                                value: !context.watch<VisitPlaceBloc>().isScience,
+                                onChanged:(value) {
+                                  BlocProvider.of<VisitPlaceBloc>(context).add(IsScienceEvent(false));
+                                },
+                              ),
+                              Text('مع الخطة'),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   Text(
                     "اختر الاختصاص :",
@@ -142,9 +270,9 @@ class _VisitHospitalState extends State<VisitHospital> {
                       hintText: "الاختصاصات",
                       items: context.watch<VisitPlaceBloc>().specialization,
                       onChanged: (value) {
-                        SpecModel specModel = value;
+                        SpecHospitalSp specModel = value;
                         BlocProvider.of<VisitPlaceBloc>(context).add(
-                            SelectSpecEvent( specModel.id));
+                            SelectSpecEvent( specModel));
                       },
                       validator: (value) {
                         return null;
@@ -152,7 +280,34 @@ class _VisitHospitalState extends State<VisitHospital> {
                       errorText: 'لايوجد نتيجة',
                     ),
                   ),
-                  Text(
+              BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                buildWhen: (previous, current) {
+                  return current is SpecState;
+                },
+                builder: (context, state) {
+                  if (state is SpecState) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppPadding.p8,horizontal: AppPadding.p8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "اجمالي الزيارات : ${state.visits}",
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                          Text(
+                            "عدد الاطباء : ${state.total}",
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Container(); // واجهة بديلة عند عدم تطابق الحالة
+                  }
+                },
+              ),
+              Text(
                     "اختر العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
@@ -191,8 +346,7 @@ class _VisitHospitalState extends State<VisitHospital> {
 
                       if (state is SelectBrandState ||
                           state is DeleteBrandState||state is  EditAmountBrandState) {
-                        print(
-                            "gggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeggggggg");
+
                         return selectBrand.isNotEmpty
                             ? Padding(
                           padding: const EdgeInsets.all(8.0),

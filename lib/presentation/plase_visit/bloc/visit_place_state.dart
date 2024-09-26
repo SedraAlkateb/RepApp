@@ -74,9 +74,19 @@ class SelectBrandState extends VisitPlaceState{
   SelectBrandState(this.brands);
   List<Object?> get props => [brands];
 }
+class SelectBrandAddState extends VisitPlaceState{
+  final String brands;
+  SelectBrandAddState(this.brands);
+  List<Object?> get props => [brands];
+}
 class EditAmountBrandState extends VisitPlaceState{
   final List<VisitBrandPharmacyModel> brands;
   EditAmountBrandState(this.brands);
+  List<Object?> get props => [brands];
+}
+class EditAmountBrandAddState extends VisitPlaceState{
+  final List<VisitBrandPharmacyModel> brands;
+  EditAmountBrandAddState(this.brands);
   List<Object?> get props => [brands];
 }
 
@@ -213,4 +223,30 @@ final class SpecializationHospitalErrorState extends VisitPlaceState {
   SpecializationHospitalErrorState({required this.failure});
   @override
   List<Object?> get props =>[failure];
+}
+final class SpecState extends VisitPlaceState {
+  final int  total;
+  final int  visits;
+
+  SpecState({required this.total,required this.visits});
+  @override
+  List<Object?> get props =>[total,visits];
+}
+final class BoxState extends VisitPlaceState {
+final String value;
+BoxState(this.value);
+  @override
+  List<Object?> get props =>[value];
+}
+final class DropDownState extends VisitPlaceState {
+  final String value;
+  DropDownState(this.value);
+  @override
+  List<Object?> get props =>[value];
+}
+class IsScienceState extends VisitPlaceState {
+  final  bool isScience;
+  IsScienceState(this.isScience);
+  @override
+  List<Object?> get props => [isScience];
 }
