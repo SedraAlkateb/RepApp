@@ -28,14 +28,14 @@ class Customdropdownsearchspec extends StatelessWidget {
      // height: MediaQuery.of(context).size.height /17,
 
       child: DropdownSearch<dynamic>(
-        itemAsString: (dynamic value) => value.title,
+        itemAsString: (dynamic value) => value.specModel.title,
         validator: validator,
         popupProps:  PopupProps.menu(
           itemBuilder: (context, item, isSelected) {
             return Column(
               children: [
                 ListTile(
-          title: Text('${item.title}'),
+          title: Text('${item.specModel.title}'),
                   onTap: () {
                     onChanged(item);
                   },

@@ -37,8 +37,20 @@ class SelectBrandEvent extends VisitPlaceEvent{
   @override
   List<Object?> get props => [brandModel];
 }
+class SelectBrandAddEvent extends VisitPlaceEvent{
+  final  String brand;
+  SelectBrandAddEvent(this.brand);
+  @override
+  List<Object?> get props => [brand];
+}
+class TypeAdditionEvent extends VisitPlaceEvent{
+final  Type type;
+  TypeAdditionEvent(this.type);
+  @override
+  List<Object?> get props => [type];
+}
 class SelectSpecEvent extends VisitPlaceEvent{
-  final int spec;
+  final SpecHospitalSp spec;
   SelectSpecEvent(this.spec);
   @override
   List<Object?> get props => [spec];
@@ -99,4 +111,10 @@ class RemoveBrandEvent extends VisitPlaceEvent {
   RemoveBrandEvent(this.brandModel);
   @override
   List<Object?> get props => [brandModel];
+}
+class IsScienceEvent extends VisitPlaceEvent {
+  final  bool isScience;
+  IsScienceEvent(this.isScience);
+  @override
+  List<Object?> get props => [isScience];
 }

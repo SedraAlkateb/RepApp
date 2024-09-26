@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class SpHospitalSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   SpHospitalSqlUsecase(this._repositorySql);
-  Future<Either<Failure, List<SpecModel>>> execute(int hospitalId) async{
+  Future<Either<Failure, List<SpecHospitalSp>>> execute(int hospitalId) async{
     return await _repositorySql.specializationByHospitalId(hospitalId);
   }
 

@@ -47,7 +47,7 @@ class CustomDropDown extends StatelessWidget {
             value: val,
             onTap: onTap ?? () {},
             child:  Text(
-                   "${ val.title.toString()} ${  val.phTitle.toString()}",  
+                   "${ val.name}",
                     style: TextStyle(
                       fontSize: tablet ? 19 : 14,
                       color: Colors.black,

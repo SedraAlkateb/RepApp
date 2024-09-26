@@ -1,10 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
-import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,33 +127,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     inputFormatters: [],
                   ),
                   Text(
-                    "اختر العينات :",
+                    " العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  SizedBox(
-                    height: 0.9,
-                  ),
-                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                    listener: (context, state) {
-                      if (state is BrandFlagErrorState) {
-                        print("object");
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      }
-                    },
-                    child: CustomDropDown(
-                      hintText: "العينات",
-                      items: context.watch<VisitPlaceBloc>().bandFlag,
-                      prefixIcon: null,
-                      onChanged: (value) {
-                        BrandModel brand = value;
-                        BlocProvider.of<VisitPlaceBloc>(context).add(
-                            SelectBrandEvent(brand, widget.doctorModel.doctorModel.id));
-                      },
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
                   ),
                   SizedBox(
                     height: 8,
@@ -178,7 +149,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                             0: FlexColumnWidth(1),
                             1: FlexColumnWidth(1),
                             2: FlexColumnWidth(1),
-                            3: FlexColumnWidth(1),
+
                           },
                           children: [
                             TableRow(
@@ -210,9 +181,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                             FontWeight.bold)),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                ),
                               ],
                             ),
                             ...selectBrand.asMap().entries.map((entry) {
@@ -234,59 +202,15 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                     child: Text(brand.phTitle,
                                         textAlign: TextAlign.center),
                                   ),
-                                  IntrinsicHeight(
-                                    child: TextField(
-                                      onChanged: (value) {
-                                        BlocProvider.of<VisitPlaceBloc>(
-                                            context)
-                                            .add(EditAmountBrandEvent(
-                                            index,
-                                            int.parse(value)));
-                                      },
-                                      keyboardType:
-                                      TextInputType.number,
-                                      decoration: InputDecoration(
-                                        hintText: '${brand.amount}',
-                                        hintStyle: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall,
-                                        errorText: null,
-                                        enabledBorder:
-                                        OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.transparent,
-                                            width: AppSize.s1_5,
-                                          ),
-                                        ),
-                                        focusedBorder:
-                                        OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.transparent,
-                                            width: AppSize.s1_5,
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.transparent,
-                                            width: AppSize.s1_5,
-                                          ),
-                                        ),
-                                        fillColor: ColorManager.white,
-                                        filled: true,
-                                      ),
-                                      cursorColor: Colors.black,
-                                    ),
-                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: IconButton(
-                                        icon: Icon(Icons.delete),
-                                        onPressed: () {},
-                                      ),
+                                    padding:
+                                    const EdgeInsets.only(top: 8),
+                                    child: Text(
+                                      brand.amount.toString(),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
+
                                 ],
                               );
                             }).toList(),
@@ -296,12 +220,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           : SizedBox();
                     },
                   ),
-                  BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                  BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                     },
                     child: ElevatedButton(
                         onPressed: () {},
-                        child: Text("ارسال")),
+                        child: Text("تعديل")),
                   )
                 ],
               ),
