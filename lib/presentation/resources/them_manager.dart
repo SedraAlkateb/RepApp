@@ -59,7 +59,7 @@ ThemeData getApplicationTheme() {
     textTheme: TextTheme(
         displaySmall: getSemiBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s16),
       displayLarge: getRegularStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s20),
-      headlineLarge: getSemiBoldStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s16),
+      headlineLarge: getSemiBoldStyle(color: ColorManager.secondaryColor2, fontSize: FontSize.s16),
       headlineMedium: getRegularStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s16),
       titleMedium: getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s18),
       bodySmall: getRegularStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s14),

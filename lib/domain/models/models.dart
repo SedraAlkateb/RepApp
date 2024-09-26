@@ -266,6 +266,11 @@ class PlaceModel {
     );
   }
 }
+class SpecHospitalSp{
+  SpecModel specModel;
+  HospitalSpModel hospitalSpModel;
+  SpecHospitalSp(this.specModel,this.hospitalSpModel);
+}
 class SpecModel {
   int id;
   String title;
@@ -553,3 +558,10 @@ class LoginModel {
         map['percentage'], map['isLogin']);
   }
 }
+class Type{
+  int i;
+  String name;
+  Type(this.i,this.name);
+}
+
+final List<Type> type=[Type(0, "دفاتر"),Type(1, "عينات"),Type(2, "وصفات")];
