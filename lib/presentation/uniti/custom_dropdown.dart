@@ -24,6 +24,7 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
     return DropdownButtonFormField<dynamic>(
+      
       elevation: 3,
       validator: validator,
       hint: Text(
@@ -32,6 +33,7 @@ class CustomDropDown extends StatelessWidget {
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
+   
         filled: true,
         fillColor: ColorManager.secondaryColor3,
         prefixIcon: prefixIcon,
@@ -62,6 +64,7 @@ class CustomDropDown extends StatelessWidget {
         // Workshop workshop = item as Workshop;
         //Navigator.pushNamed(context, workshopProfile,arguments:workshop.id );
       },
+      
       value: value,
     );
   }
