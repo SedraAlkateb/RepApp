@@ -24,6 +24,7 @@ class Customdropdownsearchspec extends StatelessWidget {
        
         borderRadius: BorderRadius.circular(15),
       ),
+      
       width: MediaQuery.of(context).size.width,
      // height: MediaQuery.of(context).size.height /17,
 
@@ -52,7 +53,7 @@ class Customdropdownsearchspec extends StatelessWidget {
             color: Colors.red.withOpacity(0.2),
             child: Text(
               searchEntry.toString(),
-              style: TextStyle(color: Colors.white,fontSize:tablet?19: 14,overflow: TextOverflow.fade,),
+              style: TextStyle(color: Colors.black,fontSize:tablet?19: 14,overflow: TextOverflow.fade,),
             ),
           ),
             showSearchBox: true,
