@@ -105,7 +105,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
             selectBrand.indexWhere((brand) => brand.id == event.brandModel.id);
         print(existingIndex);
         print("existingIndex");
-
         if (existingIndex != -1) {
           List<VisitBrandPharmacyModel> updatedList =
               List.from(visitBrandPharmacys);
@@ -119,7 +118,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(EditAmountBrandState(visitBrandPharmacys));
         } else {
           final VisitBrandPharmacyModel v = VisitBrandPharmacyModel(
-              0, event.pharmacyId, event.brandModel.id, 0);
+              0, event.pharmacyId, event.brandModel.id, 1);
           visitBrandPharmacys.add(v);
           List<BrandModel> updatedList = List.from(selectBrand);
           updatedList.add(event.brandModel);
@@ -202,7 +201,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       }
 
       if (event is EditAmountBrandEvent) {
-        visitBrandPharmacys[event.index].amount += event.brand;
+        visitBrandPharmacys[event.index].amount = event.brand;
       }
       if(event is IsScienceEvent){
         isScience=event.isScience;
