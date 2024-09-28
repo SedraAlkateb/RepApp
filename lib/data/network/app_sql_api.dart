@@ -557,10 +557,9 @@ class AppSqlApi {
         AND data < ?
       ''', [
           hospitalSpId,
-          visitHospitalModel.data,  // تاريخ الزيارة الجديدة
-          visitHospitalModel.data   // تاريخ الزيارة الجديدة (كنهاية للفترة)
+          visitHospitalModel.data,
+          visitHospitalModel.data
         ]);
-
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
           int visitId = await txn.insert(
