@@ -5,7 +5,7 @@ import 'package:domina_app/data/network/app_api.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
 import 'package:domina_app/data/network/dio_factory.dart';
 import 'package:domina_app/data/network/network_info.dart';
-import 'package:domina_app/data/network/sqllite_factory.dart';
+import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/data/repository/repository.dart';
 import 'package:domina_app/data/repository/repositroy_sql.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';

@@ -4,7 +4,6 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:domina_app/presentation/visits/pages/info_visit_doctor.dart';
-import 'package:domina_app/presentation/visits/pages/info_visit_pharmacy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +11,7 @@ class DoctorVisitUser extends StatelessWidget {
   const DoctorVisitUser({super.key});
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
