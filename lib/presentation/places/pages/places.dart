@@ -110,7 +110,8 @@ class Places extends StatelessWidget {
           ),
           title: Text('المناطق'),
         ),
-        body: bodyBuild(context));
+        body: WillPopScope( onWillPop: ()async{return false;}, child: bodyBuild(context))
+        );
   }
 
   Widget bodyBuild(BuildContext context) {

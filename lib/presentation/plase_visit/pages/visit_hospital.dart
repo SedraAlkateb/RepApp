@@ -24,14 +24,16 @@ class _VisitHospitalState extends State<VisitHospital> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
- final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
-    BlocProvider.of<VisitPlaceBloc>(context).add(SpecializationHospitalEvent(widget.hospitalModel.id)) ;
+    BlocProvider.of<VisitPlaceBloc>(context)
+        .add(SpecializationHospitalEvent(widget.hospitalModel.id));
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,14 +95,12 @@ class _VisitHospitalState extends State<VisitHospital> {
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
                       maxLines: 4,
-                        validator: (value) {
-                      if(value!.isEmpty){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
                       controller: _noteController,
                       obscureText: false,
                       minLines: 3,
@@ -114,14 +114,12 @@ class _VisitHospitalState extends State<VisitHospital> {
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
                       maxLines: 4,
-                        validator: (value) {
-                        if(value!.isEmpty){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
                       controller: _issueController,
                       obscureText: false,
                       minLines: 3,
@@ -136,25 +134,24 @@ class _VisitHospitalState extends State<VisitHospital> {
                       items: type,
                       prefixIcon: null,
                       onChanged: (value) {
-                        _noteeController.text="";
-          
+                        _noteeController.text = "";
+
                         BlocProvider.of<VisitPlaceBloc>(context)
                             .add(TypeAdditionEvent(value));
                       },
-                        validator: (value) {
-                          if(value==null){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                      validator: (value) {
+                        if (value == null) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
                       child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                         buildWhen: (previous, current) {
-                          return current is BoxState || current is DropDownState;
+                          return current is BoxState ||
+                              current is DropDownState;
                         },
                         builder: (context, state) {
                           if (state is BoxState) {
@@ -169,14 +166,12 @@ class _VisitHospitalState extends State<VisitHospital> {
                                   keyboardType: TextInputType.text,
                                   prefixIcon: null,
                                   maxLines: 4,
-                                    validator: (value) {
-                    if(value!.isEmpty){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "الحقل مطلوب";
+                                    }
+                                    return null;
+                                  },
                                   controller: _noteeController,
                                   obscureText: false,
                                   minLines: 3,
@@ -193,22 +188,19 @@ class _VisitHospitalState extends State<VisitHospital> {
                                   "اختر عينات :",
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
-          
                                 CustomDropDownSearch(
                                   hintText: "العينات",
-                                  items: context
-                                      .watch<VisitPlaceBloc>()
-                                      .bandFlag,
+                                  items:
+                                      context.watch<VisitPlaceBloc>().bandFlag,
                                   onChanged: (value) {
                                     BrandModel brand = value;
                                     BlocProvider.of<VisitPlaceBloc>(context)
                                         .add(SelectBrandAddEvent(
-                                        " ${brand.title} ${brand.phTitle} , "));
+                                            " ${brand.title} ${brand.phTitle} , "));
                                   },
                                   validator: (value) {
-                       
-                          return null;
-                        },
+                                    return null;
+                                  },
                                   errorText: 'لايوجد نتيجة',
                                 ),
                                 BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
@@ -216,29 +208,28 @@ class _VisitHospitalState extends State<VisitHospital> {
                                     return current is SelectBrandAddState;
                                   },
                                   builder: (context, state) {
-                                    if(state is SelectBrandAddState){
-                                      _noteeController.text=state.brands;
+                                    if (state is SelectBrandAddState) {
+                                      _noteeController.text = state.brands;
                                     }
                                     return Padding(
-                                      padding:  EdgeInsets.symmetric(vertical: AppPadding.p12),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: AppPadding.p12),
                                       child: BoxTextField(
                                         keyboardType: TextInputType.text,
                                         prefixIcon: null,
                                         maxLines: 4,
-                                          validator: (value) {
-                          if(value!.isEmpty){
-          
-                            return "اختر نوع الطلب";
-          
-                          }
-                          return null;
-                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "اختر نوع الطلب";
+                                          }
+                                          return null;
+                                        },
                                         controller: _noteeController,
                                         obscureText: false,
                                         minLines: 3,
                                         inputFormatters: [],
                                       ),
-                                    ) ;
+                                    );
                                   },
                                 ),
                               ],
@@ -259,10 +250,13 @@ class _VisitHospitalState extends State<VisitHospital> {
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor4,
-                                  value: context.watch<VisitPlaceBloc>().isScience,
+                                  value:
+                                      context.watch<VisitPlaceBloc>().isScience,
                                   splashRadius: 30,
-                                  onChanged:(value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context).add(IsScienceEvent(true));                            },
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(true));
+                                  },
                                 ),
                                 Text('مكتب علمي'),
                               ],
@@ -272,9 +266,12 @@ class _VisitHospitalState extends State<VisitHospital> {
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor4,
-                                  value: !context.watch<VisitPlaceBloc>().isScience,
-                                  onChanged:(value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context).add(IsScienceEvent(false));
+                                  value: !context
+                                      .watch<VisitPlaceBloc>()
+                                      .isScience,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(false));
                                   },
                                 ),
                                 Text('مع الخطة'),
@@ -295,8 +292,8 @@ class _VisitHospitalState extends State<VisitHospital> {
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
                           print("object");
-                          error(
-                              context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                       },
                       child: Customdropdownsearchspec(
@@ -304,48 +301,50 @@ class _VisitHospitalState extends State<VisitHospital> {
                         items: context.watch<VisitPlaceBloc>().specialization,
                         onChanged: (value) {
                           SpecHospitalSp specModel = value;
-                          BlocProvider.of<VisitPlaceBloc>(context).add(
-                              SelectSpecEvent( specModel));
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(SelectSpecEvent(specModel));
                         },
                         validator: (value) {
-                           if(value==null){
-          
+                          if (value == null) {
                             return "اختر الاختصاص";
-          
                           }
                           return null;
                         },
                         errorText: 'لايوجد نتيجة',
                       ),
                     ),
-                BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                  buildWhen: (previous, current) {
-                    return current is SpecState;
-                  },
-                  builder: (context, state) {
-                    if (state is SpecState) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: AppPadding.p8,horizontal: AppPadding.p8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "اجمالي الزيارات : ${state.visits}",
-                              style: Theme.of(context).textTheme.headlineLarge,
+                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      buildWhen: (previous, current) {
+                        return current is SpecState;
+                      },
+                      builder: (context, state) {
+                        if (state is SpecState) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: AppPadding.p8,
+                                horizontal: AppPadding.p8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "اجمالي الزيارات : ${state.visits}",
+                                  style:
+                                      Theme.of(context).textTheme.headlineLarge,
+                                ),
+                                Text(
+                                  "عدد الاطباء : ${state.total}",
+                                  style:
+                                      Theme.of(context).textTheme.headlineLarge,
+                                ),
+                              ],
                             ),
-                            Text(
-                              "عدد الاطباء : ${state.total}",
-                              style: Theme.of(context).textTheme.headlineLarge,
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
-                      return Container(); // واجهة بديلة عند عدم تطابق الحالة
-                    }
-                  },
-                ),
-                Text(
+                          );
+                        } else {
+                          return Container(); // واجهة بديلة عند عدم تطابق الحالة
+                        }
+                      },
+                    ),
+                    Text(
                       "اختر العينات :",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
@@ -355,9 +354,10 @@ class _VisitHospitalState extends State<VisitHospital> {
                     BlocListener<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
-                          error(context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
-                        },
+                      },
                       child: CustomDropDownSearch(
                         hintText: "العينات",
                         items: context.watch<VisitPlaceBloc>().bandFlag,
@@ -366,7 +366,7 @@ class _VisitHospitalState extends State<VisitHospital> {
                           BlocProvider.of<VisitPlaceBloc>(context).add(
                               SelectBrandEvent(brand, widget.hospitalModel.id));
                         },
-                         validator: (value) {
+                        validator: (value) {
                           return null;
                         },
                         errorText: 'لايوجد نتيجة',
@@ -381,161 +381,170 @@ class _VisitHospitalState extends State<VisitHospital> {
                             context.watch<VisitPlaceBloc>().selectBrand;
                         final visitBrand =
                             context.watch<VisitPlaceBloc>().visitBrandPharmacys;
-          
+
                         if (state is SelectBrandState ||
-                            state is DeleteBrandState||state is  EditAmountBrandState) {
-          
+                            state is DeleteBrandState ||
+                            state is EditAmountBrandState) {
                           return selectBrand.isNotEmpty
                               ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Table(
-                              border: TableBorder.all(),
-                              columnWidths: {
-                                0: FlexColumnWidth(1),
-                                1: FlexColumnWidth(1),
-                                2: FlexColumnWidth(1),
-                                3: FlexColumnWidth(1),
-                              },
-                              children: [
-                                TableRow(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text('العينات',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.bold)),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text('نوع العينة',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.bold)),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text('الكمية',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.bold)),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text('حذف العينة',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.bold)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                ...selectBrand.asMap().entries.map((entry) {
-                                  final index = entry.key;
-                                  final brand = entry.value;
-                                  TextEditingController amount=TextEditingController();
-                                  amount.text=visitBrand[index].amount.toString();
-                                  return TableRow(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Table(
+                                    border: TableBorder.all(),
+                                    columnWidths: {
+                                      0: FlexColumnWidth(1),
+                                      1: FlexColumnWidth(1),
+                                      2: FlexColumnWidth(1),
+                                      3: FlexColumnWidth(1),
+                                    },
                                     children: [
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          brand.title,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(top: 8),
-                                        child: Text(brand.phTitle,
-                                            textAlign: TextAlign.center),
-                                      ),
-                                      IntrinsicHeight(
-                                        child: TextField(
-                                          controller:amount ,
-                                          onChanged: (value) {
-                                            if (value.isEmpty) {
-                                              BlocProvider.of<
-                                                  VisitPlaceBloc>(
-                                                  context)
-                                                  .add(EditAmountBrandEvent(
-                                                  index, 1));
-                                            } else {
-                                              BlocProvider.of<
-                                                  VisitPlaceBloc>(
-                                                  context)
-                                                  .add(EditAmountBrandEvent(
-                                                  index,
-                                                  int.parse(value)));
-                                            }
-                                          },
-                                          keyboardType:
-                                          TextInputType.number,
-                                          decoration: InputDecoration(
-                                            hintText: '1',
-                                            hintStyle: Theme.of(context)
-                                                .textTheme
-                                                .labelSmall,
-                                            errorText: null,
-                                            enabledBorder:
-                                            OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                                width: AppSize.s1_5,
-                                              ),
+                                      TableRow(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text('العينات',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
                                             ),
-                                            focusedBorder:
-                                            OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                                width: AppSize.s1_5,
-                                              ),
-                                            ),
-                                            focusedErrorBorder:
-                                            OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                                width: AppSize.s1_5,
-                                              ),
-                                            ),
-                                            fillColor: ColorManager.white,
-                                            filled: true,
                                           ),
-                                          cursorColor: Colors.black,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: IconButton(
-                                            color: const Color.fromARGB(
-                                                255, 155, 23, 14),
-                                            icon:
-                                            Icon(Icons.delete_forever),
-                                            onPressed: () {
-                                              BlocProvider.of<
-                                                  VisitPlaceBloc>(
-                                                  context)
-                                                  .add(RemoveBrandEvent(
-                                                  brand));
-                                            },
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text('نوع العينة',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
                                           ),
-                                        ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text('الكمية',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text('حذف العينة',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                      ...selectBrand
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
+                                        final index = entry.key;
+                                        final brand = entry.value;
+                                        TextEditingController amount =
+                                            TextEditingController();
+                                        amount.text =
+                                            visitBrand[index].amount.toString();
+                                        return TableRow(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8),
+                                              child: Text(
+                                                brand.title,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8),
+                                              child: Text(brand.phTitle,
+                                                  textAlign: TextAlign.center),
+                                            ),
+                                            IntrinsicHeight(
+                                              child: TextField(
+                                                controller: amount,
+                                                onChanged: (value) {
+                                                  if (value.isEmpty) {
+                                                    BlocProvider.of<
+                                                                VisitPlaceBloc>(
+                                                            context)
+                                                        .add(
+                                                            EditAmountBrandEvent(
+                                                                index, 1));
+                                                  } else {
+                                                    BlocProvider.of<
+                                                                VisitPlaceBloc>(
+                                                            context)
+                                                        .add(
+                                                            EditAmountBrandEvent(
+                                                                index,
+                                                                int.parse(
+                                                                    value)));
+                                                  }
+                                                },
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                decoration: InputDecoration(
+                                                  hintText: '1',
+                                                  hintStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall,
+                                                  errorText: null,
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: AppSize.s1_5,
+                                                    ),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: AppSize.s1_5,
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: AppSize.s1_5,
+                                                    ),
+                                                  ),
+                                                  fillColor: ColorManager.white,
+                                                  filled: true,
+                                                ),
+                                                cursorColor: Colors.black,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: IconButton(
+                                                  color: const Color.fromARGB(
+                                                      255, 155, 23, 14),
+                                                  icon: Icon(
+                                                      Icons.delete_forever),
+                                                  onPressed: () {
+                                                    BlocProvider.of<
+                                                                VisitPlaceBloc>(
+                                                            context)
+                                                        .add(RemoveBrandEvent(
+                                                            brand));
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
                                     ],
-                                  );
-                                }).toList(),
-                              ],
-                            ),
-                          )
+                                  ),
+                                )
                               : SizedBox();
                         }
                         return SizedBox();
@@ -544,66 +553,77 @@ class _VisitHospitalState extends State<VisitHospital> {
                     SizedBox(
                       height: 8,
                     ),
-                    BlocListener<VisitPlaceBloc,VisitPlaceState>(
-            listener: (context, state) {
-              if (state is InsertVisitHospitalErrorState) {
-                error(
-            context, state.failure.massage, state.failure.code);
-              }
-              if (state is InsertVisitHospitalState) {
-                success(context);
-                SnackBarMessage().showSuccessSnackBar(
-            message: "succsec",
-            context: context,
-            btnOkOnPress: "d");
-                Navigator.pop(context);
-              }
-              if (state is AllVisitBrandHospitalErrorState) {
-                error(
-            context, state.failure.massage, state.failure.code);
-              }
-              if (state is AllVisitBrandHospitalState) {
-                success(context);
-                SnackBarMessage().showSuccessSnackBar(
-            message: "succsec",
-            context: context,
-            btnOkOnPress: "d");
-                Navigator.pop(context);
-              }
-            },
-            child: ElevatedButton(
-                        onPressed: ()  {
-                          if(_formKey.currentState!.validate()){
-                if(_noteController.text.isEmpty||_issueController.text.isEmpty||_noteeController.text.isEmpty){
-                            error(context, "يرجى إدخال الملاحظات",1);
+                    BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                      listener: (context, state) {
+                        if (state is InsertVisitHospitalErrorState) {
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
-                          if (_noteController.text.isNotEmpty ||
-                              context
-                                  .read<VisitPlaceBloc>()
-                                  .selectBrand
-                                  .isNotEmpty) {
-                            DateTime now = DateTime.now();
-                            String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
-                            VisitHospitalModel visitHospitalModel = VisitHospitalModel(
-                                0,
-                              formattedTime,
-                                _issueController.text,
-                                _noteController.text,
-                                _noteeController.text,
-                           0);
-                            if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
-                              BlocProvider.of<VisitPlaceBloc>(context)
-                                  .add(InsertBrandVisitHospitalEvent(visitHospitalModel,widget.hospitalModel.id));
-                            } else {
-                              BlocProvider.of<VisitPlaceBloc>(context)
-                                  .add(InsertVisitHospitalEvent(visitHospitalModel,widget.hospitalModel.id));
+                        if (state is InsertVisitHospitalState) {
+                          success(context);
+                          SnackBarMessage().showSuccessSnackBar(
+                              message: "succsec",
+                              context: context,
+                              btnOkOnPress: "d");
+                          Navigator.pop(context);
+                        }
+                        if (state is AllVisitBrandHospitalErrorState) {
+                          error(context, state.failure.massage,
+                              state.failure.code);
+                        }
+                        if (state is AllVisitBrandHospitalState) {
+                          success(context);
+                          SnackBarMessage().showSuccessSnackBar(
+                              message: "succsec",
+                              context: context,
+                              btnOkOnPress: "d");
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (_noteController.text.isEmpty ||
+                                  _issueController.text.isEmpty ||
+                                  _noteeController.text.isEmpty) {
+                                error(context, "يرجى إدخال الملاحظات", 1);
+                              }
+                              if (_noteController.text.isNotEmpty ||
+                                  context
+                                      .read<VisitPlaceBloc>()
+                                      .selectBrand
+                                      .isNotEmpty) {
+                                DateTime now = DateTime.now();
+                                String formattedTime =
+                                    DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar')
+                                        .format(now);
+                                VisitHospitalModel visitHospitalModel =
+                                    VisitHospitalModel(
+                                        0,
+                                        formattedTime,
+                                        _issueController.text,
+                                        _noteController.text,
+                                        _noteeController.text,
+                                        0);
+                                if (context
+                                    .read<VisitPlaceBloc>()
+                                    .selectBrand
+                                    .isNotEmpty) {
+                                  BlocProvider.of<VisitPlaceBloc>(context).add(
+                                      InsertBrandVisitHospitalEvent(
+                                          visitHospitalModel,
+                                          widget.hospitalModel.id));
+                                } else {
+                                  BlocProvider.of<VisitPlaceBloc>(context).add(
+                                      InsertVisitHospitalEvent(
+                                          visitHospitalModel,
+                                          widget.hospitalModel.id));
+                                }
+                              }
                             }
-                          }
-                          }
-                    
-                        },
-                        child: Text("تمت الزيارة")),
-          )
+                          },
+                          child: Text("تمت الزيارة")),
+                    )
                   ],
                 ),
               )
