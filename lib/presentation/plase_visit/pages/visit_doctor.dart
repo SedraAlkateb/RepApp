@@ -23,7 +23,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
-   final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
+
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
@@ -36,7 +38,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
     return Scaffold(
       appBar: null,
       body: SingleChildScrollView(
-        child: Form(   key: _formKey,
+        child: Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -99,13 +102,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                      if(value!.isEmpty){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                        if(value!.isEmpty){
+
+                          return "الحقل مطلوب";
+
+                        }
+                        return null;
+                      },
+
                       controller: _noteController,
                       obscureText: false,
                       minLines: 3,
@@ -120,13 +124,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                      if(value!.isEmpty){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                        if(value!.isEmpty){
+
+                          return "الحقل مطلوب";
+
+                        }
+                        return null;
+                      },
+
                       controller: _issueController,
                       obscureText: false,
                       minLines: 3,
@@ -142,13 +147,13 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       onChanged: (value) {
                         _noteeController.text = "";
-          
+
                         BlocProvider.of<VisitPlaceBloc>(context)
                             .add(TypeAdditionEvent(value));
                       },
-                        validator: (value) {
-                      return null; 
-                        },
+                      validator: (value) {
+                        return null;
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
@@ -170,13 +175,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                   prefixIcon: null,
                                   maxLines: 4,
                                   validator: (value) {
-                      if(value!.isEmpty){
-          
-                            return "الحقل مطلوب";
-          
-                          }
-                          return null;
-                        },
+                                    if(value!.isEmpty){
+
+                                      return "الحقل مطلوب";
+
+                                    }
+                                    return null;
+                                  },
+
                                   controller: _noteeController,
                                   obscureText: false,
                                   minLines: 3,
@@ -223,8 +229,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                         prefixIcon: null,
                                         maxLines: 4,
                                         validator: (value) {
+                                          if(value!.isEmpty){
+
+                                            return "الحقل مطلوب";
+
+                                          }
                                           return null;
                                         },
+
                                         controller: _noteeController,
                                         obscureText: false,
                                         minLines: 3,
@@ -319,7 +331,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
                             context.watch<VisitPlaceBloc>().selectBrand;
                         final visitBrand =
                             context.watch<VisitPlaceBloc>().visitBrandPharmacys;
-          
                         if (state is SelectBrandState ||
                             state is DeleteBrandState ||
                             state is EditAmountBrandState) {
@@ -519,25 +530,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       },
                       child: ElevatedButton(
                           onPressed: () {
-                              if(_formKey.currentState!.validate()){
-                            if (_noteController.text.isEmpty ||
-                                _issueController.text.isEmpty ||
-                                _noteeController.text.isEmpty) {
-                              error(context, "يرجى إدخال الملاحظات", 1);
-                            } if (_noteController.text.isNotEmpty ||
-                                context
-                                    .read<VisitPlaceBloc>()
-                                    .selectBrand
-                                    .isNotEmpty) {
+                            if (_formKey.currentState!.validate()) {
+                        //      error(context, "يرجى إدخال الملاحظات", 1);
                               DateTime now = DateTime.now();
-                              String formattedTime =
-                                  DateFormat('EEEE: dd-MM-yyyy', 'ar')
-                                      .format(now);
-          
+
                               VisitDoctorModel visitDoctorModel =
                                   VisitDoctorModel(
                                       0,
-                                      formattedTime,
+                                      now.toIso8601String(),
                                       _noteController.text,
                                       _issueController.text,
                                       _noteeController.text,
@@ -553,7 +553,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                 BlocProvider.of<VisitPlaceBloc>(context).add(
                                     InsertVisitDoctorEvent(visitDoctorModel));
                               }
-                            } }
+                            }
                           },
                           child: Text("تمت الزيارة")),
                     )
