@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -227,9 +228,20 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     },
                   ),
                   BlocListener<VisitBloc, VisitState>(
-                    listener: (context, state) {},
+                    listener: (context, state) {
+                      if(state is UpdateVisitDoctorState){
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.visits,
+                              (route) => false,
+                        );
+                      }
+                    },
                     child:
-                        ElevatedButton(onPressed: () {}, child: Text("تعديل")),
+                        ElevatedButton( onPressed: () {
+                          BlocProvider.of<VisitBloc>(context).add(
+                              UpdateVisitDoctorEvent
+                                (kas: _issueController.text,sc: _noteController.text, id: widget.doctorModel .visitDoctorModel.id));
+                        }, child: Text("تعديل")),
                   )
                 ],
               ),

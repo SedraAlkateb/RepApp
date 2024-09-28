@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -92,6 +93,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                       }
                       return null;
                     },
+
                     controller: _noteController,
                     obscureText: false,
                     minLines: 3,
@@ -192,10 +194,30 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                   ),
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
+                      if(state is UpdateVisitPharmacyState){
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.visits,
+                              (route) => false,
+                        );
+                      }
                     },
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("ارسال")),
+                    child: BlocListener<VisitBloc, VisitState>(
+  listener: (context, state) {
+  if(state is UpdateVisitPharmacyState){
+    Navigator.pushNamedAndRemoveUntil(
+      context, Routes.visits,
+          (route) => false,
+    );
+  }
+  },
+  child: ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<VisitBloc>(context).add(
+                              UpdateVisitPharmacyEvent
+                            (data: _noteController.text, id: widget.pharmacyModel.visitPharmacyModel.id));
+                        },
+                        child: Text("تعديل")),
+),
                   )
                 ],
               ),

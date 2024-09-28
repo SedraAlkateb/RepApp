@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -136,6 +137,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
+                    enabled: true,
                   ),
                   Text(
                     " العينات :",
@@ -231,10 +233,19 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                   ),
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
+                      if(state is UpdateVisitHospitalState){
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.visits,
+                              (route) => false,
+                        );
+                      }
                     },
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("ارسال")),
+                    child:
+                    ElevatedButton( onPressed: () {
+                      BlocProvider.of<VisitBloc>(context).add(
+                          UpdateVisitHospitalEvent
+                            (kas: _issueController.text,sc: _noteController.text, id: widget.hospitalModel .visitHospitalModel.id));
+                    }, child: Text("تعديل")),
                   )
                 ],
               ),
