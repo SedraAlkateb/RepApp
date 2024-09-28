@@ -406,8 +406,8 @@ class RepositroySqlImp extends RepositorySql {
   Future<Either<Failure, Null>> insertVisitHospital(VisitHospitalModel visitHospitalModel, int hos,
   int spec)async {
     try {
-      final response = await _databaseHelper.insertVisitHospital(visitHospitalModel,hos,spec);
-      return Right(response);
+       await _databaseHelper.insertVisitHospital(visitHospitalModel,hos,spec);
+      return Right(null);
     } catch (e) {
       return Left(ErrorHandler
           .handle(e)
