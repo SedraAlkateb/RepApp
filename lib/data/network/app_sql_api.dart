@@ -562,7 +562,7 @@ class AppSqlApi {
         ]);
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
-          int visitId = await txn.insert(
+           await txn.insert(
             'visit_hospital',
             visitHospitalModel.toJson(),
             conflictAlgorithm: ConflictAlgorithm.replace,
