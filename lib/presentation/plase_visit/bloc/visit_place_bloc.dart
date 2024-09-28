@@ -88,7 +88,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(AllDoctorByPlaceErrorState(failure: failure));
         }, (data) async {
           doctors = data;
-          print(doctors.length);
           emit(AllDoctorByPlaceState(data));
         });
       }

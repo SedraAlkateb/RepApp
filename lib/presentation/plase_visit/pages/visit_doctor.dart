@@ -1,12 +1,12 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
@@ -510,7 +510,10 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               message: "succsec",
                               context: context,
                               btnOkOnPress: "d");
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.places,
+                                (route) => false,
+                          );
                         }
                         if (state is AllVisitBrandDoctorLoadingState) {
                           loading(context);
@@ -525,7 +528,10 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               message: "succsec",
                               context: context,
                               btnOkOnPress: "d");
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.places,
+                                (route) => false,
+                          );
                         }
                       },
                       child: ElevatedButton(

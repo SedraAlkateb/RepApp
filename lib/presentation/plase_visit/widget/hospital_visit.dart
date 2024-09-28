@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HospitalVisit extends StatelessWidget {
   const HospitalVisit({super.key});
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold(

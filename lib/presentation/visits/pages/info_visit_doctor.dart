@@ -4,9 +4,9 @@ import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 class InfoVisitDoctor extends StatefulWidget {
   InfoVisitDoctor({super.key, required this.doctorModel});
+
   final VisitDoctorAndDoctor doctorModel;
 
   @override
@@ -23,7 +23,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
     _noteController.text = widget.doctorModel.visitDoctorModel.science;
     _issueController.text = widget.doctorModel.visitDoctorModel.kaswn;
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion;
-
+ //   String dateString = widget.doctorModel.visitDoctorModel.data;
+//    DateTime parsedDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
+ //   widget.doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
     super.initState();
@@ -94,7 +96,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _noteController,
                     obscureText: false,
                     minLines: 3,
@@ -108,7 +112,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _issueController,
                     obscureText: false,
                     minLines: 3,
@@ -122,7 +128,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _noteeController,
                     obscureText: false,
                     minLines: 3,
@@ -185,7 +193,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                       ],
                                     ),
                                     ...selectBrand.asMap().entries.map((entry) {
-                                      final index = entry.key;
+                                  //    final index = entry.key;
                                       final brand = entry.value;
                                       return TableRow(
                                         children: [

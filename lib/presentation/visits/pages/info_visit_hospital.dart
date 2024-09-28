@@ -1,9 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
-import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -112,7 +109,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _issueController,
                     obscureText: false,
                     minLines: 3,
@@ -126,7 +125,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _noteeController,
                     obscureText: false,
                     minLines: 3,
@@ -190,7 +191,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                               ],
                             ),
                             ...selectBrand.asMap().entries.map((entry) {
-                              final index = entry.key;
+                          //    final index = entry.key;
                               final brand = entry.value;
                               return TableRow(
                                 children: [

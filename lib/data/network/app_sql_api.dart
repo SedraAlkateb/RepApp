@@ -1,4 +1,4 @@
-import 'package:domina_app/data/network/sqllite_factory.dart';
+import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -204,8 +204,8 @@ class AppSqlApi {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> result = await db.query(
       'doctor',
-      where: 'placeId = ?',
-      whereArgs: [placeId],
+      where: 'placeId = ? AND visits != ?',
+      whereArgs: [placeId, '0'],
     );
     List<DoctorModel> doctors =
         result.map((map) => DoctorModel.fromMap(map)).toList();
@@ -368,10 +368,10 @@ class AppSqlApi {
   }
 
 
-
   insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     Database? mydb = await databaseHelper.database;
 
+    // جلب جميع الزيارات الخاصة بالطبيب خلال الثلاثة أيام الماضية
     final List<Map<String, dynamic>> visits = await mydb.rawQuery(
       '''
     SELECT * FROM visit_doctor 
@@ -386,16 +386,31 @@ class AppSqlApi {
       ],
     );
 
+    // إذا كانت القائمة فارغة، أضف الزيارة وقم بتنقيص عدد الزيارات
     if (visits.isEmpty) {
-      await mydb.insert(
-        'visit_doctor',
-        visitDoctorModel.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await mydb.transaction((txn) async {
+        // تقليل عدد الزيارات بمقدار 1
+        await txn.rawUpdate(
+          '''
+        UPDATE doctor 
+        SET visits = visits - 1 
+        WHERE id = ?
+        ''',
+          [visitDoctorModel.doctorId],
+        );
+
+        // إدراج الزيارة الجديدة
+        await txn.insert(
+          'visit_doctor',
+          visitDoctorModel.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      });
     } else {
       throw FormatException('لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
     }
   }
+
   Future<void> insertVisitBrandPharmacy(VisitPharmacyModel visitPharmacyModel,
       List<VisitBrandPharmacyModel> visitBrandPharmacyModels) async {
     final mydb = await databaseHelper.database;
@@ -422,7 +437,8 @@ class AppSqlApi {
   }
   Future<void> insertVisitBrandDoctor(
       VisitDoctorModel visitDoctorModel,
-      List<VisitBrandPharmacyModel> visitBrandPharmacyModels) async {
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
+      ) async {
     final mydb = await databaseHelper.database;
 
     await mydb.transaction((txn) async {
@@ -442,14 +458,26 @@ class AppSqlApi {
           ],
         );
 
-        // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
+        // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية
         if (visits.isEmpty) {
+          // تقليل عدد الزيارات بمقدار 1
+          await txn.rawUpdate(
+            '''
+          UPDATE doctor 
+          SET visits = visits - 1 
+          WHERE id = ?
+          ''',
+            [visitDoctorModel.doctorId],
+          );
+
+          // إدراج الزيارة الجديدة
           int visitId = await txn.insert(
             'visit_doctor',
             visitDoctorModel.toJson(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
+          // إدراج الزيارات للأدوية المرتبطة بالطبيب
           for (var visitBrand in visitBrandPharmacyModels) {
             visitBrand.visitId = visitId;
             await txn.insert(
@@ -469,6 +497,7 @@ class AppSqlApi {
     });
   }
 
+
   Future<void> insertVisitBrandHospital(
       VisitHospitalModel visitHospitalModel,
       List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
@@ -480,8 +509,8 @@ class AppSqlApi {
       try {
         // جلب hospitalSp حسب hospitalId و spId
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
-        SELECT id FROM hospitalSp 
-        WHERE hospitalId = ? AND spId = ?
+      SELECT id, visit FROM hospitalSp 
+      WHERE hospitalId = ? AND spId = ? 
       ''', [hos, spec]);
 
         if (result.isEmpty) {
@@ -489,14 +518,15 @@ class AppSqlApi {
         }
 
         int hospitalSpId = result.first['id'];
+        int currentVisits = result.first['visit'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
         // جلب جميع الزيارات الخاصة بالمشفى خلال الثلاثة أيام الماضية
         final List<Map<String, dynamic>> visits = await txn.rawQuery('''
-        SELECT * FROM visit_hospital 
-        WHERE hospitalSpId = ? 
-        AND data >= date(?, '-3 days') 
-        AND data < ?
+      SELECT * FROM visit_hospital 
+      WHERE hospitalSpId = ? 
+      AND data >= date(?, '-3 days') 
+      AND data < ?
       ''', [
           hospitalSpId,
           visitHospitalModel.data,  // تاريخ الزيارة الجديدة
@@ -505,6 +535,15 @@ class AppSqlApi {
 
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
+          // تنقيص عدد الزيارات بمقدار 1
+          if (currentVisits > 0) {
+            await txn.rawUpdate('''
+          UPDATE hospitalSp 
+          SET visit = visit - 1 
+          WHERE id = ?
+          ''', [hospitalSpId]);
+          }
+
           int visitId = await txn.insert(
             'visit_hospital',
             visitHospitalModel.toJson(),
@@ -530,39 +569,49 @@ class AppSqlApi {
     });
   }
 
-  insertVisitHospital(
+
+  Future<void> insertVisitHospital(
       VisitHospitalModel visitHospitalModel, int hos, int spec) async {
     Database? mydb = await databaseHelper.database;
-
     await mydb.transaction((txn) async {
       try {
         // جلب hospitalSp حسب hospitalId و spId
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
-        SELECT id FROM hospitalSp 
-        WHERE hospitalId = ? AND spId = ?
+      SELECT id, visit FROM hospitalSp 
+      WHERE hospitalId = ? AND spId = ?
       ''', [hos, spec]);
 
         if (result.isEmpty) {
           throw Exception('No hospitalSp found for the given hospitalId and spId.');
         }
-
         int hospitalSpId = result.first['id'];
+        int currentVisits = result.first['visit'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
         // جلب جميع الزيارات الخاصة بالمشفى خلال الثلاثة أيام الماضية
         final List<Map<String, dynamic>> visits = await txn.rawQuery('''
-        SELECT * FROM visit_hospital 
-        WHERE hospitalSpId = ? 
-        AND data >= date(?, '-3 days') 
-        AND data < ?
+      SELECT * FROM visit_hospital 
+      WHERE hospitalSpId = ? 
+      AND data >= date(?, '-3 days') 
+      AND data < ?
       ''', [
           hospitalSpId,
           visitHospitalModel.data,
           visitHospitalModel.data
         ]);
+
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
-           await txn.insert(
+          // تنقيص عدد الزيارات بمقدار 1 إذا كانت أكبر من 0
+          if (currentVisits > 0) {
+            await txn.rawUpdate('''
+          UPDATE hospitalSp 
+          SET visit = visit - 1 
+          WHERE id = ?
+          ''', [hospitalSpId]);
+          }
+
+          await txn.insert(
             'visit_hospital',
             visitHospitalModel.toJson(),
             conflictAlgorithm: ConflictAlgorithm.replace,
@@ -577,6 +626,8 @@ class AppSqlApi {
       }
     });
   }
+
+
   Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(
       int visitId) async {
     Database? mydb = await databaseHelper.database;
@@ -630,24 +681,22 @@ class AppSqlApi {
     });
   }
 
-  Future<List<SpecHospitalSp>> specializationByHospitalId(
-      int hospitalId) async {
+  Future<List<SpecHospitalSp>> specializationByHospitalId(int hospitalId) async {
     Database? mydb = await databaseHelper.database;
+
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
-      SELECT hospitalSp.*, 
-      specialization.id as specialization_id,
-      specialization.title as specialization_title
-      
-      FROM specialization
-      JOIN hospitalSp  ON hospitalSp.spId = specialization.id
-      WHERE hospitalSp.hospitalId = ?
-    ''', [hospitalId]);
+    SELECT hospitalSp.*, 
+           specialization.id as specialization_id,
+           specialization.title as specialization_title
+    FROM specialization
+    JOIN hospitalSp ON hospitalSp.spId = specialization.id
+    WHERE hospitalSp.hospitalId = ?
+    AND hospitalSp.visit > 0
+  ''', [hospitalId]);
     return List.generate(maps.length, (i) {
       SpecModel specModel = SpecModel.fromMap1(maps[i]);
       HospitalSpModel hospitalSpModel = HospitalSpModel.fromMap(maps[i]);
-      SpecHospitalSp specHospitalSp =
-          SpecHospitalSp(specModel, hospitalSpModel);
-      return specHospitalSp;
+      return SpecHospitalSp(specModel, hospitalSpModel);
     });
   }
 
