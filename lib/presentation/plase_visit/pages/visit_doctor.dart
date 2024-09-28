@@ -25,7 +25,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
   final TextEditingController _noteeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
@@ -102,14 +101,11 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        if(value!.isEmpty){
-
+                        if (value!.isEmpty) {
                           return "الحقل مطلوب";
-
                         }
                         return null;
                       },
-
                       controller: _noteController,
                       obscureText: false,
                       minLines: 3,
@@ -124,14 +120,11 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        if(value!.isEmpty){
-
+                        if (value!.isEmpty) {
                           return "الحقل مطلوب";
-
                         }
                         return null;
                       },
-
                       controller: _issueController,
                       obscureText: false,
                       minLines: 3,
@@ -152,6 +145,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                             .add(TypeAdditionEvent(value));
                       },
                       validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "اختر نوع الطلب";
+                        }
                         return null;
                       },
                     ),
@@ -159,7 +155,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
                       child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                         buildWhen: (previous, current) {
-                          return current is BoxState || current is DropDownState;
+                          return current is BoxState ||
+                              current is DropDownState;
                         },
                         builder: (context, state) {
                           if (state is BoxState) {
@@ -175,14 +172,11 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                   prefixIcon: null,
                                   maxLines: 4,
                                   validator: (value) {
-                                    if(value!.isEmpty){
-
+                                    if (value!.isEmpty) {
                                       return "الحقل مطلوب";
-
                                     }
                                     return null;
                                   },
-
                                   controller: _noteeController,
                                   obscureText: false,
                                   minLines: 3,
@@ -201,11 +195,12 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                 ),
                                 CustomDropDownSearch(
                                   hintText: "العينات",
-                                  items: context.watch<VisitPlaceBloc>().bandFlag,
+                                  items:
+                                      context.watch<VisitPlaceBloc>().bandFlag,
                                   onChanged: (value) {
                                     BrandModel brand = value;
-                                    BlocProvider.of<VisitPlaceBloc>(context).add(
-                                        SelectBrandAddEvent(
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(SelectBrandAddEvent(
                                             " ${brand.title} ${brand.phTitle} , "));
                                   },
                                   validator: (value) {
@@ -229,14 +224,11 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                         prefixIcon: null,
                                         maxLines: 4,
                                         validator: (value) {
-                                          if(value!.isEmpty){
-
+                                          if (value!.isEmpty) {
                                             return "الحقل مطلوب";
-
                                           }
                                           return null;
                                         },
-
                                         controller: _noteeController,
                                         obscureText: false,
                                         minLines: 3,
@@ -279,8 +271,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor2,
                                   activeColor: ColorManager.secondaryColor2,
-                                  value:
-                                      !context.watch<VisitPlaceBloc>().isScience,
+                                  value: !context
+                                      .watch<VisitPlaceBloc>()
+                                      .isScience,
                                   onChanged: (value) {
                                     BlocProvider.of<VisitPlaceBloc>(context)
                                         .add(IsScienceEvent(false));
@@ -304,8 +297,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
                           print("object");
-                          error(
-                              context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                       },
                       child: CustomDropDownSearch(
@@ -386,7 +379,10 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                           ),
                                         ],
                                       ),
-                                      ...selectBrand.asMap().entries.map((entry) {
+                                      ...selectBrand
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
                                         final index = entry.key;
                                         final brand = entry.value;
                                         TextEditingController amount =
@@ -417,15 +413,18 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                                     BlocProvider.of<
                                                                 VisitPlaceBloc>(
                                                             context)
-                                                        .add(EditAmountBrandEvent(
-                                                            index, 1));
+                                                        .add(
+                                                            EditAmountBrandEvent(
+                                                                index, 1));
                                                   } else {
                                                     BlocProvider.of<
                                                                 VisitPlaceBloc>(
                                                             context)
-                                                        .add(EditAmountBrandEvent(
-                                                            index,
-                                                            int.parse(value)));
+                                                        .add(
+                                                            EditAmountBrandEvent(
+                                                                index,
+                                                                int.parse(
+                                                                    value)));
                                                   }
                                                 },
                                                 keyboardType:
@@ -464,13 +463,14 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Center(
                                                 child: IconButton(
                                                   color: const Color.fromARGB(
                                                       255, 155, 23, 14),
-                                                  icon:
-                                                      Icon(Icons.delete_forever),
+                                                  icon: Icon(
+                                                      Icons.delete_forever),
                                                   onPressed: () {
                                                     BlocProvider.of<
                                                                 VisitPlaceBloc>(
@@ -501,8 +501,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                           loading(context);
                         }
                         if (state is InsertVisitDoctorErrorState) {
-                          error(
-                              context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                         if (state is InsertVisitDoctorState) {
                           success(context);
@@ -519,8 +519,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                           loading(context);
                         }
                         if (state is AllVisitBrandDoctorErrorState) {
-                          error(
-                              context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                         if (state is AllVisitBrandDoctorState) {
                           success(context);
@@ -537,7 +537,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                        //      error(context, "يرجى إدخال الملاحظات", 1);
+                              //      error(context, "يرجى إدخال الملاحظات", 1);
                               DateTime now = DateTime.now();
 
                               VisitDoctorModel visitDoctorModel =

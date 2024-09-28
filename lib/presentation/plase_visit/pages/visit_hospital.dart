@@ -219,7 +219,7 @@ class _VisitHospitalState extends State<VisitHospital> {
                                         prefixIcon: null,
                                         maxLines: 4,
                                         validator: (value) {
-                                          if (value!.isEmpty) {
+                                          if (value == null || value.isEmpty) {
                                             return "اختر نوع الطلب";
                                           }
                                           return null;
@@ -340,7 +340,7 @@ class _VisitHospitalState extends State<VisitHospital> {
                             ),
                           );
                         } else {
-                          return Container();
+                          return Container(); // واجهة بديلة عند عدم تطابق الحالة
                         }
                       },
                     ),
