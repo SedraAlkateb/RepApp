@@ -45,6 +45,9 @@ import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacies_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
+import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
+import 'package:domina_app/domain/usecase/update_pharmacy_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
@@ -155,8 +158,11 @@ Future<void>initVisitsModule() async{
     instance.registerFactory<AllBrandsDoctorVisitsSqlUsecase>(() =>AllBrandsDoctorVisitsSqlUsecase(instance()));
     instance.registerFactory<AllBrandsHospitalVisitsSqlUsecase>(() =>AllBrandsHospitalVisitsSqlUsecase(instance()));
     instance.registerFactory<AllVisitHospitalSqlUsecase>(() =>AllVisitHospitalSqlUsecase(instance()));
-
-    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance(),instance(),instance(),instance(),instance()));
+    instance.registerFactory<UpdateDoctorUsecase>(() =>UpdateDoctorUsecase(instance()));
+    instance.registerFactory<UpdateHospitalUsecase>(() =>UpdateHospitalUsecase(instance()));
+    instance.registerFactory<UpdatePharmacyUsecase>(() =>UpdatePharmacyUsecase(instance()));
+    instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance(),instance(),
+        instance(),instance(),instance(),instance(),instance(),instance()));
   }
 }
 Future<void>initSpecModule() async{
