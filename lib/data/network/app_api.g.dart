@@ -503,12 +503,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<MessageResponse> visitDoctor(List<VisitPharmacyRequest> list) async {
+  Future<Message1Response> visitDoctor(
+      List<VisitDoctorRequestBody> list) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = list.map((e) => e.toJson()).toList();
-    final _options = _setStreamType<MessageResponse>(Options(
+    final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -525,9 +526,9 @@ class _AppServiceClient implements AppServiceClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late MessageResponse _value;
+    late Message1Response _value;
     try {
-      _value = MessageResponse.fromJson(_result.data!);
+      _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

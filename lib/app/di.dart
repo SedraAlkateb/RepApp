@@ -48,8 +48,10 @@ import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_pharmacy_usecase.dart';
+import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
+import 'package:domina_app/presentation/async_in/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
@@ -169,6 +171,13 @@ Future<void>initSpecModule() async{
   if(!GetIt.I.isRegistered<AllSpecsSqlUsecase>()){
     instance.registerFactory<AllSpecsSqlUsecase>(() =>AllSpecsSqlUsecase(instance()));
     instance.registerFactory<SpecializationBloc>(() =>SpecializationBloc(instance()));
+  }
+}
+Future<void>initAsyncInModule() async{
+  if(!GetIt.I.isRegistered<AsyncInBloc>()){
+    instance.registerFactory<VisitDoctorUsecase>(() =>VisitDoctorUsecase(instance()));
+    instance.registerFactory<VisitPharmacyUsecase>(() =>VisitPharmacyUsecase(instance()));
+    instance.registerFactory<AsyncInBloc>(() =>AsyncInBloc(instance(),instance()));
   }
 }
 

@@ -56,6 +56,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         }
 
       }
+
       if(event is EditEvent){
         (await editIsLoginSqlUsecase.execute(UserInfo.repId,2)).fold((failure) {
           emit(SyncDataErrorState(failure: failure));
