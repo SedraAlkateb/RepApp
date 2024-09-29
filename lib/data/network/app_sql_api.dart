@@ -718,11 +718,7 @@ class AppSqlApi {
     }
 
   }
-  Future<void> updateVisitDoctorFields({
-    required int id,
-    String? kaswn,
-    String? science,
-  }) async {
+  Future<void> updateVisitDoctorFields({required int id, String? kaswn, String? science,}) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
     if (kaswn != null) {
@@ -740,11 +736,7 @@ class AppSqlApi {
       );
     }
   }
-  Future<void> updateVisitHospitalFields({
-    required int id,
-    String? kaswn,
-    String? science,
-  }) async {
+  Future<void> updateVisitHospitalFields({required int id, String? kaswn, String? science,}) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
     if (kaswn != null) {
@@ -761,6 +753,16 @@ class AppSqlApi {
         whereArgs: [id],
       );
     }
+  }
+  getPharmaciesVisit()async{
+    final db = await databaseHelper.database;
+    await db.transaction((txn) async {
+      final List<Map<String, dynamic>> maps = await txn.query('visit_hospital');
+      return List.generate(maps.length, (i) {
+        return SpecModel.fromMap(maps[i]);
+      });
+    });
+
   }
 
 }

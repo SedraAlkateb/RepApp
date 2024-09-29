@@ -30,9 +30,9 @@ class _MyLoginState extends State<MyLogin> {
           key: formKey,
           child: Stack(
             children: [
-              Container(
-               
-               padding: EdgeInsets.only(right: 150,top:130 ),
+              Positioned(
+                top: 60,
+                left: 40,
                 child: Text(
                   'مرحبا بك\nفي Domina',textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white, fontSize: 33),

@@ -13,7 +13,7 @@ class AsyncLoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p40, vertical: AppPadding.p120),
+        padding: const EdgeInsets.only(left: AppPadding.p40,right: AppPadding.p40, top: AppPadding.p120),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
