@@ -11,6 +11,7 @@ class PharmacyVisit extends StatelessWidget {
   const PharmacyVisit({super.key});
   @override
   Widget build(BuildContext context) {
+
     return  Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),

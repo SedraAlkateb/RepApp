@@ -41,12 +41,14 @@ class VisitsPage extends StatelessWidget {
                   Icon(Icons.groups,color: ColorManager.secondaryColor1,):
                   Icon(Icons.groups)
                     ,text: 'الأطباء',),
-                  Tab(icon:                  context.watch<VisitBloc>().current==1?
+                  Tab(icon:
+                  context.watch<VisitBloc>().current==2?
                   Icon(Icons.local_hospital,color: ColorManager.secondaryColor1,):
                   Icon(Icons.local_hospital)
                     ,text: 'المشافي',)
                 ]
             ),
+
           ),
           body: TabBarView(
               children: [

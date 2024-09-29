@@ -22,12 +22,18 @@ class PlaceVisitPage extends StatelessWidget {
                   if (value == 0) {
                     BlocProvider.of<VisitPlaceBloc>(context)
                         .add(PharmacyByPlace(placeId, value));
+                    BlocProvider.of<VisitPlaceBloc>(context)
+                        .add(BrandAnyFlagEvent());
                   } else if (value == 1) {
                     BlocProvider.of<VisitPlaceBloc>(context)
                         .add(DoctorByPlace(placeId, value));
+                    BlocProvider.of<VisitPlaceBloc>(context)
+                        .add(BrandFlagEvent());
                   } else {
                     BlocProvider.of<VisitPlaceBloc>(context)
                         .add(HospitalByPlace(placeId, value));
+                    BlocProvider.of<VisitPlaceBloc>(context)
+                        .add(BrandFlagEvent());
                   }
                 },
                 tabs: [

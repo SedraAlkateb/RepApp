@@ -469,12 +469,12 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> visitPharmacy(VisitPharmacyRequestBody list1) async {
+  Future<Message1Response> visitPharmacy(VisitPharmacyRequestBody list) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(list1.toJson());
+    _data.addAll(list.toJson());
     final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',
       headers: _headers,
@@ -503,12 +503,46 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> visitDoctor(
-      List<VisitDoctorRequestBody> list) async {
+  Future<Message1Response> visitDoctor(VisitDoctorRequestBody list) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = list.map((e) => e.toJson()).toList();
+    final _data = <String, dynamic>{};
+    _data.addAll(list.toJson());
+    final _options = _setStreamType<Message1Response>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/visitDoctor.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> visitHospital(VisitHospitalRequestBody list) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(list.toJson());
     final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',
       headers: _headers,

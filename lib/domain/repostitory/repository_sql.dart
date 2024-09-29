@@ -30,7 +30,6 @@ abstract class RepositorySql {
   Future<Either<Failure,Null>>insertDoctor(List<DoctorModel> doctorModel);
   Future<Either<Failure,List<DoctorModel>>>getDoctorSql();
 
-
   Future<Either<Failure,Null>>insertHospital(List<HospitalModel> hospitalModel);
   Future<Either<Failure,List<HospitalModel>>>getHospitalSql();
   Future<Either<Failure,List<PharmacyModel>>>getPharmaciesByPlaceId(int placeId);

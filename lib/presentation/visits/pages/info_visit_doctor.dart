@@ -65,6 +65,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                             icon: Icon(Icons.arrow_back_sharp,
                                 color: ColorManager.white))),
                     Text(
+                      textAlign: TextAlign.center,
                       widget.doctorModel.doctorModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
@@ -72,10 +73,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       height: 10,
                     ),
                     Text(
+                      textAlign: TextAlign.center,
                       "عنوان الطبيب : ${widget.doctorModel.doctorModel.address}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
+
                       "تاريخ الزيارة : \n${widget.doctorModel.visitDoctorModel.data}",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium,
@@ -126,6 +129,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   BoxTextField(
+                    enabled: true,
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
@@ -230,10 +234,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if(state is UpdateVisitDoctorState){
-                        Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.visits,
-                              (route) => false,
-                        );
+                        Navigator.pop(context);
                       }
                     },
                     child:

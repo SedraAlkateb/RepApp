@@ -63,6 +63,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                               icon: Icon(Icons.arrow_back_sharp,
                                   color: ColorManager.white))),
                       Text(
+                        textAlign: TextAlign.center,
                         widget.hospitalModel.hospitalModel.title,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
@@ -74,10 +75,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
+                        textAlign: TextAlign.center,
                         "تاريخ الزيارة : ${widget.hospitalModel.visitHospitalModel.data}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
+                        textAlign: TextAlign.center,
                         " الاختصاص : ${widget.hospitalModel.specModel.title}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
@@ -234,10 +237,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if(state is UpdateVisitHospitalState){
-                        Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.visits,
-                              (route) => false,
-                        );
+                        Navigator.pop(context);
                       }
                     },
                     child:

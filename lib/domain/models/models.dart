@@ -213,20 +213,18 @@ class VisitHospitalRequest {
   String note;
   String issue;
   String special;
-  String splId;
-  String hospitalId;
+  String hospitalSpId;
   String repPlanId;
   String representativeId;
   VisitHospitalRequest(this.id, this.visitDate, this.note, this.issue,
-      this.special, this.hospitalId,this.splId, this.repPlanId, this.representativeId);
+      this.special, this.hospitalSpId, this.repPlanId, this.representativeId);
 
   Map<String, dynamic> toJson() {
     return {
       'id':id,
       'repPlanId':repPlanId,
       'representativeId':representativeId,
-      'hospitalId': hospitalId,
-      'splId': splId,
+      'hospitalSpId': hospitalSpId,
       'visitDate': visitDate,
       'note': note,
       'issue': issue,
@@ -240,19 +238,17 @@ class VisitHospitalRequest {
       map['note'],
       map['issue'],
       map['special'],
-      map['hospitalId'],
-      map['splId'],
+      map['hospitalSpId'],
       map['repPlanId'],
       map['representativeId'],
     );
   }
-
 }
 class VisitHospitalRequestBody {
   List<VisitHospitalRequest> list1;
   List<VisitBrandPharmacyModel> list2;
-
-  VisitHospitalRequestBody(this.list1, this.list2);
+  List<HospitalSpModel> list3;
+  VisitHospitalRequestBody(this.list1, this.list2,this.list3);
 
   Map<String, dynamic> toJson() {
     return {

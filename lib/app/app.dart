@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<VisitPlaceBloc>(
           create: (context) {
             final bloc = instance<VisitPlaceBloc>();
-            bloc.add(BrandFlagEvent());
+            bloc.add(BrandAnyFlagEvent());
             return bloc;
           },
         ),

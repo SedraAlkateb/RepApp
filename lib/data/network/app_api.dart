@@ -57,12 +57,16 @@ abstract class AppServiceClient {
       );
   @POST("/pharmacyVisit.php")
   Future<Message1Response> visitPharmacy(
-      @Body() VisitPharmacyRequestBody list1
+      @Body() VisitPharmacyRequestBody list
       );
 
   @POST("/visitDoctor.php")
   Future<Message1Response> visitDoctor(
-      @Body() List<VisitDoctorRequestBody> list
+      @Body() VisitDoctorRequestBody list
+      );
+  @POST("/visitDoctor.php")
+  Future<Message1Response> visitHospital(
+      @Body() VisitHospitalRequestBody list
       );
 /*
   @POST("/visitDoctorBrand.php")
