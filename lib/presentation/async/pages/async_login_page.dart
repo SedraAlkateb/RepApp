@@ -6,8 +6,8 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AsyncPage extends StatelessWidget {
-  const AsyncPage({super.key});
+class AsyncLoginPage extends StatelessWidget {
+  const AsyncLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -153,6 +153,116 @@ class VisitPharmacyRequestBody {
     };
   }
 }
+class VisitDoctorRequest {
+  String id;
+  String visitDate;
+  String note;
+  String issue;
+  String special;
+
+  String doctorId;
+  String repPlanId;
+  String representativeId;
+
+  VisitDoctorRequest(this.id, this.visitDate, this.note, this.issue,
+      this.special, this.doctorId, this.repPlanId, this.representativeId);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id':id,
+      'repPlanId':repPlanId,
+      'representativeId':representativeId,
+      'docId': doctorId,
+      'visitDate': visitDate,
+      'note': note,
+      'issue': issue,
+      'special': special
+    };
+  }
+  factory VisitDoctorRequest.fromMap(Map<String, dynamic> map) {
+    return VisitDoctorRequest(
+      map['id'],
+      map['VisitDate'],
+      map['note'],
+      map['issue'],
+      map['special'],
+      map['DoctorId'],
+      map['repPlanId'],
+      map['representativeId'],
+    );
+  }
+
+}
+class VisitDoctorRequestBody {
+  List<VisitDoctorRequest> list1;
+  List<VisitBrandPharmacyModel> list2;
+  VisitDoctorRequestBody(this.list1, this.list2);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': list1.map((e) => e.toJson()).toList(),
+      'list2': list2.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+
+class VisitHospitalRequest {
+  String id;
+  String visitDate;
+  String note;
+  String issue;
+  String special;
+  String splId;
+  String hospitalId;
+  String repPlanId;
+  String representativeId;
+  VisitHospitalRequest(this.id, this.visitDate, this.note, this.issue,
+      this.special, this.hospitalId,this.splId, this.repPlanId, this.representativeId);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id':id,
+      'repPlanId':repPlanId,
+      'representativeId':representativeId,
+      'hospitalId': hospitalId,
+      'splId': splId,
+      'visitDate': visitDate,
+      'note': note,
+      'issue': issue,
+      'special': special
+    };
+  }
+  factory VisitHospitalRequest.fromMap(Map<String, dynamic> map) {
+    return VisitHospitalRequest(
+      map['id'],
+      map['VisitDate'],
+      map['note'],
+      map['issue'],
+      map['special'],
+      map['hospitalId'],
+      map['splId'],
+      map['repPlanId'],
+      map['representativeId'],
+    );
+  }
+
+}
+class VisitHospitalRequestBody {
+  List<VisitHospitalRequest> list1;
+  List<VisitBrandPharmacyModel> list2;
+
+  VisitHospitalRequestBody(this.list1, this.list2);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': list1.map((e) => e.toJson()).toList(),
+      'list2': list2.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+
 class VisitPharmacyAndPharmacy{
   PharmacyModel pharmacyModel;
   VisitPharmacyModel visitPharmacyModel;

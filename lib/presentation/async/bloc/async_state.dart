@@ -25,3 +25,5 @@ final class SyncDataLoadingState extends AsyncState {
   @override
   List<Object?> get props =>[];
 }
+
+

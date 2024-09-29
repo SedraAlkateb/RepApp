@@ -700,62 +700,37 @@ class AppSqlApi {
     });
   }
 
-  Future<void> updateVisitData({
+  Future<void> updateVisitPharmacy({
     required int visitId,
-    required int visitBrandId,
     String? newNote,
-    String? newAmount,
   }) async {
     Database? mydb =
-        await databaseHelper.database; // الحصول على اتصال بقاعدة البيانات
-
-    // تحديث الـ note إذا تم تمرير newNote
+        await databaseHelper.database;
     if (newNote != null) {
       await mydb.update(
         'visit_pharmacy',
-        {'note': newNote}, // البيانات التي نرغب بتحديثها
-        where: 'id = ?', // تحديد الصف بناءً على الـ id
-        whereArgs: [
-          visitId
-        ], // القيمة الخاصة بـ visitId لتحديد السطر المراد تعديله
-      );
-    }
-
-
-    if (newAmount != null) {
-      await mydb.update(
-        'visit_brand_pharmacy',
-        {'amount': newAmount},
+        {'note': newNote},
         where: 'id = ?',
         whereArgs: [
-          visitBrandId
+          visitId
         ],
       );
     }
+
   }
   Future<void> updateVisitDoctorFields({
     required int id,
-    String? data,
     String? kaswn,
     String? science,
   }) async {
     Database? mydb = await databaseHelper.database;
-
-    // إعداد قائمة التحديثات
     Map<String, dynamic> updates = {};
-
-    // إضافة الحقول التي ليست null إلى قائمة التحديثات
-    if (data != null) {
-      updates['data'] = data;
-    }
     if (kaswn != null) {
       updates['kaswn'] = kaswn;
     }
     if (science != null) {
       updates['science'] = science;
     }
-
-    // إذا كانت هناك حقول للتحديث، قم بإجراء التحديث
     if (updates.isNotEmpty) {
       await mydb.update(
         'visit_doctor',
@@ -767,23 +742,17 @@ class AppSqlApi {
   }
   Future<void> updateVisitHospitalFields({
     required int id,
-    String? data,
     String? kaswn,
     String? science,
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
-    if (data != null) {
-      updates['data'] = data;
-    }
     if (kaswn != null) {
       updates['kaswn'] = kaswn;
     }
     if (science != null) {
       updates['science'] = science;
     }
-
-    // إذا كانت هناك حقول للتحديث، قم بإجراء التحديث
     if (updates.isNotEmpty) {
       await mydb.update(
         'visit_hospital',

@@ -1,5 +1,6 @@
 import 'package:domina_app/app/di.dart';
-import 'package:domina_app/presentation/async/pages/async_page.dart';
+import 'package:domina_app/presentation/async/pages/async_login_page.dart';
+import 'package:domina_app/presentation/async_in/page/async_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital.dart';
@@ -23,6 +24,7 @@ class Routes {
   static const String placeVisit = "/placeVisit";
   static const String visitPharmacy = "/visitPharmacy";
   static const String visits = "/visits";
+  static const String asyncIn = "/asyncIn";
 
 }
 class RouteGenerator {
@@ -52,10 +54,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     PharmacyPage());
       case Routes.syncData:
         initAsyncModule();
-        return MaterialPageRoute(builder: (_) =>     AsyncPage());
+        return MaterialPageRoute(builder: (_) =>     AsyncLoginPage());
       case Routes.visits:
         initVisitsModule();
         return MaterialPageRoute(builder: (_) =>     VisitsPage());
+      case Routes.asyncIn:
+        initAsyncInModule();
+        return MaterialPageRoute(builder: (_) =>     AsyncPage());
       case Routes.placeVisit:
         return MaterialPageRoute(builder: (_) =>     PlaceVisitPage(placeId: 2));
       default:

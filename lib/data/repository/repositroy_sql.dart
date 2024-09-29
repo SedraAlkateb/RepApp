@@ -450,4 +450,39 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, Null>> updateVisitDoctorFields({required int id, String? kaswn, String? science}) async {
+    try {
+      await _databaseHelper.updateVisitDoctorFields(id: id,kaswn: kaswn,science: science);
+      return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+  @override
+  Future<Either<Failure, Null>> updateVisitHospitalFields({required int id, String? kaswn, String? science})async {
+    try {
+      await _databaseHelper.updateVisitHospitalFields(id: id,kaswn: kaswn,science: science);
+      return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> updateVisitPharmacy({required int visitId, String? newNote}) async {
+    try {
+      await _databaseHelper.updateVisitPharmacy(visitId: visitId,newNote: newNote);
+      return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

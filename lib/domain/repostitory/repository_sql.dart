@@ -57,7 +57,20 @@ abstract class RepositorySql {
   Future<Either<Failure,Null>>insertVisitHospital(VisitHospitalModel visitHospitalModel,int hos,
       int spec);
   Future<Either<Failure,Null>>editIsLogin(int repId, int isLogin);
-
+  Future<Either<Failure,Null>>updateVisitPharmacy({
+    required int visitId,
+    String? newNote,
+  }) ;
+  Future<Either<Failure,Null>>updateVisitDoctorFields({
+    required int id,
+    String? kaswn,
+    String? science,
+  }) ;
+  Future<Either<Failure,Null>>updateVisitHospitalFields({
+    required int id,
+    String? kaswn,
+    String? science,
+  });
 
 
 }

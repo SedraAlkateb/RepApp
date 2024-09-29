@@ -143,7 +143,7 @@ class DrawerPage extends StatelessWidget {
              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
                   context,
-                  Routes.syncData,
+                  Routes.asyncIn,
                 );
 
               });

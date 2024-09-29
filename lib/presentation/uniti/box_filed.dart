@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 
 
 class BoxTextField extends StatelessWidget {
-  BoxTextField({Key? key,this.minLines,this.maxLines,this.enabled,this.hintStyle,required this.inputFormatters, required this.keyboardType, required this.prefixIcon,    this.suffixIcon, required this.validator, required this.controller, required this.obscureText}) : super(key: key);
+  BoxTextField({Key? key,this.minLines,this.maxLines,this.enabled,this.hintStyle,required this.inputFormatters,
+    required this.keyboardType, required this.prefixIcon,    this.suffixIcon, required this.validator,
+    required this.controller, required this.obscureText,this.onchange}) : super(key: key);
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Icon? prefixIcon;
   final Icon? suffixIcon;
   FormFieldValidator<String>? validator;
+  FormFieldValidator<String>? onchange;
 
   final bool obscureText;
   final int ? minLines;
@@ -26,6 +29,7 @@ class BoxTextField extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: TextFormField(
+          onChanged:  onchange,
           inputFormatters: inputFormatters,
           maxLines: maxLines??1,
           minLines:minLines ,
@@ -47,6 +51,7 @@ class BoxTextField extends StatelessWidget {
               enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.hintGrey)) ,
               hintStyle:hintStyle?? const TextStyle(fontSize: 14)
           ),
+
         ),
       );
   }}

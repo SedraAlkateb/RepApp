@@ -190,7 +190,6 @@ class Places extends StatelessWidget {
                     },
                     itemCount: placeModel.length),
               );
-              ;
             },
           ),
         ),

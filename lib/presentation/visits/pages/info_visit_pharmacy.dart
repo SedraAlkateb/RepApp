@@ -1,5 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,6 @@ class InfoVisitPharmacy extends StatefulWidget {
 
 class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
   final TextEditingController _noteController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     _noteController.text=widget.pharmacyModel.visitPharmacyModel.note;
@@ -38,8 +39,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
-              child: Form(
-                key: _formKey,
+              child: Padding(
+                padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -92,6 +93,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                       }
                       return null;
                     },
+
                     controller: _noteController,
                     obscureText: false,
                     minLines: 3,
@@ -192,10 +194,30 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                   ),
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
+                      if(state is UpdateVisitPharmacyState){
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.visits,
+                              (route) => false,
+                        );
+                      }
                     },
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("ارسال")),
+                    child: BlocListener<VisitBloc, VisitState>(
+  listener: (context, state) {
+  if(state is UpdateVisitPharmacyState){
+    Navigator.pushNamedAndRemoveUntil(
+      context, Routes.visits,
+          (route) => false,
+    );
+  }
+  },
+  child: ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<VisitBloc>(context).add(
+                              UpdateVisitPharmacyEvent
+                            (data: _noteController.text, id: widget.pharmacyModel.visitPharmacyModel.id));
+                        },
+                        child: Text("تعديل")),
+),
                   )
                 ],
               ),
