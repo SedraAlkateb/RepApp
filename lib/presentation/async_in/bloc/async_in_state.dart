@@ -1,9 +1,12 @@
 part of 'async_in_bloc.dart';
 
 @immutable
-sealed class AsyncInState {}
+sealed class AsyncInState extends Equatable {}
 
-final class AsyncInInitial extends AsyncInState {}
+final class AsyncInInitial extends AsyncInState {
+  @override
+  List<Object?> get props => [];
+}
 
 
 

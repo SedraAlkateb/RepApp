@@ -7,7 +7,9 @@ import 'package:domina_app/domain/usecase/all_brands_pharmacy_visits_sql_usecase
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_pharmacy_sql_usecase.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
+import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
+import 'package:domina_app/domain/usecase/update_pharmacy_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'visit_event.dart';
