@@ -7,12 +7,12 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'place_event.dart';
 part 'place_state.dart';
+
 class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
-List<PlaceModel> placeModel =[];
-List<PlaceModel> placeSearchModel =[];
-VisitPharmacyUsecase visitPharmacyUsecase;
-int k=0;
+  List<PlaceModel> placeModel = [];
+  List<PlaceModel> placeSearchModel = [];
+  int k = 0;
 /*
 List<VisitPharmacyModel> vi=[
   VisitPharmacyModel(0, "data5", "note75", 5),
@@ -24,39 +24,29 @@ List<VisitPharmacyModel> vi=[
     VisitBrandPharmacyModel(0, 0, 0, 0)
   ];
  */
-  PlaceBloc(
-      this.allPlaceUsecase,
-      this.visitPharmacyUsecase
-      ) : super(PlaceInitial()) {
-    on<PlaceEvent>((event, emit)async {
-    //  VisitPharmacyRequestBody  v=VisitPharmacyRequestBody(vi.toDomain(), list2);
-      if(event is AllPlaceEvent){
-    //   emit(AllPlaceLoadingState());
-        (
-            await allPlaceUsecase.execute()).fold(
-      (failure)  {
-      emit(AllPlaceErrorState(failure: failure));
-      },
-      (data)  async{
-        placeModel=data;
-        placeSearchModel=data;
-      emit(AllPlaceState(data));
+  PlaceBloc(this.allPlaceUsecase) : super(PlaceInitial()) {
+    on<PlaceEvent>((event, emit) async {
+      //  VisitPharmacyRequestBody  v=VisitPharmacyRequestBody(vi.toDomain(), list2);
+      if (event is AllPlaceEvent) {
+        //   emit(AllPlaceLoadingState());
+        (await allPlaceUsecase.execute()).fold((failure) {
+          emit(AllPlaceErrorState(failure: failure));
+        }, (data) async {
+          placeModel = data;
+          placeSearchModel = data;
+          emit(AllPlaceState(data));
+        });
       }
-      );
-    }
-    if(event is SearchPlaceEvent){
-   placeSearchModel = placeModel
-      .where((value) {
-if(value.title.contains(event.value)){
-  return true;
-}else{
-  return false;
-}
-      
-      }  )
-      .toList();
-      emit(SearchPlaceState(placeSearchModel));
-    }
+      if (event is SearchPlaceEvent) {
+        placeSearchModel = placeModel.where((value) {
+          if (value.title.contains(event.value)) {
+            return true;
+          } else {
+            return false;
+          }
+        }).toList();
+        emit(SearchPlaceState(placeSearchModel));
+      }
     });
   }
 }
