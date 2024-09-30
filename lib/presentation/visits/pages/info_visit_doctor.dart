@@ -78,7 +78,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-
                       "تاريخ الزيارة : \n${widget.doctorModel.visitDoctorModel.data}",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium,
