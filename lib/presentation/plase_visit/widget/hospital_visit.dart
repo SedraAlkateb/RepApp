@@ -18,7 +18,6 @@ class HospitalVisit extends StatefulWidget {
 
 class _HospitalVisitState extends State<HospitalVisit> with AutomaticKeepAliveClientMixin  {
   final TextEditingController searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     super.build(context);

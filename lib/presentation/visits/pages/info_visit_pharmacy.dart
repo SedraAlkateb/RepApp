@@ -160,7 +160,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                               ],
                             ),
                             ...selectBrand.asMap().entries.map((entry) {
-                              final index = entry.key;
+                            //  final index = entry.key;
                               final brand = entry.value;
                               return TableRow(
                                 children: [

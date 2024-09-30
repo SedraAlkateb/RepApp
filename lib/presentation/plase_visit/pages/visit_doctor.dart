@@ -1,5 +1,6 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
@@ -510,7 +511,10 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               message: "succsec",
                               context: context,
                               btnOkOnPress: "d");
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.places,
+                                (route) => false,
+                          );
                         }
                         if (state is AllVisitBrandDoctorLoadingState) {
                           loading(context);
@@ -525,7 +529,10 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               message: "succsec",
                               context: context,
                               btnOkOnPress: "d");
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.places,
+                                (route) => false,
+                          );
                         }
                       },
                       child: ElevatedButton(

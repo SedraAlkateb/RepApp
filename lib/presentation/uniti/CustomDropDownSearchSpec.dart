@@ -36,7 +36,13 @@ class Customdropdownsearchspec extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-          title: Text('${item.specModel.title}'),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('${item.specModel.title} '),
+              Text('${item.hospitalSpModel.rate}'),
+            ],
+          ),
                   onTap: () {
                     onChanged(item);
                   },

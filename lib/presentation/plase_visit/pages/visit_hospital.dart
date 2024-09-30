@@ -1,5 +1,6 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
@@ -7,7 +8,6 @@ import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
@@ -76,7 +76,7 @@ class _VisitHospitalState extends State<VisitHospital> {
                     ),
                     Text(
                       textAlign: TextAlign.center,
-                      "العنوان: ${widget.hospitalModel?.address ?? " "}",
+                      "العنوان: ${widget.hospitalModel.address ?? " "}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
@@ -565,42 +565,36 @@ class _VisitHospitalState extends State<VisitHospital> {
                               message: "succsec",
                               context: context,
                               btnOkOnPress: "d");
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.places,
+                                (route) => false,
+                          );
                         }
                         if (state is AllVisitBrandHospitalErrorState) {
                           error(context, state.failure.massage,
-                              state.failure.code);
-                        }
+                              state.failure.code);}
                         if (state is AllVisitBrandHospitalState) {
                           success(context);
                           SnackBarMessage().showSuccessSnackBar(
                               message: "succsec",
                               context: context,
                               btnOkOnPress: "d");
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.places,
+                                (route) => false,
+                          );
                         }
                       },
                       child: ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (_noteController.text.isEmpty ||
-                                  _issueController.text.isEmpty ||
-                                  _noteeController.text.isEmpty) {
-                                error(context, "يرجى إدخال الملاحظات", 1);
-                              }
-                              if (_noteController.text.isNotEmpty ||
-                                  context
-                                      .read<VisitPlaceBloc>()
-                                      .selectBrand
-                                      .isNotEmpty) {
+
+                            if (_formKey.currentState!.validate())  {
                                 DateTime now = DateTime.now();
-                                String formattedTime =
-                                    DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar')
-                                        .format(now);
+                                //   String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
                                 VisitHospitalModel visitHospitalModel =
                                     VisitHospitalModel(
                                         0,
-                                        formattedTime,
+                                        now.toIso8601String(),
                                         _issueController.text,
                                         _noteController.text,
                                         _noteeController.text,
@@ -620,7 +614,7 @@ class _VisitHospitalState extends State<VisitHospital> {
                                           widget.hospitalModel.id));
                                 }
                               }
-                            }
+
                           },
                           child: Text("تمت الزيارة")),
                     )
