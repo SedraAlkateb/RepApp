@@ -162,11 +162,13 @@ Future<void>initVisitsModule() async{
     instance.registerFactory<AllBrandsDoctorVisitsSqlUsecase>(() =>AllBrandsDoctorVisitsSqlUsecase(instance()));
     instance.registerFactory<AllBrandsHospitalVisitsSqlUsecase>(() =>AllBrandsHospitalVisitsSqlUsecase(instance()));
     instance.registerFactory<AllVisitHospitalSqlUsecase>(() =>AllVisitHospitalSqlUsecase(instance()));
-    instance.registerFactory<UpdateDoctorUsecase>(() =>UpdateDoctorUsecase(instance()));
-    instance.registerFactory<UpdateHospitalUsecase>(() =>UpdateHospitalUsecase(instance()));
-    instance.registerFactory<UpdatePharmacyUsecase>(() =>UpdatePharmacyUsecase(instance()));
+  //  instance.registerFactory<UpdateDoctorUsecase>(() =>UpdateDoctorUsecase(instance()));
+  //  instance.registerFactory<UpdateHospitalUsecase>(() =>UpdateHospitalUsecase(instance()));
+  //  instance.registerFactory<UpdatePharmacyUsecase>(() =>UpdatePharmacyUsecase(instance()));
     instance.registerFactory<VisitBloc>(() =>VisitBloc(instance(),instance(),instance(),
-        instance(),instance(),instance(),instance(),instance(),instance()));
+        instance(),instance(),instance()
+      //  ,instance(),instance(),instance()
+    ));
   }
 }
 Future<void>initSpecModule() async{

@@ -124,9 +124,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return "الحقل مطلوب";
-                        }
+                        // if (value!.isEmpty) {
+                        //   return "الحقل مطلوب";
+                        // }
                         return null;
                       },
                       controller: _issueController,
@@ -149,9 +149,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                             .add(TypeAdditionEvent(value));
                       },
                       validator: (value) {
-                        if (value == null ) {
-                          return "اختر نوع الطلب";
-                        }
+                        // if (value == null ) {
+                        //   return "اختر نوع الطلب";
+                        // }
                         return null;
                       },
                     ),
@@ -176,9 +176,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                   prefixIcon: null,
                                   maxLines: 4,
                                   validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "الحقل مطلوب";
-                                    }
+                                    // if (value!.isEmpty) {
+                                    //   return "الحقل مطلوب";
+                                    // }
                                     return null;
                                   },
                                   controller: _noteeController,
@@ -228,9 +228,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                                         prefixIcon: null,
                                         maxLines: 4,
                                         validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "الحقل مطلوب";
-                                          }
+                                          // if (value!.isEmpty) {
+                                          //   return "الحقل مطلوب";
+                                          // }
                                           return null;
                                         },
                                         controller: _noteeController,
@@ -314,6 +314,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               SelectBrandEvent(brand, widget.doctorModel.id));
                         },
                         validator: (value) {
+                          if (value == null ) {
+                            return "اختر نوع الطلب";
+                          }
                           return null;
                         },
                         errorText: 'لايوجد نتيجة',

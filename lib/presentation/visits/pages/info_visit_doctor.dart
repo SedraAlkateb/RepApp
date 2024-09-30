@@ -230,6 +230,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           : SizedBox();
                     },
                   ),
+                 /*
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if(state is UpdateVisitDoctorState){
@@ -243,6 +244,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                 (kas: _issueController.text,sc: _noteController.text, id: widget.doctorModel .visitDoctorModel.id));
                         }, child: Text("تعديل")),
                   )
+                  */
                 ],
               ),
             )
