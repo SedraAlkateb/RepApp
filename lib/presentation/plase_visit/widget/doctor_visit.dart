@@ -21,7 +21,7 @@ class _DoctorVisitState extends State<DoctorVisit> with AutomaticKeepAliveClient
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); // مهم لإبقاء الحالة
+    super.build(context);
 
     return Scaffold(
       body: SingleChildScrollView(

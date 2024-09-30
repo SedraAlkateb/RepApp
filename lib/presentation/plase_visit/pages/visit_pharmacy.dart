@@ -125,6 +125,9 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                               SelectBrandEvent(brand, widget.pharmacyModel.id));
                         },
                         validator: (value) {
+                          if (value == null ) {
+                            return "اختر نوع الطلب";
+                          }
                           return null;
                         },
                         errorText: 'لايوجد نتيجة',

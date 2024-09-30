@@ -200,6 +200,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                           : SizedBox();
                     },
                   ),
+                /*
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if(state is UpdateVisitPharmacyState){
@@ -224,6 +225,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                         child: Text("تعديل")),
 ),
                   )
+                 */
                 ],
               ),
             )

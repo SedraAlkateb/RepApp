@@ -22,9 +22,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
   AllBrandsDoctorVisitsSqlUsecase allBrandsDoctorVisitsSqlUsecase;
   AllBrandsHospitalVisitsSqlUsecase allBrandsHospitalVisitsSqlUsecase;
   AllVisitHospitalSqlUsecase allVisitHospitalSqlUsecase;
-  UpdatePharmacyUsecase updatePharmacyUsecase;
-  UpdateDoctorUsecase updateDoctorUsecase;
-  UpdateHospitalUsecase updateHospitalUsecase;
+ // UpdatePharmacyUsecase updatePharmacyUsecase;
+ // UpdateDoctorUsecase updateDoctorUsecase;
+ // UpdateHospitalUsecase updateHospitalUsecase;
   int current =0;
   List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors=[];
@@ -39,9 +39,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       this.allBrandsDoctorVisitsSqlUsecase,
       this.allBrandsHospitalVisitsSqlUsecase,
       this.allVisitHospitalSqlUsecase,
-      this.updatePharmacyUsecase,
-      this.updateDoctorUsecase,
-      this.updateHospitalUsecase
+   //   this.updatePharmacyUsecase,
+   //   this.updateDoctorUsecase,
+   //   this.updateHospitalUsecase
       ) : super(VisitInitial()) {
     on<VisitEvent>((event, emit)async {
       if(event is VisitPharmacyEvent)
@@ -66,6 +66,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
 
                 });
       }
+    /*
       if(event is UpdateVisitDoctorEvent)
       {
         (await updateDoctorUsecase.execute(event.id,event.sc,event.kas)).fold(
@@ -95,6 +96,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
 
             });
       }
+     */
       if(event is VisitHospitalEvent)
       {
         (await allVisitHospitalSqlUsecase.execute()).fold(

@@ -77,6 +77,7 @@ class SearchPharmacyVisitEvent extends VisitEvent{
 
   List<Object?> get props => [];
 }
+/*
 class UpdateVisitDoctorEvent extends VisitEvent{
  final int id;
  final String? kas;
@@ -100,3 +101,4 @@ class UpdateVisitPharmacyEvent extends VisitEvent{
   @override
   List<Object?> get props => [data];
 }
+ */

@@ -64,7 +64,9 @@ class PlaceVisitPage extends StatelessWidget {
                   ),
                 ]),
           ),
-          body: TabBarView(children: [
+          body: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              children: [
             PharmacyVisit(),
             DoctorVisit(),
             HospitalVisit(),

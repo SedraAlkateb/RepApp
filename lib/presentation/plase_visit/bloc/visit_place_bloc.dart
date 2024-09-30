@@ -94,6 +94,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(AllDoctorByPlaceErrorState(failure: failure));
         }, (data) async {
           doctors = data;
+          doctorSearchModel=doctors;
           emit(AllDoctorByPlaceState(data));
         });
       }
