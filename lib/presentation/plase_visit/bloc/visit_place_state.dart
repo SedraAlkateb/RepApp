@@ -250,3 +250,21 @@ class IsScienceState extends VisitPlaceState {
   @override
   List<Object?> get props => [isScience];
 }
+final class SearchVisitDoctorState extends VisitPlaceState {
+final List<DoctorModel> doctorVisit;
+  SearchVisitDoctorState(this.doctorVisit);
+  @override
+  List<Object?> get props =>[doctorVisit];
+}
+final class SearchVisitHospitalState extends VisitPlaceState {
+final List<HospitalModel> hospitalVisit;
+  SearchVisitHospitalState(this.hospitalVisit);
+  @override
+  List<Object?> get props =>[hospitalVisit];
+}
+final class SearchVisitPharmacyState extends VisitPlaceState {
+final List<PharmacyModel> pharmasyVisit;
+  SearchVisitPharmacyState(this.pharmasyVisit);
+  @override
+  List<Object?> get props =>[pharmasyVisit];
+}

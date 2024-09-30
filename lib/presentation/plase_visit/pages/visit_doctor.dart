@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class _VisitDoctorState extends State<VisitDoctor> {
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
@@ -35,12 +35,13 @@ class _VisitDoctorState extends State<VisitDoctor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      body: SingleChildScrollView(
+      body: SingleChildScrollView(  
+       
         child: Form(
-          key: _formKey,
+          key: _formKey, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: [  
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 250,
@@ -144,7 +145,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                             .add(TypeAdditionEvent(value));
                       },
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null ) {
                           return "اختر نوع الطلب";
                         }
                         return null;

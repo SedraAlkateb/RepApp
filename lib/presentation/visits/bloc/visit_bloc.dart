@@ -7,9 +7,9 @@ import 'package:domina_app/domain/usecase/all_brands_pharmacy_visits_sql_usecase
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_pharmacy_sql_usecase.dart';
+import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'visit_event.dart';
 part 'visit_state.dart';
 
@@ -96,7 +96,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       if(event is BrandHospitalVisitEvent)
       {
         (await allBrandsHospitalVisitsSqlUsecase.execute(event.visitId)).fold(
-                (failure)  {
+                (failure)  {   
               print(failure.massage);
               emit(BrandHospitalVisitErrorState(failure: failure));
             },
@@ -105,6 +105,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(BrandHospitalVisitState(data));
             });
       }
+          
     });
   }
 }

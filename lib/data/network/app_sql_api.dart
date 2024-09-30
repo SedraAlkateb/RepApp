@@ -651,11 +651,10 @@ class AppSqlApi {
     });
   }
 
-  Future<void> updateVisitData({
+  Future<void> updateVisitPharmacy({
     required int visitId,
-    required int visitBrandId,
+    
     String? newNote,
-    String? newAmount,
   }) async {
     Database? mydb =
         await databaseHelper.database; // الحصول على اتصال بقاعدة البيانات
@@ -669,18 +668,6 @@ class AppSqlApi {
         whereArgs: [
           visitId
         ], // القيمة الخاصة بـ visitId لتحديد السطر المراد تعديله
-      );
-    }
-
-
-    if (newAmount != null) {
-      await mydb.update(
-        'visit_brand_pharmacy',
-        {'amount': newAmount},
-        where: 'id = ?',
-        whereArgs: [
-          visitBrandId
-        ],
       );
     }
   }

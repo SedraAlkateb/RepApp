@@ -1,52 +1,85 @@
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_pharmacy.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PharmacyVisit extends StatelessWidget {
-  const PharmacyVisit({super.key});
+class PharmacyVisit extends StatefulWidget {
+   PharmacyVisit({super.key});
+
+  @override
+  State<PharmacyVisit> createState() => _PharmacyVisitState();
+}
+
+class _PharmacyVisitState extends State<PharmacyVisit> with AutomaticKeepAliveClientMixin {
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  bool get wantKeepAlive => true;
+
+
   @override
   Widget build(BuildContext context) {
+      super.build(context); // مهم لإبقاء الحالة
+
     return  Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:8),
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                listener: (context, state) {
-                  if(state is AllPharmacyByPlaceErrorState){
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      error(context, state.failure.massage, state.failure.code);
-                    });
+             SearchField(
+              searchController: searchController,
+              onPressed: (value) {
+                BlocProvider.of<VisitPlaceBloc>(context)
+                    .add(SearchPharmacyVisitEvent(value: value));
+              },
+            ),
+            BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
+              listener: (context, state) {
+                if(state is AllPharmacyByPlaceErrorState){
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    error(context, state.failure.massage, state.failure.code);
+                  });
+                }
+                /*
+                if(state is AllPharmacyByPlaceLoadingState){
+                  loading(context);
+                }
+                if(state is AllPharmacyByPlaceState){
+                success(context);}
+               */
+              },
+             builder:(context, state) {
+
+              List<PharmacyModel> pharmacies=context.watch<VisitPlaceBloc>().pharmacies;
+               if (state is SearchVisitPharmacyState) {
+                    pharmacies = state.pharmasyVisit;
                   }
-                  /*
-                  if(state is AllPharmacyByPlaceLoadingState){
-                    loading(context);
+                  if (state is AllPharmacyByPlaceState) {
+                    pharmacies = state.pharmacy;
                   }
-                  if(state is AllPharmacyByPlaceState){
-    success(context);}
-                 */
-                },
+return   Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ListView.builder
-                  (
+                  (physics: NeverScrollableScrollPhysics(),
+                   shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-
-  Navigator.push(context, MaterialPageRoute(builder: (context) {
-    return VisitPharmacy(
-      pharmacyModel: context.watch<VisitPlaceBloc>().pharmacies[index],
-    );
-  }));
-},
-
+                            
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return VisitPharmacy(
+                    pharmacyModel:pharmacies [index],
+                  );
+                }));
+                            },
+                            
                         child: Container(
                           margin: EdgeInsets.all(AppPadding.p8),
                           padding: EdgeInsets.all(AppPadding.p8),
@@ -54,7 +87,7 @@ class PharmacyVisit extends StatelessWidget {
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(color: ColorManager.secondaryColor4)
-
+                            
                             ],
                             color: ColorManager.white,
                             border:
@@ -70,15 +103,17 @@ class PharmacyVisit extends StatelessWidget {
                             children: [
                               Text(
                                 textAlign: TextAlign.center,
-                                context.watch<VisitPlaceBloc>().pharmacies[index].title,style: Theme.of(context).textTheme.labelLarge,),
-                              TextRach(s1: "العنوان : ", s2:  context.watch<VisitPlaceBloc>().pharmacies[index].address)
+                                pharmacies[index].title,style: Theme.of(context).textTheme.labelLarge,),
+                              TextRach(s1: "العنوان : ", s2:  pharmacies[index].address)
                             ],
                           ),
                         ),
                       );
-                    }, itemCount:  context.watch<VisitPlaceBloc>().pharmacies.length),
-              ),
-            ),
+                    }, itemCount:  pharmacies.length),
+              );
+           
+             }
+             ),
           ],
         ),
       ),

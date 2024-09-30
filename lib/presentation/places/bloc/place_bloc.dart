@@ -4,6 +4,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
+import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'place_event.dart';
@@ -13,6 +14,8 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
 List<PlaceModel> placeModel =[];
 List<PlaceModel> placeSearchModel =[];
 VisitPharmacyUsecase visitPharmacyUsecase;
+List<DoctorModel> doctorSearchModel =[];
+List<DoctorModel> doctorModel =[];
 int k=0;
 /*
 List<VisitPharmacyModel> vi=[
@@ -58,6 +61,7 @@ if(value.title.contains(event.value)){
       .toList();
       emit(SearchPlaceState(placeSearchModel));
     }
+
     });
   }
 }
