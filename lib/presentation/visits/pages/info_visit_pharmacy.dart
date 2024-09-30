@@ -10,13 +10,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class InfoVisitPharmacy extends StatefulWidget {
   InfoVisitPharmacy({super.key, required this.pharmacyModel});
   final VisitPharmacyAndPharmacy pharmacyModel;
-
+ 
   @override
   State<InfoVisitPharmacy> createState() => _InfoVisitPharmacyState();
 }
 
 class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
   final TextEditingController _noteController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     _noteController.text=widget.pharmacyModel.visitPharmacyModel.note;
@@ -31,6 +33,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+           
+                      
+                      
             Container(
               width: MediaQuery.of(context).size.width,
               height: 250,

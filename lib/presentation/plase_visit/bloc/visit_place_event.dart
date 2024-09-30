@@ -124,3 +124,27 @@ class IsScienceEvent extends VisitPlaceEvent {
   @override
   List<Object?> get props => [isScience];
 }
+class SearchDoctorVisitEvent extends VisitPlaceEvent{
+
+  final String value;
+  SearchDoctorVisitEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
+}
+class SearchHospitalVisitEvent extends VisitPlaceEvent{
+
+  final String value;
+  SearchHospitalVisitEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
+}
+class SearchPharmacyVisitEvent extends VisitPlaceEvent{
+
+  final String value;
+  SearchPharmacyVisitEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
+}

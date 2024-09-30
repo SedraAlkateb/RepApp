@@ -12,7 +12,6 @@ import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_pharmacy_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'visit_event.dart';
 part 'visit_state.dart';
 
@@ -133,7 +132,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       if(event is BrandHospitalVisitEvent)
       {
         (await allBrandsHospitalVisitsSqlUsecase.execute(event.visitId)).fold(
-                (failure)  {
+                (failure)  {   
               print(failure.massage);
               emit(BrandHospitalVisitErrorState(failure: failure));
             },
@@ -142,6 +141,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(BrandHospitalVisitState(data));
             });
       }
+          
     });
   }
 }

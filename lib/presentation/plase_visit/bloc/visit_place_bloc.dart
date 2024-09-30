@@ -36,8 +36,11 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   List<BrandModel> selectBrandAdd = [];
   List<BrandModel> bandFlag = [];
   List<PharmacyModel> pharmacies = [];
+   List<PharmacyModel> pharmaSearchModel = [];
   List<DoctorModel> doctors = [];
+    List<DoctorModel> doctorSearchModel = [];
   List<HospitalModel> hospitals = [];
+  List<HospitalModel>hospitalSearchModel = [];
   List<SpecHospitalSp> specialization = [];
   SpecHospitalSp? spec;
   List<VisitBrandPharmacyModel> visitBrandPharmacys = [];
@@ -245,6 +248,74 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         not=event.type.name;
         br=" ";
       }
+          if(event is SearchDoctorVisitEvent){
+   doctorSearchModel = doctors
+      .where((doctorvalue) {
+if(doctorvalue.title.contains(event.value)){
+  return true;
+}else{
+  return false;
+}
+      
+      }  )
+      .toList();
+      emit(SearchVisitDoctorState(doctorSearchModel));
+    }
+
+
+
+
+
+
+
+
+
+
+       if(event is SearchHospitalVisitEvent){
+   hospitalSearchModel = hospitals
+      .where((hospital) {
+if(hospital.title.contains(event.value)){
+  return true;
+}else{
+  return false;
+}
+      
+      }  )
+      .toList();
+      emit(SearchVisitHospitalState(hospitalSearchModel));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+     if(event is SearchPharmacyVisitEvent){
+   pharmaSearchModel = pharmacies
+      .where((pharmacy) {
+if(pharmacy.title.contains(event.value)){
+  return true;
+}else{
+  return false;
+}
+      
+      }  )
+      .toList();
+      emit(SearchVisitPharmacyState(pharmaSearchModel));
+    }
+
+
+
+
+
+
     });
 
   }
