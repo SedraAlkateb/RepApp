@@ -53,6 +53,29 @@ class BrandHospitalVisitEvent extends VisitEvent{
   List<Object?> get props => [visitId];
 
 }
+class SearchDoctorVisitEvent extends VisitEvent{
+
+  final String value;
+  SearchDoctorVisitEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
+}
+class SearchHospitalVisitEvent extends VisitEvent{
+
+  final String value;
+  SearchHospitalVisitEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
+}
+class SearchPharmacyVisitEvent extends VisitEvent{
+
+  final String value;
+  SearchPharmacyVisitEvent({required this.value});
+  @override
+
+  List<Object?> get props => [];
 class UpdateVisitDoctorEvent extends VisitEvent{
  final int id;
  final String? kas;

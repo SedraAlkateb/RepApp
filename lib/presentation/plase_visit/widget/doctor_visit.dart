@@ -1,71 +1,102 @@
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+class DoctorVisit extends StatefulWidget {
+  @override
+  _DoctorVisitState createState() => _DoctorVisitState();
+}
 
-class DoctorVisit extends StatelessWidget {
-  const DoctorVisit({super.key});
+class _DoctorVisitState extends State<DoctorVisit> with AutomaticKeepAliveClientMixin {
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:8),
+    super.build(context); // مهم لإبقاء الحالة
+
+    return Scaffold(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: BlocListener<VisitPlaceBloc, VisitPlaceState>(
+            SearchField(
+              searchController: searchController,
+              onPressed: (value) {
+                BlocProvider.of<VisitPlaceBloc>(context)
+                    .add(SearchDoctorVisitEvent(value: value));
+              },
+            ),
+            BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
                 listener: (context, state) {
-                  if(state is AllDoctorByPlaceErrorState){
+                  if (state is AllDoctorByPlaceErrorState) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       error(context, state.failure.massage, state.failure.code);
                     });
                   }
                 },
-                child: ListView.builder
-                  (
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return  VisitDoctor(doctorModel: context.watch<VisitPlaceBloc>().doctors[index],);
-                          },));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p16),
-                          //    height: AppSize.s150,
-                          decoration: BoxDecoration(
-                            color: ColorManager.white,
-                            border:
-                            Border.all(color: ColorManager.hintGrey),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(AppSize.s8)),
-                            //        color: ColorManager.card,
+                builder: (context, state) {
+                  List<DoctorModel> doctors = context.watch<VisitPlaceBloc>().doctorSearchModel;
+                  if (state is SearchVisitDoctorState) {
+                    doctors = state.doctorVisit;
+                  }
+                  if (state is AllDoctorByPlaceState) {
+                    doctors = state.data;
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5
+                    ),
+                    child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return VisitDoctor(doctorModel: doctors[index]);
+                              }),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(AppPadding.p8),
+                            padding: EdgeInsets.all(AppPadding.p16),
+                            decoration: BoxDecoration(
+                              color: ColorManager.white,
+                              border: Border.all(color: ColorManager.hintGrey),
+                              borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  doctors[index].title,
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                TextRach(s1: "العنوان: ", s2: doctors[index].address),
+                              ],
+                            ),
                           ),
-                          child:
-                          Column(
-                            children: [
-                              Text(context.watch<VisitPlaceBloc>().doctors[index].title,style: Theme.of(context).textTheme.labelLarge,),
-                              TextRach(s1: "العنوان: ", s2: context.watch<VisitPlaceBloc>().doctors[index].address)
-                            ],
-                          ),
-                        ),
-                      );
-                    }, itemCount: context.watch<VisitPlaceBloc>().doctors.length),
-
+                        );
+                      },
+                      itemCount: doctors.length,
+                    ),
+                  );
+                },
               ),
-            ),
+           
           ],
         ),
       ),
-    
     );
   }
 }

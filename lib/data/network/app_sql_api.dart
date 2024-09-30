@@ -709,14 +709,13 @@ class AppSqlApi {
     if (newNote != null) {
       await mydb.update(
         'visit_pharmacy',
-        {'note': newNote},
-        where: 'id = ?',
+        {'note': newNote}, // البيانات التي نرغب بتحديثها
+        where: 'id = ?', // تحديد الصف بناءً على الـ id
         whereArgs: [
           visitId
-        ],
+        ], // القيمة الخاصة بـ visitId لتحديد السطر المراد تعديله
       );
     }
-
   }
   Future<void> updateVisitDoctorFields({required int id, String? kaswn, String? science,}) async {
     Database? mydb = await databaseHelper.database;

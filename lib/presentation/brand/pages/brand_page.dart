@@ -32,7 +32,7 @@ class BrandPage extends StatelessWidget {
           },
         ),
         title: Text(
-            'جميع الأصناف'),
+            ' الأصناف'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:8),
