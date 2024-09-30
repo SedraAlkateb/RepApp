@@ -1,5 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
@@ -42,42 +44,48 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            iconSize: 30,
-                            padding: EdgeInsets.only(right: 15),
-                            icon: Icon(Icons.arrow_back_sharp,
-                                color: ColorManager.white))),
-                    Text(
-                      widget.hospitalModel.hospitalModel.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(textAlign: TextAlign.center,
-                      "عنوان المشفى : ${widget.hospitalModel.hospitalModel.address}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Text(
-                      "تاريخ الزيارة : ${widget.hospitalModel.visitHospitalModel.data}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Text(
-                      " الاختصاص : ${widget.hospitalModel.specModel.title}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
+              child:Padding(
+                padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              iconSize: 30,
+                              padding: EdgeInsets.only(right: 15),
+                              icon: Icon(Icons.arrow_back_sharp,
+                                  color: ColorManager.white))),
+                      Text(
+                        textAlign: TextAlign.center,
+                        widget.hospitalModel.hospitalModel.title,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(textAlign: TextAlign.center,
+                        "العنوان : ${widget.hospitalModel.hospitalModel.address}",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        textAlign: TextAlign.center,
+                        "تاريخ الزيارة : ${widget.hospitalModel.visitHospitalModel.data}",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        textAlign: TextAlign.center,
+                        " الاختصاص : ${widget.hospitalModel.specModel.title}",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -132,6 +140,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
+                    enabled: true,
                   ),
                   Text(
                     " العينات :",
@@ -227,10 +236,16 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                   ),
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
+                      if(state is UpdateVisitHospitalState){
+                        Navigator.pop(context);
+                      }
                     },
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("ارسال")),
+                    child:
+                    ElevatedButton( onPressed: () {
+                      BlocProvider.of<VisitBloc>(context).add(
+                          UpdateVisitHospitalEvent
+                            (kas: _issueController.text,sc: _noteController.text, id: widget.hospitalModel .visitHospitalModel.id));
+                    }, child: Text("تعديل")),
                   )
                 ],
               ),

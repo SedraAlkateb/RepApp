@@ -199,4 +199,35 @@ class RepositoryImp implements Repository {
       return Left(ErrorHandler.handle(error).failure);
     }
   }
+  @override
+  Future<Either<Failure, Message1Response>> visitDoctor(
+      VisitDoctorRequestBody list1) async {
+    try {
+      final response = await _remoteDataSource.visitDoctor(list1);
+      if (response.status == null) {
+        return Right(response);
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+  @override
+  Future<Either<Failure, Message1Response>> visitHospital(
+      VisitHospitalRequestBody list1) async {
+    try {
+      final response = await _remoteDataSource.visitHospital(list1);
+      if (response.status == null) {
+        return Right(response);
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+
 }

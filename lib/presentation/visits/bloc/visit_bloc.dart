@@ -20,7 +20,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
   AllBrandsDoctorVisitsSqlUsecase allBrandsDoctorVisitsSqlUsecase;
   AllBrandsHospitalVisitsSqlUsecase allBrandsHospitalVisitsSqlUsecase;
   AllVisitHospitalSqlUsecase allVisitHospitalSqlUsecase;
-
+  UpdatePharmacyUsecase updatePharmacyUsecase;
+  UpdateDoctorUsecase updateDoctorUsecase;
+  UpdateHospitalUsecase updateHospitalUsecase;
   int current =0;
   List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors=[];
@@ -34,7 +36,10 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       this.allBrandsPharmacyVisitsSqlUsecase,
       this.allBrandsDoctorVisitsSqlUsecase,
       this.allBrandsHospitalVisitsSqlUsecase,
-      this.allVisitHospitalSqlUsecase
+      this.allVisitHospitalSqlUsecase,
+      this.updatePharmacyUsecase,
+      this.updateDoctorUsecase,
+      this.updateHospitalUsecase
       ) : super(VisitInitial()) {
     on<VisitEvent>((event, emit)async {
       if(event is VisitPharmacyEvent)
@@ -58,6 +63,35 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
                  emit(VisitDoctorState());
 
                 });
+      }
+      if(event is UpdateVisitDoctorEvent)
+      {
+        (await updateDoctorUsecase.execute(event.id,event.sc,event.kas)).fold(
+                (failure)  {print(failure.massage);
+            emit(UpdateVisitDoctorErrorState(failure: failure));},
+                (data)  async{
+              emit(UpdateVisitDoctorState());
+            });
+      }
+      if(event is UpdateVisitHospitalEvent)
+      {
+        (await updateHospitalUsecase.execute(event.id,event.sc,event.kas)).fold(
+                (failure)  {print(failure.massage);
+            emit(UpdateVisitHospitalErrorState(failure: failure));},
+                (data)  async{
+              emit(UpdateVisitHospitalState());
+
+            });
+      }
+      if(event is UpdateVisitPharmacyEvent)
+      {
+        (await updatePharmacyUsecase.execute(event.id,event.data)).fold(
+                (failure)  {print(failure.massage);
+            emit(UpdateVisitPharmacyErrorState(failure: failure));},
+                (data)  async{
+              emit(UpdateVisitPharmacyState());
+
+            });
       }
       if(event is VisitHospitalEvent)
       {

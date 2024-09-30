@@ -1,5 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     _noteController.text = widget.doctorModel.visitDoctorModel.science;
@@ -47,8 +48,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
-              child: Form(
-                key: _formKey,
+              child: Padding(
+                padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -64,6 +65,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                             icon: Icon(Icons.arrow_back_sharp,
                                 color: ColorManager.white))),
                     Text(
+                      textAlign: TextAlign.center,
                       widget.doctorModel.doctorModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
@@ -71,10 +73,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       height: 10,
                     ),
                     Text(
+                      textAlign: TextAlign.center,
                       "عنوان الطبيب : ${widget.doctorModel.doctorModel.address}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
+
                       "تاريخ الزيارة : \n${widget.doctorModel.visitDoctorModel.data}",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium,
@@ -125,6 +129,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   BoxTextField(
+                    enabled: true,
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
@@ -227,9 +232,17 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     },
                   ),
                   BlocListener<VisitBloc, VisitState>(
-                    listener: (context, state) {},
+                    listener: (context, state) {
+                      if(state is UpdateVisitDoctorState){
+                        Navigator.pop(context);
+                      }
+                    },
                     child:
-                        ElevatedButton(onPressed: () {}, child: Text("تعديل")),
+                        ElevatedButton( onPressed: () {
+                          BlocProvider.of<VisitBloc>(context).add(
+                              UpdateVisitDoctorEvent
+                                (kas: _issueController.text,sc: _noteController.text, id: widget.doctorModel .visitDoctorModel.id));
+                        }, child: Text("تعديل")),
                   )
                 ],
               ),

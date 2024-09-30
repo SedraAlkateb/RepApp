@@ -6,14 +6,14 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AsyncPage extends StatelessWidget {
-  const AsyncPage({super.key});
+class AsyncLoginPage extends StatelessWidget {
+  const AsyncLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p40, vertical: AppPadding.p120),
+        padding: const EdgeInsets.only(left: AppPadding.p40,right: AppPadding.p40, top: AppPadding.p120),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

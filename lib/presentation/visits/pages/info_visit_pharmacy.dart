@@ -1,5 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +44,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
-              child: Form(
-                key: _formKey,
+              child: Padding(
+                padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -59,6 +61,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                             icon: Icon(Icons.arrow_back_sharp,
                                 color: ColorManager.white))),
                     Text(
+                      textAlign: TextAlign.center,
                       widget.pharmacyModel.pharmacyModel.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
@@ -66,10 +69,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                       height: 10,
                     ),
                     Text(
+                      textAlign: TextAlign.center,
                       "عنوان الصيدلية : ${widget.pharmacyModel.pharmacyModel.address}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
+                      textAlign: TextAlign.center,
                       "تاريخ الزيارة : ${widget.pharmacyModel.visitPharmacyModel.data}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
@@ -96,6 +101,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                       }
                       return null;
                     },
+
                     controller: _noteController,
                     obscureText: false,
                     minLines: 3,
@@ -196,10 +202,27 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
                   ),
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
+                      if(state is UpdateVisitPharmacyState){
+                        Navigator.pop(context);
+                      }
                     },
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("ارسال")),
+                    child: BlocListener<VisitBloc, VisitState>(
+  listener: (context, state) {
+  if(state is UpdateVisitPharmacyState){
+    Navigator.pushNamedAndRemoveUntil(
+      context, Routes.visits,
+          (route) => false,
+    );
+  }
+  },
+  child: ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<VisitBloc>(context).add(
+                              UpdateVisitPharmacyEvent
+                            (data: _noteController.text, id: widget.pharmacyModel.visitPharmacyModel.id));
+                        },
+                        child: Text("تعديل")),
+),
                   )
                 ],
               ),

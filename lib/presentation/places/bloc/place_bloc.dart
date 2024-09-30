@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/data/mapper/mapper.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';

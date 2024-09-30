@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_brands_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_doctor_sql_usecase.dart';
@@ -29,6 +30,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   InsertVisitBrandHospitalSqlUsecase insertVisitBrandHospitalSqlUsecase;
   InsertVisitHospitalSqlUsecase insertVisitHospitalSqlUsecase;
   SpHospitalSqlUsecase spHospitalSqlUsecase;
+  AllBrandsSqlUsecase allBrandsSqlUsecase;
+
   List<BrandModel> selectBrand = [];
   List<BrandModel> selectBrandAdd = [];
   List<BrandModel> bandFlag = [];
@@ -56,7 +59,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       this.insertVisitBrandDoctorSqlUsecase,
       this.spHospitalSqlUsecase,
       this.insertVisitBrandHospitalSqlUsecase,
-      this.insertVisitHospitalSqlUsecase)
+      this.insertVisitHospitalSqlUsecase,
+      this.allBrandsSqlUsecase
+      )
       : super(VisitPlaceInitial()) {
     on<VisitPlaceEvent>((event, emit) async {
       if (event is PharmacyByPlace) {
@@ -94,6 +99,14 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       }
       if (event is BrandFlagEvent) {
         (await allBrandsFlagSqlUsecase.execute()).fold((failure) {
+          emit(BrandFlagErrorState(failure: failure));
+        }, (data) async {
+          bandFlag = data;
+          emit(BrandFlagState(data));
+        });
+      }
+      if (event is BrandAnyFlagEvent) {
+        (await allBrandsSqlUsecase.execute()).fold((failure) {
           emit(BrandFlagErrorState(failure: failure));
         }, (data) async {
           bandFlag = data;

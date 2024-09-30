@@ -6,7 +6,6 @@ import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
@@ -57,6 +56,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         }
 
       }
+
       if(event is EditEvent){
         (await editIsLoginSqlUsecase.execute(UserInfo.repId,2)).fold((failure) {
           emit(SyncDataErrorState(failure: failure));

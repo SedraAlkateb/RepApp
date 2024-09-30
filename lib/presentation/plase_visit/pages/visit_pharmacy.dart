@@ -47,32 +47,35 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(50)),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            iconSize: 30,
-                            padding: EdgeInsets.only(right: 15),
-                            icon: Icon(Icons.arrow_back_sharp,
-                                color: ColorManager.white))),
-                    Text(
-                      widget.pharmacyModel.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "عنوان الصيدلية : ${widget.pharmacyModel.address}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
+                child: Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              iconSize: 30,
+                              padding: EdgeInsets.only(right: 15),
+                              icon: Icon(Icons.arrow_back_sharp,
+                                  color: ColorManager.white))),
+                      Text(
+                        widget.pharmacyModel.title,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "عنوان الصيدلية : ${widget.pharmacyModel.address}",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(

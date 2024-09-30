@@ -27,7 +27,7 @@ class Places extends StatelessWidget {
                   child: Center(
                       child: Padding(
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 20),
+                    left: 20, right: 20, top: 20,bottom: 30),
                 child: Container(
                     height: size.height / 3,
                     decoration: BoxDecoration(
@@ -35,7 +35,7 @@ class Places extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15)),
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 20, right: 20, top: 20, bottom: 20),
+                          left: 20, right: 20, top: 20),
                       child: Container(
                         height: size.height / 3,
                         decoration: BoxDecoration(
@@ -190,7 +190,6 @@ class Places extends StatelessWidget {
                     },
                     itemCount: placeModel.length),
               );
-              ;
             },
           ),
         ),

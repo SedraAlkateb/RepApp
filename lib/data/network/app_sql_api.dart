@@ -702,13 +702,10 @@ class AppSqlApi {
 
   Future<void> updateVisitPharmacy({
     required int visitId,
-    
     String? newNote,
   }) async {
     Database? mydb =
-        await databaseHelper.database; // الحصول على اتصال بقاعدة البيانات
-
-    // تحديث الـ note إذا تم تمرير newNote
+        await databaseHelper.database;
     if (newNote != null) {
       await mydb.update(
         'visit_pharmacy',
@@ -720,29 +717,15 @@ class AppSqlApi {
       );
     }
   }
-  Future<void> updateVisitDoctorFields({
-    required int id,
-    String? data,
-    String? kaswn,
-    String? science,
-  }) async {
+  Future<void> updateVisitDoctorFields({required int id, String? kaswn, String? science,}) async {
     Database? mydb = await databaseHelper.database;
-
-    // إعداد قائمة التحديثات
     Map<String, dynamic> updates = {};
-
-    // إضافة الحقول التي ليست null إلى قائمة التحديثات
-    if (data != null) {
-      updates['data'] = data;
-    }
     if (kaswn != null) {
       updates['kaswn'] = kaswn;
     }
     if (science != null) {
       updates['science'] = science;
     }
-
-    // إذا كانت هناك حقول للتحديث، قم بإجراء التحديث
     if (updates.isNotEmpty) {
       await mydb.update(
         'visit_doctor',
@@ -752,25 +735,15 @@ class AppSqlApi {
       );
     }
   }
-  Future<void> updateVisitHospitalFields({
-    required int id,
-    String? data,
-    String? kaswn,
-    String? science,
-  }) async {
+  Future<void> updateVisitHospitalFields({required int id, String? kaswn, String? science,}) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
-    if (data != null) {
-      updates['data'] = data;
-    }
     if (kaswn != null) {
       updates['kaswn'] = kaswn;
     }
     if (science != null) {
       updates['science'] = science;
     }
-
-    // إذا كانت هناك حقول للتحديث، قم بإجراء التحديث
     if (updates.isNotEmpty) {
       await mydb.update(
         'visit_hospital',
@@ -779,6 +752,16 @@ class AppSqlApi {
         whereArgs: [id],
       );
     }
+  }
+  getPharmaciesVisit()async{
+    final db = await databaseHelper.database;
+    await db.transaction((txn) async {
+      final List<Map<String, dynamic>> maps = await txn.query('visit_hospital');
+      return List.generate(maps.length, (i) {
+        return SpecModel.fromMap(maps[i]);
+      });
+    });
+
   }
 
 }

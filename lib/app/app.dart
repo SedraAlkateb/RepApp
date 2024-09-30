@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
+import 'package:domina_app/presentation/async_in/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
@@ -33,6 +34,8 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => instance<AuthBloc>()),
+        BlocProvider(create: (_) => instance<AsyncInBloc>()),
+
         BlocProvider<PharmacyBloc>(
           create: (context) {
             final bloc = instance<PharmacyBloc>();
@@ -43,7 +46,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<VisitPlaceBloc>(
           create: (context) {
             final bloc = instance<VisitPlaceBloc>();
-            bloc.add(BrandFlagEvent());
+            bloc.add(BrandAnyFlagEvent());
             return bloc;
           },
         ),
