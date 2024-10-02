@@ -8,7 +8,7 @@ class DrawerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(       
-        padding: EdgeInsets.zero,
+ 
         children: [
            DrawerHeader(
             
@@ -42,10 +42,11 @@ class DrawerPage extends StatelessWidget {
                 ],
               ),
             )  ),
+    
 
           ListTile(
    leading:Icon(Icons.location_city_outlined,color: ColorManager.secondaryColor4),
-            title: const Text('المناطق '),
+            title: const Text('إِجراء زيارة'),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -56,6 +57,28 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
+            Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),
+                 ListTile(
+            leading:  Icon(Icons.local_pharmacy_outlined,color: ColorManager.secondaryColor4),
+            title: const Text('الزيارات'),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.visits,(route) => true,
+                );
+
+              });
+
+            },
+          ),
+            Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),
           ListTile(
              leading:  Icon(Icons.medical_services_outlined  ,color: ColorManager.secondaryColor4),
             title: const Text('الاختصاصات'),
@@ -69,6 +92,11 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
+            Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),
+          
           ListTile(
             leading:  Icon(Icons.group_outlined ,color: ColorManager.secondaryColor4),
             title: const Text('الأطباء '),
@@ -80,6 +108,10 @@ class DrawerPage extends StatelessWidget {
               
             },
           ),
+            Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),
             ListTile(
                leading:  Icon(Icons.local_hospital_outlined
 ,color: ColorManager.secondaryColor4),
@@ -93,6 +125,28 @@ class DrawerPage extends StatelessWidget {
                          
             },
           ),
+            Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),
+            ListTile(
+            leading:  Icon(Icons.local_pharmacy_outlined,color: ColorManager.secondaryColor4),
+            title: const Text('الصيدليات'),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.pharmacy,(route) => true,
+                );
+
+              });
+
+            },
+          ),   
+            Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),                                                                            
           ListTile(
             leading:  Icon(Icons. medication_outlined,color: ColorManager.secondaryColor4),
             title: const Text('الأصناف'),
@@ -108,37 +162,14 @@ class DrawerPage extends StatelessWidget {
 
             },
           ),
-          ListTile(
-            leading:  Icon(Icons.local_pharmacy_outlined,color: ColorManager.secondaryColor4),
-            title: const Text('الصيدليات'),
-            onTap: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.pharmacy,(route) => true,
-                );
-
-              });
-
-            },
-          ),
-          ListTile(
-            leading:  Icon(Icons.local_pharmacy_outlined,color: ColorManager.secondaryColor4),
-            title: const Text('الزيارات'),
-            onTap: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.visits,(route) => true,
-                );
-
-              });
-
-            },
-          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.hintGrey ,),
+        ),
+   
            ListTile(
              leading:  Icon(Icons.sync_outlined  ,color: ColorManager.secondaryColor4),
-            title: const Text('المزامنة'),
+            title:  Text('المزامنة',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
@@ -149,7 +180,24 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
-         
+                Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
+        ), 
+          ListTile(
+             leading:  Icon(Icons.logout_outlined  ,color: ColorManager.secondaryColor4),
+            title:  Text('تسجيل خروج',style: TextStyle(color: ColorManager.secondaryColor1),),
+            onTap: () {
+             WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.asyncIn,
+                );
+
+              });
+            },
+          ),
+        
         ],
       ),
     );

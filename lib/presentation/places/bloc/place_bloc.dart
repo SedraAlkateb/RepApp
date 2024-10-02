@@ -49,4 +49,4 @@ List<VisitPharmacyModel> vi=[
       }
     });
   }
-}
+} 

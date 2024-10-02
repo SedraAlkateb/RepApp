@@ -13,7 +13,6 @@ class Doctors extends StatelessWidget {
   final TextEditingController searchDocController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         drawer: DrawerPage(),
         appBar: AppBar(
@@ -40,11 +39,13 @@ class Doctors extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchField(searchController: searchDocController,onPressed: (value) {
-                        BlocProvider.of<DoctorsBloc>(context).add(SearchDocEvent(value));
-
-                      },
-                      ),
+              SearchField(
+                searchController: searchDocController,
+                onPressed: (value) {
+                  BlocProvider.of<DoctorsBloc>(context)
+                      .add(SearchDocEvent(value));
+                },
+              ),
               Expanded(
                 child: BlocConsumer<DoctorsBloc, DoctorsState>(
                   listener: (context, state) {
@@ -82,22 +83,37 @@ class Doctors extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge),
-                                  Text(" العنوان : ${doctormodel[index].address}",textAlign: TextAlign.center,
+                                  Text(
+                                      " العنوان : ${doctormodel[index].address}",
+                                      textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
-                                  Text(" المكان : ${doctormodel[index].placeTitle}",
+                                  Text(
+                                      " المكان : ${doctormodel[index].placeTitle}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
-                                  Text(" عدد الزيارات : ${doctormodel[index].visits}",
+                                  Text(
+                                      " عدد الزيارات : ${doctormodel[index].visits}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
-                                  Text(" الاختصاص : ${doctormodel[index].spTitle}",
+                                  Text(
+                                      " الاختصاص : ${doctormodel[index].spTitle}",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .titleSmall)
+                                          .titleSmall),
+                                  Text(" التصنيف : ${doctormodel[index].rate}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
+                                   if (doctormodel[index].note.isNotEmpty) // الشرط للتحقق من وجود الملاحظات
+      Text(
+        "ملاحظات : ${doctormodel[index].note}",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
                                 ],
                               ),
                             );
