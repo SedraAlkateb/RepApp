@@ -19,24 +19,24 @@ part 'visit_place_event.dart';
 part 'visit_place_state.dart';
 
 class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
-  PharmaciesByPlaceUsecase pharmaciesByPlaceUsecase;
+ // PharmaciesByPlaceUsecase pharmaciesByPlaceUsecase;
   AllBrandsFlagSqlUsecase allBrandsFlagSqlUsecase;
   DoctorsByPlaceUsecase doctorsByPlaceUsecase;
   HospitalsByPlaceUsecase hospitalsByPlaceUsecase;
-  InsertVisitPharmacySqlUsecase insertVisitPharmacySqlUsecase;
+ // InsertVisitPharmacySqlUsecase insertVisitPharmacySqlUsecase;
   InsertVisitDoctorSqlUsecase insertVisitDoctorSqlUsecase;
-  InsertVisitBrandPharmacySqlUsecase insertVisitBrandPharmacySqlUsecase;
+ // InsertVisitBrandPharmacySqlUsecase insertVisitBrandPharmacySqlUsecase;
   InsertVisitBrandDoctorSqlUsecase insertVisitBrandDoctorSqlUsecase;
   InsertVisitBrandHospitalSqlUsecase insertVisitBrandHospitalSqlUsecase;
   InsertVisitHospitalSqlUsecase insertVisitHospitalSqlUsecase;
   SpHospitalSqlUsecase spHospitalSqlUsecase;
-  AllBrandsSqlUsecase allBrandsSqlUsecase;
+ // AllBrandsSqlUsecase allBrandsSqlUsecase;
 
   List<BrandModel> selectBrand = [];
   List<BrandModel> selectBrandAdd = [];
   List<BrandModel> bandFlag = [];
-  List<PharmacyModel> pharmacies = [];
-   List<PharmacyModel> pharmaSearchModel = [];
+ // List<PharmacyModel> pharmacies = [];
+ //  List<PharmacyModel> pharmaSearchModel = [];
   List<DoctorModel> doctors = [];
     List<DoctorModel> doctorSearchModel = [];
   List<HospitalModel> hospitals = [];
@@ -49,30 +49,30 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   String br="";
   bool isScience=true;
   VisitPlaceBloc(
-      this.pharmaciesByPlaceUsecase,
+  //    this.pharmaciesByPlaceUsecase,
       this.allBrandsFlagSqlUsecase,
       this.doctorsByPlaceUsecase,
       this.hospitalsByPlaceUsecase,
-      this.insertVisitPharmacySqlUsecase,
+  //    this.insertVisitPharmacySqlUsecase,
       this.insertVisitDoctorSqlUsecase,
-      this.insertVisitBrandPharmacySqlUsecase,
+//      this.insertVisitBrandPharmacySqlUsecase,
       this.insertVisitBrandDoctorSqlUsecase,
       this.spHospitalSqlUsecase,
       this.insertVisitBrandHospitalSqlUsecase,
       this.insertVisitHospitalSqlUsecase,
-      this.allBrandsSqlUsecase
+  //    this.allBrandsSqlUsecase
       )
       : super(VisitPlaceInitial()) {
     on<VisitPlaceEvent>((event, emit) async {
-      if (event is PharmacyByPlace) {
-        current = event.current;
-        (await pharmaciesByPlaceUsecase.execute(event.placeId)).fold((failure) {
-          emit(AllPharmacyByPlaceErrorState(failure: failure));
-        }, (data) async {
-          pharmacies = data;
-          emit(AllPharmacyByPlaceState(data));
-        });
-      }
+      // if (event is PharmacyByPlace) {
+      //   current = event.current;
+      //   (await pharmaciesByPlaceUsecase.execute(event.placeId)).fold((failure) {
+      //     emit(AllPharmacyByPlaceErrorState(failure: failure));
+      //   }, (data) async {
+      //     pharmacies = data;
+      //     emit(AllPharmacyByPlaceState(data));
+      //   });
+      // }
       if (event is HospitalByPlace) {
         current = event.current;
         (await hospitalsByPlaceUsecase.execute(event.placeId)).fold((failure) {
@@ -106,19 +106,17 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(BrandFlagState(data));
         });
       }
-      if (event is BrandAnyFlagEvent) {
-        (await allBrandsSqlUsecase.execute()).fold((failure) {
-          emit(BrandFlagErrorState(failure: failure));
-        }, (data) async {
-          bandFlag = data;
-          emit(BrandFlagState(data));
-        });
-      }
+      // if (event is BrandAnyFlagEvent) {
+      //   (await allBrandsSqlUsecase.execute()).fold((failure) {
+      //     emit(BrandFlagErrorState(failure: failure));
+      //   }, (data) async {
+      //     bandFlag = data;
+      //     emit(BrandFlagState(data));
+      //   });
+      // }
       if (event is SelectBrandEvent) {
         final existingIndex =
             selectBrand.indexWhere((brand) => brand.id == event.brandModel.id);
-        print(existingIndex);
-        print("existingIndex");
         if (existingIndex != -1) {
           List<VisitBrandPharmacyModel> updatedList =
               List.from(visitBrandPharmacys);
@@ -126,7 +124,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
               updatedList[existingIndex].id,
               updatedList[existingIndex].visitId,
               updatedList[existingIndex].brandId,
-              updatedList[existingIndex].amount + 1 // زيادة الكمية
+              updatedList[existingIndex].amount + 1
               );
           visitBrandPharmacys = updatedList;
           emit(EditAmountBrandState(visitBrandPharmacys));
@@ -144,16 +142,16 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         br="${br} ${event.brand}";
         emit(SelectBrandAddState(br));
       }
-      if (event is InsertVisitPharmacyEvent) {
-        emit(InsertVisitPharmacyLoadingState());
-        (await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel))
-            .fold((failure) {
-          print(failure.massage);
-          emit(InsertVisitPharmacyErrorState(failure: failure));
-        }, (data) async {
-          emit(InsertVisitPharmacyState());
-        });
-      }
+      // if (event is InsertVisitPharmacyEvent) {
+      //   emit(InsertVisitPharmacyLoadingState());
+      //   (await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel))
+      //       .fold((failure) {
+      //     print(failure.massage);
+      //     emit(InsertVisitPharmacyErrorState(failure: failure));
+      //   }, (data) async {
+      //     emit(InsertVisitPharmacyState());
+      //   });
+      // }
       if (event is InsertVisitDoctorEvent) {
         event.visitDoctorModel.additaion=addition(event.visitDoctorModel.additaion);
         (await insertVisitDoctorSqlUsecase.execute(event.visitDoctorModel))
@@ -164,18 +162,18 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(InsertVisitDoctorState());
         });
       }
-      if (event is InsertBrandVisitEvent) {
-        emit(AllVisitBrandPharmacyLoadingState());
-        (await insertVisitBrandPharmacySqlUsecase.execute(
-                visitBrandPharmacys, event.visitPharmacyModel))
-            .fold((failure) {
-          selectBrand = [];
-          emit(AllVisitBrandPharmacyErrorState(failure: failure));
-        }, (data) async {
-          selectBrand = [];
-          emit(AllVisitBrandPharmacyState());
-        });
-      }
+      // if (event is InsertBrandVisitEvent) {
+      //   emit(AllVisitBrandPharmacyLoadingState());
+      //   (await insertVisitBrandPharmacySqlUsecase.execute(
+      //           visitBrandPharmacys, event.visitPharmacyModel))
+      //       .fold((failure) {
+      //     selectBrand = [];
+      //     emit(AllVisitBrandPharmacyErrorState(failure: failure));
+      //   }, (data) async {
+      //     selectBrand = [];
+      //     emit(AllVisitBrandPharmacyState());
+      //   });
+      // }
       if (event is InsertBrandVisitDoctorEvent) {
         event.visitDoctorModel.additaion=addition(event.visitDoctorModel.additaion);
         emit(AllVisitBrandDoctorLoadingState());
@@ -262,16 +260,6 @@ if(doctorvalue.title.contains(event.value)){
       .toList();
       emit(SearchVisitDoctorState(doctorSearchModel));
     }
-
-
-
-
-
-
-
-
-
-
        if(event is SearchHospitalVisitEvent){
    hospitalSearchModel = hospitals
       .where((hospital) {
@@ -298,19 +286,19 @@ if(hospital.title.contains(event.value)){
 
 
 
-     if(event is SearchPharmacyVisitEvent){
-   pharmaSearchModel = pharmacies
-      .where((pharmacy) {
-if(pharmacy.title.contains(event.value)){
-  return true;
-}else{
-  return false;
-}
-      
-      }  )
-      .toList();
-      emit(SearchVisitPharmacyState(pharmaSearchModel));
-    }
+//      if(event is SearchPharmacyVisitEvent){
+//    pharmaSearchModel = pharmacies
+//       .where((pharmacy) {
+// if(pharmacy.title.contains(event.value)){
+//   return true;
+// }else{
+//   return false;
+// }
+//
+//       }  )
+//       .toList();
+//       emit(SearchVisitPharmacyState(pharmaSearchModel));
+//     }
 
 
 

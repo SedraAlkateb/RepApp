@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
@@ -16,6 +17,7 @@ class Places extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    print(UserInfo.planId);
     final size = MediaQuery.of(context).size;
     BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -160,7 +162,7 @@ class Places extends StatelessWidget {
                             },
                           ));
                           BlocProvider.of<VisitPlaceBloc>(context).add(
-                              PharmacyByPlace(placeModel[index].placeId, 0));
+                              DoctorByPlace(placeModel[index].placeId, 0));
                         },
                         child: Container(
                           margin: EdgeInsets.all(AppPadding.p8),

@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
+import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +79,11 @@ class SpecializationsPage extends StatelessWidget {
                           }
                         },
                         builder: (context, state) {
+                          List<SpecModel> placeModel = context.watch<SpecializationBloc>().specialization;
                           if (state is AllSpecState) {
-                            List<SpecModel> placeModel = state.Specs;
-                            return   GridView.builder(
+                            placeModel = state.Specs;
+                          }
+                          return   GridView.builder(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   gridDelegate:
@@ -95,39 +98,46 @@ class SpecializationsPage extends StatelessWidget {
                                   ),
                                   itemCount: placeModel.length,
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                      margin: EdgeInsets.all(AppPadding.p10),
-                                      padding: EdgeInsets.all(AppPadding.p5),
-                                      width: 6,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(colors: [
-                                          ColorManager.secondaryColor6,
-                                          ColorManager.secondaryColor7,
-                                        ]),
-                                        color: ColorManager.white,
-                                      
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(AppSize.s25),
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) {
+                                            return SpecDH(
+                                                spId: placeModel[index].id,);
+                                          },
+                                        ));
+                                        BlocProvider.of<SpecializationBloc>(context).add(
+                                            DoctorSpEvent(placeModel[index].id));
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(AppPadding.p10),
+                                        padding: EdgeInsets.all(AppPadding.p5),
+                                        width: 6,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(colors: [
+                                            ColorManager.secondaryColor6,
+                                            ColorManager.secondaryColor7,
+                                          ]),
+                                          color: ColorManager.white,
+
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(AppSize.s25),
+                                          ),
                                         ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          placeModel[index].title,
-                                          style: TextStyle(
-                                              color: ColorManager.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 25),
+                                        child: Center(
+                                          child: Text(
+                                            textAlign: TextAlign.center,
+                                            placeModel[index].title,
+                                            style: TextStyle(
+                                                color: ColorManager.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25),
+                                          ),
                                         ),
                                       ),
                                     );
                                   },
                                 );
-                      }
-
-                          return Container(
-                            color: Colors.white,
-                          );
                         },
                       ),
                     ],

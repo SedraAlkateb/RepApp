@@ -16,6 +16,26 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
     );
   }
 }
+
+extension BrandsSpRequestMapper on BrandSpResponse? {
+  BrandSpModel toDomain() {
+    return BrandSpModel(
+      int.parse(this?.id ?? "0") ,
+      int.parse(this?.spId ?? "0") ,
+      int.parse(this?.brandId ?? "0") ,
+      this?.brandType?? Constants.empty,
+    );
+  }
+}
+extension ListBrandsSpRequestMapper on AllBrandSpBaseResponse? {
+  List<BrandSpModel> toDomain() {
+    List<BrandSpModel> brandSpModels =(this?.data?.brandsSpecializations?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<BrandSpModel>()
+        .toList();
+    return brandSpModels;
+  }
+}
 extension ListVisitPharmacyRequestMapper on List<VisitPharmacyModel>? {
   List<VisitPharmacyRequest> toDomain() {
     List<VisitPharmacyRequest> visitPharmacyRequest =(this?.map((response) => response.toDomain()) ??
@@ -144,7 +164,7 @@ extension LoginResponseMapper on LoginResponse? {
     return LoginModel(
         this?.data?.token ?? Constants.empty,
         int.parse(this?.data?.repId ?? "0") ,
-        this?.data?.planId ?? Constants.zero,
+        int.parse(this?.data?.planId ?? "0") ,
       this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1

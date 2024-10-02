@@ -13,7 +13,9 @@ class AppSqlApi {
     List<DoctorModel> doctors,
     List<HospitalModel> hospitals,
     List<HospitalSpModel> hospitalSps,
-  ) async {
+      List<BrandSpModel> brandSps,
+
+      ) async {
     try {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
@@ -38,6 +40,9 @@ class AppSqlApi {
         }
         for (var hospitalSp in hospitalSps) {
           batch.insert('hospitalSp', hospitalSp.toMap());
+        }
+        for (var brandSp in brandSps) {
+          batch.insert('brandSp', brandSp.toMap());
         }
         await batch.commit(noResult: true);
       });
@@ -224,6 +229,8 @@ class AppSqlApi {
     return hospitals;
   }
 
+
+
   insertdoctor(List<DoctorModel> doctors) async {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
@@ -260,6 +267,46 @@ class AppSqlApi {
     return List.generate(maps.length, (i) {
       return HospitalModel.fromMap(maps[i]);
     });
+  }
+  Future<List<HospitalModel>> getHospitalBySpec(int spId) async {
+    final db = await databaseHelper.database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.rawQuery('''
+      SELECT hospital.*
+      FROM hospitalSp
+      JOIN hospital ON hospitalSp.hospitalId = hospital.id
+      WHERE spId = ?
+    ''', [spId]);
+
+      if (maps.isNotEmpty) {
+        return List.generate(maps.length, (i) {
+          return HospitalModel.fromMap(maps[i]);
+        });
+      } else {
+        return [];  // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
+      }
+    } catch (e) {
+      throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
+    }
+  }
+  Future<List<DoctorModel>> getDoctorBySpec(int spId) async {
+    final db = await databaseHelper.database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.rawQuery('''
+      SELECT doctor.*
+      FROM doctor
+      WHERE spId = ?
+    ''', [spId]);
+      if (maps.isNotEmpty) {
+        return List.generate(maps.length, (i) {
+          return DoctorModel.fromMap(maps[i]);
+        });
+      } else {
+        return [];  // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
+      }
+    } catch (e) {
+      throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
+    }
   }
 
   Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy() async {
@@ -521,11 +568,10 @@ class AppSqlApi {
         int currentVisits = result.first['visit'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
-        // جلب جميع الزيارات الخاصة بالمشفى خلال الثلاثة أيام الماضية
         final List<Map<String, dynamic>> visits = await txn.rawQuery('''
       SELECT * FROM visit_hospital 
       WHERE hospitalSpId = ? 
-      AND data >= date(?, '-3 days') 
+      AND data >= date(?, '-2 days') 
       AND data < ?
       ''', [
           hospitalSpId,
@@ -592,7 +638,7 @@ class AppSqlApi {
         final List<Map<String, dynamic>> visits = await txn.rawQuery('''
       SELECT * FROM visit_hospital 
       WHERE hospitalSpId = ? 
-      AND data >= date(?, '-3 days') 
+      AND data >= date(?, '-2 days') 
       AND data < ?
       ''', [
           hospitalSpId,
@@ -709,11 +755,11 @@ class AppSqlApi {
     if (newNote != null) {
       await mydb.update(
         'visit_pharmacy',
-        {'note': newNote}, // البيانات التي نرغب بتحديثها
-        where: 'id = ?', // تحديد الصف بناءً على الـ id
+        {'note': newNote},
+        where: 'id = ?',
         whereArgs: [
           visitId
-        ], // القيمة الخاصة بـ visitId لتحديد السطر المراد تعديله
+        ],
       );
     }
   }

@@ -10,6 +10,7 @@ import 'package:domina_app/presentation/places/pages/places.dart';
 import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart';
 import 'package:domina_app/presentation/resources/strings_manager.dart';
 import 'package:domina_app/presentation/specialization/pages/spec.dart';
+import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
 import 'package:domina_app/presentation/visits/pages/visits_page.dart';
 import 'package:flutter/material.dart';
 class Routes {
@@ -25,6 +26,7 @@ class Routes {
   static const String visitPharmacy = "/visitPharmacy";
   static const String visits = "/visits";
   static const String asyncIn = "/asyncIn";
+  static const String specDH = "/specDH";
 
 }
 class RouteGenerator {
@@ -63,6 +65,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     AsyncPage());
       case Routes.placeVisit:
         return MaterialPageRoute(builder: (_) =>     PlaceVisitPage(placeId: 2));
+      case Routes.specDH:
+        return MaterialPageRoute(builder: (_) =>     SpecDH(spId: 0,));
       default:
         return unDefinedRoute();
     }

@@ -21,5 +21,6 @@ abstract class Repository{
 
   Future<Either<Failure,Message1Response>>visitDoctor(VisitDoctorRequestBody list1);
   Future<Either<Failure,Message1Response>>visitHospital(VisitHospitalRequestBody list1);
+  Future<Either<Failure,List<BrandSpModel>>> getBrandsSp(int repDet);
 
 }

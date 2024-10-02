@@ -50,8 +50,16 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY ,
     title TEXT NOT NULL
     );
-    '''
+   ''');
+    await db.execute(
+        '''
+      CREATE TABLE brandSp (
+    id INTEGER PRIMARY KEY,
+    spId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    brandType TEXT NOT NULL
     );
+   ''');
     await db.execute(
         '''
       CREATE TABLE place (
@@ -124,8 +132,8 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     kaswn TEXT NOT NULL,
-    science TEXT NOT NULL,
-    additaion TEXT NOT NULL, 
+    science TEXT ,
+    additaion TEXT , 
     doctorId INTEGER NOT NULL,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
@@ -136,8 +144,8 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     kaswn TEXT NOT NULL,
-    science TEXT NOT NULL,
-    additaion TEXT NOT NULL, 
+    science TEXT ,
+    additaion TEXT , 
     hospitalSpId INTEGER NOT NULL,
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
 );'''

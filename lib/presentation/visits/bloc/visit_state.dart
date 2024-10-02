@@ -7,13 +7,13 @@ final class VisitInitial extends VisitState {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
-final class VisitPharmacyErrorState extends VisitState {
-  final Failure failure;
-  VisitPharmacyErrorState({required this.failure});
-  @override
-
-  List<Object?> get props =>[failure];
-}
+// final class VisitPharmacyErrorState extends VisitState {
+//   final Failure failure;
+//   VisitPharmacyErrorState({required this.failure});
+//   @override
+//
+//   List<Object?> get props =>[failure];
+// }
 final class VisitHospitalErrorState extends VisitState {
   final Failure failure;
   VisitHospitalErrorState({required this.failure});
@@ -21,12 +21,12 @@ final class VisitHospitalErrorState extends VisitState {
 
   List<Object?> get props =>[failure];
 }
-final class VisitPharmacyState extends VisitState {
-  @override
-  VisitPharmacyState();
-  @override
-  List<Object?> get props =>[];
-}
+// final class VisitPharmacyState extends VisitState {
+//   @override
+//   VisitPharmacyState();
+//   @override
+//   List<Object?> get props =>[];
+// }
 
 final class VisitDoctorErrorState extends VisitState {
   final Failure failure;

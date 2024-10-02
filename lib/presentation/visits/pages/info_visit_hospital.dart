@@ -95,7 +95,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "لتعديل  الملاحظات :",
+                    " الملاحظات :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
 
@@ -108,6 +108,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
+                    enabled: true,
                   ),
                   Text(
                     "ملاحظات لمستودع قاسيون  :",
@@ -120,28 +121,35 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     validator: (value) {
                       return null;
                     },
+                    enabled: true,
                     controller: _issueController,
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
                   ),
-                  Text(
-                    "طلبات شخصية:",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  BoxTextField(
-                    keyboardType: TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {
-                      return null;
-                    },
-                    controller: _noteeController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
-                    enabled: true,
-                  ),
+
+                  _noteeController .text.isNotEmpty?
+                  Column(
+                    children: [
+                      Text(
+                        "طلبات شخصية:",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      BoxTextField(
+                        keyboardType: TextInputType.text,
+                        prefixIcon: null,
+                        maxLines: 4,
+                        validator: (value) {
+                          return null;
+                        },
+                        controller: _noteeController,
+                        obscureText: false,
+                        minLines: 3,
+                        inputFormatters: [],
+                        enabled: true,
+                      ),
+                    ],
+                  ):SizedBox(),
                   Text(
                     " العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
@@ -158,7 +166,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                       }
                       return selectBrand.isNotEmpty
                           ? Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10),
+
                         child: Table(
                           border: TableBorder.all(),
                           columnWidths: {
@@ -170,7 +179,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                             TableRow(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(10),
                                   child: Center(
                                     child: Text('العينات',
                                         style: TextStyle(
@@ -206,7 +215,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                                 children: [
                                   Padding(
                                     padding:
-                                    const EdgeInsets.only(top: 8),
+                                    const EdgeInsets.symmetric(vertical: 8),
                                     child: Text(
                                       brand.title,
                                       textAlign: TextAlign.center,

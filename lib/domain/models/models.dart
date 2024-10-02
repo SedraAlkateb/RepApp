@@ -671,3 +671,24 @@ class Type{
 }
 
 final List<Type> type=[Type(0, "دفاتر"),Type(1, "عينات"),Type(2, "وصفات")];
+class BrandSpModel{
+  int id;
+  int spId;
+  int brandId;
+  String brandType;
+  BrandSpModel(this.id, this.spId, this.brandId, this.brandType);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'spId': spId,
+      'brandId': brandId,
+      'brandType': brandType,
+    };
+  }
+  factory BrandSpModel.fromMap(Map<String, dynamic> map) {
+    return BrandSpModel(map['id'], map['spId'], map['brandId'],
+        map['brandType']);
+  }
+}
+

@@ -91,55 +91,78 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "لتعديل  الملاحظات :",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  BoxTextField(
-                    keyboardType: TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {
-                      return null;
-                    },
-                    controller: _noteController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
-                  ),
-                  Text(
-                    "ملاحظات لمستودع قاسيون  :",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  BoxTextField(
-                    keyboardType: TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {
-                      return null;
-                    },
-                    controller: _issueController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
-                  ),
-                  Text(
-                    "طلبات شخصية:",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  BoxTextField(
-                    enabled: true,
-                    keyboardType: TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {
-                      return null;
-                    },
-                    controller: _noteeController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
-                  ),
+                  _noteController.text.isNotEmpty?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "لتعديل  الملاحظات :",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      BoxTextField(
+                        keyboardType: TextInputType.text,
+                        prefixIcon: null,
+                        maxLines: 4,
+                        validator: (value) {
+                          return null;
+                        },
+                        controller: _noteController,
+                        obscureText: false,
+                        minLines: 3,
+                        inputFormatters: [],
+                        enabled: true,
+                      ),
+                    ],
+                  ):SizedBox(),
+
+                  _issueController.text.isNotEmpty?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: [
+                      Text(
+                        "ملاحظات لمستودع قاسيون  :",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      BoxTextField(
+                        keyboardType: TextInputType.text,
+                        prefixIcon: null,
+                        maxLines: 4,
+                        validator: (value) {
+                          return null;
+                        },
+                        enabled: true,
+                        controller: _issueController,
+                        obscureText: false,
+                        minLines: 3,
+                        inputFormatters: [],
+                      ),
+                    ],
+                  ):SizedBox(),
+                  _noteeController.text.isNotEmpty?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "طلبات شخصية:",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      BoxTextField(
+                        enabled: true,
+                        keyboardType: TextInputType.text,
+                        prefixIcon: null,
+                        maxLines: 4,
+                        validator: (value) {
+                          return null;
+                        },
+                        controller: _noteeController,
+                        obscureText: false,
+                        minLines: 3,
+                        inputFormatters: [],
+
+                      ),
+                    ],
+                  ):SizedBox(),
                   Text(
                     " العينات :",
                     style: Theme.of(context).textTheme.labelLarge,

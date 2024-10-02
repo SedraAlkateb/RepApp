@@ -1,3 +1,4 @@
+/*
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class InfoVisitPharmacy extends StatefulWidget {
   InfoVisitPharmacy({super.key, required this.pharmacyModel});
   final VisitPharmacyAndPharmacy pharmacyModel;
- 
+
   @override
   State<InfoVisitPharmacy> createState() => _InfoVisitPharmacyState();
 }
@@ -33,9 +34,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           
-                      
-                      
+
+
+
             Container(
               width: MediaQuery.of(context).size.width,
               height: 250,
@@ -235,3 +236,5 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
     );
   }
 }
+
+ */
