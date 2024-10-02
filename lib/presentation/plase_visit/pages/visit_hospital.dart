@@ -183,9 +183,6 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        // if (value!.isEmpty) {
-                        //   return "الحقل مطلوب";
-                        // }
                         return null;
                       },
                       controller: _issueController,
@@ -196,7 +193,6 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
 
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       builder: (context, state) {
-                        print("object");
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

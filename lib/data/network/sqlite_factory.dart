@@ -38,7 +38,8 @@ class DatabaseHelper {
       CREATE TABLE rep (
     token  TEXT NOT NULL,
     repId INTEGER NOT NULL,
-    planId INTEGER NOT NULL,
+    otherPlanId INTEGER NOT NULL,
+    activePlanId INTEGER NOT NULL,
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
     isLogin INTEGER NOT NULL DEFAULT 0

@@ -171,7 +171,7 @@ class AppSqlApi {
     final db = await databaseHelper.database;
     Batch batch = db.batch();
     batch.rawQuery(
-        'SELECT token, repId, planId, name, percentage, isLogin FROM rep LIMIT 1');
+        'SELECT token, repId, activePlanId, name, percentage, isLogin FROM rep LIMIT 1');
     List<dynamic> results = await batch.commit();
     if (results.isNotEmpty && results[0].isNotEmpty) {
       Map<String, dynamic> firstRow = results[0][0];

@@ -33,8 +33,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }, (data) async {
            loginModel=data;
           UserInfo.repId= loginModel!.repId;
-          UserInfo.planId= loginModel!.planId;
-          UserInfo.percentage= loginModel!.percentage;
+          UserInfo.otherPlanId= loginModel!.otherPlanId;
+           UserInfo.activePlanId= loginModel!.activePlanId;
+
+           UserInfo.percentage= loginModel!.percentage;
           UserInfo.token= loginModel!.token;
           UserInfo.name= loginModel!.name;
           UserInfo.isLogging= 1;

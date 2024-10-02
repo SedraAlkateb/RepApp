@@ -17,7 +17,7 @@ class Places extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print(UserInfo.planId);
+    print(UserInfo.activePlanId);
     final size = MediaQuery.of(context).size;
     BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     WidgetsBinding.instance.addPostFrameCallback((_) {

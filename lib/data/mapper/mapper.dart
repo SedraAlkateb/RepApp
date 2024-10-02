@@ -8,7 +8,7 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
     return VisitPharmacyRequest(
         this?.id.toString() ?? Constants.empty,
-        UserInfo.planId.toString(),
+        UserInfo.activePlanId.toString(),
         UserInfo.repId.toString(),
         this!.pharmacyId.toString(),
         this?.data?? Constants.empty,
@@ -164,8 +164,9 @@ extension LoginResponseMapper on LoginResponse? {
     return LoginModel(
         this?.data?.token ?? Constants.empty,
         int.parse(this?.data?.repId ?? "0") ,
-        int.parse(this?.data?.planId ?? "0") ,
-      this?.data?.name ?? Constants.empty,
+        int.parse(this?.data?.otherPlanId ?? "0") ,
+        int.parse(this?.data?.activePlanId ?? "0") ,
+        this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1
     );
