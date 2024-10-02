@@ -160,10 +160,11 @@ class RepositroySqlImp extends RepositorySql {
       (List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs,
       List<DoctorModel>doctors,
       List<HospitalModel>hospitals,
-      List<HospitalSpModel>hospitalSps
+      List<HospitalSpModel>hospitalSps,
+      List<BrandSpModel> brandSps,
       )async {
     try {
-      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals,hospitalSps);
+      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals,hospitalSps,brandSps);
       if(response==""){
         return Right(response);
       }else{
@@ -479,6 +480,30 @@ class RepositroySqlImp extends RepositorySql {
     try {
       await _databaseHelper.updateVisitPharmacy(visitId: visitId,newNote: newNote);
       return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DoctorModel>>> getDoctorBySpec(int spId)  async {
+    try {
+      final response =await _databaseHelper.getDoctorBySpec(spId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<HospitalModel>>> getHospitalBySpec(int spId)  async {
+    try {
+      final response =  await _databaseHelper.getHospitalBySpec(spId);
+      return Right(response);
     } catch (e) {
       return Left(ErrorHandler
           .handle(e)

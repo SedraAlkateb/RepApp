@@ -4,7 +4,9 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 
 
 class BoxTextField extends StatelessWidget {
-  const BoxTextField({super.key,this.minLines,this.maxLines,this.enabled,this.hintStyle,required this.inputFormatters, required this.keyboardType, required this.prefixIcon,    this.suffixIcon, required this.validator, required this.controller, required this.obscureText});
+  const BoxTextField({super.key,this.minLines,this.maxLines,this.enabled,this.hintStyle,
+    required this.inputFormatters, required this.keyboardType, required this.prefixIcon,
+    this.suffixIcon, required this.validator, required this.controller, required this.obscureText,this.function});
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Icon? prefixIcon;
@@ -14,7 +16,7 @@ class BoxTextField extends StatelessWidget {
   final bool obscureText;
   final int ? minLines;
   final int ? maxLines;
-
+  final Function(String) ? function;
   final bool? enabled;
   final TextStyle? hintStyle;
  final List<TextInputFormatter>? inputFormatters;
@@ -24,6 +26,7 @@ class BoxTextField extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextFormField(
+            onChanged:function ,
             inputFormatters: inputFormatters,
             maxLines: maxLines??1,
             minLines:minLines ,

@@ -70,7 +70,31 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
+flutter_launcher_icons:
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/d.png"
+  min_sdk_android: 21
+  android:
+    generate: true
+    image_path: "assets/images/d.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+
+  web:
+    generate: true
+    image_path: "assets/images/d.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/images/d.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/d.png"
+
+
 flutter_icons:
   android: true
   ios: true
@@ -80,7 +104,8 @@ flutter_native_splash:
   image: assets/images/d.png
   android: true
   ios: true
-
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

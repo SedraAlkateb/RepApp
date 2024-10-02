@@ -46,7 +46,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<VisitPlaceBloc>(
           create: (context) {
             final bloc = instance<VisitPlaceBloc>();
-            bloc.add(BrandAnyFlagEvent());
+            bloc.add(BrandFlagEvent());
+
             return bloc;
           },
         ),
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp> {
           },
         ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
-        BlocProvider(create: (_) => instance<VisitBloc>()..add(VisitPharmacyEvent()))
+        BlocProvider(create: (_) => instance<VisitBloc>()..add(VisitDoctorEvent()))
 
       ],
       child: MaterialApp(

@@ -28,3 +28,30 @@ final class AllSpecLoadingState extends SpecializationState {
   @override
   List<Object?> get props =>[];
 }
+final class AllDoctorSpState extends SpecializationState {
+ final List<DoctorModel> doctors;
+  @override
+  AllDoctorSpState(this.doctors);
+  @override
+  List<Object?> get props =>[doctors];
+}
+final class AllHospitalSpState extends SpecializationState {
+ final List<HospitalModel> hospitals;
+  AllHospitalSpState(this.hospitals);
+  @override
+  List<Object?> get props =>[hospitals];
+}
+final class AllSpecDoctorErrorState extends SpecializationState {
+  final Failure failure;
+  AllSpecDoctorErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllSpecHospitalErrorState extends SpecializationState {
+  final Failure failure;
+  AllSpecHospitalErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}

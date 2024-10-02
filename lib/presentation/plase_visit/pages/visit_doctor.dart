@@ -1,4 +1,5 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -19,7 +20,7 @@ class VisitDoctor extends StatefulWidget {
   State<VisitDoctor> createState() => _VisitDoctorState();
 }
 
-class _VisitDoctorState extends State<VisitDoctor> {
+class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClientMixin {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
@@ -33,6 +34,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: null,
       body: SingleChildScrollView(  
@@ -95,6 +97,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    PersonalOrder(noteeController: _noteeController),
                     Text(
                       " ملاحظات للمكتب العلمي :",
                       style: Theme.of(context).textTheme.labelLarge,
@@ -123,9 +126,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return "الحقل مطلوب";
-                        }
+                        // if (value!.isEmpty) {
+                        //   return "الحقل مطلوب";
+                        // }
                         return null;
                       },
                       controller: _issueController,
@@ -133,120 +136,8 @@ class _VisitDoctorState extends State<VisitDoctor> {
                       minLines: 3,
                       inputFormatters: [],
                     ),
-                    Text(
-                      "طلبات شخصية:",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    CustomDropDown(
-                      hintText: "نوع الطلب",
-                      items: type,
-                      prefixIcon: null,
-                      onChanged: (value) {
-                        _noteeController.text = "";
 
-                        BlocProvider.of<VisitPlaceBloc>(context)
-                            .add(TypeAdditionEvent(value));
-                      },
-                      validator: (value) {
-                        if (value == null ) {
-                          return "اختر نوع الطلب";
-                        }
-                        return null;
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
-                      child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                        buildWhen: (previous, current) {
-                          return current is BoxState ||
-                              current is DropDownState;
-                        },
-                        builder: (context, state) {
-                          if (state is BoxState) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "اكتب ملاحظاتك:",
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                BoxTextField(
-                                  keyboardType: TextInputType.text,
-                                  prefixIcon: null,
-                                  maxLines: 4,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "الحقل مطلوب";
-                                    }
-                                    return null;
-                                  },
-                                  controller: _noteeController,
-                                  obscureText: false,
-                                  minLines: 3,
-                                  inputFormatters: [],
-                                ),
-                              ],
-                            );
-                          }
-                          if (state is DropDownState) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "اختر عينات :",
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                CustomDropDownSearch(
-                                  hintText: "العينات",
-                                  items:
-                                      context.watch<VisitPlaceBloc>().bandFlag,
-                                  onChanged: (value) {
-                                    BrandModel brand = value;
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(SelectBrandAddEvent(
-                                            " ${brand.title} ${brand.phTitle} , "));
-                                  },
-                                  validator: (value) {
-                                    return null;
-                                  },
-                                  errorText: 'لايوجد نتيجة',
-                                ),
-                                BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                                  buildWhen: (previous, current) {
-                                    return current is SelectBrandAddState;
-                                  },
-                                  builder: (context, state) {
-                                    if (state is SelectBrandAddState) {
-                                      _noteeController.text = state.brands;
-                                    }
-                                    return Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: AppPadding.p12),
-                                      child: BoxTextField(
-                                        keyboardType: TextInputType.text,
-                                        prefixIcon: null,
-                                        maxLines: 4,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "الحقل مطلوب";
-                                          }
-                                          return null;
-                                        },
-                                        controller: _noteeController,
-                                        obscureText: false,
-                                        minLines: 3,
-                                        inputFormatters: [],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          }
-                          return SizedBox();
-                        },
-                      ),
-                    ),
+
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       builder: (context, state) {
                         print("object");
@@ -313,6 +204,9 @@ class _VisitDoctorState extends State<VisitDoctor> {
                               SelectBrandEvent(brand, widget.doctorModel.id));
                         },
                         validator: (value) {
+                          if (value == null ) {
+                            return "اختر نوع الطلب";
+                          }
                           return null;
                         },
                         errorText: 'لايوجد نتيجة',
@@ -575,4 +469,7 @@ class _VisitDoctorState extends State<VisitDoctor> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -42,7 +42,8 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
     TokenResponse(
       json['token'] as String?,
       json['repId'] as String?,
-      (json['planId'] as num?)?.toInt(),
+      json['otherPlanId'] as String?,
+      json['activePlanId'] as String?,
       json['name'] as String?,
       (json['percentage'] as num?)?.toInt(),
     );
@@ -51,9 +52,57 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
       'token': instance.token,
       'repId': instance.repId,
-      'planId': instance.planId,
+      'otherPlanId': instance.otherPlanId,
+      'activePlanId': instance.activePlanId,
       'name': instance.name,
       'percentage': instance.percentage,
+    };
+
+BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
+    BrandSpResponse(
+      json['id'] as String?,
+      json['spId'] as String?,
+      json['brandId'] as String?,
+      json['brandType'] as String?,
+    );
+
+Map<String, dynamic> _$BrandSpResponseToJson(BrandSpResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'spId': instance.spId,
+      'brandId': instance.brandId,
+      'brandType': instance.brandType,
+    };
+
+AllBrandSpResponse _$AllBrandSpResponseFromJson(Map<String, dynamic> json) =>
+    AllBrandSpResponse(
+      (json['brands_specializations'] as List<dynamic>?)
+          ?.map((e) => BrandSpResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllBrandSpResponseToJson(AllBrandSpResponse instance) =>
+    <String, dynamic>{
+      'brands_specializations': instance.brandsSpecializations,
+    };
+
+AllBrandSpBaseResponse _$AllBrandSpBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllBrandSpBaseResponse(
+      json['brands_specializations'] == null
+          ? null
+          : AllBrandSpResponse.fromJson(
+              json['brands_specializations'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllBrandSpBaseResponseToJson(
+        AllBrandSpBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'brands_specializations': instance.data,
     };
 
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>

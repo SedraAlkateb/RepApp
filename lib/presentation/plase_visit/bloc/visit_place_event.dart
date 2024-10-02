@@ -3,13 +3,14 @@ part of 'visit_place_bloc.dart';
 @immutable
 abstract class VisitPlaceEvent extends Equatable{
 }
-class PharmacyByPlace extends VisitPlaceEvent{
-  final  int placeId;
-  final current;
-  PharmacyByPlace(this.placeId,this.current);
-  @override
-  List<Object?> get props => [placeId,current];
-}
+// class PharmacyByPlace extends VisitPlaceEvent{
+//   final  int placeId;
+//   final current;
+//   PharmacyByPlace(this.placeId,this.current);
+//   @override
+//   @override
+//   List<Object?> get props => [placeId,current];
+// }
 class DoctorByPlace extends VisitPlaceEvent{
   final  int placeId;
   final current;
@@ -30,12 +31,12 @@ class BrandFlagEvent extends VisitPlaceEvent{
   @override
   List<Object?> get props => [];
 }
-class BrandAnyFlagEvent extends VisitPlaceEvent{
-
-  BrandAnyFlagEvent();
-  @override
-  List<Object?> get props => [];
-}
+// class BrandAnyFlagEvent extends VisitPlaceEvent{
+//
+//   BrandAnyFlagEvent();
+//   @override
+//   List<Object?> get props => [];
+// }
 class SelectBrandEvent extends VisitPlaceEvent{
   final  BrandModel brandModel;
   final int pharmacyId;
@@ -61,18 +62,18 @@ class SelectSpecEvent extends VisitPlaceEvent{
   @override
   List<Object?> get props => [spec];
 }
-class InsertVisitPharmacyEvent extends VisitPlaceEvent{
-  final  VisitPharmacyModel visitPharmacyModel;
-  InsertVisitPharmacyEvent(this.visitPharmacyModel);
-  @override
-  List<Object?> get props => [visitPharmacyModel];
-}
-class InsertBrandVisitEvent extends VisitPlaceEvent{
-  final VisitPharmacyModel visitPharmacyModel;
-  InsertBrandVisitEvent(this.visitPharmacyModel);
-  @override
-  List<Object?> get props => [];
-}
+// class InsertVisitPharmacyEvent extends VisitPlaceEvent{
+//   final  VisitPharmacyModel visitPharmacyModel;
+//   InsertVisitPharmacyEvent(this.visitPharmacyModel);
+//   @override
+//   List<Object?> get props => [visitPharmacyModel];
+// }
+// class InsertBrandVisitEvent extends VisitPlaceEvent{
+//   final VisitPharmacyModel visitPharmacyModel;
+//   InsertBrandVisitEvent(this.visitPharmacyModel);
+//   @override
+//   List<Object?> get props => [];
+// }
 class InsertBrandVisitDoctorEvent extends VisitPlaceEvent{
   final VisitDoctorModel visitDoctorModel;
   InsertBrandVisitDoctorEvent(this.visitDoctorModel);
@@ -140,11 +141,18 @@ class SearchHospitalVisitEvent extends VisitPlaceEvent{
 
   List<Object?> get props => [];
 }
-class SearchPharmacyVisitEvent extends VisitPlaceEvent{
+class EndEvent extends VisitPlaceEvent{
 
-  final String value;
-  SearchPharmacyVisitEvent({required this.value});
   @override
 
   List<Object?> get props => [];
 }
+
+// class SearchPharmacyVisitEvent extends VisitPlaceEvent{
+//
+//   final String value;
+//   SearchPharmacyVisitEvent({required this.value});
+//   @override
+//
+//   List<Object?> get props => [];
+// }

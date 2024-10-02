@@ -230,4 +230,19 @@ class RepositoryImp implements Repository {
     }
   }
 
+  @override
+  Future<Either<Failure, List<BrandSpModel>>> getBrandsSp(int repDet) async {
+    try {
+      final response = await _remoteDataSource.getBrandsSp(repDet);
+      if (response.status == null) {
+        return Right(response.toDomain());
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+
 }

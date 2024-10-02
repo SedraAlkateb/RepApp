@@ -1,3 +1,4 @@
+/*
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_pharmacy.dart';
@@ -72,14 +73,14 @@ return   Padding(
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                            
+
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return VisitPharmacy(
                     pharmacyModel:pharmacies [index],
                   );
                 }));
                             },
-                            
+
                         child: Container(
                           margin: EdgeInsets.all(AppPadding.p8),
                           padding: EdgeInsets.all(AppPadding.p8),
@@ -87,7 +88,7 @@ return   Padding(
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(color: ColorManager.secondaryColor4)
-                            
+
                             ],
                             color: ColorManager.white,
                             border:
@@ -111,7 +112,7 @@ return   Padding(
                       );
                     }, itemCount:  pharmacies.length),
               );
-           
+
              }
              ),
           ],
@@ -121,3 +122,5 @@ return   Padding(
     );
   }
 }
+
+ */
