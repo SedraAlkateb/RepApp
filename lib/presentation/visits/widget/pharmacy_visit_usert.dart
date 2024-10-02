@@ -1,3 +1,4 @@
+/*
 
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -87,3 +88,5 @@ class PharmacyVisitUser extends StatelessWidget {
     );
   }
 }
+
+ */

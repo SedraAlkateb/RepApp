@@ -1,3 +1,4 @@
+/*
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -93,9 +94,9 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                       maxLines: 4,
                       validator: (value) {
                        if(value!.isEmpty){
-          
+
                             return "الحقل مطلوب";
-          
+
                           }
                           return null;
                         },
@@ -111,7 +112,7 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                     BlocListener<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
-                        
+
                           error(
                               context, state.failure.massage, state.failure.code);
                         }
@@ -142,10 +143,10 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                             context.watch<VisitPlaceBloc>().selectBrand;
                              final visitBrand =
                             context.watch<VisitPlaceBloc>().visitBrandPharmacys;
-                            
+
                         if (state is SelectBrandState ||
                             state is DeleteBrandState||state is  EditAmountBrandState) {
-                         
+
                           return selectBrand.isNotEmpty
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -339,16 +340,16 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
                   onPressed: () {if(_formKey.currentState!.validate()){
                     // تحقق من أن الحقل ليس فارغًا
                     if (_notephController.text.isEmpty) {
-                    
+
                       error(context, "يرجى إدخال الملاحظات",1);
                     } else  {
-                    
+
                       DateTime now = DateTime.now();
               String formattedTime = DateFormat('EEEE: dd-MM-yyyy','ar').format(now);
                       VisitPharmacyModel visitPharmacyModel = VisitPharmacyModel(
                           0, formattedTime, _notephController.text, widget.pharmacyModel.id);
-                      
-                    
+
+
                       if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
                         BlocProvider.of<VisitPlaceBloc>(context)
                             .add(InsertBrandVisitEvent(visitPharmacyModel));
@@ -368,3 +369,4 @@ class _VisitPharmacyState extends State<VisitPharmacy> {
         )));
   }
 }
+ */

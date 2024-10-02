@@ -8,9 +8,8 @@ part 'app_api.g.dart';
 @RestApi(baseUrl: Constants.baseUrl)
 abstract class AppServiceClient {
   factory AppServiceClient(Dio dio, {String baseUrl}) = _AppServiceClient;
-  @POST("/logout")
-  Future<MessageResponse> logout(
-      );
+
+
   @POST("/loginU.php")
   Future<LoginResponse> login(
       @Part(name: "userName") String userName,
@@ -68,18 +67,8 @@ abstract class AppServiceClient {
   Future<Message1Response> visitHospital(
       @Body() VisitHospitalRequestBody list
       );
-/*
-  @POST("/visitDoctorBrand.php")
-  Future<MessageResponse> visitDoctorBrand(
-      @Body() List<VisitBrandDoctorModel> list
+  @POST("/getBrandsSp.php")
+  Future<AllBrandSpBaseResponse> getBrandsSp(
+      @Part(name: "repDet") int repDet,
       );
-  @POST("/visitHospital.php")
-  Future<MessageResponse> visitHospital(
-      @Body() List<VisitHospitalModel> list
-      );
-  @POST("/visitHospitalBrand.php")
-  Future<MessageResponse> visitHospitalBrand(
-      @Body() List<VisitBrandHospitalModel> list
-      );
- */
 }

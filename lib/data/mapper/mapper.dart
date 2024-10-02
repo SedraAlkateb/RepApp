@@ -8,12 +8,32 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
     return VisitPharmacyRequest(
         this?.id.toString() ?? Constants.empty,
-        UserInfo.planId.toString(),
+        UserInfo.activePlanId.toString(),
         UserInfo.repId.toString(),
         this!.pharmacyId.toString(),
         this?.data?? Constants.empty,
         this?.note?? Constants.empty,
     );
+  }
+}
+
+extension BrandsSpRequestMapper on BrandSpResponse? {
+  BrandSpModel toDomain() {
+    return BrandSpModel(
+      int.parse(this?.id ?? "0") ,
+      int.parse(this?.spId ?? "0") ,
+      int.parse(this?.brandId ?? "0") ,
+      this?.brandType?? Constants.empty,
+    );
+  }
+}
+extension ListBrandsSpRequestMapper on AllBrandSpBaseResponse? {
+  List<BrandSpModel> toDomain() {
+    List<BrandSpModel> brandSpModels =(this?.data?.brandsSpecializations?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<BrandSpModel>()
+        .toList();
+    return brandSpModels;
   }
 }
 extension ListVisitPharmacyRequestMapper on List<VisitPharmacyModel>? {
@@ -144,8 +164,9 @@ extension LoginResponseMapper on LoginResponse? {
     return LoginModel(
         this?.data?.token ?? Constants.empty,
         int.parse(this?.data?.repId ?? "0") ,
-        this?.data?.planId ?? Constants.zero,
-      this?.data?.name ?? Constants.empty,
+        int.parse(this?.data?.otherPlanId ?? "0") ,
+        int.parse(this?.data?.activePlanId ?? "0") ,
+        this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1
     );

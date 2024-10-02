@@ -24,7 +24,8 @@ abstract class RepositorySql {
       List<SpecModel> specs,
       List<DoctorModel>doctors,
       List<HospitalModel>hospitals,
-      List<HospitalSpModel>hospitalSps
+      List<HospitalSpModel>hospitalSps,
+      List<BrandSpModel> brandSps,
       );
   Future<Either<Failure,List<BrandModel>>>getBrandsWithFlag();
   Future<Either<Failure,Null>>insertDoctor(List<DoctorModel> doctorModel);
@@ -71,5 +72,6 @@ abstract class RepositorySql {
     String? science,
   });
 
-
+  Future<Either<Failure,List<HospitalModel>>> getHospitalBySpec(int spId);
+  Future<Either<Failure,List<DoctorModel>>> getDoctorBySpec(int spId);
 }

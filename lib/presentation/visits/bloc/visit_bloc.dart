@@ -16,9 +16,9 @@ part 'visit_event.dart';
 part 'visit_state.dart';
 
 class VisitBloc extends Bloc<VisitEvent, VisitState> {
-  AllVisitPharmacySqlUsecase allVisitPharmacySqlUsecase;
+ // AllVisitPharmacySqlUsecase allVisitPharmacySqlUsecase;
   AllVisitDoctorSqlUsecase allVisitDoctorSqlUsecase;
-  AllBrandsPharmacyVisitsSqlUsecase allBrandsPharmacyVisitsSqlUsecase;
+//  AllBrandsPharmacyVisitsSqlUsecase allBrandsPharmacyVisitsSqlUsecase;
   AllBrandsDoctorVisitsSqlUsecase allBrandsDoctorVisitsSqlUsecase;
   AllBrandsHospitalVisitsSqlUsecase allBrandsHospitalVisitsSqlUsecase;
   AllVisitHospitalSqlUsecase allVisitHospitalSqlUsecase;
@@ -26,16 +26,16 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
  // UpdateDoctorUsecase updateDoctorUsecase;
  // UpdateHospitalUsecase updateHospitalUsecase;
   int current =0;
-  List<VisitPharmacyAndPharmacy> pharmacies=[];
+ // List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors=[];
   List<VisitHospitalAndHospital> hospitals=[];
 
   List<PharmacyBrandModel> brands=[];
 
   VisitBloc(
-      this.allVisitPharmacySqlUsecase,
+  //    this.allVisitPharmacySqlUsecase,
       this.allVisitDoctorSqlUsecase,
-      this.allBrandsPharmacyVisitsSqlUsecase,
+ //     this.allBrandsPharmacyVisitsSqlUsecase,
       this.allBrandsDoctorVisitsSqlUsecase,
       this.allBrandsHospitalVisitsSqlUsecase,
       this.allVisitHospitalSqlUsecase,
@@ -44,17 +44,17 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
    //   this.updateHospitalUsecase
       ) : super(VisitInitial()) {
     on<VisitEvent>((event, emit)async {
-      if(event is VisitPharmacyEvent)
-      {(
-            await allVisitPharmacySqlUsecase.execute()).fold(
-      (failure)  {
-      print(failure.massage);
-      emit(VisitPharmacyErrorState(failure: failure));
-      },
-      (data)  async{
-        pharmacies=data;
-        emit(VisitPharmacyState());
-      });}
+      // if(event is VisitPharmacyEvent)
+      // {(
+      //       await allVisitPharmacySqlUsecase.execute()).fold(
+      // (failure)  {
+      // print(failure.massage);
+      // emit(VisitPharmacyErrorState(failure: failure));
+      // },
+      // (data)  async{
+      //   pharmacies=data;
+      //   emit(VisitPharmacyState());
+      // });}
       if(event is VisitDoctorEvent)
       {
         (await allVisitDoctorSqlUsecase.execute()).fold(
@@ -107,18 +107,18 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(VisitHospitalState());
             });
       }
-      if(event is BrandPharmacyVisitEvent)
-      {
-        (await allBrandsPharmacyVisitsSqlUsecase.execute(event.visitId)).fold(
-              (failure)  {
-            print(failure.massage);
-            emit(BrandPharmacyVisitErrorState(failure: failure));
-          },
-              (data)  async{
-                brands=data;
-            emit(BrandPharmacyVisitState(data));
-          });
-      }
+      // if(event is BrandPharmacyVisitEvent)
+      // {
+      //   (await allBrandsPharmacyVisitsSqlUsecase.execute(event.visitId)).fold(
+      //         (failure)  {
+      //       print(failure.massage);
+      //       emit(BrandPharmacyVisitErrorState(failure: failure));
+      //     },
+      //         (data)  async{
+      //           brands=data;
+      //       emit(BrandPharmacyVisitState(data));
+      //     });
+      // }
       if(event is BrandDoctorVisitEvent)
       {
         (await allBrandsDoctorVisitsSqlUsecase.execute(event.visitId)).fold(

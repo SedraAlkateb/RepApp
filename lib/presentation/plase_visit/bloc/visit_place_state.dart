@@ -7,25 +7,25 @@ final class VisitPlaceInitial extends VisitPlaceState {
   @override
   List<Object?> get props => [];
 }
-final class AllPharmacyByPlaceState extends VisitPlaceState {
-  final List<PharmacyModel> pharmacy;
-  AllPharmacyByPlaceState(this.pharmacy);
-  @override
-  List<Object?> get props =>[pharmacy];
-}
-final class AllPharmacyByPlaceErrorState extends VisitPlaceState {
-  final Failure failure;
-  AllPharmacyByPlaceErrorState({required this.failure});
-  @override
-
-  List<Object?> get props =>[failure];
-}
-final class AllPharmacyByPlaceLoadingState extends VisitPlaceState {
-  @override
-  AllPharmacyByPlaceLoadingState();
-  @override
-  List<Object?> get props =>[];
-}
+// final class AllPharmacyByPlaceState extends VisitPlaceState {
+//   final List<PharmacyModel> pharmacy;
+//   AllPharmacyByPlaceState(this.pharmacy);
+//   @override
+//   List<Object?> get props =>[pharmacy];
+// }
+// final class AllPharmacyByPlaceErrorState extends VisitPlaceState {
+//   final Failure failure;
+//   AllPharmacyByPlaceErrorState({required this.failure});
+//   @override
+//
+//   List<Object?> get props =>[failure];
+// }
+// final class AllPharmacyByPlaceLoadingState extends VisitPlaceState {
+//   @override
+//   AllPharmacyByPlaceLoadingState();
+//   @override
+//   List<Object?> get props =>[];
+// }
 
 final class AllDoctorByPlaceErrorState extends VisitPlaceState {
   final Failure failure;
@@ -105,20 +105,21 @@ class DeleteBrandState extends VisitPlaceState{
   List<Object?> get props => [brands];
 
 }
+//
+// final class InsertVisitPharmacyErrorState extends VisitPlaceState {
+//   final Failure failure;
+//   InsertVisitPharmacyErrorState({required this.failure});
+//   @override
+//
+//   List<Object?> get props =>[failure];
+// }
+// final class InsertVisitPharmacyLoadingState extends VisitPlaceState {
+//
+//   @override
+//
+//   List<Object?> get props =>[];
+// }
 
-final class InsertVisitPharmacyErrorState extends VisitPlaceState {
-  final Failure failure;
-  InsertVisitPharmacyErrorState({required this.failure});
-  @override
-
-  List<Object?> get props =>[failure];
-}
-final class InsertVisitPharmacyLoadingState extends VisitPlaceState {
-
-  @override
-
-  List<Object?> get props =>[];
-}
 final class InsertVisitDoctorLoadingState extends VisitPlaceState {
 
   @override
@@ -126,12 +127,12 @@ final class InsertVisitDoctorLoadingState extends VisitPlaceState {
   List<Object?> get props =>[];
 }
 
-final class InsertVisitPharmacyState extends VisitPlaceState {
-  @override
-  InsertVisitPharmacyState();
-  @override
-  List<Object?> get props =>[];
-}
+// final class InsertVisitPharmacyState extends VisitPlaceState {
+//   @override
+//   InsertVisitPharmacyState();
+//   @override
+//   List<Object?> get props =>[];
+// }
 
 final class InsertVisitDoctorErrorState extends VisitPlaceState {
   final Failure failure;
@@ -161,18 +162,18 @@ final class InsertVisitHospitalState extends VisitPlaceState {
   List<Object?> get props =>[];
 }
 
-final class AllVisitBrandPharmacyErrorState extends VisitPlaceState {
-  final Failure failure;
-  AllVisitBrandPharmacyErrorState({required this.failure});
-  @override
-  List<Object?> get props =>[failure];
-}
-final class AllVisitBrandPharmacyState extends VisitPlaceState {
-  @override
-  AllVisitBrandPharmacyState();
-  @override
-  List<Object?> get props =>[];
-}
+// final class AllVisitBrandPharmacyErrorState extends VisitPlaceState {
+//   final Failure failure;
+//   AllVisitBrandPharmacyErrorState({required this.failure});
+//   @override
+//   List<Object?> get props =>[failure];
+// }
+// final class AllVisitBrandPharmacyState extends VisitPlaceState {
+//   @override
+//   AllVisitBrandPharmacyState();
+//   @override
+//   List<Object?> get props =>[];
+// }
 final class AllVisitBrandPharmacyLoadingState extends VisitPlaceState {
   @override
   AllVisitBrandPharmacyLoadingState();
@@ -262,9 +263,15 @@ final List<HospitalModel> hospitalVisit;
   @override
   List<Object?> get props =>[hospitalVisit];
 }
-final class SearchVisitPharmacyState extends VisitPlaceState {
-final List<PharmacyModel> pharmasyVisit;
-  SearchVisitPharmacyState(this.pharmasyVisit);
+// final class SearchVisitPharmacyState extends VisitPlaceState {
+// final List<PharmacyModel> pharmasyVisit;
+//   SearchVisitPharmacyState(this.pharmasyVisit);
+//   @override
+//   List<Object?> get props =>[pharmasyVisit];
+// }
+class EndState extends VisitPlaceState{
+
   @override
-  List<Object?> get props =>[pharmasyVisit];
+
+  List<Object?> get props => [];
 }

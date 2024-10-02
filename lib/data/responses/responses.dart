@@ -41,13 +41,15 @@ class TokenResponse {
   String? token;
   @JsonKey(name: "repId")
   String? repId;
-  @JsonKey(name: "planId")
-  int? planId;
+  @JsonKey(name: "otherPlanId")
+  String? otherPlanId;
+  @JsonKey(name: "activePlanId")
+  String? activePlanId;
   @JsonKey(name: "name")
   String? name;
   @JsonKey(name: "percentage")
   int? percentage;
-  TokenResponse(this.token,this.repId,this.planId,this.name,this.percentage);
+  TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.name,this.percentage);
   // from json
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>
       _$TokenResponseFromJson(json);
@@ -56,6 +58,54 @@ class TokenResponse {
   Map<String,dynamic>toJson()=>
       _$TokenResponseToJson(this);
 }
+
+@JsonSerializable()
+class BrandSpResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "brandId")
+  String? brandId;
+  @JsonKey(name: "brandType")
+  String? brandType;
+
+  BrandSpResponse(this.id, this.spId, this.brandId, this.brandType);
+
+  factory BrandSpResponse.fromJson(Map<String,dynamic>json)=>
+      _$BrandSpResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$BrandSpResponseToJson(this);
+}
+@JsonSerializable()
+class AllBrandSpResponse {
+  @JsonKey(name: "brands_specializations")
+  List<BrandSpResponse>? brandsSpecializations;
+  AllBrandSpResponse(this.brandsSpecializations);
+  // from json
+  factory AllBrandSpResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllBrandSpResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllBrandSpResponseToJson(this);
+}
+@JsonSerializable()
+class AllBrandSpBaseResponse extends BaseResponse{
+  @JsonKey(name: "brands_specializations")
+  AllBrandSpResponse? data;
+  AllBrandSpBaseResponse(this.data);
+  // from json
+  factory AllBrandSpBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllBrandSpBaseResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllBrandSpBaseResponseToJson(this);
+}
+
+
+
 @JsonSerializable()
 class LoginResponse extends BaseResponse{
   @JsonKey(name: "data")

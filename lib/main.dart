@@ -13,7 +13,9 @@ Future<int?> sss()async{
     if(data!=null&&UserInfo.isLogging==1){
       UserInfo.name=data.name;
       UserInfo.isLogging=data.isLogin;
-      UserInfo.planId=data.planId;
+      UserInfo.activePlanId=data.activePlanId;
+      UserInfo.otherPlanId=data.otherPlanId;
+
       UserInfo.percentage=data.percentage;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;
