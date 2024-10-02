@@ -139,7 +139,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         }
       }
       if (event is SelectBrandAddEvent) {
-        br="${br} ${event.brand}";
+        br="${event.brand}";
         emit(SelectBrandAddState(br));
       }
       // if (event is InsertVisitPharmacyEvent) {
@@ -273,6 +273,9 @@ if(hospital.title.contains(event.value)){
       .toList();
       emit(SearchVisitHospitalState(hospitalSearchModel));
     }
+       if(event is EndEvent){
+emit(EndState());
+       }
 
 
 

@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PersonalOrder extends StatelessWidget {
-  const PersonalOrder({super.key,required this.noteeController});
-  final TextEditingController noteeController ;
+  const PersonalOrder({super.key, required this.noteeController});
+  final TextEditingController noteeController;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +41,7 @@ class PersonalOrder extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
-              return current is BoxState ||
-                  current is DropDownState;
+              return current is BoxState || current is DropDownState;
             },
             builder: (context, state) {
               if (state is BoxState) {
@@ -76,18 +75,17 @@ class PersonalOrder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "اختر عينات :",
+                      "اختر عينات : ",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     CustomDropDownSearch(
                       hintText: "العينات",
-                      items:
-                      context.watch<VisitPlaceBloc>().bandFlag,
+                      items: context.watch<VisitPlaceBloc>().bandFlag,
                       onChanged: (value) {
                         BrandModel brand = value;
-                        BlocProvider.of<VisitPlaceBloc>(context)
-                            .add(SelectBrandAddEvent(
-                            " ${brand.title} ${brand.phTitle} , "));
+                        BlocProvider.of<VisitPlaceBloc>(context).add(
+                            SelectBrandAddEvent(
+                                "${noteeController.text} , ${brand.title} ${brand.phTitle}"));
                       },
                       validator: (value) {
                         return null;
@@ -100,19 +98,21 @@ class PersonalOrder extends StatelessWidget {
                       },
                       builder: (context, state) {
                         if (state is SelectBrandAddState) {
-                          noteeController.text = state.brands;
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            noteeController.text = state.brands;
+                          });
                         }
                         return Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppPadding.p12),
+                          padding:
+                              EdgeInsets.symmetric(vertical: AppPadding.p12),
                           child: BoxTextField(
+                            function: (value) {
+                              BlocProvider.of<VisitPlaceBloc>(context).add(
+                                  SelectBrandAddEvent("${noteeController.text}"));},
                             keyboardType: TextInputType.text,
                             prefixIcon: null,
                             maxLines: 4,
                             validator: (value) {
-                              // if (value!.isEmpty) {
-                              //   return "الحقل مطلوب";
-                              // }
                               return null;
                             },
                             controller: noteeController,

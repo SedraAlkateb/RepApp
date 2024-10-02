@@ -141,6 +141,13 @@ class SearchHospitalVisitEvent extends VisitPlaceEvent{
 
   List<Object?> get props => [];
 }
+class EndEvent extends VisitPlaceEvent{
+
+  @override
+
+  List<Object?> get props => [];
+}
+
 // class SearchPharmacyVisitEvent extends VisitPlaceEvent{
 //
 //   final String value;

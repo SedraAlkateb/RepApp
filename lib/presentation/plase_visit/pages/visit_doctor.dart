@@ -98,6 +98,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    PersonalOrder(noteeController: _noteeController),
                     Text(
                       " ملاحظات للمكتب العلمي :",
                       style: Theme.of(context).textTheme.labelLarge,
@@ -137,7 +138,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       inputFormatters: [],
                     ),
 
-                    PersonalOrder(noteeController: _noteeController),
+
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       builder: (context, state) {
                         print("object");

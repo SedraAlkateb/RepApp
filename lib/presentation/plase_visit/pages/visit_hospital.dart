@@ -93,87 +93,6 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      " ملاحظات للمكتب العلمي :",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    BoxTextField(
-                      keyboardType: TextInputType.text,
-                      prefixIcon: null,
-                      maxLines: 4,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "الحقل مطلوب";
-                        }
-                        return null;
-                      },
-                      controller: _noteController,
-                      obscureText: false,
-                      minLines: 3,
-                      inputFormatters: [],
-                    ),
-                    Text(
-                      "ملاحظات لمستودع قاسيون  :",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    BoxTextField(
-                      keyboardType: TextInputType.text,
-                      prefixIcon: null,
-                      maxLines: 4,
-                      validator: (value) {
-                        // if (value!.isEmpty) {
-                        //   return "الحقل مطلوب";
-                        // }
-                        return null;
-                      },
-                      controller: _issueController,
-                      obscureText: false,
-                      minLines: 3,
-                      inputFormatters: [],
-                    ),
-                    PersonalOrder(noteeController: _noteeController),
-                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                      builder: (context, state) {
-                        print("object");
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
-                                  value:
-                                      context.read<VisitPlaceBloc>().isScience,
-                                  splashRadius: 30,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(true));
-                                  },
-                                ),
-                                Text('مكتب علمي'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
-                                  value: !context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(false));
-                                  },
-                                ),
-                                Text('مع الخطة'),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                    Text(
                       "اختر الاختصاص :",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
@@ -220,12 +139,12 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                 Text(
                                   "اجمالي الزيارات : ${state.visits}",
                                   style:
-                                      Theme.of(context).textTheme.headlineLarge,
+                                  Theme.of(context).textTheme.headlineLarge,
                                 ),
                                 Text(
                                   "عدد الاطباء : ${state.total}",
                                   style:
-                                      Theme.of(context).textTheme.headlineLarge,
+                                  Theme.of(context).textTheme.headlineLarge,
                                 ),
                               ],
                             ),
@@ -235,6 +154,89 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                         }
                       },
                     ),
+                    PersonalOrder(noteeController: _noteeController),
+                    Text(
+                      " ملاحظات للمكتب العلمي :",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    BoxTextField(
+                      keyboardType: TextInputType.text,
+                      prefixIcon: null,
+                      maxLines: 4,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
+                      controller: _noteController,
+                      obscureText: false,
+                      minLines: 3,
+                      inputFormatters: [],
+                    ),
+                    Text(
+                      "ملاحظات لمستودع قاسيون  :",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    BoxTextField(
+                      keyboardType: TextInputType.text,
+                      prefixIcon: null,
+                      maxLines: 4,
+                      validator: (value) {
+                        // if (value!.isEmpty) {
+                        //   return "الحقل مطلوب";
+                        // }
+                        return null;
+                      },
+                      controller: _issueController,
+                      obscureText: false,
+                      minLines: 3,
+                      inputFormatters: [],
+                    ),
+
+                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      builder: (context, state) {
+                        print("object");
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor4,
+                                  value:
+                                      context.read<VisitPlaceBloc>().isScience,
+                                  splashRadius: 30,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(true));
+                                  },
+                                ),
+                                Text('مكتب علمي'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor4,
+                                  value: !context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(false));
+                                  },
+                                ),
+                                Text('مع الخطة'),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+
                     Text(
                       "اختر العينات :",
                       style: Theme.of(context).textTheme.labelLarge,

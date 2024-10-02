@@ -269,3 +269,9 @@ final List<HospitalModel> hospitalVisit;
 //   @override
 //   List<Object?> get props =>[pharmasyVisit];
 // }
+class EndState extends VisitPlaceState{
+
+  @override
+
+  List<Object?> get props => [];
+}
