@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class InfoVisitDoctor extends StatefulWidget {
   InfoVisitDoctor({super.key, required this.doctorModel});
 
@@ -24,9 +25,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
     _noteController.text = widget.doctorModel.visitDoctorModel.science;
     _issueController.text = widget.doctorModel.visitDoctorModel.kaswn;
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion;
- //   String dateString = widget.doctorModel.visitDoctorModel.data;
+    //   String dateString = widget.doctorModel.visitDoctorModel.data;
 //    DateTime parsedDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
- //   widget.doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
+    //   widget.doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
     super.initState();
@@ -49,7 +50,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
               child: Padding(
-                padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -220,7 +221,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                       ],
                                     ),
                                     ...selectBrand.asMap().entries.map((entry) {
-                                  //    final index = entry.key;
+                                      //    final index = entry.key;
                                       final brand = entry.value;
                                       return TableRow(
                                         children: [
@@ -256,16 +257,19 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                  /*
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
-                      if(state is UpdateVisitDoctorState){
+                      if (state is UpdateVisitDoctorState) {
                         Navigator.pop(context);
                       }
                     },
-                    child:
-                        ElevatedButton( onPressed: () {
+                    child: ElevatedButton(
+                        onPressed: () {
                           BlocProvider.of<VisitBloc>(context).add(
-                              UpdateVisitDoctorEvent
-                                (kas: _issueController.text,sc: _noteController.text, id: widget.doctorModel .visitDoctorModel.id));
-                        }, child: Text("تعديل")),
+                              UpdateVisitDoctorEvent(
+                                  kas: _issueController.text,
+                                  sc: _noteController.text,
+                                  id: widget.doctorModel.visitDoctorModel.id));
+                        },
+                        child: Text("تعديل")),
                   )
                   */
                 ],

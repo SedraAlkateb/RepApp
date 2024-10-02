@@ -99,6 +99,8 @@ class DatabaseHelper {
     placeTitle TEXT NOT NULL, 
     visits TEXT NOT NULL,
     spTitle TEXT NOT NULL,
+    note TEXT NOT NULL,
+    rate TEXT NOT NULL,
     spId INTEGER NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
 );
@@ -127,8 +129,9 @@ class DatabaseHelper {
     );
     '''
     );
-    ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////
+    ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     await db.execute('''
+
      CREATE TABLE visit_doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
@@ -142,7 +145,7 @@ class DatabaseHelper {
     await db.execute(
         '''
     CREATE TABLE visit_hospital(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY  KEY AUTOINCREMENT,
     data TEXT NOT NULL,
     kaswn TEXT NOT NULL,
     science TEXT ,

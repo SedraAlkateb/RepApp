@@ -52,7 +52,7 @@ class Places extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                              "اختر أحد المناطق لاظهار(الأطباء,الصيادلة,المشافي) في المنطقة المختارة" ,
+                              "اختر أحد المناطق لإِظهار(الأطباء,الصيادلة,المشافي) في المنطقة المختارة" ,
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: ColorManager.secondaryColor1,

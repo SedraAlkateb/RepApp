@@ -454,9 +454,14 @@ class DoctorResponse {
   String? placeTitle;
     @JsonKey(name: "visits")
   String? visits;
-    @JsonKey(name: "spTitle")
+    @JsonKey(name: "note")
+  String? note;
+    @JsonKey(name: "rate")
+  String? rate;
+      @JsonKey(name: "spTitle")
   String? spTitle;
-  DoctorResponse(this.id,this.title,this.placeId,this.address,this.spId,this.placeTitle,this.visits,this.spTitle);
+
+  DoctorResponse(this.id,this.title,this.placeId,this.address,this.spId,this.placeTitle,this.visits,this.note,this.rate,this.spTitle);
   // from json
   factory DoctorResponse.fromJson(Map<String,dynamic>json)=>
       _$DoctorResponseFromJson(json);

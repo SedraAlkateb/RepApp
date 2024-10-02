@@ -217,14 +217,20 @@ extension HospitalResponseMapper on HospitalResponse? {
 
 extension DoctorResponseMapper on DoctorResponse? {
  DoctorModel toDomain() {
-    return DoctorModel(
+  if(this?.note==null||this?.note==""||this?.note==" ")
+{
+  this?.note=Constants.empty;
+}    return DoctorModel(
       int.parse(this?.id ?? "0"),
       this?.title ?? Constants.empty,
       int.parse(this?.placeId ?? "0") ,
       this?.address ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
       this?.visits ?? Constants.empty,
+      this?.note??Constants.empty,
+      this?.rate??Constants.empty,
       this?.spTitle ?? Constants.empty,      int.parse(this?.spId ?? "0") ,
+
     );
 
   }
