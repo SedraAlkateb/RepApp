@@ -147,6 +147,7 @@ extension FlowStateExtension on FlowState{
     WidgetsBinding.instance.addPostFrameCallback((_) =>
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context)=>
     StateRenderer(
         stateRendererType: stateRendererType,
