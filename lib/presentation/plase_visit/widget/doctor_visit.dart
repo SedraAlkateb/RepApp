@@ -48,7 +48,7 @@ class _DoctorVisitState extends State<DoctorVisit>
               },
               builder: (context, state) {
                 List<DoctorModel> doctors =
-                    context.watch<VisitPlaceBloc>().doctorSearchModel;
+                    context.watch<VisitPlaceBloc>().doctors;
                 if (state is SearchVisitDoctorState) {
                   doctors = state.doctorVisit;
                 }
