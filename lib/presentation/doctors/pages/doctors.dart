@@ -108,7 +108,7 @@ class Doctors extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
-                                   if (doctormodel[index].note.isNotEmpty) // الشرط للتحقق من وجود الملاحظات
+                                   if (doctormodel[index].note!=null&& doctormodel[index].note!.isNotEmpty) // الشرط للتحقق من وجود الملاحظات
       Text(
         "ملاحظات : ${doctormodel[index].note}",
         textAlign: TextAlign.center,
