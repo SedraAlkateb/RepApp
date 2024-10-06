@@ -109,26 +109,33 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     inputFormatters: [],
                     enabled: true,
                   ),
-                  Text(
-                    "ملاحظات لمستودع قاسيون  :",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  BoxTextField(
-                    keyboardType: TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {
-                      return null;
-                    },
-                    enabled: true,
-                    controller: _issueController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
-                  ),
+                  _issueController .text.isNotEmpty?
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "ملاحظات لمستودع قاسيون  :",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    BoxTextField(
+                      keyboardType: TextInputType.text,
+                      prefixIcon: null,
+                      maxLines: 4,
+                      validator: (value) {
+                        return null;
+                      },
+                      enabled: true,
+                      controller: _issueController,
+                      obscureText: false,
+                      minLines: 3,
+                      inputFormatters: [],
+                    ),
 
+                  ],
+                ):SizedBox(),
                   _noteeController .text.isNotEmpty?
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "طلبات شخصية:",

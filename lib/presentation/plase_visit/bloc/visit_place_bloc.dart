@@ -47,7 +47,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   int current = 0;
   String not = "";
   String br = "";
-  bool isScience = true;
+  int isScience = 0;
   VisitPlaceBloc(
     //    this.pharmaciesByPlaceUsecase,
     this.allBrandsFlagSqlUsecase,
@@ -273,7 +273,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   }
   String addition(String brand) {
     String add =
-        "${not} \n ${brand} \n ${isScience == true ? " مكتب علمي " : "مع الخطة "}";
+        "${not} \n ${brand} \n ${isScience == 0 ? " مكتب علمي " :isScience == 1? "مع الخطة ": "مع الموزع "}";
     return add;
   }
 }

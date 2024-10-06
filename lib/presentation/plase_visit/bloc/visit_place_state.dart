@@ -224,7 +224,7 @@ final class DropDownState extends VisitPlaceState {
   List<Object?> get props =>[value];
 }
 class IsScienceState extends VisitPlaceState {
-  final  bool isScience;
+  final  int isScience;
   IsScienceState(this.isScience);
   @override
   List<Object?> get props => [isScience];
