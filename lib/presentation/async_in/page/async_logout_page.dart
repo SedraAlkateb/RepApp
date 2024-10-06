@@ -53,7 +53,6 @@ class AsyncLogoutPage extends StatelessWidget {
                          context, Routes.login,
                              (route) => false,
                        );
-
                      }
                     },
                     child: ElevatedButton(onPressed: (){
