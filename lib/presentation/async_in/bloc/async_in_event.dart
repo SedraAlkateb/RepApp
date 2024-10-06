@@ -7,3 +7,13 @@ class Async1DataEvent extends AsyncInEvent{
   List<Object?> get props => [];
 
 }
+class DeleteBaseEvent extends AsyncInEvent{
+  @override
+  List<Object?> get props => [];
+
+}
+class DeleteAllEvent extends AsyncInEvent{
+  @override
+  List<Object?> get props => [];
+
+}

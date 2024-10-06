@@ -37,7 +37,7 @@ List<VisitPharmacyModel> vi=[
           emit(AllPlaceState(data));
         });
       }
-      if (event is SearchPlaceEvent) {
+      else    if (event is SearchPlaceEvent) {
         placeSearchModel = placeModel.where((value) {
           if (value.title.contains(event.value)) {
             return true;

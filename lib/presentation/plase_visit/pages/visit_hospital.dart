@@ -80,7 +80,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        "العنوان: ${widget.hospitalModel.address ?? " "}",
+                        "العنوان: ${widget.hospitalModel.address }",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],

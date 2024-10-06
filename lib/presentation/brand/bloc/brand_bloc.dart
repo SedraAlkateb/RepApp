@@ -22,7 +22,7 @@ class BrandBloc extends Bloc<BrandEvent, BrandState> {
           emit(AllBrandState(data));
         });
       }
-      if (event is SearchbradEvent) {
+      else    if (event is SearchbradEvent) {
         List<BrandModel> brandlist;
         brandlist = brand.where((value) {
           if (value.title.contains(event.contant)) {

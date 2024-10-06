@@ -28,7 +28,9 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
             }
 
         );
-      }     if (event is SearchDocEvent) {
+      }
+
+      else if (event is SearchDocEvent) {
         List<DoctorModel> doctorlist ;
 
         doctorlist=doctor.where((value) {

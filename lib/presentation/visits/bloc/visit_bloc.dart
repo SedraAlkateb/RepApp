@@ -97,7 +97,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
             });
       }
      */
-      if(event is VisitHospitalEvent)
+      else   if(event is VisitHospitalEvent)
       {
         (await allVisitHospitalSqlUsecase.execute()).fold(
                 (failure)  {print(failure.massage);
@@ -119,7 +119,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       //       emit(BrandPharmacyVisitState(data));
       //     });
       // }
-      if(event is BrandDoctorVisitEvent)
+      else  if(event is BrandDoctorVisitEvent)
       {
         (await allBrandsDoctorVisitsSqlUsecase.execute(event.visitId)).fold(
                 (failure)  {
@@ -131,7 +131,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(BrandPharmacyVisitState(data));
             });
       }
-      if(event is BrandHospitalVisitEvent)
+      else   if(event is BrandHospitalVisitEvent)
       {
         (await allBrandsHospitalVisitsSqlUsecase.execute(event.visitId)).fold(
                 (failure)  {   

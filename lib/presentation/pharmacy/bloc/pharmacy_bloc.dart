@@ -26,7 +26,8 @@ class PharmacyBloc extends Bloc<PharmacyEvent, PharmacyState> {
       }
 
       );
-    }  if (event is SearchphEvent) {
+    }
+      else if (event is SearchphEvent) {
         List<PharmacyModel> PharmacyModelist ;
 
        PharmacyModelist=Pharmacy.where((value) {

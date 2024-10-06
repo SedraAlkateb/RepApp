@@ -1,5 +1,6 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
+import 'package:domina_app/presentation/async_in/page/async_logout_page.dart';
 import 'package:domina_app/presentation/async_in/page/async_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
@@ -27,6 +28,7 @@ class Routes {
   static const String visits = "/visits";
   static const String asyncIn = "/asyncIn";
   static const String specDH = "/specDH";
+  static const String logout = "/logout";
 
 }
 class RouteGenerator {
@@ -63,6 +65,9 @@ class RouteGenerator {
       case Routes.asyncIn:
         initAsyncInModule();
         return MaterialPageRoute(builder: (_) =>     AsyncPage());
+      case Routes.logout:
+        initAsyncInModule();
+        return MaterialPageRoute(builder: (_) =>     AsyncLogoutPage());
       case Routes.placeVisit:
         return MaterialPageRoute(builder: (_) =>     PlaceVisitPage(placeId: 2));
       case Routes.specDH:
