@@ -1,7 +1,6 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/doctor_visit.dart';
 import 'package:domina_app/presentation/plase_visit/widget/hospital_visit.dart';
-import 'package:domina_app/presentation/plase_visit/widget/pharmacy_visit.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
