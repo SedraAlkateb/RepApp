@@ -1,6 +1,8 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
+
+
+
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -22,6 +24,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   final TextEditingController _noteeController = TextEditingController();
   @override
   void initState() {
+
+  
     _noteController.text = widget.doctorModel.visitDoctorModel.science;
     _issueController.text = widget.doctorModel.visitDoctorModel.kaswn;
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion;
