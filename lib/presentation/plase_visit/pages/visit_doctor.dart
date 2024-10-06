@@ -5,7 +5,6 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -150,11 +149,11 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                   focusColor: ColorManager.secondaryColor2,
                                   activeColor: ColorManager.secondaryColor2,
                                   value:
-                                      context.watch<VisitPlaceBloc>().isScience,
+                                      context.watch<VisitPlaceBloc>().isScience==0?true:false,
                                   splashRadius: 30,
                                   onChanged: (value) {
                                     BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(true));
+                                        .add(IsScienceEvent(0));
                                   },
                                 ),
                                 Text('مكتب علمي'),
@@ -165,15 +164,31 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor2,
                                   activeColor: ColorManager.secondaryColor2,
-                                  value: !context
+                                  value: context
                                       .watch<VisitPlaceBloc>()
-                                      .isScience,
+                                      .isScience==1?true:false,
                                   onChanged: (value) {
                                     BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(false));
+                                        .add(IsScienceEvent(1));
                                   },
                                 ),
                                 Text('مع الخطة'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor2,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .watch<VisitPlaceBloc>()
+                                      .isScience==2?true:false,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(2));
+                                  },
+                                ),
+                                Text('مع الموزع'),
                               ],
                             ),
                           ],
