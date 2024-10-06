@@ -1,6 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -22,8 +21,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _noteController.text=widget.hospitalModel.visitHospitalModel.science;
-    _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn;
+    _noteController.text=widget.hospitalModel.visitHospitalModel.science??"";
+    _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn??"";
     _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion;
     BlocProvider.of<VisitBloc>(context).add(BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id) );
     super.initState();

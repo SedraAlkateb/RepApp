@@ -298,8 +298,8 @@ class VisitHospitalAndHospital {
 class VisitDoctorModel {
   int id;
   String data;
-  String kaswn;
-  String science;
+  String ?kaswn;
+  String? science;
   String additaion;
   int doctorId;
   String? repPlanId;
@@ -351,8 +351,8 @@ class VisitDoctorModel {
 class VisitHospitalModel {
   int id;
   String data;
-  String kaswn;
-  String science;
+  String ?kaswn;
+  String? science;
   String additaion;
   int hospitalSpId;
   VisitHospitalModel(this.id, this.data, this.kaswn, this.science,
@@ -524,8 +524,8 @@ class DoctorModel {
   String address;
   String placeTitle;
   String visits;
-  String note;
-  String rate;
+  String ? note;
+  String ? rate;
   String spTitle;
   int spId;
   DoctorModel(
@@ -591,7 +591,7 @@ class HospitalSpModel {
   int hospitalId;
   int spId;
   int totalDocs;
-  String rate;
+  String ?rate;
   int visit;
   HospitalSpModel(this.id, this.hospitalId, this.spId, this.totalDocs,
       this.rate, this.visit);
