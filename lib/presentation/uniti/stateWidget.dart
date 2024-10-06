@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:domina_app/presentation/common/state_renderer/state_renderer.dart';
 import 'package:domina_app/presentation/common/state_renderer/state_renderer_imp.dart';
 import 'package:flutter/cupertino.dart';
