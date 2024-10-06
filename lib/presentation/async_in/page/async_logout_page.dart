@@ -6,8 +6,8 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AsyncPage extends StatelessWidget {
-  const AsyncPage({super.key});
+class AsyncLogoutPage extends StatelessWidget {
+  const AsyncLogoutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +38,21 @@ class AsyncPage extends StatelessWidget {
                      if(state is SyncData1ErrorState){
                        error(context, state.failure.massage, state.failure.code);
                      }
-                     if(state is DeleteBaseErrorState){
+                     if(state is DeleteAllErrorState){
                        error(context, state.failure.massage, state.failure.code);
                      }
                      if(state is SyncData1LoadingState){
                        loading(context);
                      }
                      if(state is SyncData1State){
-                       BlocProvider.of<AsyncInBloc>(context).add(DeleteBaseEvent());
+                       BlocProvider.of<AsyncInBloc>(context).add(DeleteAllEvent());
                      }
-                     if(state is DeleteBaseState){
-
+                     if(state is DeleteAllState){
                        success(context);
-                       Navigator.pushNamed(context, Routes.syncData);
+                       Navigator.pushNamedAndRemoveUntil(
+                         context, Routes.login,
+                             (route) => false,
+                       );
                      }
                     },
                     child: ElevatedButton(onPressed: (){

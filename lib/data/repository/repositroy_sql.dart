@@ -162,9 +162,10 @@ class RepositroySqlImp extends RepositorySql {
       List<HospitalModel>hospitals,
       List<HospitalSpModel>hospitalSps,
       List<BrandSpModel> brandSps,
+      List<PlanBrandModel> planBrands
       )async {
     try {
-      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals,hospitalSps,brandSps);
+      final response = await _databaseHelper.asyncData(brands,pharmacies,places,specs,doctors,hospitals,hospitalSps,brandSps,planBrands);
       if(response==""){
         return Right(response);
       }else{
@@ -504,6 +505,112 @@ class RepositroySqlImp extends RepositorySql {
     try {
       final response =  await _databaseHelper.getHospitalBySpec(spId);
       return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PlanBrandModel>>> planBrandsAs()async {
+    try {
+      final response =  await _databaseHelper.planBrandsAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+  @override
+  Future<Either<Failure, List<VisitBrandPharmacyModel>>> visitBrandDoctorAs() async {
+    try {
+      final response =  await _databaseHelper.visitBrandDoctorAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitBrandPharmacyModel>>> visitBrandHospitalAs()  async {
+    try {
+      final response =  await _databaseHelper.visitBrandHospitalAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+  @override
+  Future<Either<Failure, List<VisitBrandPharmacyModel>>> visitBrandPharmacyAs()async {
+    try {
+      final response =  await _databaseHelper.visitBrandPharmacyAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitDoctorModel>>> visitDoctorAs()async {
+    try {
+      final response =  await _databaseHelper.visitDoctorAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitHospitalModel>>> visitHospitalAs() async {
+    try {
+      final response =  await _databaseHelper.visitHospitalAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<HospitalSpModel>>> visitHospitalSpAs()async {
+    try {
+      final response =  await _databaseHelper.visitHospitalSpAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitPharmacyModel>>> visitPharmacyAs() async {
+    try {
+      final response =  await _databaseHelper.visitPharmacyAs();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> clearDatabaseAll() async {
+    try {
+       await _databaseHelper.clearDatabaseAll();
+      return Right(null);
     } catch (e) {
       return Left(ErrorHandler
           .handle(e)

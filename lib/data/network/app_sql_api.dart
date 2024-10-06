@@ -1,8 +1,68 @@
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
+abstract class AppSqlApiAbs{
+  Future<String> asyncData(List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs, List<DoctorModel> doctors, List<HospitalModel> hospitals, List<HospitalSpModel> hospitalSps, List<BrandSpModel> brandSps, List<PlanBrandModel> planBrands);
+  insertBrands(List<BrandModel> brands);
+  insertHospitalSp(List<HospitalSpModel> hospitalSps);
+  insertPharmacy(List<PharmacyModel> pharmacies);
+  insertPlace(List<PlaceModel> places);
+  insertSpec(List<SpecModel> specs);
+  insertLogin(LoginModel loginModel);
+  inserthospital(List<HospitalModel> hospitals);
+  insertdoctor(List<DoctorModel> doctors);
+  //////////////////////////////////Visit/////////////insert
+  Future<void> insertVisitHospital(VisitHospitalModel visitHospitalModel, int hos, int spec);
+  Future<void> insertVisitBrandHospital(VisitHospitalModel visitHospitalModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels, int hos, int spec);
+  Future<void> insertVisitBrandDoctor(VisitDoctorModel visitDoctorModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels,);
+  Future<void> insertVisitBrandPharmacy(VisitPharmacyModel visitPharmacyModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels);
+  insertVisitDoctor(VisitDoctorModel visitDoctorModel);
+  insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel);
+  ///////////////////////////get
+  Future<List<SpecModel>> getSpec();
+  Future<List<PlaceModel>> getPlace();
+  Future<List<PharmacyModel>> getPharmacy();
+  Future<List<BrandModel>> getBrands();
+  Future<List<HospitalModel>> getHospitalByPlaceId(int placeId);
+  Future<List<DoctorModel>> getDoctorByPlaceId(int placeId);
+  Future<List<PharmacyModel>> getPharmaciesByPlaceId(int placeId);
+  Future<List<DoctorModel>> getDoctorBySpec(int spId);
+  Future<List<HospitalModel>> getHospitalBySpec(int spId);
+  Future<List<HospitalModel>> getHospital();
+  Future<List<DoctorModel>> getDotors();
+  Future<List<BrandModel>> getBrandsWithFlag();
+  Future<LoginModel?> getRep();
+  ///////////////////////get visit////////////////////////////
+  Future<List<VisitDoctorAndDoctor>> getVisitDoctor();
+  Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy();
+   Future<List<VisitHospitalAndHospital>> getVisitHospital();
 
-class AppSqlApi {
+
+  Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(int visitId);
+  Future<List<PharmacyBrandModel>> getBrandsDoctorByVisitId(int visitId);
+  Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId);
+  getPharmaciesVisit();
+  ///////////update
+  Future<void> updateVisitHospitalFields({required int id, String? kaswn, String? science,});
+  Future<void> updateVisitDoctorFields({required int id, String? kaswn, String? science,});
+  Future<void> updateVisitPharmacy({required int visitId, String? newNote,});
+  Future<void> editIsLogin(int repId, int isLogin);
+  ///////////////////////////////////clear
+  Future<void> clearDatabase();
+  Future<void> clearDatabaseAll();
+  Future<List<SpecHospitalSp>> specializationByHospitalId(int hospitalId);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////get insert
+ Future<List<VisitDoctorModel>> visitDoctorAs();
+  Future<List<VisitBrandPharmacyModel>> visitBrandDoctorAs();
+  Future<List<VisitHospitalModel>> visitHospitalAs();
+  Future<List<HospitalSpModel>> visitHospitalSpAs();
+  Future<List<VisitBrandPharmacyModel>> visitBrandHospitalAs();
+  Future<List<VisitPharmacyModel>> visitPharmacyAs();
+  Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs();
+  Future<List<PlanBrandModel>> planBrandsAs();
+
+}
+class AppSqlApi extends AppSqlApiAbs {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
   Future<String> asyncData(
@@ -14,7 +74,7 @@ class AppSqlApi {
     List<HospitalModel> hospitals,
     List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
-
+      List<PlanBrandModel> planBrands,
       ) async {
     try {
       Database? mydb = await databaseHelper.database;
@@ -43,6 +103,9 @@ class AppSqlApi {
         }
         for (var brandSp in brandSps) {
           batch.insert('brandSp', brandSp.toMap());
+        }
+        for (var planBrand in planBrands) {
+          batch.insert('planBrand', planBrand.toMap());
         }
         await batch.commit(noResult: true);
       });
@@ -151,16 +214,51 @@ class AppSqlApi {
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
     final tables = [
-      'brand',
-      "doctor",
-      "hospital",
+      // يجب أن تحذف البيانات من الجداول التابعة أولًا
+      'hospitalSp',
+      'brandSp',
+      'doctor',
       'pharmacy',
-      'place',
       'specialization',
-      'hospitalSp'
+      'hospital',
+      'place',
+      'brand',
+      'planBrand '
+    ];
+
+    Batch batch = db.batch();
+    await db.execute('PRAGMA foreign_keys = OFF;');
+
+    for (var table in tables) {
+      batch.delete(table);
+    }
+    await batch.commit(noResult: true);
+    await db.execute('PRAGMA foreign_keys = ON;');
+
+  }
+
+
+  Future<void> clearDatabaseAll() async {
+    final db = await databaseHelper.database;
+    final tables = [
+      'visit_brand_pharmacy',
+      'visit_brand_doctor',
+      'visit_brand_hospital',
+      'visit_doctor',
+      'visit_hospital',
+      'visit_pharmacy',
+      'brandSp',
+      'planBrand',
+      'hospitalSp',
+      'doctor',
+      'pharmacy',
+      'specialization',
+      'hospital',
+      'place',
+      'brand',
+      'rep',
     ];
     Batch batch = db.batch();
-    //    batch.execute('DROP TABLE IF EXISTS rep');
     for (var table in tables) {
       batch.delete(table);
     }
@@ -171,7 +269,7 @@ class AppSqlApi {
     final db = await databaseHelper.database;
     Batch batch = db.batch();
     batch.rawQuery(
-        'SELECT token, repId, activePlanId, name, percentage, isLogin FROM rep LIMIT 1');
+        'SELECT token, repId, activePlanId,otherPlanId, name, percentage, isLogin FROM rep LIMIT 1');
     List<dynamic> results = await batch.commit();
     if (results.isNotEmpty && results[0].isNotEmpty) {
       Map<String, dynamic> firstRow = results[0][0];
@@ -228,8 +326,6 @@ class AppSqlApi {
         result.map((map) => HospitalModel.fromMap(map)).toList();
     return hospitals;
   }
-
-
 
   insertdoctor(List<DoctorModel> doctors) async {
     Database? mydb = await databaseHelper.database;
@@ -308,7 +404,6 @@ class AppSqlApi {
       throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
     }
   }
-
   Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
@@ -339,7 +434,7 @@ class AppSqlApi {
     Batch batch = mydb.batch();
     batch.insert(
       'visit_pharmacy',
-      visitPharmacyModel.toJson(),
+      visitPharmacyModel.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     await batch.commit(noResult: true);
@@ -449,7 +544,7 @@ class AppSqlApi {
         // إدراج الزيارة الجديدة
         await txn.insert(
           'visit_doctor',
-          visitDoctorModel.toJson(),
+          visitDoctorModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       });
@@ -465,7 +560,7 @@ class AppSqlApi {
       try {
         int visitId = await txn.insert(
           'visit_pharmacy',
-          visitPharmacyModel.toJson(),
+          visitPharmacyModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
         for (var visitBrand in visitBrandPharmacyModels) {
@@ -520,7 +615,7 @@ class AppSqlApi {
           // إدراج الزيارة الجديدة
           int visitId = await txn.insert(
             'visit_doctor',
-            visitDoctorModel.toJson(),
+            visitDoctorModel.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
@@ -592,7 +687,7 @@ class AppSqlApi {
 
           int visitId = await txn.insert(
             'visit_hospital',
-            visitHospitalModel.toJson(),
+            visitHospitalModel.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
@@ -659,7 +754,7 @@ class AppSqlApi {
 
           await txn.insert(
             'visit_hospital',
-            visitHospitalModel.toJson(),
+            visitHospitalModel.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
         } else {
@@ -674,8 +769,7 @@ class AppSqlApi {
   }
 
 
-  Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(
-      int visitId) async {
+  Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
       SELECT 
@@ -691,7 +785,6 @@ class AppSqlApi {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
-
   Future<List<PharmacyBrandModel>> getBrandsDoctorByVisitId(int visitId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
@@ -708,9 +801,7 @@ class AppSqlApi {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
-
-  Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(
-      int visitId) async {
+  Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(int visitId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
       SELECT 
@@ -726,7 +817,6 @@ class AppSqlApi {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
-
   Future<List<SpecHospitalSp>> specializationByHospitalId(int hospitalId) async {
     Database? mydb = await databaseHelper.database;
 
@@ -745,11 +835,7 @@ class AppSqlApi {
       return SpecHospitalSp(specModel, hospitalSpModel);
     });
   }
-
-  Future<void> updateVisitPharmacy({
-    required int visitId,
-    String? newNote,
-  }) async {
+  Future<void> updateVisitPharmacy({required int visitId, String? newNote,}) async {
     Database? mydb =
         await databaseHelper.database;
     if (newNote != null) {
@@ -808,6 +894,80 @@ class AppSqlApi {
       });
     });
 
+  }
+
+
+
+  @override
+  Future<List<PlanBrandModel>> planBrandsAs() async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('planBrand');
+    return List.generate(maps.length, (i) {
+      return PlanBrandModel.fromMap(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<VisitBrandPharmacyModel>> visitBrandDoctorAs()async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_brand_doctor');
+    return List.generate(maps.length, (i) {
+      return VisitBrandPharmacyModel.fromJson(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<VisitBrandPharmacyModel>> visitBrandHospitalAs() async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_brand_hospital');
+    return List.generate(maps.length, (i) {
+      return VisitBrandPharmacyModel.fromJson(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs()  async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_brand_pharmacy');
+    return List.generate(maps.length, (i) {
+      return VisitBrandPharmacyModel.fromJson(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<VisitDoctorModel>> visitDoctorAs()async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_doctor');
+    return List.generate(maps.length, (i) {
+      return VisitDoctorModel.fromMap(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<VisitHospitalModel>> visitHospitalAs() async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_hospital');
+    return List.generate(maps.length, (i) {
+      return VisitHospitalModel.fromMap(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<HospitalSpModel>> visitHospitalSpAs() async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('hospitalSp');
+    return List.generate(maps.length, (i) {
+      return HospitalSpModel.fromMap(maps[i]);
+    });
+  }
+
+  @override
+  Future<List<VisitPharmacyModel>> visitPharmacyAs() async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
+    return List.generate(maps.length, (i) {
+      return VisitPharmacyModel.fromMap(maps[i]);
+    });
   }
 
 }

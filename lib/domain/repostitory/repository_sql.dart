@@ -15,6 +15,9 @@ abstract class RepositorySql {
   Future<Either<Failure,Null>>insertSpec(List<SpecModel> specModel);
   Future<Either<Failure,List<SpecModel>>>getSpecSql();
   Future<Either<Failure,Null>>clearDatabase();
+  Future<Either<Failure,Null>>clearDatabaseAll();
+
+
   Future<Either<Failure,Null>>loginSql(LoginModel loginModel);
   Future<Either<Failure,LoginModel?>>getRep();
   Future<Either<Failure,String>>asyncData(
@@ -26,6 +29,7 @@ abstract class RepositorySql {
       List<HospitalModel>hospitals,
       List<HospitalSpModel>hospitalSps,
       List<BrandSpModel> brandSps,
+      List<PlanBrandModel> planBrands
       );
   Future<Either<Failure,List<BrandModel>>>getBrandsWithFlag();
   Future<Either<Failure,Null>>insertDoctor(List<DoctorModel> doctorModel);
@@ -74,4 +78,15 @@ abstract class RepositorySql {
 
   Future<Either<Failure,List<HospitalModel>>> getHospitalBySpec(int spId);
   Future<Either<Failure,List<DoctorModel>>> getDoctorBySpec(int spId);
+
+/////////////////////////////////////////////////Visit Sync
+  Future<Either<Failure,List<VisitDoctorModel>>> visitDoctorAs();
+  Future<Either<Failure,List<VisitBrandPharmacyModel>>> visitBrandDoctorAs();
+  Future<Either<Failure,List<VisitHospitalModel>>> visitHospitalAs();
+  Future<Either<Failure,List<HospitalSpModel>>> visitHospitalSpAs();
+  Future<Either<Failure,List<VisitBrandPharmacyModel>>> visitBrandHospitalAs();
+  Future<Either<Failure,List<VisitPharmacyModel>>> visitPharmacyAs();
+  Future<Either<Failure,List<VisitBrandPharmacyModel>>> visitBrandPharmacyAs();
+  Future<Either<Failure,List<PlanBrandModel>>> planBrandsAs();
+
 }

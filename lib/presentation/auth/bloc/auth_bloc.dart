@@ -16,49 +16,48 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   LoginUsecase loginUsecase;
   LoginSqlUsecase loginSqlUsecase;
-  DeleteSqlUsecase deleteSqlUsecase;
+  //DeleteSqlUsecase deleteSqlUsecase;
   LoginModel? loginModel;
-  AuthBloc(
-      this.loginSqlUsecase,
-      this.loginUsecase,
-      this.deleteSqlUsecase
+  AuthBloc(this.loginSqlUsecase, this.loginUsecase
+   //   , this.deleteSqlUsecase
       )
       : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
-      if(event is LoginEvent){
+      if (event is LoginEvent) {
         emit(LoginLoadingState());
-        (await loginUsecase.execute(LoginRequest(event.userName, event.password))).
-        fold((failure) {
+        (await loginUsecase
+                .execute(LoginRequest(event.userName, event.password)))
+            .fold((failure) {
           emit(LoginErrorState(failure: failure));
         }, (data) async {
-           loginModel=data;
-          UserInfo.repId= loginModel!.repId;
-          UserInfo.otherPlanId= loginModel!.otherPlanId;
-           UserInfo.activePlanId= loginModel!.activePlanId;
+          loginModel = data;
+          UserInfo.repId = loginModel!.repId;
+          UserInfo.otherPlanId = loginModel!.otherPlanId;
+          UserInfo.activePlanId = loginModel!.activePlanId;
 
-           UserInfo.percentage= loginModel!.percentage;
-          UserInfo.token= loginModel!.token;
-          UserInfo.name= loginModel!.name;
-          UserInfo.isLogging= 1;
+          UserInfo.percentage = loginModel!.percentage;
+          UserInfo.token = loginModel!.token;
+          UserInfo.name = loginModel!.name;
+          UserInfo.isLogging = 1;
           emit(LoginState());
         });
-      }
-      if(event is LoginInsertEvent) {
+      } else if (event is LoginInsertEvent) {
         (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
           emit(InsertLoginErrorState(failure: failure));
         }, (data) async {
           print("object");
+          emit(InsertLoginState());
         });
-        emit(InsertLoginState());
-      }
-      if(event is DeleteDataEvent){
+      } /*
+      else if (event is DeleteDataEvent) {
         (await deleteSqlUsecase.execute()).fold((failure) {
           emit(DeleteStateError(failure: failure));
           return false;
         }, (data) async {
-      emit(DeleteState());
+          emit(DeleteState());
         });
       }
+      */
     });
   }
 }

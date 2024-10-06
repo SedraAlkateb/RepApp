@@ -214,7 +214,28 @@ extension HospitalResponseMapper on HospitalResponse? {
   }
 }
 
+extension PlanBrandMapper on PlanBrandResponse? {
+  PlanBrandModel toDomain() {
+    return PlanBrandModel(
+      int.parse(this?.id ?? "0"),
+      int.parse(this?.spId ?? "0") ,
+      int.parse(this?.brandId ?? "0"),
+      int.parse(this?.repPlanId ?? "0"),
+      this?.brandType ?? Constants.empty,
+      this?.amount ?? Constants.empty,
+    );
 
+  }
+}
+extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
+  List<PlanBrandModel> toDomain() {
+    List<PlanBrandModel> planBrands =(this?.data?.planBrand?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<PlanBrandModel>()
+        .toList();
+    return planBrands;
+  }
+}
 extension DoctorResponseMapper on DoctorResponse? {
  DoctorModel toDomain() {
   if(this?.note==null||this?.note==""||this?.note==" ")
@@ -257,6 +278,22 @@ extension HospitalSpResponseMapper on HospitalSpResponse? {
 
   }
 }
+extension VisitDoctorModelMapper on VisitDoctorModel? {
+  VisitDoctorRequest toDomain() {
+    return VisitDoctorRequest(
+      (this?.id ?? Constants.zero).toString() ,
+      (this?.data ?? Constants.zero).toString() ,
+      (this?.kaswn ?? Constants.zero).toString() ,
+      (this?.science ?? Constants.zero).toString() ,
+      (this?.additaion ?? Constants.zero).toString() ,
+      (this?.doctorId ?? Constants.zero).toString() ,
+      UserInfo.activePlanId.toString() ,
+      UserInfo.repId.toString() ,
+    );
+
+  }
+}
+
 extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
   List<HospitalSpModel> toDomain() {
     List<HospitalSpModel> hospitalSpModel =(this?.data?.HospitalSp?.map((response) => response.toDomain()) ??

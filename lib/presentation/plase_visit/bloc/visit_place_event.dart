@@ -120,7 +120,7 @@ class RemoveBrandEvent extends VisitPlaceEvent {
   List<Object?> get props => [brandModel];
 }
 class IsScienceEvent extends VisitPlaceEvent {
-  final  bool isScience;
+  final  int isScience;
   IsScienceEvent(this.isScience);
   @override
   List<Object?> get props => [isScience];

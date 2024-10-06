@@ -18,7 +18,7 @@ class HospitalsBloc extends Bloc<HospitalsEvent, HospitalsState> {
           emit(AllHospitalsState(data));
         });
       }
-      if (event is SearchhosEvent) {
+      else     if (event is SearchhosEvent) {
         List<HospitalModel> hospitallist;
 
         hospitallist = hospital.where((value) {

@@ -34,7 +34,7 @@ class SpecializationBloc
           emit(AllSpecState(data));
         });
       }
-      if (event is SearchSpecEvent) {
+      else   if (event is SearchSpecEvent) {
         List<SpecModel> spec ;
 
         spec=specialization.where((value) {
@@ -47,14 +47,14 @@ class SpecializationBloc
           
         emit(AllSpecState(spec));
       }
-      if (event is DoctorSpEvent) {
+      else   if (event is DoctorSpEvent) {
         (await allDoctorSpSqlUsecase.execute(event.sp)).fold((failure) {
           emit(AllSpecDoctorErrorState(failure: failure));
         }, (data) async {
           emit(AllDoctorSpState(data));
         });
       }
-      if (event is HospitalSpEvent) {
+      else    if (event is HospitalSpEvent) {
         (await allHospitalsSpSqlUsecase.execute(event.sp)).fold((failure) {
           emit(AllSpecHospitalErrorState(failure: failure));
         }, (data) async {

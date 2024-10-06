@@ -21,8 +21,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _noteController.text=widget.hospitalModel.visitHospitalModel.science;
-    _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn;
+    _noteController.text=widget.hospitalModel.visitHospitalModel.science??"";
+    _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn??"";
     _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion;
     BlocProvider.of<VisitBloc>(context).add(BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id) );
     super.initState();
@@ -109,26 +109,33 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     inputFormatters: [],
                     enabled: true,
                   ),
-                  Text(
-                    "ملاحظات لمستودع قاسيون  :",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  BoxTextField(
-                    keyboardType: TextInputType.text,
-                    prefixIcon: null,
-                    maxLines: 4,
-                    validator: (value) {
-                      return null;
-                    },
-                    enabled: true,
-                    controller: _issueController,
-                    obscureText: false,
-                    minLines: 3,
-                    inputFormatters: [],
-                  ),
+                  _issueController .text.isNotEmpty?
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "ملاحظات لمستودع قاسيون  :",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    BoxTextField(
+                      keyboardType: TextInputType.text,
+                      prefixIcon: null,
+                      maxLines: 4,
+                      validator: (value) {
+                        return null;
+                      },
+                      enabled: true,
+                      controller: _issueController,
+                      obscureText: false,
+                      minLines: 3,
+                      inputFormatters: [],
+                    ),
 
+                  ],
+                ):SizedBox(),
                   _noteeController .text.isNotEmpty?
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "طلبات شخصية:",

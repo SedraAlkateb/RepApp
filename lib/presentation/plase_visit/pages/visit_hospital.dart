@@ -79,7 +79,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        "العنوان: ${widget.hospitalModel.address ?? " "}",
+                        "العنوان: ${widget.hospitalModel.address }",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
@@ -201,11 +201,11 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor4,
                                   value:
-                                      context.read<VisitPlaceBloc>().isScience,
+                                      context.read<VisitPlaceBloc>().isScience==0?true:false,
                                   splashRadius: 30,
                                   onChanged: (value) {
                                     BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(true));
+                                        .add(IsScienceEvent(0));
                                   },
                                 ),
                                 Text('مكتب علمي'),
@@ -216,12 +216,28 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor4,
-                                  value: !context
+                                  value: context
                                       .read<VisitPlaceBloc>()
-                                      .isScience,
+                                      .isScience==1?true:false,
                                   onChanged: (value) {
                                     BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(false));
+                                        .add(IsScienceEvent(1));
+                                  },
+                                ),
+                                Text('مع الخطة'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor4,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience==2?true:false,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(2));
                                   },
                                 ),
                                 Text('مع الخطة'),

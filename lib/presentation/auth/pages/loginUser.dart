@@ -105,12 +105,13 @@ class _MyLoginState extends State<MyLogin> {
                                         }
                                         if (state is LoginState) {
                                           BlocProvider.of<AuthBloc>(context)
-                                              .add(DeleteDataEvent());
-                                        }
-                                        if (state is DeleteState) {
-                                          BlocProvider.of<AuthBloc>(context)
                                               .add(LoginInsertEvent());
+
                                         }
+                                    //    if (state is DeleteState) {
+                                          //     BlocProvider.of<AuthBloc>(context)
+                                          //         .add(DeleteDataEvent());
+                                   //     }
                                         if (state is InsertLoginState) {
                                           success(context);
                                           Navigator.pushNamed(

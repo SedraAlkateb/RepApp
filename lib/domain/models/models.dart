@@ -1,17 +1,28 @@
+import 'package:domina_app/app/user_info.dart';
+
 class VisitPharmacyModel {
   int id;
   String data;
   String note;
   int pharmacyId;
   VisitPharmacyModel(this.id, this.data, this.note, this.pharmacyId);
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'data': data,
       'note': note,
       'pharmacyId': pharmacyId,
     };
   }
-
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'repPlanId': UserInfo.activePlanId,
+      'representativeId': UserInfo.repId,
+      'pharmacyId': pharmacyId,
+      'VisitDate': data,
+      'note': note
+    };
+  }
   factory VisitPharmacyModel.fromMap(Map<String, dynamic> map) {
     return VisitPharmacyModel(
       map['id'],
@@ -54,7 +65,7 @@ class VisitBrandPharmacyModel {
       map['id'],
       map['visitId'],
       map['brandId'],
-      map['amount'],
+     int.parse( map['amount']),
     );
   }
 }
@@ -146,7 +157,7 @@ class VisitPharmacyRequest {
 }
 
 class VisitPharmacyRequestBody {
-  List<VisitPharmacyRequest> list1;
+  List<VisitPharmacyModel> list1;
   List<VisitBrandPharmacyModel> list2;
   VisitPharmacyRequestBody(this.list1, this.list2);
 
@@ -164,7 +175,6 @@ class VisitDoctorRequest {
   String note;
   String issue;
   String special;
-
   String doctorId;
   String repPlanId;
   String representativeId;
@@ -200,10 +210,9 @@ class VisitDoctorRequest {
 }
 
 class VisitDoctorRequestBody {
-  List<VisitDoctorRequest> list1;
+  List<VisitDoctorModel> list1;
   List<VisitBrandPharmacyModel> list2;
   VisitDoctorRequestBody(this.list1, this.list2);
-
   Map<String, dynamic> toJson() {
     return {
       'list1': list1.map((e) => e.toJson()).toList(),
@@ -252,7 +261,7 @@ class VisitHospitalRequest {
 }
 
 class VisitHospitalRequestBody {
-  List<VisitHospitalRequest> list1;
+  List<VisitHospitalModel> list1;
   List<VisitBrandPharmacyModel> list2;
   List<HospitalSpModel> list3;
   VisitHospitalRequestBody(this.list1, this.list2, this.list3);
@@ -285,16 +294,19 @@ class VisitHospitalAndHospital {
       this.hospitalModel, this.visitHospitalModel, this.specModel);
 }
 
+
 class VisitDoctorModel {
   int id;
   String data;
-  String kaswn;
-  String science;
+  String ?kaswn;
+  String? science;
   String additaion;
   int doctorId;
+  String? repPlanId;
+  String? representativeId;
   VisitDoctorModel(this.id, this.data, this.kaswn, this.science, this.additaion,
-      this.doctorId);
-  Map<String, dynamic> toJson() {
+      this.doctorId,{this.repPlanId,this.representativeId});
+  Map<String, dynamic> toMap() {
     return {
       'data': data,
       'kaswn': kaswn,
@@ -303,10 +315,26 @@ class VisitDoctorModel {
       'doctorId': doctorId
     };
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'repPlanId': UserInfo.activePlanId,
+      'representativeId': UserInfo.repId,
+      'docId': doctorId,
+      'visitDate': data,
+      'note': kaswn,
+      'issue': science,
+      'special': additaion
+    };
+  }
 
   factory VisitDoctorModel.fromMap(Map<String, dynamic> map) {
     return VisitDoctorModel(map['id'], map['data'], map['kaswn'],
         map['science'], map['additaion'], map['doctorId']);
+  }
+  factory VisitDoctorModel.fromMap2(Map<String, dynamic> map) {
+    return VisitDoctorModel(map['id'], map['data'], map['kaswn'],
+        map['science'], map['additaion'], map['doctorId'],repPlanId: UserInfo.activePlanId.toString(),representativeId:  UserInfo.repId.toString());
   }
   factory VisitDoctorModel.fromMap1(Map<String, dynamic> map) {
     return VisitDoctorModel(
@@ -323,13 +351,13 @@ class VisitDoctorModel {
 class VisitHospitalModel {
   int id;
   String data;
-  String kaswn;
-  String science;
+  String ?kaswn;
+  String? science;
   String additaion;
   int hospitalSpId;
   VisitHospitalModel(this.id, this.data, this.kaswn, this.science,
       this.additaion, this.hospitalSpId);
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'data': data,
       'kaswn': kaswn,
@@ -338,7 +366,18 @@ class VisitHospitalModel {
       'hospitalSpId': hospitalSpId
     };
   }
-
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'repPlanId': UserInfo.activePlanId,
+      'representativeId': UserInfo.repId,
+      'hospitalSpId': hospitalSpId,
+      'visitDate': data,
+      'note': kaswn,
+      'issue': science,
+      'special': additaion
+    };
+  }
   factory VisitHospitalModel.fromMap(Map<String, dynamic> map) {
     return VisitHospitalModel(map['id'], map['data'], map['kaswn'],
         map['science'], map['additaion'], map['hospitalSpId']);
@@ -485,8 +524,8 @@ class DoctorModel {
   String address;
   String placeTitle;
   String visits;
-  String note;
-  String rate;
+  String ? note;
+  String ? rate;
   String spTitle;
   int spId;
   DoctorModel(
@@ -552,7 +591,7 @@ class HospitalSpModel {
   int hospitalId;
   int spId;
   int totalDocs;
-  String rate;
+  String ?rate;
   int visit;
   HospitalSpModel(this.id, this.hospitalId, this.spId, this.totalDocs,
       this.rate, this.visit);
@@ -705,4 +744,36 @@ class BrandSpModel{
         map['brandType']);
   }
 }
+
+class PlanBrandModel{
+  int id;
+  int spId;
+  int brandId;
+  int repPlanId;
+  String brandType;
+  String amount;
+  PlanBrandModel(
+      this.id,
+      this.spId,
+      this.brandId,
+      this.repPlanId,
+      this.brandType,
+      this.amount
+      );
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'spId': spId,
+      'brandId': brandId,
+      'repPlanId': repPlanId,
+      'brandType': brandType,
+      'amount': amount,
+    };
+  }
+  factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
+    return PlanBrandModel(map['id'], map['spId'], map['brandId'], map['repPlanId'],
+        map['brandType'], map['amount']);
+  }
+}
+
 

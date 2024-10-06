@@ -483,7 +483,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/visitDoctor.php',
+          '/hosVisit.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -517,7 +517,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/visitDoctor.php',
+          '/docVisit.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -567,6 +567,50 @@ class _AppServiceClient implements AppServiceClient {
     late AllBrandSpBaseResponse _value;
     try {
       _value = AllBrandSpBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
+    int repPlanIdActive,
+    int repPlanIdOther,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanIdActive',
+      repPlanIdActive.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'repPlanIdOther',
+      repPlanIdOther.toString(),
+    ));
+    final _options = _setStreamType<AllPlanBrandsBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/getAllPlanBrands.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllPlanBrandsBaseResponse _value;
+    try {
+      _value = AllPlanBrandsBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
