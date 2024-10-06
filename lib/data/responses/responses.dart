@@ -6,8 +6,8 @@ part 'responses.g.dart';
 class BaseResponse {
   @JsonKey(name: "status")
   String? status;
+  @JsonKey(name: "message")
   String? message;
-
 }
 //////////ForMessage
 @JsonSerializable()
@@ -570,3 +570,54 @@ class HospitalSpResponse {
       _$HospitalSpResponseToJson(this);
 }
 
+
+
+/////////////////////
+@JsonSerializable()
+class PlanBrandResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "repPlanId")
+  String? repPlanId;
+  @JsonKey(name: "brandId")
+  String? brandId;
+  @JsonKey(name: "brandType")
+  String? brandType;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "amount")
+  String? amount;
+
+  PlanBrandResponse(this.id, this.repPlanId, this.brandId, this.brandType,
+      this.spId, this.amount);
+  // from json
+  factory PlanBrandResponse.fromJson(Map<String,dynamic>json)=>
+      _$PlanBrandResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$PlanBrandResponseToJson(this);
+}
+@JsonSerializable()
+class AllPlanBrandResponse{
+  @JsonKey(name: "representPlan_brands")
+  List<PlanBrandResponse> ?planBrand;
+  AllPlanBrandResponse(this.planBrand);
+  // from json
+  factory AllPlanBrandResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllPlanBrandResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllPlanBrandResponseToJson(this);
+}
+@JsonSerializable()
+class AllPlanBrandsBaseResponse extends BaseResponse{
+  @JsonKey(name: "representativeActivePlan_brands")
+  AllPlanBrandResponse? data;
+  AllPlanBrandsBaseResponse(this.data);
+  // from json
+  factory AllPlanBrandsBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllPlanBrandsBaseResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllPlanBrandsBaseResponseToJson(this);
+}

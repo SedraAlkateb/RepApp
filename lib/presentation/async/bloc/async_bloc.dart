@@ -6,6 +6,7 @@ import 'package:domina_app/domain/usecase/all_brands_sp_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -26,6 +27,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllDoctorUsecase allDoctorUsecase;
   AllHospialSpUsecase allHospialSpUsecase;
   AllBrandsSpUsecase allBrandsSpUsecase;
+  AllPlanBrandsUsecase allPlanBrandsUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
@@ -35,7 +37,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   List<HospitalModel> hospitals = [];
   List<HospitalSpModel> hospitalSps = [];
   List<BrandSpModel> brandSpModel = [];
-
+  List<PlanBrandModel> planBrands=[];
   AsyncBloc(
       this.allBrandsUsecase,
       this.allPharmacyUsecase,
@@ -46,7 +48,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.allhospitalUsecase,
       this.allHospialSpUsecase,
       this.editIsLoginSqlUsecase,
-      this.allBrandsSpUsecase
+      this.allBrandsSpUsecase,
+      this.allPlanBrandsUsecase
       )
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
@@ -59,7 +62,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         }
 
       }
-      if(event is EditEvent){
+     else if(event is EditEvent){
         (await editIsLoginSqlUsecase.execute(UserInfo.repId,2)).fold((failure) {
           emit(SyncDataErrorState(failure: failure));
           return false;
@@ -77,11 +80,18 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     hospitalSps=[];
     hospitals=[];
     brandSpModel=[];
-    (await allBrandsUsecase.execute(UserInfo.repId)).fold((failure) {
+    planBrands=[];
+    (await allBrandsUsecase.execute(UserInfo.activePlanId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
       return false;
     }, (data) async {
       brands = data;
+    });
+    (await allPlanBrandsUsecase.execute(UserInfo.activePlanId,UserInfo.otherPlanId)).fold((failure) {
+      emit(SyncDataErrorState(failure: failure));
+      return false;
+    }, (data) async {
+      planBrands = data;
     });
     (await allDoctorUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(SyncDataErrorState(failure: failure));
@@ -139,7 +149,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       doctors,
       hospitals,
       hospitalSps,
-      brandSpModel
+      brandSpModel,
+      planBrands
     );
     result.fold((failure) {
       emit(SyncDataErrorState(failure: failure));

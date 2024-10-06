@@ -1,7 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
@@ -30,11 +29,10 @@ class DatabaseHelper {
         await db.execute("PRAGMA foreign_keys = ON");
       },
     );
-
   }
-  Future _onCreate(Database db, int version) async {
 
-    await db.execute ('''
+  Future _onCreate(Database db, int version) async {
+    await db.execute('''
       CREATE TABLE rep (
     token  TEXT NOT NULL,
     repId INTEGER NOT NULL,
@@ -45,32 +43,20 @@ class DatabaseHelper {
     isLogin INTEGER NOT NULL DEFAULT 0
     );
     ''');
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE specialization (
     id INTEGER PRIMARY KEY ,
     title TEXT NOT NULL
     );
    ''');
-    await db.execute(
-        '''
-      CREATE TABLE brandSp (
-    id INTEGER PRIMARY KEY,
-    spId INTEGER NOT NULL,
-    brandId INTEGER NOT NULL,
-    brandType TEXT NOT NULL
-    );
-   ''');
-    await db.execute(
-        '''
+
+    await db.execute('''
       CREATE TABLE place (
     placeId INTEGER PRIMARY KEY,
     title TEXT NOT NULL
     );
-    '''
-    );
-    await db.execute(
-        '''
+    ''');
+    await db.execute('''
       CREATE TABLE pharmacy (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
@@ -78,8 +64,7 @@ class DatabaseHelper {
     placeId INTEGER NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
-    '''
-    );
+    ''');
     await db.execute('''
       CREATE TABLE brand (
     id INTEGER PRIMARY KEY,
@@ -115,8 +100,7 @@ class DatabaseHelper {
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE hospitalSp (
     id INTEGER PRIMARY KEY,
     hospitalId INTEGER NOT NULL,
@@ -127,8 +111,28 @@ class DatabaseHelper {
     FOREIGN KEY (hospitalId) REFERENCES hospital(id),
     FOREIGN KEY (spId) REFERENCES specialization(id)
     );
-    '''
+    ''');
+    /////////////////////////////////////////////////
+
+    await db.execute('''
+      CREATE TABLE planBrand (
+    id INTEGER PRIMARY KEY,
+    spId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    repPlanId INTEGER NOT NULL,
+    brandType TEXT NOT NULL,
+    amount TEXT NOT NULL
     );
+   ''');
+    await db.execute('''
+      CREATE TABLE brandSp (
+    id INTEGER PRIMARY KEY,
+    spId INTEGER NOT NULL,
+    brandId INTEGER NOT NULL,
+    brandType TEXT NOT NULL
+    );
+   ''');
+
     ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     await db.execute('''
 
@@ -142,8 +146,7 @@ class DatabaseHelper {
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
  ''');
-    await db.execute(
-        '''
+    await db.execute('''
     CREATE TABLE visit_hospital(
     id INTEGER PRIMARY  KEY AUTOINCREMENT,
     data TEXT NOT NULL,
@@ -152,8 +155,7 @@ class DatabaseHelper {
     additaion TEXT , 
     hospitalSpId INTEGER NOT NULL,
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
-);'''
-    );
+);''');
     await db.execute('''
      CREATE TABLE visit_pharmacy(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -192,7 +194,4 @@ class DatabaseHelper {
     )
  ''');
   }
-
-
-
 }
