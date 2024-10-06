@@ -609,7 +609,7 @@ class RepositroySqlImp extends RepositorySql {
   @override
   Future<Either<Failure, Null>> clearDatabaseAll() async {
     try {
-       await _databaseHelper.visitPharmacyAs();
+       await _databaseHelper.clearDatabaseAll();
       return Right(null);
     } catch (e) {
       return Left(ErrorHandler

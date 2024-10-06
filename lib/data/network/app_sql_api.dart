@@ -216,19 +216,25 @@ class AppSqlApi extends AppSqlApiAbs {
     final tables = [
       // يجب أن تحذف البيانات من الجداول التابعة أولًا
       'hospitalSp',
+      'brandSp',
       'doctor',
       'pharmacy',
       'specialization',
       'hospital',
       'place',
       'brand',
+      'planBrand '
     ];
 
     Batch batch = db.batch();
+    await db.execute('PRAGMA foreign_keys = OFF;');
+
     for (var table in tables) {
       batch.delete(table);
     }
     await batch.commit(noResult: true);
+    await db.execute('PRAGMA foreign_keys = ON;');
+
   }
 
 
@@ -254,7 +260,7 @@ class AppSqlApi extends AppSqlApiAbs {
     ];
     Batch batch = db.batch();
     for (var table in tables) {
-      batch.execute('DROP TABLE IF EXISTS $table');  // يحذف الجدول نفسه
+      batch.delete(table);
     }
     await batch.commit(noResult: true);
   }
