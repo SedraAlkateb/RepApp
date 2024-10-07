@@ -11,6 +11,7 @@ import 'package:domina_app/domain/usecase/insert_as/get_hospital_sp_visits_sql_u
 import 'package:domina_app/domain/usecase/insert_as/get_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
@@ -23,6 +24,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   VisitDoctorUsecase visitDoctorUsecase;
   VisitPharmacyUsecase visitPharmacyUsecase;
   VisitHospitalUsecase visitHospitalUsecase;
+  PlanBrandUsecase planBrandUsecase;
   GetBrandsDoctorVisitsSqlUsecase getBrandsDoctorVisitsSqlUsecase;
   GetBrandsHospitalVisitsSqlUsecase getBrandsHospitalVisitsSqlUsecase;
   GetBrandsPharmacyVisitsSqlUsecase getBrandsPharmacyVisitsSqlUsecase;
@@ -55,7 +57,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.getPharmacyVisitsSqlUsecase,
       this.getPlanBrandSqlUsecase,
       this.deleteSqlUsecase,
-      this.deleteAllSqlUsecase)
+      this.deleteAllSqlUsecase,
+      this.planBrandUsecase)
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
       if (event is DeleteBaseEvent) {
@@ -149,7 +152,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return Future.error(failure);
         }, (data) async {
           planBrands = data;
-          print("planBrands");
+
         }),
       ]);
       print("All tasks completed successfully.");
@@ -186,6 +189,13 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }, (data) async {
           print("111");
+        }),
+        (await planBrandUsecase.execute(RepPlanBrandBody(planBrands)))
+            .fold((failure) async {
+          emit(SyncData1ErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          print("1111");
         }),
       ]);
       emit(SyncData1State());

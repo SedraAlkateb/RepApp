@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AsyncPage extends StatelessWidget {
   const AsyncPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +47,6 @@ class AsyncPage extends StatelessWidget {
                        BlocProvider.of<AsyncInBloc>(context).add(DeleteBaseEvent());
                      }
                      if(state is DeleteBaseState){
-
                        success(context);
                        Navigator.pushNamed(context, Routes.syncData);
                      }

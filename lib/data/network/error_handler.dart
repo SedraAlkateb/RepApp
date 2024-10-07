@@ -8,6 +8,7 @@ class ErrorHandler implements Exception{
 late Failure failure;
 ErrorHandler.handle(dynamic error){
   if(error is DioError){
+
 print("error.message??""");
     //dio error so its an error from response of the api or from dio itself
     failure=_handleError(error);
@@ -27,10 +28,13 @@ print("error.message??""");
 }
 Failure _handleError(DioError error){
   switch(error.type){
+
     case DioErrorType.connectionTimeout:
    return DataSource.CONNECT_TIOMOUT.getFailure();
     case DioErrorType.sendTimeout:
      return DataSource.SEND_TIMOUT.getFailure();
+    case DioErrorType.connectionError:
+      return DataSource.NO_INTERNET_CONNECTION.getFailure();
     case DioErrorType.receiveTimeout:
    return   DataSource.RECIEVE_TIMEOUT.getFailure();
     case DioExceptionType.badCertificate:

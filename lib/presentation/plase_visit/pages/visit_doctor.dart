@@ -143,11 +143,11 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
+                            Column(
                               children: [
                                 Checkbox(
-                                  focusColor: ColorManager.secondaryColor2,
-                                  activeColor: ColorManager.secondaryColor2,
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor4,
                                   value:
                                       context.watch<VisitPlaceBloc>().isScience==0?true:false,
                                   splashRadius: 30,
@@ -159,11 +159,11 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                 Text('مكتب علمي'),
                               ],
                             ),
-                            Row(
+                            Column(
                               children: [
                                 Checkbox(
-                                  focusColor: ColorManager.secondaryColor2,
-                                  activeColor: ColorManager.secondaryColor2,
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor4,
                                   value: context
                                       .watch<VisitPlaceBloc>()
                                       .isScience==1?true:false,
@@ -175,11 +175,11 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                 Text('مع الخطة'),
                               ],
                             ),
-                            Row(
+                            Column(
                               children: [
                                 Checkbox(
-                                  focusColor: ColorManager.secondaryColor2,
-                                  activeColor: ColorManager.secondaryColor2,
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor4,
                                   value: context
                                       .watch<VisitPlaceBloc>()
                                       .isScience==2?true:false,
