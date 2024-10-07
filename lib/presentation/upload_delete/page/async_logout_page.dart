@@ -42,6 +42,12 @@ class AsyncLogoutPage extends StatelessWidget {
                        loading(context);
                      }
                      if(state is SyncData1State){
+                       BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
+                     }
+                     if(state is EditStatusSErrorState){
+                       error(context, state.failure.massage, state.failure.code);
+                     }
+                     if(state is EditStatusState){
                        success(context);
                        Navigator.pushReplacementNamed(
                          context, Routes.deleteLogout,
