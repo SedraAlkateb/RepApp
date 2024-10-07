@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/delete_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/delete_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
+import 'package:domina_app/presentation/brand_first/pages/listBrand.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital.dart';
 import 'package:domina_app/presentation/brand/pages/brand_page.dart';
@@ -21,7 +22,7 @@ class Routes {
   static const String places = "/Places";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
-    static const String hospital = "/hospital";
+  static const String hospital = "/hospital";
   static const String brand = "/brand";
   static const String pharmacy = "/pharmacy";
   static const String syncData = "/syncData";
@@ -31,9 +32,9 @@ class Routes {
   static const String asyncIn = "/asyncIn";
   static const String specDH = "/specDH";
   static const String logout = "/logout";
+  static const String Listbrand = "/Listbrand";
   static const String delete = "/delete";
   static const String deleteLogout = "/deleteLogout";
-
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -76,6 +77,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     PlaceVisitPage(placeId: 2));
       case Routes.specDH:
         return MaterialPageRoute(builder: (_) =>     SpecDH(spId: 0,));
+          case Routes.Listbrand:
+        return MaterialPageRoute(builder: (_) =>     Listbrand());
       case Routes.delete:
         return MaterialPageRoute(builder: (_) =>     DeletePage());
       case Routes.deleteLogout:

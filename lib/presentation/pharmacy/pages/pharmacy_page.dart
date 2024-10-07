@@ -30,7 +30,7 @@ class PharmacyPage extends StatelessWidget {
               );
             },
           ),
-          title: Text('الصيدليات '),
+          title: Text('الصيدليات ' ),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
