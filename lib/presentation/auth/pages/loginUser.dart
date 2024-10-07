@@ -114,8 +114,8 @@ class _MyLoginState extends State<MyLogin> {
                                    //     }
                                         if (state is InsertLoginState) {
                                           success(context);
-                                          Navigator.pushNamed(
-                                              context, Routes.syncData);
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context, Routes.syncData,(route) => false,);
                                         }
                                         if (state is LoginErrorState) {
                                           error(context, state.failure.massage,

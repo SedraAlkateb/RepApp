@@ -168,7 +168,15 @@ class VisitPharmacyRequestBody {
     };
   }
 }
-
+class RepPlanBrandBody{
+  List<PlanBrandModel> planBrand;
+  RepPlanBrandBody(this.planBrand);
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': planBrand.map((e) => e.toMap()).toList(),
+    };
+  }
+}
 class VisitDoctorRequest {
   String id;
   String visitDate;

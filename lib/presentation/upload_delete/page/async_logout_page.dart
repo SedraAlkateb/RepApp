@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/async_in/bloc/async_in_bloc.dart';
+import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -38,20 +38,19 @@ class AsyncLogoutPage extends StatelessWidget {
                      if(state is SyncData1ErrorState){
                        error(context, state.failure.massage, state.failure.code);
                      }
-                     if(state is DeleteAllErrorState){
-                       error(context, state.failure.massage, state.failure.code);
-                     }
                      if(state is SyncData1LoadingState){
                        loading(context);
                      }
                      if(state is SyncData1State){
-                       BlocProvider.of<AsyncInBloc>(context).add(DeleteAllEvent());
+                       BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
                      }
-                     if(state is DeleteAllState){
+                     if(state is EditStatusSErrorState){
+                       error(context, state.failure.massage, state.failure.code);
+                     }
+                     if(state is EditStatusState){
                        success(context);
-                       Navigator.pushNamedAndRemoveUntil(
-                         context, Routes.login,
-                             (route) => false,
+                       Navigator.pushReplacementNamed(
+                         context, Routes.deleteLogout,
                        );
                      }
                     },
