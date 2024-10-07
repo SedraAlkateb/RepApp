@@ -17,3 +17,10 @@ class DeleteAllEvent extends AsyncInEvent{
   List<Object?> get props => [];
 
 }
+class EditEventIn extends AsyncInEvent{
+final  int num;
+  EditEventIn(this.num);
+  @override
+  List<Object?> get props => [];
+
+}

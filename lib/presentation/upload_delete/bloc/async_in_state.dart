@@ -66,3 +66,15 @@ final class DeleteAllLoadingState extends AsyncInState {
   @override
   List<Object?> get props =>[];
 }
+final class EditStatusState extends AsyncInState {
+  EditStatusState();
+  @override
+  List<Object?> get props =>[];
+}
+final class EditStatusSErrorState extends AsyncInState {
+  final Failure failure;
+  EditStatusSErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}

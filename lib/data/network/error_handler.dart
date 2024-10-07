@@ -50,14 +50,9 @@ Failure _handleError(DioError error){
         }else{
           return DataSource.DEFAULT.getFailure();
         }
-
-
     case DioErrorType.cancel:
      return DataSource.CANCEL.getFailure();
     case DioErrorType.unknown:
-      return DataSource.DEFAULT.getFailure();
-
-    case DioExceptionType.connectionError:
       return DataSource.DEFAULT.getFailure();
   }
 }

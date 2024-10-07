@@ -39,8 +39,14 @@ class AsyncLoginPage extends StatelessWidget {
                    loading(context);
                  }
                  if(state is SyncDataState){
-                   BlocProvider.of<AsyncBloc>(context).add(EditEvent());
+                   BlocProvider.of<AsyncBloc>(context).add(EditEvent(2));
+                 }
+                 if(state is EditStatusDErrorState){
+                   error(context, state.failure.massage, state.failure.code);
+                 }
+                 if(state is EditStatusDState){
                    success(context);
+                   print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
                    Navigator.pushNamed(context, Routes.places);
                  }
                 },

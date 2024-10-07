@@ -6,7 +6,6 @@ abstract class NetworkInfo {
 }
 
 class NetworkInfoImpl extends NetworkInfo {
-  @override
   final InternetConnection connectionChecker;
 
   NetworkInfoImpl(this.connectionChecker);
