@@ -70,4 +70,9 @@ abstract class AppServiceClient {
       @Part(name: "repPlanIdActive") int repPlanIdActive,
       @Part(name: "repPlanIdOther") int repPlanIdOther,
       );
+  @POST("/insertPlanBrands.php")
+  Future<Message1Response> repPlanBrand(
+      @Body() RepPlanBrandBody list
+      );
+
 }

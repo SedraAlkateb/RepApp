@@ -13,8 +13,7 @@ class AsyncDataEvent extends AsyncEvent{
 
 class EditEvent extends AsyncEvent{
   @override
-
-  List<Object?> get props =>[];
-
-
+final int num;
+  EditEvent(this.num);
+  List<Object?> get props =>[num];
 }

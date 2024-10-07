@@ -106,17 +106,17 @@ class MyApiInterceptor extends Interceptor {
   //TODO
   final Dio client =Dio();
 
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-    final options = Options(
-      method: requestOptions.method,
-      headers: requestOptions.headers,
-    );
-    return
-      client.request<dynamic>(requestOptions.path,
-        data: requestOptions.data,
-        queryParameters: requestOptions.queryParameters,
-        options: options);
-  }
+  // Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+  //   final options = Options(
+  //     method: requestOptions.method,
+  //     headers: requestOptions.headers,
+  //   );
+  //   return
+  //     client.request<dynamic>(requestOptions.path,
+  //       data: requestOptions.data,
+  //       queryParameters: requestOptions.queryParameters,
+  //       options: options);
+  // }
 
 // Future<bool> _refreshToken(UserModel authenticatedUser) async {
 // final response = await client.post(EndPoints.refreshToken, data: {

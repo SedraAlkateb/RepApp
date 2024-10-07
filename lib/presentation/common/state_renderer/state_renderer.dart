@@ -129,25 +129,30 @@ Widget _getRetryButton(String buttonTitle,BuildContext context){
   );
   }
 Widget _getPopupDialog(BuildContext context,List<Widget> children){
-    return  Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSize.s14),
-
-      ),
-      elevation: AppSize.s1_5,
-      backgroundColor: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          color: ColorManager.white,
-          shape: BoxShape.rectangle,
+    return  WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Dialog(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s14),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26
-            )
-          ]
+
         ),
-        child: _getDialogContent(context,children) ,
+        elevation: AppSize.s1_5,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            color: ColorManager.white,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(AppSize.s14),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26
+              )
+            ]
+          ),
+          child: _getDialogContent(context,children) ,
+        ),
       ),
     );
 }

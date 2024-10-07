@@ -10,12 +10,11 @@ Future<int?> sss()async{
     print("object");
     return 0;
   }, (data) async {
-    if(data!=null&&(data.isLogin==1||data.isLogin==2)){
+    if(data!=null&&(data.isLogin>0)){
       UserInfo.name=data.name;
       UserInfo.isLogging=data.isLogin;
       UserInfo.activePlanId=data.activePlanId;
       UserInfo.otherPlanId=data.otherPlanId;
-
       UserInfo.percentage=data.percentage;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;

@@ -102,7 +102,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
                     maxLines: 4,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     controller: _noteController,
                     obscureText: false,
                     minLines: 3,

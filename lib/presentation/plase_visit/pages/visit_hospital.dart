@@ -195,7 +195,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
+                            Column(
                               children: [
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
@@ -211,7 +211,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                 Text('مكتب علمي'),
                               ],
                             ),
-                            Row(
+                            Column(
                               children: [
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
@@ -227,7 +227,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                 Text('مع الخطة'),
                               ],
                             ),
-                            Row(
+                            Column(
                               children: [
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,

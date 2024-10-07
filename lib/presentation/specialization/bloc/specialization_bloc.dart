@@ -4,7 +4,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_hospital_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/insert_all_hospitals_sp_sql_usecase%20.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

@@ -25,5 +25,16 @@ final class SyncDataLoadingState extends AsyncState {
   @override
   List<Object?> get props =>[];
 }
+final class EditStatusDState extends AsyncState {
+  EditStatusDState();
+  @override
+  List<Object?> get props =>[];
+}
+final class EditStatusDErrorState extends AsyncState {
+  final Failure failure;
+  EditStatusDErrorState({required this.failure});
+  @override
 
+  List<Object?> get props =>[failure];
+}
 

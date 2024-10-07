@@ -1,7 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
-import 'package:domina_app/presentation/async_in/bloc/async_in_bloc.dart';
+import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
@@ -88,7 +88,6 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
         BlocProvider(create: (_) => instance<VisitBloc>()..add(VisitDoctorEvent()))
-
       ],
       child: MaterialApp(
         locale: Locale('ar'),
@@ -103,7 +102,9 @@ class _MyAppState extends State<MyApp> {
         },
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: UserInfo.isLogging == 0 ? Routes.login  : UserInfo.isLogging == 1 ? Routes.syncData: Routes.places,
+        initialRoute: UserInfo.isLogging == 0 ? Routes.login  : UserInfo.isLogging == 1 ?
+        Routes.syncData:UserInfo.isLogging ==4?
+        (Routes.syncData): Routes.places,
         theme: getApplicationTheme(),
       ),
     );
