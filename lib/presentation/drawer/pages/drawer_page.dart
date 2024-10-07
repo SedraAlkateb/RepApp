@@ -183,7 +183,23 @@ class DrawerPage extends StatelessWidget {
                 Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
-        ), 
+        ),    ListTile(
+             leading:  Icon(Icons.list_alt_outlined ,color: ColorManager.secondaryColor4),
+            title:  Text('لائحة العينات',style: TextStyle(color: ColorManager.secondaryColor1),),
+            onTap: () {
+             WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.Listbrand,
+                );
+
+              });
+            },
+          ),
+           Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
+        ),  
           ListTile(
              leading:  Icon(Icons.logout_outlined  ,color: ColorManager.secondaryColor4),
             title:  Text('تسجيل خروج',style: TextStyle(color: ColorManager.secondaryColor1),),

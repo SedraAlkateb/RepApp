@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/async_in/page/async_logout_page.dart';
 import 'package:domina_app/presentation/async_in/page/async_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
+import 'package:domina_app/presentation/brand_first/pages/listBrand.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital.dart';
 import 'package:domina_app/presentation/brand/pages/brand_page.dart';
@@ -29,7 +30,7 @@ class Routes {
   static const String asyncIn = "/asyncIn";
   static const String specDH = "/specDH";
   static const String logout = "/logout";
-
+static const String Listbrand = "/Listbrand";
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -72,6 +73,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     PlaceVisitPage(placeId: 2));
       case Routes.specDH:
         return MaterialPageRoute(builder: (_) =>     SpecDH(spId: 0,));
+          case Routes.Listbrand:
+        return MaterialPageRoute(builder: (_) =>     Listbrand());
       default:
         return unDefinedRoute();
     }
