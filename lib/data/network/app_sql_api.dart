@@ -969,6 +969,28 @@ class AppSqlApi extends AppSqlApiAbs {
       return VisitPharmacyModel.fromMap(maps[i]);
     });
   }
+ Future<List<PharmacyBrandModel>> getHospitalSpecialization(int visitId) async {
+    Database? mydb = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+      SELECT 
+      hospital.id  
+      hospital.title
+       hospital.address 
+      hospital.placeTitle
+      hospital.note
+      hospitalSp.rate
+      hospitalSp.totalDocs
+      hospitalSp.visit
+      specialization.title as titleSp
+      FROM hospital
+      JOIN hospitalSp  ON hospitalSp.hospitalId = hospital.id
+      JOIN specialization  ON hospitalSp.spId = specialization.id
+    ''', );
+    return List.generate(maps.length, (i) {
+      return PharmacyBrandModel.fromMap(maps[i]);
+    });
+  }
+  
 
   Future<List<PlanBrandSqlModel>> planBrandByRepPlanId(int repPlanId) async {
     Database? mydb = await databaseHelper.database;

@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_deetails%20.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -22,8 +23,7 @@ class Doctors extends StatelessWidget {
                 icon: Icon(
                   size: AppSize.s30,
                   Icons.menu,
-                  color: ColorManager
-                      .secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
+                  color: ColorManager.secondaryColor1,
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -59,62 +59,46 @@ class Doctors extends StatelessWidget {
 
                       return ListView.builder(
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p16),
-                              //    height: AppSize.s150,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  ColorManager.secondaryColor6,
-                                  ColorManager.secondaryColor7,
-                                  ColorManager.secondaryColor7,
-                                ]),
-                                color: ColorManager.white,
-
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(AppSize.s8)),
-                                //        color: ColorManager.card,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(doctormodel[index].title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge),
-                                  Text(
-                                      " العنوان : ${doctormodel[index].address}",
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall),
-                                  Text(
-                                      " المكان : ${doctormodel[index].placeTitle}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall),
-                                  Text(
-                                      " عدد الزيارات : ${doctormodel[index].visits}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall),
-                                  Text(
-                                      " الاختصاص : ${doctormodel[index].spTitle}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall),
-                                  Text(" التصنيف : ${doctormodel[index].rate}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall),
-                                   if (doctormodel[index].note!=null&& doctormodel[index].note!.isNotEmpty) // الشرط للتحقق من وجود الملاحظات
-      Text(
-        "ملاحظات : ${doctormodel[index].note}",
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.titleSmall,
-      ),
-                                ],
+                            return InkWell(
+                                   
+                   onTap: () {
+                                // الانتقال إلى صفحة تفاصيل الطبيب عند النقر
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DoctorDetails(
+                                      doctor: doctormodel[index], // تمرير بيانات الطبيب
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.all(AppPadding.p8),
+                                padding: EdgeInsets.all(AppPadding.p16),
+                                //    height: AppSize.s150,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    ColorManager.secondaryColor6,
+                                    ColorManager.secondaryColor7,
+                                    ColorManager.secondaryColor7,
+                                  ]),
+                                  color: ColorManager.white,
+                              
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(AppSize.s8)),
+                                  //        color: ColorManager.card,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(doctormodel[index].title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge),
+                                 
+                                  ],
+                                ),
                               ),
                             );
                           },

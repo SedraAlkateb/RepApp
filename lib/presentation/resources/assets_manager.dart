@@ -5,6 +5,8 @@ class ImageAssets{
   static const String d = "$imagePath/d.png";
   static const String domina = "$imagePath/domina.png";
   static const String login = "$imagePath/login.png";
+  static const String blue = "$imagePath/blue.jpg";
+
 
 }
 class JsonAssets{

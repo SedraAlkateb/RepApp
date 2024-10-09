@@ -262,10 +262,18 @@ Future<void> initAsyncInModule() async {
         () => GetHospitalSpVisitsSqlUsecase(instance()));
     instance.registerFactory<GetPlanBrandSqlUsecase>(
         () => GetPlanBrandSqlUsecase(instance()));
-    instance.registerFactory<DeleteSqlUsecase>(() => DeleteSqlUsecase(instance()));
     instance.registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
     instance.registerFactory<DeleteAllSqlUsecase>(
         () => DeleteAllSqlUsecase(instance()));
+ if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
+          instance.registerFactory<DeleteAllSqlUsecase>(() => DeleteAllSqlUsecase(instance()));
+    }
+
+ if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
+          instance.registerFactory<DeleteSqlUsecase>(() => DeleteSqlUsecase(instance()));
+
+    }
+
     if (!GetIt.I.isRegistered<EditIsLoginSqlUsecase>()) {
       instance.registerFactory<EditIsLoginSqlUsecase>(
               () => EditIsLoginSqlUsecase(instance()));
