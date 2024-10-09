@@ -17,3 +17,8 @@ final int num;
   EditEvent(this.num);
   List<Object?> get props =>[num];
 }
+class SetDataSEvent extends AsyncEvent{
+  @override
+  List<Object?> get props => [];
+
+}
