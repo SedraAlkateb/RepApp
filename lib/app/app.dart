@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
+import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
@@ -76,6 +77,13 @@ class _MyAppState extends State<MyApp> {
           create: (context) {
             final bloc = instance<HospitalsBloc>();
             bloc.add(AllHospitalEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<BrandPlanBloc>(
+          create: (context) {
+            final bloc = instance<BrandPlanBloc>();
+            bloc.add(AllBrandPlanEvent(0));
             return bloc;
           },
         ),

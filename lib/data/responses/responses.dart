@@ -36,6 +36,66 @@ class MessageResponse extends BaseResponse{
       _$MessageResponseToJson(this);
 }
 @JsonSerializable()
+class CheckResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "active")
+  String? active;
+  CheckResponse(this.id,this.active);
+  // from json
+  factory CheckResponse.fromJson(Map<String,dynamic>json)=>
+      _$CheckResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CheckResponseToJson(this);
+}
+@JsonSerializable()
+class CheckBaseResponse extends BaseResponse{
+  @JsonKey(name: "representativePlan_Status")
+  CheckResponse data;
+  CheckBaseResponse(this.data);
+  // from json
+  factory CheckBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$CheckBaseResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CheckBaseResponseToJson(this);
+}
+
+@JsonSerializable()
+class CheckActiveResponse {
+  @JsonKey(name: "activePlanId")
+  String? activePlanId;
+  @JsonKey(name: "otherPlanId")
+  String? otherPlanId;
+  @JsonKey(name: "otherstatus")
+  String? otherstatus;
+  CheckActiveResponse(this.activePlanId,this.otherPlanId,this.otherstatus);
+  // from json
+  factory CheckActiveResponse.fromJson(Map<String,dynamic>json)=>
+      _$CheckActiveResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CheckActiveResponseToJson(this);
+}
+@JsonSerializable()
+class CheckActiveBaseResponse extends BaseResponse{
+  @JsonKey(name: "representativePlans")
+  CheckActiveResponse data;
+  CheckActiveBaseResponse(this.data);
+  // from json
+  factory CheckActiveBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$CheckActiveBaseResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CheckActiveBaseResponseToJson(this);
+}
+
+@JsonSerializable()
 class TokenResponse {
   @JsonKey(name: "token")
   String? token;

@@ -74,5 +74,12 @@ abstract class AppServiceClient {
   Future<Message1Response> repPlanBrand(
       @Body() RepPlanBrandBody list
       );
-
+  @POST("/checkPlanStatus.php")
+  Future<CheckBaseResponse> checkPlanBrand(
+      @Part(name: "repPlanId") int repPlanId,
+      );
+  @POST("/getPlans.php")
+  Future<CheckActiveBaseResponse> checkActivePlanBrand(
+      @Part(name: "repDet") int repDet,
+      );
 }

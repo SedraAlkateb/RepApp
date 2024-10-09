@@ -327,4 +327,42 @@ class RepositoryImp implements Repository {
     } catch (error) {
       return Left(ErrorHandler.handle(error).failure);
     }
-  }}
+  }
+
+  @override
+  Future<Either<Failure, ActiveModel>> isActive(int repPlaneId)
+  async {
+    try { if (await _networkInfo.isConnected) {
+      final response = await _remoteDataSource.checkPlanBrand(repPlaneId);
+      if (response.status == null) {
+        return Right(response.toDomain());
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } else {
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+    }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, CheckActiveModel>> checkActivePlanBrand(int repDe)async {
+    try { if (await _networkInfo.isConnected) {
+      final response = await _remoteDataSource.checkActivePlanBrand(repDe);
+      if (response.status == null) {
+        return Right(response.toDomain());
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } else {
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+    }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+}

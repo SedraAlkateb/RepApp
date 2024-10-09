@@ -38,6 +38,65 @@ Map<String, dynamic> _$MessageResponseToJson(MessageResponse instance) =>
       'message': instance.message,
     };
 
+CheckResponse _$CheckResponseFromJson(Map<String, dynamic> json) =>
+    CheckResponse(
+      json['id'] as String?,
+      json['active'] as String?,
+    );
+
+Map<String, dynamic> _$CheckResponseToJson(CheckResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'active': instance.active,
+    };
+
+CheckBaseResponse _$CheckBaseResponseFromJson(Map<String, dynamic> json) =>
+    CheckBaseResponse(
+      CheckResponse.fromJson(
+          json['representativePlan_Status'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$CheckBaseResponseToJson(CheckBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'representativePlan_Status': instance.data,
+    };
+
+CheckActiveResponse _$CheckActiveResponseFromJson(Map<String, dynamic> json) =>
+    CheckActiveResponse(
+      json['activePlanId'] as String?,
+      json['otherPlanId'] as String?,
+      json['otherstatus'] as String?,
+    );
+
+Map<String, dynamic> _$CheckActiveResponseToJson(
+        CheckActiveResponse instance) =>
+    <String, dynamic>{
+      'activePlanId': instance.activePlanId,
+      'otherPlanId': instance.otherPlanId,
+      'otherstatus': instance.otherstatus,
+    };
+
+CheckActiveBaseResponse _$CheckActiveBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    CheckActiveBaseResponse(
+      CheckActiveResponse.fromJson(
+          json['representativePlans'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$CheckActiveBaseResponseToJson(
+        CheckActiveBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'representativePlans': instance.data,
+    };
+
 TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
     TokenResponse(
       json['token'] as String?,

@@ -22,4 +22,7 @@ abstract class Repository{
   Future<Either<Failure,List<BrandSpModel>>> getBrandsSp(int repDet);
   Future<Either<Failure,List<PlanBrandModel>>> getAllPlanBrands( int repPlanIdActive,int repPlanIdOther);
   Future<Either<Failure,Message1Response>>repPlanBrand(RepPlanBrandBody list1);
+  Future<Either<Failure,ActiveModel>>isActive( int repPlaneId);
+  Future<Either<Failure,CheckActiveModel>>checkActivePlanBrand( int repDe);
+
 }

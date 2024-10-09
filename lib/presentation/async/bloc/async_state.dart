@@ -38,3 +38,9 @@ final class EditStatusDErrorState extends AsyncState {
   List<Object?> get props =>[failure];
 }
 
+final class getDataSucState extends AsyncState {
+
+  @override
+
+  List<Object?> get props =>[];
+}
