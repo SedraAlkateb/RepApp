@@ -1,7 +1,6 @@
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 
 class Listbrand extends StatelessWidget {
@@ -68,7 +67,7 @@ class Listbrand extends StatelessWidget {
                              mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment:CrossAxisAlignment.start,
                           children: [
-                               Icon(Icons.file_download_done_sharp),
+                               Icon(Icons.medication_outlined),
                             Text( "العينة : بانتنول",style: Theme.of(context)
                             .textTheme
                             .headlineMedium,),
@@ -79,7 +78,7 @@ class Listbrand extends StatelessWidget {
                              mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment:CrossAxisAlignment.start,
                            children: [
-                               Icon(Icons.file_download_done_sharp),
+                               Icon(Icons.medical_services_outlined),
                              Text( "الاختصاص : قلبية",style: Theme.of(context)
                               .textTheme
                               .headlineMedium,),
@@ -122,11 +121,11 @@ class Listbrand extends StatelessWidget {
                           ),
                           SizedBox(width: 10), // مسافة بين النص وحقل الإدخال
                           Container(
-                            width: 60,
-                            height: 40,
+                            width: 45,
+                            height: 30,
                             child: TextField(
                               decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                        
                                 contentPadding: EdgeInsets.symmetric(
                                   vertical: 8,
                                   horizontal: 10,

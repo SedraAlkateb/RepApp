@@ -105,7 +105,8 @@ class SpecializationsPage extends StatelessWidget {
                                             return SpecDH(
                                                 spId: placeModel[index].id,);
                                           },
-                                        ));
+                                        )
+                                        );
                                         BlocProvider.of<SpecializationBloc>(context).add(
                                             DoctorSpEvent(placeModel[index].id));
                                       },
