@@ -13,6 +13,7 @@ import 'package:domina_app/domain/usecase/insert_as/get_hospital_sp_visits_sql_u
 import 'package:domina_app/domain/usecase/insert_as/get_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/is_active_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
@@ -23,6 +24,7 @@ part 'async_in_event.dart';
 part 'async_in_state.dart';
 
 class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
+  IsActiveUsecase isActiveUsecase;
   VisitDoctorUsecase visitDoctorUsecase;
   VisitPharmacyUsecase visitPharmacyUsecase;
   VisitHospitalUsecase visitHospitalUsecase;
@@ -48,6 +50,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   List<VisitDoctorModel> visitDoctors = [];
   bool suc = false;
   AsyncInBloc(
+      this.isActiveUsecase,
       this.editIsLoginSqlUsecase,
       this.visitPharmacyUsecase,
       this.visitDoctorUsecase,

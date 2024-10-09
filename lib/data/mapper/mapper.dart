@@ -16,7 +16,25 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
     );
   }
 }
+extension ActiveResposeMapper on CheckBaseResponse? {
+  ActiveModel toDomain() {
+    return ActiveModel(
+      int.parse(this?.data.id ?? "0") ,
+      int.parse(this?.data.active ?? "0") ,
 
+    );
+  }
+}
+extension CheckActiveResposeMapper on CheckActiveBaseResponse? {
+  CheckActiveModel toDomain() {
+    return CheckActiveModel(
+      int.parse(this?.data.activePlanId ?? "0") ,
+      int.parse(this?.data.otherPlanId ?? "0") ,
+      int.parse(this?.data.otherstatus ?? "4")
+
+    );
+  }
+}
 extension BrandsSpRequestMapper on BrandSpResponse? {
   BrandSpModel toDomain() {
     return BrandSpModel(
