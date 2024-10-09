@@ -88,5 +88,6 @@ abstract class RepositorySql {
   Future<Either<Failure,List<VisitPharmacyModel>>> visitPharmacyAs();
   Future<Either<Failure,List<VisitBrandPharmacyModel>>> visitBrandPharmacyAs();
   Future<Either<Failure,List<PlanBrandModel>>> planBrandsAs();
+  Future<Either<Failure,List<PlanBrandSqlModel>>> planBrandByRepPlanId(int repPlanId) ;
 
 }

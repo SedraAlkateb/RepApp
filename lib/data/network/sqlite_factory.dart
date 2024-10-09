@@ -33,7 +33,7 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE rep (
+    CREATE TABLE rep (
     token  TEXT NOT NULL,
     repId INTEGER NOT NULL,
     otherPlanId INTEGER NOT NULL,

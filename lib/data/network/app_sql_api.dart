@@ -970,4 +970,32 @@ class AppSqlApi extends AppSqlApiAbs {
     });
   }
 
+  Future<List<PlanBrandSqlModel>> planBrandByRepPlanId(int repPlanId) async {
+    Database? mydb = await databaseHelper.database;
+
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+ SELECT 
+  planBrand.id,
+  planBrand.repPlanId,
+  planBrand.brandType,
+  planBrand.amount,
+  brand.title AS brandTitle,
+  brand.phTitle,
+  brand.sampleCoast,
+  specialization.title AS specializationTitle
+FROM 
+  planBrand
+JOIN 
+  brand ON planBrand.brandId = brand.id
+JOIN 
+  specialization ON planBrand.spId = specialization.id
+WHERE 
+  planBrand.repPlanId = ?;
+
+  ''', [repPlanId]);
+    return List.generate(maps.length, (i) {
+      return PlanBrandSqlModel.fromMap(maps[i]);
+    });
+  }
+
 }

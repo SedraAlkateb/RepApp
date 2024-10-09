@@ -1,0 +1,41 @@
+import 'package:bloc/bloc.dart';
+import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+part 'brand_plan_event.dart';
+part 'brand_plan_state.dart';
+
+class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
+  AllBrandPlanSqlUsecase allBrandPlanSqlUsecase;
+  List<PlanBrandSqlModel> planBrand=[];
+  List<PlanBrandSqlModel> planBrandActive=[];
+
+  int current=0;
+  BrandPlanBloc(
+      this.allBrandPlanSqlUsecase
+      ) : super(BrandPlanInitial()) {
+    on<BrandPlanEvent>((event, emit)async {
+      if(event is AllBrandPlanEvent){
+        (await allBrandPlanSqlUsecase.execute(UserInfo.activePlanId)).fold((failure) {
+      emit(AllBrandPlanErrorState(failure: failure));
+      return false;
+      }, (data) async {
+          planBrandActive=data;
+      emit(AllBrandPlanState(data));
+      });
+        (await allBrandPlanSqlUsecase.execute(UserInfo.otherPlanId)).fold((failure) {
+          emit(AllBrandPlanErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          planBrand=data;
+          emit(AllBrandPlanState(data));
+        });
+      }
+    });
+  }
+}
