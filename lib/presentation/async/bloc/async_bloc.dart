@@ -10,6 +10,7 @@ import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_usecase.dart';
@@ -31,6 +32,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllPlanBrandsUsecase allPlanBrandsUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
   CheckActiveBrandPlanSqlUsecase checkActiveBrandPlanSqlUsecase;
+  UpdateActiveSqlUsecase updateActiveSqlUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
@@ -40,6 +42,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   List<HospitalSpModel> hospitalSps = [];
   List<BrandSpModel> brandSpModel = [];
   List<PlanBrandModel> planBrands=[];
+  CheckActiveModel? checkActiveModel;
   AsyncBloc(
       this.allBrandsUsecase,
       this.allPharmacyUsecase,
@@ -52,18 +55,17 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.editIsLoginSqlUsecase,
       this.allBrandsSpUsecase,
       this.allPlanBrandsUsecase,
-      this.checkActiveBrandPlanSqlUsecase
+      this.checkActiveBrandPlanSqlUsecase,
+      this.updateActiveSqlUsecase
       )
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
       if (event is AsyncDataEvent) {
         emit(SyncDataLoadingState());
-        bool b = await getData();
-        if (b) {
-          await setData();
-
-        }
-
+        await getData();
+      }
+      if (event is SetDataSEvent) {
+        await setData();
       }
      else if(event is EditEvent){
         (await editIsLoginSqlUsecase.execute(UserInfo.repId,event.num)).fold((failure) {
@@ -74,11 +76,29 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           emit(EditStatusDState());
         });
       }
+     if(event is PlanIsActiveEvent){
+       (await checkActiveBrandPlanSqlUsecase.execute(UserInfo.repId)).fold((failure) {
+         emit(IsActiveErrorState(failure: failure));
+       }, (data) async {
+         checkActiveModel=data;
+         UserInfo.activePlanId=data.activePlanId;
+         UserInfo.otherPlanId=data.otherPlanId??9;
+         UserInfo.otherstatus=data.otherstatus??9;
+         emit(IsActiveState());
+       });
+     }
+     if(event is UpdateRepEvent){
+       (await updateActiveSqlUsecase.execute(UserInfo.repId,checkActiveModel!.otherPlanId??9,checkActiveModel!.activePlanId,checkActiveModel!.otherstatus??9)).fold((failure) {
+         emit(UpdateIsActiveErrorState(failure: failure));
+       }, (data) async {
+         emit(UpdateIsActiveState());
+       });
+
+     }
     });
   }
   Future<bool> getData() async {
     try {
-      // تهيئة القوائم الفارغة
       brands = [];
       places = [];
       pharmacies = [];
@@ -91,38 +111,42 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       final brandsFailureOrSuccess = brandsResult.fold((failure) => failure, (data) => data);
       if (brandsFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: brandsFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false;
       }
       brands = brandsFailureOrSuccess as List<BrandModel>;
 
-      // استدعاء بيانات الخطة والعلامات التجارية
+      ///////////////////////////////////
       final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId);
       final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
       if (planBrandsFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false;
       }
       planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
 
-      // استدعاء بيانات الأطباء
+
+
+
+      /////////////////////////////////
+
       final doctorsResult = await allDoctorUsecase.execute(UserInfo.repId);
       final doctorsFailureOrSuccess = doctorsResult.fold((failure) => failure, (data) => data);
       if (doctorsFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: doctorsFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false; 
       }
       doctors = doctorsFailureOrSuccess as List<DoctorModel>;
 
-      // استدعاء بيانات المستشفيات
+      /////////////////////////////////////////////////
+
       final hospitalsResult = await allhospitalUsecase.execute(UserInfo.repId);
       final hospitalsFailureOrSuccess = hospitalsResult.fold((failure) => failure, (data) => data);
       if (hospitalsFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: hospitalsFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false; 
       }
       hospitals = hospitalsFailureOrSuccess as List<HospitalModel>;
-
-      // استدعاء بيانات الصيدليات
+      ////////////////////////////////////////////////
       final pharmaciesResult = await allPharmacyUsecase.execute(UserInfo.repId);
       final pharmaciesFailureOrSuccess = pharmaciesResult.fold((failure) => failure, (data) => data);
       if (pharmaciesFailureOrSuccess is Failure) {
@@ -130,7 +154,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         return false; // توقف عند الفشل
       }
       pharmacies = pharmaciesFailureOrSuccess as List<PharmacyModel>;
-
+/////////////////////////////////////////////////////
       // استدعاء بيانات الأماكن
       final placesResult = await allPlaceUsecase.execute(UserInfo.repId);
       final placesFailureOrSuccess = placesResult.fold((failure) => failure, (data) => data);
@@ -139,7 +163,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         return false; // توقف عند الفشل
       }
       places = placesFailureOrSuccess as List<PlaceModel>;
-
+///////////////////////////////////////////////////////////
       // استدعاء بيانات التخصصات
       final specResult = await allSpeUsecase.execute(UserInfo.repId);
       final specFailureOrSuccess = specResult.fold((failure) => failure, (data) => data);
@@ -148,7 +172,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         return false; // توقف عند الفشل
       }
       spec = specFailureOrSuccess as List<SpecModel>;
-
+///////////////////////////////////////
       // استدعاء بيانات التخصصات في المستشفيات
       final hospitalSpsResult = await allHospialSpUsecase.execute(UserInfo.repId);
       final hospitalSpsFailureOrSuccess = hospitalSpsResult.fold((failure) => failure, (data) => data);
@@ -158,16 +182,24 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       }
       hospitalSps = hospitalSpsFailureOrSuccess as List<HospitalSpModel>;
 
-      // إذا تم كل شيء بنجاح
+      
+      /////////////////////////
+      final brandSpsResult = await allBrandsSpUsecase.execute(UserInfo.repId);
+      final brandSpFailureOrSuccess = brandSpsResult.fold((failure) => failure, (data) => data);
+      if (brandSpFailureOrSuccess is Failure) {
+        emit(SyncDataErrorState(failure: brandSpFailureOrSuccess));
+        return false;
+      }
+      brandSpModel = brandSpFailureOrSuccess as List<BrandSpModel>;
+////////////////////////////////////////////////
+
       emit(getDataSucState());
       return true;
-
     } catch (error) {
       emit(SyncDataErrorState(failure: Failure(-9, error.toString())));
       return false;
     }
   }
-
   Future<bool> setData() async {
     final result = await asyncDataSqlUsecase.execute(
       brands,
@@ -189,15 +221,14 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       pharmacies = [];
       places = [];
       spec = [];
+      doctors=[];
       hospitalSps=[];
+      planBrands=[];
+      brandSpModel=[];
+      hospitals=[];
       emit(SyncDataState());
     });
-    (await allBrandsSpUsecase.execute(UserInfo.repId)).fold((failure) {
-      emit(SyncDataErrorState(failure: failure));
-      return false;
-    }, (data) async {
-      brandSpModel = data;
-    });
+
     return false;
   }
 

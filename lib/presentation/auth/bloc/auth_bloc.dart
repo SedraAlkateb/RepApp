@@ -33,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserInfo.repId = loginModel!.repId;
           UserInfo.otherPlanId = loginModel!.otherPlanId;
           UserInfo.activePlanId = loginModel!.activePlanId;
-
+          UserInfo.otherstatus = loginModel!.otherstatus;
           UserInfo.percentage = loginModel!.percentage;
           UserInfo.token = loginModel!.token;
           UserInfo.name = loginModel!.name;

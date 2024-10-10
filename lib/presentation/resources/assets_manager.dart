@@ -1,12 +1,13 @@
 const  String imagePath="assets/images";
 const  String jsonPath="assets/json";
-
+const  String imageSvgPath="assets/images/svg";
 class ImageAssets{
   static const String d = "$imagePath/d.png";
   static const String domina = "$imagePath/domina.png";
   static const String login = "$imagePath/login.png";
   static const String blue = "$imagePath/blue.jpg";
-
+  static const String s14 = "$imageSvgPath/14 4.svg";
+  static const String p14 = "$imageSvgPath/14 4.png";
 
 }
 class JsonAssets{

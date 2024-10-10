@@ -44,3 +44,30 @@ final class getDataSucState extends AsyncState {
 
   List<Object?> get props =>[];
 }
+///////////////
+final class IsActiveState extends AsyncState {
+  IsActiveState();
+  @override
+  List<Object?> get props =>[];
+}
+final class IsActiveErrorState extends AsyncState {
+  final Failure failure;
+  IsActiveErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+
+
+final class UpdateIsActiveState extends AsyncState {
+  UpdateIsActiveState();
+  @override
+  List<Object?> get props =>[];
+}
+final class UpdateIsActiveErrorState extends AsyncState {
+  final Failure failure;
+  UpdateIsActiveErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
