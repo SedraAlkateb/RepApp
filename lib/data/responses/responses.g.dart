@@ -105,7 +105,7 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['activePlanId'] as String?,
       json['name'] as String?,
       (json['percentage'] as num?)?.toInt(),
-    );
+    )..otherstatus = json['otherstatus'] as String?;
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
@@ -113,6 +113,7 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'repId': instance.repId,
       'otherPlanId': instance.otherPlanId,
       'activePlanId': instance.activePlanId,
+      'otherstatus': instance.otherstatus,
       'name': instance.name,
       'percentage': instance.percentage,
     };

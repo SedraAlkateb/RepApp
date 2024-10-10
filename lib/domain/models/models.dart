@@ -713,11 +713,12 @@ class LoginModel {
   int repId;
   int otherPlanId;
   int activePlanId;
+  int otherstatus;
   int percentage;
   String name;
   int isLogin;
 
-  LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,
+  LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,this.otherstatus,
       this.name, this.percentage, this.isLogin);
   Map<String, dynamic> toMap() {
     return {
@@ -725,6 +726,7 @@ class LoginModel {
       'repId': repId,
       'otherPlanId': otherPlanId,
       'activePlanId': activePlanId,
+      'otherstatus': otherstatus,
       'name': name,
       'percentage': percentage,
       'isLogin': 1
@@ -733,7 +735,7 @@ class LoginModel {
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
     return LoginModel(map['token'], map['repId'], map['otherPlanId'],
-        map['activePlanId'], map['name'], map['percentage'], map['isLogin']);
+        map['activePlanId'], map['otherstatus'], map['name'], map['percentage'], map['isLogin']);
   }
 }
 

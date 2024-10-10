@@ -9,55 +9,25 @@ class BrandPlanPage extends StatelessWidget {
   const BrandPlanPage({super.key});
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
-
         length:2, 
         child: Scaffold(
           appBar: AppBar(
-
             backgroundColor: ColorManager.secondaryColor7,
             bottom: TabBar(
+              // onTap: (value) {
+              //   if(value==1){
+              //     BlocProvider.of<BrandPlanBloc>(context).isSum();
+              //   }
+              // },
                 labelPadding: EdgeInsets.all(0.9),
-                onTap: (value) {
-                  // if (value == 0) {
-                  //   BlocProvider.of<BrandPlanBloc>(context)
-                  //       .add(PharmacyByPlace(placeId, value));
-                  //   BlocProvider.of<BrandPlanBloc>(context)
-                  //       .add(BrandAnyFlagEvent());
-                  // } else
-                  // if (value == 0) {
-                  //   BlocProvider.of<BrandPlanBloc>(context)
-                  //       .add(AllBrandPlanEvent(UserInfo.activePlanId));
-                  // } else {
-                  //   BlocProvider.of<BrandPlanBloc>(context)
-                  //       .add(AllBrandPlanEvent(UserInfo.otherPlanId));
-                  // }
-                },
                 tabs: [
-                  // Tab(
-                  //   icon: context.watch<BrandPlanBloc>().current == 0
-                  //       ? Icon(Icons.local_pharmacy_sharp,
-                  //           color: ColorManager.secondaryColor1)
-                  //       : Icon(Icons.local_pharmacy_sharp),
-                  //   text: 'الصيدليات',
-                  // ),
                   Tab(
-                    icon: context.watch<BrandPlanBloc>().current == 0
-                        ? Icon(
-                            Icons.calendar_month,
-                            color: ColorManager.secondaryColor1,
-                          )
-                        : Icon(Icons.groups),
+                    icon: Icon(Icons.groups),
                     text: 'الخطة الحالية',
                   ),
                   Tab(
-                    icon: context.watch<BrandPlanBloc>().current == 1
-                        ? Icon(
-                            Icons.calendar_month_sharp,
-                            color: ColorManager.secondaryColor1,
-                          )
-                        : Icon(Icons.local_hospital),
+                    icon: Icon(Icons.local_hospital),
                     text: 'قيد المعالجة',
                   ),
                 ]),
@@ -65,7 +35,6 @@ class BrandPlanPage extends StatelessWidget {
           body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               children: [
-          //  PharmacyVisit(),
             BrandPlanActivePage(),
                 BrandPlanOtherPage(),
           ]),

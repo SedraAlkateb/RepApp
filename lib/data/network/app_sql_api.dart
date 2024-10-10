@@ -269,7 +269,7 @@ class AppSqlApi extends AppSqlApiAbs {
     final db = await databaseHelper.database;
     Batch batch = db.batch();
     batch.rawQuery(
-        'SELECT token, repId, activePlanId,otherPlanId, name, percentage, isLogin FROM rep LIMIT 1');
+        'SELECT token, repId, activePlanId,otherPlanId, otherstatus , name, percentage, isLogin FROM rep LIMIT 1');
     List<dynamic> results = await batch.commit();
     if (results.isNotEmpty && results[0].isNotEmpty) {
       Map<String, dynamic> firstRow = results[0][0];
@@ -1020,5 +1020,17 @@ WHERE
       return PlanBrandSqlModel.fromMap(maps[i]);
     });
   }
-
+  updateRep(int repId, int otherPlanId, int activePlanId, int otherstatus) async {
+    Database? mydb = await databaseHelper.database;
+     await mydb.update(
+      'rep',
+      {
+        'otherPlanId': otherPlanId,
+        'activePlanId': activePlanId,
+        'otherstatus': otherstatus,
+      },
+      where: 'repId = ?',
+      whereArgs: [repId],
+    );
+  }
 }

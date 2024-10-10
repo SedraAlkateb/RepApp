@@ -105,6 +105,8 @@ class TokenResponse {
   String? otherPlanId;
   @JsonKey(name: "activePlanId")
   String? activePlanId;
+  @JsonKey(name: "otherstatus")
+  String? otherstatus;
   @JsonKey(name: "name")
   String? name;
   @JsonKey(name: "percentage")

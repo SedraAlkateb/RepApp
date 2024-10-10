@@ -683,7 +683,8 @@ class RepositroySqlImp extends RepositorySql {
   Future<Either<Failure, List<PlanBrandSqlModel>>> planBrandByRepPlanId(
       int repPlanId) async {
     try {
-    final response=  await _databaseHelper.planBrandByRepPlanId(repPlanId);
+    final response=  await
+    _databaseHelper.planBrandByRepPlanId(repPlanId);
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler
@@ -691,12 +692,12 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
-  
+
   @override
-  Future<Either<Failure, List<HospitalSpAllModel>>> getAllHospitalSpecialization()async {
+  Future<Either<Failure, Null>> updateRep(int repId, int otherPlanId, int activePlanId, int otherstatus)  async {
     try {
-    final response=  await _databaseHelper.getAllHospitalSpecialization();
-      return Right(response);
+       await _databaseHelper.updateRep(repId, otherPlanId, activePlanId, otherstatus);
+      return Right(null);
     } catch (e) {
       return Left(ErrorHandler
           .handle(e)
