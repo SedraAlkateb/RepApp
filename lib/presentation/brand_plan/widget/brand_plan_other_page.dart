@@ -28,7 +28,6 @@ class BrandPlanOtherPage extends StatelessWidget {
         ),
         child: Stack(
           children: [
-
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -171,17 +170,11 @@ class BrandPlanOtherPage extends StatelessWidget {
                 left: 10,
                 child: ElevatedButton(
                     style: ButtonStyle(
-
                       backgroundColor: MaterialStateProperty.all<Color>(ColorManager.secondaryColor6), // لتغيير لون الخلفية
                       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      shape: MaterialStateProperty.all<CircleBorder>(
-                        CircleBorder(                        ),
-                      ),
+                      shape: MaterialStateProperty.all<CircleBorder>(CircleBorder(),),
                       padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.all(20),
-                      ),
-                    ),
-                    onPressed: (){}, child: Text("حفظ"))),
+                        EdgeInsets.all(20),),), onPressed: (){}, child: Text("حفظ"))),
           ],
         ),
       ),
