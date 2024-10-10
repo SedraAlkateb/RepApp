@@ -1,6 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
-import 'package:domina_app/presentation/doctors/pages/doctor_deetails%20.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_details%20.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';

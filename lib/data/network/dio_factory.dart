@@ -103,7 +103,6 @@ class MyApiInterceptor extends Interceptor {
     }
     super.onError(err, handler);
   }
-  //TODO
   final Dio client =Dio();
 
   // Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {

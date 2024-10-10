@@ -6,8 +6,8 @@ class ImageAssets{
   static const String domina = "$imagePath/domina.png";
   static const String login = "$imagePath/login.png";
   static const String blue = "$imagePath/blue.jpg";
-  static const String s14 = "$imageSvgPath/14 4.svg";
-  static const String p14 = "$imageSvgPath/14 4.png";
+  static const String doctor = "$imagePath/doctor.png";
+  static const String hospital = "$imagePath/hospital.png";
 
 }
 class JsonAssets{
