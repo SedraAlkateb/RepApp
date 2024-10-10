@@ -18,14 +18,6 @@ class BrandPlanOtherPage extends StatelessWidget {
       backgroundColor: ColorManager.white,
       drawer: DrawerPage(),
        body: Container(
-        decoration: BoxDecoration(
-          // gradient: LinearGradient(colors: [
-          //   ColorManager.secondaryColor6,
-          //   ColorManager.secondaryColor7,
-          //   ColorManager.secondaryColor7,
-          // ]),
-          //   color: ColorManager.secondaryColor3,
-        ),
         child: Stack(
           children: [
             SingleChildScrollView(
