@@ -500,6 +500,7 @@ HospitalResponse _$HospitalResponseFromJson(Map<String, dynamic> json) =>
       json['placeId'] as String?,
       json['address'] as String?,
       json['placeTitle'] as String?,
+      json['note'] as String?,
     );
 
 Map<String, dynamic> _$HospitalResponseToJson(HospitalResponse instance) =>
@@ -509,6 +510,7 @@ Map<String, dynamic> _$HospitalResponseToJson(HospitalResponse instance) =>
       'placeId': instance.placeId,
       'address': instance.address,
       'placeTitle': instance.placeTitle,
+      'note': instance.note,
     };
 
 DoctorResponse _$DoctorResponseFromJson(Map<String, dynamic> json) =>

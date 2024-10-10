@@ -491,7 +491,9 @@ class HospitalResponse {
   String? address;
   @JsonKey(name: "placeTitle")
   String? placeTitle;
-  HospitalResponse(this.id,this.title,this.placeId,this.address,this.placeTitle);
+    @JsonKey(name: "note")
+  String? note;
+  HospitalResponse(this.id,this.title,this.placeId,this.address,this.placeTitle,this.note);
   factory HospitalResponse.fromJson(Map<String,dynamic>json)=>
       _$HospitalResponseFromJson(json);
   Map<String,dynamic>toJson()=>

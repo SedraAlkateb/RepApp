@@ -194,7 +194,7 @@ class ResponseMassage{
   static const String BAD_REQUEST ="Bad request ,Try again later";//failure ,Api rejected request
   static const String UNAUTORISED ="User is unauthorised,Try again later";//failure,user is not authorised
   static const String FORBIDDEN ="Forbidden request ,Try again later";//failure ,Api rejected request
-  static const String INTERNAL_SERVER_ERROR ="Some thing went wrong ,Try again later";//failure,crash in server side
+  static const String INTERNAL_SERVER_ERROR ="حدث خطأ, يرجى اعادة المحاولة";//failure,crash in server side
   static const String NOT_FOUND="Forbidden request ,Try again later";
  // static const String Unprocessable_Content ="Unprocessable Content";//success with no data (no content)
 
@@ -206,7 +206,7 @@ class ResponseMassage{
   static const String SEND_TIMOUT ="Time out error ,Try again later";
   static const String CACHE_ERROR ="Cache error ,Try again later";
   static const String NO_INTERNET_CONNECTION ="Please check your internet connection";
-  static const String DEFAULT ="Some thing went wrong ,Try again later";
+  static const String DEFAULT ="حدث خطأ, يرجى اعادة المحاولة";
 
 }
 class ApiInternalStatus{

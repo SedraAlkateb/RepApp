@@ -691,4 +691,16 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+  
+  @override
+  Future<Either<Failure, List<HospitalSpAllModel>>> getAllHospitalSpecialization()async {
+    try {
+    final response=  await _databaseHelper.getAllHospitalSpecialization();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

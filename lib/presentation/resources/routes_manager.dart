@@ -1,7 +1,6 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
-import 'package:domina_app/presentation/brand_plan/widget/brand_plan_other_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/delete_logout_page.dart';

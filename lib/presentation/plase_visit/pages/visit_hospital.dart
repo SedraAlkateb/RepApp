@@ -497,7 +497,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
 
                             if (_formKey.currentState!.validate())  {
                                 DateTime now = DateTime.now();
-                                //   String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
+                                // String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
                                 VisitHospitalModel visitHospitalModel =
                                     VisitHospitalModel(
                                         0,

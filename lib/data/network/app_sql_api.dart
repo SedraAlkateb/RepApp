@@ -487,7 +487,7 @@ class AppSqlApi extends AppSqlApiAbs {
       hospital.address as hospital_address,
       hospital.placeId as hospital_placeId,
       hospital.placeTitle as hospital_placeTitle,
-      
+      hospital.note,
       specialization.id as specialization_id,
       specialization.title as specialization_title
       
@@ -969,27 +969,28 @@ class AppSqlApi extends AppSqlApiAbs {
       return VisitPharmacyModel.fromMap(maps[i]);
     });
   }
- Future<List<PharmacyBrandModel>> getHospitalSpecialization(int visitId) async {
-    Database? mydb = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
-      SELECT 
-      hospital.id  
-      hospital.title
-       hospital.address 
-      hospital.placeTitle
-      hospital.note
-      hospitalSp.rate
-      hospitalSp.totalDocs
-      hospitalSp.visit
-      specialization.title as titleSp
-      FROM hospital
-      JOIN hospitalSp  ON hospitalSp.hospitalId = hospital.id
-      JOIN specialization  ON hospitalSp.spId = specialization.id
-    ''', );
-    return List.generate(maps.length, (i) {
-      return PharmacyBrandModel.fromMap(maps[i]);
-    });
-  }
+Future<List<HospitalSpAllModel>> getAllHospitalSpecialization() async {
+  Database? mydb = await databaseHelper.database;
+  final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+    SELECT 
+      hospital.id,
+      hospital.title,
+      hospital.address,
+      hospital.placeTitle,
+      hospital.note,
+      hospitalSp.rate,
+      hospitalSp.totalDocs,
+      hospitalSp.visit,
+      specialization.title as titleSp 
+    FROM hospital
+    JOIN hospitalSp ON hospitalSp.hospitalId = hospital.id
+    JOIN specialization ON hospitalSp.spId = specialization.id
+  ''');
+
+  return List.generate(maps.length, (i) {
+    return HospitalSpAllModel.fromMap(maps[i]);
+  });
+}
   
 
   Future<List<PlanBrandSqlModel>> planBrandByRepPlanId(int repPlanId) async {
@@ -1007,7 +1008,7 @@ class AppSqlApi extends AppSqlApiAbs {
   specialization.title AS specializationTitle
 FROM 
   planBrand
-JOIN 
+JOIN  
   brand ON planBrand.brandId = brand.id
 JOIN 
   specialization ON planBrand.spId = specialization.id

@@ -227,6 +227,7 @@ extension HospitalResponseMapper on HospitalResponse? {
       int.parse(this?.placeId ?? "0") ,
       this?.address ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
+      this?.note?? Constants.empty
     );
 
   }

@@ -3,7 +3,6 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

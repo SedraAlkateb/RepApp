@@ -2,7 +2,7 @@ import 'package:domina_app/app/user_info.dart';
 
 class VisitPharmacyModel {
   int id;
-  
+
   String data;
   String note;
   int pharmacyId;
@@ -651,18 +651,19 @@ class HospitalModel {
   String title;
   int placeId;
   String address;
-
+  String? note;
   String placeTitle;
 
-  HospitalModel(
-      this.id, this.title, this.placeId, this.address, this.placeTitle);
+  HospitalModel(this.id, this.title, this.placeId, this.address, this.note,
+      this.placeTitle);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'placeId': placeId,
       'address': address,
-      "placeTitle": placeTitle
+      "placeTitle": placeTitle,
+      "note":note,
     };
   }
 
@@ -673,6 +674,7 @@ class HospitalModel {
       map['placeId'],
       map['address'],
       map["placeTitle"],
+      map["note"],
     );
   }
   factory HospitalModel.fromMap1(Map<String, dynamic> map) {
@@ -682,6 +684,7 @@ class HospitalModel {
       map['hospital_placeId'],
       map['hospital_address'],
       map["hospital_placeTitle"],
+      map["note"],
     );
   }
 }
@@ -828,7 +831,7 @@ class PlanBrandSqlModel {
         map['id'],
         map['repPlanId'],
         map['brandType'],
-        int.parse( map['amount']),
+        int.parse(map['amount']),
         map['phTitle'],
         map['brandTitle'],
         map['sampleCoast'],
@@ -841,9 +844,56 @@ class ActiveModel {
   int active;
   ActiveModel(this.id, this.active);
 }
+
 class CheckActiveModel {
   int activePlanId;
   int? otherPlanId;
-  int ?otherstatus;
+  int? otherstatus;
   CheckActiveModel(this.activePlanId, this.otherPlanId, this.otherstatus);
+}
+//  hospital.id
+//       hospital.title
+//        hospital.address
+//       hospital.placeTitle
+//       hospital.note
+//       hospitalSp.rate
+//       hospitalSp.totalDocs
+//       hospitalSp.visit
+//       specialization.title as titleSp
+
+class HospitalSpAllModel {
+  int ?hospitalId;
+  String? title;
+  String? address;
+  String ?placeTitle;
+  String? note;
+  String? rate;
+  int totalDocs;
+  int visit;
+  HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
+      this.note, this.rate, this.totalDocs, this.visit);
+  Map<String, dynamic> toMap() {
+    return {
+      'hospitalId': hospitalId,
+      'title': title,
+      'address': address,
+      'placeTitle': placeTitle,
+      'note': note,
+      'rate': rate,
+      'totalDocs': totalDocs,
+      'visit': visit,
+    };
+  }
+
+  factory HospitalSpAllModel.fromMap(Map<String, dynamic> map) {
+    return HospitalSpAllModel(
+        map['hospitalId'],
+        map['title'],
+        map['address'],
+        map['placeTitle'],
+        map['note'],
+        map['rate'],
+        map['totalDocs'],
+        map['visit']);
+  }
 }

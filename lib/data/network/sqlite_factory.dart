@@ -96,6 +96,7 @@ class DatabaseHelper {
     title TEXT NOT NULL,
     address TEXT NOT NULL,
     placeId INTEGER NOT NULL,
+    note TEXT NOT NULL,
     placeTitle TEXT NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
