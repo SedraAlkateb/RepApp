@@ -131,10 +131,10 @@ class SpecializationsPage extends StatelessWidget {
                                         child: Center(
                                           child: Column(
                                             children: [
-                                              SvgPicture.asset(
-                                                ImageAssets.s14,
-                                                width: 70,
-                                              ),
+                                              // SvgPicture.asset(
+                                              //   ImageAssets.s14,
+                                              //   width: 70,
+                                              // ),
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 placeModel[index].title,
