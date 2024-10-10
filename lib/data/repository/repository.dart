@@ -105,6 +105,8 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.allBrand(id);
+
+
       if (response.status == null) {
         return Right(response.toDomain());
       } else {

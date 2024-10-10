@@ -22,3 +22,19 @@ class SetDataSEvent extends AsyncEvent{
   List<Object?> get props => [];
 
 }
+class PlanIsActiveEvent extends AsyncEvent{
+  @override
+  List<Object?> get props => [];
+
+}
+
+class UpdateRepEvent extends AsyncEvent{
+  @override
+  List<Object?> get props => [];
+
+}
+class OkEvent extends AsyncEvent{
+  @override
+  List<Object?> get props => [];
+
+}

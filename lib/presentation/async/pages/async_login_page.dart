@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class AsyncLoginPage extends StatelessWidget {
   const AsyncLoginPage({super.key});
@@ -39,9 +40,27 @@ class AsyncLoginPage extends StatelessWidget {
                   listener: (context, state) {
                    if(state is SyncDataErrorState){
                      error(context, state.failure.massage, state.failure.code);
+                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+
+                   }
+                   if(state is IsActiveErrorState){
+                     error(context, state.failure.massage, state.failure.code);
+                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+
+                   }
+                   if(state is UpdateIsActiveErrorState){
+                     error(context, state.failure.massage, state.failure.code);
+                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+
                    }
                    if(state is getDataSucState){
                    BlocProvider.of<AsyncBloc>(context).add(SetDataSEvent());
+                   }
+                   if(state is IsActiveState){
+                     BlocProvider.of<AsyncBloc>(context).add(UpdateRepEvent());
+                   }
+                   if(state is UpdateIsActiveState){
+                     BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
                    }
                    if(state is SyncDataLoadingState){
                      loading(context);
@@ -51,15 +70,17 @@ class AsyncLoginPage extends StatelessWidget {
                    }
                    if(state is EditStatusDErrorState){
                      error(context, state.failure.massage, state.failure.code);
+                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+
                    }
                    if(state is EditStatusDState){
                      success(context);
                      print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-                     Navigator.pushNamed(context, Routes.places);
+                     Phoenix.rebirth(context);
                    }
                   },
                   child: ElevatedButton(onPressed: (){
-                    BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
+                    BlocProvider.of<AsyncBloc>(context).add(PlanIsActiveEvent());
                   },
                       child: Text(
                       "تحميل البيانات",

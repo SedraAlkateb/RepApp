@@ -38,6 +38,7 @@ class DatabaseHelper {
     repId INTEGER NOT NULL,
     otherPlanId INTEGER NOT NULL,
     activePlanId INTEGER NOT NULL,
+    otherstatus INTEGER NOT NULL,
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
     isLogin INTEGER NOT NULL DEFAULT 0
