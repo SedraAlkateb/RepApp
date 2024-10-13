@@ -71,20 +71,16 @@ class DoctorDetails extends StatelessWidget {
                   child: Image.asset(
                       ImageAssets.doctor,
                       fit: BoxFit.cover,
-                      
-                      color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withOpacity(0.07),
                       colorBlendMode: BlendMode.modulate,
                     ),
                 ),
-            
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-            
-                    
                       ListView(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,

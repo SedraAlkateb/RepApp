@@ -38,7 +38,7 @@ class DatabaseHelper {
     repId INTEGER NOT NULL,
     otherPlanId INTEGER NOT NULL,
     activePlanId INTEGER NOT NULL,
-    otherstatus INTEGER NOT NULL,
+    otherStatus INTEGER NOT NULL,
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
     isLogin INTEGER NOT NULL DEFAULT 0
@@ -115,8 +115,8 @@ class DatabaseHelper {
     );
     ''');
     /////////////////////////////////////////////////
-
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE planBrand (
     id INTEGER PRIMARY KEY,
     spId INTEGER NOT NULL,
@@ -125,19 +125,22 @@ class DatabaseHelper {
     brandType TEXT NOT NULL,
     amount TEXT NOT NULL
     );
-   ''');
-    await db.execute('''
+   '''
+    );
+    await db.execute(
+        '''
       CREATE TABLE brandSp (
     id INTEGER PRIMARY KEY,
     spId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     brandType TEXT NOT NULL
     );
-   ''');
+   '''
+    );
 
     ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    await db.execute('''
-
+    await db.execute(
+        '''
      CREATE TABLE visit_doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
@@ -147,7 +150,8 @@ class DatabaseHelper {
     doctorId INTEGER NOT NULL,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
- ''');
+ '''
+    );
     await db.execute('''
     CREATE TABLE visit_hospital(
     id INTEGER PRIMARY  KEY AUTOINCREMENT,

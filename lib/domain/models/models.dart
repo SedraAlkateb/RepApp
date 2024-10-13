@@ -735,7 +735,7 @@ class LoginModel {
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
     return LoginModel(map['token'], map['repId'], map['otherPlanId'],
-        map['activePlanId'], map['otherstatus'], map['name'], map['percentage'], map['isLogin']);
+        map['activePlanId'], map['otherStatus'], map['name'], map['percentage'], map['isLogin']);
   }
 }
 
@@ -872,8 +872,9 @@ class HospitalSpAllModel {
   String? rate;
   int totalDocs;
   int visit;
+  String? titleSp;
   HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
-      this.note, this.rate, this.totalDocs, this.visit);
+      this.note, this.rate, this.totalDocs, this.visit,this.titleSp);
   Map<String, dynamic> toMap() {
     return {
       'hospitalId': hospitalId,
@@ -884,6 +885,7 @@ class HospitalSpAllModel {
       'rate': rate,
       'totalDocs': totalDocs,
       'visit': visit,
+      'titleSp':titleSp
     };
   }
 
@@ -896,6 +898,8 @@ class HospitalSpAllModel {
         map['note'],
         map['rate'],
         map['totalDocs'],
-        map['visit']);
+        map['visit'],
+      map['titleSp']
+    );
   }
 }

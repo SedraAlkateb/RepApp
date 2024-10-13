@@ -65,14 +65,25 @@ abstract class AppSqlApiAbs{
 class AppSqlApi extends AppSqlApiAbs {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
+  Future<void> initializeDatabase() async {
+    await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
+  }
+  insertBrands(List<BrandModel> brands) async {
+    Database? mydb = await databaseHelper.database;
+    Batch batch = mydb.batch();
+    for (var brand in brands) {
+      batch.insert('brand', brand.toMap());
+    }
+    await batch.commit(noResult: true);
+  }
   Future<String> asyncData(
-    List<BrandModel> brands,
-    List<PharmacyModel> pharmacies,
-    List<PlaceModel> places,
-    List<SpecModel> specs,
-    List<DoctorModel> doctors,
-    List<HospitalModel> hospitals,
-    List<HospitalSpModel> hospitalSps,
+      List<BrandModel> brands,
+      List<PharmacyModel> pharmacies,
+      List<PlaceModel> places,
+      List<SpecModel> specs,
+      List<DoctorModel> doctors,
+      List<HospitalModel> hospitals,
+      List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
       List<PlanBrandModel> planBrands,
       ) async {
@@ -114,16 +125,6 @@ class AppSqlApi extends AppSqlApiAbs {
       return error.toString();
     }
   }
-
-  insertBrands(List<BrandModel> brands) async {
-    Database? mydb = await databaseHelper.database;
-    Batch batch = mydb.batch();
-    for (var brand in brands) {
-      batch.insert('brand', brand.toMap());
-    }
-    await batch.commit(noResult: true);
-  }
-
   insertHospitalSp(List<HospitalSpModel> hospitalSps) async {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
@@ -1027,10 +1028,25 @@ WHERE
       {
         'otherPlanId': otherPlanId,
         'activePlanId': activePlanId,
-        'otherstatus': otherstatus,
+        'otherStatus': otherstatus,
       },
       where: 'repId = ?',
       whereArgs: [repId],
     );
   }
+  updateAmounts(List<PlanBrandSqlModel> planBrands) async {
+    Database? mydb = await databaseHelper.database;
+
+    var batch = mydb.batch();
+    for (int i = 0; i < planBrands.length; i++) {
+      batch.update(
+        'planBrand',
+        {'amount': planBrands[i].amount},  // القيمة الجديدة لكل صف
+        where: 'id = ?',
+        whereArgs: [planBrands[i].id],
+      );
+    }
+    await batch.commit(noResult: true);
+  }
+
 }

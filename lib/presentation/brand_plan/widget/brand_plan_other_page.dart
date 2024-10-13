@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BrandPlanOtherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("objectrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
     print(UserInfo.otherstatus);
     print(UserInfo.percentage);
     return Scaffold(
@@ -157,7 +156,19 @@ class BrandPlanOtherPage extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
+            BlocListener<BrandPlanBloc, BrandPlanState>(
+  listener: (context, state) {
+   if(state is UpdateAmountErrorState){
+     error(context, state.failure.massage, state.failure.code);
+   }
+   if(state is UpdateAmountState){
+     success(context);
+   }
+   if(state is UpdateAmountLoadingState){
+     loading(context);
+   }
+  },
+  child: Positioned(
                 bottom: 20,
                 left: 10,
                 child: ElevatedButton(
@@ -166,7 +177,10 @@ class BrandPlanOtherPage extends StatelessWidget {
                       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       shape: MaterialStateProperty.all<CircleBorder>(CircleBorder(),),
                       padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.all(20),),), onPressed: (){}, child: Text("حفظ"))),
+                        EdgeInsets.all(20),),), onPressed: (){
+                      BlocProvider.of<BrandPlanBloc>(context).add(UpdateAmountSucEvent());
+                }, child: Text("حفظ"))),
+),
           ],
         ),
       ),

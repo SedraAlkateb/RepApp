@@ -38,3 +38,19 @@ final class SumState extends BrandPlanState {
   @override
   List<Object?> get props =>[planBrands];
 }
+final class UpdateAmountErrorState extends BrandPlanState {
+
+  final Failure failure;
+  UpdateAmountErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class UpdateAmountState extends BrandPlanState {
+  @override
+  List<Object?> get props =>[];
+}
+final class UpdateAmountLoadingState extends BrandPlanState {
+  @override
+  List<Object?> get props =>[];
+}

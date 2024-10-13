@@ -5,6 +5,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -13,11 +14,13 @@ part 'brand_plan_state.dart';
 
 class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   AllBrandPlanSqlUsecase allBrandPlanSqlUsecase;
+  UpdateBrandPlanSqlUsecase updateBrandPlanSqlUsecase;
   List<PlanBrandSqlModel> planBrand=[];
   List<PlanBrandSqlModel> planBrandActive=[];
 int sum=0;
   int current=0;
   BrandPlanBloc(
+      this.updateBrandPlanSqlUsecase,
       this.allBrandPlanSqlUsecase
       ) : super(BrandPlanInitial()) {
     on<BrandPlanEvent>((event, emit)async {
@@ -29,13 +32,17 @@ int sum=0;
           planBrandActive=data;
       emit(AllBrandPlanState(data));
       });
-        (await allBrandPlanSqlUsecase.execute(UserInfo.otherPlanId)).fold((failure) {
-          emit(AllBrandPlanErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          planBrand=data;
-          emit(AllBrandPlanState(data));
-        });
+        if(UserInfo.otherPlanId!=null){
+          (await allBrandPlanSqlUsecase.execute(UserInfo.otherPlanId??0)).fold((failure) {
+            emit(AllBrandPlanErrorState(failure: failure));
+            return false;
+          }, (data) async {
+            planBrand=data;
+            isSum();
+            emit(AllBrandPlanState(data));
+          });
+        }
+
 
       }
       if(event is ChangeFieldEvent){
@@ -54,6 +61,20 @@ int sum=0;
       if(event is UpdateEvent){
         List<PlanBrandSqlModel>planBrandSum=List.from(planBrand);
         emit(SumState(planBrandSum));
+      }
+      if(event is UpdateAmountSucEvent){
+        emit(UpdateAmountLoadingState());
+        if(sum>UserInfo.percentage){
+          emit(UpdateAmountErrorState(failure: Failure(5, "لقد تجاوزت الحد المسموح")));
+        }else{
+          (await updateBrandPlanSqlUsecase.execute(planBrand)).fold((failure) {
+            emit(UpdateAmountErrorState(failure: failure));
+            return false;
+          }, (data) async {
+            emit(UpdateAmountState());
+          });
+        }
+
       }
     });
 
