@@ -49,7 +49,6 @@ class AsyncLoginPage extends StatelessWidget {
                    if(state is UpdateIsActiveErrorState){
                      error(context, state.failure.massage, state.failure.code);
                      BlocProvider.of<AsyncBloc>(context).add(OkEvent());
-
                    }
                    if(state is getDataSucState){
                    BlocProvider.of<AsyncBloc>(context).add(SetDataSEvent());

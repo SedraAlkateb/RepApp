@@ -124,7 +124,6 @@ class BrandPlanOtherPage extends StatelessWidget {
                                   Expanded(
                                     child: TextField(
                                       decoration: InputDecoration(
-            
                                         hintText:
                                             planBrandModel[index].amount.toString(),
                                         enabled:  UserInfo.otherstatus==0? true: state is SumErrorState ?false : false,

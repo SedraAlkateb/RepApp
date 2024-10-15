@@ -179,10 +179,11 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
-                Padding(
+          Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
-        ),    ListTile(
+        ),
+          ListTile(
              leading:  Icon(Icons.list_alt_outlined ,color: ColorManager.secondaryColor4),
             title:  Text('لائحة العينات',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {

@@ -105,7 +105,8 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
                       maxLines: 4,
-                      validator: (value) {
+                      validator: (value)
+                      {
                         if (value!.isEmpty) {
                           return "الحقل مطلوب";
                         }
