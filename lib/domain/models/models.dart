@@ -711,22 +711,22 @@ class CityModel {
 class LoginModel {
   String token;
   int repId;
-  int otherPlanId;
+  int ?otherPlanId=-1;
   int activePlanId;
-  int otherstatus;
+  int ?otherStatus=-1;
   int percentage;
   String name;
   int isLogin;
 
-  LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,this.otherstatus,
+  LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,this.otherStatus,
       this.name, this.percentage, this.isLogin);
   Map<String, dynamic> toMap() {
     return {
       'token': token,
       'repId': repId,
-      'otherPlanId': otherPlanId,
+      'otherPlanId': otherPlanId==null?-5:otherStatus,
       'activePlanId': activePlanId,
-      'otherstatus': otherstatus,
+      'otherStatus': otherStatus==null?-5:otherStatus,
       'name': name,
       'percentage': percentage,
       'isLogin': 1
@@ -734,8 +734,16 @@ class LoginModel {
   }
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
-    return LoginModel(map['token'], map['repId'], map['otherPlanId'],
-        map['activePlanId'], map['otherStatus'], map['name'], map['percentage'], map['isLogin']);
+    return LoginModel(
+        map['token'],
+        map['repId'],
+        map['otherPlanId'],
+        map['activePlanId'],
+        map['otherStatus'],
+        map['name'],
+        map['percentage'],
+        map['isLogin']
+    );
   }
 }
 

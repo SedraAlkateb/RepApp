@@ -184,7 +184,7 @@ extension LoginResponseMapper on LoginResponse? {
         int.parse(this?.data?.repId ?? "0") ,
         int.parse(this?.data?.otherPlanId ?? "0") ,
         int.parse(this?.data?.activePlanId ?? "0") ,
-        int.parse(this?.data?.otherstatus ?? "0") ,
+        int.parse(this?.data?.otherStatus ?? "0") ,
         this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1

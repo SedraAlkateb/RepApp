@@ -62,3 +62,10 @@ void successWithMessage(BuildContext context,String message) {
   StateRendererType.popupSuccess,
   message);
 }
+Widget emptyFullScreen(BuildContext context)
+{
+return  StateRenderer(stateRendererType: StateRendererType.fullScreenEmptyState, message: "لا يوجد بيانات", retryActionFunction: (){});
+
+
+
+}

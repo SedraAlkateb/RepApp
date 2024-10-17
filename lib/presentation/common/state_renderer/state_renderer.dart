@@ -80,16 +80,18 @@ class StateRenderer extends StatelessWidget {
     }
   }
 Widget _getItemsColumn(List<Widget>children){
- return Column(
-   mainAxisAlignment: MainAxisAlignment.center,
-   crossAxisAlignment: CrossAxisAlignment.center,
-   children: children,
+ return Center(
+   child: Column(
+     mainAxisAlignment: MainAxisAlignment.center,
+     crossAxisAlignment: CrossAxisAlignment.center,
+     children: children,
+   ),
  );
 }
 Widget _getAnimatedImage(String animationName){
     return SizedBox(
-      height: AppSize.s200,
-      width: AppSize.s200,
+      height: AppSize.s250,
+      width: AppSize.s250,
       child:Lottie.asset(animationName )
     );
 }

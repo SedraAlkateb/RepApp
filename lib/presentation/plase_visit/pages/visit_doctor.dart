@@ -1,7 +1,6 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
@@ -79,12 +78,12 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        "العنوان: ${widget.doctorModel.address}",
+                        "العنوان:${widget.doctorModel.address}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        "اجمالي الزيارات : ${widget.doctorModel.visits}",
+                        " اجمالي الزيارات:${widget.doctorModel.visits}",
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
                     ],
@@ -98,9 +97,10 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                   children: [
                     PersonalOrder(noteeController: _noteeController),
                     Text(
-                      " ملاحظات للمكتب العلمي :",
+                      " ملاحظات للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
+                    SizedBox(height: AppSize.s8,),
                     BoxTextField(
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
@@ -118,9 +118,10 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       inputFormatters: [],
                     ),
                     Text(
-                      "ملاحظات لمستودع قاسيون  :",
+                      "ملاحظات لمستودع قاسيون:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
+                    SizedBox(height: AppSize.s8,),
                     BoxTextField(
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
@@ -148,7 +149,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                               children: [
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
+                                  activeColor: ColorManager.secondaryColor2,
                                   value:
                                       context.watch<VisitPlaceBloc>().isScience==0?true:false,
                                   splashRadius: 30,
@@ -164,7 +165,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                               children: [
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
+                                  activeColor: ColorManager.secondaryColor2,
                                   value: context
                                       .watch<VisitPlaceBloc>()
                                       .isScience==1?true:false,
@@ -180,7 +181,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                               children: [
                                 Checkbox(
                                   focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
+                                  activeColor: ColorManager.secondaryColor2,
                                   value: context
                                       .watch<VisitPlaceBloc>()
                                       .isScience==2?true:false,
@@ -196,13 +197,12 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                         );
                       },
                     ),
+                    SizedBox(height: AppSize.s8,),
                     Text(
-                      "اختر العينات :",
+                      "اختر العينات المقدمة:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    SizedBox(
-                      height: 0.9,
-                    ),
+                    SizedBox(height: AppSize.s8,),
                     BlocListener<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
@@ -229,7 +229,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       ),
                     ),
                     SizedBox(
-                      height: 8,
+                      height: 12,
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       builder: (context, state) {
@@ -242,9 +242,13 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                             state is EditAmountBrandState) {
                           return selectBrand.isNotEmpty
                               ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(0),
                                   child: Table(
-                                    border: TableBorder.all(),
+                                    border: TableBorder.all(
+                                      width: 1,
+                                        color: ColorManager.grey1,
+                                        borderRadius: BorderRadius.all(Radius.circular(15))
+                                    ),
                                     columnWidths: {
                                       0: FlexColumnWidth(1),
                                       1: FlexColumnWidth(1),
@@ -255,37 +259,42 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                       TableRow(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('العينات',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('نوع العينة',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('الكمية',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('حذف العينة',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
+
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
@@ -306,7 +315,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                           children: [
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.only(top: 8),
+                                                  const EdgeInsets.all( 8),
                                               child: Text(
                                                 brand.title,
                                                 textAlign: TextAlign.center,
@@ -314,13 +323,14 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                             ),
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.only(top: 8),
+                                              const EdgeInsets.all( 8),
                                               child: Text(brand.phTitle,
                                                   textAlign: TextAlign.center),
                                             ),
                                             IntrinsicHeight(
                                               child: TextField(
                                                 controller: amount,
+
                                                 onChanged: (value) {
                                                   if (value.isEmpty) {
                                                     BlocProvider.of<
@@ -410,41 +420,28 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                     ),
                     BlocListener<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
-                        if (state is InsertVisitDoctorLoadingState) {
-                          loading(context);
-                        }
                         if (state is InsertVisitDoctorErrorState) {
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
                         if (state is InsertVisitDoctorState) {
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(DoctorByPlace(widget.doctorModel.placeId, 0));
                           success(context);
-                          SnackBarMessage().showSuccessSnackBar(
-                              message: "succsec",
-                              context: context,
-                              btnOkOnPress: "d");
-                          Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.places,
-                                (route) => false,
-                          );
-                        }
-                        if (state is AllVisitBrandDoctorLoadingState) {
-                          loading(context);
+                          SnackBarMessage().showAlertSScaffoldMessenger(context: context, message: "تم حفظ التغيرات");
+                          Navigator.pop(context);
                         }
                         if (state is AllVisitBrandDoctorErrorState) {
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
                         if (state is AllVisitBrandDoctorState) {
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(DoctorByPlace(widget.doctorModel.placeId, 0));
                           success(context);
-                          SnackBarMessage().showSuccessSnackBar(
-                              message: "succsec",
-                              context: context,
-                              btnOkOnPress: "d");
-                          Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.places,
-                                (route) => false,
-                          );
+                          SnackBarMessage().showAlertSScaffoldMessenger(context: context, message: "تم حفظ التغيرات");
+
+                          Navigator.pop(context);
                         }
                       },
                       child: ElevatedButton(

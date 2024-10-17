@@ -72,7 +72,6 @@ class AsyncLoginPage extends StatelessWidget {
                    }
                    if(state is EditStatusDState){
                      success(context);
-                     print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
                      Phoenix.rebirth(context);
                    }
                   },

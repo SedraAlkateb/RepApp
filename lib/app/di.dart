@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:domina_app/app/app_preferences.dart';
 import 'package:domina_app/data/data_source/remote_data_source.dart';
@@ -75,7 +76,6 @@ import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt instance = GetIt.instance;
@@ -89,7 +89,7 @@ Future<void> initAppModule() async {
       .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
   //network info instance
   instance.registerLazySingleton<NetworkInfo>(
-      () => NetworkInfoImpl(InternetConnection()));
+      () => NetworkInfoImpl(Connectivity()));
   instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
   Dio dio = await instance<DioFactory>().getDio();
   DatabaseHelper databaseHelper = DatabaseHelper();
@@ -341,7 +341,7 @@ Future<void> initPharmacyModule() async {
   }
 }
 Future<void> initBrandPlanModule() async {
-  if (!GetIt.I.isRegistered<AllBrandPlanSqlUsecase>()) {
+  if (!GetIt.I.isRegistered<UpdateBrandPlanSqlUsecase>()) {
     instance.registerFactory<AllBrandPlanSqlUsecase>(
             () => AllBrandPlanSqlUsecase(instance()));
     instance.registerFactory<UpdateBrandPlanSqlUsecase>(

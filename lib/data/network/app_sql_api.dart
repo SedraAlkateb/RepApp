@@ -519,7 +519,7 @@ class AppSqlApi extends AppSqlApiAbs {
       '''
     SELECT * FROM visit_doctor 
     WHERE doctorId = ? 
-    AND data >= date(?, '-3 days') 
+    AND data >= date(?, '-5 days') 
     AND data < ?
     ''',
       [
@@ -591,7 +591,7 @@ class AppSqlApi extends AppSqlApiAbs {
           '''
         SELECT * FROM visit_doctor 
         WHERE doctorId = ? 
-        AND data >= date(?, '-3 days') 
+        AND data >= date(?, '-5 days') 
         AND data < ?
         ''',
           [
@@ -671,8 +671,8 @@ class AppSqlApi extends AppSqlApiAbs {
       AND data < ?
       ''', [
           hospitalSpId,
-          visitHospitalModel.data,  // تاريخ الزيارة الجديدة
-          visitHospitalModel.data   // تاريخ الزيارة الجديدة (كنهاية للفترة)
+          visitHospitalModel.data,
+          visitHospitalModel.data
         ]);
 
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة

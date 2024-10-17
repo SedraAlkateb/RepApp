@@ -37,9 +37,14 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             emit(AllBrandPlanErrorState(failure: failure));
             return false;
           }, (data) async {
-            planBrand = data;
-            isSum();
-            emit(AllBrandPlanState(data));
+                if(data.isEmpty){
+                  emit(AllBrandPlanEmptyState());
+                }else{
+                  planBrand = data;
+                  isSum();
+                  emit(AllBrandPlanState(data));
+                }
+
           });
         }
       }

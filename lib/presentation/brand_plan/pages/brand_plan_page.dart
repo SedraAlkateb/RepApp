@@ -15,11 +15,6 @@ class BrandPlanPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: ColorManager.secondaryColor7,
             bottom: TabBar(
-              // onTap: (value) {
-              //   if(value==1){
-              //     BlocProvider.of<BrandPlanBloc>(context).isSum();
-              //   }
-              // },
                 labelPadding: EdgeInsets.all(0.9),
                 tabs: [
                   Tab(

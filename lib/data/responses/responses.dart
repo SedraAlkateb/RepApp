@@ -105,13 +105,13 @@ class TokenResponse {
   String? otherPlanId;
   @JsonKey(name: "activePlanId")
   String? activePlanId;
-  @JsonKey(name: "otherstatus")
-  String? otherstatus;
+  @JsonKey(name: "otherStatus")
+  String? otherStatus;
   @JsonKey(name: "name")
   String? name;
   @JsonKey(name: "percentage")
   int? percentage;
-  TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.name,this.percentage);
+  TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.otherStatus,this.name,this.percentage);
   // from json
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>
       _$TokenResponseFromJson(json);

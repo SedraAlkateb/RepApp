@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 class ErrorHandler implements Exception{
 late Failure failure;
 ErrorHandler.handle(dynamic error){
+  print(error);
   if(error is DioError){
 
 print("error.message??""");

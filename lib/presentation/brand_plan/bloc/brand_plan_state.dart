@@ -16,6 +16,11 @@ final class AllBrandPlanState extends BrandPlanState {
   @override
   List<Object?> get props =>[planBrands];
 }
+final class AllBrandPlanEmptyState extends BrandPlanState {
+  AllBrandPlanEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
 final class AllBrandPlanErrorState extends BrandPlanState {
 
   final Failure failure;

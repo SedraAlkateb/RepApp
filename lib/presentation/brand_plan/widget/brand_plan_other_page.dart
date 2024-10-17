@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,8 @@ class BrandPlanOtherPage extends StatelessWidget {
     print(UserInfo.percentage);
     return Scaffold(
       backgroundColor: ColorManager.white,
-      drawer: DrawerPage(),
-       body: Container(
+      //     drawer: DrawerPage(),
+      body: Container(
         child: Stack(
           children: [
             SingleChildScrollView(
@@ -29,14 +30,21 @@ class BrandPlanOtherPage extends StatelessWidget {
                     }
                     if (state is SumErrorState) {
                       error(context, state.failure.massage, state.failure.code);
-                      BlocProvider.of<BrandPlanBloc>(context).add(UpdateEvent());
+                      BlocProvider.of<BrandPlanBloc>(context)
+                          .add(UpdateEvent());
                     }
                   },
                   builder: (context, state) {
                     List<PlanBrandSqlModel> planBrandModel =
                         context.watch<BrandPlanBloc>().planBrand;
-                    if(state is SumState){
-                      planBrandModel=state.planBrands;
+                    if (state is SumState) {
+                      planBrandModel = state.planBrands;
+                    }
+                    if (state is AllBrandPlanEmptyState) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 200),
+                        child: emptyFullScreen(context),
+                      );
                     }
                     return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
@@ -49,9 +57,10 @@ class BrandPlanOtherPage extends StatelessWidget {
                             BoxShadow(color: ColorManager.secondaryColor),
                           ],
                           color: ColorManager.white,
-                          border: Border.all(color: ColorManager.secondaryColor),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(AppSize.s8)),
+                          border:
+                              Border.all(color: ColorManager.secondaryColor7),
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(AppSize.s8)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,70 +72,124 @@ class BrandPlanOtherPage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.add_card),
-                                  Text(
-                                    "العينة : ${planBrandModel[index].brandTitle} ( ${planBrandModel[index].brandType == 1 ? " رئيسي " : " ثانوي "} )",
-                                    style:
-                                        Theme.of(context).textTheme.headlineMedium,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Icon(
+                                      Icons.add_card,
+                                      color: ColorManager.secondaryColor4,
+                                    ),
                                   ),
+                                  SizedBox(
+                                      width:
+                                          8), // مسافة صغيرة بين الأيقونة والنص
+                                  Expanded(
+                                    child: Text(
+                                      "العينة : ${planBrandModel[index].brandTitle}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
+                                      overflow: TextOverflow
+                                          .ellipsis, // لمنع تجاوز النص
+                                    ),
+                                  ),
+                                  Container(
+                                    // margin: EdgeInsets.all(AppPadding.p8),
+                                    padding: EdgeInsets.symmetric(vertical: AppPadding.p8,horizontal: AppPadding.p14),
+                                    decoration: BoxDecoration(
+                                      color: ColorManager.secondaryColor2,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(AppSize.s8)),
+                                      //        color: ColorManager.card,
+                                    ),
+                                    child: Text("${planBrandModel[index].brandType == 1 ? " رئيسي " : " ثانوي "}"),)
                                 ],
                               ),
                             ),
-                            Divider(),
+                            Divider(color: ColorManager.secondaryColor7),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.merge_type_rounded),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Icon(
+                                      Icons.merge_type_rounded,
+                                      color: ColorManager.secondaryColor4,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8), // مسافة صغيرة
                                   Expanded(
                                     child: Text(
                                       "النوع : ${planBrandModel[index].phTitle}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium,
+                                      overflow: TextOverflow
+                                          .ellipsis, // منع تجاوز النص
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Divider(),
+                            Divider(color: ColorManager.secondaryColor7),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.medical_services_outlined),
-                                  Text(
-                                    'الاختصاص: ${planBrandModel[index].specializationTitle}',
-                                    style:
-                                        Theme.of(context).textTheme.headlineMedium,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Icon(
+                                      Icons.medical_services_outlined,
+                                      color: ColorManager.secondaryColor4,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8), // مسافة صغيرة
+                                  Expanded(
+                                    child: Text(
+                                      'الاختصاص: ${planBrandModel[index].specializationTitle}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
+                                      overflow: TextOverflow
+                                          .ellipsis, // منع تجاوز النص
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            Divider(),
+                            Divider(color: ColorManager.secondaryColor7),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    'العدد ',
-                                    style:
-                                        Theme.of(context).textTheme.headlineMedium,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(
+                                      'العدد ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
+                                    ),
                                   ),
                                   SizedBox(
-                                      width: 10),
+                                      width: 10), // مسافة بين النص وحقل الإدخال
                                   Expanded(
                                     child: TextField(
                                       decoration: InputDecoration(
-                                        hintText:
-                                            planBrandModel[index].amount.toString(),
-                                        enabled:  UserInfo.otherstatus==0? true: state is SumErrorState ?false : false,
+                                        hintText: planBrandModel[index]
+                                            .amount
+                                            .toString(),
+                                        enabled: UserInfo.otherstatus == 0
+                                            ? true
+                                            : state is SumErrorState
+                                                ? false
+                                                : false,
                                         border: OutlineInputBorder(),
                                         contentPadding: EdgeInsets.symmetric(
                                           vertical: 8,
@@ -134,10 +197,13 @@ class BrandPlanOtherPage extends StatelessWidget {
                                         ),
                                       ),
                                       onChanged: (value) {
-                                        if(value.isNotEmpty&&value!=""){
+                                        if (value.isNotEmpty && value != "") {
                                           print(value);
                                           print("value");
-                                          BlocProvider.of<BrandPlanBloc>(context).add( ChangeFieldEvent(int.parse(value),index));
+                                          BlocProvider.of<BrandPlanBloc>(
+                                                  context)
+                                              .add(ChangeFieldEvent(
+                                                  int.parse(value), index));
                                         }
                                       },
                                       keyboardType: TextInputType.number,
@@ -155,31 +221,42 @@ class BrandPlanOtherPage extends StatelessWidget {
                 ),
               ),
             ),
-            BlocListener<BrandPlanBloc, BrandPlanState>(
-  listener: (context, state) {
-   if(state is UpdateAmountErrorState){
-     error(context, state.failure.massage, state.failure.code);
-   }
-   if(state is UpdateAmountState){
-     success(context);
-   }
-   if(state is UpdateAmountLoadingState){
-     loading(context);
-   }
-  },
-  child: Positioned(
-                bottom: 20,
-                left: 10,
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(ColorManager.secondaryColor6), // لتغيير لون الخلفية
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      shape: MaterialStateProperty.all<CircleBorder>(CircleBorder(),),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.all(20),),), onPressed: (){
-                      BlocProvider.of<BrandPlanBloc>(context).add(UpdateAmountSucEvent());
-                }, child: Text("حفظ"))),
-),
+            context.watch<BrandPlanBloc>().planBrand.isNotEmpty
+                ? BlocListener<BrandPlanBloc, BrandPlanState>(
+                    listener: (context, state) {
+                      if (state is UpdateAmountErrorState) {
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      }
+                      if (state is UpdateAmountState) {
+                        SnackBarMessage().showAlertSScaffoldMessenger(
+                            context: context, message: "تم حفظ التغيرات");
+                      }
+                    },
+                    child: Positioned(
+                        bottom: 20,
+                        left: 10,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  ColorManager
+                                      .secondaryColor6), // لتغيير لون الخلفية
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              shape: MaterialStateProperty.all<CircleBorder>(
+                                CircleBorder(),
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(20),
+                              ),
+                            ),
+                            onPressed: () {
+                              BlocProvider.of<BrandPlanBloc>(context)
+                                  .add(UpdateAmountSucEvent());
+                            },
+                            child: Text("حفظ"))),
+                  )
+                : SizedBox(),
           ],
         ),
       ),
