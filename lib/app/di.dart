@@ -210,23 +210,24 @@ Future<void> initVisitsModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorSqlUsecase>()) {
     //  instance.registerFactory<AllVisitPharmacySqlUsecase>(() =>AllVisitPharmacySqlUsecase(instance()));
     instance.registerFactory<AllVisitDoctorSqlUsecase>(
-        () => AllVisitDoctorSqlUsecase(instance()));
-    // instance.registerFactory<AllBrandsPharmacyVisitsSqlUsecase>(() =>AllBrandsPharmacyVisitsSqlUsecase(instance()));
+            () => AllVisitDoctorSqlUsecase(instance()));
     instance.registerFactory<AllBrandsDoctorVisitsSqlUsecase>(
-        () => AllBrandsDoctorVisitsSqlUsecase(instance()));
+            () => AllBrandsDoctorVisitsSqlUsecase(instance()));
     instance.registerFactory<AllBrandsHospitalVisitsSqlUsecase>(
-        () => AllBrandsHospitalVisitsSqlUsecase(instance()));
+            () => AllBrandsHospitalVisitsSqlUsecase(instance()));
     instance.registerFactory<AllVisitHospitalSqlUsecase>(
-        () => AllVisitHospitalSqlUsecase(instance()));
+            () => AllVisitHospitalSqlUsecase(instance()));
+    instance.registerFactory<VisitBloc>(
+            () => VisitBloc(instance(), instance(), instance(), instance()
+          //   ,instance(),instance()
+          //  ,instance(),instance(),instance()
+        ));
+  }
+    // instance.registerFactory<AllBrandsPharmacyVisitsSqlUsecase>(() =>AllBrandsPharmacyVisitsSqlUsecase(instance()));
     //  instance.registerFactory<UpdateDoctorUsecase>(() =>UpdateDoctorUsecase(instance()));
     //  instance.registerFactory<UpdateHospitalUsecase>(() =>UpdateHospitalUsecase(instance()));
     //  instance.registerFactory<UpdatePharmacyUsecase>(() =>UpdatePharmacyUsecase(instance()));
-    instance.registerFactory<VisitBloc>(
-        () => VisitBloc(instance(), instance(), instance(), instance()
-            //   ,instance(),instance()
-            //  ,instance(),instance(),instance()
-            ));
-  }
+
 }
 
 Future<void> initSpecModule() async {
