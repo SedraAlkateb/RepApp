@@ -184,7 +184,7 @@ extension LoginResponseMapper on LoginResponse? {
         int.parse(this?.data?.repId ?? "0") ,
         int.parse(this?.data?.otherPlanId ?? "0") ,
         int.parse(this?.data?.activePlanId ?? "0") ,
-        int.parse(this?.data?.otherstatus ?? "0") ,
+        int.parse(this?.data?.otherStatus ?? "0") ,
         this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1
@@ -294,6 +294,7 @@ extension HospitalSpResponseMapper on HospitalSpResponse? {
       int.parse(this?.totalDocs ?? "0") ,
       this?.rate ?? Constants.empty,
       int.parse(this?.visit ?? "0") ,
+      0
     );
 
   }
@@ -309,6 +310,7 @@ extension VisitDoctorModelMapper on VisitDoctorModel? {
       (this?.doctorId ?? Constants.zero).toString() ,
       UserInfo.activePlanId.toString() ,
       UserInfo.repId.toString() ,
+      0
     );
 
   }

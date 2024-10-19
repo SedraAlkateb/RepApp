@@ -18,14 +18,13 @@ class HospitalDetails extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-  mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: 30,
             ),
-            
-                      Card(
+            Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
@@ -35,34 +34,27 @@ class HospitalDetails extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                 
                               Text(
                                 hospital.title!,
                                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
+                                      color: Colors.black,),
                               ),
-                              SizedBox(height: 10),
-            
-              
-                          
+                              SizedBox(height: 10)
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-            
+            SizedBox(height: 20),
             Stack(
               children: [
-              
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Image.asset(
                       ImageAssets. hospital,
                       fit: BoxFit.cover,
                       
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withOpacity(0.07),
                       colorBlendMode: BlendMode.modulate,
                     ),
                 ),
@@ -81,12 +73,17 @@ class HospitalDetails extends StatelessWidget {
                         children: [
                           buildDetailRow(
                               context, Icons.location_on, 'العنوان', hospital.address!),
-                          buildDetailRow(context, Icons.place, 'المكان',
+                          buildHtmlDetailRow(context, Icons.place, 'المكان',
                               hospital.placeTitle!),
                           buildDetailRow(context, Icons.visibility, 'عدد الزيارات',
                               '${hospital.visit}'),
                           buildDetailRow(context, Icons.star, 'التصنيف',
                               '${hospital.rate}'),
+                          buildDetailRow(
+                              context, Icons.location_on, 'عدد الاطباء', hospital.totalDocs.toString()),
+                          buildDetailRow(
+                              context, Icons.location_on, 'الاختصاص', hospital.titleSp.toString()),
+
                           if (hospital.note != null && hospital.note!.isNotEmpty)
                             buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
                                 hospital.note ?? ''),

@@ -716,4 +716,27 @@ class RepositroySqlImp extends RepositorySql {
     }
   }
 
+  @override
+  Future<Either<Failure, Null>> updateAmounts(List<PlanBrandSqlModel> planBrands) async {
+    try {
+      final response=  await _databaseHelper.updateAmounts(planBrands);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> updateSpecifiedFlagsToOne() async {
+    try {
+      final response=  await _databaseHelper.updateSpecifiedFlagsToOne();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

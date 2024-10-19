@@ -12,7 +12,7 @@ class BrandPlanActivePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.white,
-      drawer: DrawerPage(),
+    //  drawer: DrawerPage(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -25,7 +25,7 @@ class BrandPlanActivePage extends StatelessWidget {
             builder: (context, state) {
               List<PlanBrandSqlModel> planBrandModel =
                   context.watch<BrandPlanBloc>().planBrandActive;
-              return ListView.builder(
+              return  ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) => Container(
@@ -36,89 +36,107 @@ class BrandPlanActivePage extends StatelessWidget {
                       BoxShadow(color: ColorManager.secondaryColor3),
                     ],
                     color: ColorManager.white,
-                    border: Border.all(color: ColorManager.secondaryColor),
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(AppSize.s8)),
+                    border: Border.all(color: ColorManager.secondaryColor7),
+                    borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 8,),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.add_card),
-                            Text(
-                              "العينة : ${planBrandModel[index].brandTitle} ( ${planBrandModel[index].brandType == 1 ? " رئيسي " : " ثانوي "} )",
-                              style:
-                                  Theme.of(context).textTheme.headlineMedium,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Icon(Icons.add_card,color: ColorManager.secondaryColor4,),
                             ),
+                            Expanded(
+                              child: Text(
+                                "العينة : ${planBrandModel[index].brandTitle}",
+                                style: Theme.of(context).textTheme.headlineMedium,
+                              ),
+                            ),
+                                     Container(
+                                      // margin: EdgeInsets.all(AppPadding.p8),
+                                       padding: EdgeInsets.symmetric(vertical: AppPadding.p8,horizontal: AppPadding.p14),
+                                       decoration: BoxDecoration(
+                                         color: ColorManager.secondaryColor2,
+                                         borderRadius: const BorderRadius.all(
+                       Radius.circular(AppSize.s8)),
+                                         //        color: ColorManager.card,
+                                       ),
+                                       child: Text("${planBrandModel[index].brandType == 1 ? " رئيسي " : " ثانوي "}"),)
                           ],
                         ),
                       ),
-                      Divider(),
+                      Divider(color:ColorManager.secondaryColor7),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.merge_type_rounded),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Icon(Icons.merge_type_rounded,color: ColorManager.secondaryColor4,),
+                            ),
                             Expanded(
                               child: Text(
                                 "النوع : ${planBrandModel[index].phTitle}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium,
+                                style: Theme.of(context).textTheme.headlineMedium,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Divider(),
+                      Divider(color:ColorManager.secondaryColor7),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.medical_services_outlined),
-                            Text(
-                              'الاختصاص: ${planBrandModel[index].specializationTitle}',
-                              style:
-                                  Theme.of(context).textTheme.headlineMedium,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Icon(Icons.medical_services_outlined,color: ColorManager.secondaryColor4,),
+                            ),
+                            Expanded(
+                              child: Text(
+                                'الاختصاص: ${planBrandModel[index].specializationTitle}',
+                                style: Theme.of(context).textTheme.headlineMedium,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      Divider(),
+                      Divider(color:ColorManager.secondaryColor7),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              'العدد ',
-                              style:
-                                  Theme.of(context).textTheme.headlineMedium,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Text(
+                                'العدد ',
+                                style: Theme.of(context).textTheme.headlineMedium,
+                              ),
                             ),
-                            SizedBox(
-                                width: 10), // مسافة بين النص وحقل الإدخال
+                            SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 decoration: InputDecoration(
-                                  hintText:
-                                      planBrandModel[index].amount.toString(),
+                                  hintText: planBrandModel[index].amount.toString(),
                                   enabled: false,
                                   border: OutlineInputBorder(),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 8,
                                     horizontal: 10,
-                                  ), // تحسين المساحة الداخلية للحقل
+                                  ),
                                 ),
                                 keyboardType: TextInputType.number,
                               ),

@@ -1,16 +1,15 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_text_field.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 class PersonalOrder extends StatelessWidget {
   const PersonalOrder({super.key, required this.noteeController});
   final TextEditingController noteeController;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,13 +19,13 @@ class PersonalOrder extends StatelessWidget {
           "طلبات شخصية:",
           style: Theme.of(context).textTheme.labelLarge,
         ),
+        SizedBox(height: AppSize.s8,),
         CustomDropDown(
           hintText: "نوع الطلب",
           items: type,
           prefixIcon: null,
           onChanged: (value) {
             noteeController.text = "";
-
             BlocProvider.of<VisitPlaceBloc>(context)
                 .add(TypeAdditionEvent(value));
           },
@@ -34,11 +33,10 @@ class PersonalOrder extends StatelessWidget {
             // if (value == null ) {
             //   return "اختر نوع الطلب";
             // }
-            return null;
-          },
+            return null;},
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
+          padding: const EdgeInsets.only(top:AppPadding.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
               return current is BoxState || current is DropDownState;
@@ -57,15 +55,82 @@ class PersonalOrder extends StatelessWidget {
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        // if (value!.isEmpty) {
-                        //   return "الحقل مطلوب";
-                        // }
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
                         return null;
                       },
                       controller: noteeController,
                       obscureText: false,
                       minLines: 3,
                       inputFormatters: [],
+                    ),
+                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience ==
+                                      0
+                                      ? true
+                                      : false,
+                                  splashRadius: 30,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(0));
+                                  },
+                                ),
+                                Text('مكتب علمي'),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience ==
+                                      1
+                                      ? true
+                                      : false,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(1));
+                                  },
+                                ),
+                                Text('مع الخطة'),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience ==
+                                      2
+                                      ? true
+                                      : false,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(2));
+                                  },
+                                ),
+                                Text('مع الموزع'),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 );
@@ -75,7 +140,7 @@ class PersonalOrder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "اختر عينات : ",
+                      "اختر عينات: ",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     CustomDropDownSearch(
@@ -88,6 +153,9 @@ class PersonalOrder extends StatelessWidget {
                                 "${noteeController.text} , ${brand.title} ${brand.phTitle}"));
                       },
                       validator: (value) {
+                         if (value == null ) {
+                           return"اختر العينات";
+                         }
                         return null;
                       },
                       errorText: 'لايوجد نتيجة',
@@ -108,11 +176,16 @@ class PersonalOrder extends StatelessWidget {
                           child: BoxTextField(
                             function: (value) {
                               BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  SelectBrandAddEvent("${noteeController.text}"));},
+                                  SelectBrandAddEvent(
+                                      "${noteeController.text}"));
+                            },
                             keyboardType: TextInputType.text,
                             prefixIcon: null,
                             maxLines: 4,
                             validator: (value) {
+                              if (value == null ) {
+                                return"اختر العينات";
+                              }
                               return null;
                             },
                             controller: noteeController,
@@ -120,6 +193,73 @@ class PersonalOrder extends StatelessWidget {
                             minLines: 3,
                             inputFormatters: [],
                           ),
+                        );
+                      },
+                    ),
+                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience ==
+                                      0
+                                      ? true
+                                      : false,
+                                  splashRadius: 30,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(0));
+                                  },
+                                ),
+                                Text('مكتب علمي'),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience ==
+                                      1
+                                      ? true
+                                      : false,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(1));
+                                  },
+                                ),
+                                Text('مع الخطة'),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Checkbox(
+                                  focusColor: ColorManager.secondaryColor,
+                                  activeColor: ColorManager.secondaryColor2,
+                                  value: context
+                                      .read<VisitPlaceBloc>()
+                                      .isScience ==
+                                      2
+                                      ? true
+                                      : false,
+                                  onChanged: (value) {
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(IsScienceEvent(2));
+                                  },
+                                ),
+                                Text('مع الموزع'),
+                              ],
+                            ),
+                          ],
                         );
                       },
                     ),

@@ -49,26 +49,27 @@ class VisitBrandPharmacyModel {
   int visitId;
   int brandId;
   int amount = 1;
+  int? flag=0;
   VisitBrandPharmacyModel(
-    this.id,
-    this.visitId,
-    this.brandId,
-    this.amount,
-  );
+      this.id, this.visitId, this.brandId, this.amount, this.flag);
   Map<String, dynamic> toJson() {
     return {
       'visitId': visitId,
       'brandId': brandId,
-      'amount': amount == 0 ? 1 : amount
+      'amount': amount == 0 ? 1 : amount,
+      'flag': flag
     };
   }
 
   factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
     return VisitBrandPharmacyModel(
-      map['id'],
-      map['visitId'],
-      map['brandId'],
-      int.parse(map['amount']),
+        map['id'],
+        map['visitId'],
+        map['brandId'],
+        int.parse(
+          map['amount'],
+        ),
+        map['flag']
     );
   }
 }
@@ -191,9 +192,10 @@ class VisitDoctorRequest {
   String doctorId;
   String repPlanId;
   String representativeId;
-
+int flag;
   VisitDoctorRequest(this.id, this.visitDate, this.note, this.issue,
-      this.special, this.doctorId, this.repPlanId, this.representativeId);
+      this.special, this.doctorId, this.repPlanId,
+      this.representativeId,this.flag);
 
   Map<String, dynamic> toJson() {
     return {
@@ -204,7 +206,8 @@ class VisitDoctorRequest {
       'visitDate': visitDate,
       'note': note,
       'issue': issue,
-      'special': special
+      'special': special,
+      'flag':flag
     };
   }
 
@@ -217,7 +220,7 @@ class VisitDoctorRequest {
       map['special'],
       map['DoctorId'],
       map['repPlanId'],
-      map['representativeId'],
+      map['representativeId'], map['flag']
     );
   }
 }
@@ -274,7 +277,7 @@ class VisitHospitalRequest {
 }
 
 class VisitHospitalRequestBody {
-  List<VisitHospitalModel> list1;
+  List<VisitHospitalModel> list1;///
   List<VisitBrandPharmacyModel> list2;
   List<HospitalSpModel> list3;
   VisitHospitalRequestBody(this.list1, this.list2, this.list3);
@@ -316,8 +319,9 @@ class VisitDoctorModel {
   int doctorId;
   String? repPlanId;
   String? representativeId;
+  int? flag = 0;
   VisitDoctorModel(this.id, this.data, this.kaswn, this.science, this.additaion,
-      this.doctorId,
+      this.doctorId, this.flag,
       {this.repPlanId, this.representativeId});
   Map<String, dynamic> toMap() {
     return {
@@ -325,7 +329,8 @@ class VisitDoctorModel {
       'kaswn': kaswn,
       'science': science,
       'additaion': additaion,
-      'doctorId': doctorId
+      'doctorId': doctorId,
+      'flag': flag
     };
   }
 
@@ -338,29 +343,36 @@ class VisitDoctorModel {
       'visitDate': data,
       'note': kaswn,
       'issue': science,
-      'special': additaion
+      'special': additaion,
+      'flag': flag
     };
   }
 
   factory VisitDoctorModel.fromMap(Map<String, dynamic> map) {
     return VisitDoctorModel(map['id'], map['data'], map['kaswn'],
-        map['science'], map['additaion'], map['doctorId']);
+        map['science'], map['additaion'], map['doctorId'], map['flag']);
   }
   factory VisitDoctorModel.fromMap2(Map<String, dynamic> map) {
-    return VisitDoctorModel(map['id'], map['data'], map['kaswn'],
-        map['science'], map['additaion'], map['doctorId'],
+    return VisitDoctorModel(
+        map['id'],
+        map['data'],
+        map['kaswn'],
+        map['science'],
+        map['additaion'],
+        map['doctorId'],
         repPlanId: UserInfo.activePlanId.toString(),
-        representativeId: UserInfo.repId.toString());
+        representativeId: UserInfo.repId.toString(),
+        map['flag']);
   }
   factory VisitDoctorModel.fromMap1(Map<String, dynamic> map) {
     return VisitDoctorModel(
-      map['visit_doctor_id'],
-      map['visit_doctor_data'],
-      map['visit_doctor_kaswn'],
-      map['visit_doctor_science'],
-      map['visit_doctor_additaion'],
-      map['visit_doctor_doctorId'],
-    );
+        map['visit_doctor_id'],
+        map['visit_doctor_data'],
+        map['visit_doctor_kaswn'],
+        map['visit_doctor_science'],
+        map['visit_doctor_additaion'],
+        map['visit_doctor_doctorId'],
+        map['flag']);
   }
 }
 
@@ -371,15 +383,17 @@ class VisitHospitalModel {
   String? science;
   String additaion;
   int hospitalSpId;
+  int? flag = 0;
   VisitHospitalModel(this.id, this.data, this.kaswn, this.science,
-      this.additaion, this.hospitalSpId);
+      this.additaion, this.hospitalSpId, this.flag);
   Map<String, dynamic> toMap() {
     return {
       'data': data,
       'kaswn': kaswn,
       'science': science,
       'additaion': additaion,
-      'hospitalSpId': hospitalSpId
+      'hospitalSpId': hospitalSpId,
+      'flag': flag
     };
   }
 
@@ -392,23 +406,24 @@ class VisitHospitalModel {
       'visitDate': data,
       'note': kaswn,
       'issue': science,
-      'special': additaion
+      'special': additaion,
+      'flag': flag
     };
   }
 
   factory VisitHospitalModel.fromMap(Map<String, dynamic> map) {
     return VisitHospitalModel(map['id'], map['data'], map['kaswn'],
-        map['science'], map['additaion'], map['hospitalSpId']);
+        map['science'], map['additaion'], map['hospitalSpId'], map['flag']);
   }
   factory VisitHospitalModel.fromMap1(Map<String, dynamic> map) {
     return VisitHospitalModel(
-      map['visit_hospital_id'],
-      map['visit_hospital_data'],
-      map['visit_hospital_kaswn'],
-      map['visit_hospital_science'],
-      map['visit_hospital_additaion'],
-      map['visit_hospital_hospitalSpId'],
-    );
+        map['visit_hospital_id'],
+        map['visit_hospital_data'],
+        map['visit_hospital_kaswn'],
+        map['visit_hospital_science'],
+        map['visit_hospital_additaion'],
+        map['visit_hospital_hospitalSpId'],
+        map['flag']);
   }
 }
 
@@ -610,8 +625,10 @@ class HospitalSpModel {
   int totalDocs;
   String? rate;
   int visit;
+  int flag;
   HospitalSpModel(this.id, this.hospitalId, this.spId, this.totalDocs,
-      this.rate, this.visit);
+      this.rate
+      , this.visit,this.flag);
 
   Map<String, dynamic> toMap() {
     return {
@@ -621,6 +638,7 @@ class HospitalSpModel {
       'totalDocs': totalDocs,
       "rate": rate,
       "visit": visit,
+      'flag':flag
     };
   }
 
@@ -632,6 +650,7 @@ class HospitalSpModel {
       map['totalDocs'],
       map["rate"],
       map["visit"],
+        map['flag']
     );
   }
   factory HospitalSpModel.fromMap1(Map<String, dynamic> map) {
@@ -642,6 +661,7 @@ class HospitalSpModel {
       map['totalDocs'],
       map["rate"],
       map["visit"],
+        map['flag']
     );
   }
 }
@@ -663,7 +683,7 @@ class HospitalModel {
       'placeId': placeId,
       'address': address,
       "placeTitle": placeTitle,
-      "note":note,
+      "note": note,
     };
   }
 
@@ -711,22 +731,22 @@ class CityModel {
 class LoginModel {
   String token;
   int repId;
-  int otherPlanId;
+  int? otherPlanId = -1;
   int activePlanId;
-  int otherstatus;
+  int? otherStatus = -1;
   int percentage;
   String name;
   int isLogin;
 
-  LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,this.otherstatus,
-      this.name, this.percentage, this.isLogin);
+  LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,
+      this.otherStatus, this.name, this.percentage, this.isLogin);
   Map<String, dynamic> toMap() {
     return {
       'token': token,
       'repId': repId,
-      'otherPlanId': otherPlanId,
+      'otherPlanId': otherPlanId == null ? -5 : otherStatus,
       'activePlanId': activePlanId,
-      'otherstatus': otherstatus,
+      'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
       'isLogin': 1
@@ -734,8 +754,15 @@ class LoginModel {
   }
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
-    return LoginModel(map['token'], map['repId'], map['otherPlanId'],
-        map['activePlanId'], map['otherstatus'], map['name'], map['percentage'], map['isLogin']);
+    return LoginModel(
+        map['token'],
+        map['repId'],
+        map['otherPlanId'],
+        map['activePlanId'],
+        map['otherStatus'],
+        map['name'],
+        map['percentage'],
+        map['isLogin']);
   }
 }
 
@@ -864,16 +891,17 @@ class CheckActiveModel {
 //       specialization.title as titleSp
 
 class HospitalSpAllModel {
-  int ?hospitalId;
+  int? hospitalId;
   String? title;
   String? address;
-  String ?placeTitle;
+  String? placeTitle;
   String? note;
   String? rate;
   int totalDocs;
   int visit;
+  String? titleSp;
   HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
-      this.note, this.rate, this.totalDocs, this.visit);
+      this.note, this.rate, this.totalDocs, this.visit, this.titleSp);
   Map<String, dynamic> toMap() {
     return {
       'hospitalId': hospitalId,
@@ -884,6 +912,7 @@ class HospitalSpAllModel {
       'rate': rate,
       'totalDocs': totalDocs,
       'visit': visit,
+      'titleSp': titleSp
     };
   }
 
@@ -896,6 +925,7 @@ class HospitalSpAllModel {
         map['note'],
         map['rate'],
         map['totalDocs'],
-        map['visit']);
+        map['visit'],
+        map['titleSp']);
   }
 }

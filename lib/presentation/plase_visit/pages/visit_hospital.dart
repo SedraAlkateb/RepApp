@@ -1,7 +1,6 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
@@ -15,12 +14,12 @@ import '../../../domain/models/models.dart';
 class VisitHospital extends StatefulWidget {
   VisitHospital({super.key, required this.hospitalModel});
   final HospitalModel hospitalModel;
-
   @override
   State<VisitHospital> createState() => _VisitHospitalState();
 }
 
-class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveClientMixin{
+class _VisitHospitalState extends State<VisitHospital>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
@@ -54,7 +53,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       BorderRadius.vertical(bottom: Radius.circular(50)),
                 ),
                 child: Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                  padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +78,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        "العنوان: ${widget.hospitalModel.address }",
+                        "العنوان: ${widget.hospitalModel.address}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
@@ -92,7 +91,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "اختر الاختصاص :",
+                      "اختر الاختصاص:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(
@@ -136,14 +135,14 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "اجمالي الزيارات : ${state.visits}",
+                                  "اجمالي الزيارات: ${state.visits}",
                                   style:
-                                  Theme.of(context).textTheme.headlineLarge,
+                                      Theme.of(context).textTheme.headlineLarge,
                                 ),
                                 Text(
-                                  "عدد الاطباء : ${state.total}",
+                                  "عدد الاطباء: ${state.total}",
                                   style:
-                                  Theme.of(context).textTheme.headlineLarge,
+                                      Theme.of(context).textTheme.headlineLarge,
                                 ),
                               ],
                             ),
@@ -155,7 +154,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                     ),
                     PersonalOrder(noteeController: _noteeController),
                     Text(
-                      " ملاحظات للمكتب العلمي :",
+                      " ملاحظات للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
@@ -174,7 +173,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       inputFormatters: [],
                     ),
                     Text(
-                      "ملاحظات لمستودع قاسيون  :",
+                      "ملاحظات لمستودع قاسيون:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
@@ -189,67 +188,8 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                       minLines: 3,
                       inputFormatters: [],
                     ),
-
-                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
-                                  value:
-                                      context.read<VisitPlaceBloc>().isScience==0?true:false,
-                                  splashRadius: 30,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(0));
-                                  },
-                                ),
-                                Text('مكتب علمي'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
-                                  value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience==1?true:false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(1));
-                                  },
-                                ),
-                                Text('مع الخطة'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor4,
-                                  value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience==2?true:false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(2));
-                                  },
-                                ),
-                                Text('مع الخطة'),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-
                     Text(
-                      "اختر العينات :",
+                      "اختر العينات المقدمة:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(
@@ -271,7 +211,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                               SelectBrandEvent(brand, widget.hospitalModel.id));
                         },
                         validator: (value) {
-                          if (value == null ) {
+                          if (value == null) {
                             return "اختر نوع الطلب";
                           }
                           return null;
@@ -296,7 +236,11 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Table(
-                                    border: TableBorder.all(),
+                                    border: TableBorder.all(
+                                        width: 1,
+                                        color: ColorManager.grey1,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
                                     columnWidths: {
                                       0: FlexColumnWidth(1),
                                       1: FlexColumnWidth(1),
@@ -307,36 +251,40 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                       TableRow(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('العينات',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('نوع العينة',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('الكمية',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(15),
                                             child: Center(
                                               child: Text('حذف العينة',
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold)),
@@ -357,16 +305,14 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                         return TableRow(
                                           children: [
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 8),
+                                              padding: const EdgeInsets.all(8),
                                               child: Text(
                                                 brand.title,
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 8),
+                                              padding: const EdgeInsets.all(8),
                                               child: Text(brand.phTitle,
                                                   textAlign: TextAlign.center),
                                             ),
@@ -382,11 +328,7 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                                                             EditAmountBrandEvent(
                                                                 index, 1));
                                                   } else {
-                                                    BlocProvider.of<
-                                                                VisitPlaceBloc>(
-                                                            context)
-                                                        .add(
-                                                            EditAmountBrandEvent(
+                                                    BlocProvider.of<VisitPlaceBloc>(context).add(EditAmountBrandEvent(
                                                                 index,
                                                                 int.parse(
                                                                     value)));
@@ -468,60 +410,52 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
                         }
                         if (state is InsertVisitHospitalState) {
                           success(context);
-                          SnackBarMessage().showSuccessSnackBar(
-                              message: "succsec",
-                              context: context,
-                              btnOkOnPress: "d");
-                          Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.places,
-                                (route) => false,
-                          );
+                          SnackBarMessage().showAlertSScaffoldMessenger(
+                              context: context, message: "تم حفظ التغيرات");
+                          BlocProvider.of<VisitPlaceBloc>(context).add(
+                              HospitalByPlace(widget.hospitalModel.placeId, 1));
+                          Navigator.pop(context);
                         }
                         if (state is AllVisitBrandHospitalErrorState) {
                           error(context, state.failure.massage,
-                              state.failure.code);}
+                              state.failure.code);
+                        }
                         if (state is AllVisitBrandHospitalState) {
                           success(context);
-                          SnackBarMessage().showSuccessSnackBar(
-                              message: "succsec",
-                              context: context,
-                              btnOkOnPress: "d");
-                          Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.places,
-                                (route) => false,
-                          );
+                          SnackBarMessage().showAlertSScaffoldMessenger(
+                              context: context, message: "تم حفظ التغيرات");
+                          BlocProvider.of<VisitPlaceBloc>(context).add(
+                              HospitalByPlace(widget.hospitalModel.placeId, 1));
+                          Navigator.pop(context);
                         }
                       },
                       child: ElevatedButton(
                           onPressed: () {
-
-                            if (_formKey.currentState!.validate())  {
-                                DateTime now = DateTime.now();
-                                // String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
-                                VisitHospitalModel visitHospitalModel =
-                                    VisitHospitalModel(
-                                        0,
-                                        now.toIso8601String(),
-                                        _issueController.text,
-                                        _noteController.text,
-                                        _noteeController.text,
-                                        0);
-                                if (context
-                                    .read<VisitPlaceBloc>()
-                                    .selectBrand
-                                    .isNotEmpty) {
-                                  BlocProvider.of<VisitPlaceBloc>(context).add(
-                                      InsertBrandVisitHospitalEvent(
-                                          visitHospitalModel,
-                                          widget.hospitalModel.id));
-                                } else {
-                                  BlocProvider.of<VisitPlaceBloc>(context).add(
-                                      InsertVisitHospitalEvent(
-                                          visitHospitalModel,
-                                          widget.hospitalModel.id));
-                                }
+                            if (_formKey.currentState!.validate()) {
+                              DateTime now = DateTime.now();
+                              // String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
+                              VisitHospitalModel visitHospitalModel =
+                                  VisitHospitalModel(
+                                      0,
+                                      now.toIso8601String(),
+                                      _issueController.text,
+                                      _noteController.text,
+                                      _noteeController.text,
+                                      0,0);
+                              if (context
+                                  .read<VisitPlaceBloc>()
+                                  .selectBrand
+                                  .isNotEmpty) {
+                                BlocProvider.of<VisitPlaceBloc>(context).add(
+                                    InsertBrandVisitHospitalEvent(
+                                        visitHospitalModel,
+                                        widget.hospitalModel.id));
+                              } else {
+                                BlocProvider.of<VisitPlaceBloc>(context).add(
+                                    InsertVisitHospitalEvent(visitHospitalModel,
+                                        widget.hospitalModel.id));
                               }
-
+                            }
                           },
                           child: Text("تمت الزيارة")),
                     )
@@ -536,6 +470,5 @@ class _VisitHospitalState extends State<VisitHospital>  with AutomaticKeepAliveC
   }
 
   @override
-
   bool get wantKeepAlive => true;
 }

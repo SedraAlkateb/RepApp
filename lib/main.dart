@@ -31,6 +31,6 @@ void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();
  await sss();
-  runApp(Phoenix(child: const MyApp()));
+  runApp(Phoenix( child: const MyApp()));
 }
 

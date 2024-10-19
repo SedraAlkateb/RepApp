@@ -2,48 +2,58 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerPage extends StatelessWidget {
   DrawerPage({super.key});
   @override
   Widget build(BuildContext context) {
+
     return Drawer(
+      shape: Border.all(color: ColorManager.white),
       child: ListView(
         children: [
-          DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
                   ColorManager.secondaryColor6,
                   ColorManager.secondaryColor7,
                   ColorManager.secondaryColor7,
-                ]),
-                color: ColorManager.white,
-              ), //BoxDecoration
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppPadding.p18, vertical: AppPadding.p5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircleAvatar(
-                      maxRadius: 35,
-                      backgroundColor: ColorManager.secondaryColor5,
-                      child: Text(
-                        "L",
-                        style: TextStyle(fontSize: 30.0, color: Colors.blue),
-                      ), //Text
+                ],
+              ),
+              color: ColorManager.white,
+            ),
+            height: 150,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    maxRadius: 35,
+                    backgroundColor: ColorManager.secondaryColor5,
+                    child: Text(
+                      "L",
+                      style: TextStyle(fontSize: 30.0, color: Colors.blue),
                     ),
-                    Text(
-                      " Lina Mahayni ",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-              )),
+                  ),
+                  SizedBox(width: 10), // إضافة مسافة بين الصورة والنص
+                  Text(
+                    "Lina Mahayni",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.location_city_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('إِجراء زيارة'),
@@ -65,10 +75,13 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.local_pharmacy_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('الزيارات'),
             onTap: () {
+              BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -86,6 +99,8 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.medical_services_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('الاختصاصات'),
@@ -107,6 +122,8 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading:
                 Icon(Icons.group_outlined, color: ColorManager.secondaryColor4),
             title: const Text('الأطباء '),
@@ -126,6 +143,8 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.local_hospital_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('المشافي '),
@@ -145,6 +164,8 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.local_pharmacy_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('الصيدليات'),
@@ -166,6 +187,8 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.medication_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('الأصناف'),
@@ -179,12 +202,15 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
-                Padding(
+          Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
-        ),    ListTile(
+        ),
+          ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
              leading:  Icon(Icons.list_alt_outlined ,color: ColorManager.secondaryColor4),
-            title:  Text('لائحة العينات',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title:  Text('الخطط',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
@@ -200,6 +226,8 @@ class DrawerPage extends StatelessWidget {
           child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
         ),  
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading:
                 Icon(Icons.sync_outlined, color: ColorManager.secondaryColor4),
             title: Text(
@@ -211,11 +239,7 @@ class DrawerPage extends StatelessWidget {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
                   context,
-                  UserInfo.isLogging == 2
-                      ? Routes.asyncIn
-                      : UserInfo.isLogging == 3
-                          ? Routes.delete
-                          : Routes.syncData,
+                    Routes.asyncIn
                 );
               });
             },
@@ -228,6 +252,8 @@ class DrawerPage extends StatelessWidget {
             ),
           ),
           ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
             leading: Icon(Icons.logout_outlined,
                 color: ColorManager.secondaryColor4),
             title: Text(

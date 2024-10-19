@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:domina_app/app/app_preferences.dart';
 import 'package:domina_app/data/data_source/remote_data_source.dart';
@@ -58,6 +59,8 @@ import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
@@ -74,7 +77,6 @@ import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt instance = GetIt.instance;
@@ -88,11 +90,12 @@ Future<void> initAppModule() async {
       .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
   //network info instance
   instance.registerLazySingleton<NetworkInfo>(
-      () => NetworkInfoImpl(InternetConnection()));
+      () => NetworkInfoImpl(Connectivity()));
   instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
   Dio dio = await instance<DioFactory>().getDio();
   DatabaseHelper databaseHelper = DatabaseHelper();
   instance.registerLazySingleton<AppSqlApi>(() => AppSqlApi(databaseHelper));
+  await instance<AppSqlApi>().initializeDatabase();
   instance
       .registerLazySingleton<RepositorySql>(() => RepositroySqlImp(instance()));
   instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
@@ -171,10 +174,8 @@ Future<void> initPlaceVisitModule() async {
         () => HospitalsByPlaceUsecase(instance()));
     instance.registerFactory<AllBrandsFlagSqlUsecase>(
         () => AllBrandsFlagSqlUsecase(instance()));
-    //  instance.registerFactory<InsertVisitPharmacySqlUsecase>(() =>InsertVisitPharmacySqlUsecase(instance()));
     instance.registerFactory<InsertVisitDoctorSqlUsecase>(
         () => InsertVisitDoctorSqlUsecase(instance()));
-    //   instance.registerFactory<InsertVisitBrandPharmacySqlUsecase>(() =>InsertVisitBrandPharmacySqlUsecase(instance()));
     instance.registerFactory<InsertVisitBrandDoctorSqlUsecase>(
         () => InsertVisitBrandDoctorSqlUsecase(instance()));
     instance.registerFactory<InsertVisitBrandHospitalSqlUsecase>(
@@ -183,7 +184,6 @@ Future<void> initPlaceVisitModule() async {
         () => SpHospitalSqlUsecase(instance()));
     instance.registerFactory<InsertVisitHospitalSqlUsecase>(
         () => InsertVisitHospitalSqlUsecase(instance()));
-    // instance.registerFactory<AllBrandsSqlUsecase>(() =>AllBrandsSqlUsecase(instance()));
 
     instance.registerFactory<VisitPlaceBloc>(() => VisitPlaceBloc(
         instance(),
@@ -267,6 +267,7 @@ Future<void> initAsyncInModule() async {
     instance.registerFactory<GetPlanBrandSqlUsecase>(
         () => GetPlanBrandSqlUsecase(instance()));
     instance.registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
+    instance.registerFactory<UpdateFlagSqlUsecase >(() => UpdateFlagSqlUsecase(instance()));
     instance.registerFactory<DeleteAllSqlUsecase>(
         () => DeleteAllSqlUsecase(instance()));
  if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
@@ -304,7 +305,8 @@ Future<void> initAsyncInModule() async {
         instance(),
         instance(),
         instance(),
-        instance()));
+        instance(),
+    instance()));
   }
 }
 
@@ -342,9 +344,11 @@ Future<void> initPharmacyModule() async {
   }
 }
 Future<void> initBrandPlanModule() async {
-  if (!GetIt.I.isRegistered<AllBrandPlanSqlUsecase>()) {
+  if (!GetIt.I.isRegistered<UpdateBrandPlanSqlUsecase>()) {
     instance.registerFactory<AllBrandPlanSqlUsecase>(
             () => AllBrandPlanSqlUsecase(instance()));
-    instance.registerFactory<BrandPlanBloc>(() => BrandPlanBloc(instance()));
+    instance.registerFactory<UpdateBrandPlanSqlUsecase>(
+            () => UpdateBrandPlanSqlUsecase(instance()));
+    instance.registerFactory<BrandPlanBloc>(() => BrandPlanBloc(instance(),instance()));
   }
 }

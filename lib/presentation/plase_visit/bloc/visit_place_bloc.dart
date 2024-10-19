@@ -116,12 +116,12 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
               updatedList[existingIndex].id,
               updatedList[existingIndex].visitId,
               updatedList[existingIndex].brandId,
-              updatedList[existingIndex].amount + 1);
+              updatedList[existingIndex].amount + 1,0);
           visitBrandPharmacys = updatedList;
           emit(EditAmountBrandState(visitBrandPharmacys));
         } else {
           final VisitBrandPharmacyModel v = VisitBrandPharmacyModel(
-              0, event.pharmacyId, event.brandModel.id, 1);
+              0, event.pharmacyId, event.brandModel.id, 1,0);
           visitBrandPharmacys.add(v);
           List<BrandModel> updatedList = List.from(selectBrand);
           updatedList.add(event.brandModel);
