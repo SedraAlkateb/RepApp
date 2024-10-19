@@ -66,7 +66,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     AsyncLoginPage());
       case Routes.visits:
         initVisitsModule();
-
         return MaterialPageRoute(builder: (_) =>     VisitsPage());
       case Routes.asyncIn:
         initAsyncInModule();

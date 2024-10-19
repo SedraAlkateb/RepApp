@@ -81,13 +81,13 @@ class DrawerPage extends StatelessWidget {
                 color: ColorManager.secondaryColor4),
             title: const Text('الزيارات'),
             onTap: () {
-              BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.visits,
                   (route) => true,
                 );
+                BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
               });
             },
           ),

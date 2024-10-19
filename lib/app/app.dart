@@ -94,8 +94,14 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
+        BlocProvider<VisitBloc>(
+          create: (context) {
+            final bloc = instance<VisitBloc>();
+            bloc.add(VisitDoctorEvent());
+            return bloc;
+          },
+        ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
-        BlocProvider(create: (_) => instance<VisitBloc>()..add(VisitDoctorEvent()))
       ],
       child: MaterialApp(
         locale: Locale('ar'),
