@@ -2,8 +2,9 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerPage extends StatelessWidget {
   DrawerPage({super.key});
@@ -80,6 +81,7 @@ class DrawerPage extends StatelessWidget {
                 color: ColorManager.secondaryColor4),
             title: const Text('الزيارات'),
             onTap: () {
+              BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -237,11 +239,7 @@ class DrawerPage extends StatelessWidget {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
                   context,
-                  UserInfo.isLogging == 2
-                      ? Routes.asyncIn
-                      : UserInfo.isLogging == 3
-                          ? Routes.delete
-                          : Routes.syncData,
+                    Routes.asyncIn
                 );
               });
             },

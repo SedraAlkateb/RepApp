@@ -68,7 +68,6 @@ class AsyncLoginPage extends StatelessWidget {
                    if(state is EditStatusDErrorState){
                      error(context, state.failure.massage, state.failure.code);
                      BlocProvider.of<AsyncBloc>(context).add(OkEvent());
-
                    }
                    if(state is EditStatusDState){
                      success(context);

@@ -7,7 +7,6 @@ import 'package:domina_app/presentation/uniti/box_text_field.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 class PersonalOrder extends StatelessWidget {
   const PersonalOrder({super.key, required this.noteeController});
   final TextEditingController noteeController;
@@ -141,7 +140,7 @@ class PersonalOrder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "اختر عينات : ",
+                      "اختر عينات: ",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     CustomDropDownSearch(
@@ -271,7 +270,6 @@ class PersonalOrder extends StatelessWidget {
             },
           ),
         ),
-
       ],
     );
   }

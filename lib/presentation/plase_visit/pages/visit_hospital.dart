@@ -1,7 +1,6 @@
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
@@ -442,7 +441,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                       _issueController.text,
                                       _noteController.text,
                                       _noteeController.text,
-                                      0);
+                                      0,0);
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand

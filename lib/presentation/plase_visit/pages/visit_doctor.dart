@@ -137,66 +137,6 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       minLines: 3,
                       inputFormatters: [],
                     ),
-
-
-                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                      builder: (context, state) {
-                        print("object");
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value:
-                                      context.watch<VisitPlaceBloc>().isScience==0?true:false,
-                                  splashRadius: 30,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(0));
-                                  },
-                                ),
-                                Text('مكتب علمي'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                      .watch<VisitPlaceBloc>()
-                                      .isScience==1?true:false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(1));
-                                  },
-                                ),
-                                Text('مع الخطة'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                      .watch<VisitPlaceBloc>()
-                                      .isScience==2?true:false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(2));
-                                  },
-                                ),
-                                Text('مع الموزع'),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
                     SizedBox(height: AppSize.s8,),
                     Text(
                       "اختر العينات المقدمة:",
@@ -457,7 +397,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                       _noteController.text,
                                       _issueController.text,
                                       _noteeController.text,
-                                      widget.doctorModel.id);
+                                      widget.doctorModel.id,0);
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand

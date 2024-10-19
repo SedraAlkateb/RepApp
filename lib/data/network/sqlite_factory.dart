@@ -110,6 +110,7 @@ class DatabaseHelper {
     totalDocs INTEGER NOT NULL,
     rate TEXT NOT NULL,
     visit INTEGER NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (hospitalId) REFERENCES hospital(id),
     FOREIGN KEY (spId) REFERENCES specialization(id)
     );
@@ -148,6 +149,7 @@ class DatabaseHelper {
     science TEXT ,
     additaion TEXT , 
     doctorId INTEGER NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
  '''
@@ -160,6 +162,7 @@ class DatabaseHelper {
     science TEXT ,
     additaion TEXT , 
     hospitalSpId INTEGER NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
 );''');
     await db.execute('''
@@ -168,6 +171,7 @@ class DatabaseHelper {
     data TEXT NOT NULL,
     note TEXT NOT NULL,
     pharmacyId INTEGER NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (pharmacyId) REFERENCES pharmacy(id))
  ''');
     await db.execute('''
@@ -176,6 +180,7 @@ class DatabaseHelper {
     visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     amount TEXT NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (visitId) REFERENCES visit_pharmacy(id),
     FOREIGN KEY (brandId) REFERENCES brand(id))
  ''');
@@ -185,6 +190,7 @@ class DatabaseHelper {
     visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     amount TEXT NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (visitId) REFERENCES visit_doctor(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
   )
@@ -195,6 +201,7 @@ class DatabaseHelper {
     visitId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     amount TEXT NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (visitId) REFERENCES visit_hospital(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
     )

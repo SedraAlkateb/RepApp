@@ -15,6 +15,7 @@ import 'package:domina_app/domain/usecase/insert_as/get_pharmacy_visits_sql_usec
 import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_active_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
+import 'package:domina_app/domain/usecase/update_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
@@ -29,6 +30,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   VisitPharmacyUsecase visitPharmacyUsecase;
   VisitHospitalUsecase visitHospitalUsecase;
   PlanBrandUsecase planBrandUsecase;
+  UpdateFlagSqlUsecase updateFlagSqlUsecase;
   GetBrandsDoctorVisitsSqlUsecase getBrandsDoctorVisitsSqlUsecase;
   GetBrandsHospitalVisitsSqlUsecase getBrandsHospitalVisitsSqlUsecase;
   GetBrandsPharmacyVisitsSqlUsecase getBrandsPharmacyVisitsSqlUsecase;
@@ -65,7 +67,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.getPlanBrandSqlUsecase,
       this.deleteSqlUsecase,
       this.deleteAllSqlUsecase,
-      this.planBrandUsecase)
+      this.planBrandUsecase,
+      this.updateFlagSqlUsecase)
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
       if (event is DeleteBaseEvent) {

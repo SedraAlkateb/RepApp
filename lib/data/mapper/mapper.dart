@@ -294,6 +294,7 @@ extension HospitalSpResponseMapper on HospitalSpResponse? {
       int.parse(this?.totalDocs ?? "0") ,
       this?.rate ?? Constants.empty,
       int.parse(this?.visit ?? "0") ,
+      0
     );
 
   }
@@ -309,6 +310,7 @@ extension VisitDoctorModelMapper on VisitDoctorModel? {
       (this?.doctorId ?? Constants.zero).toString() ,
       UserInfo.activePlanId.toString() ,
       UserInfo.repId.toString() ,
+      0
     );
 
   }

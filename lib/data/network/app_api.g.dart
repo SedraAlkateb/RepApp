@@ -483,7 +483,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/hosVisit.php',
+          '/docVisit.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -517,7 +517,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/docVisit.php',
+          '/hosVisit.php',
           queryParameters: queryParameters,
           data: _data,
         )

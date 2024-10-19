@@ -1,0 +1,20 @@
+
+import 'package:dartz/dartz.dart';
+import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/repostitory/repository_sql.dart';
+import 'package:equatable/equatable.dart';
+class UpdateFlagSqlUsecase extends Equatable {
+  final RepositorySql _repositorySql;
+  UpdateFlagSqlUsecase(this._repositorySql);
+  Future<Either<Failure, Null>> execute() async{
+    return await _repositorySql.updateSpecifiedFlagsToOne();
+  }
+  @override
+  List<Object?> get props => [_repositorySql];
+
+}
+
+
+
+

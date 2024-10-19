@@ -9,7 +9,7 @@ class VisitsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
+
     return DefaultTabController(
         length: 2,
      //   3,

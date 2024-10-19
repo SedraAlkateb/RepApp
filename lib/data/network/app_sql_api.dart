@@ -1,8 +1,18 @@
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
-abstract class AppSqlApiAbs{
-  Future<String> asyncData(List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecModel> specs, List<DoctorModel> doctors, List<HospitalModel> hospitals, List<HospitalSpModel> hospitalSps, List<BrandSpModel> brandSps, List<PlanBrandModel> planBrands);
+
+abstract class AppSqlApiAbs {
+  Future<String> asyncData(
+      List<BrandModel> brands,
+      List<PharmacyModel> pharmacies,
+      List<PlaceModel> places,
+      List<SpecModel> specs,
+      List<DoctorModel> doctors,
+      List<HospitalModel> hospitals,
+      List<HospitalSpModel> hospitalSps,
+      List<BrandSpModel> brandSps,
+      List<PlanBrandModel> planBrands);
   insertBrands(List<BrandModel> brands);
   insertHospitalSp(List<HospitalSpModel> hospitalSps);
   insertPharmacy(List<PharmacyModel> pharmacies);
@@ -12,10 +22,19 @@ abstract class AppSqlApiAbs{
   inserthospital(List<HospitalModel> hospitals);
   insertdoctor(List<DoctorModel> doctors);
   //////////////////////////////////Visit/////////////insert
-  Future<void> insertVisitHospital(VisitHospitalModel visitHospitalModel, int hos, int spec);
-  Future<void> insertVisitBrandHospital(VisitHospitalModel visitHospitalModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels, int hos, int spec);
-  Future<void> insertVisitBrandDoctor(VisitDoctorModel visitDoctorModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels,);
-  Future<void> insertVisitBrandPharmacy(VisitPharmacyModel visitPharmacyModel, List<VisitBrandPharmacyModel> visitBrandPharmacyModels);
+  Future<void> insertVisitHospital(
+      VisitHospitalModel visitHospitalModel, int hos, int spec);
+  Future<void> insertVisitBrandHospital(
+      VisitHospitalModel visitHospitalModel,
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
+      int hos,
+      int spec);
+  Future<void> insertVisitBrandDoctor(
+    VisitDoctorModel visitDoctorModel,
+    List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
+  );
+  Future<void> insertVisitBrandPharmacy(VisitPharmacyModel visitPharmacyModel,
+      List<VisitBrandPharmacyModel> visitBrandPharmacyModels);
   insertVisitDoctor(VisitDoctorModel visitDoctorModel);
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel);
   ///////////////////////////get
@@ -35,24 +54,34 @@ abstract class AppSqlApiAbs{
   ///////////////////////get visit////////////////////////////
   Future<List<VisitDoctorAndDoctor>> getVisitDoctor();
   Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy();
-   Future<List<VisitHospitalAndHospital>> getVisitHospital();
-
+  Future<List<VisitHospitalAndHospital>> getVisitHospital();
 
   Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(int visitId);
   Future<List<PharmacyBrandModel>> getBrandsDoctorByVisitId(int visitId);
   Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId);
   getPharmaciesVisit();
   ///////////update
-  Future<void> updateVisitHospitalFields({required int id, String? kaswn, String? science,});
-  Future<void> updateVisitDoctorFields({required int id, String? kaswn, String? science,});
-  Future<void> updateVisitPharmacy({required int visitId, String? newNote,});
+  Future<void> updateVisitHospitalFields({
+    required int id,
+    String? kaswn,
+    String? science,
+  });
+  Future<void> updateVisitDoctorFields({
+    required int id,
+    String? kaswn,
+    String? science,
+  });
+  Future<void> updateVisitPharmacy({
+    required int visitId,
+    String? newNote,
+  });
   Future<void> editIsLogin(int repId, int isLogin);
   ///////////////////////////////////clear
   Future<void> clearDatabase();
   Future<void> clearDatabaseAll();
   Future<List<SpecHospitalSp>> specializationByHospitalId(int hospitalId);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////get insert
- Future<List<VisitDoctorModel>> visitDoctorAs();
+  Future<List<VisitDoctorModel>> visitDoctorAs();
   Future<List<VisitBrandPharmacyModel>> visitBrandDoctorAs();
   Future<List<VisitHospitalModel>> visitHospitalAs();
   Future<List<HospitalSpModel>> visitHospitalSpAs();
@@ -60,14 +89,15 @@ abstract class AppSqlApiAbs{
   Future<List<VisitPharmacyModel>> visitPharmacyAs();
   Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs();
   Future<List<PlanBrandModel>> planBrandsAs();
-
 }
+
 class AppSqlApi extends AppSqlApiAbs {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
   Future<void> initializeDatabase() async {
     await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
   }
+
   insertBrands(List<BrandModel> brands) async {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
@@ -76,17 +106,18 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     await batch.commit(noResult: true);
   }
+
   Future<String> asyncData(
-      List<BrandModel> brands,
-      List<PharmacyModel> pharmacies,
-      List<PlaceModel> places,
-      List<SpecModel> specs,
-      List<DoctorModel> doctors,
-      List<HospitalModel> hospitals,
-      List<HospitalSpModel> hospitalSps,
-      List<BrandSpModel> brandSps,
-      List<PlanBrandModel> planBrands,
-      ) async {
+    List<BrandModel> brands,
+    List<PharmacyModel> pharmacies,
+    List<PlaceModel> places,
+    List<SpecModel> specs,
+    List<DoctorModel> doctors,
+    List<HospitalModel> hospitals,
+    List<HospitalSpModel> hospitalSps,
+    List<BrandSpModel> brandSps,
+    List<PlanBrandModel> planBrands,
+  ) async {
     try {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
@@ -125,6 +156,7 @@ class AppSqlApi extends AppSqlApiAbs {
       return error.toString();
     }
   }
+
   insertHospitalSp(List<HospitalSpModel> hospitalSps) async {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
@@ -235,9 +267,7 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     await batch.commit(noResult: true);
     await db.execute('PRAGMA foreign_keys = ON;');
-
   }
-
 
   Future<void> clearDatabaseAll() async {
     final db = await databaseHelper.database;
@@ -365,6 +395,7 @@ class AppSqlApi extends AppSqlApiAbs {
       return HospitalModel.fromMap(maps[i]);
     });
   }
+
   Future<List<HospitalModel>> getHospitalBySpec(int spId) async {
     final db = await databaseHelper.database;
     try {
@@ -380,12 +411,13 @@ class AppSqlApi extends AppSqlApiAbs {
           return HospitalModel.fromMap(maps[i]);
         });
       } else {
-        return [];  // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
+        return []; // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
       }
     } catch (e) {
       throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
     }
   }
+
   Future<List<DoctorModel>> getDoctorBySpec(int spId) async {
     final db = await databaseHelper.database;
     try {
@@ -399,12 +431,13 @@ class AppSqlApi extends AppSqlApiAbs {
           return DoctorModel.fromMap(maps[i]);
         });
       } else {
-        return [];  // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
+        return []; // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
       }
     } catch (e) {
       throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
     }
   }
+
   Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
@@ -510,7 +543,6 @@ class AppSqlApi extends AppSqlApiAbs {
     });
   }
 
-
   insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     Database? mydb = await databaseHelper.database;
 
@@ -522,11 +554,7 @@ class AppSqlApi extends AppSqlApiAbs {
     AND data >= date(?, '-5 days') 
     AND data < ?
     ''',
-      [
-        visitDoctorModel.doctorId,
-        visitDoctorModel.data,
-        visitDoctorModel.data
-      ],
+      [visitDoctorModel.doctorId, visitDoctorModel.data, visitDoctorModel.data],
     );
 
     // إذا كانت القائمة فارغة، أضف الزيارة وقم بتنقيص عدد الزيارات
@@ -550,7 +578,8 @@ class AppSqlApi extends AppSqlApiAbs {
         );
       });
     } else {
-      throw FormatException('لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
+      throw FormatException(
+          'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
     }
   }
 
@@ -578,10 +607,11 @@ class AppSqlApi extends AppSqlApiAbs {
       }
     });
   }
+
   Future<void> insertVisitBrandDoctor(
-      VisitDoctorModel visitDoctorModel,
-      List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
-      ) async {
+    VisitDoctorModel visitDoctorModel,
+    List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
+  ) async {
     final mydb = await databaseHelper.database;
 
     await mydb.transaction((txn) async {
@@ -596,8 +626,8 @@ class AppSqlApi extends AppSqlApiAbs {
         ''',
           [
             visitDoctorModel.doctorId,
-            visitDoctorModel.data,  // تاريخ الزيارة الجديدة
-            visitDoctorModel.data   // تاريخ الزيارة الجديدة (كنهاية للفترة)
+            visitDoctorModel.data, // تاريخ الزيارة الجديدة
+            visitDoctorModel.data // تاريخ الزيارة الجديدة (كنهاية للفترة)
           ],
         );
 
@@ -631,7 +661,8 @@ class AppSqlApi extends AppSqlApiAbs {
           }
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
-          throw FormatException('لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
+          throw FormatException(
+              'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
         }
       } catch (e) {
         print('Error inserting visit and brands: $e');
@@ -639,7 +670,6 @@ class AppSqlApi extends AppSqlApiAbs {
       }
     });
   }
-
 
   Future<void> insertVisitBrandHospital(
       VisitHospitalModel visitHospitalModel,
@@ -657,7 +687,8 @@ class AppSqlApi extends AppSqlApiAbs {
       ''', [hos, spec]);
 
         if (result.isEmpty) {
-          throw Exception('No hospitalSp found for the given hospitalId and spId.');
+          throw Exception(
+              'No hospitalSp found for the given hospitalId and spId.');
         }
 
         int hospitalSpId = result.first['id'];
@@ -669,11 +700,7 @@ class AppSqlApi extends AppSqlApiAbs {
       WHERE hospitalSpId = ? 
       AND data >= date(?, '-2 days') 
       AND data < ?
-      ''', [
-          hospitalSpId,
-          visitHospitalModel.data,
-          visitHospitalModel.data
-        ]);
+      ''', [hospitalSpId, visitHospitalModel.data, visitHospitalModel.data]);
 
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
@@ -702,7 +729,8 @@ class AppSqlApi extends AppSqlApiAbs {
           }
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
-          throw FormatException('لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال الثلاثة أيام الماضية.');
+          throw FormatException(
+              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال الثلاثة أيام الماضية.');
         }
       } catch (e) {
         print('Error inserting visit and brands: $e');
@@ -711,20 +739,17 @@ class AppSqlApi extends AppSqlApiAbs {
     });
   }
 
-
-  Future<void> insertVisitHospital(
-      VisitHospitalModel visitHospitalModel, int hos, int spec) async {
+  Future<void> insertVisitHospital( VisitHospitalModel visitHospitalModel , int hos , int spec ) async {
     Database? mydb = await databaseHelper.database;
     await mydb.transaction((txn) async {
       try {
-        // جلب hospitalSp حسب hospitalId و spId
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
       SELECT id, visit FROM hospitalSp 
       WHERE hospitalId = ? AND spId = ?
       ''', [hos, spec]);
-
         if (result.isEmpty) {
-          throw Exception('No hospitalSp found for the given hospitalId and spId.');
+          throw Exception(
+              'No hospitalSp found for the given hospitalId and spId.');
         }
         int hospitalSpId = result.first['id'];
         int currentVisits = result.first['visit'];
@@ -736,11 +761,7 @@ class AppSqlApi extends AppSqlApiAbs {
       WHERE hospitalSpId = ? 
       AND data >= date(?, '-2 days') 
       AND data < ?
-      ''', [
-          hospitalSpId,
-          visitHospitalModel.data,
-          visitHospitalModel.data
-        ]);
+      ''', [hospitalSpId, visitHospitalModel.data, visitHospitalModel.data]);
 
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
@@ -760,7 +781,8 @@ class AppSqlApi extends AppSqlApiAbs {
           );
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
-          throw FormatException('لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال الثلاثة أيام الماضية.');
+          throw FormatException(
+              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال الثلاثة أيام الماضية.');
         }
       } catch (e) {
         print('Error inserting visit: $e');
@@ -769,8 +791,8 @@ class AppSqlApi extends AppSqlApiAbs {
     });
   }
 
-
-  Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId) async {
+  Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(
+      int visitId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
       SELECT 
@@ -786,6 +808,7 @@ class AppSqlApi extends AppSqlApiAbs {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
+
   Future<List<PharmacyBrandModel>> getBrandsDoctorByVisitId(int visitId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
@@ -802,7 +825,9 @@ class AppSqlApi extends AppSqlApiAbs {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
-  Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(int visitId) async {
+
+  Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(
+      int visitId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
       SELECT 
@@ -818,7 +843,9 @@ class AppSqlApi extends AppSqlApiAbs {
       return PharmacyBrandModel.fromMap(maps[i]);
     });
   }
-  Future<List<SpecHospitalSp>> specializationByHospitalId(int hospitalId) async {
+
+  Future<List<SpecHospitalSp>> specializationByHospitalId(
+      int hospitalId) async {
     Database? mydb = await databaseHelper.database;
 
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
@@ -836,21 +863,27 @@ class AppSqlApi extends AppSqlApiAbs {
       return SpecHospitalSp(specModel, hospitalSpModel);
     });
   }
-  Future<void> updateVisitPharmacy({required int visitId, String? newNote,}) async {
-    Database? mydb =
-        await databaseHelper.database;
+
+  Future<void> updateVisitPharmacy({
+    required int visitId,
+    String? newNote,
+  }) async {
+    Database? mydb = await databaseHelper.database;
     if (newNote != null) {
       await mydb.update(
         'visit_pharmacy',
         {'note': newNote},
         where: 'id = ?',
-        whereArgs: [
-          visitId
-        ],
+        whereArgs: [visitId],
       );
     }
   }
-  Future<void> updateVisitDoctorFields({required int id, String? kaswn, String? science,}) async {
+
+  Future<void> updateVisitDoctorFields({
+    required int id,
+    String? kaswn,
+    String? science,
+  }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
     if (kaswn != null) {
@@ -868,7 +901,12 @@ class AppSqlApi extends AppSqlApiAbs {
       );
     }
   }
-  Future<void> updateVisitHospitalFields({required int id, String? kaswn, String? science,}) async {
+
+  Future<void> updateVisitHospitalFields({
+    required int id,
+    String? kaswn,
+    String? science,
+  }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
     if (kaswn != null) {
@@ -886,7 +924,8 @@ class AppSqlApi extends AppSqlApiAbs {
       );
     }
   }
-  getPharmaciesVisit()async{
+
+  getPharmaciesVisit() async {
     final db = await databaseHelper.database;
     await db.transaction((txn) async {
       final List<Map<String, dynamic>> maps = await txn.query('visit_hospital');
@@ -894,13 +933,10 @@ class AppSqlApi extends AppSqlApiAbs {
         return SpecModel.fromMap(maps[i]);
       });
     });
-
   }
 
-
-
   @override
-  Future<List<PlanBrandModel>> planBrandsAs() async{
+  Future<List<PlanBrandModel>> planBrandsAs() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('planBrand');
     return List.generate(maps.length, (i) {
@@ -909,34 +945,37 @@ class AppSqlApi extends AppSqlApiAbs {
   }
 
   @override
-  Future<List<VisitBrandPharmacyModel>> visitBrandDoctorAs()async{
+  Future<List<VisitBrandPharmacyModel>> visitBrandDoctorAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_brand_doctor');
+    final List<Map<String, dynamic>> maps =
+        await db.query('visit_brand_doctor');
     return List.generate(maps.length, (i) {
       return VisitBrandPharmacyModel.fromJson(maps[i]);
     });
   }
 
   @override
-  Future<List<VisitBrandPharmacyModel>> visitBrandHospitalAs() async{
+  Future<List<VisitBrandPharmacyModel>> visitBrandHospitalAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_brand_hospital');
+    final List<Map<String, dynamic>> maps =
+        await db.query('visit_brand_hospital');
     return List.generate(maps.length, (i) {
       return VisitBrandPharmacyModel.fromJson(maps[i]);
     });
   }
 
   @override
-  Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs()  async{
+  Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_brand_pharmacy');
+    final List<Map<String, dynamic>> maps =
+        await db.query('visit_brand_pharmacy');
     return List.generate(maps.length, (i) {
       return VisitBrandPharmacyModel.fromJson(maps[i]);
     });
   }
 
   @override
-  Future<List<VisitDoctorModel>> visitDoctorAs()async{
+  Future<List<VisitDoctorModel>> visitDoctorAs() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('visit_doctor');
     return List.generate(maps.length, (i) {
@@ -945,7 +984,7 @@ class AppSqlApi extends AppSqlApiAbs {
   }
 
   @override
-  Future<List<VisitHospitalModel>> visitHospitalAs() async{
+  Future<List<VisitHospitalModel>> visitHospitalAs() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('visit_hospital');
     return List.generate(maps.length, (i) {
@@ -954,7 +993,7 @@ class AppSqlApi extends AppSqlApiAbs {
   }
 
   @override
-  Future<List<HospitalSpModel>> visitHospitalSpAs() async{
+  Future<List<HospitalSpModel>> visitHospitalSpAs() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('hospitalSp');
     return List.generate(maps.length, (i) {
@@ -963,13 +1002,14 @@ class AppSqlApi extends AppSqlApiAbs {
   }
 
   @override
-  Future<List<VisitPharmacyModel>> visitPharmacyAs() async{
+  Future<List<VisitPharmacyModel>> visitPharmacyAs() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
     return List.generate(maps.length, (i) {
       return VisitPharmacyModel.fromMap(maps[i]);
     });
   }
+
   Future<List<HospitalSpAllModel>> getAllHospitalSpecialization() async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
@@ -982,6 +1022,7 @@ class AppSqlApi extends AppSqlApiAbs {
       hospitalSp.rate,
       hospitalSp.totalDocs,
       hospitalSp.visit,
+      hospitalSp.flag,
       specialization.title as titleSp 
     FROM hospital
     JOIN hospitalSp ON hospitalSp.hospitalId = hospital.id
@@ -992,7 +1033,6 @@ class AppSqlApi extends AppSqlApiAbs {
       return HospitalSpAllModel.fromMap(maps[i]);
     });
   }
-
 
   Future<List<PlanBrandSqlModel>> planBrandByRepPlanId(int repPlanId) async {
     Database? mydb = await databaseHelper.database;
@@ -1021,9 +1061,11 @@ WHERE
       return PlanBrandSqlModel.fromMap(maps[i]);
     });
   }
-  updateRep(int repId, int otherPlanId, int activePlanId, int otherstatus) async {
+
+  updateRep(
+      int repId, int otherPlanId, int activePlanId, int otherstatus) async {
     Database? mydb = await databaseHelper.database;
-     await mydb.update(
+    await mydb.update(
       'rep',
       {
         'otherPlanId': otherPlanId,
@@ -1034,6 +1076,7 @@ WHERE
       whereArgs: [repId],
     );
   }
+
   updateAmounts(List<PlanBrandSqlModel> planBrands) async {
     Database? mydb = await databaseHelper.database;
 
@@ -1041,7 +1084,7 @@ WHERE
     for (int i = 0; i < planBrands.length; i++) {
       batch.update(
         'planBrand',
-        {'amount': planBrands[i].amount},  // القيمة الجديدة لكل صف
+        {'amount': planBrands[i].amount}, // القيمة الجديدة لكل صف
         where: 'id = ?',
         whereArgs: [planBrands[i].id],
       );
@@ -1049,4 +1092,16 @@ WHERE
     await batch.commit(noResult: true);
   }
 
+  updateSpecifiedFlagsToOne() async {
+    Database? db = await databaseHelper.database;
+    await db.transaction((txn) async {
+      await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
+      await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
+      await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
+      await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
+      await txn.rawUpdate('UPDATE visit_pharmacy SET flag = 1');
+      await txn.rawUpdate('UPDATE visit_brand_pharmacy SET flag = 1');
+      await txn.rawUpdate('UPDATE hospitalSp SET flag = 1');
+    });
+  }
 }
