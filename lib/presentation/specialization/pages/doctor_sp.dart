@@ -53,7 +53,7 @@ class _DoctorSpState extends State<DoctorSp> {
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               TextRach(
-                                  s1: "العنوان: ", s2: state.doctors[index].address),
+                                  s1: "العنوان: ", s2: state.doctors[index].placeTitle),
                             ],
                           ),
                         );

@@ -1,4 +1,4 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
+//import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -8,44 +8,44 @@ class SnackBarMessage {
       {required String message,
         required BuildContext context,
         required var btnOkOnPress}) {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.success,
-      animType: AnimType.bottomSlide,
-      title: message,
-      btnOkText: 'تأكيد',
-      btnOkOnPress: btnOkOnPress,
-    ).show();
+    // AwesomeDialog(
+    //   context: context,
+    //   dialogType: DialogType.success,
+    //   animType: AnimType.bottomSlide,
+    //   title: message,
+    //   btnOkText: 'تأكيد',
+    //   btnOkOnPress: btnOkOnPress,
+    // ).show();
   }
 
   void showErrorSnackBar(
       {required String message,
         required BuildContext context,
         required var btnOkOnPress}) {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.error,
-      animType: AnimType.bottomSlide,
-      title: message,
-      btnCancelText: 'خروج',
-      btnCancelOnPress: btnOkOnPress,
-    ).show();
+    // AwesomeDialog(
+    //   context: context,
+    //   dialogType: DialogType.error,
+    //   animType: AnimType.bottomSlide,
+    //   title: message,
+    //   btnCancelText: 'خروج',
+    //   btnCancelOnPress: btnOkOnPress,
+    // ).show();
   }
-  void showAlertSnackBar(
-      {required String message,
-        required BuildContext context,
-        required var btnOkOnPress}) {
-    AwesomeDialog(
-        context: context,
-        dialogType: DialogType.question,
-        animType: AnimType.bottomSlide,
-        title: message,
-        btnCancelText: 'خروج',
-        btnOkText: 'تأكيد',
-        btnCancelOnPress:() {Navigator.of(context);},
-        btnOkOnPress:btnOkOnPress
-    ).show();
-  }
+  // void showAlertSnackBar(
+  //     {required String message,
+  //       required BuildContext context,
+  //       required var btnOkOnPress}) {
+  //   AwesomeDialog(
+  //       context: context,
+  //       dialogType: DialogType.question,
+  //       animType: AnimType.bottomSlide,
+  //       title: message,
+  //       btnCancelText: 'خروج',
+  //       btnOkText: 'تأكيد',
+  //       btnCancelOnPress:() {Navigator.of(context);},
+  //       btnOkOnPress:btnOkOnPress
+  //   ).show();
+  // }
   void showAlertSScaffoldMessenger(
       {required BuildContext context, required String message}) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

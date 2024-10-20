@@ -101,7 +101,7 @@ class BrandPlanOtherPage extends StatelessWidget {
                                           Radius.circular(AppSize.s8)),
                                       //        color: ColorManager.card,
                                     ),
-                                    child: Text("${planBrandModel[index].brandType == 1 ? " رئيسي " : " ثانوي "}"),)
+                                    child: Text("${planBrandModel[index].brandType == 1 ? " هدف " : " مساعد "}"),)
                                 ],
                               ),
                             ),
