@@ -50,10 +50,10 @@ class _HospitalSpState extends State<HospitalSp> {
                             children: [
                               Text(
                                 state.hospitals[index].title,
-                                style: Theme.of(context).textTheme.labelLarge,
+                                style: Theme.of(context).textTheme.labelLarge,textAlign: TextAlign.center,
                               ),
                               TextRach(
-                                  s1: "العنوان: ", s2: state.hospitals[index].address),
+                                  s1: "العنوان: ", s2: state.hospitals[index].placeTitle),
                             ],
                           ),
                         );

@@ -15,9 +15,7 @@ ThemeData getApplicationTheme() {
     ),
     primaryColor: ColorManager.secondaryColor4,
     brightness: Brightness.light,
-    colorScheme: ColorScheme.light(
-      primary: ColorManager.primary,
-    ),
+  
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: ColorManager.primaryField,
     ),
