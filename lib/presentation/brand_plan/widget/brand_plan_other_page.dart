@@ -1,6 +1,7 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
+import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
@@ -233,28 +234,65 @@ class BrandPlanOtherPage extends StatelessWidget {
                       }
                     },
                     child: Positioned(
-                        bottom: 20,
-                        left: 10,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  ColorManager
-                                      .secondaryColor6), // لتغيير لون الخلفية
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              shape: MaterialStateProperty.all<CircleBorder>(
-                                CircleBorder(),
-                              ),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(20),
-                              ),
-                            ),
-                            onPressed: () {
+                      bottom: 20,
+                      left: 10,
+                      child: Column(
+
+                        children: [
+                          InkWell(
+                            onTap: () {
                               BlocProvider.of<BrandPlanBloc>(context)
                                   .add(UpdateAmountSucEvent());
                             },
-                            child: Text("حفظ"))),
-                  )
+
+                            child: SizedBox(
+                              height: 80,
+                              width: 100,
+
+                              child: Stack(
+                            //    alignment: Alignment.bottomCenter,
+                                children: [
+
+                                  Image.asset(ImageAssets.top,),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 35,
+                                    child: Text(
+                                      "حفظ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 80,
+                            width: 100,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset(ImageAssets.bottom,),
+                                Positioned(
+                                  bottom: 50,
+                                  left: 35,
+                                  child: Text(
+                                    "ارسال",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+
+            )
                 : SizedBox(),
           ],
         ),

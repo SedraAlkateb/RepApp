@@ -211,6 +211,6 @@ class ResponseMassage{
 
 }
 class ApiInternalStatus{
-  static const int SUCCESS =200;
+  static const String SUCCESS ="success";
   static const int FAILURE=0;
 }

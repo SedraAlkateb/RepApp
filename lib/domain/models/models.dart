@@ -14,7 +14,6 @@ class VisitPharmacyModel {
       'pharmacyId': pharmacyId,
     };
   }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -25,7 +24,6 @@ class VisitPharmacyModel {
       'note': note
     };
   }
-
   factory VisitPharmacyModel.fromMap(Map<String, dynamic> map) {
     return VisitPharmacyModel(
       map['id'],
@@ -57,7 +55,7 @@ class VisitBrandPharmacyModel {
       'visitId': visitId,
       'brandId': brandId,
       'amount': amount == 0 ? 1 : amount,
-      'flag': flag
+    //  'flag': flag
     };
   }
 
@@ -207,7 +205,7 @@ int flag;
       'note': note,
       'issue': issue,
       'special': special,
-      'flag':flag
+
     };
   }
 
@@ -277,11 +275,9 @@ class VisitHospitalRequest {
 }
 
 class VisitHospitalRequestBody {
-  List<VisitHospitalModel> list1;///
+  List<VisitHospitalModel> list1;
   List<VisitBrandPharmacyModel> list2;
-  List<HospitalSpModel> list3;
-  VisitHospitalRequestBody(this.list1, this.list2, this.list3);
-
+  VisitHospitalRequestBody(this.list1, this.list2);
   Map<String, dynamic> toJson() {
     return {
       'list1': list1.map((e) => e.toJson()).toList(),
@@ -315,7 +311,7 @@ class VisitDoctorModel {
   String data;
   String? kaswn;
   String? science;
-  String additaion;
+  String? additaion;
   int doctorId;
   String? repPlanId;
   String? representativeId;
@@ -344,7 +340,6 @@ class VisitDoctorModel {
       'note': kaswn,
       'issue': science,
       'special': additaion,
-      'flag': flag
     };
   }
 
@@ -407,7 +402,6 @@ class VisitHospitalModel {
       'note': kaswn,
       'issue': science,
       'special': additaion,
-      'flag': flag
     };
   }
 
@@ -815,10 +809,8 @@ class PlanBrandModel {
       'amount': amount,
     };
   }
-
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
-        map['repPlanId'], map['brandType'], map['amount']);
+    return PlanBrandModel(map['id'], map['spId'], map['brandId'], map['repPlanId'], map['brandType'], map['amount']);
   }
 }
 

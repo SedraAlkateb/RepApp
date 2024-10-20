@@ -48,7 +48,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   List<VisitBrandPharmacyModel> visitBrandHospitals = [];
   List<VisitPharmacyModel> visitPharmacies = [];
   List<VisitHospitalModel> visitHospitals = [];
-  List<HospitalSpModel> visitHospitalSp = [];
   List<VisitDoctorModel> visitDoctors = [];
   bool suc = false;
   AsyncInBloc(
@@ -89,6 +88,14 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           emit(DeleteAllState());
         });
       }
+      if (event is UpdateFlagEvent) {
+        (await updateFlagSqlUsecase.execute((visitHospitals.isNotEmpty||visitBrandHospitals.isNotEmpty),(visitDoctors.isNotEmpty||visitBrandDoctors.isNotEmpty))).fold((failure) {
+          emit(UpdateFlagErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          emit(UpdateFlagState());
+        });
+      }
       if (event is Async1DataEvent) {
         emit(SyncData1LoadingState());
         bool b = await getData();
@@ -117,7 +124,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitBrandHospitals = [];
       visitPharmacies = [];
       visitHospitals = [];
-      visitHospitalSp = [];
       visitDoctors = [];
 
       final brandPharmaciesResult = await getBrandsPharmacyVisitsSqlUsecase.execute();
@@ -128,7 +134,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       }
       visitBrandPharmacies = brandPharmaciesFailureOrSuccess as List<VisitBrandPharmacyModel>;
 
-      ///////////////////////////////////////////////////
+      ///////////////////////////////////////////////////s
 
       final brandDoctorsResult = await getBrandsDoctorVisitsSqlUsecase.execute();
       final brandDoctorsFailureOrSuccess = brandDoctorsResult.fold((failure) => failure, (data) => data);
@@ -167,18 +173,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         return false;
       }
       visitDoctors = doctorsFailureOrSuccess as List<VisitDoctorModel>;
-
       ///////////////////////////////////////////////////
 
-      final hospitalSpResult = await getHospitalSpVisitsSqlUsecase.execute();
-      final hospitalSpFailureOrSuccess = hospitalSpResult.fold((failure) => failure, (data) => data);
-      if (hospitalSpFailureOrSuccess is Failure) {
-        emit(SyncData1ErrorState(failure: hospitalSpFailureOrSuccess));
-        return false;
-      }
-      visitHospitalSp = hospitalSpFailureOrSuccess as List<HospitalSpModel>;
-
-      ///////////////////////////////////////////////////
 
       final hospitalsResult = await getHospitalVisitsSqlUsecase.execute();
       final hospitalsFailureOrSuccess = hospitalsResult.fold((failure) => failure, (data) => data);
@@ -225,9 +221,10 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         }
         print("Visit Doctor data sent successfully.");
       }
-      if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty || visitHospitalSp.isNotEmpty) {
+      if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty ) {
         final visitHospitalResult = await visitHospitalUsecase.execute(
-            VisitHospitalRequestBody(visitHospitals, visitBrandHospitals, visitHospitalSp));
+            VisitHospitalRequestBody(visitHospitals, visitBrandHospitals
+            ));
         final visitHospitalFailureOrSuccess = visitHospitalResult.fold((failure) => failure, (data) => data);
         if (visitHospitalFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(failure: visitHospitalFailureOrSuccess));
