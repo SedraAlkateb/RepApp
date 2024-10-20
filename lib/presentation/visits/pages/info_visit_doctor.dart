@@ -23,7 +23,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   void initState() {
     _noteController.text = widget.doctorModel.visitDoctorModel.science??"";
     _issueController.text = widget.doctorModel.visitDoctorModel.kaswn??"";
-    _noteeController.text = widget.doctorModel.visitDoctorModel.additaion;
+    _noteeController.text = widget.doctorModel.visitDoctorModel.additaion??"";
     //   String dateString = widget.doctorModel.visitDoctorModel.data;
 //    DateTime parsedDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
     //   widget.doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);

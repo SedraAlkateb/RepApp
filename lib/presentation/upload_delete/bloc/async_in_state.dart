@@ -78,3 +78,16 @@ final class EditStatusSErrorState extends AsyncInState {
 
   List<Object?> get props =>[failure];
 }
+
+final class UpdateFlagState extends AsyncInState {
+  UpdateFlagState();
+  @override
+  List<Object?> get props =>[];
+}
+final class UpdateFlagErrorState extends AsyncInState {
+  final Failure failure;
+  UpdateFlagErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}

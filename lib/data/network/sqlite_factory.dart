@@ -124,7 +124,8 @@ class DatabaseHelper {
     brandId INTEGER NOT NULL,
     repPlanId INTEGER NOT NULL,
     brandType TEXT NOT NULL,
-    amount TEXT NOT NULL
+    amount TEXT NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0
     );
    '''
     );

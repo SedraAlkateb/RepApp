@@ -13,6 +13,8 @@ abstract class AppSqlApiAbs {
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
       List<PlanBrandModel> planBrands);
+
+  /////////////////////////////////////////////////////////////////////////////////
   insertBrands(List<BrandModel> brands);
   insertHospitalSp(List<HospitalSpModel> hospitalSps);
   insertPharmacy(List<PharmacyModel> pharmacies);
@@ -37,6 +39,7 @@ abstract class AppSqlApiAbs {
       List<VisitBrandPharmacyModel> visitBrandPharmacyModels);
   insertVisitDoctor(VisitDoctorModel visitDoctorModel);
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel);
+
   ///////////////////////////get
   Future<List<SpecModel>> getSpec();
   Future<List<PlaceModel>> getPlace();
@@ -55,7 +58,7 @@ abstract class AppSqlApiAbs {
   Future<List<VisitDoctorAndDoctor>> getVisitDoctor();
   Future<List<VisitPharmacyAndPharmacy>> getVisitPharmacy();
   Future<List<VisitHospitalAndHospital>> getVisitHospital();
-
+////////////////////////////////////////////////////////
   Future<List<PharmacyBrandModel>> getBrandsHospitalByVisitId(int visitId);
   Future<List<PharmacyBrandModel>> getBrandsDoctorByVisitId(int visitId);
   Future<List<PharmacyBrandModel>> getBrandsPharmacyByVisitId(int visitId);
@@ -739,7 +742,8 @@ class AppSqlApi extends AppSqlApiAbs {
     });
   }
 
-  Future<void> insertVisitHospital( VisitHospitalModel visitHospitalModel , int hos , int spec ) async {
+  Future<void> insertVisitHospital(
+      VisitHospitalModel visitHospitalModel, int hos, int spec) async {
     Database? mydb = await databaseHelper.database;
     await mydb.transaction((txn) async {
       try {
@@ -938,7 +942,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<PlanBrandModel>> planBrandsAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('planBrand');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'planBrand',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0],
+    );
     return List.generate(maps.length, (i) {
       return PlanBrandModel.fromMap(maps[i]);
     });
@@ -947,8 +955,12 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<VisitBrandPharmacyModel>> visitBrandDoctorAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('visit_brand_doctor');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'visit_brand_doctor',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0],
+    );
+
     return List.generate(maps.length, (i) {
       return VisitBrandPharmacyModel.fromJson(maps[i]);
     });
@@ -957,8 +969,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<VisitBrandPharmacyModel>> visitBrandHospitalAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('visit_brand_hospital');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'visit_brand_hospital',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0],
+    );
     return List.generate(maps.length, (i) {
       return VisitBrandPharmacyModel.fromJson(maps[i]);
     });
@@ -967,8 +982,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('visit_brand_pharmacy');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'visit_brand_pharmacy',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0], // Pass the value for flag (0 in this case)
+    );
     return List.generate(maps.length, (i) {
       return VisitBrandPharmacyModel.fromJson(maps[i]);
     });
@@ -977,7 +995,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<VisitDoctorModel>> visitDoctorAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_doctor');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'visit_doctor',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0], // Pass the value for flag (0 in this case)
+    );
     return List.generate(maps.length, (i) {
       return VisitDoctorModel.fromMap(maps[i]);
     });
@@ -986,7 +1008,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<VisitHospitalModel>> visitHospitalAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_hospital');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'visit_hospital',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0], // Pass the value for flag (0 in this case)
+    );
     return List.generate(maps.length, (i) {
       return VisitHospitalModel.fromMap(maps[i]);
     });
@@ -995,7 +1021,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<HospitalSpModel>> visitHospitalSpAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('hospitalSp');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'hospitalSp',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0], // Pass the value for flag (0 in this case)
+    );
     return List.generate(maps.length, (i) {
       return HospitalSpModel.fromMap(maps[i]);
     });
@@ -1004,7 +1034,11 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<List<VisitPharmacyModel>> visitPharmacyAs() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('visit_pharmacy');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'visit_pharmacy',
+      where: 'flag = ?', // Add the WHERE clause
+      whereArgs: [0], // Pass the value for flag (0 in this case)
+    );
     return List.generate(maps.length, (i) {
       return VisitPharmacyModel.fromMap(maps[i]);
     });
@@ -1092,16 +1126,20 @@ WHERE
     await batch.commit(noResult: true);
   }
 
-  updateSpecifiedFlagsToOne() async {
+  updateSpecifiedFlagsToOne(bool hos, bool doc) async {
     Database? db = await databaseHelper.database;
     await db.transaction((txn) async {
-      await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
-      await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
-      await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
-      await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
-      await txn.rawUpdate('UPDATE visit_pharmacy SET flag = 1');
-      await txn.rawUpdate('UPDATE visit_brand_pharmacy SET flag = 1');
-      await txn.rawUpdate('UPDATE hospitalSp SET flag = 1');
+      if (hos) {
+        await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
+        await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
+      }
+      if (doc) {
+        await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
+        await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
+      }
+      //   await txn.rawUpdate('UPDATE hospitalSp SET flag = 1');
+      //  await txn.rawUpdate('UPDATE visit_pharmacy SET flag = 1');
+      //  await txn.rawUpdate('UPDATE visit_brand_pharmacy SET flag = 1');
     });
   }
 }

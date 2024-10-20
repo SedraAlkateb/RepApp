@@ -729,9 +729,9 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> updateSpecifiedFlagsToOne() async {
+  Future<Either<Failure, Null>> updateSpecifiedFlagsToOne(bool hos, bool doc) async {
     try {
-      final response=  await _databaseHelper.updateSpecifiedFlagsToOne();
+      final response=  await _databaseHelper.updateSpecifiedFlagsToOne(hos,doc);
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler

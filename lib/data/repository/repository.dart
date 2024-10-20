@@ -22,7 +22,7 @@ class RepositoryImp implements Repository {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.login(loginRequest);
 
-        if (response.status == "200") {
+        if (response.status == "200"||response.status==ApiInternalStatus.SUCCESS) {
           return Right(response.toDomain());
         } else {
           return Left(Failure(ApiInternalStatus.FAILURE,
@@ -44,7 +44,7 @@ class RepositoryImp implements Repository {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.allPlaces(id);
 
-        if (response.status == null) {
+        if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
           return Right(response.toDomain());
         } else {
           return Left(Failure(ApiInternalStatus.FAILURE,
@@ -64,7 +64,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.allSpecializations(id);
-        if (response.status == null) {
+        if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
           return Right(response.toDomain());
         } else {
           //return either left
@@ -86,7 +86,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.allMedicalRepresentative(id);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -107,7 +107,7 @@ class RepositoryImp implements Repository {
       final response = await _remoteDataSource.allBrand(id);
 
 
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -124,7 +124,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.allCity();
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -141,7 +141,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.allVisitDoctor(id);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -159,7 +159,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.getAllPharmacy(repDet);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -178,7 +178,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.getAllDoctor(repDet);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -196,7 +196,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.getAllHospital(repDet);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         print("hddddddddhh");
         return Right(response.toDomain());
       } else {
@@ -214,7 +214,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, List<HospitalSpModel>>> getAllHospitalSp(int repDet) async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.getAllHospitalSp(repDet);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       }
       else {
@@ -233,7 +233,7 @@ class RepositoryImp implements Repository {
       VisitPharmacyRequestBody list1) async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.visitPharmacy(list1);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response);
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -250,7 +250,7 @@ class RepositoryImp implements Repository {
       VisitDoctorRequestBody list1) async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.visitDoctor(list1);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response);
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -267,7 +267,7 @@ class RepositoryImp implements Repository {
       VisitHospitalRequestBody list1) async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.visitHospital(list1);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response);
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -284,7 +284,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, List<BrandSpModel>>> getBrandsSp(int repDet) async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.getBrandsSp(repDet);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -301,7 +301,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrands(int repPlanIdActive, int repPlanIdOther) async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.getAllPlanBrands(repPlanIdActive, repPlanIdOther);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -318,7 +318,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, Message1Response>> repPlanBrand(RepPlanBrandBody list1)  async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.repPlanBrand(list1);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response);
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -336,7 +336,7 @@ class RepositoryImp implements Repository {
   async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.checkPlanBrand(repPlaneId);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,
@@ -354,7 +354,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, CheckActiveModel>> checkActivePlanBrand(int repDe)async {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.checkActivePlanBrand(repDe);
-      if (response.status == null) {
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {
         return Left(Failure(ApiInternalStatus.FAILURE,

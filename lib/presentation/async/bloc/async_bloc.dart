@@ -94,7 +94,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
        }, (data) async {
          emit(UpdateIsActiveState());
        });
-
      }
     });
   }

@@ -143,8 +143,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       //   });
       // }
       else if (event is InsertVisitDoctorEvent) {
-        event.visitDoctorModel.additaion =
-            addition(event.visitDoctorModel.additaion);
+        event.visitDoctorModel.additaion =not==""?null:
+            addition(event.visitDoctorModel.additaion!);
         (await insertVisitDoctorSqlUsecase.execute(event.visitDoctorModel))
             .fold((failure) {
           print(failure.massage);
@@ -166,8 +166,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       //   });
       // }
       else if (event is InsertBrandVisitDoctorEvent) {
-        event.visitDoctorModel.additaion =
-            addition(event.visitDoctorModel.additaion);
+        event.visitDoctorModel.additaion =not==""?null:
+            addition(event.visitDoctorModel.additaion!);
         emit(AllVisitBrandDoctorLoadingState());
         (await insertVisitBrandDoctorSqlUsecase.execute(
                 visitBrandPharmacys, event.visitDoctorModel))
