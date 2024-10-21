@@ -12,8 +12,10 @@ class DrawerPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Drawer(
-      shape: Border.all(color: ColorManager.white),
+
+      shape: Border.all(color: ColorManager.secondaryColor4),
       child: ListView(
+        padding: EdgeInsets.only(top: 0),
         children: [
           Container(
             decoration: BoxDecoration(
@@ -28,7 +30,7 @@ class DrawerPage extends StatelessWidget {
             ),
             height: 150,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,

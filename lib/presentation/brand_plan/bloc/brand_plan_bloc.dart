@@ -1,11 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
-
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -15,11 +14,13 @@ part 'brand_plan_state.dart';
 class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   AllBrandPlanSqlUsecase allBrandPlanSqlUsecase;
   UpdateBrandPlanSqlUsecase updateBrandPlanSqlUsecase;
+  UpdateOtherStatusUsecase updateOtherStatusUsecase;
   List<PlanBrandSqlModel> planBrand = [];
   List<PlanBrandSqlModel> planBrandActive = [];
   int sum = 0;
   int current = 0;
-  BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase)
+  BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase,
+      this.updateOtherStatusUsecase)
       : super(BrandPlanInitial()) {
     on<BrandPlanEvent>((event, emit) async {
       if (event is AllBrandPlanEvent) {
@@ -37,14 +38,13 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             emit(AllBrandPlanErrorState(failure: failure));
             return false;
           }, (data) async {
-                if(data.isEmpty){
-                  emit(AllBrandPlanEmptyState());
-                }else{
-                  planBrand = data;
-                  isSum();
-                  emit(AllBrandPlanState(data));
-                }
-
+            if (data.isEmpty) {
+              emit(AllBrandPlanEmptyState());
+            } else {
+              planBrand = data;
+              isSum();
+              emit(AllBrandPlanState(data));
+            }
           });
         }
       }
@@ -68,6 +68,16 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
       if (event is UpdateEvent) {
         List<PlanBrandSqlModel> planBrandSum = List.from(planBrand);
         emit(SumState(planBrandSum));
+      }
+      if (event is SendToS) {
+        UserInfo.otherstatus = 1;
+        (await updateOtherStatusUsecase.execute(UserInfo.repId, 1)).fold(
+            (failure) {
+          emit(UpdateAmountErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          emit(UpdateAmountState());
+        });
       }
       if (event is UpdateAmountSucEvent) {
         emit(UpdateAmountLoadingState());

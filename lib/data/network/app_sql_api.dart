@@ -1125,6 +1125,19 @@ WHERE
     }
     await batch.commit(noResult: true);
   }
+  updateOtherStatus(int status,int repId) async {
+    Database? mydb = await databaseHelper.database;
+    var batch = mydb.batch();
+    await mydb.update(
+      'rep',
+      {
+        'otherStatus': status,
+      },
+      where: 'repId = ?',
+      whereArgs: [repId],
+    );
+    await batch.commit(noResult: true);
+  }
 
   updateSpecifiedFlagsToOne(bool hos, bool doc) async {
     Database? db = await databaseHelper.database;

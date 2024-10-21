@@ -28,21 +28,18 @@ class PharmacyBloc extends Bloc<PharmacyEvent, PharmacyState> {
       );
     }
       else if (event is SearchphEvent) {
-        List<PharmacyModel> PharmacyModelist ;
+        List<PharmacyModel> PharmacyModelList ;
 
-       PharmacyModelist=Pharmacy.where((value) {
+       PharmacyModelList=Pharmacy.where((value) {
           if (value.title.contains(event.contant)) {
           return true;
           }  if (value.address.contains(event.contant)) {
           return true;
-          } 
-        
-             
-           
+          }
           return false;
         }).toList();
-          
-        emit(AllPharmacyState(PharmacyModelist));
+
+        emit(AllPharmacyState(PharmacyModelList));
       }
     });
   }

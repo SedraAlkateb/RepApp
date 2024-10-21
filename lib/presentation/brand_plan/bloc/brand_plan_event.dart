@@ -34,3 +34,9 @@ class UpdateAmountSucEvent extends BrandPlanEvent{
  List<Object?> get props => [];
 
 }
+class SendToS extends BrandPlanEvent{
+
+ @override
+ List<Object?> get props => [];
+
+}

@@ -57,41 +57,11 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(VisitDoctorErrorState(failure: failure));},
                 (data)  async{
                   doctors=data;
-                 emit(VisitDoctorState());
+                 emit(VisitDoctorState(data));
 
                 });
       }
-    /*
-      if(event is UpdateVisitDoctorEvent)
-      {
-        (await updateDoctorUsecase.execute(event.id,event.sc,event.kas)).fold(
-                (failure)  {print(failure.massage);
-            emit(UpdateVisitDoctorErrorState(failure: failure));},
-                (data)  async{
-              emit(UpdateVisitDoctorState());
-            });
-      }
-      if(event is UpdateVisitHospitalEvent)
-      {
-        (await updateHospitalUsecase.execute(event.id,event.sc,event.kas)).fold(
-                (failure)  {print(failure.massage);
-            emit(UpdateVisitHospitalErrorState(failure: failure));},
-                (data)  async{
-              emit(UpdateVisitHospitalState());
 
-            });
-      }
-      if(event is UpdateVisitPharmacyEvent)
-      {
-        (await updatePharmacyUsecase.execute(event.id,event.data)).fold(
-                (failure)  {print(failure.massage);
-            emit(UpdateVisitPharmacyErrorState(failure: failure));},
-                (data)  async{
-              emit(UpdateVisitPharmacyState());
-
-            });
-      }
-     */
       else   if(event is VisitHospitalEvent)
       {
         (await allVisitHospitalSqlUsecase.execute()).fold(
@@ -102,6 +72,19 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(VisitHospitalState());
             });
       }
+      else if (event is SearchDoctorVisitEvent) {
+        List<VisitDoctorAndDoctor> doctorSearch ;
+        doctorSearch=doctors.where((value) {
+          if (value.doctorModel.title.contains(event.value)) {
+            return true;
+          }  if (value.visitDoctorModel.additaion!.contains(event.value)) {
+            return true;
+          }
+          return false;
+        }).toList();
+        emit(VisitDoctorState(doctorSearch));
+      }
+
       // if(event is BrandPharmacyVisitEvent)
       // {
       //   (await allBrandsPharmacyVisitsSqlUsecase.execute(event.visitId)).fold(
@@ -129,7 +112,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       else   if(event is BrandHospitalVisitEvent)
       {
         (await allBrandsHospitalVisitsSqlUsecase.execute(event.visitId)).fold(
-                (failure)  {   
+                (failure)  {
               print(failure.massage);
               emit(BrandHospitalVisitErrorState(failure: failure));
             },
@@ -138,7 +121,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
               emit(BrandHospitalVisitState(data));
             });
       }
-          
+
     });
   }
 }

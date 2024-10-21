@@ -54,6 +54,7 @@ void errorFullScreen(BuildContext context,String massage,int code)
 void success(BuildContext context){
   ContentState().dismissDialog(context);
 
+
 }
 void successWithMessage(BuildContext context,String message) {
   ContentState().dismissDialog(context);

@@ -7,15 +7,17 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 //presentation
 ThemeData getApplicationTheme() {
   return ThemeData(
-    fontFamily: 'Cairo',
+    fontFamily: 'Amiri',
     tabBarTheme: TabBarTheme(
-      labelColor: ColorManager.white,
-      indicatorColor: ColorManager.secondaryColor1,
+        labelColor: ColorManager.white,
+        indicatorColor: ColorManager.secondaryColor1,
         unselectedLabelColor: ColorManager.secondaryColor1
     ),
     primaryColor: ColorManager.secondaryColor4,
     brightness: Brightness.light,
-  
+    colorScheme: ColorScheme.light(
+      primary: ColorManager.primary,
+    ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: ColorManager.primaryField,
     ),
@@ -69,6 +71,7 @@ ThemeData getApplicationTheme() {
       titleSmall: getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s20),
       bodyMedium: getRegularStyle(color: Colors.black, fontSize: FontSize.s14),
     ),
+
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(AppPadding.p12),
       hintStyle: getRegularStyle(color: ColorManager.hintGrey, fontSize: FontSize.s20),

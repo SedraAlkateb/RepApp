@@ -18,7 +18,8 @@ class JsonAssets{
   static const String empty1 = "$jsonPath/empty1.json";
   static const String loading1 = "$jsonPath/loading1.json";
   static const String loading2 = "$jsonPath/loading2.json";
-  static const String loading3 = "$jsonPath/loading3.json";
-  static const String color = "$jsonPath/color.json";
+  static const String suc2 = "$jsonPath/suc2.json";
+  static const String suc = "$jsonPath/suc.json";
+  static const String suc1 = "$jsonPath/suc1.json";
 
 }
