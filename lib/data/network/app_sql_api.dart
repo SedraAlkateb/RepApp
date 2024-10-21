@@ -1097,23 +1097,21 @@ WHERE
   }
 
   updateRep(
-      int repId, int otherPlanId, int activePlanId, int otherstatus) async {
+      int repId, int otherPlanId, int activePlanId, int otherStatus) async {
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
       {
         'otherPlanId': otherPlanId,
         'activePlanId': activePlanId,
-        'otherStatus': otherstatus,
+        'otherStatus': otherStatus,
       },
       where: 'repId = ?',
       whereArgs: [repId],
     );
   }
-
   updateAmounts(List<PlanBrandSqlModel> planBrands) async {
     Database? mydb = await databaseHelper.database;
-
     var batch = mydb.batch();
     for (int i = 0; i < planBrands.length; i++) {
       batch.update(
@@ -1125,9 +1123,17 @@ WHERE
     }
     await batch.commit(noResult: true);
   }
-  updateOtherStatus(int status,int repId) async {
+  updateOtherStatus(int repId, int status, List<PlanBrandSqlModel> planBrands) async {
     Database? mydb = await databaseHelper.database;
     var batch = mydb.batch();
+    for (int i = 0; i < planBrands.length; i++) {
+      batch.update(
+        'planBrand',
+        {'amount': planBrands[i].amount}, // القيمة الجديدة لكل صف
+        where: 'id = ?',
+        whereArgs: [planBrands[i].id],
+      );
+    }
     await mydb.update(
       'rep',
       {
@@ -1138,7 +1144,6 @@ WHERE
     );
     await batch.commit(noResult: true);
   }
-
   updateSpecifiedFlagsToOne(bool hos, bool doc) async {
     Database? db = await databaseHelper.database;
     await db.transaction((txn) async {

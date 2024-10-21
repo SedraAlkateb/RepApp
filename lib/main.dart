@@ -16,6 +16,7 @@ Future<int?> sss()async{
       UserInfo.isLogging=data.isLogin;
       UserInfo.activePlanId=data.activePlanId;
       UserInfo.otherPlanId=data.otherPlanId;
+      UserInfo.otherstatus=data.otherStatus;
       UserInfo.percentage=data.percentage;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;

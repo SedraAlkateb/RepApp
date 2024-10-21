@@ -59,7 +59,7 @@ class SearchDoctorVisitEvent extends VisitEvent{
   SearchDoctorVisitEvent({required this.value});
   @override
 
-  List<Object?> get props => [];
+  List<Object?> get props => [value];
 }
 class SearchHospitalVisitEvent extends VisitEvent{
 

@@ -93,7 +93,7 @@ abstract class RepositorySql {
   Future<Either<Failure,List<HospitalSpAllModel>>> getAllHospitalSpecialization() ;
   Future<Either<Failure,Null>> updateAmounts(List<PlanBrandSqlModel> planBrands);
   Future<Either<Failure,Null>> updateSpecifiedFlagsToOne(bool hos, bool doc);
-  Future<Either<Failure,Null>> updateOtherStatus(int status,int repId);
+  Future<Either<Failure,Null>> updateOtherStatus(int status,int repId,List<PlanBrandSqlModel> planBrands);
 
 
 }
