@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/prescriptions/pages/prescriptions.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/delete_logout_page.dart';
@@ -35,6 +36,7 @@ class Routes {
   static const String brandPlan = "/brandPlan";
   static const String delete = "/delete";
   static const String deleteLogout = "/deleteLogout";
+    static const String Prescriptions = "/Prescriptions";
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -82,6 +84,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     BrandPlanPage());
       case Routes.delete:
         return MaterialPageRoute(builder: (_) =>     DeletePage());
+         case Routes.Prescriptions:
+        return MaterialPageRoute(builder: (_) =>     Prescriptions());
       case Routes.deleteLogout:
         return MaterialPageRoute(builder: (_) =>     DeleteLogoutPage());
       default:
