@@ -220,6 +220,27 @@ class DrawerPage extends StatelessWidget {
 
               });
             },
+          ),  Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
+        ),  
+          ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
+          
+            title: Text(
+              'الوصفات ',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamed(
+                  context,
+              
+                  Routes.  Prescriptions,
+                );
+              });
+            },
           ),
            Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -243,6 +264,7 @@ class DrawerPage extends StatelessWidget {
                 );
               });
             },
+            
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
