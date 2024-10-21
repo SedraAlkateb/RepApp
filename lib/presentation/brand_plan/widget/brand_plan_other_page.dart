@@ -94,14 +94,18 @@ class BrandPlanOtherPage extends StatelessWidget {
                                   ),
                                   Container(
                                     // margin: EdgeInsets.all(AppPadding.p8),
-                                    padding: EdgeInsets.symmetric(vertical: AppPadding.p8,horizontal: AppPadding.p14),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: AppPadding.p8,
+                                        horizontal: AppPadding.p14),
                                     decoration: BoxDecoration(
                                       color: ColorManager.secondaryColor2,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(AppSize.s8)),
                                       //        color: ColorManager.card,
                                     ),
-                                    child: Text("${planBrandModel[index].brandType == 1 ? " هدف " : " مساعد "}"),)
+                                    child: Text(
+                                        "${planBrandModel[index].brandType == 1 ? " هدف " : " مساعد "}"),
+                                  )
                                 ],
                               ),
                             ),
@@ -229,70 +233,73 @@ class BrandPlanOtherPage extends StatelessWidget {
                             context, state.failure.massage, state.failure.code);
                       }
                       if (state is UpdateAmountState) {
-                        SnackBarMessage().showAlertSScaffoldMessenger(
-                            context: context, message: "تم حفظ التغيرات");
+                        successWithMessage(context, "تم حفظ التغيرات");
                       }
                     },
                     child: Positioned(
-                      bottom: 20,
-                      left: 10,
-                      child: Column(
-
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              BlocProvider.of<BrandPlanBloc>(context)
-                                  .add(UpdateAmountSucEvent());
-                            },
-
-                            child: SizedBox(
-                              height: 80,
-                              width: 100,
-
-                              child: Stack(
-                            //    alignment: Alignment.bottomCenter,
-                                children: [
-
-                                  Image.asset(ImageAssets.top,),
-                                  Positioned(
-                                    bottom: 20,
-                                    left: 35,
-                                    child: Text(
-                                      "حفظ",
-                                      style: TextStyle(
-                                        color: Colors.white,
+                        bottom: 20,
+                        left: 10,
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                BlocProvider.of<BrandPlanBloc>(context)
+                                    .add(UpdateAmountSucEvent());
+                              },
+                              child: SizedBox(
+                                height: 80,
+                                width: 100,
+                                child: Stack(
+                                  //    alignment: Alignment.bottomCenter,
+                                  children: [
+                                    Image.asset(
+                                      ImageAssets.top,
+                                    ),
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 35,
+                                      child: Text(
+                                        "حفظ",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 80,
-                            width: 100,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(ImageAssets.bottom,),
-                                Positioned(
-                                  bottom: 50,
-                                  left: 35,
-                                  child: Text(
-                                    "ارسال",
-                                    style: TextStyle(
-                                      color: Colors.white,
+                            InkWell(
+                              onTap: () {
+                                BlocProvider.of<BrandPlanBloc>(context)
+                                    .add(SendToS());
+                              },
+                              child: SizedBox(
+                                height: 80,
+                                width: 100,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset(
+                                      ImageAssets.bottom,
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 50,
+                                      left: 35,
+                                      child: Text(
+                                        "ارسال",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    ),
-
-            )
+                          ],
+                        )),
+                  )
                 : SizedBox(),
           ],
         ),

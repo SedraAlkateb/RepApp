@@ -739,4 +739,16 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, Null>> updateOtherStatus(int status, int repId) async {
+    try {
+      final response=  await _databaseHelper.updateOtherStatus(status,repId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

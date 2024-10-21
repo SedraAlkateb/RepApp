@@ -18,7 +18,6 @@ class Prescriptions extends StatelessWidget {
   final TextEditingController _connectController = TextEditingController();
   final TextEditingController _numberofPrintedController = TextEditingController();
   final TextEditingController _specialNotesController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

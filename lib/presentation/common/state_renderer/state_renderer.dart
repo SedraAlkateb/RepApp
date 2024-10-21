@@ -42,6 +42,12 @@ class StateRenderer extends StatelessWidget {
 
       case StateRendererType.popupLoadingState:
         return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading1)]);
+      case StateRendererType.popupSuccess:
+        return _getPopupDialog(context,[
+          _getAnimatedImage(JsonAssets.suc),
+          _getMessage(message),
+          _getRetryButton("موافق",context)
+        ]);
       case StateRendererType.popupErrorState:
         return _getPopupDialog(context,[
             _getAnimatedImage(JsonAssets.error),
@@ -69,14 +75,14 @@ class StateRenderer extends StatelessWidget {
       case StateRendererType.contentState:
       return Container();
       case StateRendererType.popupSuccess:
-        return _getPopupDialog(context, [
+        return _getPopupDialog(
+            context, [
           _getMessage(title),
           _getMessage(message),
           _getRetryButton("موافق", context)
         ]);
       default:
         return Container();
-
     }
   }
 Widget _getItemsColumn(List<Widget>children){
@@ -90,8 +96,8 @@ Widget _getItemsColumn(List<Widget>children){
 }
 Widget _getAnimatedImage(String animationName){
     return SizedBox(
-      height: AppSize.s250,
-      width: AppSize.s250,
+      height: AppSize.s200,
+      width: AppSize.s200,
       child:Lottie.asset(animationName )
     );
 }
