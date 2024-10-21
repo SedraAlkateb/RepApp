@@ -185,7 +185,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitHospitals = hospitalsFailureOrSuccess as List<VisitHospitalModel>;
 
       ///////////////////////////////////////////////////
-   if(UserInfo==1){
+   if(UserInfo.otherstatus==1){
      final planBrandsResult = await getPlanBrandSqlUsecase.execute();
      final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
      if (planBrandsFailureOrSuccess is Failure) {
@@ -234,7 +234,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         print("Visit Hospital data sent successfully.");
       }
 
-    if(UserInfo==1){
+    if(UserInfo.otherstatus==1){
       final planBrandResult = await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
       final planBrandFailureOrSuccess = planBrandResult.fold((failure) => failure, (data) => data);
       if (planBrandFailureOrSuccess is Failure) {

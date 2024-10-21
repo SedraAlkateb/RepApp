@@ -35,37 +35,32 @@ class SpecializationsPage extends StatelessWidget {
           ),
           title: Text('الاختصاصات'),
         ),
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(color: ColorManager.white),
+        body:  SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 0.6,
+                    color: ColorManager.white,
+                    spreadRadius: 0.5,
+                    offset: Offset(2, 3))
+              ],
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
-            SingleChildScrollView(
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 0.6,
-                        color: ColorManager.white,
-                        spreadRadius: 0.5,
-                        offset: Offset(2, 3))
-                  ],
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                            SearchField(searchController: searchController,
-                      onPressed: (value) {
-                        BlocProvider.of<SpecializationBloc>(context).add(SearchSpecEvent(value));
-                      },
-                      ),
-                      BlocConsumer<SpecializationBloc, SpecializationState>(
-                        listener: (context, state) {
-                          /*
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SearchField(searchController: searchController,
+                    onPressed: (value) {
+                      BlocProvider.of<SpecializationBloc>(context).add(SearchSpecEvent(value));
+                    },
+                  ),
+                  BlocConsumer<SpecializationBloc, SpecializationState>(
+                    listener: (context, state) {
+                      /*
                           if (state is AllSpecLoadingState) {
                             loading(context);
                           }
@@ -73,89 +68,87 @@ class SpecializationsPage extends StatelessWidget {
                             success(context);
                           }
                           */
-                          if (state is AllSpecErrorState) {
-                            error(context, state.failure.massage,
-                                state.failure.code);
-                          }
-                        },
-                        builder: (context, state) {
-                          List<SpecModel> placeModel = context.watch<SpecializationBloc>().specialization;
-                          if (state is AllSpecState) {
-                            placeModel = state.Specs;
-                          }
-                          return   GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, // عدد الأعمدة في كل صف
-                                    crossAxisSpacing:
-                                        1.0, // المسافة الأفقية بين الأعمدة
-                                    mainAxisSpacing:
-                                        2.0, // المسافة العمودية بين الصفوف
-                                    childAspectRatio:
-                                        1, // نسبة العرض إلى الارتفاع لكل عنصر (يمكنك تعديلها حسب الحاجة)
-                                  ),
-                                  itemCount: placeModel.length,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) {
-                                            return SpecDH(
-                                                spId: placeModel[index].id,);
-                                          },
-                                        )
-                                        );
-                                        BlocProvider.of<SpecializationBloc>(context).add(
-                                            DoctorSpEvent(placeModel[index].id));
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.all(AppPadding.p10),
-                                        padding: EdgeInsets.all(AppPadding.p5),
-                                        width: 6,
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                              colors: [
-                                            ColorManager.secondaryColor6,
-                                            ColorManager.secondaryColor7,
-                                          ]
-                                          ),
+                      if (state is AllSpecErrorState) {
+                        error(context, state.failure.massage,
+                            state.failure.code);
+                      }
+                    },
+                    builder: (context, state) {
+                      List<SpecModel> placeModel = context.watch<SpecializationBloc>().specialization;
+                      if (state is AllSpecState) {
+                        placeModel = state.Specs;
+                      }
+                      return   GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // عدد الأعمدة في كل صف
+                          crossAxisSpacing:
+                          1.0, // المسافة الأفقية بين الأعمدة
+                          mainAxisSpacing:
+                          2.0, // المسافة العمودية بين الصفوف
+                          childAspectRatio:
+                          1, // نسبة العرض إلى الارتفاع لكل عنصر (يمكنك تعديلها حسب الحاجة)
+                        ),
+                        itemCount: placeModel.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return SpecDH(
+                                    spId: placeModel[index].id,);
+                                },
+                              )
+                              );
+                              BlocProvider.of<SpecializationBloc>(context).add(
+                                  DoctorSpEvent(placeModel[index].id));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(AppPadding.p10),
+                              padding: EdgeInsets.all(AppPadding.p5),
+                              width: 6,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [
+                                      ColorManager.secondaryColor6,
+                                      ColorManager.secondaryColor7,
+                                    ]
+                                ),
+                                color: ColorManager.white,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(AppSize.s25),
+                                ),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    // SvgPicture.asset(
+                                    //   ImageAssets.s14,
+                                    //   width: 70,
+                                    // ),
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      placeModel[index].title,
+                                      style: TextStyle(
                                           color: ColorManager.white,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(AppSize.s25),
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Column(
-                                            children: [
-                                              // SvgPicture.asset(
-                                              //   ImageAssets.s14,
-                                              //   width: 70,
-                                              // ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                placeModel[index].title,
-                                                style: TextStyle(
-                                                    color: ColorManager.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 13),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
                         },
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ));
+          ),
+        ),);
   }
 }

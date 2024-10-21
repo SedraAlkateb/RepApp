@@ -70,14 +70,20 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         emit(SumState(planBrandSum));
       }
       if (event is SendToS) {
-        UserInfo.otherstatus = 1;
-        (await updateOtherStatusUsecase.execute(UserInfo.repId, 1)).fold(
-            (failure) {
-          emit(UpdateAmountErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          emit(UpdateAmountState());
-        });
+        if (sum > UserInfo.percentage) {
+          emit(UpdateAmountErrorState(
+              failure: Failure(5, "لقد تجاوزت الحد المسموح")));
+        } else {
+          UserInfo.otherstatus = 1;
+          (await updateOtherStatusUsecase.execute(UserInfo.repId, 1,planBrand)).fold(
+                  (failure) {
+                emit(UpdateAmountErrorState(failure: failure));
+                return false;
+              }, (data) async {
+            emit(UpdateAmountState());
+          });
+        }
+
       }
       if (event is UpdateAmountSucEvent) {
         emit(UpdateAmountLoadingState());

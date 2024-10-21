@@ -741,9 +741,9 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> updateOtherStatus(int status, int repId) async {
+  Future<Either<Failure, Null>> updateOtherStatus(int status, int repId,List<PlanBrandSqlModel> planBrands) async {
     try {
-      final response=  await _databaseHelper.updateOtherStatus(status,repId);
+      final response=  await _databaseHelper.updateOtherStatus(status,repId,planBrands);
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler

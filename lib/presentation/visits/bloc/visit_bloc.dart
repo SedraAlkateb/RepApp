@@ -58,10 +58,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
                 (data)  async{
                   doctors=data;
                  emit(VisitDoctorState(data));
-
                 });
       }
-
       else   if(event is VisitHospitalEvent)
       {
         (await allVisitHospitalSqlUsecase.execute()).fold(
@@ -82,7 +80,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           }
           return false;
         }).toList();
-        emit(VisitDoctorState(doctorSearch));
+        emit(SearchVisitDoctorState(doctorSearch));
       }
 
       // if(event is BrandPharmacyVisitEvent)

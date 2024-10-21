@@ -52,8 +52,7 @@ class VisitsPage extends StatelessWidget {
 
           ),
           body: TabBarView(
-                       physics: NeverScrollableScrollPhysics(), 
-
+                       physics: NeverScrollableScrollPhysics(),
               children: [
              //   PharmacyVisitUser(),
                 DoctorVisitUser(),

@@ -20,15 +20,12 @@ class DoctorVisitUser extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: SingleChildScrollView(
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SearchField(searchController: searchController,onPressed: (value) {
-                BlocProvider.of<VisitBloc>(context).add(SearchDoctorVisitEvent(value: value));
-              },
-              ),
+                BlocProvider.of<VisitBloc>(context).add(SearchDoctorVisitEvent(value: value));},),
               BlocConsumer<VisitBloc, VisitState>(
                 listener: (context, state) {
                   if (state is VisitDoctorErrorState) {
@@ -46,61 +43,63 @@ class DoctorVisitUser extends StatelessWidget {
                  */
                 },
                 builder: (context, state) {
+                  List<VisitDoctorAndDoctor> doctors=context.watch<VisitBloc>().doctors;
                   if(state is VisitDoctorState){
-                     final List<VisitDoctorAndDoctor> doctors=state.doctors;
-
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return InfoVisitDoctor(
-                                      doctorModel: doctors[index],
-                                    );
-                                  }));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p8),
-                              //    height: AppSize.s150,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(color: ColorManager.secondaryColor4)
-                                ],
-                                color: ColorManager.white,
-                                border: Border.all(color: ColorManager.hintGrey),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(AppSize.s8)),
-                                //        color: ColorManager.card,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    textAlign: TextAlign.center,
-                                    doctors[index]
-                                        .doctorModel
-                                        .title,
-                                    style: Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  TextRach(
-                                      s1: "العنوان : ",
-                                      s2: doctors[index]
-                                          .doctorModel
-                                          .address)
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        itemCount:
-                        context.watch<VisitBloc>().doctors.length);
+                    doctors=state.doctors;
                   }
-                return SizedBox();
+                  if (state is SearchVisitDoctorState) {
+                    doctors = state.doctors;
+                  }
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                                  return InfoVisitDoctor(
+                                    doctorModel: doctors[index],
+                                  );
+                                }));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(AppPadding.p8),
+                            padding: EdgeInsets.all(AppPadding.p8),
+                            //    height: AppSize.s150,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(color: ColorManager.secondaryColor4)
+                              ],
+                              color: ColorManager.white,
+                              border: Border.all(color: ColorManager.hintGrey),
+                              borderRadius: const BorderRadius.all(
+                                  Radius.circular(AppSize.s8)),
+                              //        color: ColorManager.card,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  doctors[index]
+                                      .doctorModel
+                                      .title,
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                TextRach(
+                                    s1: "العنوان : ",
+                                    s2: doctors[index]
+                                        .doctorModel
+                                        .address)
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount:
+                      doctors.length);
                 },
               ),
             ],

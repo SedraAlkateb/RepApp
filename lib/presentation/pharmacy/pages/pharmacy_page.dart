@@ -39,7 +39,6 @@ class PharmacyPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [  SearchField(searchController: searchphController,onPressed: (value) {
                         BlocProvider.of<PharmacyBloc>(context).add(SearchphEvent(value));
-
                       },
                       ),
               Expanded(
@@ -94,7 +93,6 @@ class PharmacyPage extends StatelessWidget {
                           },
                           itemCount: pharmacyModel.length);
                     }
-
                     return SizedBox();
                   },
                 ),
