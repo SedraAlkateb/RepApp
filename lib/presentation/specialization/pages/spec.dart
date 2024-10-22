@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
+import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
@@ -123,18 +124,25 @@ class SpecializationsPage extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    // SvgPicture.asset(
-                                    //   ImageAssets.s14,
-                                    //   width: 70,
-                                    // ),
+                                    Image.asset(
+
+                                        ImageAssetsSpec().getImage( placeModel[index].id)
+                                    ,width: 50,
+                                      height: 50,
+                                      color: ColorManager.white.withOpacity(0.8),
+                                      colorBlendMode: BlendMode.modulate,
+
+                                    ),
+                                    SizedBox(height: 20),
                                     Text(
                                       textAlign: TextAlign.center,
                                       placeModel[index].title,
                                       style: TextStyle(
                                           color: ColorManager.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20),
                                     ),
                                   ],
                                 ),

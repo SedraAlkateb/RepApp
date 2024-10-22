@@ -134,6 +134,7 @@ flutter:
     - assets/json/
     - assets/fonts/
     - assets/images/svg/
+    - assets/images/spec/
   fonts:
     - family: Almarai
       fonts:

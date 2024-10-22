@@ -9,24 +9,31 @@ import 'package:domina_app/presentation/visits/pages/info_visit_doctor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DoctorVisitUser extends StatelessWidget {
+class DoctorVisitUser extends StatefulWidget {
    DoctorVisitUser({super.key});
-  final TextEditingController searchController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  State<DoctorVisitUser> createState() => _DoctorVisitUserState();
+}
 
+class _DoctorVisitUserState extends State<DoctorVisitUser>
+    with AutomaticKeepAliveClientMixin {
+  final TextEditingController searchController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SearchField(searchController: searchController,onPressed: (value) {
-                BlocProvider.of<VisitBloc>(context).add(SearchDoctorVisitEvent(value: value));},),
-              BlocConsumer<VisitBloc, VisitState>(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SearchField(searchController: searchController,onPressed: (value) {
+              BlocProvider.of<VisitBloc>(context).add(SearchDoctorVisitEvent(value: value));},),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: BlocConsumer<VisitBloc, VisitState>(
                 listener: (context, state) {
                   if (state is VisitDoctorErrorState) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -44,9 +51,7 @@ class DoctorVisitUser extends StatelessWidget {
                 },
                 builder: (context, state) {
                   List<VisitDoctorAndDoctor> doctors=context.watch<VisitBloc>().doctors;
-                  if(state is VisitDoctorState){
-                    doctors=state.doctors;
-                  }
+                  if(state is VisitDoctorState){doctors=state.doctors;}
                   if (state is SearchVisitDoctorState) {
                     doctors = state.doctors;
                   }
@@ -102,10 +107,13 @@ class DoctorVisitUser extends StatelessWidget {
                       doctors.length);
                 },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
