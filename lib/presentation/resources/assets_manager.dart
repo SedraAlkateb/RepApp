@@ -1,6 +1,8 @@
 const  String imagePath="assets/images";
 const  String jsonPath="assets/json";
 const  String imageSvgPath="assets/images/svg";
+const  String imageSpecPath="assets/images/spec";
+
 class ImageAssets{
   static const String d = "$imagePath/d.png";
   static const String domina = "$imagePath/domina.png";
@@ -10,7 +12,13 @@ class ImageAssets{
   static const String hospital = "$imagePath/hospital.png";
   static const String top = "$imagePath/top.png";
   static const String bottom = "$imagePath/bottom.png";
+  static const String doctor2 = "$imagePath/doctor2.png";
 
+}
+class ImageAssetsSpec{
+String getImage(int id){
+  return "$imageSpecPath/$id.png";
+}
 }
 class JsonAssets{
   static const String error = "$jsonPath/error.json";

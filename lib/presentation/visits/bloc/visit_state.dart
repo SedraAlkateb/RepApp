@@ -54,12 +54,18 @@ final class SearchVisitDoctorState extends VisitState {
   @override
   List<Object?> get props => [doctors];
 }
-
+final class SearchVisitHospitalState extends VisitState {
+  final List<VisitHospitalAndHospital> hospitals;
+  SearchVisitHospitalState(this.hospitals);
+  @override
+  List<Object?> get props => [hospitals];
+}
 final class VisitHospitalState extends VisitState {
+  final List<VisitHospitalAndHospital> hospitals;
   @override
-  VisitHospitalState();
+  VisitHospitalState(this.hospitals);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [hospitals];
 }
 
 final class BrandPharmacyVisitErrorState extends VisitState {

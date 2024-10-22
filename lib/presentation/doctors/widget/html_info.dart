@@ -12,22 +12,26 @@ Widget buildHtmlDetailRow(
           Icon(icon, color: Colors.blue),
           SizedBox(width: 10),
           Text(
+            textAlign: TextAlign.start,
             '$title: ',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
           Expanded(
-            child: Center(
-              child: Html(
-                data: value,
-                style: {
-        "body": Style(
-          fontSize: FontSize(18), // هنا تقوم بتحديد حجم الخط
-        ),
-      },
-                 
-              ),
+            child: Html(
+              shrinkWrap: true,
+
+              data: value,
+              style: {
+                    "body": Style(
+
+                      fontSize: FontSize(18),
+
+                    textAlign: TextAlign.start
+                    ),
+                  },
+
             ),
           ),
         ],

@@ -17,13 +17,11 @@ Widget buildDetailRow(
                 ),
           ),
           Expanded(
-            child: Center(
-              child: Text(
-                value,
-                style: Theme.of(context).textTheme.bodyLarge,
-               maxLines: 3,
-                  
-              ),
+            child: Text(
+              value,
+              style: Theme.of(context).textTheme.bodyLarge,
+             maxLines: 3,
+
             ),
           ),
         ],
