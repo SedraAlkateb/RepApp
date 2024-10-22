@@ -8,7 +8,7 @@ import 'package:domina_app/domain/models/models.dart';
 class DoctorDetails extends StatelessWidget {
   final DoctorModel doctor;
 
-  DoctorDetails({required this.doctor});
+   DoctorDetails({required this.doctor});
 
   @override
   Widget build(BuildContext context) {

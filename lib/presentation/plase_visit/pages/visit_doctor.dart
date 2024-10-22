@@ -1,5 +1,7 @@
+import 'package:domina_app/presentation/doctors/pages/doctor_details%20.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
+import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
@@ -18,7 +20,8 @@ class VisitDoctor extends StatefulWidget {
   State<VisitDoctor> createState() => _VisitDoctorState();
 }
 
-class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClientMixin {
+class _VisitDoctorState extends State<VisitDoctor>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
@@ -35,13 +38,12 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
     super.build(context);
     return Scaffold(
       appBar: null,
-      body: SingleChildScrollView(  
-       
+      body: SingleChildScrollView(
         child: Form(
-          key: _formKey, 
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [  
+            children: [
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 250,
@@ -51,41 +53,89 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       BorderRadius.vertical(bottom: Radius.circular(50)),
                 ),
                 child: Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                  child: Stack(
+                    
                     children: [
-                      Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              iconSize: 30,
-                              padding: EdgeInsets.only(right: 15),
-                              icon: Icon(Icons.arrow_back_sharp,
-                                  color: ColorManager.white))),
-                      Center(
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          widget.doctorModel.title,
-                          style: Theme.of(context).textTheme.titleMedium,
+                      Align(alignment: Alignment.center,
+                        child: Padding(
+                          padding:  EdgeInsets.only(top: 22),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      iconSize: 30,
+                                      padding: EdgeInsets.only(right: 15),
+                                      icon: Icon(Icons.arrow_back_sharp,
+                                          color: ColorManager.white))),
+                
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        textAlign: TextAlign.center,
-                        "العنوان:${widget.doctorModel.address}",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        textAlign: TextAlign.center,
-                        " اجمالي الزيارات:${widget.doctorModel.visits}",
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
+                      Center(
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                          onTap: () {
+                            print("Navigating to Doctor Details...");
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return DoctorDetails(doctor: widget.doctorModel);
+                              },
+                            ));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10), // المسافة الداخلية حول النص
+                            decoration: BoxDecoration(
+                              color: Colors.transparent, // خلفية شفافة أو يمكنك تخصيصها
+                              shape: BoxShape.rectangle, // يمكنك تغييره إلى BoxShape.circle إذا كنت تريد شكل دائري
+                              border: Border.all(
+                                color: ColorManager.secondaryColor2, // لون الحلقة البيضاء
+                                width: 2.0, // سماكة الحلقة البيضاء
+                              ),
+                              borderRadius: BorderRadius.circular(10), // حواف دائرية للتصميم
+                              boxShadow: [
+                               
+                              ],
+                            ),
+                            child: Text(
+                              widget.doctorModel.title, // النص المراد عرضه
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: Colors.white, // لون النص
+                                    fontWeight: FontWeight.bold, // تعديل نمط الخط
+                                  ),
+                            ),
+                          ),
+                        )
+                        
+                        
+                        ,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              textAlign: TextAlign.center,
+                              "العنوان: ${widget.doctorModel.address}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),  SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              textAlign: TextAlign.center,
+                              " اجمالي الزيارات:${widget.doctorModel.visits}",
+                              style: Theme.of(context).textTheme.headlineLarge,
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -100,13 +150,14 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       " ملاحظات للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    SizedBox(height: AppSize.s8,),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
                     BoxTextField(
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
                       maxLines: 4,
-                      validator: (value)
-                      {
+                      validator: (value) {
                         if (value!.isEmpty) {
                           return "الحقل مطلوب";
                         }
@@ -121,7 +172,9 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       "ملاحظات لمستودع قاسيون:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    SizedBox(height: AppSize.s8,),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
                     BoxTextField(
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
@@ -137,12 +190,16 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                       minLines: 3,
                       inputFormatters: [],
                     ),
-                    SizedBox(height: AppSize.s8,),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
                     Text(
                       "اختر العينات المقدمة:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    SizedBox(height: AppSize.s8,),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
                     BlocListener<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
@@ -160,7 +217,7 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                               SelectBrandEvent(brand, widget.doctorModel.id));
                         },
                         validator: (value) {
-                          if (value == null ) {
+                          if (value == null) {
                             return "اختر نوع الطلب";
                           }
                           return null;
@@ -185,10 +242,10 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                   padding: const EdgeInsets.all(0),
                                   child: Table(
                                     border: TableBorder.all(
-                                      width: 1,
+                                        width: 1,
                                         color: ColorManager.grey1,
-                                        borderRadius: BorderRadius.all(Radius.circular(15))
-                                    ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
                                     columnWidths: {
                                       0: FlexColumnWidth(1),
                                       1: FlexColumnWidth(1),
@@ -234,7 +291,6 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                               child: Text('حذف العينة',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-
                                                       fontWeight:
                                                           FontWeight.bold)),
                                             ),
@@ -254,23 +310,20 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                         return TableRow(
                                           children: [
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.all( 8),
+                                              padding: const EdgeInsets.all(8),
                                               child: Text(
                                                 brand.title,
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                              const EdgeInsets.all( 8),
+                                              padding: const EdgeInsets.all(8),
                                               child: Text(brand.phTitle,
                                                   textAlign: TextAlign.center),
                                             ),
                                             IntrinsicHeight(
                                               child: TextField(
                                                 controller: amount,
-
                                                 onChanged: (value) {
                                                   if (value.isEmpty) {
                                                     BlocProvider.of<
@@ -365,10 +418,11 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                               state.failure.code);
                         }
                         if (state is InsertVisitDoctorState) {
-                          BlocProvider.of<VisitPlaceBloc>(context)
-                              .add(DoctorByPlace(widget.doctorModel.placeId, 0));
+                          BlocProvider.of<VisitPlaceBloc>(context).add(
+                              DoctorByPlace(widget.doctorModel.placeId, 0));
                           success(context);
-                          SnackBarMessage().showAlertSScaffoldMessenger(context: context, message: "تم حفظ التغيرات");
+                          SnackBarMessage().showAlertSScaffoldMessenger(
+                              context: context, message: "تم حفظ التغيرات");
                           Navigator.pop(context);
                         }
                         if (state is AllVisitBrandDoctorErrorState) {
@@ -376,10 +430,11 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                               state.failure.code);
                         }
                         if (state is AllVisitBrandDoctorState) {
-                          BlocProvider.of<VisitPlaceBloc>(context)
-                              .add(DoctorByPlace(widget.doctorModel.placeId, 0));
+                          BlocProvider.of<VisitPlaceBloc>(context).add(
+                              DoctorByPlace(widget.doctorModel.placeId, 0));
                           success(context);
-                          SnackBarMessage().showAlertSScaffoldMessenger(context: context, message: "تم حفظ التغيرات");
+                          SnackBarMessage().showAlertSScaffoldMessenger(
+                              context: context, message: "تم حفظ التغيرات");
 
                           Navigator.pop(context);
                         }
@@ -397,7 +452,8 @@ class _VisitDoctorState extends State<VisitDoctor>  with AutomaticKeepAliveClien
                                       _noteController.text,
                                       _issueController.text,
                                       _noteeController.text,
-                                      widget.doctorModel.id,0);
+                                      widget.doctorModel.id,
+                                      0);
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand

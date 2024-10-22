@@ -86,6 +86,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     DeletePage());
          case Routes.Prescriptions:
         return MaterialPageRoute(builder: (_) =>     Prescriptions());
+        
       case Routes.deleteLogout:
         return MaterialPageRoute(builder: (_) =>     DeleteLogoutPage());
       default:
