@@ -42,158 +42,151 @@ class Prescriptions extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            
-            Text('اختار الطبيب:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Row(
-              children: [
-                Expanded(
-                  child: ListTile(
-                    title: const Text('دكتور'),
-                    leading: Radio(
-                      value: 'دكتور',
-                      groupValue: 'selectedDoctor',
-                      onChanged: (value) {},
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              
+             
+              Row(
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('الدكتور'),
+                      leading: Radio(
+                        value: 'الدكتور',
+                        groupValue: 'selectedDoctor',
+                        onChanged: (value) {},
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: const Text('دكتورة'),
-                    leading: Radio(
-                      value: 'دكتورة',
-                      groupValue: 'selectedDoctor',
-                      onChanged: (value) {},
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('الدكتورة'),
+                      leading: Radio(
+                        value: 'الدكتورة',
+                        groupValue: 'selectedDoctor',
+                        onChanged: (value) {},
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-
+                ],
+              ),
+              SizedBox(height: 20),
           
-            Text('اسم الطبيب'),
-            TextField(
-              controller: _doctornameController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+            
+            
+          
+          
+              Text('اختصاص الطبيب'),
+              TextField(
+                controller: _doctorSpController,
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('اختصاص الطبيب'),
-            TextField(
-              controller: _doctorSpController,
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('المستحضر الأول'),
+              TextField(
+                controller: _brandoneController, 
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('المستحضر الأول'),
-            TextField(
-              controller: _brandoneController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('المستحضر الثاني'),
+              TextField(
+                controller: _brandtwoController, 
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('المستحضر الثاني'),
-            TextField(
-              controller: _brandtwoController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('المستحضر الثالث'),
+              TextField(
+                controller: _brandthreeController, 
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('المستحضر الثالث'),
-            TextField(
-              controller: _brandthreeController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('الملاحظة الأولى'),
+              TextField(
+                controller: _noteoneController,
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('الملاحظة الأولى'),
-            TextField(
-              controller: _noteoneController,
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('الملاحظة الثانية'),
+              TextField(
+                controller: _notetwoController, 
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('الملاحظة الثانية'),
-            TextField(
-              controller: _notetwoController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('العنوان'),
+              TextField(
+                controller: _addressController, 
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('العنوان'),
-            TextField(
-              controller: _addressController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('التواصل'),
+              TextField(
+                controller: _connectController, 
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('التواصل'),
-            TextField(
-              controller: _connectController, 
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('عدد الوصفات المطبوعة'),
+              TextField(
+                controller: _numberofPrintedController,
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('عدد الوصفات المطبوعة'),
-            TextField(
-              controller: _numberofPrintedController,
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
+          
+              SizedBox(height: 10),
+          
+              Text('ملاحظات خاصة للمندوب'),
+              TextField(
+                controller: _specialNotesController,
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10),
-
-            Text('ملاحظات خاصة للمندوب'),
-            TextField(
-              controller: _specialNotesController,
-              decoration: InputDecoration(
-                labelText: '',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

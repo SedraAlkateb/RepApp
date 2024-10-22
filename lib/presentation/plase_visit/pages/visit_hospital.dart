@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/hospitals/page/hospital_details.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -17,7 +18,7 @@ class VisitHospital extends StatefulWidget {
   @override
   State<VisitHospital> createState() => _VisitHospitalState();
 }
-
+ 
 class _VisitHospitalState extends State<VisitHospital>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _noteController = TextEditingController();
@@ -68,10 +69,41 @@ class _VisitHospitalState extends State<VisitHospital>
                               padding: EdgeInsets.only(right: 15),
                               icon: Icon(Icons.arrow_back_sharp,
                                   color: ColorManager.white))),
-                      Text(
-                        textAlign: TextAlign.center,
-                        widget.hospitalModel.title,
-                        style: Theme.of(context).textTheme.titleMedium,
+                      InkWell(
+                      
+                        child: Container(
+                          padding:
+                              EdgeInsets.all(10), 
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .transparent, 
+                            shape: BoxShape
+                                .rectangle,
+                            border: Border.all(
+                              color: ColorManager
+                                  .secondaryColor2, 
+                              width: 2.0,
+                              
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                10),
+                                 
+                          ),
+                          child: Text(
+                            widget.hospitalModel.title,
+                            
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Colors.white,
+                                 
+                                  fontWeight: FontWeight.bold, 
+                                 
+                                ),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 10,
@@ -328,7 +360,11 @@ class _VisitHospitalState extends State<VisitHospital>
                                                             EditAmountBrandEvent(
                                                                 index, 1));
                                                   } else {
-                                                    BlocProvider.of<VisitPlaceBloc>(context).add(EditAmountBrandEvent(
+                                                    BlocProvider.of<
+                                                                VisitPlaceBloc>(
+                                                            context)
+                                                        .add(
+                                                            EditAmountBrandEvent(
                                                                 index,
                                                                 int.parse(
                                                                     value)));
@@ -441,7 +477,8 @@ class _VisitHospitalState extends State<VisitHospital>
                                       _issueController.text,
                                       _noteController.text,
                                       _noteeController.text,
-                                      0,0);
+                                      0,
+                                      0);
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand
