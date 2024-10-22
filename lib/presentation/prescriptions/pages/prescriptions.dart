@@ -7,7 +7,6 @@ class Prescriptions extends StatelessWidget {
   Prescriptions({super.key});
 
 
-  final TextEditingController _doctornameController = TextEditingController();
   final TextEditingController _doctorSpController = TextEditingController();
   final TextEditingController _brandoneController = TextEditingController();
   final TextEditingController _brandtwoController = TextEditingController();
