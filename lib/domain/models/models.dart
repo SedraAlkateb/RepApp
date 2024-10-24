@@ -766,7 +766,9 @@ class Type {
   Type(this.i, this.name);
 }
 
-final List<Type> type = [Type(0, "دفاتر"), Type(1, "عينات"), Type(2, "وصفات")];
+final List<Type> type = [Type(0, "دفاتر"), Type(1, "عينات"), 
+
+];
 
 class BrandSpModel {
   int id;

@@ -39,13 +39,13 @@ class DrawerPage extends StatelessWidget {
                     maxRadius: 35,
                     backgroundColor: ColorManager.secondaryColor5,
                     child: Text(
-                      "L",
+                      "",
                       style: TextStyle(fontSize: 30.0, color: Colors.blue),
                     ),
                   ),
                   SizedBox(width: 10), // إضافة مسافة بين الصورة والنص
                   Text(
-                    "Lina Mahayni",
+                    " lina",
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
@@ -165,29 +165,29 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
-          ListTile(
-            focusColor: ColorManager.secondaryColor,
-            minTileHeight: 10,
-            leading: Icon(Icons.local_pharmacy_outlined,
-                color: ColorManager.secondaryColor4),
-            title: const Text('الصيدليات'),
-            onTap: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.pharmacy,
-                  (route) => true,
-                );
-              });
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Divider(
-              thickness: 0.5,
-              color: ColorManager.hintGrey,
-            ),
-          ),
+          // ListTile(
+          //   focusColor: ColorManager.secondaryColor,
+          //   minTileHeight: 10,
+          //   leading: Icon(Icons.local_pharmacy_outlined,
+          //       color: ColorManager.secondaryColor4),
+          //   title: const Text('الصيدليات'),
+          //   onTap: () {
+          //     WidgetsBinding.instance.addPostFrameCallback((_) {
+          //       Navigator.pushNamedAndRemoveUntil(
+          //         context,
+          //         Routes.pharmacy,
+          //         (route) => true,
+          //       );
+          //     });
+          //   },
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10),
+          //   child: Divider(
+          //     thickness: 0.5,
+          //     color: ColorManager.hintGrey,
+          //   ),
+          // ),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
@@ -222,28 +222,7 @@ class DrawerPage extends StatelessWidget {
 
               });
             },
-          ),  Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
-        ),  
-          ListTile(
-            focusColor: ColorManager.secondaryColor,
-            minTileHeight: 10,
-          
-            title: Text(
-              'الوصفات ',
-              style: TextStyle(color: ColorManager.secondaryColor1),
-            ),
-            onTap: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
-                  context,
-              
-                  Routes.  Prescriptions,
-                );
-              });
-            },
-          ),
+          ), 
            Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),

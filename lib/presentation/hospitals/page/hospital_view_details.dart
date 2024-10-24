@@ -106,8 +106,8 @@ class HospitalViewDetails extends StatelessWidget {
                                 child: Image.asset(
                                   ImageAssetsSpec()
                                       .getImage(hospitalsp[index].specModel.id),
-                                  width: 50,
-                                  height: 50,
+                                  width: 35,
+                                  height: 60,
                                   color: ColorManager.secondaryColor4,
                                   colorBlendMode: BlendMode.modulate,
                                 ),
