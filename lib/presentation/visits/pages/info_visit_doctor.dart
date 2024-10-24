@@ -121,7 +121,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
 
                     children: [
                       Text(
-                        "ملاحظات لمستودع قاسيون  :",
+                        "ملاحظات للمكتب العلمي :",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       BoxTextField(

@@ -116,7 +116,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "ملاحظات لمستودع قاسيون  :",
+                      "ملاحظات للمكتب العلمي :",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
