@@ -517,10 +517,10 @@ class RepositroySqlImp extends RepositorySql {
 
   @override
   Future<Either<Failure, Null>> updateVisitHospitalFields(
-      {required int id, String? kaswn, String? science}) async {
+      {required int id, String? kaswn, String? science, String? target,}) async {
     try {
       await _databaseHelper.updateVisitHospitalFields(
-          id: id, kaswn: kaswn, science: science);
+          id: id, kaswn: kaswn, science: science,target:target);
       return Right(null);
     } catch (e) {
       return Left(ErrorHandler

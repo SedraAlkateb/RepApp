@@ -388,8 +388,9 @@ class VisitHospitalModel {
   String additaion;
   int hospitalSpId;
   int? flag = 0;
+  String? target;
   VisitHospitalModel(this.id, this.data, this.kaswn, this.science,
-      this.additaion, this.hospitalSpId, this.flag);
+      this.additaion, this.hospitalSpId, this.flag,this.target);
   Map<String, dynamic> toMap() {
     return {
       'data': data,
@@ -397,7 +398,8 @@ class VisitHospitalModel {
       'science': science,
       'additaion': additaion,
       'hospitalSpId': hospitalSpId,
-      'flag': flag
+      'flag': flag,
+      'target':target
     };
   }
 
@@ -411,12 +413,13 @@ class VisitHospitalModel {
       'note': kaswn,
       'issue': science,
       'special': additaion,
+      'target':target
     };
   }
 
   factory VisitHospitalModel.fromMap(Map<String, dynamic> map) {
     return VisitHospitalModel(map['id'], map['data'], map['kaswn'],
-        map['science'], map['additaion'], map['hospitalSpId'], map['flag']);
+        map['science'], map['additaion'], map['hospitalSpId'], map['flag'],map['target']);
   }
   factory VisitHospitalModel.fromMap1(Map<String, dynamic> map) {
     return VisitHospitalModel(
@@ -426,7 +429,7 @@ class VisitHospitalModel {
         map['visit_hospital_science'],
         map['visit_hospital_additaion'],
         map['visit_hospital_hospitalSpId'],
-        map['flag']);
+        map['flag'],map['target']);
   }
 }
 

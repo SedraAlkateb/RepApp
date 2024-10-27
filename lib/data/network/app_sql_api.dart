@@ -68,6 +68,7 @@ abstract class AppSqlApiAbs {
     required int id,
     String? kaswn,
     String? science,
+    String? target,
   });
   Future<void> updateVisitDoctorFields({
     required int id,
@@ -488,6 +489,7 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_doctor.kaswn as visit_doctor_kaswn, 
       visit_doctor.science as visit_doctor_science, 
       visit_doctor.additaion as visit_doctor_additaion,
+       visit_doctor.target  as visit_doctor_target,
       visit_doctor.doctorId as visit_doctor_doctorId,
       doctor.id as doctor_id, 
       doctor.title as doctor_title, 
@@ -518,6 +520,7 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_hospital.kaswn as visit_hospital_kaswn, 
       visit_hospital.science as visit_hospital_science, 
       visit_hospital.additaion as visit_hospital_additaion,
+       visit_hospital.target ,
       visit_hospital.hospitalSpId as visit_hospital_hospitalSpId,
       
       hospital.id as hospital_id, 
@@ -646,15 +649,11 @@ class AppSqlApi extends AppSqlApiAbs {
           ''',
             [visitDoctorModel.doctorId],
           );
-
-          // إدراج الزيارة الجديدة
           int visitId = await txn.insert(
             'visit_doctor',
             visitDoctorModel.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-
-          // إدراج الزيارات للأدوية المرتبطة بالطبيب
           for (var visitBrand in visitBrandPharmacyModels) {
             visitBrand.visitId = visitId;
             await txn.insert(
@@ -912,6 +911,7 @@ class AppSqlApi extends AppSqlApiAbs {
     required int id,
     String? kaswn,
     String? science,
+    String? target,
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
@@ -920,6 +920,9 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     if (science != null) {
       updates['science'] = science;
+    }
+    if (target != null) {
+      updates['target'] = target;
     }
     if (updates.isNotEmpty) {
       await mydb.update(

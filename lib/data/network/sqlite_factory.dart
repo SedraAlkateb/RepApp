@@ -151,8 +151,9 @@ class DatabaseHelper {
     additaion TEXT , 
     doctorId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id),
-    target TEXT NOT NULL,
+     target TEXT NOT NULL,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+   
 );
  '''
     );
@@ -165,7 +166,11 @@ class DatabaseHelper {
     additaion TEXT , 
     hospitalSpId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
+     target TEXT NOT NULL,
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
+    
+    
+    
 );''');
     await db.execute('''
      CREATE TABLE visit_pharmacy(
