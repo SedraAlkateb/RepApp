@@ -316,9 +316,9 @@ class VisitDoctorModel {
   String? repPlanId;
   String? representativeId;
   int? flag = 0;
+  String? target;
   VisitDoctorModel(this.id, this.data, this.kaswn, this.science, this.additaion,
-      this.doctorId, this.flag,
-      {this.repPlanId, this.representativeId});
+      this.doctorId, this.flag,this.target, {this.repPlanId, this.representativeId});
   Map<String, dynamic> toMap() {
     return {
       'data': data,
@@ -326,7 +326,8 @@ class VisitDoctorModel {
       'science': science,
       'additaion': additaion,
       'doctorId': doctorId,
-      'flag': flag
+      'flag': flag,
+      'target':target
     };
   }
 
@@ -340,12 +341,13 @@ class VisitDoctorModel {
       'note': kaswn,
       'issue': science,
       'special': additaion,
+      'target': target,
     };
   }
 
   factory VisitDoctorModel.fromMap(Map<String, dynamic> map) {
     return VisitDoctorModel(map['id'], map['data'], map['kaswn'],
-        map['science'], map['additaion'], map['doctorId'], map['flag']);
+        map['science'], map['additaion'], map['doctorId'], map['flag'],map['target']);
   }
   factory VisitDoctorModel.fromMap2(Map<String, dynamic> map) {
     return VisitDoctorModel(
@@ -357,7 +359,9 @@ class VisitDoctorModel {
         map['doctorId'],
         repPlanId: UserInfo.activePlanId.toString(),
         representativeId: UserInfo.repId.toString(),
-        map['flag']);
+        map['flag'],
+      map['target']
+    );
   }
   factory VisitDoctorModel.fromMap1(Map<String, dynamic> map) {
     return VisitDoctorModel(
@@ -367,7 +371,9 @@ class VisitDoctorModel {
         map['visit_doctor_science'],
         map['visit_doctor_additaion'],
         map['visit_doctor_doctorId'],
-        map['flag']);
+        map['flag'],
+      map['visit_doctor_target']
+    );
   }
 }
 
