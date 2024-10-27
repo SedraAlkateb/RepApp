@@ -69,6 +69,7 @@ abstract class RepositorySql {
     required int id,
     String? kaswn,
     String? science,
+    String? target,
   }) ;
   Future<Either<Failure,Null>>updateVisitHospitalFields({
     required int id,

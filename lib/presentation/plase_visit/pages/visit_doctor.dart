@@ -24,6 +24,7 @@ class _VisitDoctorState extends State<VisitDoctor>
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
+  final TextEditingController _targetController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -91,25 +92,25 @@ class _VisitDoctorState extends State<VisitDoctor>
                             ));
                           },
                           child: Container(
-                            padding: EdgeInsets.all(10), // المسافة الداخلية حول النص
+                            padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Colors.transparent, // خلفية شفافة أو يمكنك تخصيصها
-                              shape: BoxShape.rectangle, // يمكنك تغييره إلى BoxShape.circle إذا كنت تريد شكل دائري
+                              color: Colors.transparent,
+                              shape: BoxShape.rectangle,
                               border: Border.all(
-                                color: ColorManager.secondaryColor2, // لون الحلقة البيضاء
-                                width: 2.0, // سماكة الحلقة البيضاء
+                                color: ColorManager.secondaryColor2,
+                                width: 2.0,
                               ),
-                              borderRadius: BorderRadius.circular(10), // حواف دائرية للتصميم
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                
                               ],
                             ),
                             child: Text(
-                              widget.doctorModel.title, // النص المراد عرضه
+                              widget.doctorModel.title,
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.white, // لون النص
-                                    fontWeight: FontWeight.bold, // تعديل نمط الخط
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
                             ),
                           ),
@@ -144,7 +145,28 @@ class _VisitDoctorState extends State<VisitDoctor>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PersonalOrder(noteeController: _noteeController),
+                    Text(
+                      "الهدف من الزيارة:",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
+                    BoxTextField(
+                      keyboardType: TextInputType.text,
+                      prefixIcon: null,
+                      maxLines: 4,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
+                      controller: _targetController,
+                      obscureText: false,
+                      minLines: 3,
+                      inputFormatters: [],
+                    ),
                     Text(
                       " ملاحظات للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
@@ -189,6 +211,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                       minLines: 3,
                       inputFormatters: [],
                     ),
+                    PersonalOrder(noteeController: _noteeController),
                     SizedBox(
                       height: AppSize.s8,
                     ),
@@ -452,7 +475,10 @@ class _VisitDoctorState extends State<VisitDoctor>
                                       _issueController.text,
                                       _noteeController.text,
                                       widget.doctorModel.id,
-                                      0);
+                                    0,
+                                    _targetController.text
+
+                                     );
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand

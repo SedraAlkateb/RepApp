@@ -75,6 +75,7 @@ abstract class AppSqlApiAbs {
     required int id,
     String? kaswn,
     String? science,
+    String? target,
   });
   Future<void> updateVisitPharmacy({
     required int visitId,
@@ -874,6 +875,7 @@ class AppSqlApi extends AppSqlApiAbs {
     required int id,
     String? kaswn,
     String? science,
+    String? target,
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};

@@ -145,7 +145,8 @@ class DatabaseHelper {
     additaion TEXT , 
     doctorId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+    FOREIGN KEY (doctorId) REFERENCES doctor(id),
+    target TEXT NOT NULL,
 );
  ''');
     await db.execute('''

@@ -310,7 +310,8 @@ extension VisitDoctorModelMapper on VisitDoctorModel? {
       (this?.doctorId ?? Constants.zero).toString() ,
       UserInfo.activePlanId.toString() ,
       UserInfo.repId.toString() ,
-      0
+      0,
+        (this?.target ?? Constants.zero).toString() ,
     );
 
   }
