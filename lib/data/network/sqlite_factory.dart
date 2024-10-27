@@ -116,33 +116,27 @@ class DatabaseHelper {
     );
     ''');
     /////////////////////////////////////////////////
-    await db.execute(
-        '''
-      CREATE TABLE planBrand (
+    await db.execute('''
+    CREATE TABLE planBrand (
     id INTEGER PRIMARY KEY,
     spId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     repPlanId INTEGER NOT NULL,
-    brandType TEXT NOT NULL,
+    brandType TEXT NOT NULL DEFAULT 0,
     amount TEXT NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0
     );
-   '''
-    );
-    await db.execute(
-        '''
+    ''');
+    await db.execute('''
       CREATE TABLE brandSp (
     id INTEGER PRIMARY KEY,
     spId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
     brandType TEXT NOT NULL
     );
-   '''
-    );
-
+   ''');
     ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    await db.execute(
-        '''
+    await db.execute('''
      CREATE TABLE visit_doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
@@ -154,8 +148,7 @@ class DatabaseHelper {
     FOREIGN KEY (doctorId) REFERENCES doctor(id),
     target TEXT NOT NULL,
 );
- '''
-    );
+ ''');
     await db.execute('''
     CREATE TABLE visit_hospital(
     id INTEGER PRIMARY  KEY AUTOINCREMENT,

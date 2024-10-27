@@ -8,12 +8,12 @@ abstract class BrandPlanEvent extends Equatable {
 class ChangeFieldEvent extends BrandPlanEvent{
  final int number;
  final int index;
-
- ChangeFieldEvent(this.number,this.index);
+final int  indexBr;
+ ChangeFieldEvent(this.number,this.index,this.indexBr);
  @override
- List<Object?> get props => [number,index];
-
+ List<Object?> get props => [number,index,indexBr];
 }
+
 
 class AllBrandPlanEvent extends BrandPlanEvent{
  final int index;

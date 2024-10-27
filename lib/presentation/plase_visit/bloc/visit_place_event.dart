@@ -50,6 +50,12 @@ class SelectBrandAddEvent extends VisitPlaceEvent{
   @override
   List<Object?> get props => [brand];
 }
+class SelectNumBrandAddEvent extends VisitPlaceEvent{
+  final  String num;
+  SelectNumBrandAddEvent(this.num);
+  @override
+  List<Object?> get props => [num];
+}
 class TypeAdditionEvent extends VisitPlaceEvent{
 final  Type type;
   TypeAdditionEvent(this.type);

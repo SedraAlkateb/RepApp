@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
@@ -232,7 +234,6 @@ class AppSqlApi extends AppSqlApiAbs {
   Future<List<SpecModel>> getSpec() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('specialization');
-
     return List.generate(maps.length, (i) {
       return SpecModel.fromMap(maps[i]);
     });
@@ -409,13 +410,12 @@ class AppSqlApi extends AppSqlApiAbs {
       JOIN hospital ON hospitalSp.hospitalId = hospital.id
       WHERE spId = ?
     ''', [spId]);
-
       if (maps.isNotEmpty) {
         return List.generate(maps.length, (i) {
           return HospitalModel.fromMap(maps[i]);
         });
       } else {
-        return []; // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
+        return [];
       }
     } catch (e) {
       throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
@@ -435,7 +435,7 @@ class AppSqlApi extends AppSqlApiAbs {
           return DoctorModel.fromMap(maps[i]);
         });
       } else {
-        return []; // إعادة قائمة فارغة في حالة عدم وجود مستشفيات.
+        return [];
       }
     } catch (e) {
       throw Exception("حدث خطأ أثناء جلب المستشفيات: $e");
@@ -620,7 +620,6 @@ class AppSqlApi extends AppSqlApiAbs {
 
     await mydb.transaction((txn) async {
       try {
-        // جلب جميع الزيارات الخاصة بالطبيب خلال الثلاثة أيام الماضية
         final List<Map<String, dynamic>> visits = await txn.rawQuery(
           '''
         SELECT * FROM visit_doctor 
@@ -630,14 +629,11 @@ class AppSqlApi extends AppSqlApiAbs {
         ''',
           [
             visitDoctorModel.doctorId,
-            visitDoctorModel.data, // تاريخ الزيارة الجديدة
-            visitDoctorModel.data // تاريخ الزيارة الجديدة (كنهاية للفترة)
+            visitDoctorModel.data,
+            visitDoctorModel.data
           ],
         );
-
-        // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية
         if (visits.isEmpty) {
-          // تقليل عدد الزيارات بمقدار 1
           await txn.rawUpdate(
             '''
           UPDATE doctor 
@@ -646,15 +642,11 @@ class AppSqlApi extends AppSqlApiAbs {
           ''',
             [visitDoctorModel.doctorId],
           );
-
-          // إدراج الزيارة الجديدة
           int visitId = await txn.insert(
             'visit_doctor',
             visitDoctorModel.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-
-          // إدراج الزيارات للأدوية المرتبطة بالطبيب
           for (var visitBrand in visitBrandPharmacyModels) {
             visitBrand.visitId = visitId;
             await txn.insert(
@@ -664,7 +656,6 @@ class AppSqlApi extends AppSqlApiAbs {
             );
           }
         } else {
-          // إذا كانت هناك زيارة سابقة، ارمي خطأ
           throw FormatException(
               'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
         }
@@ -689,12 +680,10 @@ class AppSqlApi extends AppSqlApiAbs {
       SELECT id, visit FROM hospitalSp 
       WHERE hospitalId = ? AND spId = ? 
       ''', [hos, spec]);
-
         if (result.isEmpty) {
           throw Exception(
               'No hospitalSp found for the given hospitalId and spId.');
         }
-
         int hospitalSpId = result.first['id'];
         int currentVisits = result.first['visit'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
@@ -706,9 +695,7 @@ class AppSqlApi extends AppSqlApiAbs {
       AND data < ?
       ''', [hospitalSpId, visitHospitalModel.data, visitHospitalModel.data]);
 
-        // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
-          // تنقيص عدد الزيارات بمقدار 1
           if (currentVisits > 0) {
             await txn.rawUpdate('''
           UPDATE hospitalSp 
@@ -1070,32 +1057,114 @@ class AppSqlApi extends AppSqlApiAbs {
     });
   }
 
-  Future<List<PlanBrandSqlModel>> planBrandByRepPlanId(int repPlanId) async {
+  Future<List<BrandSpPlanModel>> planBrandByRepPlanId(int repPlanId) async {
     Database? mydb = await databaseHelper.database;
 
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
- SELECT 
-  planBrand.id,
-  planBrand.repPlanId,
-  planBrand.brandType,
-  planBrand.amount,
-  brand.title AS brandTitle,
-  brand.phTitle,
-  brand.sampleCoast,
-  specialization.title AS specializationTitle
-FROM 
-  planBrand
-JOIN  
-  brand ON planBrand.brandId = brand.id
-JOIN 
-  specialization ON planBrand.spId = specialization.id
-WHERE 
-  planBrand.repPlanId = ?;
-
+    SELECT  
+      planBrand.id AS plan_id,
+      planBrand.repPlanId,
+      planBrand.brandType,
+      planBrand.amount,
+      brand.id AS brand_id,
+      brand.title AS brand_title,
+      brand.phTitle AS brand_phTitle,
+      brand.sampleCoast AS brand_sampleCost,
+      specialization.id AS specialization_id,
+      specialization.title AS specialization_title
+    FROM 
+      planBrand
+    JOIN  
+      brand ON planBrand.brandId = brand.id
+    JOIN 
+      specialization ON planBrand.spId = specialization.id
+    WHERE 
+      planBrand.repPlanId = ?;
   ''', [repPlanId]);
-    return List.generate(maps.length, (i) {
-      return PlanBrandSqlModel.fromMap(maps[i]);
-    });
+
+    Map<int, BrandSpPlanModel> brandMap = {};
+
+    for (var row in maps) {
+      int brandId = row['brand_id'] as int;
+      if (!brandMap.containsKey(brandId)) {
+
+
+        BrandModel   brandModel = BrandModel(
+          brandId,
+           row['brand_title'] as String,
+          row['brand_phTitle'] as String,
+            0,
+            row['brand_sampleCost']
+        );
+        brandMap[brandId] = BrandSpPlanModel(
+           brandModel,
+          [],
+        );
+      }
+      brandMap[brandId]!.spPlan.add(
+        SpPlan(
+          row['plan_id'],
+         int.parse( row['amount'] ),
+          row['specialization_title'] as String,
+          row['brandType'] ,
+            row['specialization_id']
+        ),
+      );
+    }
+    return brandMap.values.toList();
+  }
+  Future<List<OtherBrandSpPlanModel>> otherPlanBrandByRepPlanId(int repPlanId) async {
+    Database? mydb = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
+    SELECT  
+      planBrand.id AS plan_id,
+      planBrand.repPlanId,
+      planBrand.brandType,
+      planBrand.amount,
+      brand.id AS brand_id,
+      brand.title AS brand_title,
+      brand.phTitle AS brand_phTitle,
+      brand.sampleCoast AS brand_sampleCost,
+      specialization.id AS specialization_id,
+      specialization.title AS specialization_title
+    FROM 
+      planBrand
+    JOIN  
+      brand ON planBrand.brandId = brand.id
+    JOIN 
+      specialization ON planBrand.spId = specialization.id
+    WHERE 
+      planBrand.repPlanId = ?;
+  ''', [repPlanId]);
+
+    Map<int, OtherBrandSpPlanModel> SpMap = {};
+
+    for (var row in maps) {
+      int specializationId = row['specialization_id'] as int;
+      if (!SpMap.containsKey(specializationId)) {
+        SpecModel   spPlan = SpecModel(
+          specializationId,
+          row['specialization_title'],
+        );
+        SpMap[specializationId] = OtherBrandSpPlanModel(
+          spPlan,
+          [],
+        );
+      }
+      SpMap[specializationId]!.brands.add(
+        OtherBrandModel(
+            row['brand_id'] ,
+            row['brand_title'] as String,
+            row['brand_phTitle'] as String,
+            0,
+            row['brand_sampleCost'],
+          row['plan_id'] ,
+            int.parse( row['amount'] ),
+          row['brandType']
+        ),
+      );
+    }
+    return SpMap.values.toList();
   }
 
   updateRep(
@@ -1112,29 +1181,33 @@ WHERE
       whereArgs: [repId],
     );
   }
-  updateAmounts(List<PlanBrandSqlModel> planBrands) async {
+  updateAmounts(List<OtherBrandSpPlanModel> planBrands) async {
     Database? mydb = await databaseHelper.database;
     var batch = mydb.batch();
     for (int i = 0; i < planBrands.length; i++) {
-      batch.update(
-        'planBrand',
-        {'amount': planBrands[i].amount}, // القيمة الجديدة لكل صف
-        where: 'id = ?',
-        whereArgs: [planBrands[i].id],
-      );
+      for (int j = 0; j < planBrands[i].brands.length; j++) {
+        batch.update(
+          'planBrand',
+          {'amount': planBrands[i].brands[j].amount},
+          where: 'id = ?',
+          whereArgs: [planBrands[i].brands[j].Plan],
+        );
+      }
     }
     await batch.commit(noResult: true);
   }
-  updateOtherStatus(int repId, int status, List<PlanBrandSqlModel> planBrands) async {
+  updateOtherStatus(int repId, int status, List<OtherBrandSpPlanModel> planBrands) async {
     Database? mydb = await databaseHelper.database;
     var batch = mydb.batch();
     for (int i = 0; i < planBrands.length; i++) {
-      batch.update(
-        'planBrand',
-        {'amount': planBrands[i].amount}, // القيمة الجديدة لكل صف
-        where: 'id = ?',
-        whereArgs: [planBrands[i].id],
-      );
+      for (int j = 0; j < planBrands[i].brands.length; j++){
+        batch.update(
+          'planBrand',
+          {'amount': planBrands[i].brands[j].amount},
+          where: 'id = ?',
+          whereArgs: [planBrands[i].brands[j].Plan],
+        );
+      }
     }
     await mydb.update(
       'rep',

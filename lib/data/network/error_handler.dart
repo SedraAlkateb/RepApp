@@ -1,9 +1,8 @@
-// ignore_for_file: deprecated_member_use, avoid_print, constant_identifier_names
+// ignore_for_file: deprecated_member_use
 
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:sqflite/sqflite.dart';
-
 class ErrorHandler implements Exception{
 late Failure failure;
 ErrorHandler.handle(dynamic error){

@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/brand_plan/pages/spec_plan_page.dart';
 import 'package:domina_app/presentation/brand_plan/widget/brand_plan_active_page.dart';
 import 'package:domina_app/presentation/brand_plan/widget/brand_plan_other_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -29,8 +30,9 @@ class BrandPlanPage extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               children: [
             BrandPlanActivePage(),
-                BrandPlanOtherPage(),
-          ]),
+                SpecPlanPage(),
+          ]
+          ),
         ));
   }
 }

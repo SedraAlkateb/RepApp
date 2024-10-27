@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class UpdateBrandPlanSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   UpdateBrandPlanSqlUsecase(this._repositorySql);
-  Future<Either<Failure, Null>> execute(List<PlanBrandSqlModel>planBrands) async{
+  Future<Either<Failure, Null>> execute(List<OtherBrandSpPlanModel>planBrands) async{
     return await _repositorySql.updateAmounts(planBrands);
   }
 

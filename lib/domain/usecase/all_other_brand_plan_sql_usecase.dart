@@ -4,15 +4,13 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:equatable/equatable.dart';
-class UpdateOtherStatusUsecase extends Equatable {
+class AllOtherBrandPlanSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
-  UpdateOtherStatusUsecase(this._repositorySql);
-  Future<Either<Failure, Null>> execute(int status, int repId,List<OtherBrandSpPlanModel> planBrands ) async{
-    return await _repositorySql.updateOtherStatus(status, repId,planBrands);
+  AllOtherBrandPlanSqlUsecase(this._repositorySql);
+  Future<Either<Failure, List<OtherBrandSpPlanModel>>> execute(int repPlanId) async{
+    return await _repositorySql.otherPlanBrandByRepPlanId(repPlanId);
   }
-
   @override
-
   List<Object?> get props => [_repositorySql];
 
 }

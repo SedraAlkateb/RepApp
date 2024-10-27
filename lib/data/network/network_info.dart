@@ -2,9 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 abstract class NetworkInfo {
   Future<bool> get isConnected;
-
 }
-
 
 class NetworkInfoImpl extends NetworkInfo {
   final Connectivity connectivity;
@@ -16,4 +14,3 @@ class NetworkInfoImpl extends NetworkInfo {
     return result != ConnectivityResult.none;
   }
 }
-

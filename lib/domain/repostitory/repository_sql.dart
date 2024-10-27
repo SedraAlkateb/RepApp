@@ -89,12 +89,12 @@ abstract class RepositorySql {
   Future<Either<Failure,List<VisitPharmacyModel>>> visitPharmacyAs();
   Future<Either<Failure,List<VisitBrandPharmacyModel>>> visitBrandPharmacyAs();
   Future<Either<Failure,List<PlanBrandModel>>> planBrandsAs();
-  Future<Either<Failure,List<PlanBrandSqlModel>>> planBrandByRepPlanId(int repPlanId) ;
   Future<Either<Failure,Null>> updateRep(int repId, int otherPlanId, int activePlanId, int otherstatus) ;
   Future<Either<Failure,List<HospitalSpAllModel>>> getAllHospitalSpecialization() ;
-  Future<Either<Failure,Null>> updateAmounts(List<PlanBrandSqlModel> planBrands);
+  Future<Either<Failure,Null>> updateAmounts(List<OtherBrandSpPlanModel> planBrands);
   Future<Either<Failure,Null>> updateSpecifiedFlagsToOne(bool hos, bool doc);
-  Future<Either<Failure,Null>> updateOtherStatus(int status,int repId,List<PlanBrandSqlModel> planBrands);
-
+  Future<Either<Failure,Null>> updateOtherStatus(int status,int repId,List<OtherBrandSpPlanModel> planBrands);
+  Future<Either<Failure,List<BrandSpPlanModel>>> planBrandByRepPlanId(int repPlanId) ;
+  Future<Either<Failure,List<OtherBrandSpPlanModel>>> otherPlanBrandByRepPlanId(int repPlanId);
 
 }

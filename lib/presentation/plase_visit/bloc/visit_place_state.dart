@@ -79,6 +79,11 @@ class SelectBrandAddState extends VisitPlaceState{
   SelectBrandAddState(this.brands);
   List<Object?> get props => [brands];
 }
+class SelectBrandAddNumState extends VisitPlaceState{
+  final String brands;
+  SelectBrandAddNumState(this.brands);
+  List<Object?> get props => [brands];
+}
 class EditAmountBrandState extends VisitPlaceState{
   final List<VisitBrandPharmacyModel> brands;
   EditAmountBrandState(this.brands);

@@ -11,8 +11,14 @@ final class BrandPlanInitial extends BrandPlanState {
   List<Object?> get props => [];
 }
 final class AllBrandPlanState extends BrandPlanState {
-  final List<PlanBrandSqlModel> planBrands;
+  final List<BrandSpPlanModel> planBrands;
   AllBrandPlanState(this.planBrands);
+  @override
+  List<Object?> get props =>[planBrands];
+}
+final class AllOtherBrandPlanState extends BrandPlanState {
+  final List<OtherBrandSpPlanModel> planBrands;
+  AllOtherBrandPlanState(this.planBrands);
   @override
   List<Object?> get props =>[planBrands];
 }
@@ -38,7 +44,7 @@ final class SumErrorState extends BrandPlanState {
   List<Object?> get props =>[failure];
 }
 final class SumState extends BrandPlanState {
-  final List<PlanBrandSqlModel> planBrands;
+  final List<OtherBrandSpPlanModel> planBrands;
   SumState(this.planBrands);
   @override
   List<Object?> get props =>[planBrands];

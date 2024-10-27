@@ -1,4 +1,6 @@
 
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/font_manager.dart';
@@ -74,13 +76,6 @@ class StateRenderer extends StatelessWidget {
         ]);
       case StateRendererType.contentState:
       return Container();
-      case StateRendererType.popupSuccess:
-        return _getPopupDialog(
-            context, [
-          _getMessage(title),
-          _getMessage(message),
-          _getRetryButton("موافق", context)
-        ]);
       default:
         return Container();
     }
