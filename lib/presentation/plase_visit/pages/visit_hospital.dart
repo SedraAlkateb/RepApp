@@ -24,6 +24,7 @@ class _VisitHospitalState extends State<VisitHospital>
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
+  final TextEditingController _targetController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -183,11 +184,30 @@ class _VisitHospitalState extends State<VisitHospital>
                             ),
                           );
                         } else {
-                          return Container(); // واجهة بديلة عند عدم تطابق الحالة
+                          return Container();
+                          // واجهة بديلة عند عدم تطابق الحالة
                         }
                       },
                     ),
-                    PersonalOrder(noteeController: _noteeController),
+                    Text(
+                      " الهدف من الزيارة:",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    BoxTextField(
+                      keyboardType: TextInputType.text,
+                      prefixIcon: null,
+                      maxLines: 4,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
+                      controller: _targetController,
+                      obscureText: false,
+                      minLines: 3,
+                      inputFormatters: [],
+                    ),
                     Text(
                       " ملاحظات للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
@@ -223,6 +243,7 @@ class _VisitHospitalState extends State<VisitHospital>
                       minLines: 3,
                       inputFormatters: [],
                     ),
+                    PersonalOrder(noteeController: _noteeController),
                     Text(
                       "اختر العينات المقدمة:",
                       style: Theme.of(context).textTheme.labelLarge,
@@ -481,7 +502,8 @@ class _VisitHospitalState extends State<VisitHospital>
                                       _noteController.text,
                                       _noteeController.text,
                                       0,
-                                      0);
+                                      0,
+                                    _targetController.text,);
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand

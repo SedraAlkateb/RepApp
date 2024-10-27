@@ -19,14 +19,18 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
+  final TextEditingController _targetController = TextEditingController();
+
   @override
   void initState() {
     _noteController.text = widget.doctorModel.visitDoctorModel.science??"";
     _issueController.text = widget.doctorModel.visitDoctorModel.kaswn??"";
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion??"";
-    //   String dateString = widget.doctorModel.visitDoctorModel.data;
-//    DateTime parsedDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
-    //   widget.doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
+    _targetController.text=widget.doctorModel.visitDoctorModel.target??"";
+print( _targetController.text);
+    print( "_targetController.text");
+//    DateTime parsedDate = ``DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
+    //   widget.````````````````````````````````````````````````````````````doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
     super.initState();
@@ -91,12 +95,41 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _noteController.text.isNotEmpty?
+                  _targetController.text.isNotEmpty?
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "لتعديل  الملاحظات :",
+                        "الهدف من الزيارة:",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      SizedBox(
+                        height: AppSize.s8,
+                      ),
+                      BoxTextField(
+                        keyboardType: TextInputType.text,
+                        prefixIcon: null,
+                        maxLines: 4,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "الحقل مطلوب";
+                          }
+                          return null;
+                        },
+                        controller: _targetController,
+                        obscureText: false,
+                        minLines: 3,
+                        inputFormatters: [],
+                      ),
+                    ],
+                  ):SizedBox(),
+                  _noteController.text.isNotEmpty?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      Text(
+                        "  الملاحظات :",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       BoxTextField(

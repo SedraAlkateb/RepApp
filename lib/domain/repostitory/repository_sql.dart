@@ -75,6 +75,7 @@ abstract class RepositorySql {
     required int id,
     String? kaswn,
     String? science,
+    String? target,
   });
 
   Future<Either<Failure,List<HospitalModel>>> getHospitalBySpec(int spId);

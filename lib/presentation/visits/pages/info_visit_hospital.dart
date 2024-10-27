@@ -18,12 +18,16 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final TextEditingController _noteeController = TextEditingController();
+  final TextEditingController _targetController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     _noteController.text=widget.hospitalModel.visitHospitalModel.science??"";
     _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn??"";
     _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion;
+    _targetController.text=widget.hospitalModel.visitHospitalModel.target??"";
+
     BlocProvider.of<VisitBloc>(context).add(BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id) );
     super.initState();
   }
@@ -93,6 +97,34 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _targetController.text.isNotEmpty?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "الهدف من الزيارة:",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      SizedBox(
+                        height: AppSize.s8,
+                      ),
+                      BoxTextField(
+                        keyboardType: TextInputType.text,
+                        prefixIcon: null,
+                        maxLines: 4,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "الحقل مطلوب";
+                          }
+                          return null;
+                        },
+                        controller: _targetController,
+                        obscureText: false,
+                        minLines: 3,
+                        inputFormatters: [],
+                      ),
+                    ],
+                  ):SizedBox(),
                   Text(
                     " الملاحظات :",
                     style: Theme.of(context).textTheme.labelLarge,
@@ -111,6 +143,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     inputFormatters: [],
                     enabled: true,
                   ),
+
                   _issueController .text.isNotEmpty?
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

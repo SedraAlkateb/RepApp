@@ -79,7 +79,7 @@ class DrawerPage extends StatelessWidget {
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
-            leading: Icon(Icons.local_pharmacy_outlined,
+            leading: Icon(Icons.location_history_outlined,
                 color: ColorManager.secondaryColor4),
             title: const Text('الزيارات'),
             onTap: () {
