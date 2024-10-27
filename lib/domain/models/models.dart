@@ -191,9 +191,10 @@ class VisitDoctorRequest {
   String repPlanId;
   String representativeId;
 int flag;
+  String target;
   VisitDoctorRequest(this.id, this.visitDate, this.note, this.issue,
       this.special, this.doctorId, this.repPlanId,
-      this.representativeId,this.flag);
+      this.representativeId,this.flag,this.target);
 
   Map<String, dynamic> toJson() {
     return {
@@ -205,7 +206,7 @@ int flag;
       'note': note,
       'issue': issue,
       'special': special,
-
+'target':target
     };
   }
 
@@ -218,7 +219,9 @@ int flag;
       map['special'],
       map['DoctorId'],
       map['repPlanId'],
-      map['representativeId'], map['flag']
+      map['representativeId'],
+        map['flag'],
+      map['target']
     );
   }
 }
