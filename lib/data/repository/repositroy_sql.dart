@@ -679,19 +679,7 @@ class RepositroySqlImp extends RepositorySql {
     }
   }
 
-  @override
-  Future<Either<Failure, List<PlanBrandSqlModel>>> planBrandByRepPlanId(
-      int repPlanId) async {
-    try {
-    final response=  await
-    _databaseHelper.planBrandByRepPlanId(repPlanId);
-      return Right(response);
-    } catch (e) {
-      return Left(ErrorHandler
-          .handle(e)
-          .failure);
-    }
-  }
+
 
   @override
   Future<Either<Failure, Null>> updateRep(int repId, int otherPlanId, int activePlanId, int otherstatus)  async {
@@ -717,7 +705,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> updateAmounts(List<PlanBrandSqlModel> planBrands) async {
+  Future<Either<Failure, Null>> updateAmounts(List<OtherBrandSpPlanModel> planBrands) async {
     try {
       final response=  await _databaseHelper.updateAmounts(planBrands);
       return Right(response);
@@ -741,9 +729,35 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> updateOtherStatus(int status, int repId,List<PlanBrandSqlModel> planBrands) async {
+  Future<Either<Failure, Null>> updateOtherStatus(int status, int repId,List<OtherBrandSpPlanModel> planBrands) async {
     try {
       final response=  await _databaseHelper.updateOtherStatus(status,repId,planBrands);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+  @override
+  Future<Either<Failure, List<BrandSpPlanModel>>> planBrandByRepPlanId(
+      int repPlanId) async {
+    try {
+      final response=  await
+      _databaseHelper.planBrandByRepPlanId(repPlanId);
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
+  @override
+  Future<Either<Failure, List<OtherBrandSpPlanModel>>> otherPlanBrandByRepPlanId(
+      int repPlanId) async {
+    try {
+      final response=  await
+      _databaseHelper.otherPlanBrandByRepPlanId(repPlanId);
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler

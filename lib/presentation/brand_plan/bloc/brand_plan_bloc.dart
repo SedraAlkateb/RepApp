@@ -3,6 +3,7 @@ import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/all_other_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -15,12 +16,13 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   AllBrandPlanSqlUsecase allBrandPlanSqlUsecase;
   UpdateBrandPlanSqlUsecase updateBrandPlanSqlUsecase;
   UpdateOtherStatusUsecase updateOtherStatusUsecase;
-  List<PlanBrandSqlModel> planBrand = [];
-  List<PlanBrandSqlModel> planBrandActive = [];
+  AllOtherBrandPlanSqlUsecase allOtherBrandPlanSqlUsecase;
+  List<OtherBrandSpPlanModel> planBrand = [];
+  List<BrandSpPlanModel> planBrandActive = [];
   int sum = 0;
   int current = 0;
   BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase,
-      this.updateOtherStatusUsecase)
+      this.updateOtherStatusUsecase,this.allOtherBrandPlanSqlUsecase)
       : super(BrandPlanInitial()) {
     on<BrandPlanEvent>((event, emit) async {
       if (event is AllBrandPlanEvent) {
@@ -33,7 +35,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           emit(AllBrandPlanState(data));
         });
         if (UserInfo.otherPlanId != null) {
-          (await allBrandPlanSqlUsecase.execute(UserInfo.otherPlanId ?? 0))
+          (await allOtherBrandPlanSqlUsecase.execute(UserInfo.otherPlanId ?? 0))
               .fold((failure) {
             emit(AllBrandPlanErrorState(failure: failure));
             return false;
@@ -43,7 +45,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             } else {
               planBrand = data;
               isSum();
-              emit(AllBrandPlanState(data));
+              emit(AllOtherBrandPlanState(data));
             }
           });
         }
@@ -51,22 +53,22 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
       if (event is ChangeFieldEvent) {
         int sum1 = sum;
         sum1 = sum1 -
-            (planBrand[event.index].amount *
-                planBrand[event.index].sampleCoast);
-        sum1 = sum1 + (event.number * planBrand[event.index].sampleCoast);
+            (planBrand[event.index].brands[event.indexBr].amount *
+                planBrand[event.index].brands[event.indexBr].sampleCoast);
+        sum1 = sum1 + (event.number * planBrand[event.index].brands[event.indexBr].sampleCoast);
         if (sum1 < UserInfo.percentage) {
-          planBrand[event.index].amount = event.number;
+          planBrand[event.index].brands[event.indexBr].amount = event.number;
           sum = sum1;
           emit(SumState(planBrand));
         } else {
-          planBrand[event.index].amount = event.number;
+          planBrand[event.index].brands[event.indexBr].amount = event.number;
           sum = sum1;
           emit(
               SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
         }
       }
       if (event is UpdateEvent) {
-        List<PlanBrandSqlModel> planBrandSum = List.from(planBrand);
+        List<OtherBrandSpPlanModel> planBrandSum = List.from(planBrand);
         emit(SumState(planBrandSum));
       }
       if (event is SendToS) {
@@ -104,7 +106,9 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   void isSum() {
     sum = 0;
     for (int i = 0; i < planBrand.length; i++) {
-      sum = sum + (planBrand[i].amount * planBrand[i].sampleCoast);
+      for (int j = 0; j < planBrand[i].brands.length; j++) {
+        sum = sum + (planBrand[i].brands[j].amount * planBrand[i].brands[j].sampleCoast);
+      }
     }
     print(sum);
   }

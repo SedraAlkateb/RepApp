@@ -24,7 +24,6 @@ class _DoctorVisitState extends State<DoctorVisit>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

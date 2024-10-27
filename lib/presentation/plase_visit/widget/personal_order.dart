@@ -5,8 +5,10 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/box_text_field.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+import 'package:domina_app/presentation/uniti/dialog_wid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class PersonalOrder extends StatelessWidget {
   const PersonalOrder({super.key, required this.noteeController});
   final TextEditingController noteeController;
@@ -19,7 +21,9 @@ class PersonalOrder extends StatelessWidget {
           "طلبات شخصية:",
           style: Theme.of(context).textTheme.labelLarge,
         ),
-        SizedBox(height: AppSize.s8,),
+        SizedBox(
+          height: AppSize.s8,
+        ),
         CustomDropDown(
           hintText: "نوع الطلب",
           items: type,
@@ -33,10 +37,11 @@ class PersonalOrder extends StatelessWidget {
             // if (value == null ) {
             //   return "اختر نوع الطلب";
             // }
-            return null;},
+            return null;
+          },
         ),
         Padding(
-          padding: const EdgeInsets.only(top:AppPadding.p12),
+          padding: const EdgeInsets.only(top: AppPadding.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
               return current is BoxState || current is DropDownState;
@@ -76,9 +81,9 @@ class PersonalOrder extends StatelessWidget {
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor2,
                                   value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience ==
-                                      0
+                                              .read<VisitPlaceBloc>()
+                                              .isScience ==
+                                          0
                                       ? true
                                       : false,
                                   splashRadius: 30,
@@ -96,9 +101,9 @@ class PersonalOrder extends StatelessWidget {
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor2,
                                   value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience ==
-                                      1
+                                              .read<VisitPlaceBloc>()
+                                              .isScience ==
+                                          1
                                       ? true
                                       : false,
                                   onChanged: (value) {
@@ -115,9 +120,9 @@ class PersonalOrder extends StatelessWidget {
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor2,
                                   value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience ==
-                                      2
+                                              .read<VisitPlaceBloc>()
+                                              .isScience ==
+                                          2
                                       ? true
                                       : false,
                                   onChanged: (value) {
@@ -150,21 +155,37 @@ class PersonalOrder extends StatelessWidget {
                         BrandModel brand = value;
                         BlocProvider.of<VisitPlaceBloc>(context).add(
                             SelectBrandAddEvent(
-                                "${noteeController.text} , ${brand.title} ${brand.phTitle}"));
+                                "${noteeController.text}  ${brand.title} ${brand.phTitle}"));
                       },
                       validator: (value) {
-                         if (value == null ) {
-                           return"اختر العينات";
-                         }
+                        if (value == null) {
+                          return "اختر العينات";
+                        }
                         return null;
                       },
                       errorText: 'لايوجد نتيجة',
                     ),
-                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                    BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
                       buildWhen: (previous, current) {
-                        return current is SelectBrandAddState;
+                        return current is SelectBrandAddState ||
+                            current is SelectBrandAddNumState;
+                      },
+                      listener: (context, state) {
+                        if (state is SelectBrandAddState) {
+                          noteeController.text = state.brands;
+                          showDialog(
+                              context: context,
+                              builder: (context) => DialogFilter(
+                                    text: "اختر عدد العينات",
+                                    noteText: noteeController.text,
+                                  ));
+                        }
                       },
                       builder: (context, state) {
+                        if (state is SelectBrandAddNumState) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            noteeController.text = state.brands;                          });
+                        }
                         if (state is SelectBrandAddState) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             noteeController.text = state.brands;
@@ -174,23 +195,19 @@ class PersonalOrder extends StatelessWidget {
                           padding:
                               EdgeInsets.symmetric(vertical: AppPadding.p12),
                           child: BoxTextField(
-                            function: (value) {
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  SelectBrandAddEvent(
-                                      "${noteeController.text}"));
-                            },
                             keyboardType: TextInputType.text,
                             prefixIcon: null,
-                            maxLines: 4,
+                            maxLines: 5,
+                            enabled: true,
+                            minLines: 3,
                             validator: (value) {
-                              if (value == null ) {
-                                return"اختر العينات";
+                              if (value == null) {
+                                return "اختر العينات";
                               }
                               return null;
                             },
                             controller: noteeController,
                             obscureText: false,
-                            minLines: 3,
                             inputFormatters: [],
                           ),
                         );
@@ -207,9 +224,9 @@ class PersonalOrder extends StatelessWidget {
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor2,
                                   value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience ==
-                                      0
+                                              .read<VisitPlaceBloc>()
+                                              .isScience ==
+                                          0
                                       ? true
                                       : false,
                                   splashRadius: 30,
@@ -227,9 +244,9 @@ class PersonalOrder extends StatelessWidget {
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor2,
                                   value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience ==
-                                      1
+                                              .read<VisitPlaceBloc>()
+                                              .isScience ==
+                                          1
                                       ? true
                                       : false,
                                   onChanged: (value) {
@@ -246,9 +263,9 @@ class PersonalOrder extends StatelessWidget {
                                   focusColor: ColorManager.secondaryColor,
                                   activeColor: ColorManager.secondaryColor2,
                                   value: context
-                                      .read<VisitPlaceBloc>()
-                                      .isScience ==
-                                      2
+                                              .read<VisitPlaceBloc>()
+                                              .isScience ==
+                                          2
                                       ? true
                                       : false,
                                   onChanged: (value) {

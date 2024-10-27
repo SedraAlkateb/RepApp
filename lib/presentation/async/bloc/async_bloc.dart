@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
@@ -151,38 +153,34 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       final pharmaciesFailureOrSuccess = pharmaciesResult.fold((failure) => failure, (data) => data);
       if (pharmaciesFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: pharmaciesFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false;
       }
       pharmacies = pharmaciesFailureOrSuccess as List<PharmacyModel>;
 /////////////////////////////////////////////////////
-      // استدعاء بيانات الأماكن
+
       final placesResult = await allPlaceUsecase.execute(UserInfo.repId);
       final placesFailureOrSuccess = placesResult.fold((failure) => failure, (data) => data);
       if (placesFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: placesFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false;
       }
       places = placesFailureOrSuccess as List<PlaceModel>;
 ///////////////////////////////////////////////////////////
-      // استدعاء بيانات التخصصات
       final specResult = await allSpeUsecase.execute(UserInfo.repId);
       final specFailureOrSuccess = specResult.fold((failure) => failure, (data) => data);
       if (specFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: specFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false;
       }
       spec = specFailureOrSuccess as List<SpecModel>;
 ///////////////////////////////////////
-      // استدعاء بيانات التخصصات في المستشفيات
       final hospitalSpsResult = await allHospialSpUsecase.execute(UserInfo.repId);
       final hospitalSpsFailureOrSuccess = hospitalSpsResult.fold((failure) => failure, (data) => data);
       if (hospitalSpsFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: hospitalSpsFailureOrSuccess));
-        return false; // توقف عند الفشل
+        return false;
       }
       hospitalSps = hospitalSpsFailureOrSuccess as List<HospitalSpModel>;
-
-
       /////////////////////////
       final brandSpsResult = await allBrandsSpUsecase.execute(UserInfo.repId);
       final brandSpFailureOrSuccess = brandSpsResult.fold((failure) => failure, (data) => data);

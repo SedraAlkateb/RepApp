@@ -10,13 +10,10 @@ class PlaceVisitPage extends StatelessWidget {
   final int placeId;
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
-
-        length:2, //3,
+        length:2,
         child: Scaffold(
           appBar: AppBar(
-
             backgroundColor: ColorManager.secondaryColor7,
             bottom: TabBar(
                 labelPadding: EdgeInsets.all(0.9),

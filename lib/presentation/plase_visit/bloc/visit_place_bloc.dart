@@ -132,6 +132,10 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         br = "${event.brand}";
         emit(SelectBrandAddState(br));
       }
+      if( event is SelectNumBrandAddEvent){
+        br = "${event.num}";
+        emit(SelectBrandAddNumState(br));
+      }
       // if (event is InsertVisitPharmacyEvent) {
       //   emit(InsertVisitPharmacyLoadingState());
       //   (await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel))
@@ -178,7 +182,10 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           selectBrand = [];
           emit(AllVisitBrandDoctorState());
         });
-      } else if (event is InsertBrandVisitHospitalEvent) {
+      }
+      else if (event is InsertBrandVisitHospitalEvent) {
+        event.visitHospitalModel.additaion =(not ==""?null:
+        addition(event.visitHospitalModel.additaion))!;
         (await insertVisitBrandHospitalSqlUsecase.execute(visitBrandPharmacys,
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -188,7 +195,10 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           selectBrand = [];
           emit(AllVisitBrandHospitalState());
         });
-      } else if (event is InsertVisitHospitalEvent) {
+      }
+      else if (event is InsertVisitHospitalEvent) {
+        event.visitHospitalModel.additaion =(not ==""?null:
+        addition(event.visitHospitalModel.additaion))!;
         (await insertVisitHospitalSqlUsecase.execute(
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -269,7 +279,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   }
   String addition(String brand) {
     String add =
-        "${not} \n ${brand} \n ${isScience == 0 ? " مكتب علمي " :isScience == 1? "مع الخطة ": "مع الموزع "}";
+        "${not} \n ${brand} ${isScience == 0 ? " مكتب علمي " :isScience == 1? "مع الخطة ": "مع الموزع "}";
     return add;
   }
 }

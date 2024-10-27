@@ -1,6 +1,5 @@
-class Failure{
-  int code;//200,201..
-  String massage;//error
-Failure(this.code,this.massage);
+class Failure {
+  int code;
+  String massage;
+  Failure(this.code, this.massage);
 }
-

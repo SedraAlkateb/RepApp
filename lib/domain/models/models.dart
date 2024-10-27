@@ -71,19 +71,36 @@ class VisitBrandPharmacyModel {
     );
   }
 }
-
+class BrandSpPlanModel{
+  BrandModel brandModel;
+  List<SpPlan> spPlan=[];
+  BrandSpPlanModel(this.brandModel,this.spPlan);
+}
+class OtherBrandSpPlanModel{
+  List<OtherBrandModel> brands=[];
+  SpecModel specModel;
+  OtherBrandSpPlanModel(this.specModel,this.brands);
+}
+class SpPlan{
+  int id;
+  int idSp;
+  int amount;
+  String title;
+  String brandType;
+  SpPlan(this.id,this.amount,this.title,this.brandType,this.idSp);
+}
 class BrandModel {
   int id;
   String title;
   String phTitle;
-  int falg;
+  int flag;
   int sampleCoast;
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'phTitle': phTitle,
-      'falg': falg,
+      'falg': flag,
       'sampleCoast': sampleCoast
     };
   }
@@ -97,7 +114,18 @@ class BrandModel {
       map['sampleCoast'],
     );
   }
-  BrandModel(this.id, this.title, this.phTitle, this.falg, this.sampleCoast);
+  BrandModel(this.id, this.title, this.phTitle, this.flag, this.sampleCoast);
+}
+class OtherBrandModel {
+  int id;
+  String title;
+  String phTitle;
+  int flag;
+  int sampleCoast;
+  int Plan;
+  int amount;
+  String brandType;
+  OtherBrandModel(this.id, this.title, this.phTitle, this.flag, this.sampleCoast,this.Plan,this.amount,this.brandType);
 }
 
 class PharmacyBrandModel {
@@ -337,8 +365,8 @@ class VisitDoctorModel {
       'representativeId': UserInfo.repId,
       'docId': doctorId,
       'visitDate': data,
-      'note': kaswn,
-      'issue': science,
+      'note': science,
+      'issue':  kaswn,
       'special': additaion,
     };
   }
@@ -399,8 +427,8 @@ class VisitHospitalModel {
       'representativeId': UserInfo.repId,
       'hospitalSpId': hospitalSpId,
       'visitDate': data,
-      'note': kaswn,
-      'issue': science,
+      'note': science,
+      'issue':  kaswn,
       'special': additaion,
     };
   }
@@ -490,8 +518,8 @@ class MedicalVisits {
       'visitDate': visitDate,
       'title': title,
       'address': address,
-      'note': note,
-      'issue': issue,
+      'note': issue,
+      'issue': note,
       'spTitle': spTitle,
       'brands': brands
     };
