@@ -9,147 +9,126 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
+
   @override
   _MyLoginState createState() => _MyLoginState();
 }
 
 class _MyLoginState extends State<MyLogin> {
-  final formKey = new GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Scaffold(
-
-          body: WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
+    return Scaffold(
+      body: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/login.png'), // مسار الصورة
+              fit: BoxFit.cover, // لتغطية الشاشة بالكامل
+            ),
+          ),
+          child: SingleChildScrollView(
             child: Form(
               key: formKey,
-              child:    SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'مرحبا بك \nفي Domina',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: ColorManager.white, fontSize: 25,fontWeight:FontWeight.bold),
-                    ),
-                    Image.asset(ImageAssets.domina,scale: 5,),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 100), // للمسافة في أعلى الصفحة
 
-                    SizedBox(height: 8,),
-                    Container(
-                      margin: EdgeInsets.only(left: 35, right: 35),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            validator: (val) => val!.length < 3
-                                ? "حقل الاسم مطلوب "
-                                : null,
-                            controller: userName,
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                                fillColor: Colors.grey.shade100,
-                                filled: true,
-                                hintText: "الاسم",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
+                  Image.asset(ImageAssets.domina, scale: 5),
+                  SizedBox(height: 8),
+                  Container(
+                    margin: EdgeInsets.only(left: 35, right: 35),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          validator: (val) => val!.length < 3 ? "حقل الاسم مطلوب" : null,
+                          controller: userName,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            hintText: "الاسم",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          SizedBox(
-                            height: 30,
+                        ),
+                        SizedBox(height: 30),
+                        TextFormField(
+                          controller: password,
+                          validator: (val) => val!.length < 2 ? "كلمة السر يجب ان تكون أطول من 2" : null,
+                          style: TextStyle(),
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            hintText: "كلمة السر",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          TextFormField(
-                            controller: password,
-                            validator: (val) => val!.length < 2
-                                ? "كلمة السر يجب ان تكون اطول من 2"
-                                : null,
-                            style: TextStyle(),
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                fillColor: Colors.grey.shade100,
-                                filled: true,
-                                hintText: "كلمة السر",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'تسجيل الدخول',
-                                style: TextStyle(
-                                    fontSize: 27,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              BlocListener<AuthBloc, AuthState>(
-                                listener: (context, state) {
-                                  if (state is LoginLoadingState) {
-                                    loading(context);
-                                  }
-                                  if (state is LoginState) {
-                                    BlocProvider.of<AuthBloc>(context)
-                                        .add(LoginInsertEvent());
-
-                                  }
-                                  //    if (state is DeleteState) {
-                                  //     BlocProvider.of<AuthBloc>(context)
-                                  //         .add(DeleteDataEvent());
-                                  //     }
-                                  if (state is InsertLoginState) {
-                                    success(context);
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context, Routes.syncData,(route) => false,);
-                                  }
-                                  if (state is LoginErrorState) {
-                                    error(context, state.failure.massage,
-                                        state.failure.code);
-                                  }
-                                  if (state is InsertLoginErrorState) {
-                                    error(context, state.failure.massage,
-                                        state.failure.code);
-                                  }
-                                },
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: ColorManager.secondaryColor1,
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        if (formKey.currentState!
-                                            .validate()) {
-                                          BlocProvider.of<AuthBloc>(
-                                              context)
-                                              .add(LoginEvent(
-                                              userName.text,
-                                              password.text));
-                                          formKey.currentState!.save();
-                                        }
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward,
-                                      )),
+                        ),
+                        SizedBox(height: 40),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'تسجيل الدخول',
+                              style: TextStyle(fontSize: 27, fontWeight: FontWeight.w700),
+                            ),
+                            BlocListener<AuthBloc, AuthState>(
+                              listener: (context, state) {
+                                if (state is LoginLoadingState) {
+                                  loading(context);
+                                }
+                                if (state is LoginState) {
+                                  BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
+                                }
+                                if (state is InsertLoginState) {
+                                  success(context);
+                                  Navigator.pushNamedAndRemoveUntil(context, Routes.syncData, (route) => false);
+                                }
+                                if (state is LoginErrorState) {
+                                  error(context, state.failure.massage, state.failure.code);
+                                }
+                                if (state is InsertLoginErrorState) {
+                                  error(context, state.failure.massage, state.failure.code);
+                                }
+                              },
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: ColorManager.secondaryColor1,
+                                child: IconButton(
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      BlocProvider.of<AuthBloc>(context).add(LoginEvent(userName.text, password.text));
+                                      formKey.currentState!.save();
+                                    }
+                                  },
+                                  icon: Icon(Icons.arrow_forward),
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -82,7 +82,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
             return true;
           }
           return false;
-        }).toList();
+        }
+        ).toList();
         emit(SearchVisitDoctorState(doctorSearch));
       }
       else if (event is SearchHospitalVisitEvent) {
@@ -100,6 +101,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           if (value.visitHospitalModel.kaswn!.contains(event.value)) {
             return true;
           }
+
           return false;
         }).toList();
         emit(SearchVisitHospitalState(hospitalSearch));
