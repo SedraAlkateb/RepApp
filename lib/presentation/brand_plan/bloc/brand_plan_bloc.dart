@@ -72,6 +72,8 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         emit(SumState(planBrandSum));
       }
       if (event is SendToS) {
+        print("|;;;;;;;;;;;;;;;;;;;;;");
+        emit(UpdateAmountLoadingState());
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
@@ -82,6 +84,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
                 emit(UpdateAmountErrorState(failure: failure));
                 return false;
               }, (data) async {
+            print("|;;;;;;;;;;;;;;;;;;;;;");
             emit(UpdateAmountState());
           });
         }
