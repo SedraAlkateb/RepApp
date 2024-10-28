@@ -45,7 +45,11 @@ class DrawerPage extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    UserInfo.name!,
+
+
+
+
+                    UserInfo.name??"",
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
