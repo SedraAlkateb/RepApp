@@ -130,6 +130,7 @@ class SpecPlanPage extends StatelessWidget {
                     context, state.failure.massage, state.failure.code);
               }
               if (state is UpdateAmountState) {
+                print("|;;;;;;;;;;;;;;;;;;;;;");
                 successWithMessage(context, "تم حفظ التغيرات");
               }
             },
@@ -168,8 +169,10 @@ class SpecPlanPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
+                        print("|;;;;;;;;;;;;;;;;;;;;;");
                         BlocProvider.of<BrandPlanBloc>(context)
                             .add(SendToS());
+
                       },
                       child: SizedBox(
                         height: 80,

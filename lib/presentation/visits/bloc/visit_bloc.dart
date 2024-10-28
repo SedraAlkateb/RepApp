@@ -92,7 +92,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           if (value.hospitalModel.title.contains(event.value)) {
             return true;
           }
-          if (value.visitHospitalModel.additaion.contains(event.value)) {
+          if (value.visitHospitalModel.additaion!.contains(event.value)) {
             return true;
           }
           if (value.visitHospitalModel.science!.contains(event.value)) {

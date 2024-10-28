@@ -413,7 +413,7 @@ class VisitHospitalModel {
   String data;
   String? kaswn;
   String? science;
-  String additaion;
+  String? additaion;
   int hospitalSpId;
   int? flag = 0;
   String? target;
