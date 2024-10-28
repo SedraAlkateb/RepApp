@@ -72,7 +72,7 @@ class HospitalViewDetails extends StatelessWidget {
                     Divider(
                       thickness: 0.5,
                     ),
-                    if (hospital.note != null && hospital.note!.isNotEmpty)
+                    if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
                       buildHtmlDetailRow(
                           context, Icons.note, 'ملاحظات', hospital.note ?? ''),
                     Text(
@@ -124,49 +124,53 @@ class HospitalViewDetails extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text.rich(
-                                          textAlign: TextAlign.center,
-                                          softWrap: false,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          TextSpan(
-                                            text: 'عدد الزيارات: ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall,
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${hospitalsp[index].hospitalSpModel.visit}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineMedium,
-                                              ),
-                                            ],
+                                        Expanded(
+                                          child: Text.rich(
+                                            textAlign: TextAlign.start,
+                                            softWrap: false,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            TextSpan(
+                                              text: 'عدد الزيارات: ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displaySmall,
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text:
+                                                      '${hospitalsp[index].hospitalSpModel.visit}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineMedium,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        Text.rich(
-                                          textAlign: TextAlign.center,
-                                          softWrap: false,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          TextSpan(
-                                            text: 'التصنيف: ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall,
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${hospitalsp[index].hospitalSpModel.rate}',
-                                                style: TextStyle(
-                                                    color: ColorManager
-                                                        .secondaryColor4,
-                                                    fontSize: 16,
-                                                    fontStyle:
-                                                        FontStyle.normal),
-                                              ),
-                                            ],
+                                        Expanded(
+                                          child: Text.rich(
+                                            textAlign: TextAlign.start,
+                                            softWrap: false,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            TextSpan(
+                                              text: 'التصنيف: ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displaySmall,
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text:
+                                                      '${hospitalsp[index].hospitalSpModel.rate}',
+                                                  style: TextStyle(
+                                                      color: ColorManager
+                                                          .secondaryColor4,
+                                                      fontSize: 16,
+                                                      fontStyle:
+                                                          FontStyle.normal),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -180,48 +184,52 @@ class HospitalViewDetails extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text.rich(
-                                          textAlign: TextAlign.center,
-                                          softWrap: false,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          TextSpan(
-                                            text: 'عدد الاطباء: ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall,
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${hospitalsp[index].hospitalSpModel.totalDocs}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineMedium,
-                                              ),
-                                            ],
+                                        Expanded(
+                                          child: Text.rich(
+                                            textAlign: TextAlign.start,
+                                            softWrap: false,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            TextSpan(
+                                              text: 'عدد الاطباء: ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displaySmall,
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text:
+                                                      '${hospitalsp[index].hospitalSpModel.totalDocs}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineMedium,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        Text.rich(
-                                          textAlign: TextAlign.center,
-                                          softWrap: false,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          TextSpan(
-                                            text: 'الاختصاص: ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall,
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: hospitalsp[index]
-                                                    .specModel
-                                                    .title
-                                                    .toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineMedium,
-                                              ),
-                                            ],
+                                        Expanded(
+                                          child: Text.rich(
+                                            textAlign: TextAlign.start,
+                                            softWrap: false,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            TextSpan(
+                                              text: 'الاختصاص: ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displaySmall,
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: hospitalsp[index]
+                                                      .specModel
+                                                      .title
+                                                      .toString(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineMedium,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],

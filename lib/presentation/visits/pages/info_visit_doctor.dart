@@ -28,7 +28,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion??"";
     _targetController.text=widget.doctorModel.visitDoctorModel.target??"";
 print( _targetController.text);
-    print( "_targetController.text");
 //    DateTime parsedDate = ``DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
     //   widget.````````````````````````````````````````````````````````````doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
     BlocProvider.of<VisitBloc>(context)

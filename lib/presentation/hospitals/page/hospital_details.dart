@@ -84,7 +84,7 @@ class HospitalDetails extends StatelessWidget {
                           buildDetailRow(
                               context, Icons.location_on, 'الاختصاص', hospital.titleSp.toString()),
 
-                          if (hospital.note != null && hospital.note!.isNotEmpty)
+                          if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
                             buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
                                 hospital.note ?? ''),
                         ],

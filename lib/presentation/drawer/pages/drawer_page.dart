@@ -39,13 +39,17 @@ class DrawerPage extends StatelessWidget {
                     maxRadius: 35,
                     backgroundColor: ColorManager.secondaryColor5,
                     child: Text(
-                      "",
+    UserInfo.name??"",
                       style: TextStyle(fontSize: 30.0, color: Colors.blue),
                     ),
                   ),
                   SizedBox(width: 10), // إضافة مسافة بين الصورة والنص
                   Text(
-                    " lina",
+
+
+
+
+                    UserInfo.name??"",
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
