@@ -1,7 +1,6 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
-import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -25,7 +24,6 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
     super.build(context);
     return Scaffold(
       backgroundColor: ColorManager.white,
-      //     drawer: DrawerPage(),
       body: Container(
         child: Stack(
           children: [

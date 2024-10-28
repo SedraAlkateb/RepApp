@@ -25,7 +25,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
   void initState() {
     _noteController.text=widget.hospitalModel.visitHospitalModel.science??"";
     _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn??"";
-    _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion;
+    _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion??"";
     _targetController.text=widget.hospitalModel.visitHospitalModel.target??"";
 
     BlocProvider.of<VisitBloc>(context).add(BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id) );

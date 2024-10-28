@@ -185,7 +185,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       }
       else if (event is InsertBrandVisitHospitalEvent) {
         event.visitHospitalModel.additaion =(not ==""?null:
-        addition(event.visitHospitalModel.additaion))!;
+        addition(event.visitHospitalModel.additaion??""));
         (await insertVisitBrandHospitalSqlUsecase.execute(visitBrandPharmacys,
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -198,7 +198,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       }
       else if (event is InsertVisitHospitalEvent) {
         event.visitHospitalModel.additaion =(not ==""?null:
-        addition(event.visitHospitalModel.additaion))!;
+        addition(event.visitHospitalModel.additaion??""));
         (await insertVisitHospitalSqlUsecase.execute(
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
