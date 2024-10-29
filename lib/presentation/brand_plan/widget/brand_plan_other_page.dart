@@ -22,7 +22,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return Scaffold(appBar: AppBar(centerTitle: true,
+        title:Text(widget.otherBrandSpPlanModel.specModel.title)),
       backgroundColor: ColorManager.white,
       body: Container(
         child: Stack(
@@ -73,7 +74,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8),
                                       child: Icon(
-                                        Icons.add_card,
+                                        Icons.medication_outlined,
                                         color: ColorManager.secondaryColor4,
                                       ),
                                     ),
@@ -88,23 +89,29 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                       ),
                                     ),
                                     Container(
-                                      // margin: EdgeInsets.all(AppPadding.p8),
                                       padding: EdgeInsets.symmetric(
-                                          vertical: AppPadding.p8,
-                                          horizontal: AppPadding.p14),
-                                      decoration: BoxDecoration(
-                                        color: ColorManager.secondaryColor2,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(AppSize.s8)),
+                                        vertical: AppPadding.p8,
+                                        horizontal: AppPadding.p14,
                                       ),
-                                      child: int.parse(widget
-                                                  .otherBrandSpPlanModel
-                                                  .brands[index]
-                                                  .brandType) ==
-                                              1
-                                          ? Text("هدف")
-                                          : Text("مساعد"),
+                                      decoration: BoxDecoration(
+                                        color: int.parse(widget.otherBrandSpPlanModel.brands[index].brandType) == 1
+                                            ? ColorManager.secondaryColor1
+                                            : ColorManager.secondaryColor2,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(AppSize.s8),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        int.parse(widget.otherBrandSpPlanModel.brands[index].brandType) == 1
+                                            ? "هدف"
+                                            : "مساعد",
+                                        style: TextStyle(
+                                          color: ColorManager.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     )
+
                                   ],
                                 ),
                               ),
@@ -119,7 +126,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8),
                                       child: Icon(
-                                        Icons.merge_type_rounded,
+                                        Icons.medical_information_outlined ,
                                         color: ColorManager.secondaryColor4,
                                       ),
                                     ),
