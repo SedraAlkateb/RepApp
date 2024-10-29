@@ -51,10 +51,9 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                     Container(
-
                       decoration:
                       BoxDecoration(
-                          color: ColorManager.secondaryColor7,
+                          color: ColorManager.secondaryColor,
                   border: Border.symmetric(vertical: BorderSide(color:  ColorManager.secondaryColor7)),
                   borderRadius:
                   const BorderRadius.all(Radius.circular(AppSize.s8)),
@@ -75,30 +74,24 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                                   Theme.of(context).textTheme.titleMedium,
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(horizontal: AppPadding.p8),
+                                  //
+                                  margin: EdgeInsets.symmetric( horizontal: AppPadding.p8),
                                   padding: EdgeInsets.symmetric(
-                                    vertical: AppPadding.p8,
-                                    horizontal: AppPadding.p14,
-                                  ),
+                                      vertical: AppPadding.p8,
+                                      horizontal: AppPadding.p14),
                                   decoration: BoxDecoration(
-                                    color: int.parse(planBrandModel[index].spPlan[0].brandType) == 1
-                                        ? ColorManager.secondaryColor1
-                                        : ColorManager.secondaryColor2,
+                                    color: ColorManager.secondaryColor2,
                                     borderRadius: const BorderRadius.all(
-                                      Radius.circular(AppSize.s8),
-                                    ),
+                                        Radius.circular(AppSize.s8)),
+                                    //        color: ColorManager.card,
                                   ),
-                                  child: Text(
-                                    int.parse(planBrandModel[index].spPlan[0].brandType) == 1
-                                        ? "هدف"
-                                        : "مساعد",
-                                    style: TextStyle(
-                                      color: ColorManager.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  child: int.parse(planBrandModel[index]
+                                      .spPlan[0]
+                                      .brandType) ==
+                                      1
+                                      ? Text("هدف")
+                                      : Text("مساعد"),
                                 )
-
                               ],
                             ),
                           ),
