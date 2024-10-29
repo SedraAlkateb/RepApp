@@ -48,7 +48,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<SpecModel>>> getSpecSql() async {
+  Future<Either<Failure, List<SpecDModel>>> getSpecSql() async {
     try {
       final response = await _databaseHelper.getSpec();
       return Right(response);

@@ -10,7 +10,7 @@ final class SpecializationInitial extends SpecializationState {
 }
 
 final class AllSpecState extends SpecializationState {
-  final List<SpecModel> Specs;
+  final List<SpecDModel> Specs;
   AllSpecState(this.Specs);
   @override
   List<Object?> get props =>[Specs];

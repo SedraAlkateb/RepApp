@@ -31,35 +31,48 @@ class _DoctorSpState extends State<DoctorSp> {
               },
               builder: (context, state) {
                 if (state is AllDoctorSpState) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p16),
-                          decoration: BoxDecoration(
-                            color: ColorManager.white,
-                            border: Border.all(color: ColorManager.hintGrey),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(AppSize.s8)),
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+                            child: Text("عدد الاطباء  :  ${state.doctors.length} "
+                                ,style: Theme.of(context).textTheme.displayLarge),
                           ),
-                          child: Column(
-                            children: [
-                              Text(
-                                state.doctors[index].title,
-                                style: Theme.of(context).textTheme.labelLarge,
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.all(AppPadding.p8),
+                              padding: EdgeInsets.all(AppPadding.p16),
+                              decoration: BoxDecoration(
+                                color: ColorManager.white,
+                                border: Border.all(color: ColorManager.hintGrey),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(AppSize.s8)),
                               ),
-                              TextRach(
-                                  s1: "العنوان: ", s2: state.doctors[index].placeTitle),
-                            ],
-                          ),
-                        );
-                      },
-                      itemCount: state.doctors.length,
-                    ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    state.doctors[index].title,
+                                    style: Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  TextRach(
+                                      s1: "العنوان: ", s2: state.doctors[index].placeTitle),
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: state.doctors.length,
+                        ),
+                      ),
+                    ],
                   );
                 }
 

@@ -75,7 +75,7 @@ class SpecializationsPage extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      List<SpecModel> placeModel = context.watch<SpecializationBloc>().specialization;
+                      List<SpecDModel> placeModel = context.watch<SpecializationBloc>().specialization;
                       if (state is AllSpecState) {
                         placeModel = state.Specs;
                       }
@@ -129,20 +129,40 @@ class SpecializationsPage extends StatelessWidget {
                                     Image.asset(
 
                                         ImageAssetsSpec().getImage( placeModel[index].id)
-                                    ,width: 50,
-                                      height: 50,
+                                    ,width: 45,
+                                      height: 45,
                                       color: ColorManager.white.withOpacity(0.8),
                                       colorBlendMode: BlendMode.modulate,
 
                                     ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      textAlign: TextAlign.center,
-                                      placeModel[index].title,
-                                      style: TextStyle(
-                                          color: ColorManager.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20),
+                                    SizedBox(height: 10),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          placeModel[index].title,
+                                          style: TextStyle(
+                                              color: ColorManager.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          " زيارات الاطباء : ${placeModel[index].sumDoctor}",
+                                          style: TextStyle(
+                                              color: ColorManager.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12),
+                                        ),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          " زيارات المشافي : ${placeModel[index].sumHospital}",
+                                          style: TextStyle(
+                                              color: ColorManager.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

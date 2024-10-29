@@ -33,32 +33,45 @@ class _HospitalSpState extends State<HospitalSp> {
                 if (state is AllHospitalSpState) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p16),
-                          decoration: BoxDecoration(
-                            color: ColorManager.white,
-                            border: Border.all(color: ColorManager.hintGrey),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(AppSize.s8)),
-                          ),
-                          child: Column(
-                            children: [
-                              Text(
-                                state.hospitals[index].title,
-                                style: Theme.of(context).textTheme.labelLarge,textAlign: TextAlign.center,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+                              child: Text("عدد المشافي  :  ${state.hospitals.length} "
+                                  ,style: Theme.of(context).textTheme.displayLarge),
+                            ),
+                          ],
+                        ),
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.all(AppPadding.p8),
+                              padding: EdgeInsets.all(AppPadding.p16),
+                              decoration: BoxDecoration(
+                                color: ColorManager.white,
+                                border: Border.all(color: ColorManager.hintGrey),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(AppSize.s8)),
                               ),
-                              TextRach(
-                                  s1: "العنوان: ", s2: state.hospitals[index].placeTitle),
-                            ],
-                          ),
-                        );
-                      },
-                      itemCount: state.hospitals.length,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    state.hospitals[index].title,
+                                    style: Theme.of(context).textTheme.labelLarge,textAlign: TextAlign.center,
+                                  ),
+                                  TextRach(
+                                      s1: "العنوان: ", s2: state.hospitals[index].placeTitle),
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: state.hospitals.length,
+                        ),
+                      ],
                     ),
                   );
                 }
