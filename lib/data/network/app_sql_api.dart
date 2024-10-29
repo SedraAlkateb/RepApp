@@ -234,34 +234,41 @@ class AppSqlApi extends AppSqlApiAbs {
 
   Future<List<SpecDModel>> getSpec() async {
     final db = await databaseHelper.database;
+
+    // استعلام لجلب مجموع زيارات الأطباء، وفي حال عدم وجود مجموع يتم إرجاع صفر
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
     SELECT 
       specialization.id AS specialization_id, 
       specialization.title AS specialization_title, 
-      SUM(CAST(doctor.visits AS INTEGER)) AS sumDoctor
+      COALESCE(SUM(CAST(doctor.visits AS INTEGER)), 0) AS sumDoctor
     FROM 
-   specialization
+      specialization
     LEFT JOIN 
       doctor ON doctor.spId = specialization.id
     GROUP BY 
-      specialization.title
+      specialization.title, specialization.id
   ''');
+
+    // استعلام لجلب مجموع زيارات المستشفيات، وفي حال عدم وجود مجموع يتم إرجاع صفر
     final List<Map<String, dynamic>> maps1 = await db.rawQuery('''
     SELECT 
       specialization.id AS specialization_id, 
       specialization.title AS specialization_title, 
-      COALESCE(SUM(hospitalSp.visit), 0) AS sumHospital
+      COALESCE(SUM(CAST(hospitalSp.visit AS INTEGER)), 0) AS sumHospital
     FROM 
       specialization
-     JOIN 
+    LEFT JOIN 
       hospitalSp ON hospitalSp.spId = specialization.id
     GROUP BY 
-       specialization.title
+      specialization.title, specialization.id
   ''');
+
+    // استخدام النتائج لإنشاء قائمة من الكائنات
     return List.generate(maps.length, (i) {
       return SpecDModel.fromMap1(maps[i], maps1[i]);
     });
   }
+
 
   Future<void> editIsLogin(int repId, int isLogin) async {
     final mydb = await databaseHelper.database;
