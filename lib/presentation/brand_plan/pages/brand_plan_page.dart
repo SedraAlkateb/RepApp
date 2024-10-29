@@ -16,11 +16,11 @@ class BrandPlanPage extends StatelessWidget {
                 labelPadding: EdgeInsets.all(0.9),
                 tabs: [
                   Tab(
-                    icon: Icon(Icons.groups),
+                    icon: Icon(Icons.list_alt_outlined),
                     text: 'الخطة الحالية',
                   ),
                   Tab(
-                    icon: Icon(Icons.local_hospital),
+                    icon: Icon(Icons.featured_play_list_outlined),
                     text: 'قيد المعالجة',
                   ),
                 ]),
