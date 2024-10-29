@@ -14,8 +14,15 @@ class HospitalsBloc extends Bloc<HospitalsEvent, HospitalsState> {
       if (event is AllHospitalEvent) {
         (await allHospitalSpNSqlUsecase.execute()).fold((failure) {
           emit(AllHospitalErrorState(failure: failure));
-        }, (data) async {hospital=data;
-          emit(AllHospitalsState(data));
+        }, (data) async {
+
+          hospital=data;
+          if(hospital.isNotEmpty){
+            emit(AllHospitalsState(data));
+
+          }else{
+            emit(AllHospitalEmptyState());
+          }
         });
       }
       else     if (event is SearchhosEvent) {

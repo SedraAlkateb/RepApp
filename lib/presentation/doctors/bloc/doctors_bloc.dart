@@ -23,8 +23,12 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
             },
                 (data)  async{
                   doctor=data;
-              emit(AllDoctorState(data));
-          
+                  if(doctor.isNotEmpty){
+                    emit(AllDoctorState(data));
+                  }else{
+                    emit(AllDoctorEmptyState());
+                  }
+
             }
 
         );

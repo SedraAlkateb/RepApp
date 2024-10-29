@@ -116,7 +116,15 @@ class Doctors extends StatelessWidget {
                     ]),
                   );
                 }
+                if(state is AllDoctorEmptyState){
+                  return SliverList(
+                      delegate: SliverChildListDelegate(
 
+                          [
+                            SizedBox(height: 100,),
+                            emptyFullScreen(context)
+                          ]));
+                }
                 return SliverToBoxAdapter(child: SizedBox());
               },
             ),

@@ -30,3 +30,9 @@ final class  AllHospitalLoadingState extends HospitalsState {
   @override
   List<Object?> get props =>[];
 }
+final class  AllHospitalEmptyState extends HospitalsState {
+  @override
+  AllHospitalEmptyState();
+  @override
+  List<Object?> get props =>[];
+}

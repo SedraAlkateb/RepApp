@@ -56,7 +56,12 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(VisitDoctorErrorState(failure: failure));
         }, (data) async {
           doctors = data;
-          emit(VisitDoctorState(data));
+          if(doctors.isNotEmpty){
+            emit(VisitDoctorState(data));
+
+          }else{
+            emit(EmptyVisitHospitalState());
+          }
         });
       } else if (event is VisitHospitalEvent) {
         (await allVisitHospitalSqlUsecase.execute()).fold((failure) {
@@ -64,7 +69,11 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(VisitHospitalErrorState(failure: failure));
         }, (data) async {
           hospitals = data;
-          emit(VisitHospitalState(data));
+          if(hospitals.isNotEmpty){
+            emit(VisitHospitalState(data));
+          }else{
+            emit(EmptyVisitHospitalState());
+          }
         });
       } else if (event is SearchDoctorVisitEvent) {
         List<VisitDoctorAndDoctor> doctorSearch;
