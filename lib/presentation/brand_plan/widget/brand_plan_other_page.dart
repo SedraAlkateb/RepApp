@@ -71,6 +71,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8),
                                       child: Icon(

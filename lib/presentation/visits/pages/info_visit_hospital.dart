@@ -77,11 +77,14 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                         "العنوان : ${widget.hospitalModel.hospitalModel.address}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
+
                       Text(
                         textAlign: TextAlign.center,
                         "تاريخ الزيارة : ${widget.hospitalModel.visitHospitalModel.data}",
                         style: Theme.of(context).textTheme.titleMedium,
+
                       ),
+
                       Text(
                         textAlign: TextAlign.center,
                         " الاختصاص : ${widget.hospitalModel.specModel.title}",
@@ -126,7 +129,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                     ],
                   ):SizedBox(),
                   Text(
-                    " الملاحظات :",
+                    " ملاحظات للمكتب العلمي :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
 
@@ -149,7 +152,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "ملاحظات للمكتب العلمي :",
+                      "ملاحظات لمستودع قاسيون :",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
