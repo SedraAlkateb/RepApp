@@ -13,135 +13,116 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Doctors extends StatelessWidget {
   Doctors({super.key});
   final TextEditingController searchDocController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: DrawerPage(),
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-                  Icons.menu,
-                  color: ColorManager.secondaryColor1,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          title: Text('الأطباء'),
+      drawer: DrawerPage(),
+      appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                size: AppSize.s30,
+                Icons.menu,
+                color: ColorManager.secondaryColor1,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SearchField(
-                  searchController: searchDocController,
-                  onPressed: (value) {
-                    BlocProvider.of<DoctorsBloc>(context)
-                        .add(SearchDocEvent(value));
-                  },
-                ),
-                BlocConsumer<DoctorsBloc, DoctorsState>(
-                  listener: (context, state) {
-                    if (state is AllDoctorErrorState) {
-                      error(context, state.failure.massage, state.failure.code);
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is AllDoctorState) {
-                      List<DoctorModel> doctormodel = state.doctor;
+        title: Text('الأطباء'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SearchField(
+                    searchController: searchDocController,
+                    onPressed: (value) {
+                      BlocProvider.of<DoctorsBloc>(context).add(SearchDocEvent(value));
+                    },
+                  ),
+                ],
+              ),
+            ),
+            BlocConsumer<DoctorsBloc, DoctorsState>(
+              listener: (context, state) {
+                if (state is AllDoctorErrorState) {
+                  error(context, state.failure.massage, state.failure.code);
+                }
+              },
+              builder: (context, state) {
+                if (state is AllDoctorState) {
+                  List<DoctorModel> doctorModel = state.doctor;
 
-                      return Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                              margin: EdgeInsets.all(8),
-                              //  alignment: Alignment.topRight,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: ColorManager.secondaryColor7),
-                                borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(AppSize.s25),
-                                    topLeft: Radius.circular(AppSize.s25)),
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "عدد الأطباء: ",
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                            CircleNumberWidget(number: doctorModel.length),
+                          ],
+                        ),
+                      ),
+                      ...doctorModel.map((doctor) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorDetails(doctor: doctor),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "  عدد المشافي  ",
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                  CircleNumberWidget(number: doctormodel.length)
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(AppPadding.p8),
+                            padding: EdgeInsets.all(AppPadding.p16),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  ColorManager.secondaryColor6,
+                                  ColorManager.secondaryColor7,
                                 ],
                               ),
+                              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  doctor.title,
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           ),
-                          ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DoctorDetails(
-                                          doctor: doctormodel[index],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.all(AppPadding.p8),
-                                    padding: EdgeInsets.all(AppPadding.p16),
-                                    //    height: AppSize.s150,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(colors: [
-                                        ColorManager.secondaryColor6,
-                                        ColorManager.secondaryColor7,
-                                        ColorManager.secondaryColor7,
-                                      ]),
-                                      color: ColorManager.white,
+                        );
+                      }).toList(),
+                    ]),
+                  );
+                }
 
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(AppSize.s8)),
-                                      //        color: ColorManager.card,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(doctormodel[index].title,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemCount: doctormodel.length),
-                        ],
-                      );
-                    }
-
-                    return SizedBox();
-                  },
-                ),
-              ],
+                return SliverToBoxAdapter(child: SizedBox());
+              },
             ),
-          ),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }
