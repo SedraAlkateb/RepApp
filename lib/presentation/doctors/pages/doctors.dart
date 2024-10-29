@@ -76,7 +76,7 @@ class Doctors extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "  عدد المشافي  ",
+                                    " عدد الأطباء ",
                                     style:
                                         Theme.of(context).textTheme.labelSmall,
                                   ),
