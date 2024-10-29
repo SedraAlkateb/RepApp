@@ -367,7 +367,7 @@ class AppSqlApi extends AppSqlApiAbs {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> result = await db.query(
       'doctor',
-      where: 'placeId = ? AND visits != ?',
+      where: 'placeId = ? AND visited != ?',
       whereArgs: [placeId, '0'],
     );
     List<DoctorModel> doctors =
@@ -520,6 +520,7 @@ class AppSqlApi extends AppSqlApiAbs {
       doctor.placeId as doctor_placeId,
       doctor.placeTitle as doctor_placeTitle,
       doctor.visits as doctor_visits,
+      doctor.visited as doctor_visited,
       doctor.spId as doctor_spId,
       doctor.spTitle as doctor_spTitle
     FROM visit_doctor
@@ -594,13 +595,12 @@ class AppSqlApi extends AppSqlApiAbs {
         await txn.rawUpdate(
           '''
         UPDATE doctor 
-        SET visits = visits - 1 
+        SET visited = visited - 1 
         WHERE id = ?
         ''',
           [visitDoctorModel.doctorId],
         );
 
-        // إدراج الزيارة الجديدة
         await txn.insert(
           'visit_doctor',
           visitDoctorModel.toMap(),
@@ -663,7 +663,7 @@ class AppSqlApi extends AppSqlApiAbs {
           await txn.rawUpdate(
             '''
           UPDATE doctor 
-          SET visits = visits - 1 
+          SET visited = visited - 1 
           WHERE id = ?
           ''',
             [visitDoctorModel.doctorId],
@@ -703,7 +703,7 @@ class AppSqlApi extends AppSqlApiAbs {
       try {
         // جلب hospitalSp حسب hospitalId و spId
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
-      SELECT id, visit FROM hospitalSp 
+      SELECT id, visited FROM hospitalSp 
       WHERE hospitalId = ? AND spId = ? 
       ''', [hos, spec]);
         if (result.isEmpty) {
@@ -711,7 +711,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'No hospitalSp found for the given hospitalId and spId.');
         }
         int hospitalSpId = result.first['id'];
-        int currentVisits = result.first['visit'];
+        int currentVisits = result.first['visited'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
         final List<Map<String, dynamic>> visits = await txn.rawQuery('''
@@ -725,7 +725,7 @@ class AppSqlApi extends AppSqlApiAbs {
           if (currentVisits > 0) {
             await txn.rawUpdate('''
           UPDATE hospitalSp 
-          SET visit = visit - 1 
+          SET visited = visited - 1 
           WHERE id = ?
           ''', [hospitalSpId]);
           }
@@ -762,7 +762,7 @@ class AppSqlApi extends AppSqlApiAbs {
     await mydb.transaction((txn) async {
       try {
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
-      SELECT id, visit FROM hospitalSp 
+      SELECT id, visited FROM hospitalSp 
       WHERE hospitalId = ? AND spId = ?
       ''', [hos, spec]);
         if (result.isEmpty) {
@@ -770,7 +770,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'No hospitalSp found for the given hospitalId and spId.');
         }
         int hospitalSpId = result.first['id'];
-        int currentVisits = result.first['visit'];
+        int currentVisits = result.first['visited'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
         // جلب جميع الزيارات الخاصة بالمشفى خلال الثلاثة أيام الماضية
@@ -787,7 +787,7 @@ class AppSqlApi extends AppSqlApiAbs {
           if (currentVisits > 0) {
             await txn.rawUpdate('''
           UPDATE hospitalSp 
-          SET visit = visit - 1 
+          SET visited = visited - 1 
           WHERE id = ?
           ''', [hospitalSpId]);
           }
@@ -873,7 +873,7 @@ class AppSqlApi extends AppSqlApiAbs {
     FROM specialization
     JOIN hospitalSp ON hospitalSp.spId = specialization.id
     WHERE hospitalSp.hospitalId = ?
-    AND hospitalSp.visit > 0
+    AND hospitalSp.visited > 0
   ''', [hospitalId]);
     return List.generate(maps.length, (i) {
       SpecModel specModel = SpecModel.fromMap1(maps[i]);
@@ -1075,6 +1075,7 @@ class AppSqlApi extends AppSqlApiAbs {
       hospitalSp.rate,
       hospitalSp.totalDocs,
       hospitalSp.visit,
+       hospitalSp.visited,
       hospitalSp.flag,
       specialization.title as titleSp 
     FROM hospital

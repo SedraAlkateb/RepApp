@@ -84,6 +84,7 @@ class DatabaseHelper {
     placeId INTEGER NOT NULL,
     placeTitle TEXT NOT NULL, 
     visits INTEGER NOT NULL,
+    visited INTEGER NOT NULL,
     spTitle TEXT NOT NULL,
     note TEXT NOT NULL,
     rate TEXT NOT NULL,
@@ -110,6 +111,7 @@ class DatabaseHelper {
     totalDocs INTEGER NOT NULL,
     rate TEXT NOT NULL,
     visit INTEGER NOT NULL,
+    visited INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (hospitalId) REFERENCES hospital(id),
     FOREIGN KEY (spId) REFERENCES specialization(id)

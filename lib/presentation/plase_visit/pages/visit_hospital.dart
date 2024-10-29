@@ -176,6 +176,11 @@ class _VisitHospitalState extends State<VisitHospital>
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
                                 Text(
+                                  "تمت الزيارة: ${state.visited}",
+                                  style:
+                                  Theme.of(context).textTheme.headlineLarge,
+                                ),
+                                Text(
                                   "عدد الاطباء: ${state.total}",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,

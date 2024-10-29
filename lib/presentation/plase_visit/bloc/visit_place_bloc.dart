@@ -80,7 +80,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         spec = event.spec;
         emit(SpecState(
             total: spec!.hospitalSpModel.totalDocs,
-            visits: spec!.hospitalSpModel.visit));
+            visits: spec!.hospitalSpModel.visit,
+            visited:spec!.hospitalSpModel.visit- spec!.hospitalSpModel.visited
+        ));
       } else if (event is DoctorByPlace) {
         current = event.current;
         (await doctorsByPlaceUsecase.execute(event.placeId)).fold((failure) {

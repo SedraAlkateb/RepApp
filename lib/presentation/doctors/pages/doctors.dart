@@ -48,7 +48,6 @@ class Doctors extends StatelessWidget {
                         .add(SearchDocEvent(value));
                   },
                 ),
-
                 BlocConsumer<DoctorsBloc, DoctorsState>(
                   listener: (context, state) {
                     if (state is AllDoctorErrorState) {
@@ -66,19 +65,21 @@ class Doctors extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.all(8),
                               //  alignment: Alignment.topRight,
-                              decoration:  BoxDecoration(
-
-                                border:
-                                Border.all(color: ColorManager.secondaryColor7),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: ColorManager.secondaryColor7),
                                 borderRadius: const BorderRadius.only(
-                                    bottomLeft:  Radius.circular(AppSize.s25),
-                                    topLeft:  Radius.circular(AppSize.s25)
-                                ),
+                                    bottomLeft: Radius.circular(AppSize.s25),
+                                    topLeft: Radius.circular(AppSize.s25)),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("  عدد المشافي  ",style: Theme.of(context).textTheme.labelSmall,),
+                                  Text(
+                                    "  عدد المشافي  ",
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall,
+                                  ),
                                   CircleNumberWidget(number: doctormodel.length)
                                 ],
                               ),
@@ -88,10 +89,8 @@ class Doctors extends StatelessWidget {
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-
                                 return InkWell(
-
-                                             onTap: () {
+                                  onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -118,22 +117,21 @@ class Doctors extends StatelessWidget {
                                       //        color: ColorManager.card,
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(doctormodel[index].title,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .labelLarge),
-
                                       ],
                                     ),
                                   ),
                                 );
-
                               },
                               itemCount: doctormodel.length),
-
                         ],
                       );
                     }

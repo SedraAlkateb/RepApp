@@ -133,6 +133,12 @@ class _VisitDoctorState extends State<VisitDoctor>
                               " اجمالي الزيارات:${widget.doctorModel.visits}",
                               style: Theme.of(context).textTheme.headlineLarge,
                             ),
+                            SizedBox(height: 8,),
+                            Text(
+                              textAlign: TextAlign.center,
+                              "  تمت الزياراة: ${(widget.doctorModel.visits-widget.doctorModel.visited)}",
+                              style: Theme.of(context).textTheme.headlineLarge,
+                            ),
                           ],
                         ),
                       )
