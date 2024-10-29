@@ -255,7 +255,7 @@ int flag;
 }
 
 class VisitDoctorRequestBody {
-  List<VisitDoctorModel> list1;
+  List<VisitDoctorModel> list1;//
   List<VisitBrandPharmacyModel> list2;
   VisitDoctorRequestBody(this.list1, this.list2);
   Map<String, dynamic> toJson() {

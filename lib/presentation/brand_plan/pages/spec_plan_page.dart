@@ -108,6 +108,14 @@ class SpecPlanPage extends StatelessWidget {
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20),
                                       ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "عدد العينات : ${planBrandModel[index].brands.length}",
+                                        style: TextStyle(
+                                            color: ColorManager.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20),
+                                      ),
                                     ],
                                   ),
                                 ),

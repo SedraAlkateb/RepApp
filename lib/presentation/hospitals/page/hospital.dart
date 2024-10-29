@@ -16,133 +16,114 @@ class Hospital extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        drawer: DrawerPage(),
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-                  Icons.menu,
-                  color:
-                  ColorManager.secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          title: Text(
-              ' المشافي'),
+      drawer: DrawerPage(),
+      appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                size: AppSize.s30,
+                Icons.menu,
+                color: ColorManager.secondaryColor1,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal:8),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SearchField(searchController: searchhosController,onPressed: (value) {
-                          BlocProvider.of<HospitalsBloc>(context).add(SearchhosEvent(value));
-
-                        },
-                        ),
-                 BlocConsumer<HospitalsBloc, HospitalsState>(
-                   listener: (context, state) {
-                     if (state is AllHospitalErrorState) {
-                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                 error(context, state.failure.massage, state.failure.code);
-                           });
-                     }
-                   },
-                   builder: (context, state) {
-                     if (state is AllHospitalsState) {
-                           List<HospitalSpAllModel> hospitalModel = state.hospital;
-                           return Column(
-
-                 children: [
-                   Align(
-                     alignment: Alignment.topRight,
-                     child: Container(
-                       margin: EdgeInsets.all(8),
-                                       //  alignment: Alignment.topRight,
-                      decoration:  BoxDecoration(
-
-                         border:
-                         Border.all(color: ColorManager.secondaryColor7),
-                         borderRadius: const BorderRadius.only(
-                            bottomLeft:  Radius.circular(AppSize.s25),
-                             topLeft:  Radius.circular(AppSize.s25)
-                         ),
-                       ),
-                       child: Row(
-                         mainAxisSize: MainAxisSize.min,
-                         children: [
-                           Text("  عدد المشافي  ",style: Theme.of(context).textTheme.labelSmall,),
-                           CircleNumberWidget(number: hospitalModel.length)
-                         ],
-                       ),
-                     ),
-                   ),
-                   ListView.builder(
-                     physics: NeverScrollableScrollPhysics(),
-                     shrinkWrap: true,
-                     itemCount: hospitalModel.length,
-                     itemBuilder: (context, index) {
-                       return InkWell(
-                         onTap: () {
-
-                           Navigator.push(
-                             context,
-                             MaterialPageRoute(
-                               builder: (context) => HospitalDetails(hospital: hospitalModel[index]),
-                             ),
-                           );
-                         },
-                         child: Container(
-                           margin: EdgeInsets.all(AppPadding.p8),
-                           padding: EdgeInsets.all(AppPadding.p16),
-                           decoration: BoxDecoration(
-                             gradient: LinearGradient(colors: [
-                               ColorManager.secondaryColor6,
-                               ColorManager.secondaryColor7,
-                               ColorManager.secondaryColor7,
-                             ]),
-                             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
-                           ),
-                           child: Column(
-                             mainAxisAlignment: MainAxisAlignment.center,
-                             crossAxisAlignment: CrossAxisAlignment.center,
-                             children: [
-                               Text(
-                                 hospitalModel[index].title ?? "",
-                                 style: Theme.of(context).textTheme.labelLarge,
-                                 textAlign: TextAlign.center,
-                               ),
-                               Text(
-                                 hospitalModel[index].titleSp ?? "",
-                                 style: Theme.of(context).textTheme.titleMedium,
-                                 textAlign: TextAlign.center,
-                               ),
-                             ],
-                           ),
-                         ),
-                       );
-                     },
-                   ),
-                 ],
-                           );
-                     }
-                     return SizedBox();
-                   },
-                 ),
-              ],
+        title: Text('المشافي'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CustomScrollView(
+          slivers: [
+            // عنصر البحث
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SearchField(
+                    searchController: searchhosController,
+                    onPressed: (value) {
+                      BlocProvider.of<HospitalsBloc>(context).add(SearchhosEvent(value));
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
+            BlocConsumer<HospitalsBloc, HospitalsState>(
+              listener: (context, state) {
+                if (state is AllHospitalErrorState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    error(context, state.failure.massage, state.failure.code);
+                  });
+                }
+              },
+              builder: (context, state) {
+                if (state is AllHospitalsState) {
+                  List<HospitalSpAllModel> hospitalModel = state.hospital;
+
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      // عرض عدد المستشفيات في Row
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("عدد المشافي: ", style: Theme.of(context).textTheme.labelSmall),
+                            CircleNumberWidget(number: hospitalModel.length),
+                          ],
+                        ),
+                      ),
+                      // القائمة
+                      ...hospitalModel.map((hospital) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HospitalDetails(hospital: hospital),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(AppPadding.p8),
+                            padding: EdgeInsets.all(AppPadding.p16),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  ColorManager.secondaryColor6,
+                                  ColorManager.secondaryColor7,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  hospital.title ?? "",
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ]),
+                  );
+                }
+                return SliverToBoxAdapter(child: SizedBox());
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
