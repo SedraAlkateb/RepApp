@@ -1109,7 +1109,8 @@ class AppSqlApi extends AppSqlApiAbs {
     JOIN 
       specialization ON planBrand.spId = specialization.id
     WHERE 
-      planBrand.repPlanId = ?;
+      planBrand.repPlanId = ?
+      AND planBrand.amount != 0;
   ''', [repPlanId]);
 
     Map<int, BrandSpPlanModel> brandMap = {};
