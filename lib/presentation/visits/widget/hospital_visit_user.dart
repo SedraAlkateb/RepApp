@@ -56,6 +56,9 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                   if (state is SearchVisitHospitalState) {
                     hospitals = state.hospitals;
                   }
+                  if(state is EmptyVisitHospitalState){
+                    return emptyFullScreen(context);
+                  }
                   return ListView.builder(
                       itemBuilder: (context, index) {
 

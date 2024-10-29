@@ -54,6 +54,9 @@ class _DoctorVisitState extends State<DoctorVisit>
                 if (state is AllDoctorByPlaceState) {
                   doctors = state.data;
                 }
+                if(state is EmptyState){
+                  return  emptyFullScreen(context);
+                }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: ListView.builder(

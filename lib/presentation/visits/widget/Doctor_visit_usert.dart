@@ -55,6 +55,9 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                   if (state is SearchVisitDoctorState) {
                     doctors = state.doctors;
                   }
+                  if(state is EmptyVisitHospitalState){
+                    return emptyFullScreen(context);
+                  }
                   return ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),

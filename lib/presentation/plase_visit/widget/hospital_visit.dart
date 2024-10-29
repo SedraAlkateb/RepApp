@@ -52,6 +52,9 @@ class _HospitalVisitState extends State<HospitalVisit> with AutomaticKeepAliveCl
                       if (state is AllHospitalByPlaceState) {
                         hospitals = state.data;
                       }
+                      if(state is EmptyState){
+                        return  emptyFullScreen(context);
+                      }
                         return  ListView.builder
                     (
                       physics: NeverScrollableScrollPhysics(),

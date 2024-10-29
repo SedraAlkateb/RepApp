@@ -118,6 +118,15 @@ class Hospital extends StatelessWidget {
                     ]),
                   );
                 }
+                if(state is AllHospitalEmptyState){
+                    return SliverList(
+                      delegate: SliverChildListDelegate(
+
+                          [
+                        SizedBox(height: 100,),
+                        emptyFullScreen(context)
+                      ]));
+                }
                 return SliverToBoxAdapter(child: SizedBox());
               },
             ),

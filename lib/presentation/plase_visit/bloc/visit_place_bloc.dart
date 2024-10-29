@@ -74,7 +74,11 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(AllHospitalByPlaceErrorState(failure: failure));
         }, (data) async {
           hospitals = data;
-          emit(AllHospitalByPlaceState(data));
+          if(hospitals.isNotEmpty){
+            emit(AllHospitalByPlaceState(data));
+          }else{
+            emit(EmptyState());
+          }
         });
       } else if (event is SelectSpecEvent) {
         spec = event.spec;
@@ -90,7 +94,11 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         }, (data) async {
           doctors = data;
           doctorSearchModel = doctors;
-          emit(AllDoctorByPlaceState(data));
+          if(doctors.isNotEmpty){
+            emit(AllDoctorByPlaceState(data));
+          }else{
+            emit(EmptyState());
+          }
         });
       } else if (event is BrandFlagEvent) {
         (await allBrandsFlagSqlUsecase.execute()).fold((failure) {
