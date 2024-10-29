@@ -268,11 +268,11 @@ extension DoctorResponseMapper on DoctorResponse? {
       this?.address ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
     int.parse(this?.visits ?? "0") ,
+    int.parse(this?.visits ?? "0") ,
       this?.note??Constants.empty,
       this?.rate??Constants.empty,
       this?.spTitle ?? Constants.empty,      int.parse(this?.spId ?? "0") ,
     );
-
   }
 }
 extension AllHospitalResponseMapper on AllHospitalBaseResponse? {
@@ -293,9 +293,9 @@ extension HospitalSpResponseMapper on HospitalSpResponse? {
       int.parse(this?.totalDocs ?? "0") ,
       this?.rate ?? Constants.empty,
       int.parse(this?.visit ?? "0") ,
+        int.parse(this?.visit ?? "0") ,
       0
     );
-
   }
 }
 extension VisitDoctorModelMapper on VisitDoctorModel? {

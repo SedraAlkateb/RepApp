@@ -622,6 +622,7 @@ class DoctorModel {
   String address;
   String placeTitle;
   int visits;
+  int visited;
   String? note;
   String? rate;
   String spTitle;
@@ -633,6 +634,7 @@ class DoctorModel {
     this.address,
     this.placeTitle,
     this.visits,
+    this.visited,
     this.note,
     this.rate,
     this.spTitle,
@@ -646,6 +648,7 @@ class DoctorModel {
       'address': address,
       "placeTitle": placeTitle,
       "visits": visits,
+      "visited": visited,
       "note": note,
       "rate": rate,
       "spTitle": spTitle,
@@ -661,6 +664,7 @@ class DoctorModel {
       map['address'],
       map["placeTitle"],
       map["visits"],
+      map["visited"],
       map["note"],
       map["rate"],
       map["spTitle"],
@@ -675,6 +679,7 @@ class DoctorModel {
       map['doctor_address'],
       map['doctor_placeTitle'],
       map['doctor_visits'],
+      map['doctor_visited'],
       map["note"],
       map["rate"],
       map['doctor_spTitle'],
@@ -690,10 +695,11 @@ class HospitalSpModel {
   int totalDocs;
   String? rate;
   int visit;
+  int visited;
   int flag;
   HospitalSpModel(this.id, this.hospitalId, this.spId, this.totalDocs,
       this.rate
-      , this.visit,this.flag);
+      , this.visit,this.visited,this.flag,);
 
   Map<String, dynamic> toMap() {
     return {
@@ -703,6 +709,7 @@ class HospitalSpModel {
       'totalDocs': totalDocs,
       "rate": rate,
       "visit": visit,
+      "visited":visited,
       'flag':flag
     };
   }
@@ -715,6 +722,7 @@ class HospitalSpModel {
       map['totalDocs'],
       map["rate"],
       map["visit"],
+        map["visited"],
         map['flag']
     );
   }
@@ -726,6 +734,7 @@ class HospitalSpModel {
       map['totalDocs'],
       map["rate"],
       map["visit"],
+        map["visited"],
         map['flag']
     );
   }
@@ -964,9 +973,10 @@ class HospitalSpAllModel {
   String? rate;
   int totalDocs;
   int visit;
+  int visited;
   String? titleSp;
   HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
-      this.note, this.rate, this.totalDocs, this.visit, this.titleSp);
+      this.note, this.rate, this.totalDocs, this.visit,this.visited, this.titleSp);
   Map<String, dynamic> toMap() {
     return {
       'hospitalId': hospitalId,
@@ -977,6 +987,7 @@ class HospitalSpAllModel {
       'rate': rate,
       'totalDocs': totalDocs,
       'visit': visit,
+      'visited': visited,
       'titleSp': titleSp
     };
   }
@@ -991,6 +1002,7 @@ class HospitalSpAllModel {
         map['rate'],
         map['totalDocs'],
         map['visit'],
+        map['visited'],
         map['titleSp']);
   }
 }

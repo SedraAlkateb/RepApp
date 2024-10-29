@@ -211,10 +211,10 @@ final class SpecializationHospitalErrorState extends VisitPlaceState {
 final class SpecState extends VisitPlaceState {
   final int  total;
   final int  visits;
-
-  SpecState({required this.total,required this.visits});
+  final int  visited;
+  SpecState({required this.total,required this.visits,required this.visited});
   @override
-  List<Object?> get props =>[total,visits];
+  List<Object?> get props =>[total,visits,visited];
 }
 final class BoxState extends VisitPlaceState {
 final String value;
