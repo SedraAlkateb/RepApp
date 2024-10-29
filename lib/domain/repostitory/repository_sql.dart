@@ -13,7 +13,7 @@ abstract class RepositorySql {
   Future<Either<Failure,Null>>insertPlace(List<PlaceModel> placeModel);
   Future<Either<Failure,List<PlaceModel>>>getPlaceSql();
   Future<Either<Failure,Null>>insertSpec(List<SpecModel> specModel);
-  Future<Either<Failure,List<SpecModel>>>getSpecSql();
+  Future<Either<Failure,List<SpecDModel>>>getSpecSql();
   Future<Either<Failure,Null>>clearDatabase();
   Future<Either<Failure,Null>>clearDatabaseAll();
 

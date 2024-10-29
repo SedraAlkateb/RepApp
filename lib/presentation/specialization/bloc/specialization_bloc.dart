@@ -15,7 +15,7 @@ class SpecializationBloc
   AllSpecsSqlUsecase allSpeUsecase;
   AllDoctorSpSqlUsecase allDoctorSpSqlUsecase;
   AllHospitalSpSqlUsecase allHospitalsSpSqlUsecase;
-    List<SpecModel> specialization=[];
+    List<SpecDModel> specialization=[];
   int current = 0;
 
   SpecializationBloc(
@@ -34,7 +34,7 @@ class SpecializationBloc
         });
       }
       else   if (event is SearchSpecEvent) {
-        List<SpecModel> spec ;
+        List<SpecDModel> spec ;
 
         spec=specialization.where((value) {
           if (value.title.contains(event.contan)) {

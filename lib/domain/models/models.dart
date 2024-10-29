@@ -510,6 +510,38 @@ class SpecModel {
     );
   }
 }
+class SpecDModel {
+  int id;
+  String title;
+  int sumDoctor;
+  int sumHospital;
+  SpecDModel(this.id, this.title,this.sumDoctor,this.sumHospital);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'sumDoctor':sumDoctor,
+      'sumHospital':sumHospital
+    };
+  }
+
+  factory SpecDModel.fromMap(Map<String, dynamic> map) {
+    return SpecDModel(
+      map['id'],
+      map['title'],
+      map["sumDoctor"],
+      map['sumHospital']
+    );
+  }
+  factory SpecDModel.fromMap1(Map<String, dynamic> map,Map<String, dynamic> map1) {
+    return SpecDModel(
+      map['specialization_id'],
+      map['specialization_title'],
+      map['sumDoctor']??0,
+      map1['sumHospital']??0
+    );
+  }
+}
 
 class MedicalVisits {
   int visID;
@@ -521,7 +553,6 @@ class MedicalVisits {
   String spTitle;
   String special;
   String brands;
-
   MedicalVisits(this.visID, this.visitDate, this.title, this.address, this.note,
       this.issue, this.spTitle, this.special, this.brands); // from
   Map<String, dynamic> toMap() {
@@ -590,7 +621,7 @@ class DoctorModel {
   int placeId;
   String address;
   String placeTitle;
-  String visits;
+  int visits;
   String? note;
   String? rate;
   String spTitle;

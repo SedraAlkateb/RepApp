@@ -267,11 +267,10 @@ extension DoctorResponseMapper on DoctorResponse? {
       int.parse(this?.placeId ?? "0") ,
       this?.address ?? Constants.empty,
       this?.placeTitle ?? Constants.empty,
-      this?.visits ?? Constants.empty,
+    int.parse(this?.visits ?? "0") ,
       this?.note??Constants.empty,
       this?.rate??Constants.empty,
       this?.spTitle ?? Constants.empty,      int.parse(this?.spId ?? "0") ,
-
     );
 
   }

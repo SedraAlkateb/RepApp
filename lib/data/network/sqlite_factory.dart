@@ -83,7 +83,7 @@ class DatabaseHelper {
     address TEXT NOT NULL,
     placeId INTEGER NOT NULL,
     placeTitle TEXT NOT NULL, 
-    visits TEXT NOT NULL,
+    visits INTEGER NOT NULL,
     spTitle TEXT NOT NULL,
     note TEXT NOT NULL,
     rate TEXT NOT NULL,

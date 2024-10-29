@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital_details.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -39,73 +40,102 @@ class Hospital extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal:8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchField(searchController: searchhosController,onPressed: (value) {
+                          BlocProvider.of<HospitalsBloc>(context).add(SearchhosEvent(value));
 
-            children: [
-              SearchField(searchController: searchhosController,onPressed: (value) {
-                        BlocProvider.of<HospitalsBloc>(context).add(SearchhosEvent(value));
+                        },
+                        ),
+                 BlocConsumer<HospitalsBloc, HospitalsState>(
+                   listener: (context, state) {
+                     if (state is AllHospitalErrorState) {
+                           WidgetsBinding.instance.addPostFrameCallback((_) {
+                 error(context, state.failure.massage, state.failure.code);
+                           });
+                     }
+                   },
+                   builder: (context, state) {
+                     if (state is AllHospitalsState) {
+                           List<HospitalSpAllModel> hospitalModel = state.hospital;
+                           return Column(
 
-                      },
-                      ),
-       Expanded(
-  child: BlocConsumer<HospitalsBloc, HospitalsState>(
-    listener: (context, state) {
-      if (state is AllHospitalErrorState) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          error(context, state.failure.massage, state.failure.code);
-        });
-      }
-    },
-    builder: (context, state) {
-      if (state is AllHospitalsState) {
-        List<HospitalSpAllModel> hospitalModel = state.hospital;
-        return ListView.builder(
-          itemCount: hospitalModel.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                // انتقل إلى صفحة تفاصيل المشفى
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HospitalDetails(hospital: hospitalModel[index]),
-                  ),
-                );
-              },
-              child: Container(
-                margin: EdgeInsets.all(AppPadding.p8),
-                padding: EdgeInsets.all(AppPadding.p16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    ColorManager.secondaryColor6,
-                    ColorManager.secondaryColor7,
-                    ColorManager.secondaryColor7,
-                  ]),
-                  borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      hospitalModel[index].title ?? "",
-                      style: Theme.of(context).textTheme.labelLarge,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      }
-      return SizedBox();
-    },
-  ),
-),
-            ],
+                 children: [
+                   Align(
+                     alignment: Alignment.topRight,
+                     child: Container(
+                       margin: EdgeInsets.all(8),
+                                       //  alignment: Alignment.topRight,
+                      decoration:  BoxDecoration(
+
+                         border:
+                         Border.all(color: ColorManager.secondaryColor7),
+                         borderRadius: const BorderRadius.only(
+                            bottomLeft:  Radius.circular(AppSize.s25),
+                             topLeft:  Radius.circular(AppSize.s25)
+                         ),
+                       ),
+                       child: Row(
+                         mainAxisSize: MainAxisSize.min,
+                         children: [
+                           Text("  عدد المشافي  ",style: Theme.of(context).textTheme.labelSmall,),
+                           CircleNumberWidget(number: hospitalModel.length)
+                         ],
+                       ),
+                     ),
+                   ),
+                   ListView.builder(
+                     physics: NeverScrollableScrollPhysics(),
+                     shrinkWrap: true,
+                     itemCount: hospitalModel.length,
+                     itemBuilder: (context, index) {
+                       return InkWell(
+                         onTap: () {
+
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                               builder: (context) => HospitalDetails(hospital: hospitalModel[index]),
+                             ),
+                           );
+                         },
+                         child: Container(
+                           margin: EdgeInsets.all(AppPadding.p8),
+                           padding: EdgeInsets.all(AppPadding.p16),
+                           decoration: BoxDecoration(
+                             gradient: LinearGradient(colors: [
+                               ColorManager.secondaryColor6,
+                               ColorManager.secondaryColor7,
+                               ColorManager.secondaryColor7,
+                             ]),
+                             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
+                           ),
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                             children: [
+                               Text(
+                                 hospitalModel[index].title ?? "",
+                                 style: Theme.of(context).textTheme.labelLarge,
+                                 textAlign: TextAlign.center,
+                               ),
+                             ],
+                           ),
+                         ),
+                       );
+                     },
+                   ),
+                 ],
+                           );
+                     }
+                     return SizedBox();
+                   },
+                 ),
+              ],
+            ),
           ),
         )
     );

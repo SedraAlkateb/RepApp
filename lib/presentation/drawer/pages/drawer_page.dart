@@ -10,9 +10,7 @@ class DrawerPage extends StatelessWidget {
   DrawerPage({super.key});
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
-
       shape: Border.all(color: ColorManager.secondaryColor4),
       child: ListView(
         padding: EdgeInsets.only(top: 0),

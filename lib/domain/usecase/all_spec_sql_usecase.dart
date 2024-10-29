@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class AllSpecsSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   AllSpecsSqlUsecase(this._repositorySql);
-  Future<Either<Failure, List<SpecModel>>> execute() async{
+  Future<Either<Failure, List<SpecDModel>>> execute() async{
     return await _repositorySql.getSpecSql();
   }
 
