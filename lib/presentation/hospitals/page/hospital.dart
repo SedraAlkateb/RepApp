@@ -110,6 +110,11 @@ class Hospital extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelLarge,
                                   textAlign: TextAlign.center,
                                 ),
+                                Text(
+                                  hospital.titleSp ?? "",
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                  textAlign: TextAlign.center,
+                                ),
                               ],
                             ),
                           ),
