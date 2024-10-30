@@ -73,7 +73,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
       if (event is DeleteBaseEvent) {
-        emit(DeleteBaseLoadingState());
+     //   emit(DeleteBaseLoadingState());
         (await deleteSqlUsecase.execute()).fold((failure) {
           emit(DeleteBaseErrorState(failure: failure));
           return false;
@@ -82,7 +82,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         });
       }
       if (event is DeleteAllEvent) {
-        emit(DeleteAllLoadingState());
+     //   emit(DeleteAllLoadingState());
         (await deleteAllSqlUsecase.execute()).fold((failure) {
           emit(DeleteAllErrorState(failure: failure));
           return false;
@@ -112,7 +112,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         }, (data) async {
           UserInfo.isLogging=event.num;
          emit( EditStatusState());
-       print("EditStatusState");
         });
       }
     });

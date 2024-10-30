@@ -56,6 +56,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(VisitDoctorErrorState(failure: failure));
         }, (data) async {
           doctors = data;
+          print("doctors[0].visitDoctorModel.data");
+          print(doctors[0].visitDoctorModel.data);
           if(doctors.isNotEmpty){
             emit(VisitDoctorState(data));
 

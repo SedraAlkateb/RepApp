@@ -90,6 +90,9 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         }
 
       }
+      if(event is UpdateAmount1SucEvent){
+
+      }
       if (event is UpdateAmountSucEvent) {
         emit(UpdateAmountLoadingState());
         if (sum > UserInfo.percentage) {

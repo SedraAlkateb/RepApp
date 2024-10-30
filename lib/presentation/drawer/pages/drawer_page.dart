@@ -201,7 +201,7 @@ class DrawerPage extends StatelessWidget {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.brand,
-                  (route) => true,
+                  (route) => false,
                 );
               });
             },
@@ -217,7 +217,7 @@ class DrawerPage extends StatelessWidget {
             title:  Text('الخطط',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
+                Navigator.pushReplacementNamed(
                   context,
                   Routes.brandPlan,
                 );
