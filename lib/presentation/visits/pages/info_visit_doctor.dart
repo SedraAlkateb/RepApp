@@ -2,6 +2,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,7 +82,7 @@ print( _targetController.text);
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      "تاريخ الزيارة : \n${widget.doctorModel.visitDoctorModel.data}",
+                      "تاريخ الزيارة : \n${formatDateTime(widget.doctorModel.visitDoctorModel.data)}",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),

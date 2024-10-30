@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:domina_app/presentation/visits/pages/info_visit_doctor.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,11 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                                     s1: "العنوان : ",
                                     s2: doctors[index]
                                         .doctorModel
-                                        .address)
+                                        .address),
+                                TextRach(
+                                    s1: "التاريخ الزيارة: ",
+                                    s2: formatDateTime(doctors[index]
+                                        .visitDoctorModel.data))
                               ],
                             ),
                           ),

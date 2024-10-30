@@ -235,7 +235,6 @@ class AppSqlApi extends AppSqlApiAbs {
   Future<List<SpecDModel>> getSpec() async {
     final db = await databaseHelper.database;
 
-    // استعلام لجلب مجموع زيارات الأطباء، وفي حال عدم وجود مجموع يتم إرجاع صفر
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
     SELECT 
       specialization.id AS specialization_id, 
@@ -248,8 +247,6 @@ class AppSqlApi extends AppSqlApiAbs {
     GROUP BY 
       specialization.title, specialization.id
   ''');
-
-    // استعلام لجلب مجموع زيارات المستشفيات، وفي حال عدم وجود مجموع يتم إرجاع صفر
     final List<Map<String, dynamic>> maps1 = await db.rawQuery('''
     SELECT 
       specialization.id AS specialization_id, 
@@ -262,8 +259,6 @@ class AppSqlApi extends AppSqlApiAbs {
     GROUP BY 
       specialization.title, specialization.id
   ''');
-
-    // استخدام النتائج لإنشاء قائمة من الكائنات
     return List.generate(maps.length, (i) {
       return SpecDModel.fromMap1(maps[i], maps1[i]);
     });
@@ -1162,15 +1157,20 @@ class AppSqlApi extends AppSqlApiAbs {
       brand.phTitle AS brand_phTitle,
       brand.sampleCoast AS brand_sampleCost,
       specialization.id AS specialization_id,
-      specialization.title AS specialization_title
+      specialization.title AS specialization_title,
+      COALESCE(SUM(CAST(doctor.visits AS INTEGER)), 0) AS sumDoctor
     FROM 
       planBrand
     JOIN  
       brand ON planBrand.brandId = brand.id
     JOIN 
       specialization ON planBrand.spId = specialization.id
+    JOIN 
+      doctor ON doctor.spId = specialization.id
     WHERE 
-      planBrand.repPlanId = ?;
+      planBrand.repPlanId = ?
+    GROUP BY 
+      specialization.title, specialization.id, brand.id, planBrand.id;
   ''', [repPlanId]);
 
     Map<int, OtherBrandSpPlanModel> SpMap = {};
