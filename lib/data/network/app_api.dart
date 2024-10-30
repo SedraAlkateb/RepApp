@@ -84,5 +84,4 @@ abstract class AppServiceClient {
   // Future<List<VisitDoctorRequestBody>> uploadVisitDoctor();
   // @POST("/hosVisit.php")
   // Future<List<VisitHospitalRequestBody>> uploadVisitHospital();
-
 }
