@@ -99,6 +99,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                                 hospitals[index].hospitalModel.title,
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
+
                               TextRach(
                                   s1: "العنوان : ",
                                   s2: hospitals[index].hospitalModel.address),
