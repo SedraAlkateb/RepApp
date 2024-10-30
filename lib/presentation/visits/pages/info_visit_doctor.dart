@@ -106,10 +106,11 @@ print( _targetController.text);
                       SizedBox(
                         height: AppSize.s8,
                       ),
-                      BoxTextField(
+                      BoxTextField(enabled: true,
                         keyboardType: TextInputType.text,
                         prefixIcon: null,
                         maxLines: 4,
+
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "الحقل مطلوب";
@@ -119,6 +120,7 @@ print( _targetController.text);
                         controller: _targetController,
                         obscureText: false,
                         minLines: 3,
+                      
                         inputFormatters: [],
                       ),
                     ],

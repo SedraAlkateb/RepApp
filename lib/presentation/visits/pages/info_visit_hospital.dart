@@ -116,7 +116,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                       BoxTextField(
                         keyboardType: TextInputType.text,
                         prefixIcon: null,
-                        maxLines: 4,
+                        maxLines: 4, enabled: true,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "الحقل مطلوب";

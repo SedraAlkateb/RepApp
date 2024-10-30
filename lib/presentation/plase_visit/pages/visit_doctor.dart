@@ -55,11 +55,11 @@ class _VisitDoctorState extends State<VisitDoctor>
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
                   child: Stack(
-                    
                     children: [
-                      Align(alignment: Alignment.center,
+                      Align(
+                        alignment: Alignment.center,
                         child: Padding(
-                          padding:  EdgeInsets.only(top: 22),
+                          padding: EdgeInsets.only(top: 22),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,50 +74,49 @@ class _VisitDoctorState extends State<VisitDoctor>
                                       padding: EdgeInsets.only(right: 15),
                                       icon: Icon(Icons.arrow_back_sharp,
                                           color: ColorManager.white))),
-                
                             ],
                           ),
                         ),
                       ),
                       Center(
-                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                          onTap: () {
-                            print("Navigating to Doctor Details...");
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return DoctorDetails(doctor: widget.doctorModel);
+                              onTap: () {
+                                print("Navigating to Doctor Details...");
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return DoctorDetails(
+                                        doctor: widget.doctorModel);
+                                  },
+                                ));
                               },
-                            ));
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              shape: BoxShape.rectangle,
-                              border: Border.all(
-                                color: ColorManager.secondaryColor2,
-                                width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                               
-                              ],
-                            ),
-                            child: Text(
-                              widget.doctorModel.title,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  shape: BoxShape.rectangle,
+                                  border: Border.all(
+                                    color: ColorManager.secondaryColor2,
+                                    width: 2.0,
                                   ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [],
+                                ),
+                                child: Text(
+                                  widget.doctorModel.title,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
                             ),
-                          ),
-                        )
-                        
-                        
-                        ,
                             SizedBox(
                               height: 10,
                             ),
@@ -125,20 +124,37 @@ class _VisitDoctorState extends State<VisitDoctor>
                               textAlign: TextAlign.center,
                               "العنوان: ${widget.doctorModel.address}",
                               style: Theme.of(context).textTheme.titleMedium,
-                            ),  SizedBox(
+                            ),
+                            SizedBox(
                               height: 10,
                             ),
                             Text(
                               textAlign: TextAlign.center,
-                              " اجمالي الزيارات:${widget.doctorModel.visits}",
-                              style: Theme.of(context).textTheme.headlineLarge,
+                              " الاختصاص ${(widget.doctorModel.spTitle)}",
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            SizedBox(height: 8,),
-                            Text(
-                              textAlign: TextAlign.center,
-                              "  تمت الزياراة: ${(widget.doctorModel.visits-widget.doctorModel.visited)}",
-                              style: Theme.of(context).textTheme.headlineLarge,
+                            SizedBox(
+                              height: 5,
                             ),
+                            Row(mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                "اجمالي الزيارات: ${widget.doctorModel.visits} ",
+                                  style:
+                                      Theme.of(context).textTheme.headlineLarge,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "  تمت الزياراة: ${(widget.doctorModel.visits - widget.doctorModel.visited)}",
+                                  style:
+                                      Theme.of(context).textTheme.headlineLarge,
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       )
@@ -481,10 +497,8 @@ class _VisitDoctorState extends State<VisitDoctor>
                                       _issueController.text,
                                       _noteeController.text,
                                       widget.doctorModel.id,
-                                    0,
-                                    _targetController.text
-
-                                     );
+                                      0,
+                                      _targetController.text);
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand
