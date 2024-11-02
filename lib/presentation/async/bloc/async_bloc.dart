@@ -12,6 +12,7 @@ import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
@@ -35,6 +36,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
   CheckActiveBrandPlanSqlUsecase checkActiveBrandPlanSqlUsecase;
   UpdateActiveSqlUsecase updateActiveSqlUsecase;
+  GetVisitDoctorUsecase getVisitDoctorUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
@@ -58,7 +60,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.allBrandsSpUsecase,
       this.allPlanBrandsUsecase,
       this.checkActiveBrandPlanSqlUsecase,
-      this.updateActiveSqlUsecase
+      this.updateActiveSqlUsecase,
+      this.getVisitDoctorUsecase
       )
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
@@ -109,6 +112,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       hospitals = [];
       brandSpModel = [];
       planBrands = [];
+
       final brandsResult = await allBrandsUsecase.execute(UserInfo.activePlanId);
       final brandsFailureOrSuccess = brandsResult.fold((failure) => failure, (data) => data);
       if (brandsFailureOrSuccess is Failure) {
