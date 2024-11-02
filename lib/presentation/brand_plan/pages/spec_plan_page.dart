@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/widget/brand_plan_other_page.dart';
+import 'package:domina_app/presentation/brand_plan/widget/dialog_plan.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -13,6 +14,7 @@ class SpecPlanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -110,11 +112,27 @@ class SpecPlanPage extends StatelessWidget {
                                       ),
                                       Text(
                                         textAlign: TextAlign.center,
-                                        "عدد العينات : ${planBrandModel[index].brands.length}",
+                                        "عدد زيارات الاطباء : ${planBrandModel[index].specModel.sumDoctor}",
                                         style: TextStyle(
                                             color: ColorManager.white,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 20),
+                                            fontSize: 10),
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "عدد زيارات المشافي : ${planBrandModel[index].specModel.sumHospital}",
+                                        style: TextStyle(
+                                            color: ColorManager.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10),
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "عدد العينات المتاحة: ${planBrandModel[index].brandk.toString()}",
+                                        style: TextStyle(
+                                            color: ColorManager.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10),
                                       ),
                                     ],
                                   ),
@@ -138,8 +156,7 @@ class SpecPlanPage extends StatelessWidget {
                     context, state.failure.massage, state.failure.code);
               }
               if (state is UpdateAmountState) {
-                print("|;;;;;;;;;;;;;;;;;;;;;");
-                successWithMessage(context, "تم حفظ التغيرات");
+                successWithMessage(context, " تم ارسال التغيرات يرجى المزامنة");
               }
             },
             child: Positioned(
@@ -149,8 +166,9 @@ class SpecPlanPage extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        BlocProvider.of<BrandPlanBloc>(context)
-                            .add(UpdateAmountSucEvent());
+                        showDialog(context: context, builder: (context) {
+                          return dialogPlan(context,true,"هل انت متاكد من حفظ التغيرات");
+                        },);
                       },
                       child: SizedBox(
                         height: 80,
@@ -177,10 +195,9 @@ class SpecPlanPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        print("|;;;;;;;;;;;;;;;;;;;;;");
-                        BlocProvider.of<BrandPlanBloc>(context)
-                            .add(SendToS());
-
+                        showDialog(context: context, builder: (context) {
+                          return dialogPlan(context,false,"هل انت متاكد من ارسال التغيرات");
+                        },);
                       },
                       child: SizedBox(
                         height: 80,

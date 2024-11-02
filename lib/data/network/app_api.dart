@@ -79,7 +79,17 @@ abstract class AppServiceClient {
   Future<CheckActiveBaseResponse> checkActivePlanBrand(
     @Part(name: "repDet") int repDet,
   );
+  @POST("/getHosVisit.php")
+  Future<VisitHospitalBaseResponse> getHosVisit(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "representativeId") int representativeId,
+      );
 
+  @POST("/getDocVisit.php")
+  Future<VisitDoctorBaseResponse> getDocVisit(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "representativeId") int representativeId,
+      );
   // @POST("/docVisit.php")
   // Future<List<VisitDoctorRequestBody>> uploadVisitDoctor();
   // @POST("/hosVisit.php")

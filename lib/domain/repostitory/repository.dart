@@ -7,7 +7,7 @@ import 'package:domina_app/domain/models/models.dart';
 abstract class Repository{
   Future<Either<Failure,LoginModel>>login(LoginRequest loginRequest);
   Future<Either<Failure,List<PlaceModel>>>allPlace(int id);
-  Future<Either<Failure,List<SpecModel>>>allSpec(int id);
+  Future<Either<Failure,List<SpecDModel>>>allSpec(int id);
   Future<Either<Failure,List<MedicalVisits>>>allVisitDoctor(int id);
   Future<Either<Failure,List<CityModel>>>allCity();
   Future<Either<Failure,List<BrandModel>>>allBrand(int id);
@@ -24,5 +24,8 @@ abstract class Repository{
   Future<Either<Failure,Message1Response>>repPlanBrand(RepPlanBrandBody list1);
   Future<Either<Failure,ActiveModel>>isActive( int repPlaneId);
   Future<Either<Failure,CheckActiveModel>>checkActivePlanBrand( int repDe);
+  Future<Either<Failure,List<VisitHospitalModel>>> getHosVisit(int repPlanId, int representativeId);
+  Future<Either<Failure,List<VisitDoctorModel>>> getDocVisit(int repPlanId, int representativeId);
+
 
 }

@@ -16,7 +16,6 @@ class DoctorVisit extends StatefulWidget {
 
 class _DoctorVisitState extends State<DoctorVisit>
     with AutomaticKeepAliveClientMixin {
-
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -54,8 +53,8 @@ class _DoctorVisitState extends State<DoctorVisit>
                 if (state is AllDoctorByPlaceState) {
                   doctors = state.data;
                 }
-                if(state is EmptyState){
-                  return  emptyFullScreen(context);
+                if (state is EmptyState) {
+                  return emptyFullScreen(context);
                 }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),

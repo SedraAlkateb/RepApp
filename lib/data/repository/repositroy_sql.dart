@@ -100,7 +100,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> insertSpec(List<SpecModel> specModel) async {
+  Future<Either<Failure, Null>> insertSpec(List<SpecDModel> specModel) async {
     try {
       final response = await _databaseHelper.insertSpec(specModel);
       return Right(response);
@@ -167,7 +167,7 @@ class RepositroySqlImp extends RepositorySql {
   @override
   Future<Either<Failure, String>> asyncData
       (List<BrandModel> brands, List<PharmacyModel> pharmacies,
-      List<PlaceModel> places, List<SpecModel> specs,
+      List<PlaceModel> places, List<SpecDModel> specs,
       List<DoctorModel>doctors,
       List<HospitalModel>hospitals,
       List<HospitalSpModel>hospitalSps,

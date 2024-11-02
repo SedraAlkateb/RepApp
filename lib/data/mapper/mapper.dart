@@ -82,19 +82,21 @@ extension PlaceResponseMapper on PlaceResponse? {
   }
 }
 extension SpecResponseMapper on SpecResponse? {
-  SpecModel toDomain() {
-    return SpecModel(
+  SpecDModel toDomain() {
+    return SpecDModel(
       int.parse(this?.id ?? "0") ,
       this?.title ?? Constants.empty,
+      0,
+      0
     );
   }
 }
 
 extension AllSpecResponseMapper on AllSpcBaseResponse? {
-  List<SpecModel> toDomain() {
-    List<SpecModel> spec =(this?.data?.specializations?.map((response) => response.toDomain()) ??
+  List<SpecDModel> toDomain() {
+    List<SpecDModel> spec =(this?.data?.specializations?.map((response) => response.toDomain()) ??
         const Iterable.empty())
-        .cast<SpecModel>()
+        .cast<SpecDModel>()
         .toList();
     return spec;
   }
@@ -317,6 +319,41 @@ extension VisitDoctorModelMapper on VisitDoctorModel? {
   }
 }
 
+extension VisitDoctorResponseMapper on VisitResponse? {
+  VisitDoctorModel toDomain() {
+    return VisitDoctorModel(
+      int.parse((this?.id  ??"0")),
+      (this?.visitDate ?? Constants.zero).toString() ,
+      (this?.note ?? Constants.zero).toString() ,
+      (this?.issue ?? Constants.zero).toString() ,
+      (this?.special ?? Constants.zero).toString() ,
+      int.parse((this?.docId ??"0")),
+      0,
+      "ff",
+    );
+
+  }
+}
+extension visitHospitalResponseMapper on VisitHospitalBaseResponse? {
+  List<VisitHospitalModel> toDomain() {
+    List<VisitHospitalModel> hospitalVisitModel = (this?.data?.visitHospital
+        ?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<VisitHospitalModel>()
+        .toList();
+    return hospitalVisitModel;
+  }
+}
+extension visitDoctorResponseMapper on VisitDoctorBaseResponse? {
+  List<VisitDoctorModel> toDomain() {
+    List<VisitDoctorModel> doctorVisitModel = (this?.data?.visitDoctor
+        ?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<VisitDoctorModel>()
+        .toList();
+    return doctorVisitModel;
+  }
+}
 extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
   List<HospitalSpModel> toDomain() {
     List<HospitalSpModel> hospitalSpModel =(this?.data?.HospitalSp?.map((response) => response.toDomain()) ??

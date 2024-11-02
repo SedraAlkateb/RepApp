@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: unused_element
-
 part of 'responses.dart';
 
 // **************************************************************************
@@ -103,12 +101,14 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
     TokenResponse(
       json['token'] as String?,
       json['repId'] as String?,
-      json['otherPlanId'].toString(),
-      json['activePlanId'].toString() as String?,
-      json['otherStatus'] as String?,
+      json['otherPlanId'] as String?,
+      json['activePlanId'] as String?,
+      json['otherPlanStatus'] as String?,
       json['name'] as String?,
       (json['percentage'] as num?)?.toInt(),
-    );
+    )
+      ..endDate = json['endDate'] as String?
+      ..startDate = json['startDate'] as String?;
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
@@ -116,9 +116,11 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'repId': instance.repId,
       'otherPlanId': instance.otherPlanId,
       'activePlanId': instance.activePlanId,
-      'otherStatus': instance.otherStatus,
+      'otherPlanStatus': instance.otherStatus,
       'name': instance.name,
       'percentage': instance.percentage,
+      'endDate': instance.endDate,
+      'startDate': instance.startDate,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
@@ -711,4 +713,113 @@ Map<String, dynamic> _$AllPlanBrandsBaseResponseToJson(
       'status': instance.status,
       'message': instance.message,
       'representativeActivePlan_brands': instance.data,
+    };
+
+VisitResponse _$VisitResponseFromJson(Map<String, dynamic> json) =>
+    VisitResponse(
+      json['id'] as String?,
+      json['repPlanId'] as String?,
+      json['representativeId'] as String?,
+      json['docId'] as String?,
+      json['visitDate'] as String?,
+      json['note'] as String?,
+      json['issue'] as String?,
+      json['special'] as String?,
+    );
+
+Map<String, dynamic> _$VisitResponseToJson(VisitResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'repPlanId': instance.repPlanId,
+      'representativeId': instance.representativeId,
+      'docId': instance.docId,
+      'visitDate': instance.visitDate,
+      'note': instance.note,
+      'issue': instance.issue,
+      'special': instance.special,
+    };
+
+VisitDoctorResponse _$VisitDoctorResponseFromJson(Map<String, dynamic> json) =>
+    VisitDoctorResponse(
+      (json['docVisitTemp'] as List<dynamic>?)
+          ?.map((e) => VisitResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      (json['brands_visit'] as List<dynamic>?)
+          ?.map((e) =>
+              VisitBrandPharmacyModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$VisitDoctorResponseToJson(
+        VisitDoctorResponse instance) =>
+    <String, dynamic>{
+      'docVisitTemp': instance.visitDoctor,
+      'brands_visit': instance.brand,
+    };
+
+VisitDoctorBrandResponse _$VisitDoctorBrandResponseFromJson(
+        Map<String, dynamic> json) =>
+    VisitDoctorBrandResponse(
+      (json['brands_visit'] as List<dynamic>?)
+          ?.map((e) =>
+              VisitBrandPharmacyModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$VisitDoctorBrandResponseToJson(
+        VisitDoctorBrandResponse instance) =>
+    <String, dynamic>{
+      'brands_visit': instance.brand,
+    };
+
+VisitDoctorBaseResponse _$VisitDoctorBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    VisitDoctorBaseResponse(
+      json['docVisitTemp'] == null
+          ? null
+          : VisitDoctorResponse.fromJson(
+              json['docVisitTemp'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$VisitDoctorBaseResponseToJson(
+        VisitDoctorBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'docVisitTemp': instance.data,
+    };
+
+VisitHospitalResponse _$VisitHospitalResponseFromJson(
+        Map<String, dynamic> json) =>
+    VisitHospitalResponse(
+      (json['hosVisitTemp'] as List<dynamic>?)
+          ?.map((e) => VisitResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$VisitHospitalResponseToJson(
+        VisitHospitalResponse instance) =>
+    <String, dynamic>{
+      'hosVisitTemp': instance.visitHospital,
+    };
+
+VisitHospitalBaseResponse _$VisitHospitalBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    VisitHospitalBaseResponse(
+      json['hosVisitTemp'] == null
+          ? null
+          : VisitHospitalResponse.fromJson(
+              json['hosVisitTemp'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$VisitHospitalBaseResponseToJson(
+        VisitHospitalBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'hosVisitTemp': instance.data,
     };

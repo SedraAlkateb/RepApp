@@ -60,7 +60,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<SpecModel>>> allSpec(int id) async {
+  Future<Either<Failure, List<SpecDModel>>> allSpec(int id) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.allSpecializations(id);
@@ -351,9 +351,51 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, CheckActiveModel>> checkActivePlanBrand(int repDe)async {
+  Future<Either<Failure, CheckActiveModel>> checkActivePlanBrand(int repDe)
+  async
+  {
     try { if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.checkActivePlanBrand(repDe);
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
+        return Right(response.toDomain());
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } else {
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+    }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitDoctorModel>>> getDocVisit(int repPlanId, int representativeId)
+  async
+  {
+    try { if (await _networkInfo.isConnected) {
+      final response = await _remoteDataSource.getDocVisit(repPlanId, representativeId);
+      if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
+        return Right(response.toDomain());
+      } else {
+        return Left(Failure(ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT));
+      }
+    } else {
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+    }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VisitHospitalModel>>> getHosVisit(int repPlanId, int representativeId)
+  async
+  {
+    try { if (await _networkInfo.isConnected) {
+      final response = await _remoteDataSource.getHosVisit(repPlanId, representativeId);
       if (response.status == null||response.status==ApiInternalStatus.SUCCESS) {
         return Right(response.toDomain());
       } else {

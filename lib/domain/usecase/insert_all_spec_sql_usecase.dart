@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class InsertAllSpecsSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   InsertAllSpecsSqlUsecase(this._repositorySql);
-  Future<Either<Failure, Null>> execute(List<SpecModel>specModel) async{
+  Future<Either<Failure, Null>> execute(List<SpecDModel>specModel) async{
     return await _repositorySql.insertSpec(specModel);
   }
 

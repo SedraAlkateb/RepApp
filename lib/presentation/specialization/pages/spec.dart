@@ -84,13 +84,13 @@ class SpecializationsPage extends StatelessWidget {
                         physics: NeverScrollableScrollPhysics(),
                         gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // عدد الأعمدة في كل صف
+                          crossAxisCount: 2,
                           crossAxisSpacing:
-                          1.0, // المسافة الأفقية بين الأعمدة
+                          1.0,
                           mainAxisSpacing:
-                          2.0, // المسافة العمودية بين الصفوف
+                          2.0,
                           childAspectRatio:
-                          1, // نسبة العرض إلى الارتفاع لكل عنصر (يمكنك تعديلها حسب الحاجة)
+                          1,
                         ),
                         itemCount: placeModel.length,
                         itemBuilder: (context, index) {

@@ -38,7 +38,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
-  List<SpecModel> spec = [];
+  List<SpecDModel> spec = [];
   List<DoctorModel> doctors = [];
   List<HospitalModel> hospitals = [];
   List<HospitalSpModel> hospitalSps = [];
@@ -172,7 +172,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: specFailureOrSuccess));
         return false;
       }
-      spec = specFailureOrSuccess as List<SpecModel>;
+      spec = specFailureOrSuccess as List<SpecDModel>;
 ///////////////////////////////////////
       final hospitalSpsResult = await allHospialSpUsecase.execute(UserInfo.repId);
       final hospitalSpsFailureOrSuccess = hospitalSpsResult.fold((failure) => failure, (data) => data);
