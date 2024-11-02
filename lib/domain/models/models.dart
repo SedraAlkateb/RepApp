@@ -756,8 +756,8 @@ class HospitalModel {
       'title': title,
       'placeId': placeId,
       'address': address,
-      "placeTitle": placeTitle,
       "note": note,
+      "placeTitle": placeTitle,
     };
   }
 
@@ -767,8 +767,8 @@ class HospitalModel {
       map['title'],
       map['placeId'],
       map['address'],
-      map["placeTitle"],
       map["note"],
+      map["placeTitle"],
     );
   }
   factory HospitalModel.fromMap1(Map<String, dynamic> map) {
@@ -777,8 +777,8 @@ class HospitalModel {
       map['hospital_title'],
       map['hospital_placeId'],
       map['hospital_address'],
-      map["hospital_placeTitle"],
       map["note"],
+      map["hospital_placeTitle"],
     );
   }
 }

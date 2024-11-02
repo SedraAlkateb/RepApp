@@ -39,7 +39,8 @@ class DoctorDetails extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  elevation: 5,
+                  elevation: 20,
+                  shadowColor:ColorManager.secondaryColor4.withOpacity(0.5),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -48,15 +49,15 @@ class DoctorDetails extends StatelessWidget {
                         Text(
                           doctor.title,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.local_hospital, color: Colors.blue),
+                            Icon(Icons.medical_services, color: Colors.blue),
                             SizedBox(width: 8),
                             Text(
                               'الاختصاص: ${doctor.spTitle}',
@@ -68,6 +69,7 @@ class DoctorDetails extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -78,12 +80,12 @@ class DoctorDetails extends StatelessWidget {
                       ListView(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        children: [
-                          buildDetailRow(context, Icons.location_on, 'العنوان',
+                        children: [   buildDetailRow(context, Icons.place, 'المنطقة',
+                            doctor.placeTitle),    Divider(thickness: 0.5,),
+                          buildDetailRow(context, Icons.location_city_outlined, 'العنوان',
                               doctor.address),
-                          Divider(thickness: 0.5,),
-                          buildDetailRow(context, Icons.place, 'المكان',
-                              doctor.placeTitle),
+
+
                           Divider(thickness: 0.5,),
                           buildDetailRow(context, Icons.visibility,
                               'عدد الزيارات', '${doctor.visits}'),
