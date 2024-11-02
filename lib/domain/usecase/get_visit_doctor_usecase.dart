@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class GetVisitDoctorUsecase extends Equatable {
   final Repository _repository;
   GetVisitDoctorUsecase(this._repository);
-  Future<Either<Failure, List<VisitDoctorModel>>> execute(int repPlanId, int representativeId) async{
+  Future<Either<Failure, visitDoctorBase>> execute(int repPlanId, int representativeId) async{
     return await _repository.getDocVisit(repPlanId, representativeId);
   }
 

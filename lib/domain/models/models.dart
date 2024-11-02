@@ -352,7 +352,11 @@ class VisitHospitalAndHospital {//
   VisitHospitalAndHospital(
       this.hospitalModel, this.visitHospitalModel, this.specModel);
 }
-
+class visitDoctorBase{
+  List<VisitBrandPharmacyModel> brand;
+  List<VisitDoctorModel> data;
+  visitDoctorBase(this.brand,this.data);
+}
 class VisitDoctorModel {
   int id;
   String data;

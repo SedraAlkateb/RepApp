@@ -371,7 +371,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<VisitDoctorModel>>> getDocVisit(int repPlanId, int representativeId)
+  Future<Either<Failure, visitDoctorBase>> getDocVisit(int repPlanId, int representativeId)
   async
   {
     try { if (await _networkInfo.isConnected) {

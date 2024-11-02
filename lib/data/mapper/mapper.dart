@@ -344,9 +344,9 @@ extension visitHospitalResponseMapper on VisitHospitalBaseResponse? {
     return hospitalVisitModel;
   }
 }
-extension visitDoctorResponseMapper on VisitDoctorBaseResponse? {
+extension visitDoctorResponseMapper on VisitDoctorResponse? {
   List<VisitDoctorModel> toDomain() {
-    List<VisitDoctorModel> doctorVisitModel = (this?.data?.visitDoctor
+    List<VisitDoctorModel> doctorVisitModel = (this?.visitDoctor
         ?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<VisitDoctorModel>()
@@ -354,6 +354,14 @@ extension visitDoctorResponseMapper on VisitDoctorBaseResponse? {
     return doctorVisitModel;
   }
 }
+extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
+  visitDoctorBase toDomain() {
+   return visitDoctorBase(this?.brandsVisit?.brand??[],this?.data.toDomain()??[]);
+  }
+}
+
+
+
 extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
   List<HospitalSpModel> toDomain() {
     List<HospitalSpModel> hospitalSpModel =(this?.data?.HospitalSp?.map((response) => response.toDomain()) ??

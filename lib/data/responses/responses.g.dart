@@ -744,24 +744,19 @@ VisitDoctorResponse _$VisitDoctorResponseFromJson(Map<String, dynamic> json) =>
       (json['docVisitTemp'] as List<dynamic>?)
           ?.map((e) => VisitResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
-      (json['brands_visit'] as List<dynamic>?)
-          ?.map((e) =>
-              VisitBrandPharmacyModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$VisitDoctorResponseToJson(
         VisitDoctorResponse instance) =>
     <String, dynamic>{
       'docVisitTemp': instance.visitDoctor,
-      'brands_visit': instance.brand,
     };
 
 VisitDoctorBrandResponse _$VisitDoctorBrandResponseFromJson(
         Map<String, dynamic> json) =>
     VisitDoctorBrandResponse(
-      (json['brands_visit'] as List<dynamic>?)
-          ?.map((e) =>
+      (json['brands_visit'] as List<dynamic>)
+          .map((e) =>
               VisitBrandPharmacyModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -779,6 +774,10 @@ VisitDoctorBaseResponse _$VisitDoctorBaseResponseFromJson(
           ? null
           : VisitDoctorResponse.fromJson(
               json['docVisitTemp'] as Map<String, dynamic>),
+      json['Brands Visit'] == null
+          ? null
+          : VisitDoctorBrandResponse.fromJson(
+              json['Brands Visit'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -789,6 +788,7 @@ Map<String, dynamic> _$VisitDoctorBaseResponseToJson(
       'status': instance.status,
       'message': instance.message,
       'docVisitTemp': instance.data,
+      'Brands Visit': instance.brandsVisit,
     };
 
 VisitHospitalResponse _$VisitHospitalResponseFromJson(
@@ -812,6 +812,10 @@ VisitHospitalBaseResponse _$VisitHospitalBaseResponseFromJson(
           ? null
           : VisitHospitalResponse.fromJson(
               json['hosVisitTemp'] as Map<String, dynamic>),
+      json['Brands Visit'] == null
+          ? null
+          : VisitDoctorResponse.fromJson(
+              json['Brands Visit'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -822,4 +826,5 @@ Map<String, dynamic> _$VisitHospitalBaseResponseToJson(
       'status': instance.status,
       'message': instance.message,
       'hosVisitTemp': instance.data,
+      'Brands Visit': instance.brandsVisit,
     };

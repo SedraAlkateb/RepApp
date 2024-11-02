@@ -629,12 +629,11 @@ class HospitalSpResponse {
   String? rate;
   @JsonKey(name: "visit")
   String? visit;
-
   HospitalSpResponse(this.id, this.hospitalId, this.spId, this.totalDocs,
       this.rate, this.visit); // from json
   factory HospitalSpResponse.fromJson(Map<String,dynamic>json)=>
       _$HospitalSpResponseFromJson(json);
-  // to json
+
   Map<String,dynamic>toJson()=>
       _$HospitalSpResponseToJson(this);
 }
@@ -724,10 +723,8 @@ class VisitResponse {
 class VisitDoctorResponse{
   @JsonKey(name: "docVisitTemp")
   List<VisitResponse> ?visitDoctor;
-  @JsonKey(name: "brands_visit")
-  List<VisitBrandPharmacyModel> ?brand;
 
-  VisitDoctorResponse(this.visitDoctor,this.brand);
+  VisitDoctorResponse(this.visitDoctor);
   factory VisitDoctorResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitDoctorResponseFromJson(json);
   Map<String,dynamic>toJson()=>
@@ -736,8 +733,7 @@ class VisitDoctorResponse{
 @JsonSerializable()
 class VisitDoctorBrandResponse{
   @JsonKey(name: "brands_visit")
-  List<VisitBrandPharmacyModel> ?brand;
-
+  List<VisitBrandPharmacyModel>brand;
   VisitDoctorBrandResponse(this.brand);
   factory VisitDoctorBrandResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitDoctorBrandResponseFromJson(json);
@@ -749,7 +745,9 @@ class VisitDoctorBrandResponse{
 class VisitDoctorBaseResponse extends BaseResponse{
   @JsonKey(name: "docVisitTemp")
   VisitDoctorResponse? data;
-  VisitDoctorBaseResponse(this.data);
+  @JsonKey(name: "Brands Visit")
+  VisitDoctorBrandResponse? brandsVisit;
+  VisitDoctorBaseResponse(this.data,this.brandsVisit);
   factory VisitDoctorBaseResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitDoctorBaseResponseFromJson(json);
   Map<String,dynamic>toJson()=>
@@ -770,7 +768,9 @@ class VisitHospitalResponse{
 class VisitHospitalBaseResponse extends BaseResponse{
   @JsonKey(name: "hosVisitTemp")
   VisitHospitalResponse? data;
-  VisitHospitalBaseResponse(this.data);
+  @JsonKey(name: "Brands Visit")
+  VisitDoctorResponse? brandsVisit;
+  VisitHospitalBaseResponse(this.data,this.brandsVisit);
   factory VisitHospitalBaseResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitHospitalBaseResponseFromJson(json);
   Map<String,dynamic>toJson()=>
