@@ -13,7 +13,6 @@ print("error.message??""");
     //dio error so its an error from response of the api or from dio itself
     failure=_handleError(error);
   }
-
   else if(error is DatabaseException ){
     failure=_handleErrorSql(error);
   }else if(error is FormatException){

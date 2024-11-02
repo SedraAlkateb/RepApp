@@ -67,6 +67,18 @@ class VisitBrandPharmacyModel {
         int.parse(
           map['amount'],
         ),
+        1
+    );
+  }
+
+  factory VisitBrandPharmacyModel.fromJson1(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+        map['id'],
+        map['visitId'],
+        map['brandId'],
+        int.parse(
+          map['amount'],
+        ),
         map['flag']
     );
   }
@@ -78,8 +90,10 @@ class BrandSpPlanModel{
 }
 class OtherBrandSpPlanModel{
   List<OtherBrandModel> brands=[];
-  SpecModel specModel;
-  OtherBrandSpPlanModel(this.specModel,this.brands);
+  SpecDModel specModel;
+  int brandk;
+  int brandm;
+  OtherBrandSpPlanModel(this.specModel,this.brands,this.brandk,this.brandm);
 }
 class SpPlan{
   int id;
@@ -87,7 +101,9 @@ class SpPlan{
   int amount;
   String title;
   String brandType;
-  SpPlan(this.id,this.amount,this.title,this.brandType,this.idSp);
+  int sumDoctor;
+  int sumHospital;
+  SpPlan(this.id,this.amount,this.title,this.brandType,this.idSp,this.sumDoctor,this.sumHospital);
 }
 class BrandModel {
   int id;
@@ -332,7 +348,7 @@ class VisitDoctorAndDoctor {
 class VisitHospitalAndHospital {//
   HospitalModel hospitalModel;
   VisitHospitalModel visitHospitalModel;
-  SpecModel specModel;
+  SpecDModel specModel;
   VisitHospitalAndHospital(
       this.hospitalModel, this.visitHospitalModel, this.specModel);
 }
@@ -481,35 +497,11 @@ class PlaceModel {
 }
 
 class SpecHospitalSp {
-  SpecModel specModel;
+  SpecDModel specModel;
   HospitalSpModel hospitalSpModel;
   SpecHospitalSp(this.specModel, this.hospitalSpModel);
 }
 
-class SpecModel {
-  int id;
-  String title;
-  SpecModel(this.id, this.title);
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-    };
-  }
-
-  factory SpecModel.fromMap(Map<String, dynamic> map) {
-    return SpecModel(
-      map['id'],
-      map['title'],
-    );
-  }
-  factory SpecModel.fromMap1(Map<String, dynamic> map) {
-    return SpecModel(
-      map['specialization_id'],
-      map['specialization_title'],
-    );
-  }
-}
 class SpecDModel {
   int id;
   String title;
@@ -524,13 +516,27 @@ class SpecDModel {
       'sumHospital':sumHospital
     };
   }
-
+  factory SpecDModel.fromJson(Map<String, dynamic> map) {
+    return SpecDModel(
+        map['id'],
+        map['title'],
+        map["sumDoctor"],
+        map['sumHospital']
+    );
+  }
   factory SpecDModel.fromMap(Map<String, dynamic> map) {
     return SpecDModel(
-      map['id'],
-      map['title'],
+      map['specialization_id'],
+      map['specialization_title'],
       map["sumDoctor"],
       map['sumHospital']
+    );
+  }
+  factory SpecDModel.fromMap2(Map<String, dynamic> map) {
+    return SpecDModel(
+        map['specialization_id'],
+        map['specialization_title'],
+      0,0
     );
   }
   factory SpecDModel.fromMap1(Map<String, dynamic> map,Map<String, dynamic> map1) {

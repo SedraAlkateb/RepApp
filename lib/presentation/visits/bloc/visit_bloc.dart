@@ -56,8 +56,6 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(VisitDoctorErrorState(failure: failure));
         }, (data) async {
           doctors = data;
-          print("doctors[0].visitDoctorModel.data");
-          print(doctors[0].visitDoctorModel.data);
           if(doctors.isNotEmpty){
             emit(VisitDoctorState(data));
 
@@ -83,13 +81,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           if (value.doctorModel.title.contains(event.value)) {
             return true;
           }
-          if (value.visitDoctorModel.additaion!.contains(event.value)) {
-            return true;
-          }
           if (value.visitDoctorModel.science!.contains(event.value)) {
-            return true;
-          }
-          if (value.visitDoctorModel.kaswn!.contains(event.value)) {
             return true;
           }
           return false;
@@ -103,16 +95,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           if (value.hospitalModel.title.contains(event.value)) {
             return true;
           }
-          if (value.visitHospitalModel.additaion!.contains(event.value)) {
-            return true;
-          }
           if (value.visitHospitalModel.science!.contains(event.value)) {
             return true;
           }
-          if (value.visitHospitalModel.kaswn!.contains(event.value)) {
-            return true;
-          }
-
           return false;
         }).toList();
         emit(SearchVisitHospitalState(hospitalSearch));

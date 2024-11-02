@@ -17,7 +17,6 @@ class DatabaseHelper {
     _database = await _initDatabase();
     return _database!;
   }
-
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database.db');
@@ -45,11 +44,14 @@ class DatabaseHelper {
     );
     ''');
     await db.execute('''
-      CREATE TABLE specialization (
-    id INTEGER PRIMARY KEY ,
-    title TEXT NOT NULL
-    );
-   ''');
+  CREATE TABLE specialization (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    sumDoctor INTEGER DEFAULT 0,
+    sumHospital INTEGER DEFAULT 0
+  );
+''');
+
 
     await db.execute('''
       CREATE TABLE place (
@@ -64,15 +66,6 @@ class DatabaseHelper {
     address TEXT NOT NULL,
     placeId INTEGER NOT NULL,
     FOREIGN KEY (placeId) REFERENCES place(placeId)
-    );
-    ''');
-    await db.execute('''
-      CREATE TABLE brand (
-    id INTEGER PRIMARY KEY,
-    title TEXT NOT NULL,
-     phTitle TEXT NOT NULL,
-     falg INTEGER NOT NULL,
-     sampleCoast INTEGER NOT NULL
     );
     ''');
 
@@ -103,6 +96,16 @@ class DatabaseHelper {
     FOREIGN KEY (placeId) REFERENCES place(placeId)
     );
     ''');
+    await db.execute('''
+      CREATE TABLE brand (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+     phTitle TEXT NOT NULL,
+     falg INTEGER NOT NULL,
+     sampleCoast INTEGER NOT NULL
+    );
+    ''');
+
     await db.execute('''
       CREATE TABLE hospitalSp (
     id INTEGER PRIMARY KEY,

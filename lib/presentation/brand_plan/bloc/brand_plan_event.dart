@@ -9,9 +9,10 @@ class ChangeFieldEvent extends BrandPlanEvent{
  final int number;
  final int index;
 final int  indexBr;
- ChangeFieldEvent(this.number,this.index,this.indexBr);
+final int brandM;
+ ChangeFieldEvent(this.number,this.index,this.indexBr,this.brandM);
  @override
- List<Object?> get props => [number,index,indexBr];
+ List<Object?> get props => [number,index,indexBr,this.brandM];
 }
 
 

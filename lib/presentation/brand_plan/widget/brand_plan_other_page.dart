@@ -19,6 +19,15 @@ class BrandPlanOtherPage extends StatefulWidget {
 
 class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
     with AutomaticKeepAliveClientMixin {
+  int summ=0;
+  @override
+  void initState() {
+    for (var brand in widget.otherBrandSpPlanModel.brands) {
+      summ=summ+brand.amount;
+      BlocProvider.of<BrandPlanBloc>(context).sumS=summ;
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -71,7 +80,6 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8),
                                       child: Icon(
@@ -190,7 +198,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                                 .add(ChangeFieldEvent(
                                                     int.parse(value),
                                                 widget.index1,
-                                                  index ));
+                                                  index, widget.otherBrandSpPlanModel.brandm));
                                           }
                                         },
                                         keyboardType: TextInputType.number,

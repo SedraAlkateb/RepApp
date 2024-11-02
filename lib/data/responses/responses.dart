@@ -1,4 +1,5 @@
 
+import 'package:domina_app/domain/models/models.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
 
@@ -105,12 +106,16 @@ class TokenResponse {
   String? otherPlanId;
   @JsonKey(name: "activePlanId")
   String? activePlanId;
-  @JsonKey(name: "otherStatus")
+  @JsonKey(name: "otherPlanStatus")
   String? otherStatus;
   @JsonKey(name: "name")
   String? name;
   @JsonKey(name: "percentage")
   int? percentage;
+  @JsonKey(name: "endDate")
+  String? endDate;
+  @JsonKey(name: "startDate")
+  String? startDate;
   TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.otherStatus,this.name,this.percentage);
   // from json
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>
@@ -685,3 +690,90 @@ class AllPlanBrandsBaseResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$AllPlanBrandsBaseResponseToJson(this);
 }
+@JsonSerializable()
+class VisitResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "repPlanId")
+  String? repPlanId;
+  @JsonKey(name: "representativeId")
+  String? representativeId;
+  @JsonKey(name: "docId")
+  String? docId;
+  @JsonKey(name: "visitDate")
+  String? visitDate;
+  @JsonKey(name: "note")
+  String? note;
+  @JsonKey(name: "issue")
+  String? issue;
+  @JsonKey(name: "special")
+  String? special;
+
+
+  VisitResponse(this.id, this.repPlanId, this.representativeId,
+      this.docId, this.visitDate, this.note, this.issue, this.special);
+
+  factory VisitResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$VisitResponseToJson(this);
+}
+
+@JsonSerializable()
+class VisitDoctorResponse{
+  @JsonKey(name: "docVisitTemp")
+  List<VisitResponse> ?visitDoctor;
+  @JsonKey(name: "brands_visit")
+  List<VisitBrandPharmacyModel> ?brand;
+
+  VisitDoctorResponse(this.visitDoctor,this.brand);
+  factory VisitDoctorResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitDoctorResponseFromJson(json);
+  Map<String,dynamic>toJson()=>
+      _$VisitDoctorResponseToJson(this);
+}
+@JsonSerializable()
+class VisitDoctorBrandResponse{
+  @JsonKey(name: "brands_visit")
+  List<VisitBrandPharmacyModel> ?brand;
+
+  VisitDoctorBrandResponse(this.brand);
+  factory VisitDoctorBrandResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitDoctorBrandResponseFromJson(json);
+  Map<String,dynamic>toJson()=>
+      _$VisitDoctorBrandResponseToJson(this);
+}
+
+@JsonSerializable()
+class VisitDoctorBaseResponse extends BaseResponse{
+  @JsonKey(name: "docVisitTemp")
+  VisitDoctorResponse? data;
+  VisitDoctorBaseResponse(this.data);
+  factory VisitDoctorBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitDoctorBaseResponseFromJson(json);
+  Map<String,dynamic>toJson()=>
+      _$VisitDoctorBaseResponseToJson(this);
+}
+@JsonSerializable()
+class VisitHospitalResponse{
+  @JsonKey(name: "hosVisitTemp")
+  List<VisitResponse> ?visitHospital;
+  VisitHospitalResponse(this.visitHospital);
+  factory VisitHospitalResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitHospitalResponseFromJson(json);
+  Map<String,dynamic>toJson()=>
+      _$VisitHospitalResponseToJson(this);
+}
+
+@JsonSerializable()
+class VisitHospitalBaseResponse extends BaseResponse{
+  @JsonKey(name: "hosVisitTemp")
+  VisitHospitalResponse? data;
+  VisitHospitalBaseResponse(this.data);
+  factory VisitHospitalBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitHospitalBaseResponseFromJson(json);
+  Map<String,dynamic>toJson()=>
+      _$VisitHospitalBaseResponseToJson(this);
+}
+

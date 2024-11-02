@@ -217,7 +217,7 @@ class DrawerPage extends StatelessWidget {
             title:  Text('الخطط',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushReplacementNamed(
+                Navigator.pushNamed(
                   context,
                   Routes.brandPlan,
                 );

@@ -1,22 +1,17 @@
 
-// ignore_for_file: must_be_immutable
-
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
-
-
-class AllSpeUsecase extends Equatable {
-  Repository _repository;
-  AllSpeUsecase(this._repository);
-  Future<Either<Failure, List<SpecDModel>>> execute(int id) async{
-    return await _repository.allSpec(id);
+class GetVisitDoctorUsecase extends Equatable {
+  final Repository _repository;
+  GetVisitDoctorUsecase(this._repository);
+  Future<Either<Failure, List<VisitDoctorModel>>> execute(int repPlanId, int representativeId) async{
+    return await _repository.getDocVisit(repPlanId, representativeId);
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [_repository];
 
 }

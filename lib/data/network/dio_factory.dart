@@ -49,12 +49,11 @@ class DioFactory{
     dio.options=BaseOptions(
         baseUrl: Constants.baseUrl,
         headers: headers,
-        receiveTimeout: Duration(seconds: Constants.apiTimeOut),
-        sendTimeout: Duration(seconds: Constants.apiTimeOut),
+      connectTimeout: Duration(seconds: 15),
+      receiveTimeout: Duration(seconds: 20),
     );
     dio.interceptors.add( MyApiInterceptor());
     if(!kReleaseMode){
-      //its debuge  mode so print app logs
       dio.interceptors.add(PrettyDioLogger(
         requestHeader : true,
         requestBody : true,

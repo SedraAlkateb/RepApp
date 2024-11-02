@@ -7,11 +7,13 @@ class BrandPlanPage extends StatelessWidget {
   const BrandPlanPage({super.key});
   @override
   Widget build(BuildContext context) {
+
     return DefaultTabController(
-        length:2, 
+        length:2,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: ColorManager.secondaryColor7,
+        //    leading: SizedBox(),
             bottom: TabBar(
                 labelPadding: EdgeInsets.all(0.9),
                 tabs: [

@@ -20,6 +20,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   List<OtherBrandSpPlanModel> planBrand = [];
   List<BrandSpPlanModel> planBrandActive = [];
   int sum = 0;
+  int sumS=0;
   int current = 0;
   BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase,
       this.updateOtherStatusUsecase,this.allOtherBrandPlanSqlUsecase)
@@ -56,23 +57,33 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             (planBrand[event.index].brands[event.indexBr].amount *
                 planBrand[event.index].brands[event.indexBr].sampleCoast);
         sum1 = sum1 + (event.number * planBrand[event.index].brands[event.indexBr].sampleCoast);
-        if (sum1 < UserInfo.percentage) {
+        int sum2=sumS;
+        sum2= sum2 -planBrand[event.index].brands[event.indexBr].amount ;
+        sum2 = sum2 + event.number;
+        print(event.brandM);
+        print("event.brandM");
+        if(sum2<=event.brandM){
+          if (sum1 < UserInfo.percentage) {
+            planBrand[event.index].brands[event.indexBr].amount = event.number;
+            sum = sum1;
+            sumS=sum2;
+            emit(SumState(planBrand));
+          } else {
+            planBrand[event.index].brands[event.indexBr].amount = event.number;
+            sum = sum1;
+            sumS=sum2;
+            emit(SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
+          }
+        }else{
           planBrand[event.index].brands[event.indexBr].amount = event.number;
-          sum = sum1;
-          emit(SumState(planBrand));
-        } else {
-          planBrand[event.index].brands[event.indexBr].amount = event.number;
-          sum = sum1;
-          emit(
-              SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
-        }
+          sumS=sum2;
+          emit(SumErrorState(failure: Failure(100, " لقد تجاوزت الحد المسموح العينات في هذا اللاختصاص")));}
       }
       if (event is UpdateEvent) {
         List<OtherBrandSpPlanModel> planBrandSum = List.from(planBrand);
         emit(SumState(planBrandSum));
       }
       if (event is SendToS) {
-        print("|;;;;;;;;;;;;;;;;;;;;;");
         emit(UpdateAmountLoadingState());
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
