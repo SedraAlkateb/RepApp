@@ -60,7 +60,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.location_city_outlined,
                 color: ColorManager.secondaryColor4),
-            title: const Text('إجراء زيارة'),
+            title:  Text('إجراء زيارة',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -83,7 +83,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.location_history_outlined,
                 color: ColorManager.secondaryColor4),
-            title: const Text('الزيارات'),
+            title:  Text('الزيارات',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -107,7 +107,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.medical_services_outlined,
                 color: ColorManager.secondaryColor4),
-            title: const Text('الاختصاصات'),
+            title:  Text('الاختصاصات',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -130,7 +130,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading:
                 Icon(Icons.group_outlined, color: ColorManager.secondaryColor4),
-            title: const Text('الأطباء '),
+            title:  Text('الأطباء ',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -151,7 +151,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.local_hospital_outlined,
                 color: ColorManager.secondaryColor4),
-            title: const Text('المشافي '),
+            title:  Text('المشافي ',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -195,7 +195,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.medication_outlined,
                 color: ColorManager.secondaryColor4),
-            title: const Text('الأصناف'),
+            title:  Text('الأصناف',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -208,13 +208,13 @@ class DrawerPage extends StatelessWidget {
           ),
           Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
+          child: Divider(thickness:0.5, color: ColorManager.hintGrey),
         ),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
              leading:  Icon(Icons.list_alt_outlined ,color: ColorManager.secondaryColor4),
-            title:  Text('الخطط',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title:  Text('الخطط',style: TextStyle(color: ColorManager.secondaryColor1)),
             onTap: () {
              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
@@ -227,13 +227,13 @@ class DrawerPage extends StatelessWidget {
           ), 
            Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(thickness:0.5,color:ColorManager.secondaryColor ,),
+          child: Divider(thickness:0.5, color: ColorManager.hintGrey,),
         ),  
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
             leading:
-                Icon(Icons.sync_outlined, color: ColorManager.secondaryColor4),
+                Icon(Icons. wifi_protected_setup_outlined, color: ColorManager.secondaryColor4),
             title: Text(
               'المزامنة',
               style: TextStyle(color: ColorManager.secondaryColor1),
@@ -253,7 +253,7 @@ class DrawerPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
               thickness: 0.5,
-              color: ColorManager.secondaryColor,
+              color: ColorManager.hintGrey,
             ),
           ),
           ListTile(

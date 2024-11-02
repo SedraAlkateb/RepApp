@@ -124,7 +124,7 @@ class Places extends StatelessWidget {
                 },
                 backgroundColor: ColorManager.secondaryColor1,
                 child: Icon(
-                  Icons.sync_outlined,
+                  Icons.wifi_protected_setup_outlined,
                   color: ColorManager.white,
                 ),
               ),

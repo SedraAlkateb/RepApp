@@ -4,6 +4,8 @@ import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
 
+import '../../resources/color_manager.dart';
+
 class HospitalDetails extends StatelessWidget {
   final HospitalSpAllModel hospital;
 
@@ -28,7 +30,8 @@ class HospitalDetails extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        elevation: 5,
+                         elevation: 20,
+              shadowColor:ColorManager.secondaryColor4.withOpacity(0.5),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -70,20 +73,24 @@ class HospitalDetails extends StatelessWidget {
                       ListView(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        children: [
+                        children: [   buildDetailRow(context, Icons.place, 'المنطقة',
+                            hospital.placeTitle!),
+                          Divider(thickness: 0.4,),
                           buildDetailRow(
-                              context, Icons.location_on, 'العنوان', hospital.address!),
-                          buildHtmlDetailRow(context, Icons.place, 'المكان',
-                              hospital.placeTitle!),
+                              context, Icons.location_city_outlined, 'العنوان', hospital.address!),
+                          Divider(thickness: 0.4,),
                           buildDetailRow(context, Icons.visibility, 'عدد الزيارات',
                               '${hospital.visit}'),
+                          Divider(thickness: 0.4,),
                           buildDetailRow(context, Icons.star, 'التصنيف',
                               '${hospital.rate}'),
+                          Divider(thickness: 0.4,),
                           buildDetailRow(
-                              context, Icons.location_on, 'عدد الاطباء', hospital.totalDocs.toString()),
+                              context, Icons.group, 'عدد الاطباء', hospital.totalDocs.toString()),
+                          Divider(thickness: 0.4,),
                           buildDetailRow(
-                              context, Icons.location_on, 'الاختصاص', hospital.titleSp.toString()),
-
+                              context, Icons.medical_services, 'الاختصاص', hospital.titleSp.toString()),
+                          Divider(thickness: 0.4,),
                           if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
                             buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
                                 hospital.note ?? ''),
