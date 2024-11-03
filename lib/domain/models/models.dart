@@ -821,9 +821,12 @@ class LoginModel {
   int percentage;
   String name;
   int isLogin;
-
+  String endDate;
+  String startDate;
+  String otherStartDate;
+  String otherEndDate;
   LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,
-      this.otherStatus, this.name, this.percentage, this.isLogin);
+      this.otherStatus, this.name, this.percentage, this.isLogin,this.startDate,this.endDate,this.otherStartDate,this.otherEndDate);
   Map<String, dynamic> toMap() {
     return {
       'token': token,
@@ -833,7 +836,11 @@ class LoginModel {
       'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
-      'isLogin': 1
+      'isLogin': 1,
+      'endDate': endDate,
+      'startDate': startDate,
+      'otherStartDate': otherStartDate,
+      'otherEndDate': otherEndDate,
     };
   }
 
@@ -846,7 +853,12 @@ class LoginModel {
         map['otherStatus'],
         map['name'],
         map['percentage'],
-        map['isLogin']);
+        map['isLogin'],
+      map['endDate']??"",
+      map['startDate']??"",
+      map['otherStartDate']??"",
+      map['otherEndDate']??"",
+    );
   }
 }
 

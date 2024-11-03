@@ -38,6 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserInfo.token = loginModel!.token;
           UserInfo.name = loginModel!.name;
           UserInfo.isLogging = 1;
+          UserInfo.startDate=data.startDate;
+          UserInfo.endDate=data.endDate;
+          UserInfo.otherStartDate=data.otherStartDate;
+          UserInfo.otherEndDate=data.otherEndDate;
           emit(LoginState());
         });
       } else if (event is LoginInsertEvent) {

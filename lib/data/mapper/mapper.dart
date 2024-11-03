@@ -189,7 +189,11 @@ extension LoginResponseMapper on LoginResponse? {
         int.parse(this?.data?.otherStatus ?? "0") ,
         this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
-      1
+      1,
+      this?.data?.startDate ?? Constants.empty,
+      this?.data?.endDate ?? Constants.empty,
+      this?.data?.otherStartDate ?? Constants.empty,
+      this?.data?.otherEndDate ?? Constants.empty,
     );
   }
 }
