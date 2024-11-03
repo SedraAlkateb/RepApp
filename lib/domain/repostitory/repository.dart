@@ -24,8 +24,8 @@ abstract class Repository{
   Future<Either<Failure,Message1Response>>repPlanBrand(RepPlanBrandBody list1);
   Future<Either<Failure,ActiveModel>>isActive( int repPlaneId);
   Future<Either<Failure,LoginModel>>checkActivePlanBrand( int repDe);
-  Future<Either<Failure,visitHospitalBase>> getHosVisit(int repPlanId, int representativeId);
-  Future<Either<Failure,visitDoctorBase>> getDocVisit(String repPlanId, String representativeId);
+  Future<Either<Failure,VisitHospitalBase>> getHosVisit(int repPlanId, int representativeId);
+  Future<Either<Failure,VisitDoctorBase>> getDocVisit(String repPlanId, String representativeId);
 
 
 }

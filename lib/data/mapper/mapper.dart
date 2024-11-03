@@ -387,8 +387,8 @@ extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
   }
 }
 extension visitHospitalBrandResponseMapper on VisitHospitalBaseResponse? {
-  visitHospitalBase toDomain() {
-    return visitHospitalBase(this?.brandsVisit.toDomain()??[],this?.data.toDomain()??[]);
+  VisitHospitalBase toDomain() {
+    return VisitHospitalBase(this?.brandsVisit.toDomain()??[],this?.data.toDomain()??[]);
   }
 }
 extension visitDoctorResponseMapper on VisitDoctorResponse? {
@@ -412,8 +412,8 @@ extension getVisitHospitalResponseMapper on VisitHospitalResponse? {
   }
 }
 extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
-  visitDoctorBase toDomain() {
-   return visitDoctorBase(this?.brandsVisit.toDomain()??[],this?.data.toDomain()??[]);
+  VisitDoctorBase toDomain() {
+   return VisitDoctorBase(this?.brandsVisit.toDomain()??[],this?.data.toDomain()??[]);
   }
 }
 
