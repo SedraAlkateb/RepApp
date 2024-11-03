@@ -104,7 +104,9 @@ abstract class RepositorySql {
   Future<Either<Failure, List<VisitBrandPharmacyModel>>> visitBrandPharmacyAs();
   Future<Either<Failure, List<PlanBrandModel>>> planBrandsAs();
   Future<Either<Failure, Null>> updateRep(
-      int repId, int otherPlanId, int activePlanId, int otherstatus);
+      int repId, int otherPlanId, int activePlanId, int otherstatus,
+      String startDate,String endDate,String otherStartDate,String otherEndDate
+      );
   Future<Either<Failure, List<HospitalSpAllModel>>>
       getAllHospitalSpecialization();
   Future<Either<Failure, Null>> updateAmounts(

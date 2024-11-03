@@ -338,6 +338,22 @@ extension VisitDoctorResponseMapper on VisitResponse? {
 
   }
 }
+
+extension VisitHospitalResponseMapper on VisitHosResponse? {
+  VisitHospitalModel toDomain() {
+    return VisitHospitalModel(
+      int.parse((this?.id  ??"0")),
+      (this?.visitDate ?? Constants.zero).toString() ,
+      (this?.note ?? Constants.zero).toString() ,
+      (this?.issue ?? Constants.zero).toString() ,
+      (this?.special ?? Constants.zero).toString() ,
+      int.parse((this?.docId ??"0")),
+      0,
+      "ff",
+    );
+
+  }
+}
 extension visitHospitalResponseMapper on VisitHospitalBaseResponse? {
   List<VisitHospitalModel> toDomain() {
     List<VisitHospitalModel> hospitalVisitModel = (this?.data?.visitHospital
@@ -348,6 +364,38 @@ extension visitHospitalResponseMapper on VisitHospitalBaseResponse? {
     return hospitalVisitModel;
   }
 }
+extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
+  VisitBrandPharmacyModel toDomain() {
+    return VisitBrandPharmacyModel(
+        int.parse((this?.id  ??"0")),
+        int.parse((this?.visitId  ??"0")),
+        int.parse((this?.brandId  ??"0")),
+        int.parse((this?.amount ??"0")),
+        0
+    );
+
+  }
+}
+extension VisitDoctorBrandsResponseMapper on VisitDoctorBrandResponse? {
+  List<VisitBrandPharmacyModel> toDomain() {
+    List<VisitBrandPharmacyModel> doctorVisitModel = (this?.brand
+        .map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<VisitBrandPharmacyModel>()
+        .toList();
+    return doctorVisitModel;
+  }
+}
+extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
+  List<HospitalSpModel> toDomain() {
+    List<HospitalSpModel> hospitalSpModel =(this?.data?.HospitalSp?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<HospitalSpModel>()
+        .toList();
+    return hospitalSpModel;
+  }
+}
+
 extension visitDoctorResponseMapper on VisitDoctorResponse? {
   List<VisitDoctorModel> toDomain() {
     List<VisitDoctorModel> doctorVisitModel = (this?.visitDoctor
@@ -358,20 +406,19 @@ extension visitDoctorResponseMapper on VisitDoctorResponse? {
     return doctorVisitModel;
   }
 }
+extension getVisitHospitalResponseMapper on VisitHospitalResponse? {
+  List<VisitHospitalModel> toDomain() {
+    List<VisitHospitalModel> doctorVisitModel = (this?.visitHospital
+        ?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<VisitHospitalModel>()
+        .toList();
+    return doctorVisitModel;
+  }
+}
 extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
   visitDoctorBase toDomain() {
-   return visitDoctorBase(this?.brandsVisit?.brand??[],this?.data.toDomain()??[]);
+   return visitDoctorBase(this?.brandsVisit.toDomain()??[],this?.data.toDomain()??[]);
   }
 }
 
-
-
-extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
-  List<HospitalSpModel> toDomain() {
-    List<HospitalSpModel> hospitalSpModel =(this?.data?.HospitalSp?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<HospitalSpModel>()
-        .toList();
-    return hospitalSpModel;
-  }
-}

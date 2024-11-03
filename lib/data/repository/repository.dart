@@ -351,7 +351,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, CheckActiveModel>> checkActivePlanBrand(int repDe)
+  Future<Either<Failure, LoginModel>> checkActivePlanBrand(int repDe)
   async
   {
     try { if (await _networkInfo.isConnected) {
@@ -371,7 +371,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, visitDoctorBase>> getDocVisit(int repPlanId, int representativeId)
+  Future<Either<Failure, visitDoctorBase>> getDocVisit(String repPlanId, String representativeId)
   async
   {
     try { if (await _networkInfo.isConnected) {
