@@ -8,9 +8,7 @@ late Failure failure;
 ErrorHandler.handle(dynamic error){
   print(error);
   if(error is DioError){
-
 print("error.message??""");
-    //dio error so its an error from response of the api or from dio itself
     failure=_handleError(error);
   }
   else if(error is DatabaseException ){

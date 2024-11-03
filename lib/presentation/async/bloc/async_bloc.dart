@@ -46,6 +46,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   List<HospitalSpModel> hospitalSps = [];
   List<BrandSpModel> brandSpModel = [];
   List<PlanBrandModel> planBrands=[];
+late  visitDoctorBase  visitDoctor;
   CheckActiveModel? checkActiveModel;
   AsyncBloc(
       this.allBrandsUsecase,
@@ -66,7 +67,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
       if (event is AsyncDataEvent) {
-
         await getData();
       }
       if (event is SetDataSEvent) {
@@ -112,7 +112,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       hospitals = [];
       brandSpModel = [];
       planBrands = [];
-
+      visitDoctor.brand=[];
+      visitDoctor.data=[];
       final brandsResult = await allBrandsUsecase.execute(UserInfo.activePlanId);
       final brandsFailureOrSuccess = brandsResult.fold((failure) => failure, (data) => data);
       if (brandsFailureOrSuccess is Failure) {
@@ -121,7 +122,15 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       }
       brands = brandsFailureOrSuccess as List<BrandModel>;
 
-      ///////////////////////////////////
+      final visitDoctorResult = await getVisitDoctorUsecase.execute(UserInfo.activePlanId,UserInfo.repId);
+      final visitDoctorFailureOrSuccess = visitDoctorResult.fold((failure) => failure, (data) => data);
+      if (visitDoctorFailureOrSuccess is Failure) {
+        emit(SyncDataErrorState(failure: visitDoctorFailureOrSuccess));
+        return false;
+      }
+      ///////////TODO
+  //    visitDoctor = visitDoctorFailureOrSuccess as Visit;
+
       final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
       final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
       if (planBrandsFailureOrSuccess is Failure) {

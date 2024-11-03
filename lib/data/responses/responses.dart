@@ -116,12 +116,15 @@ class TokenResponse {
   String? endDate;
   @JsonKey(name: "startDate")
   String? startDate;
-  TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.otherStatus,this.name,this.percentage);
-  // from json
+  @JsonKey(name: "otherStartDate")
+  String? otherStartDate;
+  @JsonKey(name: "otherEndDate")
+  String? otherEndDate;
+  TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.otherStatus,this.name,this.percentage,
+      this.startDate,this.endDate,this.otherStartDate,this.otherEndDate
+      );
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>
       _$TokenResponseFromJson(json);
-
-  // to json
   Map<String,dynamic>toJson()=>
       _$TokenResponseToJson(this);
 }

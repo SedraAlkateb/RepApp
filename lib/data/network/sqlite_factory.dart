@@ -40,7 +40,11 @@ class DatabaseHelper {
     otherStatus INTEGER NOT NULL,
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
-    isLogin INTEGER NOT NULL DEFAULT 0
+    isLogin INTEGER NOT NULL DEFAULT 0,
+    endDate TEXT NOT NULL,
+    startDate TEXT NOT NULL,
+    otherStartDate TEXT NOT NULL,
+    otherEndDate TEXT NOT NULL
     );
     ''');
     await db.execute('''

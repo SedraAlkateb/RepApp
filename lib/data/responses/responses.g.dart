@@ -106,9 +106,11 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['otherPlanStatus'] as String?,
       json['name'] as String?,
       (json['percentage'] as num?)?.toInt(),
-    )
-      ..endDate = json['endDate'] as String?
-      ..startDate = json['startDate'] as String?;
+      json['startDate'] as String?,
+      json['endDate'] as String?,
+      json['otherStartDate'] as String?,
+      json['otherEndDate'] as String?,
+    );
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
@@ -121,6 +123,8 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'percentage': instance.percentage,
       'endDate': instance.endDate,
       'startDate': instance.startDate,
+      'otherStartDate': instance.otherStartDate,
+      'otherEndDate': instance.otherEndDate,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>

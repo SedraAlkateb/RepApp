@@ -20,6 +20,10 @@ Future<int?> sss()async{
       UserInfo.percentage=data.percentage;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;
+      UserInfo.startDate=data.startDate;
+      UserInfo.endDate=data.endDate;
+      UserInfo.otherStartDate=data.otherStartDate;
+      UserInfo.otherEndDate=data.otherEndDate;
     }else {
       UserInfo.isLogging=data?.isLogin??0;
     }
