@@ -13,6 +13,7 @@ import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
+import 'package:domina_app/domain/usecase/get_visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
@@ -37,6 +38,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   CheckActiveBrandPlanSqlUsecase checkActiveBrandPlanSqlUsecase;
   UpdateActiveSqlUsecase updateActiveSqlUsecase;
   GetVisitDoctorUsecase getVisitDoctorUsecase;
+  GetVisitHospitalUsecase getVisitHospitalUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
@@ -46,8 +48,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   List<HospitalSpModel> hospitalSps = [];
   List<BrandSpModel> brandSpModel = [];
   List<PlanBrandModel> planBrands=[];
-late  visitDoctorBase  visitDoctor;
-  CheckActiveModel? checkActiveModel;
+  visitDoctorBase?  visitDoctor;
+  visitHospitalBase?  visitHospital;
+  LoginModel? checkActiveModel;
   AsyncBloc(
       this.allBrandsUsecase,
       this.allPharmacyUsecase,
@@ -62,7 +65,8 @@ late  visitDoctorBase  visitDoctor;
       this.allPlanBrandsUsecase,
       this.checkActiveBrandPlanSqlUsecase,
       this.updateActiveSqlUsecase,
-      this.getVisitDoctorUsecase
+      this.getVisitDoctorUsecase,
+      this.getVisitHospitalUsecase
       )
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
@@ -89,12 +93,27 @@ late  visitDoctorBase  visitDoctor;
          checkActiveModel=data;
          UserInfo.activePlanId=data.activePlanId;
          UserInfo.otherPlanId=data.otherPlanId??9;
-         UserInfo.otherstatus=data.otherstatus??9;
+         UserInfo.otherstatus=data.otherStatus??9;
+         UserInfo.percentage=data.percentage;
+         UserInfo.startDate=data.startDate;
+         UserInfo.endDate=data.endDate;
+         UserInfo.otherStartDate=data.otherStartDate;
+         UserInfo.otherEndDate=data.otherEndDate;
          emit(IsActiveState());
        });
      }
      if(event is UpdateRepEvent){
-       (await updateActiveSqlUsecase.execute(UserInfo.repId,checkActiveModel!.otherPlanId??9,checkActiveModel!.activePlanId,checkActiveModel!.otherstatus??9)).fold((failure) {
+       (await updateActiveSqlUsecase.execute
+         (UserInfo.repId
+           ,checkActiveModel!.otherPlanId??9,
+           checkActiveModel!.activePlanId,
+           checkActiveModel!.otherStatus??9,
+         checkActiveModel!.startDate,
+         checkActiveModel!.endDate,
+         checkActiveModel!.otherStartDate,
+         checkActiveModel!.otherEndDate
+
+       )).fold((failure) {
          emit(UpdateIsActiveErrorState(failure: failure));
        }, (data) async {
          emit(UpdateIsActiveState());
@@ -112,8 +131,8 @@ late  visitDoctorBase  visitDoctor;
       hospitals = [];
       brandSpModel = [];
       planBrands = [];
-      visitDoctor.brand=[];
-      visitDoctor.data=[];
+      visitDoctor?.brand=[];
+      visitDoctor?.data=[];
       final brandsResult = await allBrandsUsecase.execute(UserInfo.activePlanId);
       final brandsFailureOrSuccess = brandsResult.fold((failure) => failure, (data) => data);
       if (brandsFailureOrSuccess is Failure) {
@@ -122,14 +141,14 @@ late  visitDoctorBase  visitDoctor;
       }
       brands = brandsFailureOrSuccess as List<BrandModel>;
 
-      final visitDoctorResult = await getVisitDoctorUsecase.execute(UserInfo.activePlanId,UserInfo.repId);
+      final visitDoctorResult = await getVisitDoctorUsecase.execute(UserInfo.activePlanId.toString(),UserInfo.repId.toString());
       final visitDoctorFailureOrSuccess = visitDoctorResult.fold((failure) => failure, (data) => data);
       if (visitDoctorFailureOrSuccess is Failure) {
         emit(SyncDataErrorState(failure: visitDoctorFailureOrSuccess));
         return false;
       }
-      ///////////TODO
-  //    visitDoctor = visitDoctorFailureOrSuccess as Visit;
+
+      visitDoctor = visitDoctorFailureOrSuccess as visitDoctorBase;
 
       final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
       final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);

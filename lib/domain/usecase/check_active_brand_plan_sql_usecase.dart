@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class CheckActiveBrandPlanSqlUsecase extends Equatable {
   final Repository _repository;
   CheckActiveBrandPlanSqlUsecase(this._repository);
-  Future<Either<Failure, CheckActiveModel>> execute(int repId) async{
+  Future<Either<Failure, LoginModel>> execute(int repId) async{
     return await _repository.checkActivePlanBrand(repId);
   }
 

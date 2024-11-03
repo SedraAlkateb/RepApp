@@ -353,7 +353,7 @@ class AppSqlApi extends AppSqlApiAbs {
     final db = await databaseHelper.database;
     Batch batch = db.batch();
     batch.rawQuery(
-        'SELECT token, repId, activePlanId,otherPlanId, otherstatus , name, percentage, isLogin FROM rep LIMIT 1');
+        'SELECT token, repId, activePlanId,otherPlanId, otherStatus , name, percentage, isLogin,  startDate , endDate, otherStartDate, otherEndDate  FROM rep LIMIT 1');
     List<dynamic> results = await batch.commit();
     if (results.isNotEmpty && results[0].isNotEmpty) {
       Map<String, dynamic> firstRow = results[0][0];
@@ -1233,7 +1233,9 @@ class AppSqlApi extends AppSqlApiAbs {
 
 
   updateRep(
-      int repId, int otherPlanId, int activePlanId, int otherStatus) async {
+      int repId, int otherPlanId, int activePlanId, int otherStatus,
+      String startDate,String endDate,String otherStartDate,String otherEndDate
+      ) async {
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
@@ -1241,6 +1243,10 @@ class AppSqlApi extends AppSqlApiAbs {
         'otherPlanId': otherPlanId,
         'activePlanId': activePlanId,
         'otherStatus': otherStatus,
+        'startDate':startDate,
+        'endDate':endDate,
+        'otherStartDate':otherStartDate,
+        'otherEndDate':otherEndDate
       },
       where: 'repId = ?',
       whereArgs: [repId],

@@ -682,9 +682,11 @@ class RepositroySqlImp extends RepositorySql {
 
 
   @override
-  Future<Either<Failure, Null>> updateRep(int repId, int otherPlanId, int activePlanId, int otherstatus)  async {
+  Future<Either<Failure, Null>> updateRep(int repId, int otherPlanId, int activePlanId, int otherStatus
+  ,String startDate,String endDate,String otherStartDate,String otherEndDate
+      )  async {
     try {
-       await _databaseHelper.updateRep(repId, otherPlanId, activePlanId, otherstatus);
+       await _databaseHelper.updateRep(repId, otherPlanId, activePlanId, otherStatus, startDate, endDate, otherStartDate, otherEndDate);
       return Right(null);
     } catch (e) {
       return Left(ErrorHandler

@@ -13,6 +13,7 @@ class ImageAssets{
   static const String top = "$imagePath/top.png";
   static const String bottom = "$imagePath/bottom.png";
   static const String doctor2 = "$imagePath/doctor2.png";
+  static const String upload = "$imageSvgPath/upload.svg";
 
 }
 class ImageAssetsSpec{

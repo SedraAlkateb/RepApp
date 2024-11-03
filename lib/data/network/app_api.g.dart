@@ -690,7 +690,7 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<CheckActiveBaseResponse> checkActivePlanBrand(int repDet) async {
+  Future<LoginResponse> checkActivePlanBrand(int repDet) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -699,7 +699,7 @@ class _AppServiceClient implements AppServiceClient {
       'repDet',
       repDet.toString(),
     ));
-    final _options = _setStreamType<CheckActiveBaseResponse>(Options(
+    final _options = _setStreamType<LoginResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -716,9 +716,9 @@ class _AppServiceClient implements AppServiceClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late CheckActiveBaseResponse _value;
+    late LoginResponse _value;
     try {
-      _value = CheckActiveBaseResponse.fromJson(_result.data!);
+      _value = LoginResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -772,8 +772,8 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<VisitDoctorBaseResponse> getDocVisit(
-    int repPlanId,
-    int representativeId,
+    String repPlanId,
+    String representativeId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -781,11 +781,11 @@ class _AppServiceClient implements AppServiceClient {
     final _data = FormData();
     _data.fields.add(MapEntry(
       'repPlanId',
-      repPlanId.toString(),
+      repPlanId,
     ));
     _data.fields.add(MapEntry(
       'representativeId',
-      representativeId.toString(),
+      representativeId,
     ));
     final _options = _setStreamType<VisitDoctorBaseResponse>(Options(
       method: 'POST',
