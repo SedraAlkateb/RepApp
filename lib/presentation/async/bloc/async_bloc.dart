@@ -13,6 +13,7 @@ import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
+import 'package:domina_app/domain/usecase/get_visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
@@ -37,6 +38,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   CheckActiveBrandPlanSqlUsecase checkActiveBrandPlanSqlUsecase;
   UpdateActiveSqlUsecase updateActiveSqlUsecase;
   GetVisitDoctorUsecase getVisitDoctorUsecase;
+  GetVisitHospitalUsecase getVisitHospitalUsecase;
   List<BrandModel> brands = [];
   List<PharmacyModel> pharmacies = [];
   List<PlaceModel> places = [];
@@ -47,6 +49,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   List<BrandSpModel> brandSpModel = [];
   List<PlanBrandModel> planBrands=[];
   visitDoctorBase?  visitDoctor;
+  visitHospitalBase?  visitHospital;
   LoginModel? checkActiveModel;
   AsyncBloc(
       this.allBrandsUsecase,
@@ -62,7 +65,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.allPlanBrandsUsecase,
       this.checkActiveBrandPlanSqlUsecase,
       this.updateActiveSqlUsecase,
-      this.getVisitDoctorUsecase
+      this.getVisitDoctorUsecase,
+      this.getVisitHospitalUsecase
       )
       : super(AsyncInitial()) {
     on<AsyncEvent>((event, emit) async {
