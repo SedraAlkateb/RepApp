@@ -43,8 +43,8 @@ class DatabaseHelper {
     isLogin INTEGER NOT NULL DEFAULT 0,
     endDate TEXT NOT NULL,
     startDate TEXT NOT NULL,
-    otherStartDate TEXT NOT NULL,
-    otherEndDate TEXT NOT NULL
+    otherStartDate TEXT ,
+    otherEndDate TEXT 
     );
     ''');
     await db.execute('''
@@ -73,7 +73,7 @@ class DatabaseHelper {
     );
     ''');
 
-    await db.execute('''
+    await db.execute( '''
      CREATE TABLE doctor (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
@@ -156,7 +156,6 @@ class DatabaseHelper {
     flag INTEGER NOT NULL DEFAULT 0,
      target TEXT NOT NULL,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
-   
 );
  ''');
     await db.execute('''

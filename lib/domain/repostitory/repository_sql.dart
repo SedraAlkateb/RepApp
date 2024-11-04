@@ -28,7 +28,9 @@ abstract class RepositorySql {
       List<HospitalModel> hospitals,
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
-      List<PlanBrandModel> planBrands);
+      List<PlanBrandModel> planBrands,
+      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
+      );
   Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag();
   Future<Either<Failure, Null>> insertDoctor(List<DoctorModel> doctorModel);
   Future<Either<Failure, List<DoctorModel>>> getDoctorSql();

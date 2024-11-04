@@ -28,25 +28,25 @@ final class SyncData1LoadingState extends AsyncInState {
   @override
   List<Object?> get props =>[];
 }
-
-final class DeleteBaseState extends AsyncInState {
-  DeleteBaseState();
-  @override
-  List<Object?> get props =>[];
-}
-final class DeleteBaseErrorState extends AsyncInState {
-  final Failure failure;
-  DeleteBaseErrorState({required this.failure});
-  @override
-
-  List<Object?> get props =>[failure];
-}
-final class DeleteBaseLoadingState extends AsyncInState {
-  @override
-  DeleteBaseLoadingState();
-  @override
-  List<Object?> get props =>[];
-}
+//
+// final class DeleteBaseState extends AsyncInState {
+//   DeleteBaseState();
+//   @override
+//   List<Object?> get props =>[];
+// }
+// final class DeleteBaseErrorState extends AsyncInState {
+//   final Failure failure;
+//   DeleteBaseErrorState({required this.failure});
+//   @override
+//
+//   List<Object?> get props =>[failure];
+// }
+// final class DeleteBaseLoadingState extends AsyncInState {
+//   @override
+//   DeleteBaseLoadingState();
+//   @override
+//   List<Object?> get props =>[];
+// }
 
 final class DeleteAllState extends AsyncInState {
   DeleteAllState();

@@ -110,9 +110,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
            checkActiveModel!.otherStatus??9,
          checkActiveModel!.startDate,
          checkActiveModel!.endDate,
-         checkActiveModel!.otherStartDate,
-         checkActiveModel!.otherEndDate
-
+         checkActiveModel!.otherStartDate??"",
+         checkActiveModel!.otherEndDate??""
        )).fold((failure) {
          emit(UpdateIsActiveErrorState(failure: failure));
        }, (data) async {
@@ -133,6 +132,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       planBrands = [];
       visitDoctor?.brand=[];
       visitDoctor?.data=[];
+      visitHospital?.brand=[];
+      visitHospital?.data=[];
+
       final brandsResult = await allBrandsUsecase.execute(UserInfo.activePlanId);
       final brandsFailureOrSuccess = brandsResult.fold((failure) => failure, (data) => data);
       if (brandsFailureOrSuccess is Failure) {
@@ -251,8 +253,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       hospitalSps,
       brandSpModel,
       planBrands,
-        visitHospital,
-        visitDoctor
+        visitHospital!,
+        visitDoctor!
     );
     result.fold((failure) {
       emit(SyncDataErrorState(failure: failure));
@@ -268,6 +270,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       planBrands=[];
       brandSpModel=[];
       hospitals=[];
+      visitDoctor?.brand=[];
+      visitDoctor?.data=[];
+      visitHospital?.brand=[];
+      visitHospital?.data=[];
+
       emit(SyncDataState());
     });
 

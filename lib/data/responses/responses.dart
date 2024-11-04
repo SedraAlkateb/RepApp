@@ -116,12 +116,15 @@ class TokenResponse {
   String? endDate;
   @JsonKey(name: "startDate")
   String? startDate;
-  @JsonKey(name: "otherStartDate")
+
+  @JsonKey(name: "otherStartDate", includeIfNull: false)
   String? otherStartDate;
-  @JsonKey(name: "otherEndDate")
+  @JsonKey(name: "otherEndDate", includeIfNull: false)
   String? otherEndDate;
   TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.otherStatus,this.name,this.percentage,
-      this.startDate,this.endDate,this.otherStartDate,this.otherEndDate
+      this.startDate,this.endDate,
+
+      this.otherStartDate,this.otherEndDate
       );
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>
       _$TokenResponseFromJson(json);
@@ -774,7 +777,7 @@ class VisitBrandPharmacyResponse {
 
 @JsonSerializable()
 class VisitDoctorResponse{
-  @JsonKey(name: "docVisitTemp")
+  @JsonKey(name: "docVisitTemp", defaultValue: [])
   List<VisitResponse> ?visitDoctor;
 
   VisitDoctorResponse(this.visitDoctor);
@@ -785,8 +788,8 @@ class VisitDoctorResponse{
 }
 @JsonSerializable()
 class VisitDoctorBrandResponse{
-  @JsonKey(name: "brands_visit")
-  List<VisitBrandPharmacyResponse>brand;
+  @JsonKey(name: "brands_visit", defaultValue: [])
+  List<VisitBrandPharmacyResponse>?brand;
   VisitDoctorBrandResponse(this.brand);
   factory VisitDoctorBrandResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitDoctorBrandResponseFromJson(json);
@@ -797,9 +800,9 @@ class VisitDoctorBrandResponse{
 @JsonSerializable()
 class VisitDoctorBaseResponse extends BaseResponse{
   @JsonKey(name: "docVisitTemp")
-  VisitDoctorResponse data;
+  VisitDoctorResponse? data;
   @JsonKey(name: "Brands Visit")
-  VisitDoctorBrandResponse brandsVisit;
+  VisitDoctorBrandResponse? brandsVisit;
   VisitDoctorBaseResponse(this.data,this.brandsVisit);
   factory VisitDoctorBaseResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitDoctorBaseResponseFromJson(json);
@@ -808,7 +811,7 @@ class VisitDoctorBaseResponse extends BaseResponse{
 }
 @JsonSerializable()
 class VisitHospitalResponse{
-  @JsonKey(name: "hosVisitTemp")
+  @JsonKey(name: "hosVisitTemp", defaultValue: [])
   List<VisitHosResponse> ?visitHospital;
   VisitHospitalResponse(this.visitHospital);
   factory VisitHospitalResponse.fromJson(Map<String,dynamic>json)=>

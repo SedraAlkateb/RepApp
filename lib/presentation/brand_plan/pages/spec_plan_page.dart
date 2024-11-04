@@ -156,7 +156,7 @@ class SpecPlanPage extends StatelessWidget {
                     context, state.failure.massage, state.failure.code);
               }
               if (state is UpdateAmountState) {
-                successWithMessage(context, " تم ارسال التغيرات يرجى المزامنة");
+                successWithMessage(context, "تم حفظ التغيرات");
               }
             },
             child: Positioned(

@@ -184,16 +184,17 @@ extension LoginResponseMapper on LoginResponse? {
     return LoginModel(
         this?.data?.token ?? Constants.empty,
         int.parse(this?.data?.repId ?? "0") ,
-        int.parse(this?.data?.otherPlanId ?? "0") ,
-        int.parse(this?.data?.activePlanId ?? "0") ,
-        int.parse(this?.data?.otherStatus ?? "0") ,
+      int.parse(this?.data?.otherPlanId ?? "0") ,
+
+      int.parse(this?.data?.activePlanId ?? "0") ,
+      int.parse(this?.data?.otherStatus ?? "0") ,
         this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1,
       this?.data?.startDate ?? Constants.empty,
       this?.data?.endDate ?? Constants.empty,
-      this?.data?.otherStartDate ?? Constants.empty,
-      this?.data?.otherEndDate ?? Constants.empty,
+     otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
+      otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
   }
 }
@@ -332,10 +333,9 @@ extension VisitDoctorResponseMapper on VisitResponse? {
       (this?.issue ?? Constants.zero).toString() ,
       (this?.special ?? Constants.zero).toString() ,
       int.parse((this?.docId ??"0")),
-      0,
+      1,
       "ff",
     );
-
   }
 }
 
@@ -348,12 +348,8 @@ extension VisitHospitalResponseMapper on VisitHosResponse? {
       (this?.issue ?? Constants.zero).toString() ,
       (this?.special ?? Constants.zero).toString() ,
       int.parse((this?.docId ??"0")),
-      0,
-      "ff",
-    );
-
-  }
-}
+      1,
+      "ff",);}}
 
 extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
   VisitBrandPharmacyModel toDomain() {
@@ -362,19 +358,19 @@ extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
         int.parse((this?.visitId  ??"0")),
         int.parse((this?.brandId  ??"0")),
         int.parse((this?.amount ??"0")),
-        0
+        1
     );
 
   }
 }
 extension VisitDoctorBrandsResponseMapper on VisitDoctorBrandResponse? {
-  List<VisitBrandPharmacyModel> toDomain() {
-    List<VisitBrandPharmacyModel> doctorVisitModel = (this?.brand
+  List<VisitBrandPharmacyModel>?toDomain() {
+    List<VisitBrandPharmacyModel>? doctorVisitModel = (this?.brand!
         .map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<VisitBrandPharmacyModel>()
         .toList();
-    return doctorVisitModel;
+    return doctorVisitModel??[];
   }
 }
 extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
@@ -392,23 +388,23 @@ extension visitHospitalBrandResponseMapper on VisitHospitalBaseResponse? {
   }
 }
 extension visitDoctorResponseMapper on VisitDoctorResponse? {
-  List<VisitDoctorModel> toDomain() {
-    List<VisitDoctorModel> doctorVisitModel = (this?.visitDoctor
+  List<VisitDoctorModel>? toDomain() {
+    List<VisitDoctorModel>? doctorVisitModel = (this?.visitDoctor
         ?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<VisitDoctorModel>()
         .toList();
-    return doctorVisitModel;
+    return doctorVisitModel??[];
   }
 }
 extension getVisitHospitalResponseMapper on VisitHospitalResponse? {
-  List<VisitHospitalModel> toDomain() {
-    List<VisitHospitalModel> doctorVisitModel = (this?.visitHospital
+  List<VisitHospitalModel>? toDomain() {
+    List<VisitHospitalModel> ?doctorVisitModel = (this?.visitHospital
         ?.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<VisitHospitalModel>()
         .toList();
-    return doctorVisitModel;
+    return doctorVisitModel??[];
   }
 }
 extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
