@@ -167,8 +167,6 @@ class AppSqlApi extends AppSqlApiAbs {
         for (var visitDoc in visitDoctor.data) {
           batch.insert('visit_doctor', visitDoc.toMap());
         }
-
-
         await batch.commit(noResult: true);
         await txn.execute("PRAGMA foreign_keys = ON");
         for (var visitHosBrand in visitHospital.brand) {
@@ -642,7 +640,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
         await txn.insert(
           'visit_doctor',
-          visitDoctorModel.toMap(),
+          visitDoctorModel.toMap1(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       });
@@ -709,7 +707,7 @@ class AppSqlApi extends AppSqlApiAbs {
           );
           int visitId = await txn.insert(
             'visit_doctor',
-            visitDoctorModel.toMap(),
+            visitDoctorModel.toMap1(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           for (var visitBrand in visitBrandPharmacyModels) {
@@ -771,7 +769,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
           int visitId = await txn.insert(
             'visit_hospital',
-            visitHospitalModel.toMap(),
+            visitHospitalModel.toMap1(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
@@ -833,7 +831,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
           await txn.insert(
             'visit_hospital',
-            visitHospitalModel.toMap(),
+            visitHospitalModel.toMap1(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
         } else {

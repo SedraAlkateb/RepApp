@@ -1,5 +1,3 @@
-
-import 'package:domina_app/domain/models/models.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
 
@@ -732,7 +730,7 @@ class VisitHosResponse {
   String? repPlanId;
   @JsonKey(name: "representativeId")
   String? representativeId;
-  @JsonKey(name: "docId")
+  @JsonKey(name: "spId")
   String? docId;
   @JsonKey(name: "visitDate")
   String? visitDate;
@@ -743,13 +741,12 @@ class VisitHosResponse {
   @JsonKey(name: "special")
   String? special;
 
-
   VisitHosResponse(this.id, this.repPlanId, this.representativeId,
       this.docId, this.visitDate, this.note, this.issue, this.special);
 
   factory VisitHosResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitHosResponseFromJson(json);
-  // to json
+
   Map<String,dynamic>toJson()=>
       _$VisitHosResponseToJson(this);
 }
@@ -822,7 +819,7 @@ class VisitHospitalResponse{
 
 @JsonSerializable()
 class VisitHospitalBaseResponse extends BaseResponse{
-  @JsonKey(name: "hosVisitTemp")
+  @JsonKey(name: "HosVisitTemp")
   VisitHospitalResponse? data;
   @JsonKey(name: "Brands Visit")
   VisitDoctorBrandResponse? brandsVisit;

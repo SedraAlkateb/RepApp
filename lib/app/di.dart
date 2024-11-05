@@ -38,7 +38,6 @@ import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
@@ -280,8 +279,6 @@ Future<void> initAsyncInModule() async {
         .registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
     instance.registerFactory<UpdateFlagSqlUsecase>(
         () => UpdateFlagSqlUsecase(instance()));
-    instance.registerFactory<DeleteAllSqlUsecase>(
-        () => DeleteAllSqlUsecase(instance()));
     if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
       instance.registerFactory<DeleteAllSqlUsecase>(
           () => DeleteAllSqlUsecase(instance()));
