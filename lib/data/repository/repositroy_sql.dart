@@ -172,7 +172,9 @@ class RepositroySqlImp extends RepositorySql {
       List<HospitalModel>hospitals,
       List<HospitalSpModel>hospitalSps,
       List<BrandSpModel> brandSps,
-      List<PlanBrandModel> planBrands) async {
+      List<PlanBrandModel> planBrands,
+      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
+      ) async {
     try {
       final response = await _databaseHelper.asyncData(
           brands,
@@ -183,7 +185,9 @@ class RepositroySqlImp extends RepositorySql {
           hospitals,
           hospitalSps,
           brandSps,
-          planBrands);
+          planBrands,
+          visitHospital,visitDoctor
+      );
       if (response == "") {
         return Right(response);
       } else {

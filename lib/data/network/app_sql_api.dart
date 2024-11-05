@@ -14,7 +14,9 @@ abstract class AppSqlApiAbs {
       List<HospitalModel> hospitals,
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
-      List<PlanBrandModel> planBrands);
+      List<PlanBrandModel> planBrands,
+      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
+      );
 
   /////////////////////////////////////////////////////////////////////////////////
   insertBrands(List<BrandModel> brands);
@@ -125,13 +127,13 @@ class AppSqlApi extends AppSqlApiAbs {
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
       List<PlanBrandModel> planBrands,
+      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
       ) async {
     try {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
         Batch batch = txn.batch();
-
-        // إضافة البيانات بالجملة
+        await txn.execute("PRAGMA foreign_keys = OFF");
         for (var place in places) {
           batch.insert('place', place.toMap());
         }
@@ -159,7 +161,19 @@ class AppSqlApi extends AppSqlApiAbs {
         for (var planBrand in planBrands) {
           batch.insert('planBrand', planBrand.toMap());
         }
+        for (var visitHos in visitHospital.data) {
+          batch.insert('visit_hospital', visitHos.toMap());
+        }
+        for (var visitDoc in visitDoctor.data) {
+          batch.insert('visit_doctor', visitDoc.toMap());
+        }
         await batch.commit(noResult: true);
+        for (var visitHosBrand in visitHospital.brand) {
+          batch.insert('visit_brand_hospital', visitHosBrand.toMap());
+        }
+        for (var visitDocBrand in visitDoctor.brand) {
+          batch.insert('visit_brand_doctor', visitDocBrand.toMap());
+        }
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
           specialization.id AS specialization_id, 
@@ -185,7 +199,6 @@ class AppSqlApi extends AppSqlApiAbs {
         GROUP BY 
           specialization.title, specialization.id
       ''');
-
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = maps[i]['sumDoctor'] as int;
@@ -201,6 +214,8 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
+        await txn.execute("PRAGMA foreign_keys = ON");
+
       });
 
       return "";

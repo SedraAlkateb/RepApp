@@ -42,7 +42,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   GetHospitalSpVisitsSqlUsecase getHospitalSpVisitsSqlUsecase;
   GetPlanBrandSqlUsecase getPlanBrandSqlUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
-  DeleteSqlUsecase deleteSqlUsecase;
+ // DeleteSqlUsecase deleteSqlUsecase;
   DeleteAllSqlUsecase deleteAllSqlUsecase;
   List<PlanBrandModel> planBrands = [];
   List<VisitBrandPharmacyModel> visitBrandPharmacies = [];
@@ -66,21 +66,21 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.getDoctorVisitsSqlUsecase,
       this.getPharmacyVisitsSqlUsecase,
       this.getPlanBrandSqlUsecase,
-      this.deleteSqlUsecase,
+    //  this.deleteSqlUsecase,
       this.deleteAllSqlUsecase,
       this.planBrandUsecase,
       this.updateFlagSqlUsecase)
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
-      if (event is DeleteBaseEvent) {
-     //   emit(DeleteBaseLoadingState());
-        (await deleteSqlUsecase.execute()).fold((failure) {
-          emit(DeleteBaseErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          emit(DeleteBaseState());
-        });
-      }
+     //  if (event is DeleteBaseEvent) {
+     // //   emit(DeleteBaseLoadingState());
+     //    (await deleteSqlUsecase.execute()).fold((failure) {
+     //      emit(DeleteBaseErrorState(failure: failure));
+     //      return false;
+     //    }, (data) async {
+     //      emit(DeleteBaseState());
+     //    });
+     //  }
       if (event is DeleteAllEvent) {
      //   emit(DeleteAllLoadingState());
         (await deleteAllSqlUsecase.execute()).fold((failure) {

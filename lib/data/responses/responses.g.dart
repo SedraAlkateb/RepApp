@@ -112,20 +112,29 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['otherEndDate'] as String?,
     );
 
-Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
-    <String, dynamic>{
-      'token': instance.token,
-      'repId': instance.repId,
-      'otherPlanId': instance.otherPlanId,
-      'activePlanId': instance.activePlanId,
-      'otherPlanStatus': instance.otherStatus,
-      'name': instance.name,
-      'percentage': instance.percentage,
-      'endDate': instance.endDate,
-      'startDate': instance.startDate,
-      'otherStartDate': instance.otherStartDate,
-      'otherEndDate': instance.otherEndDate,
-    };
+Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) {
+  final val = <String, dynamic>{
+    'token': instance.token,
+    'repId': instance.repId,
+    'otherPlanId': instance.otherPlanId,
+    'activePlanId': instance.activePlanId,
+    'otherPlanStatus': instance.otherStatus,
+    'name': instance.name,
+    'percentage': instance.percentage,
+    'endDate': instance.endDate,
+    'startDate': instance.startDate,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('otherStartDate', instance.otherStartDate);
+  writeNotNull('otherEndDate', instance.otherEndDate);
+  return val;
+}
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
     BrandSpResponse(
@@ -790,8 +799,9 @@ Map<String, dynamic> _$VisitBrandPharmacyResponseToJson(
 VisitDoctorResponse _$VisitDoctorResponseFromJson(Map<String, dynamic> json) =>
     VisitDoctorResponse(
       (json['docVisitTemp'] as List<dynamic>?)
-          ?.map((e) => VisitResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) => VisitResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$VisitDoctorResponseToJson(
@@ -803,10 +813,11 @@ Map<String, dynamic> _$VisitDoctorResponseToJson(
 VisitDoctorBrandResponse _$VisitDoctorBrandResponseFromJson(
         Map<String, dynamic> json) =>
     VisitDoctorBrandResponse(
-      (json['brands_visit'] as List<dynamic>)
-          .map((e) =>
-              VisitBrandPharmacyResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      (json['brands_visit'] as List<dynamic>?)
+              ?.map((e) => VisitBrandPharmacyResponse.fromJson(
+                  e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$VisitDoctorBrandResponseToJson(
@@ -818,10 +829,14 @@ Map<String, dynamic> _$VisitDoctorBrandResponseToJson(
 VisitDoctorBaseResponse _$VisitDoctorBaseResponseFromJson(
         Map<String, dynamic> json) =>
     VisitDoctorBaseResponse(
-      VisitDoctorResponse.fromJson(
-          json['docVisitTemp'] as Map<String, dynamic>),
-      VisitDoctorBrandResponse.fromJson(
-          json['Brands Visit'] as Map<String, dynamic>),
+      json['docVisitTemp'] == null
+          ? null
+          : VisitDoctorResponse.fromJson(
+              json['docVisitTemp'] as Map<String, dynamic>),
+      json['Brands Visit'] == null
+          ? null
+          : VisitDoctorBrandResponse.fromJson(
+              json['Brands Visit'] as Map<String, dynamic>),
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -839,8 +854,9 @@ VisitHospitalResponse _$VisitHospitalResponseFromJson(
         Map<String, dynamic> json) =>
     VisitHospitalResponse(
       (json['hosVisitTemp'] as List<dynamic>?)
-          ?.map((e) => VisitHosResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) => VisitHosResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$VisitHospitalResponseToJson(

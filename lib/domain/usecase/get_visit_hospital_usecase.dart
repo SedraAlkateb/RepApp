@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 class GetVisitHospitalUsecase extends Equatable {
   final Repository _repository;
   GetVisitHospitalUsecase(this._repository);
-  Future<Either<Failure, visitHospitalBase>> execute(int repPlanId, int representativeId) async{
+  Future<Either<Failure, VisitHospitalBase>> execute(int repPlanId, int representativeId) async{
     return await _repository.getHosVisit(repPlanId, representativeId);
   }
 

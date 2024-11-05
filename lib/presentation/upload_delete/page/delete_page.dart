@@ -31,10 +31,10 @@ class DeletePage extends StatelessWidget {
               ),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
-                  if(state is DeleteBaseErrorState){
+                  if(state is DeleteAllErrorState){
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if(state is DeleteBaseLoadingState){
+                  if(state is DeleteAllLoadingState){
                     loading(context);
                   }
                   if(state is EditStatusSErrorState){
@@ -45,12 +45,12 @@ class DeletePage extends StatelessWidget {
                     success(context);
                     Navigator.pushNamedAndRemoveUntil(context, Routes.syncData,(route) => false,);
                   }
-                  if(state is DeleteBaseState){
+                  if(state is DeleteAllState){
                     BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(1));
                   }
                 },
                 child: ElevatedButton(onPressed: (){
-                  BlocProvider.of<AsyncInBloc>(context).add(DeleteBaseEvent());
+                  BlocProvider.of<AsyncInBloc>(context).add(DeleteAllEvent());
                 },
                     child: Text(
                       " حذف البيانات ",

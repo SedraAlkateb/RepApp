@@ -58,6 +58,14 @@ class VisitBrandPharmacyModel {
     //  'flag': flag
     };
   }
+  Map<String, dynamic> toMap() {
+    return {
+      'visitId': visitId,
+      'brandId': brandId,
+      'amount': amount == 0 ? 1 : amount,
+        'flag': 1
+    };
+  }
 
   factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
     return VisitBrandPharmacyModel(
@@ -352,15 +360,15 @@ class VisitHospitalAndHospital {//
   VisitHospitalAndHospital(
       this.hospitalModel, this.visitHospitalModel, this.specModel);
 }
-class visitDoctorBase{
+class VisitDoctorBase{
   List<VisitBrandPharmacyModel> brand;
   List<VisitDoctorModel> data;
-  visitDoctorBase(this.brand,this.data);
+  VisitDoctorBase(this.brand,this.data);
 }
-class visitHospitalBase{
+class VisitHospitalBase{
   List<VisitBrandPharmacyModel> brand;
   List<VisitHospitalModel> data;
-  visitHospitalBase(this.brand,this.data);
+  VisitHospitalBase(this.brand,this.data);
 }
 class VisitDoctorModel {
   int id;
@@ -828,10 +836,12 @@ class LoginModel {
   int isLogin;
   String endDate;
   String startDate;
-  String otherStartDate;
-  String otherEndDate;
+  String? otherStartDate;
+  String? otherEndDate;
   LoginModel(this.token, this.repId, this.otherPlanId, this.activePlanId,
-      this.otherStatus, this.name, this.percentage, this.isLogin,this.startDate,this.endDate,this.otherStartDate,this.otherEndDate);
+      this.otherStatus, this.name, this.percentage, this.isLogin,this.startDate,this.endDate,
+      {this.otherStartDate,
+      this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
       'token': token,
@@ -861,8 +871,8 @@ class LoginModel {
         map['isLogin'],
       map['endDate']??"",
       map['startDate']??"",
-      map['otherStartDate']??"",
-      map['otherEndDate']??"",
+     otherStartDate: map['otherStartDate']??"",
+  otherEndDate:    map['otherEndDate']??"",
     );
   }
 }
