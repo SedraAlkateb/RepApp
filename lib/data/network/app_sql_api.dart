@@ -131,7 +131,7 @@ class AppSqlApi extends AppSqlApiAbs {
       ) async {
     try {
       Database? mydb = await databaseHelper.database;
-      await mydb.transaction((txn) async {
+      await mydb.transaction((txn)async{
         Batch batch = txn.batch();
         await txn.execute("PRAGMA foreign_keys = OFF");
         for (var place in places) {
@@ -168,11 +168,12 @@ class AppSqlApi extends AppSqlApiAbs {
           batch.insert('visit_doctor', visitDoc.toMap());
         }
         await batch.commit(noResult: true);
+        await txn.execute("PRAGMA foreign_keys = ON");
         for (var visitHosBrand in visitHospital.brand) {
-          batch.insert('visit_brand_hospital', visitHosBrand.toMap());
+          txn.insert('visit_brand_hospital', visitHosBrand.toMap());
         }
         for (var visitDocBrand in visitDoctor.brand) {
-          batch.insert('visit_brand_doctor', visitDocBrand.toMap());
+          txn.insert('visit_brand_doctor', visitDocBrand.toMap());
         }
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
@@ -203,7 +204,6 @@ class AppSqlApi extends AppSqlApiAbs {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = maps[i]['sumDoctor'] as int;
           int sumHospital = maps1[i]['sumHospital'] as int;
-
           await txn.update(
             'specialization',
             {
@@ -214,8 +214,6 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
-        await txn.execute("PRAGMA foreign_keys = ON");
-
       });
 
       return "";
@@ -642,7 +640,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
         await txn.insert(
           'visit_doctor',
-          visitDoctorModel.toMap(),
+          visitDoctorModel.toMap1(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       });
@@ -709,7 +707,7 @@ class AppSqlApi extends AppSqlApiAbs {
           );
           int visitId = await txn.insert(
             'visit_doctor',
-            visitDoctorModel.toMap(),
+            visitDoctorModel.toMap1(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           for (var visitBrand in visitBrandPharmacyModels) {
@@ -771,7 +769,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
           int visitId = await txn.insert(
             'visit_hospital',
-            visitHospitalModel.toMap(),
+            visitHospitalModel.toMap1(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
@@ -833,7 +831,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
           await txn.insert(
             'visit_hospital',
-            visitHospitalModel.toMap(),
+            visitHospitalModel.toMap1(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
         } else {

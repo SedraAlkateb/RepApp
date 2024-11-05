@@ -23,17 +23,17 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
 
   final _formKey = GlobalKey<FormState>();
   @override
-  void initState() {
+  void initState(){
     _noteController.text=widget.hospitalModel.visitHospitalModel.science??"";
     _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn??"";
     _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion??"";
     _targetController.text=widget.hospitalModel.visitHospitalModel.target??"";
-
     BlocProvider.of<VisitBloc>(context).add(BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id) );
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.visitHospitalModel.hospitalSpId}s${widget.hospitalModel.specModel.id}h${widget.hospitalModel.hospitalModel.id}");
     return Scaffold(
       appBar: null,
       body: SingleChildScrollView(

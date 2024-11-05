@@ -88,6 +88,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     Prescriptions());
         
       case Routes.deleteLogout:
+        initAsyncInModule();
         return MaterialPageRoute(builder: (_) =>     DeleteLogoutPage());
       default:
         return unDefinedRoute();

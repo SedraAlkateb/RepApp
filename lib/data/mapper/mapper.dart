@@ -169,8 +169,8 @@ extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
       this?.visitDate ?? Constants.empty,
       this?.title ?? Constants.empty,
       this?.address ?? Constants.empty,
-      this?.note ?? Constants.empty,
-      this?.issue ?? Constants.empty,
+        (this?.issue ?? Constants.zero).toString() ,
+        (this?.note ?? Constants.zero).toString() ,
       this?.spTitle ?? Constants.empty,
       this?.special ?? Constants.empty,
       this?.brands ?? Constants.empty
@@ -329,8 +329,8 @@ extension VisitDoctorResponseMapper on VisitResponse? {
     return VisitDoctorModel(
       int.parse((this?.id  ??"0")),
       (this?.visitDate ?? Constants.zero).toString() ,
-      (this?.note ?? Constants.zero).toString() ,
       (this?.issue ?? Constants.zero).toString() ,
+      (this?.note ?? Constants.zero).toString() ,
       (this?.special ?? Constants.zero).toString() ,
       int.parse((this?.docId ??"0")),
       1,
@@ -344,12 +344,13 @@ extension VisitHospitalResponseMapper on VisitHosResponse? {
     return VisitHospitalModel(
       int.parse((this?.id  ??"0")),
       (this?.visitDate ?? Constants.zero).toString() ,
-      (this?.note ?? Constants.zero).toString() ,
       (this?.issue ?? Constants.zero).toString() ,
+      (this?.note ?? Constants.zero).toString() ,
       (this?.special ?? Constants.zero).toString() ,
       int.parse((this?.docId ??"0")),
       1,
-      "ff",);}}
+      "ff",);}
+}
 
 extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
   VisitBrandPharmacyModel toDomain() {
@@ -370,7 +371,7 @@ extension VisitDoctorBrandsResponseMapper on VisitDoctorBrandResponse? {
         const Iterable.empty())
         .cast<VisitBrandPharmacyModel>()
         .toList();
-    return doctorVisitModel??[];
+    return doctorVisitModel;
   }
 }
 extension AllHospitalSpResponseMapper on AllHospitalSpBaseResponse? {
@@ -394,7 +395,7 @@ extension visitDoctorResponseMapper on VisitDoctorResponse? {
         const Iterable.empty())
         .cast<VisitDoctorModel>()
         .toList();
-    return doctorVisitModel??[];
+    return doctorVisitModel;
   }
 }
 extension getVisitHospitalResponseMapper on VisitHospitalResponse? {
@@ -404,7 +405,7 @@ extension getVisitHospitalResponseMapper on VisitHospitalResponse? {
         const Iterable.empty())
         .cast<VisitHospitalModel>()
         .toList();
-    return doctorVisitModel??[];
+    return doctorVisitModel;
   }
 }
 extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {

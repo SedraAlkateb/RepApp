@@ -1,8 +1,7 @@
 part of 'visit_place_bloc.dart';
 
 @immutable
-abstract class VisitPlaceEvent extends Equatable{
-}
+abstract class VisitPlaceEvent extends Equatable {}
 // class PharmacyByPlace extends VisitPlaceEvent{
 //   final  int placeId;
 //   final current;
@@ -26,7 +25,6 @@ class HospitalByPlace extends VisitPlaceEvent{
   List<Object?> get props => [placeId,current];
 }
 class BrandFlagEvent extends VisitPlaceEvent{
-
   BrandFlagEvent();
   @override
   List<Object?> get props => [];
