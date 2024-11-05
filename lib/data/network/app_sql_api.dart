@@ -786,7 +786,7 @@ class AppSqlApi extends AppSqlApiAbs {
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
           throw FormatException(
-              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال الثلاثة أيام الماضية.');
+              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال خمسة أيام الماضية.');
         }
       } catch (e) {
         print('Error inserting visit and brands: $e');
@@ -839,7 +839,7 @@ class AppSqlApi extends AppSqlApiAbs {
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
           throw FormatException(
-              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال الثلاثة أيام الماضية.');
+              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال خمسة أيام الماضية.');
         }
       } catch (e) {
         print('Error inserting visit: $e');
