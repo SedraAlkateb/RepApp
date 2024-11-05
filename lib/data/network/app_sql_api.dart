@@ -216,8 +216,6 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
-
-
       });
 
       return "";
