@@ -167,13 +167,14 @@ class AppSqlApi extends AppSqlApiAbs {
         for (var visitDoc in visitDoctor.data) {
           batch.insert('visit_doctor', visitDoc.toMap());
         }
-        await batch.commit(noResult: true);
         for (var visitHosBrand in visitHospital.brand) {
           batch.insert('visit_brand_hospital', visitHosBrand.toMap());
         }
         for (var visitDocBrand in visitDoctor.brand) {
           batch.insert('visit_brand_doctor', visitDocBrand.toMap());
         }
+        await batch.commit(noResult: true);
+        await txn.execute("PRAGMA foreign_keys = ON");
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
           specialization.id AS specialization_id, 
@@ -203,7 +204,6 @@ class AppSqlApi extends AppSqlApiAbs {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = maps[i]['sumDoctor'] as int;
           int sumHospital = maps1[i]['sumHospital'] as int;
-
           await txn.update(
             'specialization',
             {
@@ -214,7 +214,7 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
-        await txn.execute("PRAGMA foreign_keys = ON");
+
 
       });
 
