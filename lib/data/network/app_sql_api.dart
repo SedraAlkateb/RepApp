@@ -131,7 +131,7 @@ class AppSqlApi extends AppSqlApiAbs {
       ) async {
     try {
       Database? mydb = await databaseHelper.database;
-      await mydb.transaction((txn) async {
+      await mydb.transaction((txn)async{
         Batch batch = txn.batch();
         await txn.execute("PRAGMA foreign_keys = OFF");
         for (var place in places) {
@@ -167,14 +167,16 @@ class AppSqlApi extends AppSqlApiAbs {
         for (var visitDoc in visitDoctor.data) {
           batch.insert('visit_doctor', visitDoc.toMap());
         }
-        for (var visitHosBrand in visitHospital.brand) {
-          batch.insert('visit_brand_hospital', visitHosBrand.toMap());
-        }
-        for (var visitDocBrand in visitDoctor.brand) {
-          batch.insert('visit_brand_doctor', visitDocBrand.toMap());
-        }
+
+
         await batch.commit(noResult: true);
         await txn.execute("PRAGMA foreign_keys = ON");
+        for (var visitHosBrand in visitHospital.brand) {
+          txn.insert('visit_brand_hospital', visitHosBrand.toMap());
+        }
+        for (var visitDocBrand in visitDoctor.brand) {
+          txn.insert('visit_brand_doctor', visitDocBrand.toMap());
+        }
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
           specialization.id AS specialization_id, 
