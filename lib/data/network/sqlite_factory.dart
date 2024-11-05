@@ -212,12 +212,5 @@ class DatabaseHelper {
     FOREIGN KEY (brandId) REFERENCES brand(id)
     )
  ''');
-    await db.execute('''
-     CREATE TABLE visited_doctor(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    doctorId INTEGER NOT NULL,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id)
-    )
- ''');
   }
 }

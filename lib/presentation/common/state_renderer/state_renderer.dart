@@ -43,7 +43,7 @@ class StateRenderer extends StatelessWidget {
     switch(stateRendererType){
 
       case StateRendererType.popupLoadingState:
-        return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading1)]);
+        return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading1), _getMessage(message)]);
       case StateRendererType.popupSuccess:
         return _getPopupDialog(context,[
           _getAnimatedImage(JsonAssets.suc),
