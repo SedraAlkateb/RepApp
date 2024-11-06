@@ -60,7 +60,7 @@ class AsyncLoginPage extends StatelessWidget {
                      BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
                    }
                    if(state is SyncDataLoadingState){
-                     loading(context);
+                     loading(context,text: context.read<AsyncBloc>().loading.toString());
                    }
                    if(state is SyncDataState){
                      BlocProvider.of<AsyncBloc>(context).add(EditEvent(2));

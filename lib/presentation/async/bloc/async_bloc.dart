@@ -51,6 +51,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   VisitDoctorBase?  visitDoctor;
   VisitHospitalBase?  visitHospital;
   LoginModel? checkActiveModel;
+  int loading=0;
   AsyncBloc(
       this.allBrandsUsecase,
       this.allPharmacyUsecase,
@@ -141,6 +142,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: brandsFailureOrSuccess));
         return false;
       }
+      loading=1;
       brands = brandsFailureOrSuccess as List<BrandModel>;
 
       final visitDoctorResult = await getVisitDoctorUsecase.execute(UserInfo.activePlanId.toString(),UserInfo.repId.toString());
@@ -149,6 +151,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: visitDoctorFailureOrSuccess));
         return false;
       }
+      loading=2;
       visitDoctor = visitDoctorFailureOrSuccess as VisitDoctorBase;
       final visitHospitalResult = await getVisitHospitalUsecase.execute(UserInfo.activePlanId,UserInfo.repId);
       final visitHospitalFailureOrSuccess = visitHospitalResult.fold((failure) => failure, (data) => data);
@@ -156,6 +159,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: visitHospitalFailureOrSuccess));
         return false;
       }
+      loading=3;
       visitHospital = visitHospitalFailureOrSuccess as VisitHospitalBase;
 
       final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
@@ -164,6 +168,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
         return false;
       }
+      loading=4;
       planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
 
 
@@ -177,6 +182,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: doctorsFailureOrSuccess));
         return false;
       }
+      loading=5;
       doctors = doctorsFailureOrSuccess as List<DoctorModel>;
 
       /////////////////////////////////////////////////
@@ -187,6 +193,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: hospitalsFailureOrSuccess));
         return false;
       }
+      loading=6;
       hospitals = hospitalsFailureOrSuccess as List<HospitalModel>;
       ////////////////////////////////////////////////
       final pharmaciesResult = await allPharmacyUsecase.execute(UserInfo.repId);
@@ -195,6 +202,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: pharmaciesFailureOrSuccess));
         return false;
       }
+      loading=7;
       pharmacies = pharmaciesFailureOrSuccess as List<PharmacyModel>;
 /////////////////////////////////////////////////////
 
@@ -204,6 +212,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: placesFailureOrSuccess));
         return false;
       }
+      loading=8;
       places = placesFailureOrSuccess as List<PlaceModel>;
 ///////////////////////////////////////////////////////////
       final specResult = await allSpeUsecase.execute(UserInfo.repId);
@@ -212,6 +221,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: specFailureOrSuccess));
         return false;
       }
+      loading=9;
       spec = specFailureOrSuccess as List<SpecDModel>;
 ///////////////////////////////////////
       final hospitalSpsResult = await allHospialSpUsecase.execute(UserInfo.repId);
@@ -220,6 +230,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: hospitalSpsFailureOrSuccess));
         return false;
       }
+      loading=10;
       hospitalSps = hospitalSpsFailureOrSuccess as List<HospitalSpModel>;
       /////////////////////////
       final brandSpsResult = await allBrandsSpUsecase.execute(UserInfo.repId);
@@ -228,6 +239,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         emit(SyncDataErrorState(failure: brandSpFailureOrSuccess));
         return false;
       }
+      loading=11;
       brandSpModel = brandSpFailureOrSuccess as List<BrandSpModel>;
 ////////////////////////////////////////////////
 

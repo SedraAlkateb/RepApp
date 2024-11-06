@@ -404,7 +404,7 @@ class AppSqlApi extends AppSqlApiAbs {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> result = await db.query(
       'doctor',
-      where: 'placeId = ? AND visited != ?',
+      where: 'placeId = ? AND visited <= ?',
       whereArgs: [placeId, '0'],
     );
     List<DoctorModel> doctors =
