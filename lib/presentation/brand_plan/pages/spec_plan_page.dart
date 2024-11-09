@@ -167,7 +167,7 @@ class SpecPlanPage extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         showDialog(context: context, builder: (context) {
-                          return dialogPlan(context,true,"هل انت متاكد من حفظ التغيرات");
+                          return dialogPlan(context,true,"هل أنت متأكد من حفظ التغيرات");
                         },);
                       },
                       child: SizedBox(
@@ -196,7 +196,7 @@ class SpecPlanPage extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         showDialog(context: context, builder: (context) {
-                          return dialogPlan(context,false,"هل انت متاكد من ارسال التغيرات");
+                          return dialogPlan(context,false,"هل أنت متأكد من إرسال التغيرات");
                         },);
                       },
                       child: SizedBox(
@@ -212,7 +212,7 @@ class SpecPlanPage extends StatelessWidget {
                               bottom: 50,
                               left: 35,
                               child: Text(
-                                "ارسال",
+                                "إرسال",
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
