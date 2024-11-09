@@ -13,14 +13,16 @@ class AsyncLogoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 200),
+        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset(
-                ImageAssets.domina,width: 200,
+                ImageAssets.upload,
+                height: 500,
+
               ),
               Text(
                 textAlign: TextAlign.center,

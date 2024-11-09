@@ -29,6 +29,7 @@ class _VisitDoctorState extends State<VisitDoctor>
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     super.initState();
   }
@@ -149,7 +150,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                 ),
                                 Text(
                                   textAlign: TextAlign.center,
-                                  "  تمت الزياراة: ${(widget.doctorModel.visits - widget.doctorModel.visited)}",
+                                  "  تمت الزياراة: ${(widget.doctorModel.visited??0)}",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),

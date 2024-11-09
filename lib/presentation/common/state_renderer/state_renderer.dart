@@ -43,7 +43,7 @@ class StateRenderer extends StatelessWidget {
     switch(stateRendererType){
 
       case StateRendererType.popupLoadingState:
-        return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading1), _getMessage(message)]);
+        return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading1)]);
       case StateRendererType.popupSuccess:
         return _getPopupDialog(context,[
           _getAnimatedImage(JsonAssets.suc),
@@ -59,7 +59,7 @@ class StateRenderer extends StatelessWidget {
         ]);
 
       case StateRendererType.fullScreenLoadingState:
-      return _getItemsColumn([_getAnimatedImage(JsonAssets.loading2),_getMessage(message)]);
+      return _getItemsColumn([_getAnimatedImage(JsonAssets.loading2)]);
 
       case StateRendererType.fullScreenErrorState:
         return _getItemsColumn(
@@ -96,12 +96,12 @@ Widget _getAnimatedImage(String animationName){
       child:Lottie.asset(animationName )
     );
 }
-Widget _getMessage(String message){
+Widget _getMessage(String? message){
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppPadding.p8),
         child: Text(
-          message,
+          message??"",
           style: getRegularStyle(
               color: ColorManager.black,
             fontSize: FontSize.s18

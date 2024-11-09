@@ -31,7 +31,6 @@ Future<int?> sss()async{
   });
   return null;
 }
-
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();

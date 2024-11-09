@@ -79,12 +79,12 @@ class SelectBrandState extends VisitPlaceState{
   List<Object?> get props => [brands];
 }
 class SelectBrandAddState extends VisitPlaceState{
-  final String brands;
-  SelectBrandAddState(this.brands);
-  List<Object?> get props => [brands];
+
+  SelectBrandAddState();
+  List<Object?> get props => [];
 }
 class SelectBrandAddNumState extends VisitPlaceState{
-  final String brands;
+  final List<BrandAddition> brands;
   SelectBrandAddNumState(this.brands);
   List<Object?> get props => [brands];
 }
@@ -110,6 +110,12 @@ class  EditBrandState extends VisitPlaceState{
 class DeleteBrandState extends VisitPlaceState{
   final List<BrandModel> brands;
   DeleteBrandState(this.brands);
+  @override
+  List<Object?> get props => [brands];
+}
+class DeleteBrandAddState extends VisitPlaceState{
+  final List<BrandAddition> brands;
+  DeleteBrandAddState(this.brands);
   @override
   List<Object?> get props => [brands];
 }
@@ -202,9 +208,10 @@ final class AllVisitBrandHospitalErrorState extends VisitPlaceState {
 
 final class SpecializationHospitalState extends VisitPlaceState {
   @override
-  SpecializationHospitalState();
+final  List<SpecHospitalSp> specialization;
+  SpecializationHospitalState(this.specialization);
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props =>[specialization];
 }
 final class SpecializationHospitalErrorState extends VisitPlaceState {
   final Failure failure;

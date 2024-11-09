@@ -87,7 +87,7 @@ class BrandPage extends StatelessWidget {
                   Text(" ${brandModel[index].title} ", style: Theme.of(context)
                       .textTheme
                       .labelLarge),
-                  Text(" نوع الصنف : ${brandModel[index].phTitle} ", style: Theme.of(context)
+                  Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
                       .textTheme
                       .titleSmall,textAlign: TextAlign.center,),
 

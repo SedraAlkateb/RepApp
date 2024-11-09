@@ -120,6 +120,15 @@ class SpPlan {
       this.sumDoctor, this.sumHospital);
 }
 
+class BrandAddition {
+int id;
+  String title;
+  String phTitle;
+  int amount;
+
+  BrandAddition(this.id,this.title, this.phTitle, this.amount);
+}
+
 class BrandModel {
   int id;
   String title;
@@ -692,24 +701,14 @@ class DoctorModel {
   String address;
   String placeTitle;
   int visits;
-  int visited;
   String? note;
   String? rate;
   String spTitle;
   int spId;
-  DoctorModel(
-    this.id,
-    this.title,
-    this.placeId,
-    this.address,
-    this.placeTitle,
-    this.visits,
-    this.visited,
-    this.note,
-    this.rate,
-    this.spTitle,
-    this.spId,
-  );
+  int? visited;
+  DoctorModel(this.id, this.title, this.placeId, this.address, this.placeTitle,
+      this.visits, this.note, this.rate, this.spTitle, this.spId,
+      {this.visited});
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -718,7 +717,6 @@ class DoctorModel {
       'address': address,
       "placeTitle": placeTitle,
       "visits": visits,
-      "visited": visited,
       "note": note,
       "rate": rate,
       "spTitle": spTitle,
@@ -734,11 +732,11 @@ class DoctorModel {
       map['address'],
       map["placeTitle"],
       map["visits"],
-      map["visited"],
       map["note"],
       map["rate"],
       map["spTitle"],
       map['spId'],
+      visited: map["visited"],
     );
   }
   factory DoctorModel.fromMap1(Map<String, dynamic> map) {
@@ -749,7 +747,7 @@ class DoctorModel {
       map['doctor_address'],
       map['doctor_placeTitle'],
       map['doctor_visits'],
-      map['doctor_visited'],
+      visited: map['doctor_visited'],
       map["note"],
       map["rate"],
       map['doctor_spTitle'],
@@ -765,7 +763,7 @@ class HospitalSpModel {
   int totalDocs;
   String? rate;
   int visit;
-  int visited;
+  int? visited;
   int flag;
   HospitalSpModel(
     this.id,
@@ -774,10 +772,9 @@ class HospitalSpModel {
     this.totalDocs,
     this.rate,
     this.visit,
+    this.flag, {
     this.visited,
-    this.flag,
-  );
-
+  });
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -786,7 +783,6 @@ class HospitalSpModel {
       'totalDocs': totalDocs,
       "rate": rate,
       "visit": visit,
-      "visited": visited,
       'flag': flag
     };
   }
@@ -799,7 +795,7 @@ class HospitalSpModel {
         map['totalDocs'],
         map["rate"],
         map["visit"],
-        map["visited"],
+        visited: map["visited"],
         map['flag']);
   }
   factory HospitalSpModel.fromMap1(Map<String, dynamic> map) {
@@ -810,7 +806,7 @@ class HospitalSpModel {
         map['totalDocs'],
         map["rate"],
         map["visit"],
-        map["visited"],
+        visited: map["visited"],
         map['flag']);
   }
 }
@@ -1074,19 +1070,11 @@ class HospitalSpAllModel {
   String? rate;
   int totalDocs;
   int visit;
-  int visited;
+  int? visited;
   String? titleSp;
-  HospitalSpAllModel(
-      this.hospitalId,
-      this.title,
-      this.address,
-      this.placeTitle,
-      this.note,
-      this.rate,
-      this.totalDocs,
-      this.visit,
-      this.visited,
-      this.titleSp);
+  HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
+      this.note, this.rate, this.totalDocs, this.visit, this.titleSp,
+      {this.visited});
   Map<String, dynamic> toMap() {
     return {
       'hospitalId': hospitalId,
@@ -1112,7 +1100,7 @@ class HospitalSpAllModel {
         map['rate'],
         map['totalDocs'],
         map['visit'],
-        map['visited'],
+        visited: map['visited'],
         map['titleSp']);
   }
 }
