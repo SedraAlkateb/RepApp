@@ -77,7 +77,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         }else{
           planBrand[event.index].brands[event.indexBr].amount = event.number;
           sumS=sum2;
-          emit(SumErrorState(failure: Failure(100, " لقد تجاوزت الحد المسموح العينات في هذا اللاختصاص")));}
+          emit(SumErrorState(failure: Failure(100, " لقد تجاوزت الحد المسموح للعينات في هذا اللاختصاص")));}
       }
       if (event is UpdateEvent) {
         List<OtherBrandSpPlanModel> planBrandSum = List.from(planBrand);

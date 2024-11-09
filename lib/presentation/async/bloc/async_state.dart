@@ -20,10 +20,16 @@ final class SyncDataErrorState extends AsyncState {
   List<Object?> get props =>[failure];
 }
 final class SyncDataLoadingState extends AsyncState {
+  final int loading;
+  SyncDataLoadingState(this.loading);
   @override
-  SyncDataLoadingState();
+  List<Object?> get props =>[loading];
+}
+final class LoadingState extends AsyncState {
+  final int loading;
+  LoadingState(this.loading);
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props =>[loading];
 }
 final class EditStatusDState extends AsyncState {
   EditStatusDState();
@@ -70,4 +76,23 @@ final class UpdateIsActiveErrorState extends AsyncState {
   @override
 
   List<Object?> get props =>[failure];
+}
+
+final class DeleteAllState extends AsyncState {
+  DeleteAllState();
+  @override
+  List<Object?> get props =>[];
+}
+final class DeleteAllErrorState extends AsyncState {
+  final Failure failure;
+  DeleteAllErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class DeleteAllLoadingState extends AsyncState {
+  @override
+  DeleteAllLoadingState();
+  @override
+  List<Object?> get props =>[];
 }

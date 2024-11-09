@@ -202,7 +202,7 @@ class ResponseMassage{
   static const String RECIEVE_TIMEOUT ="Time out error ,Try again later";
   static const String SEND_TIMOUT ="Time out error ,Try again later";
   static const String CACHE_ERROR ="Cache error ,Try again later";
-  static const String NO_INTERNET_CONNECTION ="برجى التأكد من اتصالك بالانترنت";
+  static const String NO_INTERNET_CONNECTION ="يرجى التأكد من اتصالك بالانترنت";
   static const String DEFAULT ="حدث خطأ, يرجى اعادة المحاولة";
 
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -5,22 +7,21 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AsyncPage extends StatelessWidget {
   const AsyncPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:   Padding(
-        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 200),
+      body:    Padding(
+        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.domina,width: 200,
-              ),
+              SvgPicture.asset(ImageAssets.upload,),
               Text(
                 textAlign: TextAlign.center,
                 "تأكد من اتصالك بالانترنت واضغط على زر رفع البيانات ",

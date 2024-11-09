@@ -29,6 +29,7 @@ class _VisitHospitalState extends State<VisitHospital>
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     BlocProvider.of<VisitPlaceBloc>(context)
         .add(SpecializationHospitalEvent(widget.hospitalModel.id));
@@ -133,29 +134,36 @@ class _VisitHospitalState extends State<VisitHospital>
                     SizedBox(
                       height: 0.9,
                     ),
-                    BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                    BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
                       },
-                      child: Customdropdownsearchspec(
-                        hintText: "الاختصاصات",
-                        items: context.watch<VisitPlaceBloc>().specialization,
-                        onChanged: (value) {
-                          SpecHospitalSp specModel = value;
-                          BlocProvider.of<VisitPlaceBloc>(context)
-                              .add(SelectSpecEvent(specModel));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "اختر الاختصاص";
-                          }
-                          return null;
-                        },
-                        errorText: 'لايوجد نتيجة',
-                      ),
+                      builder: (context, state)
+                         {
+                           List<SpecHospitalSp> specialization=context.watch<VisitPlaceBloc>().specialization;
+                           if(state is SpecializationHospitalState){
+                             specialization  =state.specialization;
+                           }
+                           return  Customdropdownsearchspec(
+                             hintText: "الاختصاصات",
+                             items: specialization,
+                             onChanged: (value) {
+                               SpecHospitalSp specModel = value;
+                               BlocProvider.of<VisitPlaceBloc>(context)
+                                   .add(SelectSpecEvent(specModel));
+                             },
+                             validator: (value) {
+                               if (value == null) {
+                                 return "اختر الاختصاص";
+                               }
+                               return null;
+                             },
+                             errorText: 'لايوجد نتيجة',
+                           );
+                         }
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       buildWhen: (previous, current) {
