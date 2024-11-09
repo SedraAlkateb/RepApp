@@ -130,7 +130,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                             ),
                             Text(
                               textAlign: TextAlign.center,
-                              " الاختصاص ${(widget.doctorModel.spTitle)}",
+                              " الإختصاص ${(widget.doctorModel.spTitle)}",
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(
@@ -140,7 +140,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                               children: [
                                 Text(
                                   textAlign: TextAlign.center,
-                                "اجمالي الزيارات: ${widget.doctorModel.visits} ",
+                                "إجمالي الزيارات: ${widget.doctorModel.visits} ",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
