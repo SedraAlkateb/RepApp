@@ -4,6 +4,7 @@ const  String imageSvgPath="assets/images/svg";
 const  String imageSpecPath="assets/images/spec";
 const  String imageAsyncPath="assets/images/async";
 
+
 class ImageAssets{
   static const String d = "$imagePath/d.png";
   static const String domina = "$imagePath/domina.png";
