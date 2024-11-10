@@ -1,10 +1,9 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_brands_doctor_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_brands_hospital_visits_sql_usecase.dart';
@@ -15,6 +14,7 @@ import 'package:domina_app/domain/usecase/insert_as/get_hospital_visits_sql_usec
 import 'package:domina_app/domain/usecase/insert_as/get_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_active_usecase.dart';
+import 'package:domina_app/domain/usecase/is_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/update_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
@@ -41,7 +41,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   GetHospitalSpVisitsSqlUsecase getHospitalSpVisitsSqlUsecase;
   GetPlanBrandSqlUsecase getPlanBrandSqlUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
- // DeleteSqlUsecase deleteSqlUsecase;
+  IsPlanSqlUsecase isPlanSqlUsecase;
+  DeleteSqlUsecase deleteSqlUsecase;
   DeleteAllSqlUsecase deleteAllSqlUsecase;
   List<PlanBrandModel> planBrands = [];
   List<VisitBrandPharmacyModel> visitBrandPharmacies = [];
@@ -52,6 +53,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   List<VisitDoctorModel> visitDoctors = [];
   bool suc = false;
   AsyncInBloc(
+      this.isPlanSqlUsecase,
       this.isActiveUsecase,
       this.editIsLoginSqlUsecase,
       this.visitPharmacyUsecase,
@@ -65,21 +67,21 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.getDoctorVisitsSqlUsecase,
       this.getPharmacyVisitsSqlUsecase,
       this.getPlanBrandSqlUsecase,
-    //  this.deleteSqlUsecase,
+      this.deleteSqlUsecase,
       this.deleteAllSqlUsecase,
       this.planBrandUsecase,
       this.updateFlagSqlUsecase)
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
-     //  if (event is DeleteBaseEvent) {
-     // //   emit(DeleteBaseLoadingState());
-     //    (await deleteSqlUsecase.execute()).fold((failure) {
-     //      emit(DeleteBaseErrorState(failure: failure));
-     //      return false;
-     //    }, (data) async {
-     //      emit(DeleteBaseState());
-     //    });
-     //  }
+      if (event is DeleteBaseEvent) {
+     //   emit(DeleteBaseLoadingState());
+        (await deleteSqlUsecase.execute()).fold((failure) {
+          emit(DeleteBaseErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          emit(DeleteBaseState());
+        });
+      }
       if (event is DeleteAllEvent) {
      //   emit(DeleteAllLoadingState());
         (await deleteAllSqlUsecase.execute()).fold((failure) {
@@ -98,7 +100,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         });
       }
       if (event is Async1DataEvent) {
-        emit(SyncData1LoadingState());
+
         bool b = await getData();
         if (b) {
           await setData();
@@ -185,13 +187,14 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitHospitals = hospitalsFailureOrSuccess as List<VisitHospitalModel>;
 
       ///////////////////////////////////////////////////
-   if(UserInfo.otherstatus==1){
+   if(UserInfo.otherstatus==1&& UserInfo.flag==0){
      final planBrandsResult = await getPlanBrandSqlUsecase.execute();
      final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
      if (planBrandsFailureOrSuccess is Failure) {
        emit(SyncData1ErrorState(failure: planBrandsFailureOrSuccess));
        return false;}
      planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+
    }
 
       return true;
@@ -234,7 +237,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         print("Visit Hospital data sent successfully.");
       }
 
-    if(UserInfo.otherstatus==1){
+    if(UserInfo.otherstatus==1&&UserInfo.flag==0){
+
       final planBrandResult = await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
       final planBrandFailureOrSuccess = planBrandResult.fold((failure) => failure, (data) => data);
       if (planBrandFailureOrSuccess is Failure) {
@@ -243,6 +247,13 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       }
       print("Plan Brand data sent successfully.");
     }
+      final planBrandFlagResult =   await isPlanSqlUsecase.execute(UserInfo.repId,UserInfo.flag);;
+      final planBrandFlagFailureOrSuccess = planBrandFlagResult.fold((failure) => failure, (data) => data);
+      if (planBrandFlagFailureOrSuccess is Failure) {
+        emit(SyncData1ErrorState(failure: planBrandFlagFailureOrSuccess));
+        return false;
+      }
+      UserInfo.flag=1;
       emit(SyncData1State());
       return true;
     } catch (e) {

@@ -19,10 +19,14 @@ class DeleteLogoutPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.delete,
-                height: 500,
+              SizedBox(
+                height: 400,
+                width: 400,
+                child: Image.asset(
+                  ImageAssets.delete,
+                  height: 500,
 
+                ),
               ),
               Text(
                 textAlign: TextAlign.center,
@@ -36,9 +40,6 @@ class DeleteLogoutPage extends StatelessWidget {
                     error(context, state.failure.massage, state.failure.code);
                   }
 
-                  if (state is DeleteAllLoadingState) {
-                    loading(context);
-                  }
                   if (state is EditStatusSErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }

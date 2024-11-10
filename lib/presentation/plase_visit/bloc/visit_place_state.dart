@@ -207,8 +207,7 @@ final class AllVisitBrandHospitalErrorState extends VisitPlaceState {
 
 
 final class SpecializationHospitalState extends VisitPlaceState {
-  @override
-final  List<SpecHospitalSp> specialization;
+  final  List<SpecHospitalSp> specialization;
   SpecializationHospitalState(this.specialization);
   @override
   List<Object?> get props =>[specialization];

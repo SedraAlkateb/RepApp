@@ -100,6 +100,15 @@ class DoctorDetails extends StatelessWidget {
                                 buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
                                     doctor.note ?? ''),
                               ],
+
+                            ),
+                          if (doctor.workHours != null && doctor.workHours!.isNotEmpty&&doctor.workHours!=" ")
+                            Column(
+                              children: [
+                                Divider(thickness: 0.5,),
+                                buildHtmlDetailRow(context, Icons.work, 'أوقات العمل',
+                                    doctor.workHours ?? ''),
+                              ],
                             ),
                         ],
                       ),

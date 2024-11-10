@@ -29,12 +29,12 @@ class BrandFlagEvent extends VisitPlaceEvent{
   @override
   List<Object?> get props => [];
 }
-// class BrandAnyFlagEvent extends VisitPlaceEvent{
-//
-//   BrandAnyFlagEvent();
-//   @override
-//   List<Object?> get props => [];
-// }
+class BrandAnyFlagEvent extends VisitPlaceEvent{
+
+  BrandAnyFlagEvent();
+  @override
+  List<Object?> get props => [];
+}
 class SelectBrandEvent extends VisitPlaceEvent{
   final  BrandModel brandModel;
   final int pharmacyId;

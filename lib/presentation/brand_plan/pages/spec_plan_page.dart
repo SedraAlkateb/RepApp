@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/widget/brand_plan_other_page.dart';
@@ -167,7 +168,9 @@ class SpecPlanPage extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         showDialog(context: context, builder: (context) {
-                          return dialogPlan(context,true,"هل انت متاكد من حفظ التغيرات");
+                          return dialogPlan(context,
+                      fun:()=> BlocProvider.of<BrandPlanBloc>(context).add(UpdateAmountSucEvent())
+                              ,"هل انت متاكد من حفظ التغيرات");
                         },);
                       },
                       child: SizedBox(
@@ -195,9 +198,12 @@ class SpecPlanPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
+                        UserInfo.otherstatus==0?
                         showDialog(context: context, builder: (context) {
-                          return dialogPlan(context,false,"هل انت متاكد من ارسال التغيرات");
-                        },);
+                          return dialogPlan(context,
+                           fun: ()=>  BlocProvider.of<BrandPlanBloc>(context).add(SendToS())
+                              ,"هل انت متاكد من ارسال التغيرات");
+                        },):null;
                       },
                       child: SizedBox(
                         height: 80,

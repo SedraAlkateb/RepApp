@@ -706,9 +706,10 @@ class DoctorModel {
   String spTitle;
   int spId;
   int? visited;
+  String? workHours;
   DoctorModel(this.id, this.title, this.placeId, this.address, this.placeTitle,
       this.visits, this.note, this.rate, this.spTitle, this.spId,
-      {this.visited});
+      this.workHours,{this.visited});
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -721,6 +722,7 @@ class DoctorModel {
       "rate": rate,
       "spTitle": spTitle,
       "spId": spId,
+      "workHours":workHours
     };
   }
 
@@ -737,6 +739,7 @@ class DoctorModel {
       map["spTitle"],
       map['spId'],
       visited: map["visited"],
+      map['workHours']
     );
   }
   factory DoctorModel.fromMap1(Map<String, dynamic> map) {
@@ -752,6 +755,7 @@ class DoctorModel {
       map["rate"],
       map['doctor_spTitle'],
       map['doctor_spId'],
+      map['workHours']
     );
   }
 }
@@ -880,6 +884,7 @@ class LoginModel {
   int activePlanId;
   int? otherStatus = -1;
   int percentage;
+  int samplesCount;
   String name;
   int isLogin;
   String endDate;
@@ -887,6 +892,7 @@ class LoginModel {
   String? otherStartDate;
   String? otherEndDate;
   LoginModel(
+      this.samplesCount,
       this.token,
       this.repId,
       this.otherPlanId,
@@ -901,6 +907,7 @@ class LoginModel {
       this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
+      'samplesCount':samplesCount,
       'token': token,
       'repId': repId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
@@ -918,6 +925,7 @@ class LoginModel {
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
     return LoginModel(
+      map['samplesCount'],
       map['token'],
       map['repId'],
       map['otherPlanId'],
