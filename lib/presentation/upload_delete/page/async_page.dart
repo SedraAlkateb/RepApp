@@ -13,18 +13,19 @@ class AsyncPage extends StatelessWidget {
   const AsyncPage({super.key});
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage(ImageAssets.upload), context);
     return Scaffold(
       body:    Padding(
-        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),
+        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 200),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(ImageAssets.upload,),
-              Text(
+              Image.asset(ImageAssets.upload)
+             , Text(
                 textAlign: TextAlign.center,
-                "تأكد من اتصالك بالانترنت واضغط على زر رفع البيانات ",
+                "تأكد من اتصالك بالإنترنت واضغط على زر رفع البيانات ",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(

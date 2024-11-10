@@ -3,6 +3,8 @@ import 'package:domina_app/presentation/brand_plan/widget/brand_plan_active_page
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 
+import '../../../app/user_info.dart';
+
 class BrandPlanPage extends StatelessWidget {
   const BrandPlanPage({super.key});
   @override
@@ -18,7 +20,8 @@ class BrandPlanPage extends StatelessWidget {
                 tabs: [
                   Tab(
                     icon: Icon(Icons.list_alt_outlined),
-                    text: 'الخطة الحالية',
+                    text: "الخطة الحالية",
+
                   ),
                   Tab(
                     icon: Icon(Icons.featured_play_list_outlined),

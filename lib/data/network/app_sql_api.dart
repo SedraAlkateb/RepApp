@@ -1107,7 +1107,7 @@ class AppSqlApi extends AppSqlApiAbs {
       brand.title AS brand_title,
       brand.phTitle AS brand_phTitle,
       brand.sampleCoast AS brand_sampleCost,
-      specialization.id AS specialization_id,
+      specializat+ion.id AS specialization_id,
       specialization.title AS specialization_title,
       specialization.sumDoctor AS sumDoctor,
       specialization.sumHospital AS sumHospital

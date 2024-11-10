@@ -29,7 +29,7 @@ class DeletePage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(
-                  height: AppSize.s50
+                  height: AppSize.s25
               ),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
