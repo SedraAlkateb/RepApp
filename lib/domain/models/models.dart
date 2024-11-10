@@ -951,6 +951,7 @@ class Type {
 final List<Type> type = [
   Type(0, "دفاتر"),
   Type(1, "عينات"),
+  Type(2, "لاشيء"),
 ];
 
 class BrandSpModel {

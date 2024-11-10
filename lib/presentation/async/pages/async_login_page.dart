@@ -49,16 +49,16 @@ class AsyncLoginPage extends StatelessWidget {
                   (builder: (context, state) =>  state is LoadingState?CircleNumberWidget(number: state.loading):SizedBox(),),
                 Image.asset(
                   ImageAssets.download,
-                  height: 400,
+                  height: 300,
 
                 ),
                 Text(
                   textAlign: TextAlign.center,
-                  "تأكد من اتصالك بالانترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق ",
+                  "تأكد من اتصالك بالإنترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق ",
                 style: Theme.of(context).textTheme.titleLarge,
                 ),
                 SizedBox(
-                  height: AppSize.s50
+                  height: AppSize.s25
                 ),
                 BlocConsumer<AsyncBloc, AsyncState>(
                   listener: (context, state) {

@@ -46,6 +46,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   String not = "";
   String br = "";
   int isScience = 0;
+  Type type=Type(0, "لا شيئ");
   VisitPlaceBloc(
       //    this.pharmaciesByPlaceUsecase,
       this.allBrandsFlagSqlUsecase,
@@ -166,7 +167,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       //   });
       // }
       else if (event is InsertVisitDoctorEvent) {
-        event.visitDoctorModel.additaion = not == "" ? null : addition();
+
+        event.visitDoctorModel.additaion =type.i==2?null:not==""?null:
+         addition();
         (await insertVisitDoctorSqlUsecase.execute(event.visitDoctorModel))
             .fold((failure) {
           print(failure.massage);
@@ -188,7 +191,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       //   });
       // }
       else if (event is InsertBrandVisitDoctorEvent) {
-        event.visitDoctorModel.additaion = not == "" ? null : addition();
+        event.visitDoctorModel.additaion =type.i==2?null:not==""?null:
+        addition();
         emit(AllVisitBrandDoctorLoadingState());
         (await insertVisitBrandDoctorSqlUsecase.execute(
                 visitBrandPharmacys, event.visitDoctorModel))
@@ -199,8 +203,10 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           selectBrand = [];
           emit(AllVisitBrandDoctorState());
         });
-      } else if (event is InsertBrandVisitHospitalEvent) {
-        event.visitHospitalModel.additaion = not == "" ? null : addition();
+      }
+      else if (event is InsertBrandVisitHospitalEvent) {
+        event.visitHospitalModel.additaion =type.i==2?null:not ==""?null:
+        addition();
         (await insertVisitBrandHospitalSqlUsecase.execute(visitBrandPharmacys,
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -210,8 +216,10 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           selectBrand = [];
           emit(AllVisitBrandHospitalState());
         });
-      } else if (event is InsertVisitHospitalEvent) {
-        event.visitHospitalModel.additaion = (not == "" ? null : addition());
+      }
+      else if (event is InsertVisitHospitalEvent) {
+        event.visitHospitalModel.additaion =type.i==2?null: (not ==""?null:
+        addition());
         (await insertVisitHospitalSqlUsecase.execute(
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -251,11 +259,17 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(SpecializationHospitalState(data));
         });
       } else if (event is TypeAdditionEvent) {
+        type=event.type;
+
         if (event.type.i == 0) {
+
           emit(BoxState(event.type.name));
         } else if (event.type.i == 1) {
           emit(DropDownState(event.type.name));
-        } else {
+        }
+        else if (event.type.i == 2) {
+          emit(NothingState());
+        }else {
           emit(BoxState(event.type.name));
         }
         not = event.type.name;
@@ -298,14 +312,16 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
     });
   }
   String addition() {
-    String brand = "";
-    if (br == "") {
-      for (var ss in selectAddBrand) {
-        brand = "${brand} ${ss.title} ${ss.phTitle} ${ss.amount} \n";
-      }
-    } else {
-      brand = "${br}\n";
-    }
+    String brand="";
+   if(br==""){
+     for( var ss in selectAddBrand ){
+       brand= "${brand} ${ss.title} ${ss.phTitle} ${ss.amount} \n";
+     }
+   }
+
+   else{
+     brand= "${br}\n";
+   }
     String add =
         "${not} \n ${brand} ${isScience == 0 ? " مكتب علمي " : isScience == 1 ? "مع الخطة " : "مع الموزع "}";
     return add;
