@@ -23,10 +23,13 @@ class SpecPlanPage extends StatelessWidget {
           SingleChildScrollView(
             child:    Column(
               children: [SizedBox(height: 14,),
-                Card(shadowColor:ColorManager.secondaryColor7 ,child:
-              Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor7,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.otherStartDate ?? 'غير متاح'} >>> ${UserInfo.otherEndDate ?? 'غير متاح'} \n ",
-              ),
-                margin: EdgeInsets.symmetric( horizontal:20),),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Card(shadowColor:ColorManager.secondaryColor7 ,child:
+                                Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor7,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.otherStartDate ?? 'غير متاح'} >>> ${UserInfo.otherEndDate ?? 'غير متاح'} \n ",
+                                ),
+                  margin: EdgeInsets.symmetric( horizontal:20),),
+                ),
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [
