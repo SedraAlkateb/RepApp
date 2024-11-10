@@ -25,10 +25,13 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
         child: Column(
           children: [
             SizedBox(height: 14,),
-            Card(shadowColor: ColorManager.secondaryColor7,child:
-            Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor2,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.startDate ?? 'غير متاح'} >>> ${UserInfo.endDate ?? 'غير متاح'} \n ",
-        ),
-            margin: EdgeInsets.symmetric( horizontal:20),),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Card(shadowColor: ColorManager.secondaryColor7,child:
+              Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor2,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.startDate ?? 'غير متاح'} >>> ${UserInfo.endDate ?? 'غير متاح'} \n ",
+                      ),
+              margin: EdgeInsets.symmetric( horizontal:20),),
+            ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: BlocConsumer<BrandPlanBloc, BrandPlanState>(
