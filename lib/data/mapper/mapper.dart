@@ -189,6 +189,7 @@ extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
 extension LoginResponseMapper on LoginResponse? {
   LoginModel toDomain() {
     return LoginModel(
+      int.parse(this?.data?.samplesCount ?? "0"),
       this?.data?.token ?? Constants.empty,
       int.parse(this?.data?.repId ?? "0"),
       int.parse(this?.data?.otherPlanId ?? "0"),
@@ -293,6 +294,7 @@ extension DoctorResponseMapper on DoctorResponse? {
       this?.rate ?? Constants.empty,
       this?.spTitle ?? Constants.empty,
       int.parse(this?.spId ?? "0"),
+      this?.workHours ?? Constants.empty,
     );
   }
 }

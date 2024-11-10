@@ -7,7 +7,6 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class AsyncPage extends StatelessWidget {
   const AsyncPage({super.key});
@@ -22,8 +21,11 @@ class AsyncPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(ImageAssets.upload)
-             , Text(
+              SizedBox(
+                  height: 400,
+                  width: 400,
+                  child: Image.asset(ImageAssets.upload,)),
+              Text(
                 textAlign: TextAlign.center,
                 "تأكد من اتصالك بالإنترنت واضغط على زر رفع البيانات ",
                 style: Theme.of(context).textTheme.titleLarge,
@@ -52,9 +54,6 @@ class AsyncPage extends StatelessWidget {
                   if(state is EditStatusState){
                     success(context);
                     Navigator.pushReplacementNamed(context, Routes.delete,);
-                  }
-                  if(state is SyncData1LoadingState){
-                    loading(context);
                   }
                 },
                 child: ElevatedButton(onPressed: (){

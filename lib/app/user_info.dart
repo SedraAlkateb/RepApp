@@ -12,5 +12,6 @@ class UserInfo{
   static String? startDate=" ";
   static String? otherStartDate=" ";
   static String? otherEndDate=" ";
-
+  static int samplesCount = 2;
+  static int flag = 0;
 }

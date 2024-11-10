@@ -19,10 +19,14 @@ class AsyncLogoutPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.upload,
-                height: 500,
+              SizedBox(
+                height: 400,
+                width: 400,
+                child: Image.asset(
+                  ImageAssets.upload,
+                  height: 500,
 
+                ),
               ),
               Text(
                 textAlign: TextAlign.center,
@@ -37,9 +41,7 @@ class AsyncLogoutPage extends StatelessWidget {
                   if(state is SyncData1ErrorState){
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if(state is SyncData1LoadingState){
-                    loading(context);
-                  }
+
                   if(state is SyncData1State){
                     BlocProvider.of<AsyncInBloc>(context).add(UpdateFlagEvent());
                   }

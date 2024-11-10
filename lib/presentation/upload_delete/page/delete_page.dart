@@ -18,10 +18,14 @@ class DeletePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.delete,
-                height: 500,
+              SizedBox(
+                height: 400,
+                width: 400,
+                child: Image.asset(
+                  ImageAssets.delete,
+                  height: 500,
 
+                ),
               ),
               Text(
                 textAlign: TextAlign.center,
@@ -33,11 +37,8 @@ class DeletePage extends StatelessWidget {
               ),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
-                  if(state is DeleteAllErrorState){
+                  if(state is DeleteBaseErrorState){
                     error(context, state.failure.massage, state.failure.code);
-                  }
-                  if(state is DeleteAllLoadingState){
-                    loading(context);
                   }
                   if(state is EditStatusSErrorState){
                     error(context, state.failure.massage, state.failure.code);
@@ -47,12 +48,12 @@ class DeletePage extends StatelessWidget {
                     success(context);
                     Navigator.pushNamedAndRemoveUntil(context, Routes.syncData,(route) => false,);
                   }
-                  if(state is DeleteAllState){
+                  if(state is DeleteBaseState){
                     BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(1));
                   }
                 },
                 child: ElevatedButton(onPressed: (){
-                  BlocProvider.of<AsyncInBloc>(context).add(DeleteAllEvent());
+                  BlocProvider.of<AsyncInBloc>(context).add(DeleteBaseEvent());
                 },
                     child: Text(
                       " حذف البيانات ",

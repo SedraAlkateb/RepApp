@@ -110,13 +110,14 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['endDate'] as String?,
       json['otherStartDate'] as String?,
       json['otherEndDate'] as String?,
-    );
+    )..samplesCount = json['samplesCount'] as String?;
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) {
   final val = <String, dynamic>{
     'token': instance.token,
     'repId': instance.repId,
     'otherPlanId': instance.otherPlanId,
+    'samplesCount': instance.samplesCount,
     'activePlanId': instance.activePlanId,
     'otherPlanStatus': instance.otherStatus,
     'name': instance.name,
@@ -544,6 +545,7 @@ DoctorResponse _$DoctorResponseFromJson(Map<String, dynamic> json) =>
       json['note'] as String?,
       json['rate'] as String?,
       json['spTitle'] as String?,
+      json['workHours'] as String?,
     );
 
 Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
@@ -558,6 +560,7 @@ Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
       'note': instance.note,
       'rate': instance.rate,
       'spTitle': instance.spTitle,
+      'workHours': instance.workHours,
     };
 
 AllDoctorResponse _$AllDoctorResponseFromJson(Map<String, dynamic> json) =>
