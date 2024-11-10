@@ -51,8 +51,6 @@ dependencies:
   analyzer: ^6.4.1
   freezed: ^2.3.2
   equatable: ^2.0.5
-
-
   shimmer: ^3.0.0
   lottie: ^3.1.2
   sqflite: ^2.3.3+1
@@ -63,13 +61,11 @@ dependencies:
   retrofit_generator: ^9.1.2
   json_serializable: ^6.4.1
   custom_dropdown_search: ^1.0.0
-  internet_connection_checker_plus: ^2.5.2
   flutter_html: ^3.0.0-beta.2
   flutter_svg: ^2.0.4
   flutter_phoenix: ^1.1.1
-  connectivity_plus: ^6.0.5 
-  permission_handler: ^11.3.1
-  intl: ^0.19.0
+  internet_connection_checker_plus: ^2.5.2
+
 
 
 
