@@ -218,7 +218,7 @@ class SpecPlanPage extends StatelessWidget {
                               bottom: 50,
                               left: 35,
                               child: Text(
-                                "ارسال",
+                                "إرسال",
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
