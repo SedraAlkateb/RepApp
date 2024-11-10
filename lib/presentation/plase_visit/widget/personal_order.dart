@@ -30,7 +30,7 @@ class PersonalOrder extends StatelessWidget {
           prefixIcon: null,
           onChanged: (value) {
             noteeController.text = "";
-            BlocProvider.of<VisitPlaceBloc>(context).br="";
+            BlocProvider.of<VisitPlaceBloc>(context).br = "";
             BlocProvider.of<VisitPlaceBloc>(context)
                 .add(TypeAdditionEvent(value));
           },
@@ -70,9 +70,10 @@ class PersonalOrder extends StatelessWidget {
                       obscureText: false,
                       minLines: 3,
                       inputFormatters: [],
-                      function:(p0) {
-                        BlocProvider.of<VisitPlaceBloc>(context).add(BoxAddEvent(p0));
-                      } ,
+                      function: (p0) {
+                        BlocProvider.of<VisitPlaceBloc>(context)
+                            .add(BoxAddEvent(p0));
+                      },
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       builder: (context, state) {
@@ -154,7 +155,7 @@ class PersonalOrder extends StatelessWidget {
                     ),
                     CustomDropDownSearch(
                       hintText: "العينات",
-                      items: context.watch<VisitPlaceBloc>().bandFlag,
+                      items: context.watch<VisitPlaceBloc>().allBandFlag,
                       onChanged: (value) {
                         BrandModel brand = value;
                         BlocProvider.of<VisitPlaceBloc>(context)
@@ -172,12 +173,9 @@ class PersonalOrder extends StatelessWidget {
                       listenWhen: (previous, current) {
                         return current is SelectBrandAddState;
                       },
-
                       buildWhen: (previous, current) {
-                        return
-                            current is SelectBrandAddNumState;
+                        return current is SelectBrandAddNumState;
                       },
-
                       listener: (context, state) {
                         if (state is SelectBrandAddState) {
                           showDialog(
@@ -257,7 +255,6 @@ class PersonalOrder extends StatelessWidget {
                                       ],
                                     ),
                                     ...selectBrand.asMap().entries.map((entry) {
-                                      final index = entry.key;
                                       final brand = entry.value;
                                       return TableRow(
                                         children: [
@@ -306,7 +303,6 @@ class PersonalOrder extends StatelessWidget {
                                 ),
                               )
                             : SizedBox();
-                        ;
                       },
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(

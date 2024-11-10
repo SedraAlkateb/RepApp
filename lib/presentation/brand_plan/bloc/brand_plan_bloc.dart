@@ -20,10 +20,10 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   List<OtherBrandSpPlanModel> planBrand = [];
   List<BrandSpPlanModel> planBrandActive = [];
   int sum = 0;
-  int sumS=0;
+  int sumS = 0;
   int current = 0;
   BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase,
-      this.updateOtherStatusUsecase,this.allOtherBrandPlanSqlUsecase)
+      this.updateOtherStatusUsecase, this.allOtherBrandPlanSqlUsecase)
       : super(BrandPlanInitial()) {
     on<BrandPlanEvent>((event, emit) async {
       if (event is AllBrandPlanEvent) {
@@ -56,28 +56,34 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         sum1 = sum1 -
             (planBrand[event.index].brands[event.indexBr].amount *
                 planBrand[event.index].brands[event.indexBr].sampleCoast);
-        sum1 = sum1 + (event.number * planBrand[event.index].brands[event.indexBr].sampleCoast);
-        int sum2=sumS;
-        sum2= sum2 -planBrand[event.index].brands[event.indexBr].amount ;
+        sum1 = sum1 +
+            (event.number *
+                planBrand[event.index].brands[event.indexBr].sampleCoast);
+        int sum2 = sumS;
+        sum2 = sum2 - planBrand[event.index].brands[event.indexBr].amount;
         sum2 = sum2 + event.number;
         print(event.brandM);
         print("event.brandM");
-        if(sum2<=event.brandM){
+        if (sum2 <= event.brandM) {
           if (sum1 < UserInfo.percentage) {
             planBrand[event.index].brands[event.indexBr].amount = event.number;
             sum = sum1;
-            sumS=sum2;
+            sumS = sum2;
             emit(SumState(planBrand));
           } else {
             planBrand[event.index].brands[event.indexBr].amount = event.number;
             sum = sum1;
-            sumS=sum2;
-            emit(SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
+            sumS = sum2;
+            emit(SumErrorState(
+                failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
           }
-        }else{
+        } else {
           planBrand[event.index].brands[event.indexBr].amount = event.number;
-          sumS=sum2;
-          emit(SumErrorState(failure: Failure(100, " لقد تجاوزت الحد المسموح للعينات في هذا اللاختصاص")));}
+          sumS = sum2;
+          emit(SumErrorState(
+              failure: Failure(
+                  100, " لقد تجاوزت الحد المسموح للعينات في هذا اللاختصاص")));
+        }
       }
       if (event is UpdateEvent) {
         List<OtherBrandSpPlanModel> planBrandSum = List.from(planBrand);
@@ -88,18 +94,16 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        } else {
+        }else {
           UserInfo.otherstatus = 1;
-          (await updateOtherStatusUsecase.execute(UserInfo.repId, 1,planBrand)).fold(
-                  (failure) {
-                emit(UpdateAmountErrorState(failure: failure));
-                return false;
-              }, (data) async {
-            print("|;;;;;;;;;;;;;;;;;;;;;");
+          (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
+              .fold((failure) {
+            emit(UpdateAmountErrorState(failure: failure));
+            return false;
+          }, (data) async {
             emit(UpdateAmountState());
           });
         }
-
       }
       if (event is UpdateAmountSucEvent) {
         emit(UpdateAmountLoadingState());
@@ -121,7 +125,9 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
     sum = 0;
     for (int i = 0; i < planBrand.length; i++) {
       for (int j = 0; j < planBrand[i].brands.length; j++) {
-        sum = sum + (planBrand[i].brands[j].amount * planBrand[i].brands[j].sampleCoast);
+        sum = sum +
+            (planBrand[i].brands[j].amount *
+                planBrand[i].brands[j].sampleCoast);
       }
     }
     print(sum);

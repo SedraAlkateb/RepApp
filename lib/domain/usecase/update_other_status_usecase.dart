@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 class UpdateOtherStatusUsecase extends Equatable {
   final RepositorySql _repositorySql;
   UpdateOtherStatusUsecase(this._repositorySql);
-  Future<Either<Failure, Null>> execute(int status, int repId,List<OtherBrandSpPlanModel> planBrands ) async{
-    return await _repositorySql.updateOtherStatus(status, repId,planBrands);
+  Future<Either<Failure, Null>> execute(int repId , int status ,List<OtherBrandSpPlanModel> planBrands ) async{
+    return await _repositorySql.updateOtherStatus(repId,status,planBrands);
   }
 
   @override

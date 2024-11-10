@@ -305,6 +305,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
        )).fold((failure) {
          emit(UpdateIsActiveErrorState(failure: failure));
        }, (data) async {
+         if(checkActiveModel?.otherStatus!=null){
+           UserInfo.flag=checkActiveModel?.otherStatus==0?0:1;
+         }
          emit(UpdateIsActiveState());
        });
      }
