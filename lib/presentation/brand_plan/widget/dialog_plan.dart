@@ -1,11 +1,9 @@
-import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
- Widget dialogPlan(BuildContext context,bool conf,String text){
+ Widget dialogPlan(BuildContext context,
+     String text,{required VoidCallback fun}){
    return WillPopScope(
      onWillPop: () async {
        return false;
@@ -45,10 +43,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
                      Navigator.pop(context);
                    }, child: Text("الغاء")),
                    SizedBox(width: 8,),
-                   ElevatedButton(onPressed:() =>conf?
-                       BlocProvider.of<BrandPlanBloc>(context).add(UpdateAmountSucEvent()):
-                   BlocProvider.of<BrandPlanBloc>(context)
-                       .add(SendToS())
+                   ElevatedButton(
+                       onPressed: fun
+
                        , child: Text("تاكيد"))
                  ],),
                SizedBox(height: 20,)

@@ -13,15 +13,20 @@ class DeleteLogoutPage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
-            left: AppPadding.p40, right: AppPadding.p40, top: 300),
+            left: AppPadding.p40, right: AppPadding.p40, top: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.domina,
-                width: 200,
+              SizedBox(
+                height: 400,
+                width: 400,
+                child: Image.asset(
+                  ImageAssets.delete,
+                  height: 500,
+
+                ),
               ),
               Text(
                 textAlign: TextAlign.center,
@@ -35,9 +40,6 @@ class DeleteLogoutPage extends StatelessWidget {
                     error(context, state.failure.massage, state.failure.code);
                   }
 
-                  if (state is DeleteAllLoadingState) {
-                    loading(context);
-                  }
                   if (state is EditStatusSErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }

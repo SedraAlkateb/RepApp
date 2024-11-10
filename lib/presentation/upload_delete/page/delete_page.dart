@@ -12,14 +12,20 @@ class DeletePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body:   Padding(
-        padding:  EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 300),
+        padding:  EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.domina,width: 200,
+              SizedBox(
+                height: 400,
+                width: 400,
+                child: Image.asset(
+                  ImageAssets.delete,
+                  height: 500,
+
+                ),
               ),
               Text(
                 textAlign: TextAlign.center,
@@ -27,15 +33,12 @@ class DeletePage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(
-                  height: AppSize.s50
+                  height: AppSize.s25
               ),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
-                  if(state is DeleteAllErrorState){
+                  if(state is DeleteBaseErrorState){
                     error(context, state.failure.massage, state.failure.code);
-                  }
-                  if(state is DeleteAllLoadingState){
-                    loading(context);
                   }
                   if(state is EditStatusSErrorState){
                     error(context, state.failure.massage, state.failure.code);
@@ -45,12 +48,12 @@ class DeletePage extends StatelessWidget {
                     success(context);
                     Navigator.pushNamedAndRemoveUntil(context, Routes.syncData,(route) => false,);
                   }
-                  if(state is DeleteAllState){
+                  if(state is DeleteBaseState){
                     BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(1));
                   }
                 },
                 child: ElevatedButton(onPressed: (){
-                  BlocProvider.of<AsyncInBloc>(context).add(DeleteAllEvent());
+                  BlocProvider.of<AsyncInBloc>(context).add(DeleteBaseEvent());
                 },
                     child: Text(
                       " حذف البيانات ",

@@ -9,7 +9,11 @@ class AsyncDataEvent extends AsyncEvent{
 
 
 }
+class DeleteAllEvent extends AsyncEvent{
+  @override
+  List<Object?> get props => [];
 
+}
 
 class EditEvent extends AsyncEvent{
   final int num;

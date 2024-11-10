@@ -102,6 +102,8 @@ class TokenResponse {
   String? repId;
   @JsonKey(name: "otherPlanId")
   String? otherPlanId;
+  @JsonKey(name: "samplesCount")
+  String? samplesCount;
   @JsonKey(name: "activePlanId")
   String? activePlanId;
   @JsonKey(name: "otherPlanStatus")
@@ -533,8 +535,14 @@ class DoctorResponse {
   String? rate;
       @JsonKey(name: "spTitle")
   String? spTitle;
+  @JsonKey(name: "workHours")
+  String? workHours;
 
-  DoctorResponse(this.id,this.title,this.placeId,this.address,this.spId,this.placeTitle,this.visits,this.note,this.rate,this.spTitle);
+  DoctorResponse(
+
+      this.id,this.title,this.placeId,this.address,this.spId,this.placeTitle,this.visits,this.note,this.rate,this.spTitle,
+      this.workHours
+      );
   // from json
   factory DoctorResponse.fromJson(Map<String,dynamic>json)=>
       _$DoctorResponseFromJson(json);

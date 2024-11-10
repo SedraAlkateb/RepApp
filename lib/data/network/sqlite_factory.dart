@@ -38,8 +38,10 @@ class DatabaseHelper {
     otherPlanId INTEGER NOT NULL,
     activePlanId INTEGER NOT NULL,
     otherStatus INTEGER NOT NULL,
+    flag INTEGER NOT NULL DEFAULT 0,
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
+    samplesCount INTEGER NOT NULL,
     isLogin INTEGER NOT NULL DEFAULT 0,
     endDate TEXT NOT NULL,
     startDate TEXT NOT NULL,
@@ -81,8 +83,8 @@ class DatabaseHelper {
     placeId INTEGER NOT NULL,
     placeTitle TEXT NOT NULL, 
     visits INTEGER NOT NULL,
-    visited INTEGER NOT NULL,
     spTitle TEXT NOT NULL,
+    workHours TEXT NOT NULL,
     note TEXT NOT NULL,
     rate TEXT NOT NULL,
     spId INTEGER NOT NULL,
@@ -118,7 +120,6 @@ class DatabaseHelper {
     totalDocs INTEGER NOT NULL,
     rate TEXT NOT NULL,
     visit INTEGER NOT NULL,
-    visited INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (hospitalId) REFERENCES hospital(id),
     FOREIGN KEY (spId) REFERENCES specialization(id)
@@ -210,13 +211,6 @@ class DatabaseHelper {
     flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (visitId) REFERENCES visit_hospital(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
-    )
- ''');
-    await db.execute('''
-     CREATE TABLE visited_doctor(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    doctorId INTEGER NOT NULL,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id)
     )
  ''');
   }

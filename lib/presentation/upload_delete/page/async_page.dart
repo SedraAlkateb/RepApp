@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -10,20 +12,22 @@ class AsyncPage extends StatelessWidget {
   const AsyncPage({super.key});
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage(ImageAssets.upload), context);
     return Scaffold(
-      body:   Padding(
+      body:    Padding(
         padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 200),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                ImageAssets.domina,width: 200,
-              ),
+              SizedBox(
+                  height: 400,
+                  width: 400,
+                  child: Image.asset(ImageAssets.upload,)),
               Text(
                 textAlign: TextAlign.center,
-                "تأكد من اتصالك بالانترنت واضغط على زر رفع البيانات ",
+                "تأكد من اتصالك بالإنترنت واضغط على زر رفع البيانات ",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(
@@ -50,9 +54,6 @@ class AsyncPage extends StatelessWidget {
                   if(state is EditStatusState){
                     success(context);
                     Navigator.pushReplacementNamed(context, Routes.delete,);
-                  }
-                  if(state is SyncData1LoadingState){
-                    loading(context);
                   }
                 },
                 child: ElevatedButton(onPressed: (){

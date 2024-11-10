@@ -13,14 +13,20 @@ class AsyncLogoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 200),
+        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                ImageAssets.domina,width: 200,
+              SizedBox(
+                height: 400,
+                width: 400,
+                child: Image.asset(
+                  ImageAssets.upload,
+                  height: 500,
+
+                ),
               ),
               Text(
                 textAlign: TextAlign.center,
@@ -35,9 +41,7 @@ class AsyncLogoutPage extends StatelessWidget {
                   if(state is SyncData1ErrorState){
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if(state is SyncData1LoadingState){
-                    loading(context);
-                  }
+
                   if(state is SyncData1State){
                     BlocProvider.of<AsyncInBloc>(context).add(UpdateFlagEvent());
                   }

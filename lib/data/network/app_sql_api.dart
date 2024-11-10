@@ -1,5 +1,4 @@
-// ignore_for_file: deprecated_member_use
-
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,8 +14,8 @@ abstract class AppSqlApiAbs {
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
       List<PlanBrandModel> planBrands,
-      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
-      );
+      VisitHospitalBase visitHospital,
+      VisitDoctorBase visitDoctor);
 
   /////////////////////////////////////////////////////////////////////////////////
   insertBrands(List<BrandModel> brands);
@@ -127,11 +126,11 @@ class AppSqlApi extends AppSqlApiAbs {
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
       List<PlanBrandModel> planBrands,
-      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
-      ) async {
+      VisitHospitalBase visitHospital,
+      VisitDoctorBase visitDoctor) async {
     try {
       Database? mydb = await databaseHelper.database;
-      await mydb.transaction((txn)async{
+      await mydb.transaction((txn) async {
         Batch batch = txn.batch();
         await txn.execute("PRAGMA foreign_keys = OFF");
         for (var place in places) {
@@ -223,7 +222,6 @@ class AppSqlApi extends AppSqlApiAbs {
     }
   }
 
-
   insertHospitalSp(List<HospitalSpModel> hospitalSps) async {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
@@ -310,19 +308,35 @@ class AppSqlApi extends AppSqlApiAbs {
     );
   }
 
+  Future<void> editIsPlan(int repId, int flag) async {
+    final mydb = await databaseHelper.database;
+    await mydb.update(
+      'rep',
+      {'flag': flag},
+      where: 'repId = ?',
+      whereArgs: [repId],
+    );
+  }
+
+  //////////TODO
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
     final tables = [
-      // يجب أن تحذف البيانات من الجداول التابعة أولًا
-      'hospitalSp',
+      'visit_brand_pharmacy',
+      'visit_brand_doctor',
+      'visit_brand_hospital',
+      'visit_doctor',
+      'visit_hospital',
+      'visit_pharmacy',
       'brandSp',
+      'planBrand',
+      'hospitalSp',
       'doctor',
       'pharmacy',
       'specialization',
       'hospital',
       'place',
       'brand',
-      'planBrand '
     ];
 
     Batch batch = db.batch();
@@ -365,8 +379,10 @@ class AppSqlApi extends AppSqlApiAbs {
   Future<LoginModel?> getRep() async {
     final db = await databaseHelper.database;
     Batch batch = db.batch();
-    batch.rawQuery(
-        'SELECT token, repId, activePlanId,otherPlanId, otherStatus , name, percentage, isLogin,  startDate , endDate, otherStartDate, otherEndDate  FROM rep LIMIT 1');
+    batch.rawQuery('SELECT token, repId, activePlanId,otherPlanId, '
+        'otherStatus , name, percentage, isLogin, '
+        ' startDate , endDate, otherStartDate,'
+        ' otherEndDate ,samplesCount FROM rep LIMIT 1');
     List<dynamic> results = await batch.commit();
     if (results.isNotEmpty && results[0].isNotEmpty) {
       Map<String, dynamic> firstRow = results[0][0];
@@ -400,28 +416,39 @@ class AppSqlApi extends AppSqlApiAbs {
     return pharmacies;
   }
 
-  Future<List<DoctorModel>> getDoctorByPlaceId(int placeId) async {
-    final db = await databaseHelper.database;
-    List<Map<String, dynamic>> result = await db.query(
-      'doctor',
-      where: 'placeId = ? AND visited != ?',
-      whereArgs: [placeId, '0'],
-    );
-    List<DoctorModel> doctors =
-        result.map((map) => DoctorModel.fromMap(map)).toList();
-    return doctors;
-  }
-
   Future<List<HospitalModel>> getHospitalByPlaceId(int placeId) async {
     final db = await databaseHelper.database;
-    List<Map<String, dynamic>> result = await db.query(
-      'hospital',
-      where: 'placeId = ?',
-      whereArgs: [placeId],
-    );
+    List<Map<String, dynamic>> result = await db.rawQuery('''
+    SELECT hospital.*, 
+           SUM(CASE WHEN visit_hospital.hospitalSpId IS NOT NULL THEN 1 ELSE 0 END) as total_visits
+    FROM hospital
+    LEFT JOIN hospitalSp ON hospital.id = hospitalSp.hospitalId
+    LEFT JOIN visit_hospital ON hospitalSp.id = visit_hospital.hospitalSpId
+    WHERE hospital.placeId = ?
+    GROUP BY hospital.id
+    HAVING total_visits < SUM(hospitalSp.visit)
+  ''', [placeId]);
     List<HospitalModel> hospitals =
         result.map((map) => HospitalModel.fromMap(map)).toList();
     return hospitals;
+  }
+
+  Future<List<DoctorModel>> getDoctorByPlaceId(int placeId) async {
+    final db = await databaseHelper.database;
+
+    List<Map<String, dynamic>> result = await db.rawQuery('''
+    SELECT doctor.*, 
+           COUNT(visit_doctor.doctorId) as visited
+    FROM doctor
+    LEFT JOIN visit_doctor ON doctor.id = visit_doctor.doctorId
+    WHERE doctor.placeId = ?
+    GROUP BY doctor.id
+    HAVING visited < doctor.visits
+  ''', [placeId]);
+
+    List<DoctorModel> doctors =
+        result.map((map) => DoctorModel.fromMap(map)).toList();
+    return doctors;
   }
 
   insertdoctor(List<DoctorModel> doctors) async {
@@ -557,9 +584,9 @@ class AppSqlApi extends AppSqlApiAbs {
       doctor.placeId as doctor_placeId,
       doctor.placeTitle as doctor_placeTitle,
       doctor.visits as doctor_visits,
-      doctor.visited as doctor_visited,
       doctor.spId as doctor_spId,
-      doctor.spTitle as doctor_spTitle
+      doctor.spTitle as doctor_spTitle,
+      doctor.workHours as workHours
     FROM visit_doctor
     JOIN doctor ON visit_doctor.doctorId = doctor.id
     ''');
@@ -614,12 +641,11 @@ class AppSqlApi extends AppSqlApiAbs {
   insertVisitDoctor(VisitDoctorModel visitDoctorModel) async {
     Database? mydb = await databaseHelper.database;
 
-    // جلب جميع الزيارات الخاصة بالطبيب خلال الثلاثة أيام الماضية
     final List<Map<String, dynamic>> visits = await mydb.rawQuery(
       '''
-    SELECT * FROM visit_doctor 
-    WHERE doctorId = ? 
-    AND data >= date(?, '-5 days') 
+    SELECT * FROM visit_doctor
+    WHERE doctorId = ?
+    AND data >= date(?, '-5 days')
     AND data < ?
     ''',
       [visitDoctorModel.doctorId, visitDoctorModel.data, visitDoctorModel.data],
@@ -628,16 +654,6 @@ class AppSqlApi extends AppSqlApiAbs {
     // إذا كانت القائمة فارغة، أضف الزيارة وقم بتنقيص عدد الزيارات
     if (visits.isEmpty) {
       await mydb.transaction((txn) async {
-        // تقليل عدد الزيارات بمقدار 1
-        await txn.rawUpdate(
-          '''
-        UPDATE doctor 
-        SET visited = visited - 1 
-        WHERE id = ?
-        ''',
-          [visitDoctorModel.doctorId],
-        );
-
         await txn.insert(
           'visit_doctor',
           visitDoctorModel.toMap1(),
@@ -646,7 +662,7 @@ class AppSqlApi extends AppSqlApiAbs {
       });
     } else {
       throw FormatException(
-          'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
+          'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الخمسة أيام الماضية.');
     }
   }
 
@@ -697,14 +713,6 @@ class AppSqlApi extends AppSqlApiAbs {
           ],
         );
         if (visits.isEmpty) {
-          await txn.rawUpdate(
-            '''
-          UPDATE doctor 
-          SET visited = visited - 1 
-          WHERE id = ?
-          ''',
-            [visitDoctorModel.doctorId],
-          );
           int visitId = await txn.insert(
             'visit_doctor',
             visitDoctorModel.toMap1(),
@@ -720,7 +728,7 @@ class AppSqlApi extends AppSqlApiAbs {
           }
         } else {
           throw FormatException(
-              'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الثلاثة أيام الماضية.');
+              'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الخمسة أيام الماضية.');
         }
       } catch (e) {
         print('Error inserting visit and brands: $e');
@@ -735,12 +743,11 @@ class AppSqlApi extends AppSqlApiAbs {
       int hos,
       int spec) async {
     final mydb = await databaseHelper.database;
-
     await mydb.transaction((txn) async {
       try {
         // جلب hospitalSp حسب hospitalId و spId
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
-      SELECT id, visited FROM hospitalSp 
+      SELECT id FROM hospitalSp 
       WHERE hospitalId = ? AND spId = ? 
       ''', [hos, spec]);
         if (result.isEmpty) {
@@ -748,7 +755,6 @@ class AppSqlApi extends AppSqlApiAbs {
               'No hospitalSp found for the given hospitalId and spId.');
         }
         int hospitalSpId = result.first['id'];
-        int currentVisits = result.first['visited'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
         final List<Map<String, dynamic>> visits = await txn.rawQuery('''
@@ -759,14 +765,6 @@ class AppSqlApi extends AppSqlApiAbs {
       ''', [hospitalSpId, visitHospitalModel.data, visitHospitalModel.data]);
 
         if (visits.isEmpty) {
-          if (currentVisits > 0) {
-            await txn.rawUpdate('''
-          UPDATE hospitalSp 
-          SET visited = visited - 1 
-          WHERE id = ?
-          ''', [hospitalSpId]);
-          }
-
           int visitId = await txn.insert(
             'visit_hospital',
             visitHospitalModel.toMap1(),
@@ -784,7 +782,7 @@ class AppSqlApi extends AppSqlApiAbs {
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
           throw FormatException(
-              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال خمسة أيام الماضية.');
+              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال اليومين  الماضيين.');
         }
       } catch (e) {
         print('Error inserting visit and brands: $e');
@@ -799,7 +797,7 @@ class AppSqlApi extends AppSqlApiAbs {
     await mydb.transaction((txn) async {
       try {
         final List<Map<String, dynamic>> result = await txn.rawQuery('''
-      SELECT id, visited FROM hospitalSp 
+      SELECT id FROM hospitalSp 
       WHERE hospitalId = ? AND spId = ?
       ''', [hos, spec]);
         if (result.isEmpty) {
@@ -807,7 +805,6 @@ class AppSqlApi extends AppSqlApiAbs {
               'No hospitalSp found for the given hospitalId and spId.');
         }
         int hospitalSpId = result.first['id'];
-        int currentVisits = result.first['visited'];
         visitHospitalModel.hospitalSpId = hospitalSpId;
 
         // جلب جميع الزيارات الخاصة بالمشفى خلال الثلاثة أيام الماضية
@@ -820,15 +817,6 @@ class AppSqlApi extends AppSqlApiAbs {
 
         // إذا لم تكن هناك زيارات خلال الثلاثة أيام الماضية، قم بإدراج الزيارة الجديدة
         if (visits.isEmpty) {
-          // تنقيص عدد الزيارات بمقدار 1 إذا كانت أكبر من 0
-          if (currentVisits > 0) {
-            await txn.rawUpdate('''
-          UPDATE hospitalSp 
-          SET visited = visited - 1 
-          WHERE id = ?
-          ''', [hospitalSpId]);
-          }
-
           await txn.insert(
             'visit_hospital',
             visitHospitalModel.toMap1(),
@@ -837,7 +825,7 @@ class AppSqlApi extends AppSqlApiAbs {
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
           throw FormatException(
-              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال خمسة أيام الماضية.');
+              'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال اليومين  الماضيين.');
         }
       } catch (e) {
         print('Error inserting visit: $e');
@@ -905,12 +893,15 @@ class AppSqlApi extends AppSqlApiAbs {
 
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
     SELECT hospitalSp.*, 
-           specialization.id as specialization_id,
-           specialization.title as specialization_title
+           specialization.id AS specialization_id,
+           specialization.title AS specialization_title,
+           COUNT(visit_hospital.id) AS visited
     FROM specialization
     JOIN hospitalSp ON hospitalSp.spId = specialization.id
+    LEFT JOIN visit_hospital ON visit_hospital.hospitalSpId = hospitalSp.id
     WHERE hospitalSp.hospitalId = ?
-    AND hospitalSp.visited > 0
+    GROUP BY specialization.id, hospitalSp.id
+    HAVING visited < hospitalSp.visit
   ''', [hospitalId]);
     return List.generate(maps.length, (i) {
       SpecDModel specModel = SpecDModel.fromMap2(maps[i]);
@@ -1112,7 +1103,6 @@ class AppSqlApi extends AppSqlApiAbs {
       hospitalSp.rate,
       hospitalSp.totalDocs,
       hospitalSp.visit,
-       hospitalSp.visited,
       hospitalSp.flag,
       specialization.title as titleSp 
     FROM hospital
@@ -1162,8 +1152,7 @@ class AppSqlApi extends AppSqlApiAbs {
             row['brand_title'] as String,
             row['brand_phTitle'] as String,
             0,
-            row['brand_sampleCost']
-        );
+            row['brand_sampleCost']);
         brandMap[brandId] = BrandSpPlanModel(
           brandModel,
           [],
@@ -1176,16 +1165,16 @@ class AppSqlApi extends AppSqlApiAbs {
                 row['specialization_title'] as String,
                 row['brandType'],
                 row['specialization_id'],
-              row['sumDoctor'],
-              row['sumHospital']
-            ),
+                row['sumDoctor'],
+                row['sumHospital']),
           );
     }
     return brandMap.values.toList();
   }
-  ////////////
 
-  Future<List<OtherBrandSpPlanModel>> otherPlanBrandByRepPlanId(int repPlanId) async {
+  ////////////
+  Future<List<OtherBrandSpPlanModel>> otherPlanBrandByRepPlanId(
+      int repPlanId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
     SELECT  
@@ -1215,40 +1204,40 @@ class AppSqlApi extends AppSqlApiAbs {
     for (var row in maps) {
       int specializationId = row['specialization_id'] as int;
       if (!SpMap.containsKey(specializationId)) {
-        SpecDModel   spPlan = SpecDModel(
-          specializationId,
-          row['specialization_title'],
-          row['sumDoctor'],
-          row['sumHospital']
-        );
+        SpecDModel spPlan = SpecDModel(specializationId,
+            row['specialization_title'], row['sumDoctor'], row['sumHospital']);
         SpMap[specializationId] = OtherBrandSpPlanModel(
-          spPlan,
-          [],
-         ( spPlan.sumDoctor+spPlan.sumHospital)*2,
-         ( ( ( spPlan.sumDoctor+spPlan.sumHospital)*2)+ (( spPlan.sumDoctor+spPlan.sumHospital)/4)).toInt()
-        );
+            spPlan,
+            [],
+            (spPlan.sumDoctor + spPlan.sumHospital) * UserInfo.samplesCount,
+            (((spPlan.sumDoctor + spPlan.sumHospital) * UserInfo.samplesCount) +
+                    ((spPlan.sumDoctor + spPlan.sumHospital) / 4))
+                .toInt());
       }
       SpMap[specializationId]!.brands.add(
-        OtherBrandModel(
-            row['brand_id'] ,
-            row['brand_title'] as String,
-            row['brand_phTitle'] as String,
-            0,
-            row['brand_sampleCost'],
-            row['plan_id'] ,
-            int.parse( row['amount'] ),
-            row['brandType']
-        ),
-      );
+            OtherBrandModel(
+                row['brand_id'],
+                row['brand_title'] as String,
+                row['brand_phTitle'] as String,
+                0,
+                row['brand_sampleCost'],
+                row['plan_id'],
+                int.parse(row['amount']),
+                row['brandType']),
+          );
     }
     return SpMap.values.toList();
   }
 
-
   updateRep(
-      int repId, int otherPlanId, int activePlanId, int otherStatus,
-      String startDate,String endDate,String otherStartDate,String otherEndDate
-      ) async {
+      int repId,
+      int otherPlanId,
+      int activePlanId,
+      int otherStatus,
+      String startDate,
+      String endDate,
+      String otherStartDate,
+      String otherEndDate) async {
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
@@ -1256,15 +1245,17 @@ class AppSqlApi extends AppSqlApiAbs {
         'otherPlanId': otherPlanId,
         'activePlanId': activePlanId,
         'otherStatus': otherStatus,
-        'startDate':startDate,
-        'endDate':endDate,
-        'otherStartDate':otherStartDate,
-        'otherEndDate':otherEndDate
+        'startDate': startDate,
+        'endDate': endDate,
+        'otherStartDate': otherStartDate,
+        'otherEndDate': otherEndDate,
+        'flag': otherStatus == 0 ? 0 : 1
       },
       where: 'repId = ?',
       whereArgs: [repId],
     );
   }
+
   updateAmounts(List<OtherBrandSpPlanModel> planBrands) async {
     Database? mydb = await databaseHelper.database;
     var batch = mydb.batch();
@@ -1298,6 +1289,7 @@ class AppSqlApi extends AppSqlApiAbs {
     await mydb.update(
       'rep',
       {
+        'flag': 0,
         'otherStatus': status,
       },
       where: 'repId = ?',

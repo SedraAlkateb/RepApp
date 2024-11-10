@@ -29,6 +29,7 @@ class _VisitDoctorState extends State<VisitDoctor>
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
+    BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     super.initState();
   }
@@ -130,7 +131,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                             ),
                             Text(
                               textAlign: TextAlign.center,
-                              " الاختصاص ${(widget.doctorModel.spTitle)}",
+                              " الإختصاص ${(widget.doctorModel.spTitle)}",
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(
@@ -140,7 +141,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                               children: [
                                 Text(
                                   textAlign: TextAlign.center,
-                                "اجمالي الزيارات: ${widget.doctorModel.visits} ",
+                                "إجمالي الزيارات: ${widget.doctorModel.visits} ",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
@@ -149,7 +150,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                 ),
                                 Text(
                                   textAlign: TextAlign.center,
-                                  "  تمت الزياراة: ${(widget.doctorModel.visits - widget.doctorModel.visited)}",
+                                  "  تمت الزياراة: ${(widget.doctorModel.visited??0)}",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),

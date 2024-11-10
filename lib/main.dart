@@ -22,8 +22,10 @@ Future<int?> sss()async{
       UserInfo.token=data.token;
       UserInfo.startDate=data.startDate;
       UserInfo.endDate=data.endDate;
+      UserInfo.endDate=data.endDate;
       UserInfo.otherStartDate=data.otherStartDate;
       UserInfo.otherEndDate=data.otherEndDate;
+      UserInfo.samplesCount=data.samplesCount;
     }else {
       UserInfo.isLogging=data?.isLogin??0;
     }
@@ -31,7 +33,6 @@ Future<int?> sss()async{
   });
   return null;
 }
-
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();

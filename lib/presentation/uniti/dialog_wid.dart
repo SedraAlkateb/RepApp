@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DialogFilter extends StatelessWidget {
-  DialogFilter({super.key, required this.text,required this.noteText});
+  DialogFilter({super.key, required this.text});
   final TextEditingController numController = TextEditingController();
   final formKey = new GlobalKey<FormState>();
   final String text;
-  final String noteText;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -52,6 +52,7 @@ class DialogFilter extends StatelessWidget {
                                 style: const TextStyle(fontSize: 20)),
                           ),
                           TextFormField(
+                            keyboardType: TextInputType.number,
                             validator: (val) =>
                                 val==null? "حقل الاسم مطلوب " : null,
                             controller: numController,
@@ -68,7 +69,7 @@ class DialogFilter extends StatelessWidget {
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
                                  BlocProvider.of<VisitPlaceBloc>(context).add(SelectNumBrandAddEvent
-                                   ("${noteText} : ${numController.text} \n"));
+                                   (numController.text));
                                   Navigator.pop(context);
                                 }
                               },

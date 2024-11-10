@@ -36,7 +36,6 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (_) => instance<AuthBloc>()),
         BlocProvider(create: (_) => instance<AsyncInBloc>()),
-
         BlocProvider<PharmacyBloc>(
           create: (context) {
             final bloc = instance<PharmacyBloc>();
@@ -48,7 +47,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) {
             final bloc = instance<VisitPlaceBloc>();
             bloc.add(BrandFlagEvent());
-
+            bloc.add(BrandAnyFlagEvent());
             return bloc;
           },
         ),
@@ -116,9 +115,13 @@ class _MyAppState extends State<MyApp> {
         },
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: UserInfo.isLogging == 0 ? Routes.login  : UserInfo.isLogging == 1 ?
-        Routes.syncData:UserInfo.isLogging ==4?
-        (Routes.syncData): Routes.places,
+        initialRoute: UserInfo.isLogging == 0
+            ? Routes.login
+            : UserInfo.isLogging == 1
+                ? Routes.syncData
+                : UserInfo.isLogging == 4
+                    ? (Routes.syncData)
+                    : Routes.places,
         theme: getApplicationTheme(),
       ),
     );

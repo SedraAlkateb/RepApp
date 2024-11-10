@@ -115,9 +115,10 @@ abstract class RepositorySql {
       List<OtherBrandSpPlanModel> planBrands);
   Future<Either<Failure, Null>> updateSpecifiedFlagsToOne(bool hos, bool doc);
   Future<Either<Failure, Null>> updateOtherStatus(
-      int status, int repId, List<OtherBrandSpPlanModel> planBrands);
+      int repId , int status ,List<OtherBrandSpPlanModel> planBrands);
   Future<Either<Failure, List<BrandSpPlanModel>>> planBrandByRepPlanId(
       int repPlanId);
   Future<Either<Failure, List<OtherBrandSpPlanModel>>>
       otherPlanBrandByRepPlanId(int repPlanId);
+  Future<Either<Failure, Null>> editIsPlan(int repId, int flag) ;
 }

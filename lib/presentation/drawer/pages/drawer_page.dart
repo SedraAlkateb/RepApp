@@ -243,12 +243,12 @@ class DrawerPage extends StatelessWidget {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
                   context,
-                    Routes.asyncIn
+                  Routes.asyncIn,
                 );
               });
             },
-            
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
@@ -269,8 +269,7 @@ class DrawerPage extends StatelessWidget {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
                   context,
-                  UserInfo.isLogging==3?Routes.deleteLogout:
-                  Routes.logout,
+                    Routes.logout
                 );
               });
             },

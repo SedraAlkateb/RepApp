@@ -2,9 +2,9 @@ import 'package:domina_app/presentation/common/state_renderer/state_renderer.dar
 import 'package:domina_app/presentation/common/state_renderer/state_renderer_imp.dart';
 import 'package:flutter/cupertino.dart';
 
-void loading(BuildContext context) {
+void loading(BuildContext context, {String? text}) {
   LoadingState(stateRendererType: StateRendererType.popupLoadingState)
-      .showPopup(context, StateRendererType.popupLoadingState, "loading");
+      .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
 }
 
 void loadingFullScreen(BuildContext context) {
