@@ -156,13 +156,15 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           }
           visitHospital = visitHospitalFailureOrSuccess as VisitHospitalBase;
           emit(LoadingState(3));
-          final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
-          final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
-          if (planBrandsFailureOrSuccess is Failure) {
-            emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
-            return false;
-          }
-          planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+
+         final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
+         final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
+         if (planBrandsFailureOrSuccess is Failure) {
+           emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
+           return false;
+         }
+         planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+
           emit(LoadingState(4));
           try{
             final doctorsResult = await allDoctorUsecase.execute(UserInfo.repId);

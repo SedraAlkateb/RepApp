@@ -26,6 +26,7 @@ Future<int?> sss()async{
       UserInfo.otherStartDate=data.otherStartDate;
       UserInfo.otherEndDate=data.otherEndDate;
       UserInfo.samplesCount=data.samplesCount;
+      UserInfo.flag=data.flag;
     }else {
       UserInfo.isLogging=data?.isLogin??0;
     }

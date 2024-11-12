@@ -200,6 +200,7 @@ extension LoginResponseMapper on LoginResponse? {
       1,
       this?.data?.startDate ?? Constants.empty,
       this?.data?.endDate ?? Constants.empty,
+      0,
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );

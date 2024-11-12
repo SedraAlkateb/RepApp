@@ -194,9 +194,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
        emit(SyncData1ErrorState(failure: planBrandsFailureOrSuccess));
        return false;}
      planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
-
    }
-
       return true;
     } catch (error) {
       emit(SyncData1ErrorState(failure: Failure(-9, error.toString())));
@@ -236,7 +234,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         }
         print("Visit Hospital data sent successfully.");
       }
-
     if(UserInfo.otherstatus==1&&UserInfo.flag==0){
 
       final planBrandResult = await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
@@ -247,7 +244,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       }
       print("Plan Brand data sent successfully.");
     }
-      final planBrandFlagResult =   await isPlanSqlUsecase.execute(UserInfo.repId,UserInfo.flag);;
+      final planBrandFlagResult =   await isPlanSqlUsecase.execute(UserInfo.repId,1);;
       final planBrandFlagFailureOrSuccess = planBrandFlagResult.fold((failure) => failure, (data) => data);
       if (planBrandFlagFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: planBrandFlagFailureOrSuccess));

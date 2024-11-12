@@ -889,6 +889,7 @@ class LoginModel {
   int isLogin;
   String endDate;
   String startDate;
+  int flag;
   String? otherStartDate;
   String? otherEndDate;
   LoginModel(
@@ -903,6 +904,7 @@ class LoginModel {
       this.isLogin,
       this.startDate,
       this.endDate,
+      this.flag,
       {this.otherStartDate,
       this.otherEndDate});
   Map<String, dynamic> toMap() {
@@ -918,6 +920,7 @@ class LoginModel {
       'isLogin': 1,
       'endDate': endDate,
       'startDate': startDate,
+      'flag':flag,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
     };
@@ -936,6 +939,7 @@ class LoginModel {
       map['isLogin'],
       map['endDate'] ?? "",
       map['startDate'] ?? "",
+      map['flag'],
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );

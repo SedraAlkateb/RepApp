@@ -10,8 +10,6 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../app/user_info.dart';
-
 class SpecPlanPage extends StatelessWidget {
   SpecPlanPage({super.key});
   @override

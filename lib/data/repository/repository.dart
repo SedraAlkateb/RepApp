@@ -49,7 +49,7 @@ class RepositoryImp implements Repository {
         } else {
           return Left(Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT));
-        }
+                                                                                                           }
       } else {
         return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
       }
