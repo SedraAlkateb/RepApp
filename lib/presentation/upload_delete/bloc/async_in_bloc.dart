@@ -100,7 +100,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         });
       }
       if (event is Async1DataEvent) {
-
+        emit(SyncData1LoadingState());
         bool b = await getData();
         if (b) {
           await setData();

@@ -573,6 +573,7 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_doctor.additaion as visit_doctor_additaion,
        visit_doctor.target  as visit_doctor_target,
       visit_doctor.doctorId as visit_doctor_doctorId,
+       visit_doctor.flag,
       doctor.id as doctor_id, 
       doctor.title as doctor_title, 
       doctor.address as doctor_address,
@@ -603,7 +604,8 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_hospital.kaswn as visit_hospital_kaswn, 
       visit_hospital.science as visit_hospital_science, 
       visit_hospital.additaion as visit_hospital_additaion,
-       visit_hospital.target ,
+      visit_hospital.target ,
+      visit_hospital.flag, 
       visit_hospital.hospitalSpId as visit_hospital_hospitalSpId,
       
       hospital.id as hospital_id, 

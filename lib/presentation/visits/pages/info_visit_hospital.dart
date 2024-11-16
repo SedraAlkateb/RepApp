@@ -32,6 +32,14 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
     super.initState();
   }
   @override
+  void dispose() {
+    _noteController.dispose();
+    _issueController.dispose();
+    _noteeController.dispose();
+    _targetController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
 print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.visitHospitalModel.hospitalSpId}s${widget.hospitalModel.specModel.id}h${widget.hospitalModel.hospitalModel.id}");
     return Scaffold(
@@ -116,7 +124,8 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                       BoxTextField(
                         keyboardType: TextInputType.text,
                         prefixIcon: null,
-                        maxLines: 4, enabled: true,
+                        maxLines: 4,
+                        enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "الحقل مطلوب";
@@ -146,7 +155,7 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
-                    enabled: true,
+                    enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
                   ),
 
                   _issueController .text.isNotEmpty?
@@ -164,7 +173,7 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                       validator: (value) {
                         return null;
                       },
-                      enabled: true,
+                      enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
                       controller: _issueController,
                       obscureText: false,
                       minLines: 3,
@@ -192,7 +201,7 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                         obscureText: false,
                         minLines: 3,
                         inputFormatters: [],
-                        enabled: true,
+                        enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
                       ),
                     ],
                   ):SizedBox(),
@@ -289,21 +298,26 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                           : SizedBox();
                     },
                   ),
-              /*
+
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if(state is UpdateVisitHospitalState){
                         Navigator.pop(context);
+                        BlocProvider.of<VisitBloc>(context).add(VisitHospitalEvent());
                       }
                     },
                     child:
                     ElevatedButton( onPressed: () {
+                      widget.hospitalModel.visitHospitalModel.flag!=0?
                       BlocProvider.of<VisitBloc>(context).add(
                           UpdateVisitHospitalEvent
-                            (kas: _issueController.text,sc: _noteController.text, id: widget.hospitalModel .visitHospitalModel.id));
+                            (kas: _issueController.text
+                              ,sc: _noteController.text,
+                              id: widget.hospitalModel .visitHospitalModel.id,
+                              target: _targetController.text)):null;
                     }, child: Text("تعديل")),
                   )
-               */
+
                 ],
               ),
             )
