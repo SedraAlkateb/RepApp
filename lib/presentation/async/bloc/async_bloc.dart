@@ -167,6 +167,12 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
 
           emit(LoadingState(4));
           try{
+
+
+
+
+
+
             final doctorsResult = await allDoctorUsecase.execute(UserInfo.repId);
             final doctorsFailureOrSuccess = doctorsResult.fold((failure) => failure, (data) => data);
             if (doctorsFailureOrSuccess is Failure) {
