@@ -65,3 +65,9 @@ final class UpdateAmountLoadingState extends BrandPlanState {
   @override
   List<Object?> get props =>[];
 }
+final class SearchBrandState extends BrandPlanState {
+  final  List<BrandSpPlanModel> brand;
+  SearchBrandState(this.brand);
+  @override
+  List<Object?> get props =>[brand];
+}

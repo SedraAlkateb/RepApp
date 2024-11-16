@@ -17,16 +17,32 @@ class DatabaseHelper {
     _database = await _initDatabase();
     return _database!;
   }
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      // تحقق من التغييرات في البنية وفقًا لرقم الإصدار
+      if (oldVersion == 1) {
+        // مثال: إذا كنت تنتقل من الإصدار 1 إلى 2، أضف تعديلاتك هنا
+        await db.execute('''
+          ALTER TABLE rep ADD COLUMN newColumn TEXT
+        ''');
+      }
+      // إذا كنت تنتقل من إصدارات أخرى إلى الإصدار الحالي، أضف المزيد من الشروط
+    }
+
+  }
+
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database.db');
     return await openDatabase(
       path,
       version: 1,
+   //   onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
       },
+
     );
   }
 
@@ -112,7 +128,8 @@ class DatabaseHelper {
     );
     ''');
 
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE hospitalSp (
     id INTEGER PRIMARY KEY,
     hospitalId INTEGER NOT NULL,

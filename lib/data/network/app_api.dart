@@ -53,13 +53,6 @@ abstract class AppServiceClient {
   Future<AllHospitalSpBaseResponse> getAllHospitalSp(
     @Part(name: "repDet") int repDet,
   );
-  @POST("/pharmacyVisit.php")
-  Future<Message1Response> visitPharmacy(@Body() VisitPharmacyRequestBody list);
-
-  @POST("/docVisit.php")
-  Future<Message1Response> visitDoctor(@Body() VisitDoctorRequestBody list);
-  @POST("/hosVisit.php")
-  Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
   @POST("/getBrandsSp.php")
   Future<AllBrandSpBaseResponse> getBrandsSp(
     @Part(name: "repDet") int repDet,
@@ -69,26 +62,36 @@ abstract class AppServiceClient {
     @Part(name: "repPlanIdActive") int repPlanIdActive,
     @Part(name: "repPlanIdOther") int repPlanIdOther,
   );
-  @POST("/insertPlanBrands.php")
-  Future<Message1Response> repPlanBrand(@Body() RepPlanBrandBody list);
-  @POST("/checkPlanStatus.php")
-  Future<CheckBaseResponse> checkPlanBrand(
-    @Part(name: "repPlanId") int repPlanId,
-  );
-  @POST("/getPlans.php")
-  Future<LoginResponse> checkActivePlanBrand(
-    @Part(name: "repDet") int repDet,
-  );
   @POST("/getHosVisit.php")
   Future<VisitHospitalBaseResponse> getHosVisit(
       @Part(name: "repPlanId") int repPlanId,
       @Part(name: "representativeId") int representativeId,
       );
-
   @POST("/getDocVisit.php")
   Future<VisitDoctorBaseResponse> getDocVisit(
       @Part(name: "repPlanId") String repPlanId,
       @Part(name: "representativeId") String representativeId,
+      );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+  @POST("/insertPlanBrands.php")
+  Future<Message1Response> repPlanBrand(@Body() RepPlanBrandBody list);
+
+  @POST("/pharmacyVisit.php")
+  Future<Message1Response> visitPharmacy(@Body() VisitPharmacyRequestBody list);
+
+  @POST("/docVisit.php")
+  Future<Message1Response> visitDoctor(@Body() VisitDoctorRequestBody list);
+  @POST("/hosVisit.php")
+  Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
+
+//////////////////////////////////////
+  @POST("/checkPlanStatus.php")
+  Future<CheckBaseResponse> checkPlanBrand(
+      @Part(name: "repPlanId") int repPlanId,
+      );
+  @POST("/getPlans.php")
+  Future<LoginResponse> checkActivePlanBrand(
+      @Part(name: "repDet") int repDet,
       );
   // @POST("/docVisit.php")
   // Future<List<VisitDoctorRequestBody>> uploadVisitDoctor();
