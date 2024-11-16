@@ -29,8 +29,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion??"";
     _targetController.text=widget.doctorModel.visitDoctorModel.target??"";
 print( _targetController.text);
-//    DateTime parsedDate = ``DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
-    //   widget.````````````````````````````````````````````````````````````doctorModel.visitDoctorModel.data = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(parsedDate);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
     super.initState();
@@ -106,7 +104,9 @@ print( _targetController.text);
                       SizedBox(
                         height: AppSize.s8,
                       ),
-                      BoxTextField(enabled: true,
+                      BoxTextField(
+                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
+
                         keyboardType: TextInputType.text,
                         prefixIcon: null,
                         maxLines: 4,
@@ -145,7 +145,8 @@ print( _targetController.text);
                         obscureText: false,
                         minLines: 3,
                         inputFormatters: [],
-                        enabled: true,
+                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
+
                       ),
                     ],
                   ):SizedBox(),
@@ -166,7 +167,7 @@ print( _targetController.text);
                         validator: (value) {
                           return null;
                         },
-                        enabled: true,
+                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
                         controller: _issueController,
                         obscureText: false,
                         minLines: 3,
@@ -183,7 +184,7 @@ print( _targetController.text);
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       BoxTextField(
-                        enabled: true,
+                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
                         keyboardType: TextInputType.text,
                         prefixIcon: null,
                         maxLines: 4,
@@ -289,24 +290,26 @@ print( _targetController.text);
                     },
                   ),
 
-                 /*
+
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if (state is UpdateVisitDoctorState) {
                         Navigator.pop(context);
+                        BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
                       }
                     },
                     child: ElevatedButton(
                         onPressed: () {
+                          widget.doctorModel.visitDoctorModel.flag!=0?
                           BlocProvider.of<VisitBloc>(context).add(
                               UpdateVisitDoctorEvent(
                                   kas: _issueController.text,
                                   sc: _noteController.text,
-                                  id: widget.doctorModel.visitDoctorModel.id));
+                                  id: widget.doctorModel.visitDoctorModel.id)):null;
                         },
                         child: Text("تعديل")),
                   )
-                  */
+
 
                 ],
               ),

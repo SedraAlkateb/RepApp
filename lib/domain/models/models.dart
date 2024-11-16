@@ -379,7 +379,7 @@ class VisitDoctorAndDoctor {
 }
 
 class VisitHospitalAndHospital {
-  //
+
   HospitalModel hospitalModel;
   VisitHospitalModel visitHospitalModel;
   SpecDModel specModel;

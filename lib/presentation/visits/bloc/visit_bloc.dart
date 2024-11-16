@@ -5,6 +5,8 @@ import 'package:domina_app/domain/usecase/all_brands_doctor_visits_sql_usecase.d
 import 'package:domina_app/domain/usecase/all_brands_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
+import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'visit_event.dart';
@@ -18,8 +20,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
   AllBrandsHospitalVisitsSqlUsecase allBrandsHospitalVisitsSqlUsecase;
   AllVisitHospitalSqlUsecase allVisitHospitalSqlUsecase;
   // UpdatePharmacyUsecase updatePharmacyUsecase;
-  // UpdateDoctorUsecase updateDoctorUsecase;
-  // UpdateHospitalUsecase updateHospitalUsecase;
+   UpdateDoctorUsecase updateDoctorUsecase;
+   UpdateHospitalUsecase updateHospitalUsecase;
   int current = 0;
   // List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors = [];
@@ -35,8 +37,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
     this.allBrandsHospitalVisitsSqlUsecase,
     this.allVisitHospitalSqlUsecase,
     //   this.updatePharmacyUsecase,
-    //   this.updateDoctorUsecase,
-    //   this.updateHospitalUsecase
+       this.updateDoctorUsecase,
+       this.updateHospitalUsecase
   ) : super(VisitInitial()) {
     on<VisitEvent>((event, emit) async {
       // if(event is VisitPharmacyEvent)
@@ -114,6 +116,26 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       //       emit(BrandPharmacyVisitState(data));
       //     });
       // }
+
+      if(event is UpdateVisitDoctorEvent)
+      {
+        (await updateDoctorUsecase.execute(event.id,event.sc,event.kas,event.target)).fold(
+                (failure)  {print(failure.massage);
+            emit(UpdateVisitDoctorErrorState(failure: failure));},
+                (data)  async{
+              emit(UpdateVisitDoctorState());
+            });
+      }
+      if(event is UpdateVisitHospitalEvent)
+      {
+        (await updateHospitalUsecase.execute(event.id,event.sc,event.kas,event.target)).fold(
+                (failure)  {print(failure.massage);
+            emit(UpdateVisitHospitalErrorState(failure: failure));},
+                (data)  async{
+              emit(UpdateVisitHospitalState());
+
+            });
+      }
       else if (event is BrandDoctorVisitEvent) {
         (await allBrandsDoctorVisitsSqlUsecase.execute(event.visitId)).fold(
             (failure) {
