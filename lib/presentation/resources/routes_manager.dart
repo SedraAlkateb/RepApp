@@ -1,7 +1,6 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
-import 'package:domina_app/presentation/prescriptions/pages/prescriptions.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/delete_logout_page.dart';
@@ -18,6 +17,8 @@ import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
 import 'package:domina_app/presentation/visits/pages/visits_page.dart';
 import 'package:flutter/material.dart';
+
+import '../Recipes/pages/Recipes.dart';
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
@@ -36,7 +37,7 @@ class Routes {
   static const String brandPlan = "/brandPlan";
   static const String delete = "/delete";
   static const String deleteLogout = "/deleteLogout";
-    static const String Prescriptions = "/Prescriptions";
+    static const String Recipes = "/Recipes";
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -84,8 +85,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     BrandPlanPage());
       case Routes.delete:
         return MaterialPageRoute(builder: (_) =>     DeletePage());
-         case Routes.Prescriptions:
-        return MaterialPageRoute(builder: (_) =>     Prescriptions());
+         case Routes.Recipes:
+        return MaterialPageRoute(builder: (_) =>     Recipes());
         
       case Routes.deleteLogout:
         initAsyncInModule();
