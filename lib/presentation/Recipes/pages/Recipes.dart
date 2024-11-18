@@ -1,10 +1,7 @@
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_button.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
