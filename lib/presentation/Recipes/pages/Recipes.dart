@@ -1,9 +1,7 @@
-import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -49,11 +47,7 @@ class _RecipesState extends State<Recipes> {
       });
     }
   }
-@override
-  void initState() {
-    BlocProvider.of<RecipesBrandBloc>(context).add(AllRecipesEvent());
-    super.initState();
-  }
+
   @override
 
   Widget build(BuildContext context) {
