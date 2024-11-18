@@ -86,6 +86,7 @@ class RouteGenerator {
       case Routes.delete:
         return MaterialPageRoute(builder: (_) =>     DeletePage());
          case Routes.Recipes:
+           initBrandRecModule();
         return MaterialPageRoute(builder: (_) =>     Recipes());
         
       case Routes.deleteLogout:

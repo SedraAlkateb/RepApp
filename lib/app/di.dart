@@ -14,6 +14,7 @@ import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_doctor_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_hospital_visits_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_brands_sp_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sql_usecase%20.dart';
@@ -71,6 +72,7 @@ import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
+import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
@@ -267,7 +269,14 @@ Future<void> initSpecModule() async {
         () => SpecializationBloc(instance(), instance(), instance()));
   }
 }
-
+Future<void> initBrandRecModule() async {
+  if (!GetIt.I.isRegistered<AllBrandsResUsecase>()) {
+    instance.registerFactory<AllBrandsResUsecase>(
+            () => AllBrandsResUsecase(instance()));
+    instance.registerFactory<RecipesBrandBloc>(
+            () => RecipesBrandBloc(instance()));
+  }
+}
 Future<void> initAsyncInModule() async {
   if (!GetIt.I.isRegistered<GetPharmacyVisitsSqlUsecase>()) {
     instance.registerFactory<VisitHospitalUsecase>(
