@@ -26,7 +26,8 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
           children: [
             SizedBox(height: 14,),
             Card(shadowColor: ColorManager.secondaryColor7,child:
-            Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor2,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.startDate ?? 'غير متاح'} >>> ${UserInfo.endDate ?? 'غير متاح'} \n ",
+            Text(textAlign: TextAlign.center,style:
+            TextStyle(color: ColorManager.secondaryColor2,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.startDate ?? 'غير متاح'} >>> ${UserInfo.endDate ?? 'غير متاح'} \n ",
         ),
             margin: EdgeInsets.symmetric( horizontal:20),),
             Padding(
