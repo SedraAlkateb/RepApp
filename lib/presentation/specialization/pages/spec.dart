@@ -127,7 +127,6 @@ class SpecializationsPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
-
                                         ImageAssetsSpec().getImage( placeModel[index].id)
                                     ,width: 45,
                                       height: 45,
@@ -146,6 +145,7 @@ class SpecializationsPage extends StatelessWidget {
                                               fontWeight: FontWeight.w500,
                                               fontSize: 20),
                                         ),
+                                        placeModel[index].sumDoctor!=0?
                                         Text(
                                           textAlign: TextAlign.center,
                                           " زيارات الاطباء : ${placeModel[index].sumDoctor}",
@@ -153,7 +153,8 @@ class SpecializationsPage extends StatelessWidget {
                                               color: ColorManager.white,
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12),
-                                        ),
+                                        ):SizedBox(),
+                                        placeModel[index].sumHospital!=0?
                                         Text(
                                           textAlign: TextAlign.center,
                                           " زيارات المشافي : ${placeModel[index].sumHospital}",
@@ -161,7 +162,7 @@ class SpecializationsPage extends StatelessWidget {
                                               color: ColorManager.white,
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12),
-                                        ),
+                                        ):SizedBox(),
                                       ],
                                     ),
                                   ],

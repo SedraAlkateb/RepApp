@@ -37,6 +37,7 @@ class DeletePage extends StatelessWidget {
               ),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
+
                   if(state is DeleteBaseErrorState){
                     error(context, state.failure.massage, state.failure.code);
                   }

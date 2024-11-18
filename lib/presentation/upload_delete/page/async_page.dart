@@ -14,8 +14,9 @@ class AsyncPage extends StatelessWidget {
   Widget build(BuildContext context) {
     precacheImage(AssetImage(ImageAssets.upload), context);
     return Scaffold(
-      body:    Padding(
-        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 200),
+      body: Padding(
+        padding: const EdgeInsets.only(
+            left: AppPadding.p40, right: AppPadding.p40),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,45 +25,54 @@ class AsyncPage extends StatelessWidget {
               SizedBox(
                   height: 400,
                   width: 400,
-                  child: Image.asset(ImageAssets.upload,)),
+                  child: Image.asset(
+                    ImageAssets.upload,
+                  )),
               Text(
                 textAlign: TextAlign.center,
                 "تأكد من اتصالك بالإنترنت واضغط على زر رفع البيانات ",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(
-                  height: AppSize.s50
-              ),
+              SizedBox(height: AppSize.s40),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
-                  if(state is SyncData1ErrorState){
+                  if (state is SyncData1ErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if(state is SyncData1State){
-                    BlocProvider.of<AsyncInBloc>(context).add(UpdateFlagEvent());
+                  if(state is SyncData1LoadingState){
+                    loading(context);
                   }
-                  if(state is UpdateFlagErrorState){
+                  if (state is SyncData1State) {
+                    BlocProvider.of<AsyncInBloc>(context)
+                        .add(UpdateFlagEvent());
+                  }
+                  if (state is UpdateFlagErrorState) {
                     error(context, state.failure.massage, state.failure.code);
-
                   }
-                  if(state is UpdateFlagState){
+                  if (state is UpdateFlagState) {
                     BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
                   }
-                  if(state is EditStatusSErrorState){
+                  if (state is EditStatusSErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if(state is EditStatusState){
+                  if (state is EditStatusState) {
                     success(context);
-                    Navigator.pushReplacementNamed(context, Routes.delete,);
+                    Navigator.pushReplacementNamed(
+                      context,
+                      Routes.delete,
+                    );
                   }
                 },
-                child: ElevatedButton(onPressed: (){
-                  BlocProvider.of<AsyncInBloc>(context).add(Async1DataEvent());
-                },
+                child: ElevatedButton(
+                    onPressed: () {
+                      BlocProvider.of<AsyncInBloc>(context)
+                          .add(Async1DataEvent());
+                    },
                     child: Text(
                       " رفع البيانات ",
                     )),
               ),
+              SizedBox(height: AppSize.s50),
             ],
           ),
         ),

@@ -62,6 +62,33 @@ class CheckBaseResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$CheckBaseResponseToJson(this);
 }
+@JsonSerializable()
+class BrandReResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "title_en")
+  String? title_en;
+  BrandReResponse(this.id,this.title_en);
+  // from json
+  factory BrandReResponse.fromJson(Map<String,dynamic>json)=>
+      _$BrandReResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$BrandReResponseToJson(this);
+}
+@JsonSerializable()
+class AllBrandResResponse extends BaseResponse{
+  @JsonKey(name: "representativePlan_Status")
+  List<BrandReResponse>? brandRes;
+  AllBrandResResponse(this.brandRes);
+  // from json
+  factory AllBrandResResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllBrandResResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllBrandResResponseToJson(this);
+}
 
 @JsonSerializable()
 class CheckActiveResponse {
@@ -116,14 +143,15 @@ class TokenResponse {
   String? endDate;
   @JsonKey(name: "startDate")
   String? startDate;
-
+  @JsonKey(name: "recipesCount")
+  String? recipesCount;
   @JsonKey(name: "otherStartDate", includeIfNull: false)
   String? otherStartDate;
   @JsonKey(name: "otherEndDate", includeIfNull: false)
   String? otherEndDate;
   TokenResponse(this.token,this.repId,this.otherPlanId,this.activePlanId,this.otherStatus,this.name,this.percentage,
       this.startDate,this.endDate,
-
+      this.recipesCount,
       this.otherStartDate,this.otherEndDate
       );
   factory TokenResponse.fromJson(Map<String,dynamic>json)=>

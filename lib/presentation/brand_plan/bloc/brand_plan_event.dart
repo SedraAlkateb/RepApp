@@ -48,3 +48,12 @@ class SendToS extends BrandPlanEvent{
  List<Object?> get props => [];
 
 }
+class SearchBrandEvent extends BrandPlanEvent{
+  final  List<BrandSpPlanModel> brand;
+ final String value;
+  SearchBrandEvent({required this.value,required this.brand});
+ @override
+
+ List<Object?> get props => [];
+
+}

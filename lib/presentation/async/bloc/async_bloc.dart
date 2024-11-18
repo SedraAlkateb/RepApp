@@ -156,15 +156,23 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           }
           visitHospital = visitHospitalFailureOrSuccess as VisitHospitalBase;
           emit(LoadingState(3));
-          final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
-          final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
-          if (planBrandsFailureOrSuccess is Failure) {
-            emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
-            return false;
-          }
-          planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+
+         final planBrandsResult = await allPlanBrandsUsecase.execute(UserInfo.activePlanId, UserInfo.otherPlanId??0);
+         final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
+         if (planBrandsFailureOrSuccess is Failure) {
+           emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
+           return false;
+         }
+         planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+
           emit(LoadingState(4));
           try{
+
+
+
+
+
+
             final doctorsResult = await allDoctorUsecase.execute(UserInfo.repId);
             final doctorsFailureOrSuccess = doctorsResult.fold((failure) => failure, (data) => data);
             if (doctorsFailureOrSuccess is Failure) {
@@ -285,6 +293,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
          UserInfo.otherPlanId=data.otherPlanId??9;
          UserInfo.otherstatus=data.otherStatus??9;
          UserInfo.percentage=data.percentage;
+         UserInfo.recipesCount=data.recipesCount;
          UserInfo.startDate=data.startDate;
          UserInfo.endDate=data.endDate;
          UserInfo.otherStartDate=data.otherStartDate;

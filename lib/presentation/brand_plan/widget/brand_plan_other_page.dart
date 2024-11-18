@@ -24,8 +24,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
   void initState() {
     for (var brand in widget.otherBrandSpPlanModel.brands) {
       summ=summ+brand.amount;
-      BlocProvider.of<BrandPlanBloc>(context).sumS=summ;
     }
+    BlocProvider.of<BrandPlanBloc>(context).sumS=summ;
     super.initState();
   }
   @override

@@ -19,6 +19,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   AllOtherBrandPlanSqlUsecase allOtherBrandPlanSqlUsecase;
   List<OtherBrandSpPlanModel> planBrand = [];
   List<BrandSpPlanModel> planBrandActive = [];
+  List<BrandSpPlanModel> planBrandActiveSearch = [];
   int sum = 0;
   int sumS = 0;
   int current = 0;
@@ -33,6 +34,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           return false;
         }, (data) async {
           planBrandActive = data;
+          planBrandActiveSearch=data;
           emit(AllBrandPlanState(data));
         });
         if (UserInfo.otherPlanId != null) {
@@ -44,14 +46,23 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             if (data.isEmpty) {
               emit(AllBrandPlanEmptyState());
             } else {
-              planBrand = data;
-              isSum();
+              planBrand=data;
               emit(AllOtherBrandPlanState(data));
             }
           });
         }
       }
-      if (event is ChangeFieldEvent) {
+      else if (event is SearchBrandEvent) {/////////////////////////TODO
+        planBrandActiveSearch = planBrandActive .where((value) {
+          if (value.brandModel.title.contains(event.value)) {
+            return true;
+          } else {
+            return false;
+          }
+        }).toList();
+        emit(SearchBrandState(planBrandActiveSearch));
+      }
+     else if (event is ChangeFieldEvent) {
         int sum1 = sum;
         sum1 = sum1 -
             (planBrand[event.index].brands[event.indexBr].amount *
@@ -91,10 +102,18 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
       }
       if (event is SendToS) {
         emit(UpdateAmountLoadingState());
+        int x=isSum();
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        }else {
+        }
+        else if(x!=-1){
+          emit(UpdateAmountErrorState(
+              failure: Failure(5,
+                  "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x].specModel.title}")));
+        }
+
+        else {
           UserInfo.otherstatus = 1;
           (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
               .fold((failure) {
@@ -106,11 +125,16 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         }
       }
       if (event is UpdateAmountSucEvent) {
+        int x=isSum();
         emit(UpdateAmountLoadingState());
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        } else {
+        }    else if(x!=-1){
+          emit(UpdateAmountErrorState(
+              failure: Failure(5, "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x].specModel.title}")));
+        }
+        else {
           (await updateBrandPlanSqlUsecase.execute(planBrand)).fold((failure) {
             emit(UpdateAmountErrorState(failure: failure));
             return false;
@@ -121,15 +145,18 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
       }
     });
   }
-  void isSum() {
+  int isSum() {
     sum = 0;
     for (int i = 0; i < planBrand.length; i++) {
       for (int j = 0; j < planBrand[i].brands.length; j++) {
         sum = sum +
-            (planBrand[i].brands[j].amount *
-                planBrand[i].brands[j].sampleCoast);
+            (planBrand[i].brands[j].amount);
       }
+      if(sum>planBrand[i].brandm){
+        return i;
+      }
+      sum = 0;
     }
-    print(sum);
+    return -1;
   }
 }

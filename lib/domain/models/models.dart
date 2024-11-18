@@ -379,7 +379,7 @@ class VisitDoctorAndDoctor {
 }
 
 class VisitHospitalAndHospital {
-  //
+
   HospitalModel hospitalModel;
   VisitHospitalModel visitHospitalModel;
   SpecDModel specModel;
@@ -889,6 +889,8 @@ class LoginModel {
   int isLogin;
   String endDate;
   String startDate;
+  int flag;
+  int recipesCount;
   String? otherStartDate;
   String? otherEndDate;
   LoginModel(
@@ -903,6 +905,8 @@ class LoginModel {
       this.isLogin,
       this.startDate,
       this.endDate,
+      this.flag,
+      this.recipesCount,
       {this.otherStartDate,
       this.otherEndDate});
   Map<String, dynamic> toMap() {
@@ -918,6 +922,8 @@ class LoginModel {
       'isLogin': 1,
       'endDate': endDate,
       'startDate': startDate,
+      'flag':flag,
+      'recipesCount':recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
     };
@@ -936,6 +942,8 @@ class LoginModel {
       map['isLogin'],
       map['endDate'] ?? "",
       map['startDate'] ?? "",
+      map['flag'],
+      map['recipesCount'],
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );
@@ -1112,4 +1120,9 @@ class HospitalSpAllModel {
         visited: map['visited'],
         map['titleSp']);
   }
+}
+class BrandRes{
+  int id;
+  String title_en;
+  BrandRes(this.id,this.title_en);
 }

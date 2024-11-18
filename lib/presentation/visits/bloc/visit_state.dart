@@ -103,7 +103,7 @@ final class EmptyVisitHospitalState extends VisitState {
   @override
   List<Object?> get props =>[];
 }
-/*
+
 
 final class UpdateVisitDoctorErrorState extends VisitState {
   final Failure failure;
@@ -146,4 +146,4 @@ final class UpdateVisitPharmacyState extends VisitState {
   @override
   List<Object?> get props =>[];
 }
- */
+

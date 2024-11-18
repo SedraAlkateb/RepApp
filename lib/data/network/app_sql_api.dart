@@ -26,7 +26,7 @@ abstract class AppSqlApiAbs {
   insertLogin(LoginModel loginModel);
   inserthospital(List<HospitalModel> hospitals);
   insertdoctor(List<DoctorModel> doctors);
-  insertSumDoctorHospital();
+
   //////////////////////////////////Visit/////////////insert
   Future<void> insertVisitHospital(
       VisitHospitalModel visitHospitalModel, int hos, int spec);
@@ -188,21 +188,31 @@ class AppSqlApi extends AppSqlApiAbs {
       ''');
 
         final List<Map<String, dynamic>> maps1 = await txn.rawQuery('''
-        SELECT 
-          specialization.id AS specialization_id, 
-          specialization.title AS specialization_title, 
-          COALESCE(SUM(CAST(hospitalSp.visit AS INTEGER)), 0) AS sumHospital
-        FROM 
-          specialization
-        LEFT JOIN 
-          hospitalSp ON hospitalSp.spId = specialization.id
-        GROUP BY 
-          specialization.title, specialization.id
-      ''');
+  SELECT 
+      specialization.id AS specialization_id, 
+      specialization.title AS specialization_title, 
+        COALESCE(SUM(
+        CASE 
+          WHEN hospital.title LIKE '%شعب%' THEN 
+            (CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)) / 2
+          ELSE 
+            CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
+        END
+      ), 0) AS sumHospital
+  FROM 
+      specialization
+  LEFT JOIN 
+      hospitalSp ON hospitalSp.spId = specialization.id
+ LEFT JOIN 
+      hospital ON hospital.id = hospitalSp.hospitalId
+  GROUP BY 
+      specialization.title, specialization.id
+''');
+
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
-          int sumDoctor = maps[i]['sumDoctor'] as int;
-          int sumHospital = maps1[i]['sumHospital'] as int;
+          int sumDoctor = (maps[i]['sumDoctor']??0 )as int;
+          int sumHospital = (maps1[i]['sumHospital'] ??0) as int;
           await txn.update(
             'specialization',
             {
@@ -375,18 +385,13 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     await batch.commit(noResult: true);
   }
-
   Future<LoginModel?> getRep() async {
     final db = await databaseHelper.database;
-    Batch batch = db.batch();
-    batch.rawQuery('SELECT token, repId, activePlanId,otherPlanId, '
-        'otherStatus , name, percentage, isLogin, '
-        ' startDate , endDate, otherStartDate,'
-        ' otherEndDate ,samplesCount FROM rep LIMIT 1');
-    List<dynamic> results = await batch.commit();
-    if (results.isNotEmpty && results[0].isNotEmpty) {
-      Map<String, dynamic> firstRow = results[0][0];
-      return LoginModel.fromMap(firstRow);
+    List<Map<String, dynamic>> results =
+        await db.rawQuery('SELECT * FROM rep LIMIT 1');
+
+    if (results.isNotEmpty) {
+      return LoginModel.fromMap(results[0]);
     } else {
       return null;
     }
@@ -578,6 +583,7 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_doctor.additaion as visit_doctor_additaion,
        visit_doctor.target  as visit_doctor_target,
       visit_doctor.doctorId as visit_doctor_doctorId,
+       visit_doctor.flag,
       doctor.id as doctor_id, 
       doctor.title as doctor_title, 
       doctor.address as doctor_address,
@@ -608,7 +614,8 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_hospital.kaswn as visit_hospital_kaswn, 
       visit_hospital.science as visit_hospital_science, 
       visit_hospital.additaion as visit_hospital_additaion,
-       visit_hospital.target ,
+      visit_hospital.target ,
+      visit_hospital.flag, 
       visit_hospital.hospitalSpId as visit_hospital_hospitalSpId,
       
       hospital.id as hospital_id, 
@@ -1118,31 +1125,34 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
 
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
-    SELECT  
-      planBrand.id AS plan_id,
-      planBrand.repPlanId,
-      planBrand.brandType,
-      planBrand.amount,
-      brand.id AS brand_id,
-      brand.title AS brand_title,
-      brand.phTitle AS brand_phTitle,
-      brand.sampleCoast AS brand_sampleCost,
-      specializat+ion.id AS specialization_id,
-      specialization.title AS specialization_title,
-      specialization.sumDoctor AS sumDoctor,
-      specialization.sumHospital AS sumHospital
-    FROM 
-      planBrand
-    JOIN  
-      brand ON planBrand.brandId = brand.id
-    JOIN 
-      specialization ON planBrand.spId = specialization.id
-    WHERE 
-      planBrand.repPlanId = ?
-      AND planBrand.amount != 0;
-  ''', [repPlanId]);
+  SELECT  
+    planBrand.id AS plan_id,
+    planBrand.repPlanId,
+    planBrand.brandType,
+    planBrand.amount,
+    brand.id AS brand_id,
+    brand.title AS brand_title,
+    brand.phTitle AS brand_phTitle,
+    brand.sampleCoast AS brand_sampleCost,
+    specialization.id AS specialization_id,
+    specialization.title AS specialization_title,
+    specialization.sumDoctor AS sumDoctor,
+    specialization.sumHospital AS sumHospital
+  FROM 
+    planBrand
+  JOIN  
+    brand ON planBrand.brandId = brand.id
+  JOIN 
+    specialization ON planBrand.spId = specialization.id
+  WHERE 
+    planBrand.repPlanId = ?
+    AND planBrand.amount != 0
+  ORDER BY 
+    brandType ASC;
+''', [repPlanId]);
 
-    Map<int, BrandSpPlanModel> brandMap = {};
+    Map<int, BrandSpPlanModel> brandMap = {
+    };
 
     for (var row in maps) {
       int brandId = row['brand_id'] as int;
@@ -1199,11 +1209,10 @@ class AppSqlApi extends AppSqlApiAbs {
     WHERE 
       planBrand.repPlanId = ?;
   ''', [repPlanId]);
-
     Map<int, OtherBrandSpPlanModel> SpMap = {};
     for (var row in maps) {
       int specializationId = row['specialization_id'] as int;
-      if (!SpMap.containsKey(specializationId)) {
+      if (!SpMap.containsKey(specializationId)){
         SpecDModel spPlan = SpecDModel(specializationId,
             row['specialization_title'], row['sumDoctor'], row['sumHospital']);
         SpMap[specializationId] = OtherBrandSpPlanModel(
@@ -1313,39 +1322,5 @@ class AppSqlApi extends AppSqlApiAbs {
       //  await txn.rawUpdate('UPDATE visit_pharmacy SET flag = 1');
       //  await txn.rawUpdate('UPDATE visit_brand_pharmacy SET flag = 1');
     });
-  }
-
-  @override
-  Future<void> insertSumDoctorHospital() async {
-    final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> specializationSums = await db.rawQuery('''
-    SELECT 
-      specialization.id AS specialization_id,
-      COALESCE(SUM(CAST(doctor.visits AS INTEGER)), 0) AS sumDoctor,
-      COALESCE(SUM(CAST(hospitalSp.visit AS INTEGER)), 0) AS sumHospital
-    FROM 
-      specialization
-    LEFT JOIN 
-      doctor ON doctor.spId = specialization.id
-    LEFT JOIN 
-      hospitalSp ON hospitalSp.spId = specialization.id
-    GROUP BY 
-      specialization.id
-  ''');
-    for (var row in specializationSums) {
-      int specializationId = row['specialization_id'] as int;
-      int sumDoctor = row['sumDoctor'] as int;
-      int sumHospital = row['sumHospital'] as int;
-
-      await db.update(
-        'specialization',
-        {
-          'sumDoctor': sumDoctor,
-          'sumHospital': sumHospital,
-        },
-        where: 'id = ?',
-        whereArgs: [specializationId],
-      );
-    }
   }
 }

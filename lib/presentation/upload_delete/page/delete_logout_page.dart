@@ -25,7 +25,6 @@ class DeleteLogoutPage extends StatelessWidget {
                 child: Image.asset(
                   ImageAssets.delete,
                   height: 500,
-
                 ),
               ),
               Text(
