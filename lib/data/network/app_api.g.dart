@@ -436,6 +436,209 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
+  Future<AllBrandSpBaseResponse> getBrandsSp(int repDet) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repDet',
+      repDet.toString(),
+    ));
+    final _options = _setStreamType<AllBrandSpBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/getBrandsSp.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllBrandSpBaseResponse _value;
+    try {
+      _value = AllBrandSpBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
+    int repPlanIdActive,
+    int repPlanIdOther,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanIdActive',
+      repPlanIdActive.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'repPlanIdOther',
+      repPlanIdOther.toString(),
+    ));
+    final _options = _setStreamType<AllPlanBrandsBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/getAllPlanBrands.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllPlanBrandsBaseResponse _value;
+    try {
+      _value = AllPlanBrandsBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<VisitHospitalBaseResponse> getHosVisit(
+    int repPlanId,
+    int representativeId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanId',
+      repPlanId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'representativeId',
+      representativeId.toString(),
+    ));
+    final _options = _setStreamType<VisitHospitalBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/getHosVisit.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late VisitHospitalBaseResponse _value;
+    try {
+      _value = VisitHospitalBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<VisitDoctorBaseResponse> getDocVisit(
+    String repPlanId,
+    String representativeId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanId',
+      repPlanId,
+    ));
+    _data.fields.add(MapEntry(
+      'representativeId',
+      representativeId,
+    ));
+    final _options = _setStreamType<VisitDoctorBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/getDocVisit.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late VisitDoctorBaseResponse _value;
+    try {
+      _value = VisitDoctorBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> repPlanBrand(RepPlanBrandBody list) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(list.toJson());
+    final _options = _setStreamType<Message1Response>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/insertPlanBrands.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<Message1Response> visitPharmacy(VisitPharmacyRequestBody list) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -538,121 +741,6 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllBrandSpBaseResponse> getBrandsSp(int repDet) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllBrandSpBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getBrandsSp.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late AllBrandSpBaseResponse _value;
-    try {
-      _value = AllBrandSpBaseResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
-    int repPlanIdActive,
-    int repPlanIdOther,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanIdActive',
-      repPlanIdActive.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'repPlanIdOther',
-      repPlanIdOther.toString(),
-    ));
-    final _options = _setStreamType<AllPlanBrandsBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllPlanBrands.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late AllPlanBrandsBaseResponse _value;
-    try {
-      _value = AllPlanBrandsBaseResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<Message1Response> repPlanBrand(RepPlanBrandBody list) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(list.toJson());
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/insertPlanBrands.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Message1Response _value;
-    try {
-      _value = Message1Response.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<CheckBaseResponse> checkPlanBrand(int repPlanId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -727,30 +815,23 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<VisitHospitalBaseResponse> getHosVisit(
-    int repPlanId,
-    int representativeId,
-  ) async {
+  Future<AllBrandResResponse> getBrandRes(int repDet) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
+      'repDet',
+      repDet.toString(),
     ));
-    _data.fields.add(MapEntry(
-      'representativeId',
-      representativeId.toString(),
-    ));
-    final _options = _setStreamType<VisitHospitalBaseResponse>(Options(
+    final _options = _setStreamType<AllBrandResResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/getHosVisit.php',
+          '/getBrands.php',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -760,53 +841,9 @@ class _AppServiceClient implements AppServiceClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late VisitHospitalBaseResponse _value;
+    late AllBrandResResponse _value;
     try {
-      _value = VisitHospitalBaseResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<VisitDoctorBaseResponse> getDocVisit(
-    String repPlanId,
-    String representativeId,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId,
-    ));
-    _data.fields.add(MapEntry(
-      'representativeId',
-      representativeId,
-    ));
-    final _options = _setStreamType<VisitDoctorBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getDocVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late VisitDoctorBaseResponse _value;
-    try {
-      _value = VisitDoctorBaseResponse.fromJson(_result.data!);
+      _value = AllBrandResResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

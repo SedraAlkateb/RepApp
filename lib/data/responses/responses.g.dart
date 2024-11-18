@@ -6,6 +6,15 @@ part of 'responses.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse()
+  ..status = json['status'] as String?
+  ..message = json['message'] as String?;
+
+Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
 
 Message1Response _$Message1ResponseFromJson(Map<String, dynamic> json) =>
     Message1Response()
@@ -56,6 +65,35 @@ Map<String, dynamic> _$CheckBaseResponseToJson(CheckBaseResponse instance) =>
       'representativePlan_Status': instance.data,
     };
 
+BrandReResponse _$BrandReResponseFromJson(Map<String, dynamic> json) =>
+    BrandReResponse(
+      json['id'] as String?,
+      json['title_en'] as String?,
+    );
+
+Map<String, dynamic> _$BrandReResponseToJson(BrandReResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title_en': instance.title_en,
+    };
+
+AllBrandResResponse _$AllBrandResResponseFromJson(Map<String, dynamic> json) =>
+    AllBrandResResponse(
+      (json['representativePlan_Status'] as List<dynamic>?)
+          ?.map((e) => BrandReResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllBrandResResponseToJson(
+        AllBrandResResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'representativePlan_Status': instance.brandRes,
+    };
+
 CheckActiveResponse _$CheckActiveResponseFromJson(Map<String, dynamic> json) =>
     CheckActiveResponse(
       json['activePlanId'] as String?,
@@ -99,6 +137,7 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       (json['percentage'] as num?)?.toInt(),
       json['startDate'] as String?,
       json['endDate'] as String?,
+      json['recipesCount'] as String?,
       json['otherStartDate'] as String?,
       json['otherEndDate'] as String?,
     )..samplesCount = json['samplesCount'] as String?;
@@ -115,6 +154,7 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) {
     'percentage': instance.percentage,
     'endDate': instance.endDate,
     'startDate': instance.startDate,
+    'recipesCount': instance.recipesCount,
   };
 
   void writeNotNull(String key, dynamic value) {

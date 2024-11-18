@@ -293,6 +293,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
          UserInfo.otherPlanId=data.otherPlanId??9;
          UserInfo.otherstatus=data.otherStatus??9;
          UserInfo.percentage=data.percentage;
+         UserInfo.recipesCount=data.recipesCount;
          UserInfo.startDate=data.startDate;
          UserInfo.endDate=data.endDate;
          UserInfo.otherStartDate=data.otherStartDate;

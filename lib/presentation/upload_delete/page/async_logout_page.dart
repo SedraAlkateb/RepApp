@@ -14,7 +14,7 @@ class AsyncLogoutPage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(
-            left: AppPadding.p40, right: AppPadding.p40, top: 20),
+            left: AppPadding.p40, right: AppPadding.p40),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,7 +33,7 @@ class AsyncLogoutPage extends StatelessWidget {
                 "تأكد من اتصالك بالانترنت واضغط على زر رفع البيانات ",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(height: AppSize.s50),
+              SizedBox(height: AppSize.s40),
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
                   if (state is SyncData1ErrorState) {
@@ -72,6 +72,7 @@ class AsyncLogoutPage extends StatelessWidget {
                       " رفع البيانات ",
                     )),
               ),
+              SizedBox(height: AppSize.s50),
             ],
           ),
         ),

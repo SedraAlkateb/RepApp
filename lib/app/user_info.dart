@@ -14,4 +14,5 @@ class UserInfo{
   static String? otherEndDate=" ";
   static int samplesCount = 2;
   static int flag = 0;
+  static int recipesCount = -1;
 }

@@ -26,7 +26,7 @@ abstract class AppSqlApiAbs {
   insertLogin(LoginModel loginModel);
   inserthospital(List<HospitalModel> hospitals);
   insertdoctor(List<DoctorModel> doctors);
-  insertSumDoctorHospital();
+
   //////////////////////////////////Visit/////////////insert
   Future<void> insertVisitHospital(
       VisitHospitalModel visitHospitalModel, int hos, int spec);
@@ -188,21 +188,31 @@ class AppSqlApi extends AppSqlApiAbs {
       ''');
 
         final List<Map<String, dynamic>> maps1 = await txn.rawQuery('''
-        SELECT 
-          specialization.id AS specialization_id, 
-          specialization.title AS specialization_title, 
-          COALESCE(SUM(CAST(hospitalSp.visit AS INTEGER)), 0) AS sumHospital
-        FROM 
-          specialization
-        LEFT JOIN 
-          hospitalSp ON hospitalSp.spId = specialization.id
-        GROUP BY 
-          specialization.title, specialization.id
-      ''');
+  SELECT 
+      specialization.id AS specialization_id, 
+      specialization.title AS specialization_title, 
+        COALESCE(SUM(
+        CASE 
+          WHEN hospital.title LIKE '%شعب%' THEN 
+            (CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)) / 2
+          ELSE 
+            CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
+        END
+      ), 0) AS sumHospital
+  FROM 
+      specialization
+  LEFT JOIN 
+      hospitalSp ON hospitalSp.spId = specialization.id
+ LEFT JOIN 
+      hospital ON hospital.id = hospitalSp.hospitalId
+  GROUP BY 
+      specialization.title, specialization.id
+''');
+
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
-          int sumDoctor = maps[i]['sumDoctor'] as int;
-          int sumHospital = maps1[i]['sumHospital'] as int;
+          int sumDoctor = (maps[i]['sumDoctor']??0 )as int;
+          int sumHospital = (maps1[i]['sumHospital'] ??0) as int;
           await txn.update(
             'specialization',
             {
@@ -1312,39 +1322,5 @@ class AppSqlApi extends AppSqlApiAbs {
       //  await txn.rawUpdate('UPDATE visit_pharmacy SET flag = 1');
       //  await txn.rawUpdate('UPDATE visit_brand_pharmacy SET flag = 1');
     });
-  }
-
-  @override
-  Future<void> insertSumDoctorHospital() async {
-    final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> specializationSums = await db.rawQuery('''
-    SELECT 
-      specialization.id AS specialization_id,
-      COALESCE(SUM(CAST(doctor.visits AS INTEGER)), 0) AS sumDoctor,
-      COALESCE(SUM(CAST(hospitalSp.visit AS INTEGER)), 0) AS sumHospital
-    FROM 
-      specialization
-    LEFT JOIN 
-      doctor ON doctor.spId = specialization.id
-    LEFT JOIN 
-      hospitalSp ON hospitalSp.spId = specialization.id
-    GROUP BY 
-      specialization.id
-  ''');
-    for (var row in specializationSums) {
-      int specializationId = row['specialization_id'] as int;
-      int sumDoctor = row['sumDoctor'] as int;
-      int sumHospital = row['sumHospital'] as int;
-
-      await db.update(
-        'specialization',
-        {
-          'sumDoctor': sumDoctor,
-          'sumHospital': sumHospital,
-        },
-        where: 'id = ?',
-        whereArgs: [specializationId],
-      );
-    }
   }
 }

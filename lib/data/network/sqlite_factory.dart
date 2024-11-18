@@ -17,32 +17,29 @@ class DatabaseHelper {
     _database = await _initDatabase();
     return _database!;
   }
+
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
-      // تحقق من التغييرات في البنية وفقًا لرقم الإصدار
       if (oldVersion == 1) {
-        // مثال: إذا كنت تنتقل من الإصدار 1 إلى 2، أضف تعديلاتك هنا
         await db.execute('''
-          ALTER TABLE rep ADD COLUMN newColumn TEXT
-        ''');
+        ALTER TABLE rep ADD COLUMN recipesCount INTEGER NOT NULL DEFAULT 0
+      ''');
       }
-      // إذا كنت تنتقل من إصدارات أخرى إلى الإصدار الحالي، أضف المزيد من الشروط
     }
-
   }
+
 
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database.db');
     return await openDatabase(
       path,
-      version: 1,
-   //   onUpgrade: _onUpgrade,
+      version: 2,
+         onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
       },
-
     );
   }
 
@@ -58,6 +55,7 @@ class DatabaseHelper {
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
     samplesCount INTEGER NOT NULL,
+    recipesCount INTEGER NOT NULL DEFAULT 0,
     isLogin INTEGER NOT NULL DEFAULT 0,
     endDate TEXT NOT NULL,
     startDate TEXT NOT NULL,
@@ -73,7 +71,6 @@ class DatabaseHelper {
     sumHospital INTEGER DEFAULT 0
   );
 ''');
-
 
     await db.execute('''
       CREATE TABLE place (
@@ -91,7 +88,7 @@ class DatabaseHelper {
     );
     ''');
 
-    await db.execute( '''
+    await db.execute('''
      CREATE TABLE doctor (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
@@ -126,12 +123,11 @@ class DatabaseHelper {
      falg INTEGER NOT NULL,
      sampleCoast INTEGER NOT NULL
     );
-    ''');
-
-    await db.execute(
-        '''
-      CREATE TABLE hospitalSp (
-    id INTEGER PRIMARY KEY,
+    '''
+    );
+    await db.execute('''
+        CREATE TABLE hospitalSp (
+        id INTEGER PRIMARY KEY,
     hospitalId INTEGER NOT NULL,
     spId INTEGER NOT NULL,
     totalDocs INTEGER NOT NULL,
@@ -142,7 +138,6 @@ class DatabaseHelper {
     FOREIGN KEY (spId) REFERENCES specialization(id)
     );
     ''');
-    /////////////////////////////////////////////////
     await db.execute('''
     CREATE TABLE planBrand (
     id INTEGER PRIMARY KEY,
@@ -162,7 +157,6 @@ class DatabaseHelper {
     brandType TEXT NOT NULL
     );
    ''');
-    ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     await db.execute('''
      CREATE TABLE visit_doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -187,8 +181,8 @@ class DatabaseHelper {
     flag INTEGER NOT NULL DEFAULT 0,
      target TEXT NOT NULL,
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
-
-);''');
+);
+''');
     await db.execute('''
      CREATE TABLE visit_pharmacy(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
