@@ -201,6 +201,7 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.startDate ?? Constants.empty,
       this?.data?.endDate ?? Constants.empty,
       0,
+      int.parse(this?.data?.recipesCount ?? "0"),
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
@@ -242,7 +243,24 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
     return doctorModel;
   }
 }
-
+extension BrandResResponseMapper on BrandReResponse? {
+  BrandRes toDomain() {
+    return BrandRes(
+      int.parse(this?.id ?? "0"),
+        this?.title_en ?? Constants.empty,
+    );
+  }
+}
+extension AllBrandResResponseMapper on AllBrandResResponse? {
+  List<BrandRes> toDomain() {
+    List<BrandRes> brand =
+    (this?.brandRes?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<BrandRes>()
+        .toList();
+    return brand;
+  }
+}
 extension HospitalResponseMapper on HospitalResponse? {
   HospitalModel toDomain() {
     return HospitalModel(

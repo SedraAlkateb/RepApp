@@ -35,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserInfo.activePlanId = loginModel!.activePlanId;
           UserInfo.otherstatus = loginModel!.otherStatus;
           UserInfo.percentage = loginModel!.percentage;
+          UserInfo.recipesCount = loginModel!.recipesCount;
           UserInfo.token = loginModel!.token;
           UserInfo.name = loginModel!.name;
           UserInfo.isLogging = 1;

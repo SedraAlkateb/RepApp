@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use
 
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
@@ -23,7 +22,6 @@ class AsyncLoginPage extends StatelessWidget {
         appBar: AppBar(
           leading: SizedBox(),
             actions:  [
-
             IconButton(
                 onPressed: (){
                   Navigator.pushNamedAndRemoveUntil(

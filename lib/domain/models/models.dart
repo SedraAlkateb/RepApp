@@ -890,6 +890,7 @@ class LoginModel {
   String endDate;
   String startDate;
   int flag;
+  int recipesCount;
   String? otherStartDate;
   String? otherEndDate;
   LoginModel(
@@ -905,6 +906,7 @@ class LoginModel {
       this.startDate,
       this.endDate,
       this.flag,
+      this.recipesCount,
       {this.otherStartDate,
       this.otherEndDate});
   Map<String, dynamic> toMap() {
@@ -921,6 +923,7 @@ class LoginModel {
       'endDate': endDate,
       'startDate': startDate,
       'flag':flag,
+      'recipesCount':recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
     };
@@ -940,6 +943,7 @@ class LoginModel {
       map['endDate'] ?? "",
       map['startDate'] ?? "",
       map['flag'],
+      map['recipesCount'],
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );
@@ -1116,4 +1120,9 @@ class HospitalSpAllModel {
         visited: map['visited'],
         map['titleSp']);
   }
+}
+class BrandRes{
+  int id;
+  String title_en;
+  BrandRes(this.id,this.title_en);
 }

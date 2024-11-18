@@ -18,6 +18,7 @@ Future<int?> sss()async{
       UserInfo.otherPlanId=data.otherPlanId;
       UserInfo.otherstatus=data.otherStatus;
       UserInfo.percentage=data.percentage;
+      UserInfo.recipesCount=data.recipesCount;
       UserInfo.repId=data.repId;
       UserInfo.token=data.token;
       UserInfo.startDate=data.startDate;

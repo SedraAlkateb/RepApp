@@ -25,7 +25,7 @@ class PersonalOrder extends StatelessWidget {
           height: AppSize.s8,
         ),
         CustomDropDown(
-          hintText: "نوع الطلب",
+          hintText: "لا شييء",
           items: type,
           prefixIcon: null,
           onChanged: (value) {
