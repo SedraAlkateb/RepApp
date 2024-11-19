@@ -93,7 +93,7 @@ abstract class AppServiceClient {
   Future<LoginResponse> checkActivePlanBrand(
       @Part(name: "repDet") int repDet,
       );
-  @POST("/getBrands.php")
+  @POST("/reci/getBrands.php")
   Future<AllBrandResResponse> getBrandRes(
       @Part(name: "repDet") int repDet,
       );

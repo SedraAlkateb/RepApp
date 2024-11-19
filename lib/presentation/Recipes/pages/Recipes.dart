@@ -1,7 +1,11 @@
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
+import 'package:domina_app/presentation/Recipes/widget/drop_down_recipes.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -16,7 +20,7 @@ class _RecipesState extends State<Recipes> {
   final TextEditingController _doctorSpController = TextEditingController();
 
   final TextEditingController _noteoneController =
-  TextEditingController(text: "يرجى عدم تبديل الدواء");
+      TextEditingController(text: "يرجى عدم تبديل الدواء");
 
   final TextEditingController _notetwoController = TextEditingController();
 
@@ -49,17 +53,17 @@ class _RecipesState extends State<Recipes> {
   }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading:  IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          iconSize: 30,
-          padding: EdgeInsets.only(right: 15),
-          icon: Icon(Icons.arrow_back_sharp,
-              color: ColorManager.secondaryColor)),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            iconSize: 30,
+            padding: EdgeInsets.only(right: 15),
+            icon: Icon(Icons.arrow_back_sharp,
+                color: ColorManager.secondaryColor)),
         title: Text('تفاصيل الوصفة'),
       ),
       body: Padding(
@@ -102,7 +106,8 @@ class _RecipesState extends State<Recipes> {
                 ),
                 SizedBox(height: 10),
                 Text('اختصاص الطبيب'),
-                BoxTextField(inputFormatters: [],
+                BoxTextField(
+                  inputFormatters: [],
                   controller: _doctorSpController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -116,24 +121,27 @@ class _RecipesState extends State<Recipes> {
                   minLines: 1,
                   prefixIcon: null,
                 ),
-
                 Text('المستحضر الأول'),
-                CustomDropDown(
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
-                  onChanged: (value) {},
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
+                  onChanged: (value) {
+                    BrandRes brand = value;
+                    BlocProvider.of<RecipesBrandBloc>(context)
+                        .add(SelectBrandEvent(brand.id));
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "يرجى اختيار المستحضر الأول";
                     }
                     return null;
-                  }, prefixIcon: null,
+                  },
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثاني'),
-                CustomDropDown(prefixIcon: null,
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -144,9 +152,9 @@ class _RecipesState extends State<Recipes> {
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثالث'),
-                CustomDropDown(prefixIcon: null,
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -157,9 +165,9 @@ class _RecipesState extends State<Recipes> {
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الرابع'),
-                CustomDropDown(prefixIcon: null,
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -170,7 +178,8 @@ class _RecipesState extends State<Recipes> {
                 ),
                 SizedBox(height: 5),
                 Text('الملاحظة الأولى'),
-                BoxTextField(prefixIcon: null,
+                BoxTextField(
+                  prefixIcon: null,
                   controller: _noteoneController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -181,11 +190,13 @@ class _RecipesState extends State<Recipes> {
                   },
                   obscureText: false,
                   maxLines: 4,
-                  minLines: 1, inputFormatters: [],
+                  minLines: 1,
+                  inputFormatters: [],
                 ),
                 SizedBox(height: 5),
                 Text('الملاحظة الثانية'),
-                BoxTextField(inputFormatters: [],
+                BoxTextField(
+                  inputFormatters: [],
                   controller: _notetwoController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -196,7 +207,8 @@ class _RecipesState extends State<Recipes> {
                   },
                   obscureText: false,
                   maxLines: 4,
-                  minLines: 1, prefixIcon: null,
+                  minLines: 1,
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 5),
                 Text('العنوان'),
@@ -211,11 +223,15 @@ class _RecipesState extends State<Recipes> {
                   },
                   obscureText: false,
                   maxLines: 1,
-                  minLines: 1, inputFormatters: [], prefixIcon: null,
+                  minLines: 1,
+                  inputFormatters: [],
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 10),
                 Text('التواصل'),
-                BoxTextField(inputFormatters: [],prefixIcon: null,
+                BoxTextField(
+                  inputFormatters: [],
+                  prefixIcon: null,
                   controller: _connectController,
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -239,11 +255,14 @@ class _RecipesState extends State<Recipes> {
                       return "يرجى اختيار العدد";
                     }
                     return null;
-                  }, prefixIcon: null,
+                  },
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 10),
                 Text('ملاحظات خاصة للمندوب'),
-                BoxTextField(prefixIcon:null ,inputFormatters: [],
+                BoxTextField(
+                  prefixIcon: null,
+                  inputFormatters: [],
                   controller: _specialNotesController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -256,7 +275,6 @@ class _RecipesState extends State<Recipes> {
                   maxLines: 4,
                   minLines: 1,
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -280,31 +298,33 @@ class _RecipesState extends State<Recipes> {
                               ),
                               child: _imageFile1 != null
                                   ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  _imageFile1!,
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        _imageFile1!,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
                                   : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.camera_alt, size: 50, color: ColorManager.secondaryColor),
-                                  SizedBox(height: 5),
-
-                                ],
-                              ),
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.camera_alt,
+                                            size: 50,
+                                            color: ColorManager.secondaryColor),
+                                        SizedBox(height: 5),
+                                      ],
+                                    ),
                             ),
                           ),
-                        ),Text(
+                        ),
+                        Text(
                           "صورة 1",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
-
 
                     Column(
                       children: [
@@ -325,25 +345,28 @@ class _RecipesState extends State<Recipes> {
                               ),
                               child: _imageFile2 != null
                                   ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  _imageFile2!,
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        _imageFile2!,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
                                   : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.camera_alt, size: 50, color: ColorManager.secondaryColor),
-                                  SizedBox(height: 5),
-
-                                ],
-                              ),
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.camera_alt,
+                                            size: 50,
+                                            color: ColorManager.secondaryColor),
+                                        SizedBox(height: 5),
+                                      ],
+                                    ),
                             ),
                           ),
-                        ),  Text(
+                        ),
+                        Text(
                           "صورة 2",
                           style: TextStyle(color: Colors.grey),
                         ),
@@ -351,19 +374,19 @@ class _RecipesState extends State<Recipes> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                       );
                     } else {
-
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('يرجى تعبئة جميع الحقول المطلوبة'),backgroundColor: ColorManager.secondaryColor,),
+                        SnackBar(
+                          content: Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                          backgroundColor: ColorManager.secondaryColor,
+                        ),
                       );
                     }
                   },

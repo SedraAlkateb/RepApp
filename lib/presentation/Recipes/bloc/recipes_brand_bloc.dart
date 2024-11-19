@@ -11,20 +11,17 @@ part 'recipes_brand_state.dart';
 
 class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   AllBrandsResUsecase allBrandsResUsecase;
-
-  List<BrandRes>brandRecs=[];
-  RecipesBrandBloc(
-      this.allBrandsResUsecase
-      ) : super(RecipesBrandInitial()) {
-    on<RecipesBrandEvent>((event, emit) async{
-      if(event is AllRecipesEvent){
+  List<BrandRes> brandRecs = [];
+  RecipesBrandBloc(this.allBrandsResUsecase) : super(RecipesBrandInitial()) {
+    on<RecipesBrandEvent>((event, emit) async {
+      if (event is AllRecipesEvent) {
         emit(AllRecipesLoadingState());
         (await allBrandsResUsecase.execute(UserInfo.repId)).fold((failure) {
-      emit(AllRecipesErrorState(failure: failure));
-      }, (data) async {
+          emit(AllRecipesErrorState(failure: failure));
+        }, (data) async {
           brandRecs = data;
-      emit(AllRecipesState(data));
-      });
+          emit(AllRecipesState(data));
+        });
       }
     });
   }
