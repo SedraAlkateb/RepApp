@@ -1,4 +1,6 @@
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
+import 'package:domina_app/presentation/Recipes/widget/drop_down_recipes.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -125,42 +127,42 @@ class Recipes extends StatelessWidget {
                   prefixIcon: null,
                 ),
                 Text('المستحضر الأول'),
-                CustomDropDown(
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
-                  onChanged: (value) {},
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
+                  onChanged: (value) {
+                    BrandRes brand = value;
+                    BlocProvider.of<RecipesBrandBloc>(context)
+                        .add(SelectBrandEvent(brand.id));
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "يرجى اختيار المستحضر الأول";
                     }
                     return null;
                   },
-                  prefixIcon: null,
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثاني'),
-                CustomDropDown(
-                  prefixIcon: null,
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
                   validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثالث'),
-                CustomDropDown(
-                  prefixIcon: null,
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
                   validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الرابع'),
-                CustomDropDown(
-                  prefixIcon: null,
+                DropDownRecipesSearch(
                   hintText: 'اختر المستحضر',
-                  items: [],
+                  items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
                   validator: (value) {},
                 ),

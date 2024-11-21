@@ -1126,3 +1126,9 @@ class BrandRes{
   String title_en;
   BrandRes(this.id,this.title_en);
 }
+class StatePlan{
+  int index;
+  int state;
+  StatePlan(this.index,this.state);
+//state 0 true , state 1 more state 2 0
+}

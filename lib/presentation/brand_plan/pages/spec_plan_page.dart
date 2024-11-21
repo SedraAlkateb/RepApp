@@ -64,7 +64,7 @@ class SpecPlanPage extends StatelessWidget {
                                 child: emptyFullScreen(context),
                               );
                             }
-                            return GridView.builder(
+                            return  GridView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,82 +75,90 @@ class SpecPlanPage extends StatelessWidget {
                               ),
                               itemCount: planBrandModel.length,
                               itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
+                                return Visibility(
+                                  visible: planBrandModel[index].brandk != 0, // تحقق من الشرط
+                                  maintainSize: false, // منع الفراغ
+                                  maintainAnimation: false,
+                                  maintainState: false,
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => BrandPlanOtherPage(
-                                            otherBrandSpPlanModel:
-                                            planBrandModel[index],index1: index,),
-                                        ));
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.all(AppPadding.p10),
-                                    padding: EdgeInsets.all(AppPadding.p5),
-                                    width: 6,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(colors: [
-                                        ColorManager.secondaryColor6,
-                                        ColorManager.secondaryColor7,
-                                      ]),
-                                      color: ColorManager.white,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(AppSize.s25),
+                                            otherBrandSpPlanModel: planBrandModel[index],
+                                            index1: index,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.all(AppPadding.p10),
+                                      padding: EdgeInsets.all(AppPadding.p5),
+                                      width: 6,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                          ColorManager.secondaryColor6,
+                                          ColorManager.secondaryColor7,
+                                        ]),
+                                        color: ColorManager.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(AppSize.s25),
+                                        ),
                                       ),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            ImageAssetsSpec().getImage(
-                                                planBrandModel[index].specModel.id),
-                                            width: 50,
-                                            height: 50,
-                                            color: ColorManager.white.withOpacity(0.8),
-                                            colorBlendMode: BlendMode.modulate,
-                                          ),
-                                          SizedBox(height: 20),
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            planBrandModel[index].specModel.title,
-                                            style: TextStyle(
-                                                color: ColorManager.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 20),
-                                          ),
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            "عدد زيارات الاطباء : ${planBrandModel[index].specModel.sumDoctor}",
-                                            style: TextStyle(
-                                                color: ColorManager.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10),
-                                          ),
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            "عدد زيارات المشافي : ${planBrandModel[index].specModel.sumHospital}",
-                                            style: TextStyle(
-                                                color: ColorManager.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10),
-                                          ),
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            "عدد العينات المتاحة: ${planBrandModel[index].brandk.toString()}",
-                                            style: TextStyle(
-                                                color: ColorManager.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10),
-                                          ),
-                                        ],
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              ImageAssetsSpec().getImage(planBrandModel[index].specModel.id),
+                                              width: 50,
+                                              height: 50,
+                                              color: ColorManager.white.withOpacity(0.8),
+                                              colorBlendMode: BlendMode.modulate,
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              planBrandModel[index].specModel.title,
+                                              style: TextStyle(
+                                                  color: ColorManager.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 20),
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "عدد زيارات الاطباء : ${planBrandModel[index].specModel.sumDoctor}",
+                                              style: TextStyle(
+                                                  color: ColorManager.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10),
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "عدد زيارات المشافي : ${planBrandModel[index].specModel.sumHospital}",
+                                              style: TextStyle(
+                                                  color: ColorManager.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10),
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "عدد العينات المتاحة: ${planBrandModel[index].brandk.toString()}",
+                                              style: TextStyle(
+                                                  color: ColorManager.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 );
                               },
                             );
+
                           },
                         ),
                       ],

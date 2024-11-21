@@ -831,7 +831,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/getBrands.php',
+          '/reci/getBrands.php',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -20,7 +20,7 @@ class SelectTypeEvent extends RecipesBrandEvent {
 
   List<Object?> get props =>[selectedTypeDoctor] ;
 }
-//
+
 class PickImageEvent extends RecipesBrandEvent {
   final File? image;
 
@@ -29,4 +29,11 @@ class PickImageEvent extends RecipesBrandEvent {
 
   @override
   List<Object?> get props => [image,index];
+
+class SelectBrandEvent extends RecipesBrandEvent{
+  @override
+  final int index;
+  SelectBrandEvent(this.index);
+  List<Object?> get props => [index];
+
 }

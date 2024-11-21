@@ -17,7 +17,7 @@ String value = "0";
   File? imageFile1;
   File? imageFile2;
   final _picker = ImagePicker();
-
+  List<BrandRes> brandRecs = [];
   Future<File?> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     if(pickedFile!=null)
@@ -34,11 +34,11 @@ String value = "0";
       if(event is AllRecipesEvent){
         emit(AllRecipesLoadingState());
         (await allBrandsResUsecase.execute(UserInfo.repId)).fold((failure) {
-      emit(AllRecipesErrorState(failure: failure));
-      }, (data) async {
+          emit(AllRecipesErrorState(failure: failure));
+        }, (data) async {
           brandRecs = data;
-      emit(AllRecipesState(data));
-      });
+          emit(AllRecipesState(data));
+        });
       }
       if(event is SelectTypeEvent){
         print("object");
