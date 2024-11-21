@@ -1,22 +1,19 @@
+import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class Recipes extends StatefulWidget {
+class Recipes extends StatelessWidget {
   Recipes({super.key});
 
-  @override
-  State<Recipes> createState() => _RecipesState();
-}
-
-class _RecipesState extends State<Recipes> {
   final TextEditingController _doctorSpController = TextEditingController();
 
   final TextEditingController _noteoneController =
-  TextEditingController(text: "يرجى عدم تبديل الدواء");
+      TextEditingController(text: "يرجى عدم تبديل الدواء");
 
   final TextEditingController _notetwoController = TextEditingController();
 
@@ -28,38 +25,21 @@ class _RecipesState extends State<Recipes> {
 
   final _formKey = GlobalKey<FormState>();
 
-  File? _imageFile1;
-
-  File? _imageFile2;
-
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage(int imageNumber) async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        if (imageNumber == 1) {
-          _imageFile1 = File(pickedFile.path);
-        } else if (imageNumber == 2) {
-          _imageFile2 = File(pickedFile.path);
-        }
-      });
-    }
-  }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading:  IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          iconSize: 30,
-          padding: EdgeInsets.only(right: 15),
-          icon: Icon(Icons.arrow_back_sharp,
-              color: ColorManager.secondaryColor)),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pop(context);
+              });
+            },
+            iconSize: 30,
+            padding: EdgeInsets.only(right: 15),
+            icon: Icon(Icons.arrow_back_sharp,
+                color: ColorManager.secondaryColor)),
         title: Text('تفاصيل الوصفة'),
       ),
       body: Padding(
@@ -70,39 +50,67 @@ class _RecipesState extends State<Recipes> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        dense: true,
-                        title: const Text('الدكتور'),
-                        leading: Radio(
-                          value: 'الدكتور',
-                          groupValue: 'الدكتور',
-                          onChanged: (value) {},
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Row(
+                            children: [
+                              Radio(activeColor: ColorManager.secondaryColor2,
+                                value: '0',
+                                groupValue:
+                                    context.watch<RecipesBrandBloc>().value,
+                                onChanged: (value) {
+                                  BlocProvider.of<RecipesBrandBloc>(context)
+                                      .add(SelectTypeEvent(value ?? "0"));
+                                },
+                              ),
+                              const Text('الدكتور'),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        dense: true,
-                        title: Text(
-                          'الدكتورة',
-                          style: TextStyle(color: Colors.blue),
+                        Flexible(
+                          child: Row(
+                            children: [
+                              Radio(activeColor: ColorManager.secondaryColor2,
+                                value: '1',
+                                groupValue:
+                                    context.watch<RecipesBrandBloc>().value,
+                                onChanged: (value) {
+                                  BlocProvider.of<RecipesBrandBloc>(context)
+                                      .add(SelectTypeEvent(value ?? "0"));
+                                },
+                              ),
+                              const Text('الدكتورة'),
+                            ],
+                          ),
                         ),
-                        leading: Radio(
-                          value: 'الدكتورة',
-                          groupValue: 'selectedDoctor',
-                          onChanged: (value) {},
+                        Flexible(
+                          child: Row(
+                            children: [
+                              Radio(activeColor: ColorManager.secondaryColor2,
+                                value: '2',
+                                groupValue:
+                                    context.watch<RecipesBrandBloc>().value,
+                                onChanged: (value) {
+                                  BlocProvider.of<RecipesBrandBloc>(context)
+                                      .add(SelectTypeEvent(value ?? "0"));
+                                },
+                              ),
+                              const Text('لاشيء'),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
                 SizedBox(height: 10),
                 Text('اختصاص الطبيب'),
-                BoxTextField(inputFormatters: [],
+                BoxTextField(
+                  inputFormatters: [],
                   controller: _doctorSpController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -116,7 +124,6 @@ class _RecipesState extends State<Recipes> {
                   minLines: 1,
                   prefixIcon: null,
                 ),
-
                 Text('المستحضر الأول'),
                 CustomDropDown(
                   hintText: 'اختر المستحضر',
@@ -127,50 +134,40 @@ class _RecipesState extends State<Recipes> {
                       return "يرجى اختيار المستحضر الأول";
                     }
                     return null;
-                  }, prefixIcon: null,
+                  },
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثاني'),
-                CustomDropDown(prefixIcon: null,
+                CustomDropDown(
+                  prefixIcon: null,
                   hintText: 'اختر المستحضر',
                   items: [],
                   onChanged: (value) {},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الثاني";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثالث'),
-                CustomDropDown(prefixIcon: null,
+                CustomDropDown(
+                  prefixIcon: null,
                   hintText: 'اختر المستحضر',
                   items: [],
                   onChanged: (value) {},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الثالث";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الرابع'),
-                CustomDropDown(prefixIcon: null,
+                CustomDropDown(
+                  prefixIcon: null,
                   hintText: 'اختر المستحضر',
                   items: [],
                   onChanged: (value) {},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الرابع";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('الملاحظة الأولى'),
-                BoxTextField(prefixIcon: null,
+                BoxTextField(
+                  prefixIcon: null,
                   controller: _noteoneController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -181,22 +178,20 @@ class _RecipesState extends State<Recipes> {
                   },
                   obscureText: false,
                   maxLines: 4,
-                  minLines: 1, inputFormatters: [],
+                  minLines: 1,
+                  inputFormatters: [],
                 ),
                 SizedBox(height: 5),
                 Text('الملاحظة الثانية'),
-                BoxTextField(inputFormatters: [],
+                BoxTextField(
+                  inputFormatters: [],
                   controller: _notetwoController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "يرجى إدخال الملاحظة الثانية";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                   obscureText: false,
                   maxLines: 4,
-                  minLines: 1, prefixIcon: null,
+                  minLines: 1,
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 5),
                 Text('العنوان'),
@@ -211,11 +206,15 @@ class _RecipesState extends State<Recipes> {
                   },
                   obscureText: false,
                   maxLines: 1,
-                  minLines: 1, inputFormatters: [], prefixIcon: null,
+                  minLines: 1,
+                  inputFormatters: [],
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 10),
                 Text('التواصل'),
-                BoxTextField(inputFormatters: [],prefixIcon: null,
+                BoxTextField(
+                  inputFormatters: [],
+                  prefixIcon: null,
                   controller: _connectController,
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -239,32 +238,35 @@ class _RecipesState extends State<Recipes> {
                       return "يرجى اختيار العدد";
                     }
                     return null;
-                  }, prefixIcon: null,
+                  },
+                  prefixIcon: null,
                 ),
                 SizedBox(height: 10),
                 Text('ملاحظات خاصة للمندوب'),
-                BoxTextField(prefixIcon:null ,inputFormatters: [],
+                BoxTextField(
+                  prefixIcon: null,
+                  inputFormatters: [],
                   controller: _specialNotesController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "يرجى إدخال ملاحظات خاصة";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                   obscureText: false,
                   maxLines: 4,
                   minLines: 1,
                 ),
-
-                Row(
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+  builder: (context, state) {
+    return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // الصورة الأولى داخل Card
                     Column(
                       children: [
                         InkWell(
-                          onTap: () => _pickImage(1),
+                          onTap: () async{ File? f1=await context.read<RecipesBrandBloc>().pickImage();
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(PickImageEvent(f1,1));
+
+
+                          },
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -275,41 +277,50 @@ class _RecipesState extends State<Recipes> {
                               width: 100,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+
+                              borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade400),
                               ),
-                              child: _imageFile1 != null
+                              child: context.watch<RecipesBrandBloc>().imageFile1  != null
                                   ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  _imageFile1!,
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        context.watch<RecipesBrandBloc>().imageFile1 !,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
                                   : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.camera_alt, size: 50, color: ColorManager.secondaryColor),
-                                  SizedBox(height: 5),
-
-                                ],
-                              ),
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.camera_alt,
+                                            size: 50,
+                                            color: ColorManager.secondaryColor),
+                                        SizedBox(height: 5),
+                                      ],
+                                    ),
                             ),
                           ),
-                        ),Text(
+                        ),
+                        Text(
                           "صورة 1",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
 
-
                     Column(
                       children: [
                         InkWell(
-                          onTap: () => _pickImage(2),
+                          onTap: () async{
+                            File? f2=await context.read<RecipesBrandBloc>().pickImage();
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(PickImageEvent(f2,2));
+
+
+                            },
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -323,47 +334,52 @@ class _RecipesState extends State<Recipes> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade400),
                               ),
-                              child: _imageFile2 != null
+                              child:   context.watch<RecipesBrandBloc>().imageFile2 != null
                                   ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  _imageFile2!,
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        context.watch<RecipesBrandBloc>().imageFile2!,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
                                   : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.camera_alt, size: 50, color: ColorManager.secondaryColor),
-                                  SizedBox(height: 5),
-
-                                ],
-                              ),
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.camera_alt,
+                                            size: 50,
+                                            color: ColorManager.secondaryColor),
+                                        SizedBox(height: 5),
+                                      ],
+                                    ),
                             ),
                           ),
-                        ),  Text(
+                        ),
+                        Text(
                           "صورة 2",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
                   ],
-                ),
-
+                );
+  },
+),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                       );
                     } else {
-
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('يرجى تعبئة جميع الحقول المطلوبة'),backgroundColor: ColorManager.secondaryColor,),
+                        SnackBar(
+                          content: Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                          backgroundColor: ColorManager.secondaryColor,
+                        ),
                       );
                     }
                   },

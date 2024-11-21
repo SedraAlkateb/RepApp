@@ -22,3 +22,22 @@ final class AllRecipesLoadingState extends RecipesBrandState {
   @override
   List<Object?> get props => [];
 }
+//
+final class SelectTypeState extends RecipesBrandState {
+ final String type;
+ SelectTypeState(this.type);
+  @override
+  List<Object?> get props => [type];
+}
+
+class ImagePickedState extends RecipesBrandState {
+ final File? image;
+
+ ImagePickedState(this.image);
+
+  @override
+  List<Object?> get props => [image];
+}
+
+
+
