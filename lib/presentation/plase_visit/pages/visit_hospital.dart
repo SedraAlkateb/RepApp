@@ -33,6 +33,7 @@ class _VisitHospitalState extends State<VisitHospital>
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     BlocProvider.of<VisitPlaceBloc>(context)
         .add(SpecializationHospitalEvent(widget.hospitalModel.id));
+    BlocProvider.of<VisitPlaceBloc>(context).isBrand = false;
     super.initState();
   }
 
@@ -264,6 +265,28 @@ class _VisitHospitalState extends State<VisitHospital>
                     SizedBox(
                       height: 0.9,
                     ),
+                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            Checkbox(
+                              focusColor: ColorManager.secondaryColor,
+                              activeColor: ColorManager.secondaryColor2,
+                              value: context.read<VisitPlaceBloc>().isBrand ,
+                              onChanged: (value) {
+                                BlocProvider.of<VisitPlaceBloc>(context)
+                                    .add(IsBrandEvent());
+                              },
+                            ),
+                            Text('لم يتم توزيع العينات'),
+                          ],
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
+                    context.read<VisitPlaceBloc>().isBrand==false?
                     BlocListener<VisitPlaceBloc, VisitPlaceState>(
                       listener: (context, state) {
                         if (state is BrandFlagErrorState) {
@@ -287,12 +310,17 @@ class _VisitHospitalState extends State<VisitHospital>
                         },
                         errorText: 'لايوجد نتيجة',
                       ),
-                    ),
+                    ):SizedBox(),
                     SizedBox(
                       height: 8,
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      buildWhen: (previous, current) {
+                        return current is SelectBrandState || current is DeleteBrandState ||current is EditAmountBrandState;
+
+                      },
                       builder: (context, state) {
+
                         final selectBrand =
                             context.watch<VisitPlaceBloc>().selectBrand;
                         final visitBrand =

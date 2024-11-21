@@ -31,6 +31,7 @@ class _VisitDoctorState extends State<VisitDoctor>
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
+    BlocProvider.of<VisitPlaceBloc>(context).isBrand = false;
     super.initState();
   }
 
@@ -137,11 +138,12 @@ class _VisitDoctorState extends State<VisitDoctor>
                             SizedBox(
                               height: 5,
                             ),
-                            Row(mainAxisAlignment: MainAxisAlignment.center,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   textAlign: TextAlign.center,
-                                "إجمالي الزيارات: ${widget.doctorModel.visits} ",
+                                  "إجمالي الزيارات: ${widget.doctorModel.visits} ",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
@@ -150,7 +152,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                 ),
                                 Text(
                                   textAlign: TextAlign.center,
-                                  "  تمت الزياراة: ${(widget.doctorModel.visited??0)}",
+                                  "  تمت الزياراة: ${(widget.doctorModel.visited ?? 0)}",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
@@ -245,35 +247,64 @@ class _VisitDoctorState extends State<VisitDoctor>
                     SizedBox(
                       height: AppSize.s8,
                     ),
-                    BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                      listener: (context, state) {
-                        if (state is BrandFlagErrorState) {
-                          print("object");
-                          error(context, state.failure.massage,
-                              state.failure.code);
-                        }
+                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            Checkbox(
+                              focusColor: ColorManager.secondaryColor,
+                              activeColor: ColorManager.secondaryColor2,
+                              value: context.read<VisitPlaceBloc>().isBrand,
+                              onChanged: (value) {
+                                BlocProvider.of<VisitPlaceBloc>(context)
+                                    .add(IsBrandEvent());
+                              },
+                            ),
+                            Text('لم يتم توزيع العينات'),
+                          ],
+                        );
                       },
-                      child: CustomDropDownSearch(
-                        hintText: "العينات",
-                        items: context.watch<VisitPlaceBloc>().bandFlag,
-                        onChanged: (value) {
-                          BrandModel brand = value;
-                          BlocProvider.of<VisitPlaceBloc>(context).add(
-                              SelectBrandEvent(brand, widget.doctorModel.id));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "اختر نوع الطلب";
-                          }
-                          return null;
-                        },
-                        errorText: 'لايوجد نتيجة',
-                      ),
                     ),
+                    SizedBox(
+                      height: AppSize.s8,
+                    ),
+                    context.read<VisitPlaceBloc>().isBrand == false
+                        ? BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                            listener: (context, state) {
+                              if (state is BrandFlagErrorState) {
+                                print("object");
+                                error(context, state.failure.massage,
+                                    state.failure.code);
+                              }
+                            },
+                            child: CustomDropDownSearch(
+                              hintText: "العينات",
+                              items: context.watch<VisitPlaceBloc>().bandFlag,
+                              onChanged: (value) {
+                                BrandModel brand = value;
+                                BlocProvider.of<VisitPlaceBloc>(context).add(
+                                    SelectBrandEvent(
+                                        brand, widget.doctorModel.id));
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return "اختر نوع الطلب";
+                                }
+                                return null;
+                              },
+                              errorText: 'لايوجد نتيجة',
+                            ),
+                          )
+                        : SizedBox(),
                     SizedBox(
                       height: 12,
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                      buildWhen: (previous, current) {
+                        return current is SelectBrandState ||
+                            current is DeleteBrandState ||
+                            current is EditAmountBrandState;
+                      },
                       builder: (context, state) {
                         final selectBrand =
                             context.watch<VisitPlaceBloc>().selectBrand;

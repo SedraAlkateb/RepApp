@@ -11,3 +11,10 @@ class AllRecipesEvent extends RecipesBrandEvent{
 
 }
 
+class SelectBrandEvent extends RecipesBrandEvent{
+  @override
+  final int index;
+  SelectBrandEvent(this.index);
+  List<Object?> get props => [index];
+
+}

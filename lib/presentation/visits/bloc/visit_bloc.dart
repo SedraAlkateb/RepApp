@@ -119,6 +119,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
 
       if(event is UpdateVisitDoctorEvent)
       {
+        print("object");
         (await updateDoctorUsecase.execute(event.id,event.sc,event.kas,event.target)).fold(
                 (failure)  {print(failure.massage);
             emit(UpdateVisitDoctorErrorState(failure: failure));},
