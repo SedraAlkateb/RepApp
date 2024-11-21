@@ -9,14 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class Recipes extends StatefulWidget {
+class Recipes extends StatelessWidget {
   Recipes({super.key});
 
-  @override
-  State<Recipes> createState() => _RecipesState();
-}
-
-class _RecipesState extends State<Recipes> {
   final TextEditingController _doctorSpController = TextEditingController();
 
   final TextEditingController _noteoneController =
@@ -32,25 +27,6 @@ class _RecipesState extends State<Recipes> {
 
   final _formKey = GlobalKey<FormState>();
 
-  File? _imageFile1;
-
-  File? _imageFile2;
-
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage(int imageNumber) async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        if (imageNumber == 1) {
-          _imageFile1 = File(pickedFile.path);
-        } else if (imageNumber == 2) {
-          _imageFile2 = File(pickedFile.path);
-        }
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +34,9 @@ class _RecipesState extends State<Recipes> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pop(context);
+              });
             },
             iconSize: 30,
             padding: EdgeInsets.only(right: 15),
@@ -74,35 +52,62 @@ class _RecipesState extends State<Recipes> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        dense: true,
-                        title: const Text('الدكتور'),
-                        leading: Radio(
-                          value: 'الدكتور',
-                          groupValue: 'الدكتور',
-                          onChanged: (value) {},
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Row(
+                            children: [
+                              Radio(activeColor: ColorManager.secondaryColor2,
+                                value: '0',
+                                groupValue:
+                                    context.watch<RecipesBrandBloc>().value,
+                                onChanged: (value) {
+                                  BlocProvider.of<RecipesBrandBloc>(context)
+                                      .add(SelectTypeEvent(value ?? "0"));
+                                },
+                              ),
+                              const Text('الدكتور'),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        dense: true,
-                        title: Text(
-                          'الدكتورة',
-                          style: TextStyle(color: Colors.blue),
+                        Flexible(
+                          child: Row(
+                            children: [
+                              Radio(activeColor: ColorManager.secondaryColor2,
+                                value: '1',
+                                groupValue:
+                                    context.watch<RecipesBrandBloc>().value,
+                                onChanged: (value) {
+                                  BlocProvider.of<RecipesBrandBloc>(context)
+                                      .add(SelectTypeEvent(value ?? "0"));
+                                },
+                              ),
+                              const Text('الدكتورة'),
+                            ],
+                          ),
                         ),
-                        leading: Radio(
-                          value: 'الدكتورة',
-                          groupValue: 'selectedDoctor',
-                          onChanged: (value) {},
+                        Flexible(
+                          child: Row(
+                            children: [
+                              Radio(activeColor: ColorManager.secondaryColor2,
+                                value: '2',
+                                groupValue:
+                                    context.watch<RecipesBrandBloc>().value,
+                                onChanged: (value) {
+                                  BlocProvider.of<RecipesBrandBloc>(context)
+                                      .add(SelectTypeEvent(value ?? "0"));
+                                },
+                              ),
+                              const Text('لاشيء'),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
                 SizedBox(height: 10),
                 Text('اختصاص الطبيب'),
@@ -143,12 +148,7 @@ class _RecipesState extends State<Recipes> {
                   hintText: 'اختر المستحضر',
                   items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الثاني";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثالث'),
@@ -156,12 +156,7 @@ class _RecipesState extends State<Recipes> {
                   hintText: 'اختر المستحضر',
                   items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الثالث";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الرابع'),
@@ -169,12 +164,7 @@ class _RecipesState extends State<Recipes> {
                   hintText: 'اختر المستحضر',
                   items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الرابع";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                 ),
                 SizedBox(height: 5),
                 Text('الملاحظة الأولى'),
@@ -199,12 +189,7 @@ class _RecipesState extends State<Recipes> {
                   inputFormatters: [],
                   controller: _notetwoController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "يرجى إدخال الملاحظة الثانية";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                   obscureText: false,
                   maxLines: 4,
                   minLines: 1,
@@ -265,24 +250,25 @@ class _RecipesState extends State<Recipes> {
                   inputFormatters: [],
                   controller: _specialNotesController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "يرجى إدخال ملاحظات خاصة";
-                    }
-                    return null;
-                  },
+                  validator: (value) {},
                   obscureText: false,
                   maxLines: 4,
                   minLines: 1,
                 ),
-                Row(
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+  builder: (context, state) {
+    return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // الصورة الأولى داخل Card
                     Column(
                       children: [
                         InkWell(
-                          onTap: () => _pickImage(1),
+                          onTap: () async{ File? f1=await context.read<RecipesBrandBloc>().pickImage();
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(PickImageEvent(f1,1));
+
+
+                          },
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -293,14 +279,15 @@ class _RecipesState extends State<Recipes> {
                               width: 100,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+
+                              borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade400),
                               ),
-                              child: _imageFile1 != null
+                              child: context.watch<RecipesBrandBloc>().imageFile1  != null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
                                       child: Image.file(
-                                        _imageFile1!,
+                                        context.watch<RecipesBrandBloc>().imageFile1 !,
                                         height: 100,
                                         width: 100,
                                         fit: BoxFit.cover,
@@ -329,7 +316,13 @@ class _RecipesState extends State<Recipes> {
                     Column(
                       children: [
                         InkWell(
-                          onTap: () => _pickImage(2),
+                          onTap: () async{
+                            File? f2=await context.read<RecipesBrandBloc>().pickImage();
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(PickImageEvent(f2,2));
+
+
+                            },
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -343,11 +336,11 @@ class _RecipesState extends State<Recipes> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade400),
                               ),
-                              child: _imageFile2 != null
+                              child:   context.watch<RecipesBrandBloc>().imageFile2 != null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
                                       child: Image.file(
-                                        _imageFile2!,
+                                        context.watch<RecipesBrandBloc>().imageFile2!,
                                         height: 100,
                                         width: 100,
                                         fit: BoxFit.cover,
@@ -373,7 +366,9 @@ class _RecipesState extends State<Recipes> {
                       ],
                     ),
                   ],
-                ),
+                );
+  },
+),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {

@@ -49,7 +49,8 @@ class BoxTextField extends StatelessWidget {
               border: const OutlineInputBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20) )),
               focusedBorder:   OutlineInputBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.hintGrey)),
               enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.hintGrey)) ,
-              hintStyle:hintStyle?? const TextStyle(fontSize: 14)
+              hintStyle:hintStyle?? const TextStyle(fontSize: 14),
+
           ),
 
         ),
