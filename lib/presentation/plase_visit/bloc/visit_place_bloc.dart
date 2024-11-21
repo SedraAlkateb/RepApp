@@ -46,6 +46,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   String not = "";
   String br = "";
   int isScience = 0;
+  bool isBrand = false;
   Type type=Type(0, "لا شيئ");
   VisitPlaceBloc(
       //    this.pharmaciesByPlaceUsecase,
@@ -234,7 +235,17 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       } else if (event is IsScienceEvent) {
         isScience = event.isScience;
         emit(IsScienceState(isScience));
-      } else if (event is RemoveBrandEvent) {
+      } else if (event is IsBrandEvent) {
+        isBrand = !isBrand;
+        print(isBrand);
+       if(isBrand==true){
+         selectBrand=[];
+         visitBrandPharmacys=[];
+         selectAddBrand=[];
+       }
+        emit(IsBrandState(isBrand));
+      }
+      else if (event is RemoveBrandEvent) {
         List<BrandModel> updatedList = List.from(selectBrand);
         updatedList.removeWhere(
           (v) => v.id == event.brandModel.id,

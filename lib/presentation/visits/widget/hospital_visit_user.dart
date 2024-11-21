@@ -106,7 +106,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                               TextRach(
                                   s1: "التاريخ الزيار: ",
                                   s2: formatDateTime(
-                                      hospitals[index].visitHospitalModel.data))
+                                      hospitals[index].visitHospitalModel.data)),
                             ],
                           ),
                         ),

@@ -127,7 +127,8 @@ class AppSqlApi extends AppSqlApiAbs {
       List<BrandSpModel> brandSps,
       List<PlanBrandModel> planBrands,
       VisitHospitalBase visitHospital,
-      VisitDoctorBase visitDoctor) async {
+      VisitDoctorBase visitDoctor
+      ) async {
     try {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
@@ -186,7 +187,6 @@ class AppSqlApi extends AppSqlApiAbs {
         GROUP BY 
           specialization.title, specialization.id
       ''');
-
         final List<Map<String, dynamic>> maps1 = await txn.rawQuery('''
   SELECT 
       specialization.id AS specialization_id, 
@@ -208,11 +208,10 @@ class AppSqlApi extends AppSqlApiAbs {
   GROUP BY 
       specialization.title, specialization.id
 ''');
-
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
-          int sumDoctor = (maps[i]['sumDoctor']??0 )as int;
-          int sumHospital = (maps1[i]['sumHospital'] ??0) as int;
+          int sumDoctor = (maps[i]['sumDoctor'] ?? 0) as int;
+          int sumHospital = (maps1[i]['sumHospital'] ?? 0) as int;
           await txn.update(
             'specialization',
             {
@@ -385,6 +384,7 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     await batch.commit(noResult: true);
   }
+
   Future<LoginModel?> getRep() async {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> results =
@@ -1151,8 +1151,7 @@ class AppSqlApi extends AppSqlApiAbs {
     brandType ASC;
 ''', [repPlanId]);
 
-    Map<int, BrandSpPlanModel> brandMap = {
-    };
+    Map<int, BrandSpPlanModel> brandMap = {};
 
     for (var row in maps) {
       int brandId = row['brand_id'] as int;
@@ -1212,7 +1211,7 @@ class AppSqlApi extends AppSqlApiAbs {
     Map<int, OtherBrandSpPlanModel> SpMap = {};
     for (var row in maps) {
       int specializationId = row['specialization_id'] as int;
-      if (!SpMap.containsKey(specializationId)){
+      if (!SpMap.containsKey(specializationId)&&!(row['sumDoctor']==0&&row['sumHospital']==0)) {
         SpecDModel spPlan = SpecDModel(specializationId,
             row['specialization_title'], row['sumDoctor'], row['sumHospital']);
         SpMap[specializationId] = OtherBrandSpPlanModel(
@@ -1223,6 +1222,7 @@ class AppSqlApi extends AppSqlApiAbs {
                     ((spPlan.sumDoctor + spPlan.sumHospital) / 4))
                 .toInt());
       }
+     ! (row['sumDoctor']==0&&row['sumHospital']==0)?
       SpMap[specializationId]!.brands.add(
             OtherBrandModel(
                 row['brand_id'],
@@ -1233,7 +1233,7 @@ class AppSqlApi extends AppSqlApiAbs {
                 row['plan_id'],
                 int.parse(row['amount']),
                 row['brandType']),
-          );
+          ):null;
     }
     return SpMap.values.toList();
   }
@@ -1323,4 +1323,9 @@ class AppSqlApi extends AppSqlApiAbs {
       //  await txn.rawUpdate('UPDATE visit_brand_pharmacy SET flag = 1');
     });
   }
+  Future<List<Map<String, dynamic>>> getAllUsers() async {
+    Database? db = await databaseHelper.database;
+    return await db.query('users');
+  }
 }
+

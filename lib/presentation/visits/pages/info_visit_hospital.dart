@@ -205,9 +205,20 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                       ),
                     ],
                   ):SizedBox(),
+                  context.watch<VisitBloc>().brands.isNotEmpty?
                   Text(
                     " العينات :",
                     style: Theme.of(context).textTheme.labelLarge,
+                  ):Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.circle,color: ColorManager.secondaryColor1,),
+                      Text(
+                        " لم يتم توزيع عينات ",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 8,

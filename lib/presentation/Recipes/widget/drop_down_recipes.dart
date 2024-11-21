@@ -1,6 +1,7 @@
 import 'package:custom_dropdown_search/custom_dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+
 class DropDownRecipesSearch extends StatelessWidget {
   const DropDownRecipesSearch({
     Key? key,
@@ -24,8 +25,7 @@ class DropDownRecipesSearch extends StatelessWidget {
       ),
       width: MediaQuery.of(context).size.width,
       child: DropdownSearch<dynamic>(
-        itemAsString: (dynamic item) =>
-            item.title_en,
+        itemAsString: (dynamic item) => item.title_en,
         validator: validator,
         popupProps: PopupProps.menu(
           itemBuilder: (context, item, isSelected) {

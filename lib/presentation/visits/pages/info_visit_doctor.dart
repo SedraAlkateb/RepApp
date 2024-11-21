@@ -24,11 +24,11 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
 
   @override
   void initState() {
-    _noteController.text = widget.doctorModel.visitDoctorModel.science??"";
-    _issueController.text = widget.doctorModel.visitDoctorModel.kaswn??"";
-    _noteeController.text = widget.doctorModel.visitDoctorModel.additaion??"";
-    _targetController.text=widget.doctorModel.visitDoctorModel.target??"";
-print( _targetController.text);
+    _noteController.text = widget.doctorModel.visitDoctorModel.science ?? "";
+    _issueController.text = widget.doctorModel.visitDoctorModel.kaswn ?? "";
+    _noteeController.text = widget.doctorModel.visitDoctorModel.additaion ?? "";
+    _targetController.text = widget.doctorModel.visitDoctorModel.target ?? "";
+    print(_targetController.text);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
     super.initState();
@@ -93,116 +93,139 @@ print( _targetController.text);
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _targetController.text.isNotEmpty?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "الهدف من الزيارة:",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      SizedBox(
-                        height: AppSize.s8,
-                      ),
-                      BoxTextField(
-                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
-
-                        keyboardType: TextInputType.text,
-                        prefixIcon: null,
-                        maxLines: 4,
-
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "الحقل مطلوب";
-                          }
-                          return null;
-                        },
-                        controller: _targetController,
-                        obscureText: false,
-                        minLines: 3,
-                      
-                        inputFormatters: [],
-                      ),
-                    ],
-                  ):SizedBox(),
-                  _noteController.text.isNotEmpty?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Text(
-                        "  الملاحظات :",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      BoxTextField(
-                        keyboardType: TextInputType.text,
-                        prefixIcon: null,
-                        maxLines: 4,
-                        validator: (value) {
-                          return null;
-                        },
-                        controller: _noteController,
-                        obscureText: false,
-                        minLines: 3,
-                        inputFormatters: [],
-                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
-
-                      ),
-                    ],
-                  ):SizedBox(),
-
-                  _issueController.text.isNotEmpty?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      Text(
-                        "ملاحظات للمكتب العلمي :",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      BoxTextField(
-                        keyboardType: TextInputType.text,
-                        prefixIcon: null,
-                        maxLines: 4,
-                        validator: (value) {
-                          return null;
-                        },
-                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
-                        controller: _issueController,
-                        obscureText: false,
-                        minLines: 3,
-                        inputFormatters: [],
-                      ),
-                    ],
-                  ):SizedBox(),
-                  _noteeController.text.isNotEmpty?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "طلبات شخصية:",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      BoxTextField(
-                        enabled: widget.doctorModel.visitDoctorModel.flag==0?false:true,
-                        keyboardType: TextInputType.text,
-                        prefixIcon: null,
-                        maxLines: 4,
-                        validator: (value) {
-                          return null;
-                        },
-                        controller: _noteeController,
-                        obscureText: false,
-                        minLines: 3,
-                        inputFormatters: [],
-
-                      ),
-                    ],
-                  ):SizedBox(),
-                  Text(
-                    " العينات :",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
+                  _targetController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "الهدف من الزيارة:",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            SizedBox(
+                              height: AppSize.s8,
+                            ),
+                            BoxTextField(
+                              enabled:
+                                  widget.doctorModel.visitDoctorModel.flag == 0
+                                      ? false
+                                      : true,
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "الحقل مطلوب";
+                                }
+                                return null;
+                              },
+                              controller: _targetController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  _noteController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "  الملاحظات :",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            BoxTextField(
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              validator: (value) {
+                                return null;
+                              },
+                              controller: _noteController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                              enabled:
+                                  widget.doctorModel.visitDoctorModel.flag == 0
+                                      ? false
+                                      : true,
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  _issueController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "ملاحظات للمكتب العلمي :",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            BoxTextField(
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              validator: (value) {
+                                return null;
+                              },
+                              enabled:
+                                  widget.doctorModel.visitDoctorModel.flag == 0
+                                      ? false
+                                      : true,
+                              controller: _issueController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  _noteeController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "طلبات شخصية:",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            BoxTextField(
+                              enabled:
+                                  widget.doctorModel.visitDoctorModel.flag == 0
+                                      ? false
+                                      : true,
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              validator: (value) {
+                                return null;
+                              },
+                              controller: _noteeController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  context.watch<VisitBloc>().brands.isNotEmpty
+                      ? Text(
+                          " العينات :",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: ColorManager.secondaryColor1,
+                            ),
+                            Text(
+                              " لم يتم توزيع عينات ",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ],
+                        ),
                   SizedBox(
                     height: 8,
                   ),
@@ -289,28 +312,27 @@ print( _targetController.text);
                           : SizedBox();
                     },
                   ),
-
-
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if (state is UpdateVisitDoctorState) {
                         Navigator.pop(context);
-                        BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
+                        BlocProvider.of<VisitBloc>(context)
+                            .add(VisitDoctorEvent());
                       }
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          widget.doctorModel.visitDoctorModel.flag!=0?
-                          BlocProvider.of<VisitBloc>(context).add(
-                              UpdateVisitDoctorEvent(
-                                  kas: _issueController.text,
-                                  sc: _noteController.text,
-                                  id: widget.doctorModel.visitDoctorModel.id)):null;
+                          widget.doctorModel.visitDoctorModel.flag != 0
+                              ? BlocProvider.of<VisitBloc>(context).add(
+                                  UpdateVisitDoctorEvent(
+                                      kas: _issueController.text,
+                                      sc: _noteController.text,
+                                      id: widget
+                                          .doctorModel.visitDoctorModel.id))
+                              : null;
                         },
                         child: Text("تعديل")),
                   )
-
-
                 ],
               ),
             )
