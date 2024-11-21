@@ -26,7 +26,6 @@ String value = "0";
 
   }
 
-  List<BrandRes>brandRecs=[];
   RecipesBrandBloc(
       this.allBrandsResUsecase
       ) : super(RecipesBrandInitial()) {
