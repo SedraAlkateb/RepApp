@@ -290,8 +290,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
        }, (data) async {
          checkActiveModel=data;
          UserInfo.activePlanId=data.activePlanId;
-         UserInfo.otherPlanId=data.otherPlanId??9;
-         UserInfo.otherstatus=data.otherStatus??9;
+         UserInfo.otherPlanId=data.otherPlanId??0;
+         UserInfo.otherstatus=data.otherStatus??-1;
          UserInfo.percentage=data.percentage;
          UserInfo.recipesCount=data.recipesCount;
          UserInfo.startDate=data.startDate;

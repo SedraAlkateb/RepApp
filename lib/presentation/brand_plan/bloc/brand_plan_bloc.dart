@@ -37,7 +37,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           planBrandActiveSearch = data;
           emit(AllBrandPlanState(data));
         });
-        if (UserInfo.otherPlanId != null) {
+        if (UserInfo.otherPlanId != null&&UserInfo.otherPlanId != 0) {
           (await allOtherBrandPlanSqlUsecase.execute(UserInfo.otherPlanId ?? 0))
               .fold((failure) {
             emit(AllBrandPlanErrorState(failure: failure));
@@ -161,7 +161,6 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
       sum = 0;
     }
     return StatePlan(0, 0);
-    ;
   }
   StatePlan isSumSave() {
     sum = 0;

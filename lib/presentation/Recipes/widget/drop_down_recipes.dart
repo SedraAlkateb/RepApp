@@ -32,7 +32,7 @@ class DropDownRecipesSearch extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  title: Html(data: item.title_en), // عرض العنوانين
+                  title:  item.title_en, // عرض العنوانين
                   onTap: () {
                     onChanged(item);
                   },

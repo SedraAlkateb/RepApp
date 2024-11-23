@@ -2,6 +2,7 @@ import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:html/parser.dart';
 
 extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
@@ -91,7 +92,7 @@ extension PlaceResponseMapper on PlaceResponse? {
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
     return SpecDModel(
-        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty, 0, 0);
+        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty, 0, 0,0);
   }
 }
 
@@ -244,10 +245,13 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
   }
 }
 extension BrandResResponseMapper on BrandReResponse? {
+
   BrandRes toDomain() {
+    var document = parse(this?.title_en ?? Constants.empty);
+    String plainText = document.body!.text;
     return BrandRes(
       int.parse(this?.id ?? "0"),
-        this?.title_en ?? Constants.empty,
+      plainText,
     );
   }
 }

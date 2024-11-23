@@ -116,8 +116,9 @@ class SpPlan {
   String brandType;
   int sumDoctor;
   int sumHospital;
+  int sumBrandHospital;
   SpPlan(this.id, this.amount, this.title, this.brandType, this.idSp,
-      this.sumDoctor, this.sumHospital);
+      this.sumDoctor, this.sumHospital, this.sumBrandHospital);
 }
 
 class BrandAddition {
@@ -593,32 +594,33 @@ class SpecDModel {
   String title;
   int sumDoctor;
   int sumHospital;
-  SpecDModel(this.id, this.title, this.sumDoctor, this.sumHospital);
+  int sumBrandHospital;
+  SpecDModel(this.id, this.title, this.sumDoctor, this.sumHospital,this.sumBrandHospital);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'sumDoctor': sumDoctor,
-      'sumHospital': sumHospital
+      'sumHospital': sumHospital,
+      'sumBrandHospital': sumBrandHospital,
     };
   }
-
   factory SpecDModel.fromJson(Map<String, dynamic> map) {
     return SpecDModel(
-        map['id'], map['title'], map["sumDoctor"], map['sumHospital']);
+        map['id'], map['title'], map["sumDoctor"], map['sumHospital'],map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap(Map<String, dynamic> map) {
     return SpecDModel(map['specialization_id'], map['specialization_title'],
-        map["sumDoctor"], map['sumHospital']);
+        map["sumDoctor"], map['sumHospital'],map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap2(Map<String, dynamic> map) {
     return SpecDModel(
-        map['specialization_id'], map['specialization_title'], 0, 0);
+        map['specialization_id'], map['specialization_title'], 0, 0,0);
   }
   factory SpecDModel.fromMap1(
       Map<String, dynamic> map, Map<String, dynamic> map1) {
     return SpecDModel(map['specialization_id'], map['specialization_title'],
-        map['sumDoctor'] ?? 0, map1['sumHospital'] ?? 0);
+        map['sumDoctor'] ?? 0, map1['sumHospital'] ?? 0,map1['sumBrandHospital'] ?? 0);
   }
 }
 

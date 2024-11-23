@@ -141,7 +141,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                               validator: (value) {
                                 return null;
                               },
-                              controller: _noteController,
+                              controller: _issueController,
                               obscureText: false,
                               minLines: 3,
                               inputFormatters: [],
@@ -172,11 +172,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                   widget.doctorModel.visitDoctorModel.flag == 0
                                       ? false
                                       : true,
-                              controller: _issueController,
+                              controller: _noteController,
                               obscureText: false,
                               minLines: 3,
                               inputFormatters: [],
                             ),
+
                           ],
                         )
                       : SizedBox(),

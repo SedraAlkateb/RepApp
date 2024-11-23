@@ -20,9 +20,9 @@ class DatabaseHelper {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
-      if (oldVersion == 1) {
+      if (oldVersion == 2) {
         await db.execute('''
-        ALTER TABLE rep ADD COLUMN recipesCount INTEGER NOT NULL DEFAULT 0
+        ALTER TABLE specialization ADD COLUMN sumBrandHospital INTEGER NOT NULL DEFAULT 0
       ''');
       }
     }
@@ -34,7 +34,7 @@ class DatabaseHelper {
     final path = join(dbPath, 'task_database.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
          onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
@@ -69,6 +69,7 @@ class DatabaseHelper {
     title TEXT NOT NULL,
     sumDoctor INTEGER DEFAULT 0,
     sumHospital INTEGER DEFAULT 0
+    sumBrandHospital INTEGER DEFAULT 0
   );
 ''');
 

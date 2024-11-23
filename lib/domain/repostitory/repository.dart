@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';

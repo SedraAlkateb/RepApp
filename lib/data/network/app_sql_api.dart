@@ -198,7 +198,8 @@ class AppSqlApi extends AppSqlApiAbs {
           ELSE 
             CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
         END
-      ), 0) AS sumHospital
+      ), 0) AS sumBrandHospital,
+          CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER) AS sumHospital
   FROM 
       specialization
   LEFT JOIN 
@@ -211,11 +212,13 @@ class AppSqlApi extends AppSqlApiAbs {
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = (maps[i]['sumDoctor'] ?? 0) as int;
+          int sumBrandHospital = (maps1[i]['sumBrandHospital'] ?? 0) as int;
           int sumHospital = (maps1[i]['sumHospital'] ?? 0) as int;
           await txn.update(
             'specialization',
             {
               'sumDoctor': sumDoctor,
+              'sumBrandHospital': sumBrandHospital,
               'sumHospital': sumHospital,
             },
             where: 'id = ?',
@@ -223,7 +226,6 @@ class AppSqlApi extends AppSqlApiAbs {
           );
         }
       });
-
       return "";
     } catch (error) {
       return error.toString();
@@ -697,7 +699,6 @@ class AppSqlApi extends AppSqlApiAbs {
       }
     });
   }
-
   Future<void> insertVisitBrandDoctor(
     VisitDoctorModel visitDoctorModel,
     List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
@@ -1123,7 +1124,6 @@ class AppSqlApi extends AppSqlApiAbs {
 
   Future<List<BrandSpPlanModel>> planBrandByRepPlanId(int repPlanId) async {
     Database? mydb = await databaseHelper.database;
-
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
   SELECT  
     planBrand.id AS plan_id,
@@ -1138,6 +1138,7 @@ class AppSqlApi extends AppSqlApiAbs {
     specialization.title AS specialization_title,
     specialization.sumDoctor AS sumDoctor,
     specialization.sumHospital AS sumHospital
+    specialization.sumBrandHospital AS sumBrandHospital
   FROM 
     planBrand
   JOIN  
@@ -1175,7 +1176,8 @@ class AppSqlApi extends AppSqlApiAbs {
                 row['brandType'],
                 row['specialization_id'],
                 row['sumDoctor'],
-                row['sumHospital']),
+                row['sumHospital'],
+                row['sumBrandHospital']),
           );
     }
     return brandMap.values.toList();
@@ -1198,7 +1200,8 @@ class AppSqlApi extends AppSqlApiAbs {
       specialization.id AS specialization_id,
       specialization.title AS specialization_title,
       specialization.sumDoctor AS sumDoctor,
-      specialization.sumHospital AS sumHospital
+      specialization.sumHospital AS sumHospital,
+      specialization.sumBrandHospital AS sumBrandHospital
     FROM 
       planBrand
     JOIN  
@@ -1211,18 +1214,23 @@ class AppSqlApi extends AppSqlApiAbs {
     Map<int, OtherBrandSpPlanModel> SpMap = {};
     for (var row in maps) {
       int specializationId = row['specialization_id'] as int;
-      if (!SpMap.containsKey(specializationId)&&!(row['sumDoctor']==0&&row['sumHospital']==0)) {
-        SpecDModel spPlan = SpecDModel(specializationId,
-            row['specialization_title'], row['sumDoctor'], row['sumHospital']);
+      if (!SpMap.containsKey(specializationId)&&!(row['sumDoctor']==0&&row['sumBrandHospital']==0)) {
+        SpecDModel spPlan = SpecDModel(
+            specializationId,
+            row['specialization_title'],
+            row['sumDoctor'],
+            row['sumHospital'],
+          row['sumBrandHospital']
+        );
         SpMap[specializationId] = OtherBrandSpPlanModel(
             spPlan,
             [],
-            (spPlan.sumDoctor + spPlan.sumHospital) * UserInfo.samplesCount,
-            (((spPlan.sumDoctor + spPlan.sumHospital) * UserInfo.samplesCount) +
-                    ((spPlan.sumDoctor + spPlan.sumHospital) / 4))
+            (spPlan.sumDoctor + spPlan.sumBrandHospital) * UserInfo.samplesCount,
+            (((spPlan.sumDoctor + spPlan.sumBrandHospital) * UserInfo.samplesCount) +
+                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) / 4))
                 .toInt());
       }
-     ! (row['sumDoctor']==0&&row['sumHospital']==0)?
+     ! (row['sumDoctor']==0&&row['sumBrandHospital']==0)?
       SpMap[specializationId]!.brands.add(
             OtherBrandModel(
                 row['brand_id'],

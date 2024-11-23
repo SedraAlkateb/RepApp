@@ -6,7 +6,6 @@ import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class Recipes extends StatelessWidget {
@@ -26,7 +25,6 @@ class Recipes extends StatelessWidget {
   final TextEditingController _specialNotesController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,8 @@ class Recipes extends StatelessWidget {
                         Flexible(
                           child: Row(
                             children: [
-                              Radio(activeColor: ColorManager.secondaryColor2,
+                              Radio(
+                                activeColor: ColorManager.secondaryColor2,
                                 value: '0',
                                 groupValue:
                                     context.watch<RecipesBrandBloc>().value,
@@ -76,7 +75,8 @@ class Recipes extends StatelessWidget {
                         Flexible(
                           child: Row(
                             children: [
-                              Radio(activeColor: ColorManager.secondaryColor2,
+                              Radio(
+                                activeColor: ColorManager.secondaryColor2,
                                 value: '1',
                                 groupValue:
                                     context.watch<RecipesBrandBloc>().value,
@@ -92,7 +92,8 @@ class Recipes extends StatelessWidget {
                         Flexible(
                           child: Row(
                             children: [
-                              Radio(activeColor: ColorManager.secondaryColor2,
+                              Radio(
+                                activeColor: ColorManager.secondaryColor2,
                                 value: '2',
                                 groupValue:
                                     context.watch<RecipesBrandBloc>().value,
@@ -148,7 +149,9 @@ class Recipes extends StatelessWidget {
                   hintText: 'اختر المستحضر',
                   items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثالث'),
@@ -156,7 +159,9 @@ class Recipes extends StatelessWidget {
                   hintText: 'اختر المستحضر',
                   items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الرابع'),
@@ -164,7 +169,9 @@ class Recipes extends StatelessWidget {
                   hintText: 'اختر المستحضر',
                   items: context.watch<RecipesBrandBloc>().brandRecs,
                   onChanged: (value) {},
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                 ),
                 SizedBox(height: 5),
                 Text('الملاحظة الأولى'),
@@ -189,7 +196,9 @@ class Recipes extends StatelessWidget {
                   inputFormatters: [],
                   controller: _notetwoController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   obscureText: false,
                   maxLines: 4,
                   minLines: 1,
@@ -250,125 +259,142 @@ class Recipes extends StatelessWidget {
                   inputFormatters: [],
                   controller: _specialNotesController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   obscureText: false,
                   maxLines: 4,
                   minLines: 1,
                 ),
                 BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
-  builder: (context, state) {
-    return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        InkWell(
-                          onTap: () async{ File? f1=await context.read<RecipesBrandBloc>().pickImage();
-                          BlocProvider.of<RecipesBrandBloc>(context)
-                              .add(PickImageEvent(f1,1));
-
-
-                          },
-                          child: Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-
-                              borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade400),
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                File? f1 = await context
+                                    .read<RecipesBrandBloc>()
+                                    .pickImage();
+                                BlocProvider.of<RecipesBrandBloc>(context)
+                                    .add(PickImageEvent(f1, 1));
+                              },
+                              child: Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border:
+                                        Border.all(color: Colors.grey.shade400),
+                                  ),
+                                  child: context
+                                              .watch<RecipesBrandBloc>()
+                                              .imageFile1 !=
+                                          null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Image.file(
+                                            context
+                                                .watch<RecipesBrandBloc>()
+                                                .imageFile1!,
+                                            height: 100,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.camera_alt,
+                                                size: 50,
+                                                color: ColorManager
+                                                    .secondaryColor),
+                                            SizedBox(height: 5),
+                                          ],
+                                        ),
+                                ),
                               ),
-                              child: context.watch<RecipesBrandBloc>().imageFile1  != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        context.watch<RecipesBrandBloc>().imageFile1 !,
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.camera_alt,
-                                            size: 50,
-                                            color: ColorManager.secondaryColor),
-                                        SizedBox(height: 5),
-                                      ],
-                                    ),
                             ),
-                          ),
+                            Text(
+                              "صورة 1",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "صورة 1",
-                          style: TextStyle(color: Colors.grey),
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                File? f2 = await context
+                                    .read<RecipesBrandBloc>()
+                                    .pickImage();
+                                BlocProvider.of<RecipesBrandBloc>(context)
+                                    .add(PickImageEvent(f2, 2));
+                              },
+                              child: Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border:
+                                        Border.all(color: Colors.grey.shade400),
+                                  ),
+                                  child: context
+                                              .watch<RecipesBrandBloc>()
+                                              .imageFile2 !=
+                                          null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Image.file(
+                                            context
+                                                .watch<RecipesBrandBloc>()
+                                                .imageFile2!,
+                                            height: 100,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.camera_alt,
+                                                size: 50,
+                                                color: ColorManager
+                                                    .secondaryColor),
+                                            SizedBox(height: 5),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "صورة 2",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () async{
-                            File? f2=await context.read<RecipesBrandBloc>().pickImage();
-                          BlocProvider.of<RecipesBrandBloc>(context)
-                              .add(PickImageEvent(f2,2));
-
-
-                            },
-                          child: Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade400),
-                              ),
-                              child:   context.watch<RecipesBrandBloc>().imageFile2 != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        context.watch<RecipesBrandBloc>().imageFile2!,
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.camera_alt,
-                                            size: 50,
-                                            color: ColorManager.secondaryColor),
-                                        SizedBox(height: 5),
-                                      ],
-                                    ),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "صورة 2",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-  },
-),
+                    );
+                  },
+                ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {

@@ -525,8 +525,8 @@ class _VisitDoctorState extends State<VisitDoctor>
                                   VisitDoctorModel(
                                       0,
                                       now.toIso8601String(),
-                                      _noteController.text,
                                       _issueController.text,
+                                      _noteController.text,
                                       _noteeController.text,
                                       widget.doctorModel.id,
                                       0,
