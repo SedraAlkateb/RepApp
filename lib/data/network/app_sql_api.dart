@@ -1137,7 +1137,7 @@ class AppSqlApi extends AppSqlApiAbs {
     specialization.id AS specialization_id,
     specialization.title AS specialization_title,
     specialization.sumDoctor AS sumDoctor,
-    specialization.sumHospital AS sumHospital
+    specialization.sumHospital AS sumHospital,
     specialization.sumBrandHospital AS sumBrandHospital
   FROM 
     planBrand
