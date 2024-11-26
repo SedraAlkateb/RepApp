@@ -87,7 +87,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>     DeletePage());
          case Routes.Recipes:
            initBrandRecModule();
-        return MaterialPageRoute(builder: (_) =>     Recipes());
+        return MaterialPageRoute(builder: (_) =>     RecipesPage(docId: 0,));
         
       case Routes.deleteLogout:
         initAsyncInModule();

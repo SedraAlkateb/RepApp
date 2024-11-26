@@ -89,7 +89,18 @@ class AllBrandResResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$AllBrandResResponseToJson(this);
 }
-
+@JsonSerializable()
+class CheckReResponse extends BaseResponse{
+  @JsonKey(name: "total")
+ int? total;
+  CheckReResponse(this.total);
+  // from json
+  factory CheckReResponse.fromJson(Map<String,dynamic>json)=>
+      _$CheckReResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CheckReResponseToJson(this);
+}
 @JsonSerializable()
 class CheckActiveResponse {
   @JsonKey(name: "activePlanId")

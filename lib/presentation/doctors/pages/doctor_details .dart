@@ -1,10 +1,10 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/uniti/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
 
@@ -134,9 +134,10 @@ class DoctorDetails extends StatelessWidget {
                                 onPressed: () {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
-                                    Navigator.pushNamed(
+                                    initBrandRecModule();
+                                    Navigator.push(
                                       context,
-                                      Routes.Recipes,
+                                      MaterialPageRoute(builder: (context) => RecipesPage(docId: doctor.id,),),
                                     );
                                   });
                                 },

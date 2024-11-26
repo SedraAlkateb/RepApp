@@ -65,6 +65,8 @@ class _DoctorSpState extends State<DoctorSp> {
                                   ),
                                   TextRach(
                                       s1: "العنوان: ", s2: state.doctors[index].placeTitle),
+                                  TextRach(
+                                      s1: "الزيارات: ", s2: state.doctors[index].visits.toString()),
                                 ],
                               ),
                             );

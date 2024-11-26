@@ -166,27 +166,29 @@ class RepositroySqlImp extends RepositorySql {
 
   @override
   Future<Either<Failure, String>> asyncData
-      (List<BrandModel> brands, List<PharmacyModel> pharmacies,
+      (List<BrandModel> brands,
+      //List<PharmacyModel> pharmacies,
       List<PlaceModel> places, List<SpecDModel> specs,
       List<DoctorModel>doctors,
       List<HospitalModel>hospitals,
       List<HospitalSpModel>hospitalSps,
       List<BrandSpModel> brandSps,
-      List<PlanBrandModel> planBrands,
-      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
+
+      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor,
+  {List<PlanBrandModel>? planBrands}
       ) async {
     try {
       final response = await _databaseHelper.asyncData(
           brands,
-          pharmacies,
+        //  pharmacies,
           places,
           specs,
           doctors,
           hospitals,
           hospitalSps,
           brandSps,
-          planBrands,
-          visitHospital,visitDoctor
+          visitHospital,visitDoctor,
+        planBrands:   planBrands,
       );
       if (response == "") {
         return Right(response);

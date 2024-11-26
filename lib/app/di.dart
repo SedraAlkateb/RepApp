@@ -28,7 +28,6 @@ import 'package:domina_app/domain/usecase/all_hospital_sp_n_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_hospital_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_other_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/all_pharmacy_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
@@ -53,6 +52,7 @@ import 'package:domina_app/domain/usecase/insert_as/get_hospital_sp_visits_sql_u
 import 'package:domina_app/domain/usecase/insert_as/get_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
@@ -121,8 +121,8 @@ Future<void> initAsyncModule() async {
   if (!GetIt.I.isRegistered<AsyncBloc>()) {
     instance
         .registerFactory<AllBrandsUsecase>(() => AllBrandsUsecase(instance()));
-    instance.registerFactory<AllPharmacyUsecase>(
-        () => AllPharmacyUsecase(instance()));
+    // instance.registerFactory<AllPharmacyUsecase>(
+    //     () => AllPharmacyUsecase(instance()));
     instance
         .registerFactory<AllPlaceUsecase>(() => AllPlaceUsecase(instance()));
     instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
@@ -165,7 +165,7 @@ Future<void> initAsyncModule() async {
         instance(),
         instance(),
         instance(),
-        instance(),
+     //   instance(),
         instance(),
         instance(),
         instance(),
@@ -271,10 +271,12 @@ Future<void> initSpecModule() async {
 }
 Future<void> initBrandRecModule() async {
   if (!GetIt.I.isRegistered<AllBrandsResUsecase>()) {
+    instance.registerFactory<InsertReciUsecase>(
+            () => InsertReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
             () => AllBrandsResUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-            () => RecipesBrandBloc(instance()));
+            () => RecipesBrandBloc(instance(),instance()));
   }
 }
 Future<void> initAsyncInModule() async {
