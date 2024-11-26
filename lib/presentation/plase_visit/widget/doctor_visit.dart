@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
@@ -29,7 +30,7 @@ class _DoctorVisitState extends State<DoctorVisit>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SearchField(
+             SearchField(
               searchController: searchController,
               onPressed: (value) {
                 BlocProvider.of<VisitPlaceBloc>(context)
