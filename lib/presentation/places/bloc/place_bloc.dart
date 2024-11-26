@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'place_event.dart';
@@ -12,6 +13,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   List<PlaceModel> placeModel = [];
   List<PlaceModel> placeSearchModel = [];
   int k = 0;
+  String data= formatDateTime(DateTime.now().toString());
 /*
 List<VisitPharmacyModel> vi=[
   VisitPharmacyModel(0, "data5", "note75", 5),

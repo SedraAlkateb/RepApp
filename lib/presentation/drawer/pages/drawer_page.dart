@@ -274,7 +274,25 @@ class DrawerPage extends StatelessWidget {
                 );
               });
             },
+
           ),
+         SizedBox(height: 35,),
+         Padding(
+           padding: const EdgeInsets.all(8.0),
+           child: Text(textAlign: TextAlign.left,
+             'Version 2',
+             style: TextStyle(
+               color: ColorManager.secondaryColor7,
+               shadows: [
+                 Shadow(
+                   offset: Offset(1.0, 1.5),
+                  blurRadius: 1.0,
+                   color: ColorManager.secondaryColor.withOpacity(0.5),
+                 ),
+               ],
+             ),
+           ),
+         )
         ],
       ),
     );

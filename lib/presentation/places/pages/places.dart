@@ -10,6 +10,7 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +19,7 @@ class Places extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print(UserInfo.activePlanId);
+   print(UserInfo.activePlanId);
     final size = MediaQuery.of(context).size;
     BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -140,6 +141,24 @@ class Places extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: 10,
+        ),
+       UserInfo.endDate==BlocProvider.of<PlaceBloc>(context).data?
+        Padding(
+          padding: const EdgeInsets.only(right: 17),
+          child: Row(
+            children: [ Icon(
+              Icons.warning_amber_outlined,
+              color: Colors.red,
+              size: 20,
+            ),
+              SizedBox(width: 4),
+              Text("يرجى رفع الزيارات للخطة الحالية",style: TextStyle(color: Colors.black,fontWeight:FontWeight.bold, fontSize: 15,),textAlign: TextAlign.center,),
+            ],
+          )
+        )
+           :SizedBox(),
         SizedBox(
           height: 10,
         ),

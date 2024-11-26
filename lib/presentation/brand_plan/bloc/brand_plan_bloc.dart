@@ -91,7 +91,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           sumS = sum2;
           emit(SumErrorState(
               failure: Failure(
-                  100, " لقد تجاوزت الحد المسموح للعينات في هذا اللاختصاص")));
+                  100, "لقد تجاوزت الحد المسموح للعينات في هذا الإختصاص")));
         }
       }
       if (event is UpdateEvent) {
@@ -117,11 +117,11 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         } else if (x.state == 1) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
-                  "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x.index].specModel.title}")));
+                  "لقد تجاوزت الحد المسموح في إختصاص ${planBrand[x.index].specModel.title}")));
         } else if (x.state== 2) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
-                  "لم يتم تعبئة اختصاص (${planBrand[x.index].specModel.title})")));
+                  "لم يتم تعبئة إختصاص (${planBrand[x.index].specModel.title})")));
         }
       }
       if (event is UpdateAmountSucEvent) {

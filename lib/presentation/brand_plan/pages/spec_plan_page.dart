@@ -189,7 +189,7 @@ class SpecPlanPage extends StatelessWidget {
                         showDialog(context: context, builder: (context) {
                           return dialogPlan(context,
                       fun:()=> BlocProvider.of<BrandPlanBloc>(context).add(UpdateAmountSucEvent())
-                              ,"هل انت متاكد من حفظ التغيرات");
+                              ,"هل أنت متأكد من حفظ التغيرات");
                         },);
                       },
                       child: SizedBox(
@@ -221,7 +221,7 @@ class SpecPlanPage extends StatelessWidget {
                         showDialog(context: context, builder: (context) {
                           return dialogPlan(context,
                            fun: ()=>  BlocProvider.of<BrandPlanBloc>(context).add(SendToS())
-                              ,"هل انت متاكد من ارسال التغيرات");
+                              ,"هل أنت متأكد من إرسال التغيرات");
                         },):null;
                       },
                       child: SizedBox(
