@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:domina_app/app/user_info.dart';
 
 class VisitPharmacyModel {
@@ -122,12 +124,12 @@ class SpPlan {
 }
 
 class BrandAddition {
-int id;
+  int id;
   String title;
   String phTitle;
   int amount;
 
-  BrandAddition(this.id,this.title, this.phTitle, this.amount);
+  BrandAddition(this.id, this.title, this.phTitle, this.amount);
 }
 
 class BrandModel {
@@ -380,7 +382,6 @@ class VisitDoctorAndDoctor {
 }
 
 class VisitHospitalAndHospital {
-
   HospitalModel hospitalModel;
   VisitHospitalModel visitHospitalModel;
   SpecDModel specModel;
@@ -595,7 +596,8 @@ class SpecDModel {
   int sumDoctor;
   int sumHospital;
   int sumBrandHospital;
-  SpecDModel(this.id, this.title, this.sumDoctor, this.sumHospital,this.sumBrandHospital);
+  SpecDModel(this.id, this.title, this.sumDoctor, this.sumHospital,
+      this.sumBrandHospital);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -605,22 +607,27 @@ class SpecDModel {
       'sumBrandHospital': sumBrandHospital,
     };
   }
+
   factory SpecDModel.fromJson(Map<String, dynamic> map) {
-    return SpecDModel(
-        map['id'], map['title'], map["sumDoctor"], map['sumHospital'],map['sumBrandHospital']);
+    return SpecDModel(map['id'], map['title'], map["sumDoctor"],
+        map['sumHospital'], map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap(Map<String, dynamic> map) {
     return SpecDModel(map['specialization_id'], map['specialization_title'],
-        map["sumDoctor"], map['sumHospital'],map['sumBrandHospital']);
+        map["sumDoctor"], map['sumHospital'], map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap2(Map<String, dynamic> map) {
     return SpecDModel(
-        map['specialization_id'], map['specialization_title'], 0, 0,0);
+        map['specialization_id'], map['specialization_title'], 0, 0, 0);
   }
   factory SpecDModel.fromMap1(
       Map<String, dynamic> map, Map<String, dynamic> map1) {
-    return SpecDModel(map['specialization_id'], map['specialization_title'],
-        map['sumDoctor'] ?? 0, map1['sumHospital'] ?? 0,map1['sumBrandHospital'] ?? 0);
+    return SpecDModel(
+        map['specialization_id'],
+        map['specialization_title'],
+        map['sumDoctor'] ?? 0,
+        map1['sumHospital'] ?? 0,
+        map1['sumBrandHospital'] ?? 0);
   }
 }
 
@@ -709,9 +716,19 @@ class DoctorModel {
   int spId;
   int? visited;
   String? workHours;
-  DoctorModel(this.id, this.title, this.placeId, this.address, this.placeTitle,
-      this.visits, this.note, this.rate, this.spTitle, this.spId,
-      this.workHours,{this.visited});
+  DoctorModel(
+      this.id,
+      this.title,
+      this.placeId,
+      this.address,
+      this.placeTitle,
+      this.visits,
+      this.note,
+      this.rate,
+      this.spTitle,
+      this.spId,
+      this.workHours,
+      {this.visited});
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -724,41 +741,39 @@ class DoctorModel {
       "rate": rate,
       "spTitle": spTitle,
       "spId": spId,
-      "workHours":workHours
+      "workHours": workHours
     };
   }
 
   factory DoctorModel.fromMap(Map<String, dynamic> map) {
     return DoctorModel(
-      map['id'],
-      map['title'],
-      map['placeId'],
-      map['address'],
-      map["placeTitle"],
-      map["visits"],
-      map["note"],
-      map["rate"],
-      map["spTitle"],
-      map['spId'],
-      visited: map["visited"],
-      map['workHours']
-    );
+        map['id'],
+        map['title'],
+        map['placeId'],
+        map['address'],
+        map["placeTitle"],
+        map["visits"],
+        map["note"],
+        map["rate"],
+        map["spTitle"],
+        map['spId'],
+        visited: map["visited"],
+        map['workHours']);
   }
   factory DoctorModel.fromMap1(Map<String, dynamic> map) {
     return DoctorModel(
-      (map['doctor_id']),
-      map['doctor_title'],
-      map['doctor_placeId'],
-      map['doctor_address'],
-      map['doctor_placeTitle'],
-      map['doctor_visits'],
-      visited: map['doctor_visited'],
-      map["note"],
-      map["rate"],
-      map['doctor_spTitle'],
-      map['doctor_spId'],
-      map['workHours']
-    );
+        (map['doctor_id']),
+        map['doctor_title'],
+        map['doctor_placeId'],
+        map['doctor_address'],
+        map['doctor_placeTitle'],
+        map['doctor_visits'],
+        visited: map['doctor_visited'],
+        map["note"],
+        map["rate"],
+        map['doctor_spTitle'],
+        map['doctor_spId'],
+        map['workHours']);
   }
 }
 
@@ -913,7 +928,7 @@ class LoginModel {
       this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
-      'samplesCount':samplesCount,
+      'samplesCount': samplesCount,
       'token': token,
       'repId': repId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
@@ -924,8 +939,8 @@ class LoginModel {
       'isLogin': 1,
       'endDate': endDate,
       'startDate': startDate,
-      'flag':flag,
-      'recipesCount':recipesCount,
+      'flag': flag,
+      'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
     };
@@ -1123,14 +1138,56 @@ class HospitalSpAllModel {
         map['titleSp']);
   }
 }
-class BrandRes{
+
+class BrandRes {
   int id;
   String title_en;
-  BrandRes(this.id,this.title_en);
+  BrandRes(this.id, this.title_en);
 }
-class StatePlan{
+
+class StatePlan {
   int index;
   int state;
-  StatePlan(this.index,this.state);
+  StatePlan(this.index, this.state);
 //state 0 true , state 1 more state 2 0
+}
+
+class ReciRequest {
+  String repId;
+  String type;
+  String docId;
+  String spName;
+  String brand_1;
+  String address;
+  String phone;
+  String total;
+  String? note1;
+  String? note2;
+  String? active;
+  String? note_emp;
+  File? image1;
+  File? image2;
+  String? brand_2;
+  String? brand_3;
+  String? brand_4;
+
+  ReciRequest(
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total, {
+    this.note1,
+    this.note2,
+    this.active,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
 }

@@ -18,24 +18,23 @@ class DatabaseHelper {
     return _database!;
   }
 
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < newVersion) {
-      if (oldVersion == 2) {
-        await db.execute('''
-        ALTER TABLE specialization ADD COLUMN sumBrandHospital INTEGER NOT NULL DEFAULT 0
-      ''');
-      }
-    }
-  }
-
+  // Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  //   if (oldVersion < newVersion) {
+  //     if (oldVersion == 2) {
+  //       await db.execute('''
+  //       ALTER TABLE specialization ADD COLUMN sumBrandHospital INTEGER NOT NULL DEFAULT 0
+  //     ''');
+  //     }
+  //   }
+  // }
 
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database.db');
     return await openDatabase(
       path,
-      version: 3,
-         onUpgrade: _onUpgrade,
+      version: 1,
+      //   onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
@@ -68,7 +67,7 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     sumDoctor INTEGER DEFAULT 0,
-    sumHospital INTEGER DEFAULT 0
+    sumHospital INTEGER DEFAULT 0,
     sumBrandHospital INTEGER DEFAULT 0
   );
 ''');
@@ -106,7 +105,7 @@ class DatabaseHelper {
 );
  ''');
     await db.execute('''
-      CREATE TABLE hospital (
+    CREATE TABLE hospital (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     address TEXT NOT NULL,
@@ -124,9 +123,8 @@ class DatabaseHelper {
      falg INTEGER NOT NULL,
      sampleCoast INTEGER NOT NULL
     );
-    '''
-    );
-    await db.execute('''
+    ''');
+    await db.execute( '''
         CREATE TABLE hospitalSp (
         id INTEGER PRIMARY KEY,
     hospitalId INTEGER NOT NULL,

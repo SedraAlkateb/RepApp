@@ -21,15 +21,14 @@ abstract class RepositorySql {
   Future<Either<Failure, LoginModel?>> getRep();
   Future<Either<Failure, String>> asyncData(
       List<BrandModel> brands,
-      List<PharmacyModel> pharmacies,
+    //  List<PharmacyModel> pharmacies,
       List<PlaceModel> places,
       List<SpecDModel> specs,
       List<DoctorModel> doctors,
       List<HospitalModel> hospitals,
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
-      List<PlanBrandModel> planBrands,
-      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
+      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor,{List<PlanBrandModel>? planBrands}
       );
   Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag();
   Future<Either<Failure, Null>> insertDoctor(List<DoctorModel> doctorModel);

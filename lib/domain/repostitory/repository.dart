@@ -26,5 +26,8 @@ abstract class Repository{
   Future<Either<Failure,VisitHospitalBase>> getHosVisit(int repPlanId, int representativeId);
   Future<Either<Failure,VisitDoctorBase>> getDocVisit(String repPlanId, String representativeId);
   Future<Either<Failure,List<BrandRes>>>getBrandRes(int repDet);
+  Future<Either<Failure,Message1Response>>insertReci(ReciRequest reciReq);
+  Future<Either<Failure,CheckReResponse>>checkRe(int repDet);
+
 
 }

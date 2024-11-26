@@ -851,6 +851,187 @@ class _AppServiceClient implements AppServiceClient {
     return _value;
   }
 
+  @override
+  Future<CheckReResponse> checkRe(int repDet) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repDet',
+      repDet.toString(),
+    ));
+    final _options = _setStreamType<CheckReResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/reci/checkRe.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CheckReResponse _value;
+    try {
+      _value = CheckReResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> insertReci(
+    String repId,
+    String type,
+    String docId,
+    String spName,
+    String brand_1,
+    String address,
+    String phone,
+    String total, {
+    String? note1,
+    String? note2,
+    File? image1,
+    File? image2,
+    String? brand_2,
+    String? brand_3,
+    String? brand_4,
+    String? note_emp,
+    String? active,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repId',
+      repId,
+    ));
+    _data.fields.add(MapEntry(
+      'type',
+      type,
+    ));
+    _data.fields.add(MapEntry(
+      'docId',
+      docId,
+    ));
+    _data.fields.add(MapEntry(
+      'spName',
+      spName,
+    ));
+    _data.fields.add(MapEntry(
+      'brand_1',
+      brand_1,
+    ));
+    _data.fields.add(MapEntry(
+      'address',
+      address,
+    ));
+    _data.fields.add(MapEntry(
+      'phone',
+      phone,
+    ));
+    _data.fields.add(MapEntry(
+      'total',
+      total,
+    ));
+    if (note1 != null) {
+      _data.fields.add(MapEntry(
+        'note1',
+        note1,
+      ));
+    }
+    if (note2 != null) {
+      _data.fields.add(MapEntry(
+        'note2',
+        note2,
+      ));
+    }
+    if (image1 != null) {
+      _data.files.add(MapEntry(
+        'image1',
+        MultipartFile.fromFileSync(
+          image1.path,
+          filename: image1.path.split(Platform.pathSeparator).last,
+        ),
+      ));
+    }
+    if (image2 != null) {
+      _data.files.add(MapEntry(
+        'image2',
+        MultipartFile.fromFileSync(
+          image2.path,
+          filename: image2.path.split(Platform.pathSeparator).last,
+        ),
+      ));
+    }
+    if (brand_2 != null) {
+      _data.fields.add(MapEntry(
+        'brand_2',
+        brand_2,
+      ));
+    }
+    if (brand_3 != null) {
+      _data.fields.add(MapEntry(
+        'brand_3',
+        brand_3,
+      ));
+    }
+    if (brand_4 != null) {
+      _data.fields.add(MapEntry(
+        'brand_4',
+        brand_4,
+      ));
+    }
+    if (note_emp != null) {
+      _data.fields.add(MapEntry(
+        'note_emp',
+        note_emp,
+      ));
+    }
+    if (active != null) {
+      _data.fields.add(MapEntry(
+        'active',
+        active,
+      ));
+    }
+    final _options = _setStreamType<Message1Response>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/reci/insertReci.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

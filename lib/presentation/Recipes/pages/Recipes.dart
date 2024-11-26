@@ -8,8 +8,9 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io';
 
-class Recipes extends StatelessWidget {
-  Recipes({super.key});
+class RecipesPage extends StatelessWidget {
+final   int docId;
+  RecipesPage({super.key,required this.docId});
 
   final TextEditingController _doctorSpController = TextEditingController();
 
@@ -61,8 +62,10 @@ class Recipes extends StatelessWidget {
                               Radio(
                                 activeColor: ColorManager.secondaryColor2,
                                 value: '0',
-                                groupValue:
-                                    context.watch<RecipesBrandBloc>().value,
+                                groupValue: context
+                                    .watch<RecipesBrandBloc>()
+                                    .insertRecipesObject
+                                    .type,
                                 onChanged: (value) {
                                   BlocProvider.of<RecipesBrandBloc>(context)
                                       .add(SelectTypeEvent(value ?? "0"));
@@ -78,8 +81,10 @@ class Recipes extends StatelessWidget {
                               Radio(
                                 activeColor: ColorManager.secondaryColor2,
                                 value: '1',
-                                groupValue:
-                                    context.watch<RecipesBrandBloc>().value,
+                                groupValue: context
+                                    .watch<RecipesBrandBloc>()
+                                    .insertRecipesObject
+                                    .type,
                                 onChanged: (value) {
                                   BlocProvider.of<RecipesBrandBloc>(context)
                                       .add(SelectTypeEvent(value ?? "0"));
@@ -95,8 +100,10 @@ class Recipes extends StatelessWidget {
                               Radio(
                                 activeColor: ColorManager.secondaryColor2,
                                 value: '2',
-                                groupValue:
-                                    context.watch<RecipesBrandBloc>().value,
+                                groupValue: context
+                                    .watch<RecipesBrandBloc>()
+                                    .insertRecipesObject
+                                    .type,
                                 onChanged: (value) {
                                   BlocProvider.of<RecipesBrandBloc>(context)
                                       .add(SelectTypeEvent(value ?? "0"));
@@ -128,49 +135,85 @@ class Recipes extends StatelessWidget {
                   prefixIcon: null,
                 ),
                 Text('المستحضر الأول'),
-                DropDownRecipesSearch(
-                  hintText: 'اختر المستحضر',
-                  items: context.watch<RecipesBrandBloc>().brandRecs,
-                  onChanged: (value) {
-                    BrandRes brand = value;
-                    BlocProvider.of<RecipesBrandBloc>(context)
-                        .add(SelectBrandEvent(brand.id));
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار المستحضر الأول";
-                    }
-                    return null;
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return DropDownRecipesSearch(
+                      hintText: state is AllRecipesLoadingState
+                          ? 'loading'
+                          : 'اختر المستحضر',
+                      items: context.watch<RecipesBrandBloc>().brandRecs,
+                      onChanged: (value) {
+                        BrandRes brand = value;
+                        BlocProvider.of<RecipesBrandBloc>(context)
+                            .add(SelectBrandEvent(id: brand.id,index: 1));
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "يرجى اختيار المستحضر الأول";
+                        }
+                        return null;
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثاني'),
-                DropDownRecipesSearch(
-                  hintText: 'اختر المستحضر',
-                  items: context.watch<RecipesBrandBloc>().brandRecs,
-                  onChanged: (value) {},
-                  validator: (value) {
-                    return null;
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return DropDownRecipesSearch(
+                      hintText: state is AllRecipesLoadingState
+                          ? 'loading'
+                          : 'اختر المستحضر',
+                      items: context.watch<RecipesBrandBloc>().brandRecs,
+                      onChanged: (value) {
+                        BrandRes brand = value;
+                        BlocProvider.of<RecipesBrandBloc>(context)
+                            .add(SelectBrandEvent(id: brand.id,index: 2));
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الثالث'),
-                DropDownRecipesSearch(
-                  hintText: 'اختر المستحضر',
-                  items: context.watch<RecipesBrandBloc>().brandRecs,
-                  onChanged: (value) {},
-                  validator: (value) {
-                    return null;
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return DropDownRecipesSearch(
+                      hintText: state is AllRecipesLoadingState
+                          ? 'loading'
+                          : 'اختر المستحضر',
+                      items: context.watch<RecipesBrandBloc>().brandRecs,
+                      onChanged: (value) {
+                        BrandRes brand = value;
+                        BlocProvider.of<RecipesBrandBloc>(context)
+                            .add(SelectBrandEvent(id: brand.id,index: 3));
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 5),
                 Text('المستحضر الرابع'),
-                DropDownRecipesSearch(
-                  hintText: 'اختر المستحضر',
-                  items: context.watch<RecipesBrandBloc>().brandRecs,
-                  onChanged: (value) {},
-                  validator: (value) {
-                    return null;
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return DropDownRecipesSearch(
+                      hintText: state is AllRecipesLoadingState
+                          ? 'loading'
+                          : 'اختر المستحضر',
+                      items: context.watch<RecipesBrandBloc>().brandRecs,
+                      onChanged: (value) {
+                        BrandRes brand = value;
+                        BlocProvider.of<RecipesBrandBloc>(context)
+                            .add(SelectBrandEvent(id: brand.id,index: 4));
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 5),
@@ -243,7 +286,9 @@ class Recipes extends StatelessWidget {
                 CustomDropDown(
                   hintText: 'اختر العدد',
                   items: [],
-                  onChanged: (value) {},
+                  onChanged: (value) {
+
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "يرجى اختيار العدد";
@@ -399,9 +444,10 @@ class Recipes extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('تم إرسال البيانات بنجاح')),
-                      );
+                      //      BlocProvider.of<RecipesBrandBloc>(context).add(InsertReciEvent(ReciRequest(UserInfo.repId.toString(), type, docId, spName, brand_1, address, phone, total)))
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(content: Text('تم إرسال البيانات بنجاح')),
+                      // );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

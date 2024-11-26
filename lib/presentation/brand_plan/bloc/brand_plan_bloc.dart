@@ -142,6 +142,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
               failure: Failure(5,
                   "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x.index].specModel.title}")));
         }
+     //   UserInfo.flag1=     UserInfo.flag1+1;
       }
     });
   }
@@ -150,6 +151,9 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
     //state 0 true , state 1 more state 2 0
     for (int i = 0; i < planBrand.length; i++) {
       for (int j = 0; j < planBrand[i].brands.length; j++) {
+        if(planBrand[i].brands[j].amount==0){
+          return StatePlan(i, 2);
+        }
         sum = sum + (planBrand[i].brands[j].amount);
       }
       if (sum > planBrand[i].brandm) {

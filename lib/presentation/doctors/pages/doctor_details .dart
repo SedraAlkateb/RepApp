@@ -1,3 +1,5 @@
+import 'package:domina_app/app/di.dart';
+import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
@@ -132,9 +134,10 @@ class DoctorDetails extends StatelessWidget {
                                 onPressed: () {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
-                                    Navigator.pushNamed(
+                                    initBrandRecModule();
+                                    Navigator.push(
                                       context,
-                                      Routes.Recipes,
+                                      MaterialPageRoute(builder: (context) => RecipesPage(docId: doctor.id,),),
                                     );
                                   });
                                 },

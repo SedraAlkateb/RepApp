@@ -150,3 +150,26 @@ class CreateProductObject with _$CreateProductObject {
       )
   =_CreateProductObject;
 }
+@freezed
+class InsertRecipesObject with _$InsertRecipesObject {
+  factory  InsertRecipesObject(
+  String repId,
+  String type,
+  String docId,
+  String spName,
+  String brand_1,
+  String address,
+  String phone,
+  String total,
+  String? note1,
+  String? note2,
+  String? active,
+  String? note_emp,
+  File? image1,
+  File? image2,
+  String? brand_2,
+  String? brand_3,
+  String? brand_4,
+      )
+  =_InsertRecipesObject;
+}

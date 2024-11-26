@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:domina_app/app/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/responses/responses.dart';
@@ -64,21 +66,19 @@ abstract class AppServiceClient {
   );
   @POST("/getHosVisit.php")
   Future<VisitHospitalBaseResponse> getHosVisit(
-      @Part(name: "repPlanId") int repPlanId,
-      @Part(name: "representativeId") int representativeId,
-      );
+    @Part(name: "repPlanId") int repPlanId,
+    @Part(name: "representativeId") int representativeId,
+  );
   @POST("/getDocVisit.php")
   Future<VisitDoctorBaseResponse> getDocVisit(
-      @Part(name: "repPlanId") String repPlanId,
-      @Part(name: "representativeId") String representativeId,
-      );
+    @Part(name: "repPlanId") String repPlanId,
+    @Part(name: "representativeId") String representativeId,
+  );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
   @POST("/insertPlanBrands.php")
   Future<Message1Response> repPlanBrand(@Body() RepPlanBrandBody list);
-
   @POST("/pharmacyVisit.php")
   Future<Message1Response> visitPharmacy(@Body() VisitPharmacyRequestBody list);
-
   @POST("/docVisit.php")
   Future<Message1Response> visitDoctor(@Body() VisitDoctorRequestBody list);
   @POST("/hosVisit.php")
@@ -87,15 +87,41 @@ abstract class AppServiceClient {
 //////////////////////////////////////
   @POST("/checkPlanStatus.php")
   Future<CheckBaseResponse> checkPlanBrand(
-      @Part(name: "repPlanId") int repPlanId,
-      );
+    @Part(name: "repPlanId") int repPlanId,
+  );
   @POST("/getPlans.php")
   Future<LoginResponse> checkActivePlanBrand(
-      @Part(name: "repDet") int repDet,
-      );
+    @Part(name: "repDet") int repDet,
+  );
   @POST("/reci/getBrands.php")
   Future<AllBrandResResponse> getBrandRes(
-      @Part(name: "repDet") int repDet,
+    @Part(name: "repDet") int repDet,
+  );
+  @POST("/reci/checkRe.php")
+  Future<CheckReResponse> checkRe(
+      @Part(name: "repDet") int repDet
+      );
+  @POST("/reci/insertReci.php")
+  Future<Message1Response> insertReci(
+      @Part(name: "repId") String repId,
+      @Part(name: "type") String type,
+      @Part(name: "docId") String docId,
+      @Part(name: "spName") String spName,
+      @Part(name: "brand_1") String brand_1,
+      @Part(name: "address") String address,
+      @Part(name: "phone") String phone,
+      @Part(name: "total") String total,
+      {
+        @Part(name: "note1") String? note1,
+        @Part(name: "note2") String ?note2,
+        @Part(name: "image1") File? image1,
+        @Part(name: "image2") File? image2,
+        @Part(name: "brand_2") String? brand_2,
+        @Part(name: "brand_3") String? brand_3,
+        @Part(name: "brand_4") String ?brand_4,
+        @Part(name: "note_emp") String ?note_emp,
+        @Part(name: "active") String ?active,
+      }
       );
   // @POST("/docVisit.php")
   // Future<List<VisitDoctorRequestBody>> uploadVisitDoctor();
