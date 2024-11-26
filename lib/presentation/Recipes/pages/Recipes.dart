@@ -145,7 +145,7 @@ final   int docId;
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 1));
+                            .add(SelectBrandEvent(id: brand.id, index: 1));
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -168,7 +168,7 @@ final   int docId;
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 2));
+                            .add(SelectBrandEvent(id: brand.id, index: 2));
                       },
                       validator: (value) {
                         return null;
@@ -188,7 +188,7 @@ final   int docId;
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 3));
+                            .add(SelectBrandEvent(id: brand.id, index: 3));
                       },
                       validator: (value) {
                         return null;
@@ -208,7 +208,7 @@ final   int docId;
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 4));
+                            .add(SelectBrandEvent(id: brand.id, index: 4));
                       },
                       validator: (value) {
                         return null;
@@ -286,9 +286,7 @@ final   int docId;
                 CustomDropDown(
                   hintText: 'اختر العدد',
                   items: [],
-                  onChanged: (value) {
-
-                  },
+                  onChanged: (value) {},
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "يرجى اختيار العدد";
