@@ -3,7 +3,9 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
+import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
+import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
 import 'package:domina_app/presentation/common/freezed_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -16,9 +18,8 @@ part 'recipes_brand_state.dart';
 class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   AllBrandsResUsecase allBrandsResUsecase;
   InsertReciUsecase insertReciUsecase;
+  ReciNumUsecase reciNumUsecase;
 
-  File? imageFile1;
-  File? imageFile2;
   final _picker = ImagePicker();
   InsertRecipesObject insertRecipesObject = InsertRecipesObject(
       UserInfo.repId.toString(),
@@ -38,7 +39,12 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "brand_2",
       'brand_3',
       "brand_4");
+  void empty() {
+    insertRecipesObject = InsertRecipesObject.empty();
+  }
+
   List<BrandRes> brandRecs = [];
+  List<int> numRec = [];
   Future<File?> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) return File(pickedFile.path);
@@ -48,25 +54,27 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   void updateValue(String value) {
     final updatedUser = insertRecipesObject.copyWith(type: value);
     insertRecipesObject = updatedUser;
-    print(updatedUser); // طباعة البيانات المعدلة
+    print(updatedUser);
   }
+
   void updateBrandValue(int index, int id) {
-    if(index==1){
+    if (index == 1) {
       final updatedUser = insertRecipesObject.copyWith(brand_1: id.toString());
       insertRecipesObject = updatedUser;
-    }else if(index==2){
+    } else if (index == 2) {
       final updatedUser = insertRecipesObject.copyWith(brand_2: id.toString());
       insertRecipesObject = updatedUser;
-    }else if(index==3){
+    } else if (index == 3) {
       final updatedUser = insertRecipesObject.copyWith(brand_3: id.toString());
       insertRecipesObject = updatedUser;
-    }else{
+    } else {
       final updatedUser = insertRecipesObject.copyWith(brand_4: id.toString());
       insertRecipesObject = updatedUser;
     }
-
   }
-  RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase)
+
+  RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
+      this.reciNumUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllRecipesEvent) {
@@ -78,9 +86,48 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           emit(AllRecipesState(data));
         });
       }
+      if (event is AllNumEvent) {
+        emit(AllNumLoadingState());
+        (await reciNumUsecase.execute()).fold((failure) {
+          emit(AllNumErrorState(failure: failure));
+        }, (data) async {
+          numRec = data;
+          emit(AllNumState(data));
+        });
+      }
+
       if (event is InsertReciEvent) {
+        final updatedUser = insertRecipesObject.copyWith(
+            brand_3: event.specialNotes,
+            address: event.address,
+            docId: event.docId.toString(),
+            note1: event.firstNote,
+            note2: event.secondNote,
+            note_emp: event.specialNotes,
+            spName: event.doctorSp,
+            phone: event.phone);
+        insertRecipesObject = updatedUser;
         emit(InsertRecipesLoadingState());
-        (await insertReciUsecase.execute(event.reciRequest)).fold((failure) {
+        (await insertReciUsecase.execute(ReciRequest(
+          insertRecipesObject.repId,
+          insertRecipesObject.type,
+          insertRecipesObject.docId,
+          insertRecipesObject.spName,
+          insertRecipesObject.brand_1,
+          insertRecipesObject.address,
+          insertRecipesObject.phone,
+          insertRecipesObject.total,
+          note_emp: insertRecipesObject.note_emp,
+          note2: insertRecipesObject.note2,
+          note1: insertRecipesObject.note1,
+          image1: insertRecipesObject.image1,
+          brand_2: insertRecipesObject.brand_2,
+          active: insertRecipesObject.active,
+          brand_3: insertRecipesObject.brand_3,
+          brand_4: insertRecipesObject.brand_4,
+          image2: insertRecipesObject.image2,
+        )))
+            .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
           emit(InsertRecipesState());
@@ -91,15 +138,21 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         updateValue(event.selectedTypeDoctor);
         emit(SelectTypeState(insertRecipesObject.type));
       }
-      if(event is SelectBrandEvent){
+      if (event is SelectBrandEvent) {
         updateBrandValue(event.index, event.id);
       }
+      if (event is SelectNumRecEvent) {
+        final updatedUser =
+            insertRecipesObject.copyWith(total: event.num.toString());
+        insertRecipesObject = updatedUser;
+      }
       if (event is PickImageEvent) {
-        print('fffffffffffff');
         if (event.index == 1) {
-          imageFile1 = event.image;
+          final updatedUser = insertRecipesObject.copyWith(image1: event.image);
+          insertRecipesObject = updatedUser;
         } else {
-          imageFile2 = event.image;
+          final updatedUser = insertRecipesObject.copyWith(image2: event.image);
+          insertRecipesObject = updatedUser;
         }
         emit(ImagePickedState(event.image));
       }

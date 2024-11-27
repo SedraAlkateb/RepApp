@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 
-class CustomDropDown extends StatelessWidget {
-  const CustomDropDown(
+class DropDownNum extends StatelessWidget {
+  const DropDownNum(
       {super.key,
-      required this.hintText,
-      required this.items,
-      required this.prefixIcon,
-      required this.onChanged,
-      required this.validator,
-      this.width,
-      this.value,
-      this.onTap});
+        required this.hintText,
+        required this.items,
+        required this.prefixIcon,
+        required this.onChanged,
+        required this.validator,
+        this.width,
+        this.value,
+        this.onTap});
   final String hintText;
   final List<dynamic> items;
   final Icon? prefixIcon;
@@ -24,6 +24,7 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
     return DropdownButtonFormField<dynamic>(
+
       elevation: 3,
       validator: validator,
       hint: Text(
@@ -32,6 +33,7 @@ class CustomDropDown extends StatelessWidget {
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
+
         filled: true,
         fillColor: ColorManager.secondaryColor3,
         prefixIcon: prefixIcon,
@@ -46,8 +48,8 @@ class CustomDropDown extends StatelessWidget {
         return DropdownMenuItem(
           value: val,
           onTap: onTap ?? () {},
-          child: Text(
-            "${val.name}",
+          child:  Text(
+            "${ val}",
             style: TextStyle(
               fontSize: tablet ? 19 : 14,
               color: Colors.black,
@@ -55,8 +57,7 @@ class CustomDropDown extends StatelessWidget {
             softWrap: false,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-          ),
-        );
+          ),);
       }).toList(),
       onChanged: onChanged,
       onTap: () {

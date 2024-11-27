@@ -65,6 +65,22 @@ Map<String, dynamic> _$CheckBaseResponseToJson(CheckBaseResponse instance) =>
       'representativePlan_Status': instance.data,
     };
 
+ReciNumResponse _$ReciNumResponseFromJson(Map<String, dynamic> json) =>
+    ReciNumResponse(
+      (json['recICounts'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$ReciNumResponseToJson(ReciNumResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'recICounts': instance.recICounts,
+    };
+
 BrandReResponse _$BrandReResponseFromJson(Map<String, dynamic> json) =>
     BrandReResponse(
       json['id'] as String?,
@@ -96,7 +112,8 @@ Map<String, dynamic> _$AllBrandResResponseToJson(
 
 CheckReResponse _$CheckReResponseFromJson(Map<String, dynamic> json) =>
     CheckReResponse(
-      (json['total'] as num?)?.toInt(),
+      json['total'] as String?,
+      json['accepted'] as bool?,
     )
       ..status = json['status'] as String?
       ..message = json['message'] as String?;
@@ -106,6 +123,7 @@ Map<String, dynamic> _$CheckReResponseToJson(CheckReResponse instance) =>
       'status': instance.status,
       'message': instance.message,
       'total': instance.total,
+      'accepted': instance.accepted,
     };
 
 CheckActiveResponse _$CheckActiveResponseFromJson(Map<String, dynamic> json) =>

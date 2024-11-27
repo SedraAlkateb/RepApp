@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -21,21 +22,21 @@ class BrandBloc extends Bloc<BrandEvent, BrandState> {
           brand = data;
           emit(AllBrandState(data));
         });
-      }
-      else    if (event is SearchbradEvent) {
-        List<BrandModel> brandlist;
-        brandlist = brand.where((value) {
-          if (value.title.contains(event.contant)) {
+      } else if (event is SearchbradEvent) {
+        List<BrandModel> brandList;
+        String search = normalizeText(event.contant);
+        brandList = brand.where((value) {
+          if (normalizeText(value.title).contains(search)) {
             return true;
           }
-          if (value.phTitle.contains(event.contant)) {
+          if (normalizeText(value.phTitle).contains(search)) {
             return true;
           }
 
           return false;
         }).toList();
 
-        emit(AllBrandState(brandlist));
+        emit(AllBrandState(brandList));
       }
     });
   }

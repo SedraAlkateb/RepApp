@@ -7,6 +7,7 @@ import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'visit_event.dart';
@@ -20,8 +21,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
   AllBrandsHospitalVisitsSqlUsecase allBrandsHospitalVisitsSqlUsecase;
   AllVisitHospitalSqlUsecase allVisitHospitalSqlUsecase;
   // UpdatePharmacyUsecase updatePharmacyUsecase;
-   UpdateDoctorUsecase updateDoctorUsecase;
-   UpdateHospitalUsecase updateHospitalUsecase;
+  UpdateDoctorUsecase updateDoctorUsecase;
+  UpdateHospitalUsecase updateHospitalUsecase;
   int current = 0;
   // List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors = [];
@@ -30,16 +31,16 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
   List<PharmacyBrandModel> brands = [];
 
   VisitBloc(
-    //    this.allVisitPharmacySqlUsecase,
-    this.allVisitDoctorSqlUsecase,
-    //     this.allBrandsPharmacyVisitsSqlUsecase,
-    this.allBrandsDoctorVisitsSqlUsecase,
-    this.allBrandsHospitalVisitsSqlUsecase,
-    this.allVisitHospitalSqlUsecase,
-    //   this.updatePharmacyUsecase,
-       this.updateDoctorUsecase,
-       this.updateHospitalUsecase
-  ) : super(VisitInitial()) {
+      //    this.allVisitPharmacySqlUsecase,
+      this.allVisitDoctorSqlUsecase,
+      //     this.allBrandsPharmacyVisitsSqlUsecase,
+      this.allBrandsDoctorVisitsSqlUsecase,
+      this.allBrandsHospitalVisitsSqlUsecase,
+      this.allVisitHospitalSqlUsecase,
+      //   this.updatePharmacyUsecase,
+      this.updateDoctorUsecase,
+      this.updateHospitalUsecase)
+      : super(VisitInitial()) {
     on<VisitEvent>((event, emit) async {
       // if(event is VisitPharmacyEvent)
       // {(
@@ -58,10 +59,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(VisitDoctorErrorState(failure: failure));
         }, (data) async {
           doctors = data;
-          if(doctors.isNotEmpty){
+          if (doctors.isNotEmpty) {
             emit(VisitDoctorState(data));
-
-          }else{
+          } else {
             emit(EmptyVisitHospitalState());
           }
         });
@@ -71,33 +71,35 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(VisitHospitalErrorState(failure: failure));
         }, (data) async {
           hospitals = data;
-          if(hospitals.isNotEmpty){
+          if (hospitals.isNotEmpty) {
             emit(VisitHospitalState(data));
-          }else{
+          } else {
             emit(EmptyVisitHospitalState());
           }
         });
       } else if (event is SearchDoctorVisitEvent) {
         List<VisitDoctorAndDoctor> doctorSearch;
+        String search = normalizeText(event.value);
         doctorSearch = doctors.where((value) {
-          if (value.doctorModel.title.contains(event.value)) {
+          if (normalizeText(value.doctorModel.title).contains(search)) {
             return true;
           }
-          if (value.visitDoctorModel.science!.contains(event.value)) {
+          if (normalizeText(value.visitDoctorModel.science ?? "")
+              .contains(search)) {
             return true;
           }
           return false;
-        }
-        ).toList();
+        }).toList();
         emit(SearchVisitDoctorState(doctorSearch));
-      }
-      else if (event is SearchHospitalVisitEvent) {
+      } else if (event is SearchHospitalVisitEvent) {
         List<VisitHospitalAndHospital> hospitalSearch;
+        String search = normalizeText(event.value);
         hospitalSearch = hospitals.where((value) {
-          if (value.hospitalModel.title.contains(event.value)) {
+          if (normalizeText(value.hospitalModel.title).contains(search)) {
             return true;
           }
-          if (value.visitHospitalModel.science!.contains(event.value)) {
+          if (normalizeText(value.visitHospitalModel.science!)
+              .contains(search)) {
             return true;
           }
           return false;
@@ -117,27 +119,27 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       //     });
       // }
 
-      if(event is UpdateVisitDoctorEvent)
-      {
+      if (event is UpdateVisitDoctorEvent) {
         print("object");
-        (await updateDoctorUsecase.execute(event.id,event.sc,event.kas,event.target)).fold(
-                (failure)  {print(failure.massage);
-            emit(UpdateVisitDoctorErrorState(failure: failure));},
-                (data)  async{
-              emit(UpdateVisitDoctorState());
-            });
+        (await updateDoctorUsecase.execute(
+                event.id, event.sc, event.kas, event.target))
+            .fold((failure) {
+          print(failure.massage);
+          emit(UpdateVisitDoctorErrorState(failure: failure));
+        }, (data) async {
+          emit(UpdateVisitDoctorState());
+        });
       }
-      if(event is UpdateVisitHospitalEvent)
-      {
-        (await updateHospitalUsecase.execute(event.id,event.sc,event.kas,event.target)).fold(
-                (failure)  {print(failure.massage);
-            emit(UpdateVisitHospitalErrorState(failure: failure));},
-                (data)  async{
-              emit(UpdateVisitHospitalState());
-
-            });
-      }
-      else if (event is BrandDoctorVisitEvent) {
+      if (event is UpdateVisitHospitalEvent) {
+        (await updateHospitalUsecase.execute(
+                event.id, event.sc, event.kas, event.target))
+            .fold((failure) {
+          print(failure.massage);
+          emit(UpdateVisitHospitalErrorState(failure: failure));
+        }, (data) async {
+          emit(UpdateVisitHospitalState());
+        });
+      } else if (event is BrandDoctorVisitEvent) {
         (await allBrandsDoctorVisitsSqlUsecase.execute(event.visitId)).fold(
             (failure) {
           print(failure.massage);

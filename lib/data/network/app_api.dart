@@ -123,8 +123,8 @@ abstract class AppServiceClient {
         @Part(name: "active") String ?active,
       }
       );
-  // @POST("/docVisit.php")
-  // Future<List<VisitDoctorRequestBody>> uploadVisitDoctor();
+  @POST("/reci/reciNum.php")
+   Future<ReciNumResponse> reciNum();
   // @POST("/hosVisit.php")
   // Future<List<VisitHospitalRequestBody>> uploadVisitHospital();
 }

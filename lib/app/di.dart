@@ -37,6 +37,7 @@ import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
@@ -62,6 +63,7 @@ import 'package:domina_app/domain/usecase/is_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
+import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
@@ -140,7 +142,7 @@ Future<void> initAsyncModule() async {
     }
     if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
       instance.registerFactory<DeleteAllSqlUsecase>(
-              () => DeleteAllSqlUsecase(instance()));
+          () => DeleteAllSqlUsecase(instance()));
     }
     instance.registerFactory<AllBrandsSpUsecase>(
         () => AllBrandsSpUsecase(instance()));
@@ -154,7 +156,7 @@ Future<void> initAsyncModule() async {
         () => GetVisitDoctorUsecase(instance()));
 
     instance.registerFactory<GetVisitHospitalUsecase>(
-            () => GetVisitHospitalUsecase(instance()));
+        () => GetVisitHospitalUsecase(instance()));
     instance.registerFactory<AsyncBloc>(() => AsyncBloc(
         instance(),
         instance(),
@@ -165,7 +167,7 @@ Future<void> initAsyncModule() async {
         instance(),
         instance(),
         instance(),
-     //   instance(),
+        //   instance(),
         instance(),
         instance(),
         instance(),
@@ -207,7 +209,7 @@ Future<void> initPlaceVisitModule() async {
         () => InsertVisitHospitalSqlUsecase(instance()));
     if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
       instance.registerFactory<AllBrandsSqlUsecase>(
-              () => AllBrandsSqlUsecase(instance()));
+          () => AllBrandsSqlUsecase(instance()));
     }
     instance.registerFactory<VisitPlaceBloc>(() => VisitPlaceBloc(
         instance(),
@@ -216,7 +218,7 @@ Future<void> initPlaceVisitModule() async {
         instance(),
         instance(),
         instance(),
-         instance(),
+        instance(),
         // instance(),instance(),instance(),
         instance(),
         instance()));
@@ -234,9 +236,9 @@ Future<void> initPlacesModule() async {
 Future<void> initVisitsModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorSqlUsecase>()) {
     instance.registerFactory<UpdateHospitalUsecase>(
-            () =>UpdateHospitalUsecase(instance()));
+        () => UpdateHospitalUsecase(instance()));
     instance.registerFactory<UpdateDoctorUsecase>(
-            () =>UpdateDoctorUsecase(instance()));
+        () => UpdateDoctorUsecase(instance()));
     instance.registerFactory<AllVisitDoctorSqlUsecase>(
         () => AllVisitDoctorSqlUsecase(instance()));
     instance.registerFactory<AllBrandsDoctorVisitsSqlUsecase>(
@@ -245,11 +247,10 @@ Future<void> initVisitsModule() async {
         () => AllBrandsHospitalVisitsSqlUsecase(instance()));
     instance.registerFactory<AllVisitHospitalSqlUsecase>(
         () => AllVisitHospitalSqlUsecase(instance()));
-    instance.registerFactory<VisitBloc>(
-        () => VisitBloc(instance(), instance(), instance(), instance()
-            ,instance(),instance()
-            //  ,instance(),instance(),instance()
-            ));
+    instance.registerFactory<VisitBloc>(() => VisitBloc(
+        instance(), instance(), instance(), instance(), instance(), instance()
+        //  ,instance(),instance(),instance()
+        ));
   }
   // instance.registerFactory<AllBrandsPharmacyVisitsSqlUsecase>(() =>AllBrandsPharmacyVisitsSqlUsecase(instance()));
   //  instance.registerFactory<UpdateDoctorUsecase>(() =>UpdateDoctorUsecase(instance()));
@@ -269,16 +270,21 @@ Future<void> initSpecModule() async {
         () => SpecializationBloc(instance(), instance(), instance()));
   }
 }
+
 Future<void> initBrandRecModule() async {
   if (!GetIt.I.isRegistered<AllBrandsResUsecase>()) {
     instance.registerFactory<InsertReciUsecase>(
-            () => InsertReciUsecase(instance()));
+        () => InsertReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
-            () => AllBrandsResUsecase(instance()));
+        () => AllBrandsResUsecase(instance()));
+    /////////////
+
+    instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-            () => RecipesBrandBloc(instance(),instance()));
+        () => RecipesBrandBloc(instance(), instance(), instance()));
   }
 }
+
 Future<void> initAsyncInModule() async {
   if (!GetIt.I.isRegistered<GetPharmacyVisitsSqlUsecase>()) {
     instance.registerFactory<VisitHospitalUsecase>(
@@ -303,8 +309,8 @@ Future<void> initAsyncInModule() async {
         () => GetHospitalSpVisitsSqlUsecase(instance()));
     instance.registerFactory<GetPlanBrandSqlUsecase>(
         () => GetPlanBrandSqlUsecase(instance()));
-    instance.registerFactory<IsPlanSqlUsecase>(
-            () => IsPlanSqlUsecase(instance()));
+    instance
+        .registerFactory<IsPlanSqlUsecase>(() => IsPlanSqlUsecase(instance()));
     instance
         .registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
     instance.registerFactory<UpdateFlagSqlUsecase>(
@@ -315,7 +321,7 @@ Future<void> initAsyncInModule() async {
     }
     if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
       instance.registerFactory<DeleteSqlUsecase>(
-              () => DeleteSqlUsecase(instance()));
+          () => DeleteSqlUsecase(instance()));
     }
 
     // if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
@@ -350,7 +356,7 @@ Future<void> initAsyncInModule() async {
         instance(),
         instance(),
         instance(),
-         instance(),
+        instance(),
         instance()));
   }
 }
@@ -359,7 +365,13 @@ Future<void> initdoctorModule() async {
   if (!GetIt.I.isRegistered<AllDoctorsSqlUsecase>()) {
     instance.registerFactory<AllDoctorsSqlUsecase>(
         () => AllDoctorsSqlUsecase(instance()));
-    instance.registerFactory<DoctorsBloc>(() => DoctorsBloc(instance()));
+    if (!GetIt.I.isRegistered<CheckReciUsecase>()){
+      instance
+          .registerFactory<CheckReciUsecase>(
+              () => CheckReciUsecase(instance()));
+    }
+
+    instance.registerFactory<DoctorsBloc>(() => DoctorsBloc(instance(),instance()));
   }
 }
 

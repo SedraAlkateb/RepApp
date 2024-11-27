@@ -28,6 +28,5 @@ abstract class Repository{
   Future<Either<Failure,List<BrandRes>>>getBrandRes(int repDet);
   Future<Either<Failure,Message1Response>>insertReci(ReciRequest reciReq);
   Future<Either<Failure,CheckReResponse>>checkRe(int repDet);
-
-
+  Future<Either<Failure,List<int>>>reciNum();
 }
