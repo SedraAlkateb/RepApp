@@ -68,6 +68,15 @@ extension ListVisitPharmacyRequestMapper on List<VisitPharmacyModel>? {
     return visitPharmacyRequest;
   }
 }
+extension ListReciNumMapper on ReciNumResponse? {
+  List<int> toDomain() {
+    List<int> reci =
+    (this?.recICounts?.map((response) => response) ?? const Iterable.empty())
+        .cast<int>()
+        .toList();
+    return reci;
+  }
+}
 
 extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   List<PlaceModel> toDomain() {
@@ -92,7 +101,7 @@ extension PlaceResponseMapper on PlaceResponse? {
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
     return SpecDModel(
-        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty, 0, 0,0);
+        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty, 0, 0, 0);
   }
 }
 
@@ -244,8 +253,8 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
     return doctorModel;
   }
 }
-extension BrandResResponseMapper on BrandReResponse? {
 
+extension BrandResResponseMapper on BrandReResponse? {
   BrandRes toDomain() {
     var document = parse(this?.title_en ?? Constants.empty);
     String plainText = document.body!.text;
@@ -255,16 +264,18 @@ extension BrandResResponseMapper on BrandReResponse? {
     );
   }
 }
+
 extension AllBrandResResponseMapper on AllBrandResResponse? {
   List<BrandRes> toDomain() {
     List<BrandRes> brand =
-    (this?.brandRes?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<BrandRes>()
-        .toList();
+        (this?.brandRes?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<BrandRes>()
+            .toList();
     return brand;
   }
 }
+
 extension HospitalResponseMapper on HospitalResponse? {
   HospitalModel toDomain() {
     return HospitalModel(

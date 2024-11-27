@@ -4,6 +4,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_hospital_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -15,45 +16,40 @@ class SpecializationBloc
   AllSpecsSqlUsecase allSpeUsecase;
   AllDoctorSpSqlUsecase allDoctorSpSqlUsecase;
   AllHospitalSpSqlUsecase allHospitalsSpSqlUsecase;
-    List<SpecDModel> specialization=[];
+  List<SpecDModel> specialization = [];
   int current = 0;
 
-  SpecializationBloc(
-      this.allSpeUsecase,
-      this.allDoctorSpSqlUsecase,
-      this.allHospitalsSpSqlUsecase
-      ) : super(SpecializationInitial()) {
+  SpecializationBloc(this.allSpeUsecase, this.allDoctorSpSqlUsecase,
+      this.allHospitalsSpSqlUsecase)
+      : super(SpecializationInitial()) {
     on<SpecializationEvent>((event, emit) async {
       if (event is SpecEvent) {
         //       emit(AllSpecLoadingState());
         (await allSpeUsecase.execute()).fold((failure) {
           emit(AllSpecErrorState(failure: failure));
         }, (data) async {
-          specialization=data;
+          specialization = data;
           emit(AllSpecState(data));
         });
-      }
-      else   if (event is SearchSpecEvent) {
-        List<SpecDModel> spec ;
+      } else if (event is SearchSpecEvent) {
+        List<SpecDModel> spec;
+        String search = normalizeText(event.contan);
+        spec = specialization.where((value) {
+          if (normalizeText(value.title).contains(search)) {
+            return true;
+          }
 
-        spec=specialization.where((value) {
-          if (value.title.contains(event.contan)) {
-          return true;
-          } 
-           
           return false;
         }).toList();
-          
+
         emit(AllSpecState(spec));
-      }
-      else   if (event is DoctorSpEvent) {
+      } else if (event is DoctorSpEvent) {
         (await allDoctorSpSqlUsecase.execute(event.sp)).fold((failure) {
           emit(AllSpecDoctorErrorState(failure: failure));
         }, (data) async {
           emit(AllDoctorSpState(data));
         });
-      }
-      else    if (event is HospitalSpEvent) {
+      } else if (event is HospitalSpEvent) {
         (await allHospitalsSpSqlUsecase.execute(event.sp)).fold((failure) {
           emit(AllSpecHospitalErrorState(failure: failure));
         }, (data) async {

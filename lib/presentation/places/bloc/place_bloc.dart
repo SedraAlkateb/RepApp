@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -39,8 +40,9 @@ List<VisitPharmacyModel> vi=[
         });
       }
       else    if (event is SearchPlaceEvent) {
+        String search = normalizeText(event.value);
         placeSearchModel = placeModel.where((value) {
-          if (value.title.contains(event.value)) {
+          if (normalizeText(value.title).contains(search)) {
             return true;
           } else {
             return false;

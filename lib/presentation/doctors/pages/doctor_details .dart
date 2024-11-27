@@ -1,18 +1,18 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
+import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DoctorDetails extends StatelessWidget {
   final DoctorModel doctor;
-
   DoctorDetails({required this.doctor});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,33 +121,56 @@ class DoctorDetails extends StatelessWidget {
                                 ),
                                 buildHtmlDetailRow(context, Icons.work,
                                     'أوقات العمل', doctor.workHours ?? ''),
-
                               ],
                             ),
-                          SizedBox(height:20 ,),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-
-                              ElevatedButton(
-                                onPressed: () {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    initBrandRecModule();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => RecipesPage(docId: doctor.id,),),
-                                    );
-                                  });
-                                },
-                                child: Text('إنشاء وصفة'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: Text('تكرار وصفة'),
-                              ),
-                            ],
+                          SizedBox(
+                            height: 20,
+                          ),
+                          BlocListener<DoctorsBloc, DoctorsState>(
+                            listener: (context, state) {
+                              if (state is CheckRecipesState) {
+                                if (state.isCheck == true) {
+                                  initBrandRecModule();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecipesPage(
+                                        docId: doctor.id,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'لقد تاوزت الحد المسموح لعدد الوصفات')),
+                                  );
+                                }
+                              }
+                              if (state is CheckRecipesErrorState) {
+                                error(context, state.failure.massage,
+                                    state.failure.code);
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      BlocProvider.of<DoctorsBloc>(context)
+                                          .add(CheckReciEvent(doctor.id));
+                                    });
+                                  },
+                                  child: Text('إنشاء وصفة '),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  child: Text('تكرار وصفة'),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),

@@ -35,3 +35,18 @@ final class AllDoctorEmptyState extends DoctorsState{
   List<Object?> get props =>[];
 
 }
+final class CheckRecipesState extends DoctorsState {
+  final bool isCheck;
+  CheckRecipesState(this.isCheck);
+  List<Object?> get props => [isCheck];
+}
+final class CheckRecipesErrorState extends DoctorsState {
+  final Failure failure;
+  CheckRecipesErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+final class CheckRecipesLoadingState extends DoctorsState {
+  @override
+  List<Object?> get props => [];
+}

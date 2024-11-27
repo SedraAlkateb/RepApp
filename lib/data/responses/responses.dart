@@ -29,7 +29,6 @@ class MessageResponse extends BaseResponse{
   // from json
   factory MessageResponse.fromJson(Map<String,dynamic>json)=>
       _$MessageResponseFromJson(json);
-
   // to json
   Map<String,dynamic>toJson()=>
       _$MessageResponseToJson(this);
@@ -62,6 +61,19 @@ class CheckBaseResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$CheckBaseResponseToJson(this);
 }
+
+@JsonSerializable()
+class ReciNumResponse extends BaseResponse{
+  @JsonKey(name: "recICounts")
+  List<int> ?recICounts;
+  ReciNumResponse(this.recICounts);
+  // from json
+  factory ReciNumResponse.fromJson(Map<String,dynamic>json)=>
+      _$ReciNumResponseFromJson(json);
+
+  Map<String,dynamic>toJson()=>
+      _$ReciNumResponseToJson(this);
+}
 @JsonSerializable()
 class BrandReResponse {
   @JsonKey(name: "id")
@@ -92,8 +104,10 @@ class AllBrandResResponse extends BaseResponse{
 @JsonSerializable()
 class CheckReResponse extends BaseResponse{
   @JsonKey(name: "total")
- int? total;
-  CheckReResponse(this.total);
+ String? total;
+  @JsonKey(name: "accepted")
+  bool? accepted;
+  CheckReResponse(this.total,this.accepted);
   // from json
   factory CheckReResponse.fromJson(Map<String,dynamic>json)=>
       _$CheckReResponseFromJson(json);

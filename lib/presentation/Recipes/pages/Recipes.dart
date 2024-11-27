@@ -1,23 +1,29 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
+import 'package:domina_app/presentation/Recipes/widget/drop_down_num.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_recipes.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io';
 
-class RecipesPage extends StatelessWidget {
-final   int docId;
-  RecipesPage({super.key,required this.docId});
+class RecipesPage extends StatefulWidget {
+  final int docId;
+  RecipesPage({super.key, required this.docId});
 
+  @override
+  State<RecipesPage> createState() => _RecipesPageState();
+}
+
+class _RecipesPageState extends State<RecipesPage> {
   final TextEditingController _doctorSpController = TextEditingController();
 
-  final TextEditingController _noteoneController =
+  final TextEditingController firstNoteController =
       TextEditingController(text: "يرجى عدم تبديل الدواء");
 
-  final TextEditingController _notetwoController = TextEditingController();
+  final TextEditingController _secondNoteController = TextEditingController();
 
   final TextEditingController _addressController = TextEditingController();
 
@@ -26,7 +32,12 @@ final   int docId;
   final TextEditingController _specialNotesController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
+@override
+  void initState() {
+  BlocProvider.of<RecipesBrandBloc>(context)
+      .empty();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,17 +149,18 @@ final   int docId;
                 BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                   builder: (context, state) {
                     return DropDownRecipesSearch(
-                      hintText: state is AllRecipesLoadingState
+                      hintText: (state is AllRecipesLoadingState ||
+                              state is AllNumLoadingState)
                           ? 'loading'
                           : 'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 1));
+                            .add(SelectBrandEvent(id: brand.id, index: 1));
                       },
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null) {
                           return "يرجى اختيار المستحضر الأول";
                         }
                         return null;
@@ -161,14 +173,15 @@ final   int docId;
                 BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                   builder: (context, state) {
                     return DropDownRecipesSearch(
-                      hintText: state is AllRecipesLoadingState
+                      hintText: (state is AllRecipesLoadingState ||
+                              state is AllNumLoadingState)
                           ? 'loading'
                           : 'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 2));
+                            .add(SelectBrandEvent(id: brand.id, index: 2));
                       },
                       validator: (value) {
                         return null;
@@ -181,14 +194,15 @@ final   int docId;
                 BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                   builder: (context, state) {
                     return DropDownRecipesSearch(
-                      hintText: state is AllRecipesLoadingState
+                      hintText: (state is AllRecipesLoadingState ||
+                              state is AllNumLoadingState)
                           ? 'loading'
                           : 'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 3));
+                            .add(SelectBrandEvent(id: brand.id, index: 3));
                       },
                       validator: (value) {
                         return null;
@@ -201,14 +215,15 @@ final   int docId;
                 BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                   builder: (context, state) {
                     return DropDownRecipesSearch(
-                      hintText: state is AllRecipesLoadingState
+                      hintText: (state is AllRecipesLoadingState ||
+                              state is AllNumLoadingState)
                           ? 'loading'
                           : 'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectBrandEvent(id: brand.id,index: 4));
+                            .add(SelectBrandEvent(id: brand.id, index: 4));
                       },
                       validator: (value) {
                         return null;
@@ -220,7 +235,7 @@ final   int docId;
                 Text('الملاحظة الأولى'),
                 BoxTextField(
                   prefixIcon: null,
-                  controller: _noteoneController,
+                  controller: firstNoteController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -237,7 +252,7 @@ final   int docId;
                 Text('الملاحظة الثانية'),
                 BoxTextField(
                   inputFormatters: [],
-                  controller: _notetwoController,
+                  controller: _secondNoteController,
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     return null;
@@ -283,19 +298,27 @@ final   int docId;
                 ),
                 SizedBox(height: 10),
                 Text('عدد الوصفات المطبوعة'),
-                CustomDropDown(
-                  hintText: 'اختر العدد',
-                  items: [],
-                  onChanged: (value) {
-
+                BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                  builder: (context, state) {
+                    return DropDownNum(
+                      hintText: (state is AllRecipesLoadingState ||
+                              state is AllNumLoadingState)
+                          ? "loading"
+                          : 'اختر العدد',
+                      items: context.watch<RecipesBrandBloc>().numRec,
+                      onChanged: (value) {
+                        BlocProvider.of<RecipesBrandBloc>(context)
+                            .add(SelectNumRecEvent(num: "2"));
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return "يرجى اختيار العدد";
+                        }
+                        return null;
+                      },
+                      prefixIcon: null,
+                    );
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى اختيار العدد";
-                    }
-                    return null;
-                  },
-                  prefixIcon: null,
                 ),
                 SizedBox(height: 10),
                 Text('ملاحظات خاصة للمندوب'),
@@ -332,8 +355,10 @@ final   int docId;
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Container(
-                                  height: 100,
-                                  width: 100,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.15,
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.15,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
@@ -342,7 +367,8 @@ final   int docId;
                                   ),
                                   child: context
                                               .watch<RecipesBrandBloc>()
-                                              .imageFile1 !=
+                                              .insertRecipesObject
+                                              .image1 !=
                                           null
                                       ? ClipRRect(
                                           borderRadius:
@@ -350,9 +376,16 @@ final   int docId;
                                           child: Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
-                                                .imageFile1!,
-                                            height: 100,
-                                            width: 100,
+                                                .insertRecipesObject
+                                                .image1!,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.15,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.15,
                                             fit: BoxFit.cover,
                                           ),
                                         )
@@ -392,8 +425,10 @@ final   int docId;
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Container(
-                                  height: 100,
-                                  width: 100,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.15,
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.15,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
@@ -402,7 +437,8 @@ final   int docId;
                                   ),
                                   child: context
                                               .watch<RecipesBrandBloc>()
-                                              .imageFile2 !=
+                                              .insertRecipesObject
+                                              .image2 !=
                                           null
                                       ? ClipRRect(
                                           borderRadius:
@@ -410,9 +446,16 @@ final   int docId;
                                           child: Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
-                                                .imageFile2!,
-                                            height: 100,
-                                            width: 100,
+                                                .insertRecipesObject
+                                                .image2!,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.2,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.2,
                                             fit: BoxFit.cover,
                                           ),
                                         )
@@ -441,24 +484,49 @@ final   int docId;
                   },
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      //      BlocProvider.of<RecipesBrandBloc>(context).add(InsertReciEvent(ReciRequest(UserInfo.repId.toString(), type, docId, spName, brand_1, address, phone, total)))
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(content: Text('تم إرسال البيانات بنجاح')),
-                      // );
-                    } else {
+                BlocListener<RecipesBrandBloc, RecipesBrandState>(
+                  listener: (context, state) {
+                    if (state is InsertRecipesLoadingState) {
+                      loading(context);
+                    }
+                    if (state is InsertRecipesState) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        success(context);
+                        Navigator.of(context).pop();
+                      });
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                          backgroundColor: ColorManager.secondaryColor,
-                        ),
+                        SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                       );
                     }
+                    if (state is InsertRecipesErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                    }
                   },
-                  child: Text(
-                    "إرسال",
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        BlocProvider.of<RecipesBrandBloc>(context).add(
+                            InsertReciEvent(
+                                _doctorSpController.text,
+                                firstNoteController.text,
+                                _secondNoteController.text,
+                                _addressController.text,
+                                _connectController.text,
+                                _specialNotesController.text,
+                                widget.docId,
+                                _connectController.text));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                            backgroundColor: ColorManager.secondaryColor,
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      "إرسال",
+                    ),
                   ),
                 ),
               ],

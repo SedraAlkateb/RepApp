@@ -6,6 +6,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_other_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -37,7 +38,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           planBrandActiveSearch = data;
           emit(AllBrandPlanState(data));
         });
-        if (UserInfo.otherPlanId != null&&UserInfo.otherPlanId != 0) {
+        if (UserInfo.otherPlanId != null && UserInfo.otherPlanId != 0) {
           (await allOtherBrandPlanSqlUsecase.execute(UserInfo.otherPlanId ?? 0))
               .fold((failure) {
             emit(AllBrandPlanErrorState(failure: failure));
@@ -52,8 +53,9 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           });
         }
       } else if (event is SearchBrandEvent) {
+        String search = normalizeText(event.value);
         planBrandActiveSearch = planBrandActive.where((value) {
-          if (value.brandModel.title.contains(event.value)) {
+          if (normalizeText(value.brandModel.title).contains(search)) {
             return true;
           } else {
             return false;
@@ -118,7 +120,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
                   "لقد تجاوزت الحد المسموح في إختصاص ${planBrand[x.index].specModel.title}")));
-        } else if (x.state== 2) {
+        } else if (x.state == 2) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
                   "لم يتم تعبئة إختصاص (${planBrand[x.index].specModel.title})")));
@@ -130,7 +132,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        } else if (x.state == 0 ) {
+        } else if (x.state == 0) {
           (await updateBrandPlanSqlUsecase.execute(planBrand)).fold((failure) {
             emit(UpdateAmountErrorState(failure: failure));
             return false;
@@ -142,7 +144,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
               failure: Failure(5,
                   "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x.index].specModel.title}")));
         }
-     //   UserInfo.flag1=     UserInfo.flag1+1;
+        //   UserInfo.flag1=     UserInfo.flag1+1;
       }
     });
   }
@@ -151,7 +153,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
     //state 0 true , state 1 more state 2 0
     for (int i = 0; i < planBrand.length; i++) {
       for (int j = 0; j < planBrand[i].brands.length; j++) {
-        if(planBrand[i].brands[j].amount==0){
+        if (planBrand[i].brands[j].amount == 0) {
           return StatePlan(i, 2);
         }
         sum = sum + (planBrand[i].brands[j].amount);
@@ -166,6 +168,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
     }
     return StatePlan(0, 0);
   }
+
   StatePlan isSumSave() {
     sum = 0;
     //state 0 true , state 1 more state 2 0

@@ -23,6 +23,24 @@ final class AllRecipesLoadingState extends RecipesBrandState {
   List<Object?> get props => [];
 }
 //
+
+//
+final class AllNumState extends RecipesBrandState {
+  final List<int> numRec;
+  AllNumState(this.numRec);
+  List<Object?> get props => [numRec];
+}
+final class AllNumErrorState extends RecipesBrandState {
+  final Failure failure;
+  AllNumErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+final class AllNumLoadingState extends RecipesBrandState {
+  @override
+  List<Object?> get props => [];
+}
+//
 final class InsertRecipesState extends RecipesBrandState {
   List<Object?> get props => [];
 }

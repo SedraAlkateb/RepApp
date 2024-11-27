@@ -11,7 +11,7 @@ class AllDoctorEvent extends DoctorsEvent {
 
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class SearchDocEvent extends DoctorsEvent {
@@ -22,4 +22,9 @@ class SearchDocEvent extends DoctorsEvent {
 
 
 
+}
+class CheckReciEvent extends DoctorsEvent {
+  final int docId;
+  CheckReciEvent(this.docId);
+  List<Object?> get props => [docId];
 }
