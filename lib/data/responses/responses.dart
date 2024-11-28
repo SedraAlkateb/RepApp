@@ -115,6 +115,20 @@ class CheckReResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$CheckReResponseToJson(this);
 }
+/////CopyReeciResponse//////
+@JsonSerializable()
+class CopyReeciResponse extends BaseResponse{
+  @JsonKey(name: "")
+  CheckResponse data;
+  CopyReeciResponse(this.data);
+  // from json
+  factory CopyReeciResponse.fromJson(Map<String,dynamic>json)=>
+      _$CopyReeciResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CopyReeciResponseToJson(this);
+}
 @JsonSerializable()
 class CheckActiveResponse {
   @JsonKey(name: "activePlanId")

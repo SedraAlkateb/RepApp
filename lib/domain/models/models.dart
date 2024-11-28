@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:domina_app/app/user_info.dart';
 
 class VisitPharmacyModel {
   int id;
-
   String data;
   String note;
   int pharmacyId;

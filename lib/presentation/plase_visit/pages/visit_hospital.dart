@@ -149,7 +149,7 @@ class _VisitHospitalState extends State<VisitHospital>
                              specialization  =state.specialization;
                            }
                            return  Customdropdownsearchspec(
-                             hintText: "الاختصاصات",
+                             hintText: "الإختصاصات",
                              items: specialization,
                              onChanged: (value) {
                                SpecHospitalSp specModel = value;
@@ -158,7 +158,7 @@ class _VisitHospitalState extends State<VisitHospital>
                              },
                              validator: (value) {
                                if (value == null) {
-                                 return "اختر الاختصاص";
+                                 return "اختر الإختصاص";
                                }
                                return null;
                              },
@@ -190,7 +190,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                   Theme.of(context).textTheme.headlineLarge,
                                 ),
                                 Text(
-                                  "عدد الاطباء: ${state.total}",
+                                  "عدد الأطباء: ${state.total}",
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),

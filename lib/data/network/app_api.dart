@@ -127,4 +127,8 @@ abstract class AppServiceClient {
    Future<ReciNumResponse> reciNum();
   // @POST("/hosVisit.php")
   // Future<List<VisitHospitalRequestBody>> uploadVisitHospital();
+  @POST("/reci/copyRe.php")
+  Future<CopyReeciResponse> copyReeci(
+      @Part(name: "repDet") int repDet,
+      );
 }

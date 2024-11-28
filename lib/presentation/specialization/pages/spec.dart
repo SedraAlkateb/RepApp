@@ -34,7 +34,7 @@ class SpecializationsPage extends StatelessWidget {
               );
             },
           ),
-          title: Text('الاختصاصات'),
+          title: Text('الإختصاصات'),
         ),
         body:  SingleChildScrollView(
           child: Container(

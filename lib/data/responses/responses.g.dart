@@ -126,6 +126,21 @@ Map<String, dynamic> _$CheckReResponseToJson(CheckReResponse instance) =>
       'accepted': instance.accepted,
     };
 
+CopyReeciResponse _$CopyReeciResponseFromJson(Map<String, dynamic> json) =>
+    CopyReeciResponse(
+      CheckResponse.fromJson(
+          json['representativePlan_Status'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$CopyReeciResponseToJson(CopyReeciResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'representativePlan_Status': instance.data,
+    };
+
 CheckActiveResponse _$CheckActiveResponseFromJson(Map<String, dynamic> json) =>
     CheckActiveResponse(
       json['activePlanId'] as String?,
