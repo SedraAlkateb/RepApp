@@ -906,7 +906,6 @@ class _AppServiceClient implements AppServiceClient {
     String? brand_3,
     String? brand_4,
     String? note_emp,
-    String? active,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -999,12 +998,6 @@ class _AppServiceClient implements AppServiceClient {
         note_emp,
       ));
     }
-    if (active != null) {
-      _data.fields.add(MapEntry(
-        'active',
-        active,
-      ));
-    }
     final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',
       headers: _headers,
@@ -1066,16 +1059,16 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<CopyReeciResponse> copyReeci(int repDet) async {
+  Future<CopyRecResponse> copyReci(int docId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
+      'docId',
+      docId.toString(),
     ));
-    final _options = _setStreamType<CopyReeciResponse>(Options(
+    final _options = _setStreamType<CopyRecResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -1092,9 +1085,9 @@ class _AppServiceClient implements AppServiceClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late CopyReeciResponse _value;
+    late CopyRecResponse _value;
     try {
-      _value = CopyReeciResponse.fromJson(_result.data!);
+      _value = CopyRecResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

@@ -115,19 +115,73 @@ class CheckReResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$CheckReResponseToJson(this);
 }
-/////CopyReeciResponse//////
+/////CopyReecResponse//////
+
 @JsonSerializable()
-class CopyReeciResponse extends BaseResponse{
-  @JsonKey(name: "")
-  CheckResponse data;
-  CopyReeciResponse(this.data);
+class CopyRecResponse extends BaseResponse{
+  @JsonKey(name: "recip")
+  CopyRecipResponse? recip;
+  CopyRecResponse ( this.recip);
   // from json
-  factory CopyReeciResponse.fromJson(Map<String,dynamic>json)=>
-      _$CopyReeciResponseFromJson(json);
+  factory CopyRecResponse.fromJson(Map<String,dynamic>json)=>
+      _$CopyRecResponseFromJson(json);
 
   // to json
   Map<String,dynamic>toJson()=>
-      _$CopyReeciResponseToJson(this);
+      _$CopyRecResponseToJson(this);
+}
+
+@JsonSerializable()
+class CopyRecipResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "repId")
+  String? repId;
+  @JsonKey(name: "type")
+  String? type;
+  @JsonKey(name: "docId")
+  String? docId;
+  @JsonKey(name: "spName")
+  String? spName;
+  @JsonKey(name: "brand_1")
+  String? brand_1;
+  @JsonKey(name: "brand_2")
+  String? brand_2;
+  @JsonKey(name: "brand_3")
+  String? brand_3;
+  @JsonKey(name: "brand_4")
+  String? brand_4;
+  @JsonKey(name: "note1")
+  String? note1;
+  @JsonKey(name: "note2")
+  String? note2;
+  @JsonKey(name: "address")
+  String? address;
+  @JsonKey(name: "phone")
+  String? phone;
+  @JsonKey(name: "total")
+  String? total;
+  @JsonKey(name: "note_emp")
+  String? note_emp;
+  @JsonKey(name: "image1")
+  String? image1;
+  @JsonKey(name: "image2")
+  String? image2;
+
+
+
+
+  CopyRecipResponse(this.id,this.repId,this.type,this.docId,this.spName,
+  this.brand_1,this.brand_2,this.brand_3,this.brand_4,this.note1,
+      this.note2,this.address,this.phone,this.total,this.note_emp,this.image1,this.image2);
+
+  // from json
+  factory CopyRecipResponse.fromJson(Map<String,dynamic>json)=>
+      _$CopyRecipResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CopyRecipResponseToJson(this);
 }
 @JsonSerializable()
 class CheckActiveResponse {

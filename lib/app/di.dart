@@ -38,6 +38,7 @@ import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
+import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
@@ -277,11 +278,13 @@ Future<void> initBrandRecModule() async {
         () => InsertReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
         () => AllBrandsResUsecase(instance()));
+    instance.registerFactory<CopyReciUsecase>(
+            () => CopyReciUsecase(instance()));
     /////////////
 
     instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-        () => RecipesBrandBloc(instance(), instance(), instance()));
+        () => RecipesBrandBloc(instance(), instance(),instance(),instance()));
   }
 }
 

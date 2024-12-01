@@ -141,7 +141,7 @@ class InsertRecipesObject with _$InsertRecipesObject {
     String total,
     String? note1,
     String? note2,
-    String? active,
+
     String? note_emp,
     File? image1,
     File? image2,
@@ -159,7 +159,6 @@ class InsertRecipesObject with _$InsertRecipesObject {
         '',
         '',
         '',
-        null,
         null,
         null,
         null,

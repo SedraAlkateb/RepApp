@@ -120,7 +120,6 @@ abstract class AppServiceClient {
         @Part(name: "brand_3") String? brand_3,
         @Part(name: "brand_4") String ?brand_4,
         @Part(name: "note_emp") String ?note_emp,
-        @Part(name: "active") String ?active,
       }
       );
   @POST("/reci/reciNum.php")
@@ -128,7 +127,7 @@ abstract class AppServiceClient {
   // @POST("/hosVisit.php")
   // Future<List<VisitHospitalRequestBody>> uploadVisitHospital();
   @POST("/reci/copyRe.php")
-  Future<CopyReeciResponse> copyReeci(
-      @Part(name: "repDet") int repDet,
+  Future<CopyRecResponse> copyReci(
+      @Part(name: "docId") int docId,
       );
 }

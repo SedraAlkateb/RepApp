@@ -1161,7 +1161,6 @@ class ReciRequest {
   String total;
   String? note1;
   String? note2;
-  String? active;
   String? note_emp;
   File? image1;
   File? image2;
@@ -1180,7 +1179,6 @@ class ReciRequest {
     this.total, {
     this.note1,
     this.note2,
-    this.active,
     this.note_emp,
     this.image1,
     this.image2,
@@ -1188,4 +1186,45 @@ class ReciRequest {
     this.brand_3,
     this.brand_4,
   });
+}
+///
+class CopyReciRequest {
+  int id;
+  int repId;
+  int type;
+  int docId;
+  String spName;
+  int brand_1;
+  String? brand_2;
+  String? brand_3;
+  String? brand_4;
+  String? note1;
+  String? note2;
+  String address;
+  String phone;
+  String total;
+  String? note_emp;
+  String? image1;
+  String? image2;
+
+
+  CopyReciRequest(
+      this.id,
+      this.repId,
+      this.type,
+      this.docId,
+      this.spName,
+      this.brand_1,
+      this.address,
+      this.phone,
+      this.total, {
+        this.note1,
+        this.note2,
+        this.note_emp,
+        this.image1,
+        this.image2,
+        this.brand_2,
+        this.brand_3,
+        this.brand_4,
+      });
 }
