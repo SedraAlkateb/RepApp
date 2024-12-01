@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
       List<BrandModel> brands,
-     // List<PharmacyModel> pharmacies,
+      // List<PharmacyModel> pharmacies,
       List<PlaceModel> places,
       List<SpecDModel> specs,
       List<DoctorModel> doctors,
@@ -118,7 +118,7 @@ class AppSqlApi extends AppSqlApiAbs {
 
   Future<String> asyncData(
       List<BrandModel> brands,
-    //  List<PharmacyModel> pharmacies,
+      //  List<PharmacyModel> pharmacies,
       List<PlaceModel> places,
       List<SpecDModel> specs,
       List<DoctorModel> doctors,
@@ -340,9 +340,9 @@ class AppSqlApi extends AppSqlApiAbs {
       'visit_hospital',
       'visit_pharmacy',
       'brandSp',
-  //    (UserInfo.flag1 == 0) ?
+      //    (UserInfo.flag1 == 0) ?
       'planBrand',
-    //      : null,
+      //      : null,
       'hospitalSp',
       'doctor',
       'pharmacy',
@@ -594,9 +594,9 @@ class AppSqlApi extends AppSqlApiAbs {
       visit_doctor.kaswn as visit_doctor_kaswn, 
       visit_doctor.science as visit_doctor_science, 
       visit_doctor.additaion as visit_doctor_additaion,
-       visit_doctor.target  as visit_doctor_target,
+      visit_doctor.target  as visit_doctor_target,
       visit_doctor.doctorId as visit_doctor_doctorId,
-       visit_doctor.flag,
+      visit_doctor.flag,
       doctor.id as doctor_id, 
       doctor.title as doctor_title, 
       doctor.address as doctor_address,
@@ -608,7 +608,8 @@ class AppSqlApi extends AppSqlApiAbs {
       doctor.workHours as workHours
     FROM visit_doctor
     JOIN doctor ON visit_doctor.doctorId = doctor.id
-    ''');
+    ORDER BY visit_doctor.data DESC
+  ''');
     return List.generate(maps.length, (i) {
       VisitDoctorModel visitDoctorModel = VisitDoctorModel.fromMap1(maps[i]);
       DoctorModel doctorModel = DoctorModel.fromMap1(maps[i]);
@@ -644,7 +645,7 @@ class AppSqlApi extends AppSqlApiAbs {
     JOIN hospitalSp ON visit_hospital.hospitalSpId = hospitalSp.id
     JOIN hospital ON hospitalSp.hospitalId = hospital.id
     JOIN specialization ON hospitalSp.spId = specialization.id
-
+    ORDER BY visit_hospital.data DESC
     ''');
     return List.generate(maps.length, (i) {
       VisitHospitalModel visitHospitalModel =
@@ -958,6 +959,9 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     if (science != null) {
       updates['science'] = science;
+    }
+    if (target != null) {
+      updates['target'] = target;
     }
     if (updates.isNotEmpty) {
       await mydb.update(

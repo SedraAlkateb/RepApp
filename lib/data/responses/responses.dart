@@ -772,10 +772,13 @@ class VisitResponse {
   String? issue;
   @JsonKey(name: "special")
   String? special;
+  @JsonKey(name: "target")
+  String? target;
+
 
 
   VisitResponse(this.id, this.repPlanId, this.representativeId,
-      this.docId, this.visitDate, this.note, this.issue, this.special);
+      this.docId, this.visitDate, this.note, this.issue, this.special,this.target);
 
   factory VisitResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitResponseFromJson(json);
@@ -801,9 +804,11 @@ class VisitHosResponse {
   String? issue;
   @JsonKey(name: "special")
   String? special;
+  @JsonKey(name: "target")
+  String? target;
 
   VisitHosResponse(this.id, this.repPlanId, this.representativeId,
-      this.docId, this.visitDate, this.note, this.issue, this.special);
+      this.docId, this.visitDate, this.note, this.issue, this.special,this.target);
 
   factory VisitHosResponse.fromJson(Map<String,dynamic>json)=>
       _$VisitHosResponseFromJson(json);

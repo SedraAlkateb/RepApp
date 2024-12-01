@@ -57,7 +57,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   int loading = 0;
   AsyncBloc(
       this.allBrandsUsecase,
-    //  this.allPharmacyUsecase,
+      //  this.allPharmacyUsecase,
       this.allPlaceUsecase,
       this.allSpeUsecase,
       this.asyncDataSqlUsecase,
@@ -77,28 +77,29 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       Future<bool> setData() async {
         emit(LoadingState(12));
         final result = await asyncDataSqlUsecase.execute(
-            brands,
-        //    pharmacies,
-            places,
-            spec,
-            doctors,
-            hospitals,
-            hospitalSps,
-            brandSpModel,
-            visitHospital!,
-            visitDoctor!,
-             planBrands: planBrands
-         //   (UserInfo.flag1 == 0)?
+          brands,
+          //    pharmacies,
+          places,
+          spec,
+          doctors,
+          hospitals,
+          hospitalSps,
+          brandSpModel,
+          visitHospital!,
+          visitDoctor!,
+          planBrands: planBrands
+          //   (UserInfo.flag1 == 0)?
 
-        //        :null
-          ,);
+          //        :null
+          ,
+        );
         result.fold((failure) {
           emit(SyncDataErrorState(failure: failure));
           return false;
         }, (data) {
           print("brand");
           brands = [];
-      //    pharmacies = [];
+          //    pharmacies = [];
           places = [];
           spec = [];
           doctors = [];
@@ -120,7 +121,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         try {
           brands = [];
           places = [];
-   //       pharmacies = [];
+          //       pharmacies = [];
           spec = [];
           hospitalSps = [];
           hospitals = [];
@@ -160,18 +161,18 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             return false;
           }
           visitHospital = visitHospitalFailureOrSuccess as VisitHospitalBase;
-       //   if ((UserInfo.flag1 == 0)) {
-            emit(LoadingState(3));
-            final planBrandsResult = await allPlanBrandsUsecase.execute(
-                UserInfo.activePlanId, UserInfo.otherPlanId ?? 0);
-            final planBrandsFailureOrSuccess =
-                planBrandsResult.fold((failure) => failure, (data) => data);
-            if (planBrandsFailureOrSuccess is Failure) {
-              emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
-              return false;
-            }
-            planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
-       //   }
+          //   if ((UserInfo.flag1 == 0)) {
+          emit(LoadingState(3));
+          final planBrandsResult = await allPlanBrandsUsecase.execute(
+              UserInfo.activePlanId, UserInfo.otherPlanId ?? 0);
+          final planBrandsFailureOrSuccess =
+              planBrandsResult.fold((failure) => failure, (data) => data);
+          if (planBrandsFailureOrSuccess is Failure) {
+            emit(SyncDataErrorState(failure: planBrandsFailureOrSuccess));
+            return false;
+          }
+          planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+          //   }
 
           emit(LoadingState(4));
           try {
@@ -251,8 +252,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           }
           hospitalSps = hospitalSpsFailureOrSuccess as List<HospitalSpModel>;
           emit(LoadingState(10));
-
-          /////////////////////////
+          //////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
           final brandSpsResult =
               await allBrandsSpUsecase.execute(UserInfo.repId);
           final brandSpFailureOrSuccess =
@@ -263,9 +263,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           }
           brandSpModel = brandSpFailureOrSuccess as List<BrandSpModel>;
           emit(LoadingState(11));
-
 ////////////////////////////////////////////////
-
           emit(getDataSucState());
           return true;
         } catch (error) {
@@ -314,7 +312,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           UserInfo.endDate = data.endDate;
           UserInfo.otherStartDate = data.otherStartDate;
           UserInfo.otherEndDate = data.otherEndDate;
-          UserInfo.flag1= (data.otherStatus==0&&UserInfo.flag==1)?0:1;
+          UserInfo.flag1 =
+              (data.otherStatus == 0 && UserInfo.flag == 1) ? 0 : 1;
           emit(IsActiveState());
         });
       }
