@@ -30,6 +30,9 @@ abstract class RemoteDataSource {
   Future<Message1Response> repPlanBrand(RepPlanBrandBody list);
   Future<CheckBaseResponse> checkPlanBrand(int repPlanId);
   Future<LoginResponse> checkActivePlanBrand(int repDet);
+  //
+  Future<CopyRecResponse> copyReci(int docId);
+  //
   Future<VisitHospitalBaseResponse> getHosVisit(
     int repPlanId,
     int representativeId,
@@ -181,7 +184,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         reciReq.address,
         reciReq.phone,
         reciReq.total,
-        active: reciReq.active,
         brand_2: reciReq.brand_2,
         brand_3: reciReq.brand_3,
         brand_4: reciReq.brand_4,
@@ -200,6 +202,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<ReciNumResponse> reciNum() async {
     return await _appServiceClient.reciNum();
+  }
+
+  @override
+  Future<CopyRecResponse> copyReci(int docId) async{
+    return await _appServiceClient.copyReci(docId);
   }
 
 

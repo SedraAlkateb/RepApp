@@ -126,6 +126,64 @@ Map<String, dynamic> _$CheckReResponseToJson(CheckReResponse instance) =>
       'accepted': instance.accepted,
     };
 
+CopyRecResponse _$CopyRecResponseFromJson(Map<String, dynamic> json) =>
+    CopyRecResponse(
+      json['recip'] == null
+          ? null
+          : CopyRecipResponse.fromJson(json['recip'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$CopyRecResponseToJson(CopyRecResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'recip': instance.recip,
+    };
+
+CopyRecipResponse _$CopyRecipResponseFromJson(Map<String, dynamic> json) =>
+    CopyRecipResponse(
+      json['id'] as String?,
+      json['repId'] as String?,
+      json['type'] as String?,
+      json['docId'] as String?,
+      json['spName'] as String?,
+      json['brand_1'] as String?,
+      json['brand_2'] as String?,
+      json['brand_3'] as String?,
+      json['brand_4'] as String?,
+      json['note1'] as String?,
+      json['note2'] as String?,
+      json['address'] as String?,
+      json['phone'] as String?,
+      json['total'] as String?,
+      json['note_emp'] as String?,
+      json['image1'] as String?,
+      json['image2'] as String?,
+    );
+
+Map<String, dynamic> _$CopyRecipResponseToJson(CopyRecipResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'repId': instance.repId,
+      'type': instance.type,
+      'docId': instance.docId,
+      'spName': instance.spName,
+      'brand_1': instance.brand_1,
+      'brand_2': instance.brand_2,
+      'brand_3': instance.brand_3,
+      'brand_4': instance.brand_4,
+      'note1': instance.note1,
+      'note2': instance.note2,
+      'address': instance.address,
+      'phone': instance.phone,
+      'total': instance.total,
+      'note_emp': instance.note_emp,
+      'image1': instance.image1,
+      'image2': instance.image2,
+    };
+
 CheckActiveResponse _$CheckActiveResponseFromJson(Map<String, dynamic> json) =>
     CheckActiveResponse(
       json['activePlanId'] as String?,

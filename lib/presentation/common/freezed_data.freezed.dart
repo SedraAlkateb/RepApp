@@ -2820,7 +2820,6 @@ mixin _$InsertRecipesObject {
   String get total => throw _privateConstructorUsedError;
   String? get note1 => throw _privateConstructorUsedError;
   String? get note2 => throw _privateConstructorUsedError;
-  String? get active => throw _privateConstructorUsedError;
   String? get note_emp => throw _privateConstructorUsedError;
   File? get image1 => throw _privateConstructorUsedError;
   File? get image2 => throw _privateConstructorUsedError;
@@ -2852,7 +2851,6 @@ abstract class $InsertRecipesObjectCopyWith<$Res> {
       String total,
       String? note1,
       String? note2,
-      String? active,
       String? note_emp,
       File? image1,
       File? image2,
@@ -2886,7 +2884,6 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
     Object? total = null,
     Object? note1 = freezed,
     Object? note2 = freezed,
-    Object? active = freezed,
     Object? note_emp = freezed,
     Object? image1 = freezed,
     Object? image2 = freezed,
@@ -2935,10 +2932,6 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
           ? _value.note2
           : note2 // ignore: cast_nullable_to_non_nullable
               as String?,
-      active: freezed == active
-          ? _value.active
-          : active // ignore: cast_nullable_to_non_nullable
-              as String?,
       note_emp: freezed == note_emp
           ? _value.note_emp
           : note_emp // ignore: cast_nullable_to_non_nullable
@@ -2986,7 +2979,6 @@ abstract class _$$InsertRecipesObjectImplCopyWith<$Res>
       String total,
       String? note1,
       String? note2,
-      String? active,
       String? note_emp,
       File? image1,
       File? image2,
@@ -3018,7 +3010,6 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
     Object? total = null,
     Object? note1 = freezed,
     Object? note2 = freezed,
-    Object? active = freezed,
     Object? note_emp = freezed,
     Object? image1 = freezed,
     Object? image2 = freezed,
@@ -3067,10 +3058,6 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
           ? _value.note2
           : note2 // ignore: cast_nullable_to_non_nullable
               as String?,
-      freezed == active
-          ? _value.active
-          : active // ignore: cast_nullable_to_non_nullable
-              as String?,
       freezed == note_emp
           ? _value.note_emp
           : note_emp // ignore: cast_nullable_to_non_nullable
@@ -3113,7 +3100,6 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
       this.total,
       this.note1,
       this.note2,
-      this.active,
       this.note_emp,
       this.image1,
       this.image2,
@@ -3142,8 +3128,6 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
   @override
   final String? note2;
   @override
-  final String? active;
-  @override
   final String? note_emp;
   @override
   final File? image1;
@@ -3158,7 +3142,7 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
 
   @override
   String toString() {
-    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, note1: $note1, note2: $note2, active: $active, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
+    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, note1: $note1, note2: $note2, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
   }
 
   @override
@@ -3176,7 +3160,6 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
             (identical(other.total, total) || other.total == total) &&
             (identical(other.note1, note1) || other.note1 == note1) &&
             (identical(other.note2, note2) || other.note2 == note2) &&
-            (identical(other.active, active) || other.active == active) &&
             (identical(other.note_emp, note_emp) ||
                 other.note_emp == note_emp) &&
             (identical(other.image1, image1) || other.image1 == image1) &&
@@ -3199,7 +3182,6 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
       total,
       note1,
       note2,
-      active,
       note_emp,
       image1,
       image2,
@@ -3229,7 +3211,6 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
       final String total,
       final String? note1,
       final String? note2,
-      final String? active,
       final String? note_emp,
       final File? image1,
       final File? image2,
@@ -3257,8 +3238,6 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
   String? get note1;
   @override
   String? get note2;
-  @override
-  String? get active;
   @override
   String? get note_emp;
   @override

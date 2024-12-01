@@ -4,6 +4,7 @@ import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:html/parser.dart';
 
+
 extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
     return VisitPharmacyRequest(
@@ -472,5 +473,41 @@ extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
   VisitDoctorBase toDomain() {
     return VisitDoctorBase(
         this?.brandsVisit.toDomain() ?? [], this?.data.toDomain() ?? []);
+  }
+}
+
+
+
+extension CopyRecResponseMapper on CopyRecResponse {
+  CopyReciRequest toDomain() {
+    return CopyReciRequest(
+      int.parse(this?.recip?.id ?? "0"),
+      int.parse(this?.recip?.repId ?? "0"),
+      int.parse(this?.recip?.type ?? "0"),
+      int.parse(this?.recip?.docId ?? "0"),
+      this.recip?.spName ?? Constants.empty,
+      int.parse(this?.recip?.brand_1 ?? "0"),
+      this.recip?.address ?? Constants.empty,
+      this.recip?.phone ?? Constants.empty,
+      this.recip?.total ?? Constants.empty,
+      note1: this.recip?.note1?? Constants.empty,
+      note2:this.recip?.note2?? Constants.empty,
+      note_emp: this.recip?.note_emp?? Constants.empty,
+      image1: this.recip?.image1?? Constants.empty,
+      image2: this.recip?.image2?? Constants.empty,
+      brand_2: this.recip?.brand_2?? Constants.empty,
+      brand_3: this.recip?.brand_3?? Constants.empty,
+      brand_4: this.recip?.brand_4?? Constants.empty,
+
+
+
+
+
+
+
+
+
+    );
+
   }
 }

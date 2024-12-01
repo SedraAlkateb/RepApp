@@ -3,7 +3,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
-import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
+import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
 import 'package:domina_app/presentation/common/freezed_data.dart';
@@ -19,6 +19,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   AllBrandsResUsecase allBrandsResUsecase;
   InsertReciUsecase insertReciUsecase;
   ReciNumUsecase reciNumUsecase;
+  CopyReciUsecase copyReciUsecase;
 
   final _picker = ImagePicker();
   InsertRecipesObject insertRecipesObject = InsertRecipesObject(
@@ -32,7 +33,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "total",
       "note1",
       'note2',
-      "active",
       "note_emp",
       null,
       null,
@@ -74,7 +74,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   }
 
   RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase)
+      this.reciNumUsecase,this.copyReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllRecipesEvent) {
@@ -122,7 +122,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           note1: insertRecipesObject.note1,
           image1: insertRecipesObject.image1,
           brand_2: insertRecipesObject.brand_2,
-          active: insertRecipesObject.active,
           brand_3: insertRecipesObject.brand_3,
           brand_4: insertRecipesObject.brand_4,
           image2: insertRecipesObject.image2,

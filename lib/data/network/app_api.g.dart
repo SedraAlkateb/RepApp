@@ -906,7 +906,6 @@ class _AppServiceClient implements AppServiceClient {
     String? brand_3,
     String? brand_4,
     String? note_emp,
-    String? active,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -999,12 +998,6 @@ class _AppServiceClient implements AppServiceClient {
         note_emp,
       ));
     }
-    if (active != null) {
-      _data.fields.add(MapEntry(
-        'active',
-        active,
-      ));
-    }
     final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',
       headers: _headers,
@@ -1058,6 +1051,43 @@ class _AppServiceClient implements AppServiceClient {
     late ReciNumResponse _value;
     try {
       _value = ReciNumResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<CopyRecResponse> copyReci(int docId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'docId',
+      docId.toString(),
+    ));
+    final _options = _setStreamType<CopyRecResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/reci/copyRe.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CopyRecResponse _value;
+    try {
+      _value = CopyRecResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
