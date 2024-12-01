@@ -44,12 +44,12 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
           if (normalizeText(value.spTitle).contains(search)) {
             return true;
           }
-
           return false;
         }).toList();
 
         emit(AllDoctorState(doctorList));
       }
+
       if (event is CheckReciEvent) {
         emit(CheckRecipesLoadingState());
         (await checkReciUsecase.execute(UserInfo.repId)).fold((failure) {

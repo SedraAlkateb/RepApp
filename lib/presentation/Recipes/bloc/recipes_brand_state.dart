@@ -69,6 +69,8 @@ class ImagePickedState extends RecipesBrandState {
   @override
   List<Object?> get props => [image];
 }
-
+final class CopyRecipesState extends RecipesBrandState {
+  List<Object?> get props => [];
+}
 
 
