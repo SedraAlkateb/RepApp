@@ -220,7 +220,6 @@ Future<void> initPlaceVisitModule() async {
         instance(),
         instance(),
         instance(),
-        // instance(),instance(),instance(),
         instance(),
         instance()));
   }

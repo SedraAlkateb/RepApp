@@ -84,7 +84,7 @@ class DoctorDetails extends StatelessWidget {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         children: [
-                          buildDetailRow(context, Icons.place, 'المنطقة',
+                          buildDetailRow(context, Icons.place,'المنطقة',
                               doctor.placeTitle),
                           Divider(
                             thickness: 0.5,
@@ -143,7 +143,7 @@ class DoctorDetails extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
-                                            'لقد تاوزت الحد المسموح لعدد الوصفات')),
+                                            'لقد تجاوزت الحد المسموح لعدد الوصفات')),
                                   );
                                 }
                               }
@@ -163,7 +163,7 @@ class DoctorDetails extends StatelessWidget {
                                           .add(CheckReciEvent(doctor.id));
                                     });
                                   },
-                                  child: Text('إنشاء وصفة '),
+                                  child: Text('إنشاء وصفة'),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {},

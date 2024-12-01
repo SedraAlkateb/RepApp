@@ -49,7 +49,6 @@ class SelectTypeEvent extends RecipesBrandEvent {
 
 class PickImageEvent extends RecipesBrandEvent {
   final File? image;
-
   final int index;
 
   PickImageEvent(this.image, this.index);

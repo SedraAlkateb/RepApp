@@ -39,6 +39,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "brand_2",
       'brand_3',
       "brand_4");
+
   void empty() {
     insertRecipesObject = InsertRecipesObject.empty();
   }
@@ -74,7 +75,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   }
 
   RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase,this.copyReciUsecase)
+      this.reciNumUsecase, this.copyReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllRecipesEvent) {
