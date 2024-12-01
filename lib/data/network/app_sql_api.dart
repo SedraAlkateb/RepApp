@@ -157,7 +157,7 @@ class AppSqlApi extends AppSqlApiAbs {
         for (var brandSp in brandSps) {
           batch.insert('brandSp', brandSp.toMap());
         }
-        if (planBrands != null) {
+        if (planBrands != null && planBrands.isNotEmpty) {
           for (var planBrand in planBrands) {
             batch.insert('planBrand', planBrand.toMap());
           }
@@ -320,11 +320,23 @@ class AppSqlApi extends AppSqlApiAbs {
     );
   }
 
+  Future<void> updateSave(int repId, int flag1) async {
+    final mydb = await databaseHelper.database;
+    await mydb.update(
+      'rep',
+      {'flag1': flag1},
+      where: 'repId = ?',
+      whereArgs: [repId],
+    );
+  }
+
   Future<void> editIsPlan(int repId, int flag) async {
     final mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
-      {'flag': flag},
+      {'flag': flag,
+      'flag1':0
+      },
       where: 'repId = ?',
       whereArgs: [repId],
     );
@@ -340,9 +352,7 @@ class AppSqlApi extends AppSqlApiAbs {
       'visit_hospital',
       'visit_pharmacy',
       'brandSp',
-      //    (UserInfo.flag1 == 0) ?
-      'planBrand',
-      //      : null,
+      ((UserInfo.flag1 == 0) )? 'planBrand' : null,
       'hospitalSp',
       'doctor',
       'pharmacy',
@@ -395,6 +405,15 @@ class AppSqlApi extends AppSqlApiAbs {
         await db.rawQuery('SELECT * FROM rep LIMIT 1');
 
     if (results.isNotEmpty) {
+      results[0]['otherStatus']==-1?
+      await db.update(
+        'rep',
+        {
+          'flag1': 0,
+        },
+        where: 'repId = ?',
+        whereArgs: [ results[0]['repId'],],
+      ):null;
       return LoginModel.fromMap(results[0]);
     } else {
       return null;
@@ -1275,7 +1294,8 @@ class AppSqlApi extends AppSqlApiAbs {
       String startDate,
       String endDate,
       String otherStartDate,
-      String otherEndDate) async {
+      String otherEndDate)
+  async{
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
@@ -1287,7 +1307,8 @@ class AppSqlApi extends AppSqlApiAbs {
         'endDate': endDate,
         'otherStartDate': otherStartDate,
         'otherEndDate': otherEndDate,
-        'flag': otherStatus == 0 ? 0 : 1
+        'flag': otherStatus == 0 ? 0 : 1,
+        'flag1':otherStatus==-1?0:otherStatus==1?1:UserInfo.flag1
       },
       where: 'repId = ?',
       whereArgs: [repId],
@@ -1327,6 +1348,7 @@ class AppSqlApi extends AppSqlApiAbs {
     await mydb.update(
       'rep',
       {
+        'flag1': 0,
         'flag': 0,
         'otherStatus': status,
       },

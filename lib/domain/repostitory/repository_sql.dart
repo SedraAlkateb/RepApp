@@ -120,4 +120,6 @@ abstract class RepositorySql {
   Future<Either<Failure, List<OtherBrandSpPlanModel>>>
       otherPlanBrandByRepPlanId(int repPlanId);
   Future<Either<Failure, Null>> editIsPlan(int repId, int flag) ;
+  Future<Either<Failure, Null>> updateSave(int repId, int flag1) ;
+
 }

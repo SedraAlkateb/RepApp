@@ -16,6 +16,7 @@ abstract class AppServiceClient {
   Future<LoginResponse> login(
     @Part(name: "userName") String userName,
     @Part(name: "password") String password,
+      @Part(name: "ver") int ver,
   );
   @POST("/getAllPlace.php")
   Future<AllPlaceBaseResponse> allPlace(
@@ -92,6 +93,7 @@ abstract class AppServiceClient {
   @POST("/getPlans.php")
   Future<LoginResponse> checkActivePlanBrand(
     @Part(name: "repDet") int repDet,
+      @Part(name: "ver") int ver
   );
   @POST("/reci/getBrands.php")
   Future<AllBrandResResponse> getBrandRes(

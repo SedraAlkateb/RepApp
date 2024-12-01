@@ -786,4 +786,16 @@ class RepositroySqlImp extends RepositorySql {
           .failure);
     }
   }
+
+  @override
+  Future<Either<Failure, Null>> updateSave(int repId, int flag1) async {
+    try {
+      await _databaseHelper.updateSave(repId, flag1);
+      return Right(null);
+    } catch (e) {
+      return Left(ErrorHandler
+          .handle(e)
+          .failure);
+    }
+  }
 }

@@ -43,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserInfo.endDate=data.endDate;
           UserInfo.otherStartDate=data.otherStartDate;
           UserInfo.otherEndDate=data.otherEndDate;
+          loginModel?.flag1=0;
           UserInfo.flag1 =0;
           emit(LoginState());
         });

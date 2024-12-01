@@ -6,6 +6,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_other_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
+import 'package:domina_app/domain/usecase/update_save_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -18,6 +19,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   UpdateBrandPlanSqlUsecase updateBrandPlanSqlUsecase;
   UpdateOtherStatusUsecase updateOtherStatusUsecase;
   AllOtherBrandPlanSqlUsecase allOtherBrandPlanSqlUsecase;
+  UpdateSaveSqlUsecase updateSaveSqlUsecase;
   List<OtherBrandSpPlanModel> planBrand = [];
   List<BrandSpPlanModel> planBrandActive = [];
   List<BrandSpPlanModel> planBrandActiveSearch = [];
@@ -25,9 +27,17 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   int sumS = 0;
   int current = 0;
   BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase,
-      this.updateOtherStatusUsecase, this.allOtherBrandPlanSqlUsecase)
+      this.updateOtherStatusUsecase, this.allOtherBrandPlanSqlUsecase,this.updateSaveSqlUsecase)
       : super(BrandPlanInitial()) {
     on<BrandPlanEvent>((event, emit) async {
+      if (event is UpdateSaveEvent) {
+        (await updateSaveSqlUsecase.execute(UserInfo.repId,1)).fold(
+                (failure) {
+              emit(UpdateSaveErrorState(failure: failure));
+              return false;
+            }, (data) async {
+                  UserInfo.flag1=1;
+        });}
       if (event is AllBrandPlanEvent) {
         (await allBrandPlanSqlUsecase.execute(UserInfo.activePlanId)).fold(
             (failure) {

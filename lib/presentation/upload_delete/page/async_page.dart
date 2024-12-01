@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -65,6 +66,12 @@ class AsyncPage extends StatelessWidget {
                 },
                 child: ElevatedButton(
                     onPressed: () {
+                      print(UserInfo.flag1);
+                      print("UserInfo.flag1");
+                      print(UserInfo.flag);
+                      print("UserInfo.flag");
+                      print(UserInfo.otherstatus);
+                      print("UserInfo.otherstatus");
                       BlocProvider.of<AsyncInBloc>(context)
                           .add(Async1DataEvent());
                     },

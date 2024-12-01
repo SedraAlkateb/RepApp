@@ -11,7 +11,8 @@ import 'dart:io';
 
 class RecipesPage extends StatefulWidget {
   final int docId;
-  RecipesPage({super.key, required this.docId});
+  final int st;
+  RecipesPage({super.key, required this.docId,required this.st});
 
   @override
   State<RecipesPage> createState() => _RecipesPageState();
@@ -34,6 +35,10 @@ class _RecipesPageState extends State<RecipesPage> {
   final _formKey = GlobalKey<FormState>();
 @override
   void initState() {
+  // widget.st==1?
+  // BlocProvider.of<RecipesBrandBloc>(context).add(//event
+  //    )
+  //     :null;
   BlocProvider.of<RecipesBrandBloc>(context)
       .empty();
     super.initState();

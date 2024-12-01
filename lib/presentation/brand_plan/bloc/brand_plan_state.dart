@@ -35,6 +35,15 @@ final class AllBrandPlanErrorState extends BrandPlanState {
 
   List<Object?> get props =>[failure,];
 }
+
+final class UpdateSaveErrorState extends BrandPlanState {
+
+  final Failure failure;
+  UpdateSaveErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure,];
+}
 final class SumErrorState extends BrandPlanState {
 
   final Failure failure;

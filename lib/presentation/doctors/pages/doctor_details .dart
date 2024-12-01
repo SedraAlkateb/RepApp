@@ -136,6 +136,7 @@ class DoctorDetails extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context) => RecipesPage(
                                         docId: doctor.id,
+                                        st: state.st,
                                       ),
                                     ),
                                   );
@@ -160,13 +161,19 @@ class DoctorDetails extends StatelessWidget {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       BlocProvider.of<DoctorsBloc>(context)
-                                          .add(CheckReciEvent(doctor.id));
+                                          .add(CheckReciEvent(doctor.id,0));
                                     });
                                   },
                                   child: Text('إنشاء وصفة '),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      BlocProvider.of<DoctorsBloc>(context)
+                                          .add(CheckReciEvent(doctor.id,1));
+                                    });
+                                  },
                                   child: Text('تكرار وصفة'),
                                 ),
                               ],

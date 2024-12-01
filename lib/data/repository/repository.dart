@@ -455,8 +455,7 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, VisitHospitalBase>> getHosVisit(
-      int repPlanId, int representativeId)
-  async {
+      int repPlanId, int representativeId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response =
@@ -478,8 +477,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<BrandRes>>> getBrandRes(int repDet)
-  async {
+  Future<Either<Failure, List<BrandRes>>> getBrandRes(int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getBrandRes(repDet);
@@ -500,8 +498,8 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, Message1Response>> insertReci(ReciRequest reciReq)
-  async {
+  Future<Either<Failure, Message1Response>> insertReci(
+      ReciRequest reciReq) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.insertReci(reciReq);
@@ -522,8 +520,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, CheckReResponse>> checkRe(int repDet)
-  async {
+  Future<Either<Failure, CheckReResponse>> checkRe(int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.checkRe(repDet);
@@ -544,8 +541,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<int>>> reciNum()
-  async {
+  Future<Either<Failure, List<int>>> reciNum() async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.reciNum();
@@ -566,27 +562,23 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, CopyReciRequest>> copyReci(int docId)
-    async {
-      try {
-        if (await _networkInfo.isConnected) {
-          final response = await _remoteDataSource.copyReci(docId);
-          if (response.status == null ||
-              response.status == ApiInternalStatus.SUCCESS ||
-              response.status == "200") {
-            return Right(response.toDomain());
-          } else {
-            return Left(Failure(ApiInternalStatus.FAILURE,
-                response.message ?? ResponseMassage.DEFAULT));
-          }
+  Future<Either<Failure, CopyReciRequest>> copyReci(int docId) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.copyReci(docId);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
         } else {
-          return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+          return Left(Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT));
         }
-      } catch (error) {
-        return Left(ErrorHandler.handle(error).failure);
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
       }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
     }
-
   }
-
-
+}
