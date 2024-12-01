@@ -15,18 +15,29 @@ class SpecPlanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Stack(
         children: [
           SingleChildScrollView(
-            child:    Column(
-              children: [SizedBox(height: 14,),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 14,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Card(shadowColor:ColorManager.secondaryColor7 ,child:
-                                Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor7,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.otherStartDate ?? 'غير متاح'} >>> ${UserInfo.otherEndDate ?? 'غير متاح'} \n ",
-                                ),
-                  margin: EdgeInsets.symmetric( horizontal:20),),
+                  child: Card(
+                    shadowColor: ColorManager.secondaryColor7,
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: ColorManager.secondaryColor7,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      "\nتاريخ الخطة : ${UserInfo.otherStartDate ?? 'غير متاح'} >>> ${UserInfo.otherEndDate ?? 'غير متاح'} \n ",
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                  ),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -37,7 +48,8 @@ class SpecPlanPage extends StatelessWidget {
                           spreadRadius: 0.5,
                           offset: Offset(2, 3))
                     ],
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -48,9 +60,9 @@ class SpecPlanPage extends StatelessWidget {
                         BlocConsumer<BrandPlanBloc, BrandPlanState>(
                           listener: (context, state) {
                             if (state is AllBrandPlanErrorState) {
-                              error(context, state.failure.massage, state.failure.code);
+                              error(context, state.failure.massage,
+                                  state.failure.code);
                             }
-
                           },
                           builder: (context, state) {
                             List<OtherBrandSpPlanModel> planBrandModel =
@@ -64,10 +76,11 @@ class SpecPlanPage extends StatelessWidget {
                                 child: emptyFullScreen(context),
                               );
                             }
-                            return  GridView.builder(
+                            return GridView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 1.0,
                                 mainAxisSpacing: 2.0,
@@ -76,7 +89,8 @@ class SpecPlanPage extends StatelessWidget {
                               itemCount: planBrandModel.length,
                               itemBuilder: (context, index) {
                                 return Visibility(
-                                  visible: planBrandModel[index].brandk != 0, // تحقق من الشرط
+                                  visible: planBrandModel[index].brandk !=
+                                      0, // تحقق من الشرط
                                   maintainSize: false, // منع الفراغ
                                   maintainAnimation: false,
                                   maintainState: false,
@@ -85,8 +99,10 @@ class SpecPlanPage extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => BrandPlanOtherPage(
-                                            otherBrandSpPlanModel: planBrandModel[index],
+                                          builder: (context) =>
+                                              BrandPlanOtherPage(
+                                            otherBrandSpPlanModel:
+                                                planBrandModel[index],
                                             index1: index,
                                           ),
                                         ),
@@ -108,19 +124,27 @@ class SpecPlanPage extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Image.asset(
-                                              ImageAssetsSpec().getImage(planBrandModel[index].specModel.id),
+                                              ImageAssetsSpec().getImage(
+                                                  planBrandModel[index]
+                                                      .specModel
+                                                      .id),
                                               width: 50,
                                               height: 50,
-                                              color: ColorManager.white.withOpacity(0.8),
-                                              colorBlendMode: BlendMode.modulate,
+                                              color: ColorManager.white
+                                                  .withOpacity(0.8),
+                                              colorBlendMode:
+                                                  BlendMode.modulate,
                                             ),
                                             SizedBox(height: 20),
                                             Text(
                                               textAlign: TextAlign.center,
-                                              planBrandModel[index].specModel.title,
+                                              planBrandModel[index]
+                                                  .specModel
+                                                  .title,
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
@@ -158,7 +182,6 @@ class SpecPlanPage extends StatelessWidget {
                                 );
                               },
                             );
-
                           },
                         ),
                       ],
@@ -170,86 +193,99 @@ class SpecPlanPage extends StatelessWidget {
           ),
           context.watch<BrandPlanBloc>().planBrand.isNotEmpty
               ? BlocListener<BrandPlanBloc, BrandPlanState>(
-            listener: (context, state) {
-              if (state is UpdateAmountErrorState) {
-                error(
-                    context, state.failure.massage, state.failure.code);
-              }
-              if (state is UpdateAmountState) {
-                successWithMessage(context, "تم حفظ التغيرات");
-              }
-            },
-            child: Positioned(
-                bottom: 20,
-                left: 10,
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        showDialog(context: context, builder: (context) {
-                          return dialogPlan(context,
-                      fun:()=> BlocProvider.of<BrandPlanBloc>(context).add(UpdateAmountSucEvent())
-                              ,"هل أنت متأكد من حفظ التغيرات");
-                        },);
-                      },
-                      child: SizedBox(
-                        height: 80,
-                        width: 100,
-                        child: Stack(
-                          //    alignment: Alignment.bottomCenter,
-                          children: [
-                            Image.asset(
-                              ImageAssets.top,
-                            ),
-                            Positioned(
-                              bottom: 20,
-                              left: 35,
-                              child: Text(
-                                "حفظ",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
+                  listener: (context, state) {
+                    if (state is UpdateAmountErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                    }
+                    if (state is UpdateAmountState) {
+                      successWithMessage(context, "تم حفظ التغيرات");
+                    }
+                  },
+                  child: Positioned(
+                      bottom: 20,
+                      left: 10,
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return dialogPlan(
+                                      context,
+                                      fun: () => BlocProvider.of<BrandPlanBloc>(
+                                              context)
+                                          .add(UpdateAmountSucEvent()),
+                                      "هل أنت متأكد من حفظ التغيرات");
+                                },
+                              );
+                            },
+                            child: SizedBox(
+                              height: 80,
+                              width: 100,
+                              child: Stack(
+                                //    alignment: Alignment.bottomCenter,
+                                children: [
+                                  Image.asset(
+                                    ImageAssets.top,
+                                  ),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 35,
+                                    child: Text(
+                                      "حفظ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        UserInfo.otherstatus==0?
-                        showDialog(context: context, builder: (context) {
-                          return dialogPlan(context,
-                           fun: ()=>  BlocProvider.of<BrandPlanBloc>(context).add(SendToS())
-                              ,"هل أنت متأكد من إرسال التغيرات");
-                        },):null;
-                      },
-                      child: SizedBox(
-                        height: 80,
-                        width: 100,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              ImageAssets.bottom,
-                            ),
-                            Positioned(
-                              bottom: 50,
-                              left: 35,
-                              child: Text(
-                                "إرسال",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              UserInfo.otherstatus == 0
+                                  ? showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return dialogPlan(
+                                            context,
+                                            fun: () =>
+                                                BlocProvider.of<BrandPlanBloc>(
+                                                        context)
+                                                    .add(SendToS()),
+                                            "هل أنت متأكد من إرسال التغيرات");
+                                      },
+                                    )
+                                  : null;
+                            },
+                            child: SizedBox(
+                              height: 80,
+                              width: 100,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(
+                                    ImageAssets.bottom,
+                                  ),
+                                  Positioned(
+                                    bottom: 50,
+                                    left: 35,
+                                    child: Text(
+                                      "إرسال",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          )
+                          ),
+                        ],
+                      )),
+                )
               : SizedBox(),
         ],
       ),

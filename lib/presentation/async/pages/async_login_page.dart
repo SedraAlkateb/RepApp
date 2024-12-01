@@ -30,8 +30,6 @@ class AsyncLoginPage extends StatelessWidget {
                         (route) => false,
                   );
                   BlocProvider.of<AsyncBloc>(context).add(DeleteAllEvent());
-
-
                 }, icon: Icon(Icons.arrow_forward)),
           ]
         ),

@@ -9,9 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InfoVisitDoctor extends StatefulWidget {
   InfoVisitDoctor({super.key, required this.doctorModel});
-
   final VisitDoctorAndDoctor doctorModel;
-
   @override
   State<InfoVisitDoctor> createState() => _InfoVisitPharmacyState();
 }
@@ -177,7 +175,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                               minLines: 3,
                               inputFormatters: [],
                             ),
-
                           ],
                         )
                       : SizedBox(),
@@ -190,10 +187,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             BoxTextField(
-                              enabled:
-                                  widget.doctorModel.visitDoctorModel.flag == 0
-                                      ? false
-                                      : true,
+                              enabled: true,
                               keyboardType: TextInputType.text,
                               prefixIcon: null,
                               maxLines: 4,
@@ -323,13 +317,14 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          widget.doctorModel.visitDoctorModel.flag != 0
+                          widget.doctorModel.visitDoctorModel.flag == 0
                               ? BlocProvider.of<VisitBloc>(context).add(
                                   UpdateVisitDoctorEvent(
                                       kas: _issueController.text,
                                       sc: _noteController.text,
                                       id: widget
-                                          .doctorModel.visitDoctorModel.id))
+                                          .doctorModel.visitDoctorModel.id,
+                                      target: _targetController.text))
                               : null;
                         },
                         child: Text("تعديل")),

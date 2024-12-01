@@ -511,6 +511,7 @@ class RepositroySqlImp extends RepositorySql {
   Future<Either<Failure, Null>> updateVisitDoctorFields(
       {required int id, String? kaswn, String? science,String?target}) async {
     try {
+  ;
       await _databaseHelper.updateVisitDoctorFields(
           id: id, kaswn: kaswn, science: science,target:target);
       return Right(null);

@@ -11,7 +11,6 @@ class CustomDropDownSearch extends StatelessWidget {
     required this.hintText,
     required this.errorText,
   }) : super(key: key);
-  
 
   final FormFieldValidator<dynamic> validator;
   final ValueSetter<dynamic> onChanged;
@@ -38,7 +37,8 @@ class CustomDropDownSearch extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  title: Text('${item.title}  ${item.phTitle}'), // عرض العنوانين
+                  title:
+                      Text('${item.title}  ${item.phTitle}'), // عرض العنوانين
                   onTap: () {
                     onChanged(item);
                   },
@@ -72,6 +72,7 @@ class CustomDropDownSearch extends StatelessWidget {
             overflow: TextOverflow.fade,
           ),
           dropdownSearchDecoration: InputDecoration(
+
             icon: icon,
             labelStyle: TextStyle(
               fontSize: tablet ? 19 : 14,

@@ -804,6 +804,7 @@ VisitResponse _$VisitResponseFromJson(Map<String, dynamic> json) =>
       json['note'] as String?,
       json['issue'] as String?,
       json['special'] as String?,
+      json['target'] as String?,
     );
 
 Map<String, dynamic> _$VisitResponseToJson(VisitResponse instance) =>
@@ -816,6 +817,7 @@ Map<String, dynamic> _$VisitResponseToJson(VisitResponse instance) =>
       'note': instance.note,
       'issue': instance.issue,
       'special': instance.special,
+      'target': instance.target,
     };
 
 VisitHosResponse _$VisitHosResponseFromJson(Map<String, dynamic> json) =>
@@ -828,6 +830,7 @@ VisitHosResponse _$VisitHosResponseFromJson(Map<String, dynamic> json) =>
       json['note'] as String?,
       json['issue'] as String?,
       json['special'] as String?,
+      json['target'] as String?,
     );
 
 Map<String, dynamic> _$VisitHosResponseToJson(VisitHosResponse instance) =>
@@ -840,6 +843,7 @@ Map<String, dynamic> _$VisitHosResponseToJson(VisitHosResponse instance) =>
       'note': instance.note,
       'issue': instance.issue,
       'special': instance.special,
+      'target': instance.target,
     };
 
 VisitBrandPharmacyResponse _$VisitBrandPharmacyResponseFromJson(

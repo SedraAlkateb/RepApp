@@ -68,10 +68,11 @@ extension ListVisitPharmacyRequestMapper on List<VisitPharmacyModel>? {
     return visitPharmacyRequest;
   }
 }
+
 extension ListReciNumMapper on ReciNumResponse? {
   List<int> toDomain() {
-    List<int> reci =
-    (this?.recICounts?.map((response) => response) ?? const Iterable.empty())
+    List<int> reci = (this?.recICounts?.map((response) => response) ??
+            const Iterable.empty())
         .cast<int>()
         .toList();
     return reci;
@@ -212,6 +213,7 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.endDate ?? Constants.empty,
       0,
       int.parse(this?.data?.recipesCount ?? "0"),
+      0,
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
@@ -384,7 +386,7 @@ extension VisitDoctorResponseMapper on VisitResponse? {
       (this?.special ?? Constants.zero).toString(),
       int.parse((this?.docId ?? "0")),
       1,
-      "ff",
+      (this?.target ?? Constants.zero).toString(),
     );
   }
 }
@@ -399,7 +401,7 @@ extension VisitHospitalResponseMapper on VisitHosResponse? {
       (this?.special ?? Constants.zero).toString(),
       int.parse((this?.docId ?? "0")),
       1,
-      "ff",
+      (this?.target ?? Constants.zero).toString(),
     );
   }
 }

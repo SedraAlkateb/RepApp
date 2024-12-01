@@ -8,9 +8,7 @@ class DatabaseHelper {
   factory DatabaseHelper() {
     return _instance;
   }
-
   DatabaseHelper._internal();
-
   Future<Database> get database async {
     if (_database != null) return _database!;
 
@@ -51,6 +49,7 @@ class DatabaseHelper {
     activePlanId INTEGER NOT NULL,
     otherStatus INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
+    flag1 INTEGER NOT NULL DEFAULT 0,
     name TEXT NOT NULL,
     percentage INTEGER NOT NULL,
     samplesCount INTEGER NOT NULL,
@@ -124,7 +123,7 @@ class DatabaseHelper {
      sampleCoast INTEGER NOT NULL
     );
     ''');
-    await db.execute( '''
+    await db.execute('''
         CREATE TABLE hospitalSp (
         id INTEGER PRIMARY KEY,
     hospitalId INTEGER NOT NULL,

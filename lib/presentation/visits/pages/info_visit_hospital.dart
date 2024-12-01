@@ -23,14 +23,19 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
 
   final _formKey = GlobalKey<FormState>();
   @override
-  void initState(){
-    _noteController.text=widget.hospitalModel.visitHospitalModel.science??"";
-    _issueController.text=widget.hospitalModel.visitHospitalModel.kaswn??"";
-    _noteeController.text=widget.hospitalModel.visitHospitalModel.additaion??"";
-    _targetController.text=widget.hospitalModel.visitHospitalModel.target??"";
-    BlocProvider.of<VisitBloc>(context).add(BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id) );
+  void initState() {
+    _noteController.text =
+        widget.hospitalModel.visitHospitalModel.science ?? "";
+    _issueController.text = widget.hospitalModel.visitHospitalModel.kaswn ?? "";
+    _noteeController.text =
+        widget.hospitalModel.visitHospitalModel.additaion ?? "";
+    _targetController.text =
+        widget.hospitalModel.visitHospitalModel.target ?? "";
+    BlocProvider.of<VisitBloc>(context).add(
+        BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id));
     super.initState();
   }
+
   @override
   void dispose() {
     _noteController.dispose();
@@ -39,9 +44,11 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
     _targetController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.visitHospitalModel.hospitalSpId}s${widget.hospitalModel.specModel.id}h${widget.hospitalModel.hospitalModel.id}");
+    print(
+        "v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.visitHospitalModel.hospitalSpId}s${widget.hospitalModel.specModel.id}h${widget.hospitalModel.hospitalModel.id}");
     return Scaffold(
       appBar: null,
       body: SingleChildScrollView(
@@ -56,8 +63,8 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
-              child:Padding(
-                padding:  EdgeInsets.symmetric(horizontal: AppPadding.p18),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -82,23 +89,20 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                       SizedBox(
                         height: 10,
                       ),
-                      Text(textAlign: TextAlign.center,
+                      Text(
+                        textAlign: TextAlign.center,
                         "العنوان : ${widget.hospitalModel.hospitalModel.address}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-
-
                       Text(
                         textAlign: TextAlign.center,
                         " الاختصاص : ${widget.hospitalModel.specModel.title}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-
                       Text(
                         textAlign: TextAlign.center,
                         "تاريخ الزيارة : ${formatDateTime(widget.hospitalModel.visitHospitalModel.data)}",
                         style: Theme.of(context).textTheme.titleMedium,
-
                       ),
                     ],
                   ),
@@ -110,40 +114,44 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _targetController.text.isNotEmpty?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "الهدف من الزيارة:",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      SizedBox(
-                        height: AppSize.s8,
-                      ),
-                      BoxTextField(
-                        keyboardType: TextInputType.text,
-                        prefixIcon: null,
-                        maxLines: 4,
-                        enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "الحقل مطلوب";
-                          }
-                          return null;
-                        },
-                        controller: _targetController,
-                        obscureText: false,
-                        minLines: 3,
-                        inputFormatters: [],
-                      ),
-                    ],
-                  ):SizedBox(),
+                  _targetController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "الهدف من الزيارة:",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            SizedBox(
+                              height: AppSize.s8,
+                            ),
+                            BoxTextField(
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              enabled: widget.hospitalModel.visitHospitalModel
+                                          .flag ==
+                                      0
+                                  ? false
+                                  : true,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "الحقل مطلوب";
+                                }
+                                return null;
+                              },
+                              controller: _targetController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
                   Text(
                     " ملاحظات للمكتب العلمي :",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-
                   BoxTextField(
                     keyboardType: TextInputType.text,
                     prefixIcon: null,
@@ -155,180 +163,186 @@ print("v${widget.hospitalModel.visitHospitalModel.id}vv${widget.hospitalModel.vi
                     obscureText: false,
                     minLines: 3,
                     inputFormatters: [],
-                    enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
+                    enabled: widget.hospitalModel.visitHospitalModel.flag == 0
+                        ? false
+                        : true,
                   ),
-
-                  _issueController .text.isNotEmpty?
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "ملاحظات لمستودع قاسيون :",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    BoxTextField(
-                      keyboardType: TextInputType.text,
-                      prefixIcon: null,
-                      maxLines: 4,
-                      validator: (value) {
-                        return null;
-                      },
-                      enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
-                      controller: _issueController,
-                      obscureText: false,
-                      minLines: 3,
-                      inputFormatters: [],
-                    ),
-
-                  ],
-                ):SizedBox(),
-                  _noteeController .text.isNotEmpty?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "طلبات شخصية:",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      BoxTextField(
-                        keyboardType: TextInputType.text,
-                        prefixIcon: null,
-                        maxLines: 4,
-                        validator: (value) {
-                          return null;
-                        },
-                        controller: _noteeController,
-                        obscureText: false,
-                        minLines: 3,
-                        inputFormatters: [],
-                        enabled: widget.hospitalModel.visitHospitalModel.flag==0?false:true,
-                      ),
-                    ],
-                  ):SizedBox(),
-                  context.watch<VisitBloc>().brands.isNotEmpty?
-                  Text(
-                    " العينات :",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ):Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.circle,color: ColorManager.secondaryColor1,),
-                      Text(
-                        " لم يتم توزيع عينات ",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
+                  _issueController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "ملاحظات لمستودع قاسيون :",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            BoxTextField(
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              validator: (value) {
+                                return null;
+                              },
+                              enabled: widget.hospitalModel.visitHospitalModel
+                                          .flag ==
+                                      0
+                                  ? false
+                                  : true,
+                              controller: _issueController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  _noteeController.text.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "طلبات شخصية:",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            BoxTextField(
+                              keyboardType: TextInputType.text,
+                              prefixIcon: null,
+                              maxLines: 4,
+                              validator: (value) {
+                                return null;
+                              },
+                              controller: _noteeController,
+                              obscureText: false,
+                              minLines: 3,
+                              inputFormatters: [],
+                              enabled: true,
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                  context.watch<VisitBloc>().brands.isNotEmpty
+                      ? Text(
+                          " العينات :",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: ColorManager.secondaryColor1,
+                            ),
+                            Text(
+                              " لم يتم توزيع عينات ",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ],
+                        ),
                   SizedBox(
                     height: 8,
                   ),
                   BlocBuilder<VisitBloc, VisitState>(
                     builder: (context, state) {
-                       List<PharmacyBrandModel> selectBrand =
+                      List<PharmacyBrandModel> selectBrand =
                           context.watch<VisitBloc>().brands;
                       if (state is BrandPharmacyVisitState) {
-                        selectBrand =state.brands;
+                        selectBrand = state.brands;
                       }
                       return selectBrand.isNotEmpty
                           ? Padding(
-                        padding: const EdgeInsets.all(10),
-
-                        child: Table(
-                          border: TableBorder.all(),
-                          columnWidths: {
-                            0: FlexColumnWidth(1),
-                            1: FlexColumnWidth(1),
-                            2: FlexColumnWidth(1),
-                          },
-                          children: [
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Center(
-                                    child: Text('العينات',
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold)),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text('نوع العينة',
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold)),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text('الكمية',
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold)),
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                            ...selectBrand.asMap().entries.map((entry) {
-                          //    final index = entry.key;
-                              final brand = entry.value;
-                              return TableRow(
+                              padding: const EdgeInsets.all(10),
+                              child: Table(
+                                border: TableBorder.all(),
+                                columnWidths: {
+                                  0: FlexColumnWidth(1),
+                                  1: FlexColumnWidth(1),
+                                  2: FlexColumnWidth(1),
+                                },
                                 children: [
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                    child: Text(
-                                      brand.title,
-                                      textAlign: TextAlign.center,
-                                    ),
+                                  TableRow(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Center(
+                                          child: Text('العينات',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text('نوع العينة',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text('الكمية',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(top: 8),
-                                    child: Text(brand.phTitle,
-                                        textAlign: TextAlign.center),
-                                  ),
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(top: 8),
-                                    child: Text(brand.amount.toString(),
-                                        textAlign: TextAlign.center),
-                                  ),
-
+                                  ...selectBrand.asMap().entries.map((entry) {
+                                    //    final index = entry.key;
+                                    final brand = entry.value;
+                                    return TableRow(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
+                                          child: Text(
+                                            brand.title,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: Text(brand.phTitle,
+                                              textAlign: TextAlign.center),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: Text(brand.amount.toString(),
+                                              textAlign: TextAlign.center),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
                                 ],
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      )
+                              ),
+                            )
                           : SizedBox();
                     },
                   ),
-
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
-                      if(state is UpdateVisitHospitalState){
+                      if (state is UpdateVisitHospitalState) {
                         Navigator.pop(context);
-                        BlocProvider.of<VisitBloc>(context).add(VisitHospitalEvent());
+                        BlocProvider.of<VisitBloc>(context)
+                            .add(VisitHospitalEvent());
                       }
                     },
-                    child:
-                    ElevatedButton( onPressed: () {
-                      widget.hospitalModel.visitHospitalModel.flag!=0?
-                      BlocProvider.of<VisitBloc>(context).add(
-                          UpdateVisitHospitalEvent
-                            (kas: _issueController.text
-                              ,sc: _noteController.text,
-                              id: widget.hospitalModel .visitHospitalModel.id,
-                              target: _targetController.text)):null;
-                    }, child: Text("تعديل")),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          widget.hospitalModel.visitHospitalModel.flag == 0
+                              ? BlocProvider.of<VisitBloc>(context).add(
+                                  UpdateVisitHospitalEvent(
+                                      kas: _issueController.text,
+                                      sc: _noteController.text,
+                                      id: widget
+                                          .hospitalModel.visitHospitalModel.id,
+                                      target: _targetController.text))
+                              : null;
+                        },
+                        child: Text("تعديل")),
                   )
-
                 ],
               ),
             )
