@@ -27,6 +27,7 @@ class _AppServiceClient implements AppServiceClient {
   Future<LoginResponse> login(
     String userName,
     String password,
+    int ver,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -39,6 +40,10 @@ class _AppServiceClient implements AppServiceClient {
     _data.fields.add(MapEntry(
       'password',
       password,
+    ));
+    _data.fields.add(MapEntry(
+      'ver',
+      ver.toString(),
     ));
     final _options = _setStreamType<LoginResponse>(Options(
       method: 'POST',
@@ -778,7 +783,10 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<LoginResponse> checkActivePlanBrand(int repDet) async {
+  Future<LoginResponse> checkActivePlanBrand(
+    int repDet,
+    int ver,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -786,6 +794,10 @@ class _AppServiceClient implements AppServiceClient {
     _data.fields.add(MapEntry(
       'repDet',
       repDet.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'ver',
+      ver.toString(),
     ));
     final _options = _setStreamType<LoginResponse>(Options(
       method: 'POST',

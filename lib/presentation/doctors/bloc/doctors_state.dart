@@ -37,7 +37,8 @@ final class AllDoctorEmptyState extends DoctorsState{
 }
 final class CheckRecipesState extends DoctorsState {
   final bool isCheck;
-  CheckRecipesState(this.isCheck);
+  final int st;
+  CheckRecipesState(this.isCheck,this.st);
   List<Object?> get props => [isCheck];
 }
 final class CheckRecipesErrorState extends DoctorsState {

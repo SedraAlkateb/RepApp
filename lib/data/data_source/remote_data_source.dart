@@ -1,10 +1,10 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/app_api.dart';
 import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 
 abstract class RemoteDataSource {
-  Future<MessageResponse> logout();
   Future<LoginResponse> login(LoginRequest loginRequest);
   Future<AllPlaceBaseResponse> allPlaces(int id);
   Future<AllSpcBaseResponse> allSpecializations(int repDet);
@@ -55,14 +55,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<LoginResponse> login(LoginRequest loginRequest) async {
     return await _appServiceClient.login(
-        loginRequest.email, loginRequest.password);
+        loginRequest.email, loginRequest.password,UserInfo.version);
   }
-
-  @override
-  Future<MessageResponse> logout() {
-    throw UnimplementedError();
-  }
-
   @override
   Future<AllPlaceBaseResponse> allPlaces(int id) async {
     return await _appServiceClient.allPlace(id);
@@ -153,7 +147,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<LoginResponse> checkActivePlanBrand(int repDet) async {
-    return await _appServiceClient.checkActivePlanBrand(repDet);
+    return await _appServiceClient.checkActivePlanBrand(repDet,UserInfo.version);
   }
 
   @override

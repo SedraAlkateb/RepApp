@@ -80,6 +80,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }, (data) async {
           emit(DeleteBaseState());
+
         });
       }
       if (event is DeleteAllEvent) {
@@ -88,6 +89,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           emit(DeleteAllErrorState(failure: failure));
           return false;
         }, (data) async {
+          UserInfo.flag1=0;
           emit(DeleteAllState());
         });
       }
@@ -235,7 +237,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         print("Visit Hospital data sent successfully.");
       }
     if(UserInfo.otherstatus==1&&UserInfo.flag==0){
-
       final planBrandResult = await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
       final planBrandFailureOrSuccess = planBrandResult.fold((failure) => failure, (data) => data);
       if (planBrandFailureOrSuccess is Failure) {
@@ -244,7 +245,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       }
       print("Plan Brand data sent successfully.");
     }
-      final planBrandFlagResult =   await isPlanSqlUsecase.execute(UserInfo.repId,1);;
+      final planBrandFlagResult =   await isPlanSqlUsecase.execute(UserInfo.repId,1);
       final planBrandFlagFailureOrSuccess = planBrandFlagResult.fold((failure) => failure, (data) => data);
       if (planBrandFlagFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: planBrandFlagFailureOrSuccess));

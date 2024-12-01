@@ -14,6 +14,7 @@ class SpecPlanPage extends StatelessWidget {
   SpecPlanPage({super.key});
   @override
   Widget build(BuildContext context) {
+    print(UserInfo.flag1);
     return Scaffold(
       body: Stack(
         children: [
@@ -198,6 +199,8 @@ class SpecPlanPage extends StatelessWidget {
                       error(context, state.failure.massage, state.failure.code);
                     }
                     if (state is UpdateAmountState) {
+                      BlocProvider.of<BrandPlanBloc>(context)
+                          .add(UpdateSaveEvent());
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                   },
@@ -208,17 +211,19 @@ class SpecPlanPage extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return dialogPlan(
-                                      context,
-                                      fun: () => BlocProvider.of<BrandPlanBloc>(
-                                              context)
-                                          .add(UpdateAmountSucEvent()),
-                                      "هل أنت متأكد من حفظ التغيرات");
-                                },
-                              );
+                              UserInfo.otherstatus == 0
+                                  ? showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return dialogPlan(
+                                            context,
+                                            fun: () => BlocProvider.of<
+                                                    BrandPlanBloc>(context)
+                                                .add(UpdateAmountSucEvent()),
+                                            "هل أنت متأكد من حفظ التغيرات");
+                                      },
+                                    )
+                                  : null;
                             },
                             child: SizedBox(
                               height: 80,
