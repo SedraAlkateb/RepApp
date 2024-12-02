@@ -70,6 +70,10 @@ final class UpdateAmountState extends BrandPlanState {
   @override
   List<Object?> get props =>[];
 }
+final class UpdateAmountSendState extends BrandPlanState {
+  @override
+  List<Object?> get props =>[];
+}
 final class UpdateAmountLoadingState extends BrandPlanState {
   @override
   List<Object?> get props =>[];

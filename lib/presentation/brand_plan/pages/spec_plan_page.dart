@@ -203,6 +203,9 @@ class SpecPlanPage extends StatelessWidget {
                           .add(UpdateSaveEvent());
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
+                    if (state is UpdateAmountSendState) {
+                      successWithMessage(context, "تم حفظ التغيرات");
+                    }
                   },
                   child: Positioned(
                       bottom: 20,

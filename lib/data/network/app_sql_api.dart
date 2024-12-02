@@ -328,6 +328,7 @@ class AppSqlApi extends AppSqlApiAbs {
       where: 'repId = ?',
       whereArgs: [repId],
     );
+    UserInfo.flag1=flag1;
   }
 
   Future<void> editIsPlan(int repId, int flag) async {
@@ -340,6 +341,7 @@ class AppSqlApi extends AppSqlApiAbs {
       where: 'repId = ?',
       whereArgs: [repId],
     );
+    UserInfo.flag1=0;
   }
 
   Future<void> clearDatabase() async {
@@ -410,10 +412,12 @@ class AppSqlApi extends AppSqlApiAbs {
         'rep',
         {
           'flag1': 0,
+          'flag': 0,
         },
         where: 'repId = ?',
         whereArgs: [ results[0]['repId'],],
       ):null;
+      UserInfo.flag1=0;
       return LoginModel.fromMap(results[0]);
     } else {
       return null;
@@ -1308,7 +1312,9 @@ class AppSqlApi extends AppSqlApiAbs {
         'otherStartDate': otherStartDate,
         'otherEndDate': otherEndDate,
         'flag': otherStatus == 0 ? 0 : 1,
-        'flag1':otherStatus==-1?0:otherStatus==1?1:UserInfo.flag1
+        'flag1':otherStatus==-1?0
+      //      :UserInfo.flag==1?1
+            :UserInfo.flag1
       },
       where: 'repId = ?',
       whereArgs: [repId],
@@ -1355,6 +1361,7 @@ class AppSqlApi extends AppSqlApiAbs {
       where: 'repId = ?',
       whereArgs: [repId],
     );
+    UserInfo.flag1=0;
     await batch.commit(noResult: true);
   }
 

@@ -35,10 +35,11 @@ class _RecipesPageState extends State<RecipesPage> {
   final _formKey = GlobalKey<FormState>();
 @override
   void initState() {
-  // widget.st==1?
-  // BlocProvider.of<RecipesBrandBloc>(context).add(//event
-  //    )
-  //     :null;
+  if(  widget.st==1){
+    BlocProvider.of<RecipesBrandBloc>(context).add(CopyRecipesEvent(widget.docId));
+  
+  }
+
   BlocProvider.of<RecipesBrandBloc>(context)
       .empty();
     super.initState();
@@ -59,7 +60,15 @@ class _RecipesPageState extends State<RecipesPage> {
                 color: ColorManager.secondaryColor)),
         title: Text('تفاصيل الوصفة'),
       ),
-      body: Padding(
+      body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+  builder: (context, state) {
+    _doctorSpController.text=context.watch<RecipesBrandBloc>().insertRecipesObject.spName??"";
+    firstNoteController.text=context.watch<RecipesBrandBloc>().insertRecipesObject.note1??"";
+    _secondNoteController.text=context.watch<RecipesBrandBloc>().insertRecipesObject.note2??"";
+    _addressController.text=context.watch<RecipesBrandBloc>().insertRecipesObject.address??"";
+    _connectController.text=context.watch<RecipesBrandBloc>().insertRecipesObject.phone??"";
+    _specialNotesController.text=context.watch<RecipesBrandBloc>().insertRecipesObject.note_emp??"";
+    return Padding(
         padding: const EdgeInsets.all(14.0),
         child: SingleChildScrollView(
           child: Form(
@@ -157,7 +166,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       hintText: (state is AllRecipesLoadingState ||
                               state is AllNumLoadingState)
                           ? 'loading'
-                          : 'اختر المستحضر',
+                          : widget.st==1? context.watch<RecipesBrandBloc>().insertRecipesObject.brand_1:'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
@@ -181,7 +190,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       hintText: (state is AllRecipesLoadingState ||
                               state is AllNumLoadingState)
                           ? 'loading'
-                          : 'اختر المستحضر',
+                          :  widget.st==1? context.watch<RecipesBrandBloc>().insertRecipesObject.brand_2 ??"":'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
@@ -202,7 +211,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       hintText: (state is AllRecipesLoadingState ||
                               state is AllNumLoadingState)
                           ? 'loading'
-                          : 'اختر المستحضر',
+                          :widget.st==1? context.watch<RecipesBrandBloc>().insertRecipesObject.brand_3 ??"":'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
@@ -223,7 +232,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       hintText: (state is AllRecipesLoadingState ||
                               state is AllNumLoadingState)
                           ? 'loading'
-                          : 'اختر المستحضر',
+                          :widget.st==1? context.watch<RecipesBrandBloc>().insertRecipesObject.brand_4 ??"":'اختر المستحضر',
                       items: context.watch<RecipesBrandBloc>().brandRecs,
                       onChanged: (value) {
                         BrandRes brand = value;
@@ -309,7 +318,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       hintText: (state is AllRecipesLoadingState ||
                               state is AllNumLoadingState)
                           ? "loading"
-                          : 'اختر العدد',
+                          :widget.st==1? context.watch<RecipesBrandBloc>().insertRecipesObject.total ??"":'اختر العدد',
                       items: context.watch<RecipesBrandBloc>().numRec,
                       onChanged: (value) {
                         BlocProvider.of<RecipesBrandBloc>(context)
@@ -378,7 +387,11 @@ class _RecipesPageState extends State<RecipesPage> {
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          child: Image.file(
+                                          child:context
+                                              .watch<RecipesBrandBloc>()
+                                              .insertRecipesObject
+                                              .image1==null?
+                                          Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
                                                 .insertRecipesObject
@@ -392,7 +405,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                                     .height *
                                                 0.15,
                                             fit: BoxFit.cover,
-                                          ),
+                                          ):SizedBox(),
                                         )
                                       : Column(
                                           mainAxisAlignment:
@@ -444,11 +457,16 @@ class _RecipesPageState extends State<RecipesPage> {
                                               .watch<RecipesBrandBloc>()
                                               .insertRecipesObject
                                               .image2 !=
-                                          null
+                                          null ||context
+                                      .watch<RecipesBrandBloc>()
+                                      .insertRecipesObject
+                                      .image2 !=
+                                      ""
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          child: Image.file(
+                                          child:
+                                          Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
                                                 .insertRecipesObject
@@ -538,7 +556,9 @@ class _RecipesPageState extends State<RecipesPage> {
             ),
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 }

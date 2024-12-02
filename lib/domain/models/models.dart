@@ -1198,7 +1198,7 @@ class CopyReciRequest {
   int type;
   int docId;
   String spName;
-  int brand_1;
+  String brand_1;
   String? brand_2;
   String? brand_3;
   String? brand_4;

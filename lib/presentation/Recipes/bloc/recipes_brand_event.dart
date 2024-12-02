@@ -9,7 +9,14 @@ class AllRecipesEvent extends RecipesBrandEvent {
   List<Object?> get props => [];
 }
 
+class CopyRecipesEvent extends RecipesBrandEvent {
+  final int docId;
 
+  CopyRecipesEvent(this.docId);
+  @override
+
+  List<Object?> get props => [docId];
+}
 
 class BrandRecipesEvent extends RecipesBrandEvent {
   final BrandRes brandRes;

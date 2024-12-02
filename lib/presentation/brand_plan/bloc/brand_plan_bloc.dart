@@ -117,14 +117,15 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        } else if (x.state == 0) {
+        }
+        else if (x.state == 0) {
           UserInfo.otherstatus = 1;
           (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
               .fold((failure) {
             emit(UpdateAmountErrorState(failure: failure));
             return false;
           }, (data) async {
-            emit(UpdateAmountState());
+            emit(UpdateAmountSendState());
           });
         } else if (x.state == 1) {
           emit(UpdateAmountErrorState(
@@ -154,7 +155,6 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
               failure: Failure(5,
                   "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x.index].specModel.title}")));
         }
-        //   UserInfo.flag1=     UserInfo.flag1+1;
       }
     });
   }
