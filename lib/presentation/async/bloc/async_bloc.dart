@@ -156,9 +156,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             return false;
           }
           visitHospital = visitHospitalFailureOrSuccess as VisitHospitalBase;
-          if ((UserInfo.flag1 == 0) &&
-              (!(UserInfo.flag == 1 && UserInfo.otherstatus == 1)))
-          {
+          if ((UserInfo.flag1 == 0))
+          //       &&(!(UserInfo.flag == 1 && UserInfo.otherstatus == 1)))
+            {
             emit(LoadingState(3));
             final planBrandsResult = await allPlanBrandsUsecase.execute(
                 UserInfo.activePlanId, UserInfo.otherPlanId ?? 0);
@@ -171,8 +171,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
             print("Sedra");
           }
-
           emit(LoadingState(4));
+
           try {
             final doctorsResult =
                 await allDoctorUsecase.execute(UserInfo.repId);
@@ -312,10 +312,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           UserInfo.otherEndDate = data.otherEndDate ?? null;
           UserInfo.flag1 = UserInfo.otherstatus == -1
               ? 0
-              : UserInfo.flag == 1
-                  ? 1
-                  : data.flag1;
-
+              //  : UserInfo.otherstatus == 1
+              //     ? 1
+              : data.flag1;
           emit(IsActiveState());
         });
       }
@@ -336,9 +335,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             UserInfo.flag = checkActiveModel?.otherStatus == 0 ? 0 : 1;
             UserInfo.flag1 = checkActiveModel?.otherStatus == -1
                 ? 0
-                : checkActiveModel?.flag == 1
-                    ? 1
-                    : checkActiveModel!.flag1;
+                //  : checkActiveModel?.flag == 1
+                //       ? 1
+                : checkActiveModel!.flag1;
           } else {
             UserInfo.flag1 = 0;
           }

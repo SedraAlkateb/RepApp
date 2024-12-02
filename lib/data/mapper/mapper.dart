@@ -486,7 +486,7 @@ extension CopyRecResponseMapper on CopyRecResponse {
       int.parse(this?.recip?.type ?? "0"),
       int.parse(this?.recip?.docId ?? "0"),
       this.recip?.spName ?? Constants.empty,
-      int.parse(this?.recip?.brand_1 ?? "0"),
+      this.recip?.brand_1 ?? Constants.empty,
       this.recip?.address ?? Constants.empty,
       this.recip?.phone ?? Constants.empty,
       this.recip?.total ?? Constants.empty,

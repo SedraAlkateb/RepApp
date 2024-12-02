@@ -22,6 +22,20 @@ final class AllRecipesLoadingState extends RecipesBrandState {
   @override
   List<Object?> get props => [];
 }
+final class RecipesRecipesState extends RecipesBrandState {
+  RecipesRecipesState();
+  List<Object?> get props => [];
+}
+final class RecipesRecipesErrorState extends RecipesBrandState {
+  final Failure failure;
+  RecipesRecipesErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+final class RecipesRecipesLoadingState extends RecipesBrandState {
+  @override
+  List<Object?> get props => [];
+}
 //
 
 //

@@ -57,7 +57,27 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
     insertRecipesObject = updatedUser;
     print(updatedUser);
   }
-
+  void updateRecipes(CopyReciRequest recipes  ){
+    final updatedUser = insertRecipesObject.copyWith(
+      phone: recipes.phone,
+      image2:recipes.image2!=null? File(recipes.image2??""):null,
+      image1:recipes.image1!=null? File(recipes.image1??""):null,
+      brand_4: recipes.brand_4,
+      brand_3: recipes.brand_3,
+      brand_2: recipes.brand_2,
+      brand_1: recipes.brand_1,
+      note1: recipes.note1,
+      note2: recipes.note2,
+      note_emp: recipes.note_emp,
+      spName: recipes.spName,
+      docId: recipes.docId.toString(),
+      address: recipes.address,
+       repId: recipes.repId.toString(),
+      total: recipes.total,
+      type: recipes.type.toString()
+    );
+    insertRecipesObject = updatedUser;
+  }
   void updateBrandValue(int index, int id) {
     if (index == 1) {
       final updatedUser = insertRecipesObject.copyWith(brand_1: id.toString());
@@ -85,6 +105,15 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         }, (data) async {
           brandRecs = data;
           emit(AllRecipesState(data));
+        });
+      }
+      if (event is CopyRecipesEvent) {
+        emit(RecipesRecipesLoadingState());
+        (await copyReciUsecase.execute(event.docId)).fold((failure) {
+          emit(RecipesRecipesErrorState(failure: failure));
+        }, (data) async {
+          updateRecipes(data);
+          emit(RecipesRecipesState());
         });
       }
       if (event is AllNumEvent) {
