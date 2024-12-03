@@ -38,6 +38,7 @@ import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
+import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
@@ -230,7 +231,9 @@ Future<void> initPlacesModule() async {
   if (!GetIt.I.isRegistered<AllPlacesSqlUsecase>()) {
     instance.registerFactory<AllPlacesSqlUsecase>(
         () => AllPlacesSqlUsecase(instance()));
-    instance.registerFactory<PlaceBloc>(() => PlaceBloc(instance()));
+    instance.registerFactory<CheckRepUsecase>(
+            () => CheckRepUsecase(instance()));
+    instance.registerFactory<PlaceBloc>(() => PlaceBloc(instance(),instance()));
   }
 }
 

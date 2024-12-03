@@ -126,6 +126,20 @@ Map<String, dynamic> _$CheckReResponseToJson(CheckReResponse instance) =>
       'accepted': instance.accepted,
     };
 
+CheckRepResponse _$CheckRepResponseFromJson(Map<String, dynamic> json) =>
+    CheckRepResponse(
+      json['accepted'] as bool?,
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$CheckRepResponseToJson(CheckRepResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'accepted': instance.accepted,
+    };
+
 CopyRecResponse _$CopyRecResponseFromJson(Map<String, dynamic> json) =>
     CopyRecResponse(
       json['recip'] == null

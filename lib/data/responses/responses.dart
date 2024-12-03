@@ -115,6 +115,18 @@ class CheckReResponse extends BaseResponse{
   Map<String,dynamic>toJson()=>
       _$CheckReResponseToJson(this);
 }
+@JsonSerializable()
+class CheckRepResponse extends BaseResponse{
+  @JsonKey(name: "accepted")
+  bool? accepted;
+  CheckRepResponse(this.accepted);
+  // from json
+  factory CheckRepResponse.fromJson(Map<String,dynamic>json)=>
+      _$CheckRepResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$CheckRepResponseToJson(this);
+}
 /////CopyReecResponse//////
 
 @JsonSerializable()

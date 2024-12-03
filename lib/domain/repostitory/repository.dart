@@ -30,5 +30,6 @@ abstract class Repository{
   Future<Either<Failure,CheckReResponse>>checkRe(int repDet);
   Future<Either<Failure,List<int>>>reciNum();
   Future<Either<Failure,CopyReciRequest>>copyReci( int docId);
+  Future<Either<Failure,CheckRepResponse>>checkRep( int depId);
 
 }
