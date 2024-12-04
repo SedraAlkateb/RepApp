@@ -11,6 +11,8 @@ abstract class RemoteDataSource {
   Future<AllMedicalVisitBaseResponse> allVisitDoctor(
     int repDet,
   );
+  Future<CheckRepResponse> checkRep(int repDet);
+
   Future<AllCityBaseResponse> allCity();
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(
       int repDet);
@@ -178,13 +180,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         reciReq.address,
         reciReq.phone,
         reciReq.total,
+        note1: reciReq.note1,
+        note2: reciReq.note2,
+        image1: reciReq.image1,
+        image2: reciReq.image2,
         brand_2: reciReq.brand_2,
         brand_3: reciReq.brand_3,
         brand_4: reciReq.brand_4,
-        image1: reciReq.image1,
-        image2: reciReq.image2,
-        note1: reciReq.note1,
-        note2: reciReq.note2,
         note_emp: reciReq.note_emp);
   }
 
@@ -202,6 +204,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<CopyRecResponse> copyReci(int docId) async{
     return await _appServiceClient.copyReci(docId);
   }
+
+  @override
+  Future<CheckRepResponse> checkRep(int repDet) async{
+    return await _appServiceClient.checkRep(repDet);
+  }
+
 
 
 }

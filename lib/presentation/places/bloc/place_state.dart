@@ -34,3 +34,24 @@ final List<PlaceModel> places;
   @override
   List<Object?> get props =>[places];
 }
+
+////////////
+final class CheckRepState extends PlaceState {
+final bool isCheck;
+  CheckRepState(this.isCheck);
+  @override
+  List<Object?> get props =>[isCheck];
+}
+final class CheckRepErrorState extends PlaceState {
+  final Failure failure;
+  CheckRepErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class CheckRepLoadingState extends PlaceState {
+  @override
+  CheckRepLoadingState();
+  @override
+  List<Object?> get props =>[];
+}

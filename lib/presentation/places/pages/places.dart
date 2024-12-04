@@ -20,7 +20,6 @@ class Places extends StatelessWidget {
   Widget build(BuildContext context) {
     print(UserInfo.activePlanId);
     final size = MediaQuery.of(context).size;
-    BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
         showDialog(
@@ -180,6 +179,17 @@ class Places extends StatelessWidget {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   error(context, state.failure.massage, state.failure.code);
                 });
+              }
+              if (state is CheckRepState) {
+                if (state.isCheck == false) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.deleteLogout,
+                      (route) => false,
+                    );
+                  });
+                }
               }
             },
             builder: (context, state) {

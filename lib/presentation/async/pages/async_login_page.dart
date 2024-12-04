@@ -104,7 +104,7 @@ class AsyncLoginPage extends StatelessWidget {
                     builder: (context, state)=>
 
                         ElevatedButton(onPressed: (){
-                          print( ((UserInfo.flag1 == 0) &&!(UserInfo.flag == 1&&UserInfo.otherstatus==1)));
+
                     BlocProvider.of<AsyncBloc>(context).add(PlanIsActiveEvent());
                   },
                       child: Text(

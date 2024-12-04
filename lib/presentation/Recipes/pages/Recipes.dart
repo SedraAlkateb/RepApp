@@ -323,7 +323,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       items: context.watch<RecipesBrandBloc>().numRec,
                       onChanged: (value) {
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectNumRecEvent(num: "2"));
+                            .add(SelectNumRecEvent(num: value.toString()));
                       },
                       validator: (value) {
                         if (value == null) {
@@ -388,10 +388,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          child:context
-                                              .watch<RecipesBrandBloc>()
-                                              .insertRecipesObject
-                                              .image1==null?
+                                          child:
                                           Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
@@ -406,7 +403,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                                     .height *
                                                 0.15,
                                             fit: BoxFit.cover,
-                                          ):SizedBox(),
+                                          ),
                                         )
                                       : Column(
                                           mainAxisAlignment:
@@ -458,16 +455,11 @@ class _RecipesPageState extends State<RecipesPage> {
                                               .watch<RecipesBrandBloc>()
                                               .insertRecipesObject
                                               .image2 !=
-                                          null ||context
-                                      .watch<RecipesBrandBloc>()
-                                      .insertRecipesObject
-                                      .image2 !=
-                                      ""
+                                          null
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          child:
-                                          Image.file(
+                                          child: Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
                                                 .insertRecipesObject

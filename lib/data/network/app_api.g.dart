@@ -901,6 +901,43 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
+  Future<CheckRepResponse> checkRep(int repDet) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repDet',
+      repDet.toString(),
+    ));
+    final _options = _setStreamType<CheckRepResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/reci/checkRep.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CheckRepResponse _value;
+    try {
+      _value = CheckRepResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<Message1Response> insertReci(
     String repId,
     String type,
