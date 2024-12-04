@@ -126,7 +126,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           visitDoctor?.data = [];
           visitHospital?.brand = [];
           visitHospital?.data = [];
-
           final brandsResult =
               await allBrandsUsecase.execute(UserInfo.activePlanId);
           final brandsFailureOrSuccess =
@@ -158,7 +157,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           visitHospital = visitHospitalFailureOrSuccess as VisitHospitalBase;
           if ((UserInfo.flag1 == 0))
           //       &&(!(UserInfo.flag == 1 && UserInfo.otherstatus == 1)))
-            {
+          {
             emit(LoadingState(3));
             final planBrandsResult = await allPlanBrandsUsecase.execute(
                 UserInfo.activePlanId, UserInfo.otherPlanId ?? 0);
@@ -172,7 +171,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             print("Sedra");
           }
           emit(LoadingState(4));
-
           try {
             final doctorsResult =
                 await allDoctorUsecase.execute(UserInfo.repId);
@@ -310,11 +308,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           UserInfo.endDate = data.endDate;
           UserInfo.otherStartDate = data.otherStartDate ?? null;
           UserInfo.otherEndDate = data.otherEndDate ?? null;
-          UserInfo.flag1 = UserInfo.otherstatus == -1
-              ? 0
-              //  : UserInfo.otherstatus == 1
-              //     ? 1
-              : data.flag1;
+          if (UserInfo.otherstatus == -1) {
+            UserInfo.flag1 = 0;
+          }
           emit(IsActiveState());
         });
       }

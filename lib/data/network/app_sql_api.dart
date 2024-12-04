@@ -192,28 +192,34 @@ class AppSqlApi extends AppSqlApiAbs {
   SELECT 
       specialization.id AS specialization_id, 
       specialization.title AS specialization_title, 
-        COALESCE(SUM(
-        CASE 
-          WHEN hospital.title LIKE '%شعب%' THEN 
-            (CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)) / 2
-          ELSE 
-            CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
-        END
-      ), 0) AS sumBrandHospital,
-          CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER) AS sumHospital
+      COALESCE(
+        SUM(
+          CASE 
+            WHEN hospital.title LIKE '%شعب%' THEN 
+              CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER) / 2
+            ELSE 
+              CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
+          END
+        ), 0) AS sumBrandHospital,
+      COALESCE(
+        SUM(
+          CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
+        ), 0) AS sumHospital
   FROM 
       specialization
   LEFT JOIN 
       hospitalSp ON hospitalSp.spId = specialization.id
- LEFT JOIN 
+  LEFT JOIN 
       hospital ON hospital.id = hospitalSp.hospitalId
   GROUP BY 
-      specialization.title, specialization.id
+      specialization.id, specialization.title
 ''');
+
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = (maps[i]['sumDoctor'] ?? 0) as int;
-          int sumBrandHospital = (maps1[i]['sumBrandHospital'] ?? 0) as int;
+          int sumBrandHospital =
+              (maps1[i]['sumBrandHospital'] ?? 0) as int; //الجمع للخطة
           int sumHospital = (maps1[i]['sumHospital'] ?? 0) as int;
           await txn.update(
             'specialization',
@@ -328,20 +334,18 @@ class AppSqlApi extends AppSqlApiAbs {
       where: 'repId = ?',
       whereArgs: [repId],
     );
-    UserInfo.flag1=flag1;
+    UserInfo.flag1 = flag1;
   }
 
   Future<void> editIsPlan(int repId, int flag) async {
     final mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
-      {'flag': flag,
-      'flag1':0
-      },
+      {'flag': flag, 'flag1': 0},
       where: 'repId = ?',
       whereArgs: [repId],
     );
-    UserInfo.flag1=0;
+    UserInfo.flag1 = 0;
   }
 
   Future<void> clearDatabase() async {
@@ -354,7 +358,7 @@ class AppSqlApi extends AppSqlApiAbs {
       'visit_hospital',
       'visit_pharmacy',
       'brandSp',
-      ((UserInfo.flag1 == 0) )? 'planBrand' : null,
+      ((UserInfo.flag1 == 0)) ? 'planBrand' : null,
       'hospitalSp',
       'doctor',
       'pharmacy',
@@ -407,17 +411,20 @@ class AppSqlApi extends AppSqlApiAbs {
         await db.rawQuery('SELECT * FROM rep LIMIT 1');
 
     if (results.isNotEmpty) {
-      results[0]['otherStatus']==-1?
-      await db.update(
-        'rep',
-        {
-          'flag1': 0,
-          'flag': 0,
-        },
-        where: 'repId = ?',
-        whereArgs: [ results[0]['repId'],],
-      ):null;
-      UserInfo.flag1=0;
+      if (results[0]['otherStatus'] == -1) {
+        await db.update(
+          'rep',
+          {
+            'flag1': 0,
+            'flag': 0,
+          },
+          where: 'repId = ?',
+          whereArgs: [
+            results[0]['repId'],
+          ],
+        );
+        UserInfo.flag1 = 0;
+      }
       return LoginModel.fromMap(results[0]);
     } else {
       return null;
@@ -1269,8 +1276,7 @@ class AppSqlApi extends AppSqlApiAbs {
             (((spPlan.sumDoctor + spPlan.sumBrandHospital) *
                         UserInfo.samplesCount) +
                     ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                        UserInfo.samplesCount /
-                        4))
+                        UserInfo.samplesCount / 4))
                 .toInt());
       }
       !(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)
@@ -1298,8 +1304,9 @@ class AppSqlApi extends AppSqlApiAbs {
       String startDate,
       String endDate,
       String otherStartDate,
-      String otherEndDate)
-  async{
+      String otherEndDate) async {
+    print(UserInfo.flag1);
+    print("UserInfo.flag1");
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
@@ -1312,9 +1319,10 @@ class AppSqlApi extends AppSqlApiAbs {
         'otherStartDate': otherStartDate,
         'otherEndDate': otherEndDate,
         'flag': otherStatus == 0 ? 0 : 1,
-        'flag1':otherStatus==-1?0
-      //      :UserInfo.flag==1?1
-            :UserInfo.flag1
+        'flag1': otherStatus == -1
+            ? 0
+            //      :UserInfo.flag==1?1
+            : UserInfo.flag1
       },
       where: 'repId = ?',
       whereArgs: [repId],
@@ -1361,7 +1369,7 @@ class AppSqlApi extends AppSqlApiAbs {
       where: 'repId = ?',
       whereArgs: [repId],
     );
-    UserInfo.flag1=0;
+    UserInfo.flag1 = 0;
     await batch.commit(noResult: true);
   }
 

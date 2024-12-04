@@ -8,6 +8,12 @@ class AllPlaceEvent extends PlaceEvent{
   List<Object?> get props => [];
 
 }
+class CheckRepEvent extends PlaceEvent{
+  @override
+  CheckRepEvent();
+  List<Object?> get props => [];
+
+}
 class SearchPlaceEvent extends PlaceEvent{
 
   final String value;

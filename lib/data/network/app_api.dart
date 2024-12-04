@@ -103,6 +103,10 @@ abstract class AppServiceClient {
   Future<CheckReResponse> checkRe(
       @Part(name: "repDet") int repDet
       );
+  @POST("/reci/checkRep.php")
+  Future<CheckRepResponse> checkRep(
+      @Part(name: "repDet") int repDet
+      );
   @POST("/reci/insertReci.php")
   Future<Message1Response> insertReci(
       @Part(name: "repId") String repId,

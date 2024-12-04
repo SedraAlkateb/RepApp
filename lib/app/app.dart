@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) {
             final bloc = instance<PlaceBloc>();
             bloc.add(AllPlaceEvent());
+            bloc.add(CheckRepEvent());
             return bloc;
           },
         ),

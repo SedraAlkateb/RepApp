@@ -35,14 +35,14 @@ class _RecipesPageState extends State<RecipesPage> {
   final _formKey = GlobalKey<FormState>();
 @override
   void initState() {
-  if(  widget.st==1){
-    BlocProvider.of<RecipesBrandBloc>(context).add(CopyRecipesEvent(widget.docId));
-  
-  }
 
   BlocProvider.of<RecipesBrandBloc>(context)
       .empty();
-    super.initState();
+  if(  widget.st==1){
+    BlocProvider.of<RecipesBrandBloc>(context).add(CopyRecipesEvent(widget.docId));
+  }
+
+  super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -322,7 +322,7 @@ class _RecipesPageState extends State<RecipesPage> {
                       items: context.watch<RecipesBrandBloc>().numRec,
                       onChanged: (value) {
                         BlocProvider.of<RecipesBrandBloc>(context)
-                            .add(SelectNumRecEvent(num: "2"));
+                            .add(SelectNumRecEvent(num: value.toString()));
                       },
                       validator: (value) {
                         if (value == null) {
@@ -387,10 +387,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          child:context
-                                              .watch<RecipesBrandBloc>()
-                                              .insertRecipesObject
-                                              .image1==null?
+                                          child:
                                           Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
@@ -405,7 +402,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                                     .height *
                                                 0.15,
                                             fit: BoxFit.cover,
-                                          ):SizedBox(),
+                                          ),
                                         )
                                       : Column(
                                           mainAxisAlignment:
@@ -457,16 +454,11 @@ class _RecipesPageState extends State<RecipesPage> {
                                               .watch<RecipesBrandBloc>()
                                               .insertRecipesObject
                                               .image2 !=
-                                          null ||context
-                                      .watch<RecipesBrandBloc>()
-                                      .insertRecipesObject
-                                      .image2 !=
-                                      ""
+                                          null
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
-                                          child:
-                                          Image.file(
+                                          child: Image.file(
                                             context
                                                 .watch<RecipesBrandBloc>()
                                                 .insertRecipesObject

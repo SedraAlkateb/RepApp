@@ -214,7 +214,7 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.endDate ?? Constants.empty,
       0,
       int.parse(this?.data?.recipesCount ?? "0"),
-      0,
+     UserInfo.flag1,
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
