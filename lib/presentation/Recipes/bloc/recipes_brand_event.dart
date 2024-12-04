@@ -66,9 +66,9 @@ class PickImageEvent extends RecipesBrandEvent {
 
 class SelectBrandEvent extends RecipesBrandEvent {
   final int index;
-  final int id;
-  SelectBrandEvent({required this.index,required this.id});
-  List<Object?> get props => [index,id];
+  final BrandRes brandRecipeModel;
+  SelectBrandEvent({required this.index,required this.brandRecipeModel});
+  List<Object?> get props => [index,brandRecipeModel];
 }
 class SelectNumRecEvent extends RecipesBrandEvent {
   final String num;

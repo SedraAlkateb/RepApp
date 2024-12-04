@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'freezed_data.freezed.dart';
 
@@ -135,19 +136,18 @@ class InsertRecipesObject with _$InsertRecipesObject {
     String type,
     String docId,
     String spName,
-    String brand_1,
+      BrandRes brand_1,
     String address,
     String phone,
     String total,
     String? note1,
     String? note2,
-
     String? note_emp,
     File? image1,
     File? image2,
-    String? brand_2,
-    String? brand_3,
-    String? brand_4,
+      BrandRes? brand_2,
+      BrandRes? brand_3,
+      BrandRes? brand_4,
   ) = _InsertRecipesObject;
 
   factory InsertRecipesObject.empty() => InsertRecipesObject(
@@ -155,7 +155,7 @@ class InsertRecipesObject with _$InsertRecipesObject {
         '0',
         '',
         '',
-        '',
+    BrandRes(0, ""),
         '',
         '',
         '',

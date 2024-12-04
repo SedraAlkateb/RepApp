@@ -6,7 +6,7 @@ sealed class SpecializationState extends Equatable{}
 final class SpecializationInitial extends SpecializationState {
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 final class AllSpecState extends SpecializationState {

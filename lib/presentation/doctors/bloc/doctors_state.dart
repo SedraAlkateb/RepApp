@@ -7,7 +7,7 @@ abstract class DoctorsState extends Equatable {
 final class DoctorsInitial extends DoctorsState {
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 
 }
 

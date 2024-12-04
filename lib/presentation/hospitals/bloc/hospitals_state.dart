@@ -8,7 +8,7 @@ sealed class HospitalsState extends Equatable {
 final class HospitalsInitial extends HospitalsState {
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 final class AllHospitalsState extends HospitalsState {

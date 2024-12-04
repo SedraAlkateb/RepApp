@@ -11,7 +11,7 @@ class AllHospitalEvent extends HospitalsEvent {
 
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 class SearchhosEvent extends HospitalsEvent {
   final String contant;
