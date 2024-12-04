@@ -40,6 +40,7 @@ class _RecipesPageState extends State<RecipesPage> {
       .empty();
   if(  widget.st==1){
     BlocProvider.of<RecipesBrandBloc>(context).add(CopyRecipesEvent(widget.docId));
+
   }
 
   super.initState();
