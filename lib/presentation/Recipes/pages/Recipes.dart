@@ -35,14 +35,15 @@ class _RecipesPageState extends State<RecipesPage> {
   final _formKey = GlobalKey<FormState>();
 @override
   void initState() {
-  if(  widget.st==1){
-    BlocProvider.of<RecipesBrandBloc>(context).add(CopyRecipesEvent(widget.docId));
-  
-  }
 
   BlocProvider.of<RecipesBrandBloc>(context)
       .empty();
-    super.initState();
+  if(  widget.st==1){
+    BlocProvider.of<RecipesBrandBloc>(context).add(CopyRecipesEvent(widget.docId));
+
+  }
+
+  super.initState();
   }
   @override
   Widget build(BuildContext context) {

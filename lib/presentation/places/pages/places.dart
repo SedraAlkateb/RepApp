@@ -18,7 +18,7 @@ class Places extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-   print(UserInfo.activePlanId);
+    print(UserInfo.activePlanId);
     final size = MediaQuery.of(context).size;
     BlocProvider.of<PlaceBloc>(context).add(AllPlaceEvent());
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -29,56 +29,56 @@ class Places extends StatelessWidget {
               return Container(
                   child: Center(
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, top: 20, bottom: 20),
-                        child: Container(
-                            height: size.height / 3.2,
-                            decoration: BoxDecoration(
-                                color: ColorManager.white,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                              child: Container(
-                                height: size.height / 3,
-                                decoration: BoxDecoration(
-                                    color: ColorManager.white,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          "اختر أحد المناطق لإِظهار(الأطباء,المشافي)في المنطقة المختارة",
-                                          style: TextStyle(
-                                              fontSize: 22,
-                                              color: ColorManager.secondaryColor1,
-                                              fontWeight: FontWeight.bold,
-                                              decoration: TextDecoration.none),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 7,
-                                      ),
-                                      ElevatedButton(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text( "موافق"),
-                                          ),
-
-                                          onPressed: () {
-                                            context.read<PlaceBloc>().k = 1;
-                                            Navigator.pop(context);
-                                          })
-                                    ],
-                                  ),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 20, bottom: 20),
+                child: Container(
+                    height: size.height / 3.2,
+                    decoration: BoxDecoration(
+                        color: ColorManager.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, right: 20, top: 20),
+                      child: Container(
+                        height: size.height / 3,
+                        decoration: BoxDecoration(
+                            color: ColorManager.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  "اختر أحد المناطق لإِظهار(الأطباء,المشافي)في المنطقة المختارة",
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      color: ColorManager.secondaryColor1,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none),
                                 ),
                               ),
-                            )),
-                      )));
+                              SizedBox(
+                                height: 7,
+                              ),
+                              ElevatedButton(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("موافق"),
+                                  ),
+                                  onPressed: () {
+                                    context.read<PlaceBloc>().k = 1;
+                                    Navigator.pop(context);
+                                  })
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+              )));
             });
         context.read<PlaceBloc>().k = 1;
       }
@@ -116,10 +116,7 @@ class Places extends StatelessWidget {
                 onPressed: () {
                   initAsyncInModule();
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamed(
-                        context,
-                        Routes .asyncIn
-                    );
+                    Navigator.pushNamed(context, Routes.asyncIn);
                   });
                 },
                 backgroundColor: ColorManager.secondaryColor1,
@@ -143,28 +140,37 @@ class Places extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-       UserInfo.endDate==BlocProvider.of<PlaceBloc>(context).data?
-        Padding(
-          padding: const EdgeInsets.only(right: 17),
-          child: Row(
-            children: [ Icon(
-              Icons.warning_amber_outlined,
-              color: Colors.red,
-              size: 20,
-            ),
-              SizedBox(width: 4),
-              Text("يرجى رفع الزيارات للخطة الحالية",style: TextStyle(color: Colors.black,fontWeight:FontWeight.bold, fontSize: 15,),textAlign: TextAlign.center,),
-            ],
-          )
-        )
-           :SizedBox(),
+        UserInfo.endDate == BlocProvider.of<PlaceBloc>(context).data
+            ? Padding(
+                padding: const EdgeInsets.only(right: 17),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_outlined,
+                      color: Colors.red,
+                      size: 20,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      "يرجى رفع الزيارات للخطة الحالية",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ))
+            : SizedBox(),
         SizedBox(
           height: 10,
         ),
         SearchField(
           searchController: searchController,
           onPressed: (value) {
-            BlocProvider.of<PlaceBloc>(context).add(SearchPlaceEvent(value: value));
+            BlocProvider.of<PlaceBloc>(context)
+                .add(SearchPlaceEvent(value: value));
           },
         ),
         Expanded(
@@ -177,7 +183,8 @@ class Places extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              List<PlaceModel> placeModel = context.watch<PlaceBloc>().placeSearchModel;
+              List<PlaceModel> placeModel =
+                  context.watch<PlaceBloc>().placeSearchModel;
               if (state is AllPlaceState) {
                 placeModel = state.places;
               }
@@ -192,7 +199,8 @@ class Places extends StatelessWidget {
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(
                           builder: (context) {
-                            return PlaceVisitPage(placeId: placeModel[index].placeId);
+                            return PlaceVisitPage(
+                                placeId: placeModel[index].placeId);
                           },
                         ));
                         BlocProvider.of<VisitPlaceBloc>(context).add(
@@ -209,7 +217,8 @@ class Places extends StatelessWidget {
                             ColorManager.secondaryColor7,
                           ]),
                           color: ColorManager.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(AppSize.s8)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

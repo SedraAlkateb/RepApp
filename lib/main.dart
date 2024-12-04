@@ -4,6 +4,8 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:timezone/data/latest.dart' ;
+
 
 Future<int?> sss()async{
   IsLoginSqlUsecase isLoginSqlUsecase=IsLoginSqlUsecase(instance());
@@ -36,10 +38,14 @@ Future<int?> sss()async{
   });
   return null;
 }
+
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();
  await sss();
+ initializeTimeZones();
+  // تهيئة الإشعارات
+  //await initializeNotifications();
   runApp(Phoenix( child: const MyApp()));
 }
 
