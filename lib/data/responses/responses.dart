@@ -156,13 +156,13 @@ class CopyRecipResponse {
   @JsonKey(name: "spName")
   String? spName;
   @JsonKey(name: "brand_1")
-  String? brand_1;
+  BrandRecipesResponse? brand_1;
   @JsonKey(name: "brand_2")
-  String? brand_2;
+  BrandRecipesResponse? brand_2;
   @JsonKey(name: "brand_3")
-  String? brand_3;
+  BrandRecipesResponse? brand_3;
   @JsonKey(name: "brand_4")
-  String? brand_4;
+  BrandRecipesResponse? brand_4;
   @JsonKey(name: "note1")
   String? note1;
   @JsonKey(name: "note2")
@@ -211,6 +211,21 @@ class CheckActiveResponse {
   // to json
   Map<String,dynamic>toJson()=>
       _$CheckActiveResponseToJson(this);
+}
+@JsonSerializable()
+class BrandRecipesResponse {
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "title_en")
+  String? title_en;
+  BrandRecipesResponse(this.id,this.title_en);
+  // from json
+  factory BrandRecipesResponse.fromJson(Map<String,dynamic>json)=>
+      _$BrandRecipesResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$BrandRecipesResponseToJson(this);
 }
 @JsonSerializable()
 class CheckActiveBaseResponse extends BaseResponse{

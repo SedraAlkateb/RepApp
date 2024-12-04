@@ -2814,7 +2814,7 @@ mixin _$InsertRecipesObject {
   String get type => throw _privateConstructorUsedError;
   String get docId => throw _privateConstructorUsedError;
   String get spName => throw _privateConstructorUsedError;
-  String get brand_1 => throw _privateConstructorUsedError;
+  BrandRes get brand_1 => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
   String get total => throw _privateConstructorUsedError;
@@ -2823,9 +2823,9 @@ mixin _$InsertRecipesObject {
   String? get note_emp => throw _privateConstructorUsedError;
   File? get image1 => throw _privateConstructorUsedError;
   File? get image2 => throw _privateConstructorUsedError;
-  String? get brand_2 => throw _privateConstructorUsedError;
-  String? get brand_3 => throw _privateConstructorUsedError;
-  String? get brand_4 => throw _privateConstructorUsedError;
+  BrandRes? get brand_2 => throw _privateConstructorUsedError;
+  BrandRes? get brand_3 => throw _privateConstructorUsedError;
+  BrandRes? get brand_4 => throw _privateConstructorUsedError;
 
   /// Create a copy of InsertRecipesObject
   /// with the given fields replaced by the non-null parameter values.
@@ -2845,7 +2845,7 @@ abstract class $InsertRecipesObjectCopyWith<$Res> {
       String type,
       String docId,
       String spName,
-      String brand_1,
+      BrandRes brand_1,
       String address,
       String phone,
       String total,
@@ -2854,9 +2854,9 @@ abstract class $InsertRecipesObjectCopyWith<$Res> {
       String? note_emp,
       File? image1,
       File? image2,
-      String? brand_2,
-      String? brand_3,
-      String? brand_4});
+      BrandRes? brand_2,
+      BrandRes? brand_3,
+      BrandRes? brand_4});
 }
 
 /// @nodoc
@@ -2911,7 +2911,7 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
       brand_1: null == brand_1
           ? _value.brand_1
           : brand_1 // ignore: cast_nullable_to_non_nullable
-              as String,
+              as BrandRes,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -2947,15 +2947,15 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
       brand_2: freezed == brand_2
           ? _value.brand_2
           : brand_2 // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BrandRes?,
       brand_3: freezed == brand_3
           ? _value.brand_3
           : brand_3 // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BrandRes?,
       brand_4: freezed == brand_4
           ? _value.brand_4
           : brand_4 // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BrandRes?,
     ) as $Val);
   }
 }
@@ -2973,7 +2973,7 @@ abstract class _$$InsertRecipesObjectImplCopyWith<$Res>
       String type,
       String docId,
       String spName,
-      String brand_1,
+      BrandRes brand_1,
       String address,
       String phone,
       String total,
@@ -2982,9 +2982,9 @@ abstract class _$$InsertRecipesObjectImplCopyWith<$Res>
       String? note_emp,
       File? image1,
       File? image2,
-      String? brand_2,
-      String? brand_3,
-      String? brand_4});
+      BrandRes? brand_2,
+      BrandRes? brand_3,
+      BrandRes? brand_4});
 }
 
 /// @nodoc
@@ -3037,7 +3037,7 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
       null == brand_1
           ? _value.brand_1
           : brand_1 // ignore: cast_nullable_to_non_nullable
-              as String,
+              as BrandRes,
       null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -3073,15 +3073,15 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
       freezed == brand_2
           ? _value.brand_2
           : brand_2 // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BrandRes?,
       freezed == brand_3
           ? _value.brand_3
           : brand_3 // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BrandRes?,
       freezed == brand_4
           ? _value.brand_4
           : brand_4 // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BrandRes?,
     ));
   }
 }
@@ -3116,7 +3116,7 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
   @override
   final String spName;
   @override
-  final String brand_1;
+  final BrandRes brand_1;
   @override
   final String address;
   @override
@@ -3134,11 +3134,11 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
   @override
   final File? image2;
   @override
-  final String? brand_2;
+  final BrandRes? brand_2;
   @override
-  final String? brand_3;
+  final BrandRes? brand_3;
   @override
-  final String? brand_4;
+  final BrandRes? brand_4;
 
   @override
   String toString() {
@@ -3205,7 +3205,7 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
       final String type,
       final String docId,
       final String spName,
-      final String brand_1,
+      final BrandRes brand_1,
       final String address,
       final String phone,
       final String total,
@@ -3214,9 +3214,9 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
       final String? note_emp,
       final File? image1,
       final File? image2,
-      final String? brand_2,
-      final String? brand_3,
-      final String? brand_4) = _$InsertRecipesObjectImpl;
+      final BrandRes? brand_2,
+      final BrandRes? brand_3,
+      final BrandRes? brand_4) = _$InsertRecipesObjectImpl;
 
   @override
   String get repId;
@@ -3227,7 +3227,7 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
   @override
   String get spName;
   @override
-  String get brand_1;
+  BrandRes get brand_1;
   @override
   String get address;
   @override
@@ -3245,11 +3245,11 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
   @override
   File? get image2;
   @override
-  String? get brand_2;
+  BrandRes? get brand_2;
   @override
-  String? get brand_3;
+  BrandRes? get brand_3;
   @override
-  String? get brand_4;
+  BrandRes? get brand_4;
 
   /// Create a copy of InsertRecipesObject
   /// with the given fields replaced by the non-null parameter values.

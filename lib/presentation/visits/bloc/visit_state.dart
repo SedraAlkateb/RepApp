@@ -5,7 +5,7 @@ sealed class VisitState extends Equatable {}
 
 final class VisitInitial extends VisitState {
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 // final class VisitPharmacyErrorState extends VisitState {

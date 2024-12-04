@@ -418,6 +418,15 @@ extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
   }
 }
 
+extension BrandRecipesResponseMapper on BrandRecipesResponse? {
+  BrandRes toDomain() {
+    return BrandRes(
+        this?.id ?? Constants.zero,
+        this?.title_en ?? Constants.empty,
+    );
+  }
+}
+
 extension VisitDoctorBrandsResponseMapper on VisitDoctorBrandResponse? {
   List<VisitBrandPharmacyModel>? toDomain() {
     List<VisitBrandPharmacyModel>? doctorVisitModel =
@@ -481,12 +490,12 @@ extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
 extension CopyRecResponseMapper on CopyRecResponse {
   CopyReciRequest toDomain() {
     return CopyReciRequest(
-      int.parse(this?.recip?.id ?? "0"),
-      int.parse(this?.recip?.repId ?? "0"),
-      int.parse(this?.recip?.type ?? "0"),
-      int.parse(this?.recip?.docId ?? "0"),
+      int.parse(this.recip?.id ?? "0"),
+      int.parse(this.recip?.repId ?? "0"),
+      int.parse(this.recip?.type ?? "0"),
+      int.parse(this.recip?.docId ?? "0"),
       this.recip?.spName ?? Constants.empty,
-      this.recip?.brand_1 ?? Constants.empty,
+      this.recip!.brand_1.toDomain(),
       this.recip?.address ?? Constants.empty,
       this.recip?.phone ?? Constants.empty,
       this.recip?.total ?? Constants.empty,
@@ -495,9 +504,9 @@ extension CopyRecResponseMapper on CopyRecResponse {
       note_emp: this.recip?.note_emp?? Constants.empty,
       image1: this.recip?.image1?? Constants.empty,
       image2: this.recip?.image2?? Constants.empty,
-      brand_2: this.recip?.brand_2?? Constants.empty,
-      brand_3: this.recip?.brand_3?? Constants.empty,
-      brand_4: this.recip?.brand_4?? Constants.empty,
+      brand_2:   this.recip?.brand_2.toDomain(),
+      brand_3:   this.recip?.brand_3.toDomain(),
+      brand_4:   this.recip?.brand_4.toDomain(),
 
 
 

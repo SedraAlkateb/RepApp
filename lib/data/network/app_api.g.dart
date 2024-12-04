@@ -6,7 +6,7 @@ part of 'app_api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
 
 class _AppServiceClient implements AppServiceClient {
   _AppServiceClient(
@@ -1006,22 +1006,26 @@ class _AppServiceClient implements AppServiceClient {
       ));
     }
     if (image1 != null) {
-      _data.files.add(MapEntry(
-        'image1',
-        MultipartFile.fromFileSync(
-          image1.path,
-          filename: image1.path.split(Platform.pathSeparator).last,
-        ),
-      ));
+      if (image1 != null) {
+        _data.files.add(MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
     }
     if (image2 != null) {
-      _data.files.add(MapEntry(
-        'image2',
-        MultipartFile.fromFileSync(
-          image2.path,
-          filename: image2.path.split(Platform.pathSeparator).last,
-        ),
-      ));
+      if (image2 != null) {
+        _data.files.add(MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
     }
     if (brand_2 != null) {
       _data.fields.add(MapEntry(
