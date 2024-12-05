@@ -204,7 +204,8 @@ class DrawerPage extends StatelessWidget {
                   Routes.brand,
                   (route) => false,
                 );
-              });
+              }
+              );
             },
           ),
           Padding(

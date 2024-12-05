@@ -1,3 +1,4 @@
+import 'dart:async' as s;
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
@@ -10,16 +11,21 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../../uniti/local_notifications.dart';
 
 class Places extends StatelessWidget {
   Places({super.key});
   final TextEditingController searchController = TextEditingController();
   @override
+
   Widget build(BuildContext context) {
     print(UserInfo.activePlanId);
     final size = MediaQuery.of(context).size;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
         showDialog(
@@ -82,6 +88,18 @@ class Places extends StatelessWidget {
         context.read<PlaceBloc>().k = 1;
       }
     });
+    // التحقق من الوقت الحالي مقابل UserInfo.endDate
+    s.Timer.periodic(const Duration(seconds: 60), (timer) async {
+
+      final now =formatDateTimeFromDataTime(DateTime.now()) ;
+      if (UserInfo.endDate != null && now==formatDateTime(UserInfo.endDate??""))
+      {
+        timer.cancel();
+        // إيقاف الفحص عند تحقق الشرط
+        await _showEndDateNotification();
+
+      }
+    });
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
@@ -130,6 +148,30 @@ class Places extends StatelessWidget {
       ),
     );
   }
+// إنشاء الإشعار باستخدام flutter_local_notifications
+  Future<void> _showEndDateNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your_channel_id', // معرف القناة
+      'التنبيهات', // اسم القناة
+      channelDescription: 'تنبيهات خاصة بالوقت',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      enableVibration :true,
+        playSound: true,
+    );
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0, // معرف الإشعار
+      'شركة دومِنا', // عنوان الإشعار
+      'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
+      platformChannelSpecifics,
+      payload: 'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
+    );
+  }
 
   Widget bodyBuild(BuildContext context) {
     return Column(
@@ -151,7 +193,7 @@ class Places extends StatelessWidget {
                     ),
                     SizedBox(width: 4),
                     Text(
-                      "يرجى رفع الزيارات للخطة الحالية",
+                      "يرجى الضغط على زر المزامنة لرفع زيارات الخطة الحالية",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

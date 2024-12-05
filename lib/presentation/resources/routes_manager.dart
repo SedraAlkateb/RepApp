@@ -31,7 +31,7 @@ class Routes {
   static const String placeVisit = "/placeVisit";
   static const String visitPharmacy = "/visitPharmacy";
   static const String visits = "/visits";
-  static const String  asyncIn = "/asyncIn";
+  static const String asyncIn = "/asyncIn";
   static const String specDH = "/specDH";
   static const String logout = "/logout";
   static const String brandPlan = "/brandPlan";
