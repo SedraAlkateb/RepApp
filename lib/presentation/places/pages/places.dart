@@ -2,6 +2,7 @@ import 'dart:async' as s;
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/main.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
