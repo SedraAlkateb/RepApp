@@ -163,10 +163,22 @@ CopyRecipResponse _$CopyRecipResponseFromJson(Map<String, dynamic> json) =>
       json['type'] as String?,
       json['docId'] as String?,
       json['spName'] as String?,
-      json['brand_1'] as String?,
-      json['brand_2'] as String?,
-      json['brand_3'] as String?,
-      json['brand_4'] as String?,
+      json['brand_1'] == null
+          ? null
+          : BrandRecipesResponse.fromJson(
+              json['brand_1'] as Map<String, dynamic>),
+      json['brand_2'] == null
+          ? null
+          : BrandRecipesResponse.fromJson(
+              json['brand_2'] as Map<String, dynamic>),
+      json['brand_3'] == null
+          ? null
+          : BrandRecipesResponse.fromJson(
+              json['brand_3'] as Map<String, dynamic>),
+      json['brand_4'] == null
+          ? null
+          : BrandRecipesResponse.fromJson(
+              json['brand_4'] as Map<String, dynamic>),
       json['note1'] as String?,
       json['note2'] as String?,
       json['address'] as String?,
@@ -213,6 +225,20 @@ Map<String, dynamic> _$CheckActiveResponseToJson(
       'otherstatus': instance.otherstatus,
     };
 
+BrandRecipesResponse _$BrandRecipesResponseFromJson(
+        Map<String, dynamic> json) =>
+    BrandRecipesResponse(
+      (json['id'] as num?)?.toInt(),
+      json['title_en'] as String?,
+    );
+
+Map<String, dynamic> _$BrandRecipesResponseToJson(
+        BrandRecipesResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title_en': instance.title_en,
+    };
+
 CheckActiveBaseResponse _$CheckActiveBaseResponseFromJson(
         Map<String, dynamic> json) =>
     CheckActiveBaseResponse(
@@ -246,31 +272,22 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['otherEndDate'] as String?,
     )..samplesCount = json['samplesCount'] as String?;
 
-Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) {
-  final val = <String, dynamic>{
-    'token': instance.token,
-    'repId': instance.repId,
-    'otherPlanId': instance.otherPlanId,
-    'samplesCount': instance.samplesCount,
-    'activePlanId': instance.activePlanId,
-    'otherPlanStatus': instance.otherStatus,
-    'name': instance.name,
-    'percentage': instance.percentage,
-    'endDate': instance.endDate,
-    'startDate': instance.startDate,
-    'recipesCount': instance.recipesCount,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('otherStartDate', instance.otherStartDate);
-  writeNotNull('otherEndDate', instance.otherEndDate);
-  return val;
-}
+Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+      'repId': instance.repId,
+      'otherPlanId': instance.otherPlanId,
+      'samplesCount': instance.samplesCount,
+      'activePlanId': instance.activePlanId,
+      'otherPlanStatus': instance.otherStatus,
+      'name': instance.name,
+      'percentage': instance.percentage,
+      'endDate': instance.endDate,
+      'startDate': instance.startDate,
+      'recipesCount': instance.recipesCount,
+      if (instance.otherStartDate case final value?) 'otherStartDate': value,
+      if (instance.otherEndDate case final value?) 'otherEndDate': value,
+    };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
     BrandSpResponse(

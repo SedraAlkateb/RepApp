@@ -27,7 +27,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "0",
       "docId",
       "spName",
-      "brand_1",
+      BrandRes(0, ''),
       'address',
       "phone",
       "total",
@@ -36,9 +36,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "note_emp",
       null,
       null,
-      "brand_2",
-      'brand_3',
-      "brand_4");
+      null,
+      null,
+      null);
 
   void empty() {
     insertRecipesObject = InsertRecipesObject.empty();
@@ -48,7 +48,13 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   List<int> numRec = [];
   Future<File?> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-    if (pickedFile != null) return File(pickedFile.path);
+    if (pickedFile != null) {
+      print(pickedFile.path);
+      print("pickedFile.path");
+      return File(pickedFile.path);
+
+    }
+
     return null;
   }
 
@@ -79,18 +85,18 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
     insertRecipesObject = updatedUser;
   }
 
-  void updateBrandValue(int index, int id) {
+  void updateBrandValue(int index, BrandRes id) {
     if (index == 1) {
-      final updatedUser = insertRecipesObject.copyWith(brand_1: id.toString());
+      final updatedUser = insertRecipesObject.copyWith(brand_1: id);
       insertRecipesObject = updatedUser;
     } else if (index == 2) {
-      final updatedUser = insertRecipesObject.copyWith(brand_2: id.toString());
+      final updatedUser = insertRecipesObject.copyWith(brand_2: id);
       insertRecipesObject = updatedUser;
     } else if (index == 3) {
-      final updatedUser = insertRecipesObject.copyWith(brand_3: id.toString());
+      final updatedUser = insertRecipesObject.copyWith(brand_3: id);
       insertRecipesObject = updatedUser;
     } else {
-      final updatedUser = insertRecipesObject.copyWith(brand_4: id.toString());
+      final updatedUser = insertRecipesObject.copyWith(brand_4: id);
       insertRecipesObject = updatedUser;
     }
   }
@@ -126,7 +132,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           emit(AllNumState(data));
         });
       }
-
       if (event is InsertReciEvent) {
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
@@ -143,7 +148,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.type,
           insertRecipesObject.docId,
           insertRecipesObject.spName,
-          insertRecipesObject.brand_1,
+          insertRecipesObject.brand_1.id.toString(),
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
@@ -151,9 +156,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,
           image1: insertRecipesObject.image1,
-          brand_2: insertRecipesObject.brand_2,
-          brand_3: insertRecipesObject.brand_3,
-          brand_4: insertRecipesObject.brand_4,
+          brand_2: insertRecipesObject.brand_2?.id.toString(),
+          brand_3: insertRecipesObject.brand_3?.id.toString(),
+          brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: insertRecipesObject.image2,
         )))
             .fold((failure) {
@@ -168,7 +173,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         emit(SelectTypeState(insertRecipesObject.type));
       }
       if (event is SelectBrandEvent) {
-        updateBrandValue(event.index, event.id);
+        updateBrandValue(event.index, event.brandRecipeModel);
       }
       if (event is SelectNumRecEvent) {
         final updatedUser =

@@ -5,7 +5,7 @@ sealed class AsyncState extends Equatable{}
 
 final class AsyncInitial extends AsyncState {
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 final class SyncDataState extends AsyncState {
   SyncDataState();

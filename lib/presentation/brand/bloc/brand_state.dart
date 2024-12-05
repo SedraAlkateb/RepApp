@@ -6,7 +6,7 @@ sealed class BrandState extends Equatable {}
 final class BrandInitial extends BrandState {
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 final class AllBrandState extends BrandState {
   final List<BrandModel> brand;

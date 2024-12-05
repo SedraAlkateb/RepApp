@@ -940,7 +940,7 @@ class LoginModel {
       'endDate': endDate,
       'startDate': startDate,
       'flag': flag,
-      'flag1':flag1,
+      'flag1': flag1,
       'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
@@ -1022,10 +1022,15 @@ class PlanBrandModel {
       'amount': amount,
     };
   }
-
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
-        map['repPlanId'], map['brandType'], map['amount']);
+    return PlanBrandModel(
+        map['id'],
+        map['spId'],
+        map['brandId'],
+        map['repPlanId'],
+        map['brandType'],
+        map['amount']
+    );
   }
 }
 
@@ -1191,6 +1196,7 @@ class ReciRequest {
     this.brand_4,
   });
 }
+
 ///
 class CopyReciRequest {
   int id;
@@ -1198,10 +1204,10 @@ class CopyReciRequest {
   int type;
   int docId;
   String spName;
-  String brand_1;
-  String? brand_2;
-  String? brand_3;
-  String? brand_4;
+  BrandRes brand_1;
+  BrandRes? brand_2;
+  BrandRes? brand_3;
+  BrandRes? brand_4;
   String? note1;
   String? note2;
   String address;
@@ -1211,24 +1217,23 @@ class CopyReciRequest {
   String? image1;
   String? image2;
 
-
   CopyReciRequest(
-      this.id,
-      this.repId,
-      this.type,
-      this.docId,
-      this.spName,
-      this.brand_1,
-      this.address,
-      this.phone,
-      this.total, {
-        this.note1,
-        this.note2,
-        this.note_emp,
-        this.image1,
-        this.image2,
-        this.brand_2,
-        this.brand_3,
-        this.brand_4,
-      });
+    this.id,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total, {
+    this.note1,
+    this.note2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
 }

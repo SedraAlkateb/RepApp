@@ -6,7 +6,7 @@ abstract class PlaceState extends Equatable{}
 final class PlaceInitial extends PlaceState {
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 final class AllPlaceState extends PlaceState {
 final List<PlaceModel> places;
