@@ -8,13 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AsyncLogoutPage extends StatelessWidget {
   const AsyncLogoutPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(
-            left: AppPadding.p40, right: AppPadding.p40),
+        padding:
+            const EdgeInsets.only(left: AppPadding.p40, right: AppPadding.p40),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,6 +60,8 @@ class AsyncLogoutPage extends StatelessWidget {
                       context,
                       Routes.deleteLogout,
                     );
+                    BlocProvider.of<AsyncInBloc>(context)
+                        .add(AsyncInBaseEvent());
                   }
                 },
                 child: ElevatedButton(

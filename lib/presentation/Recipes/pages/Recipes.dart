@@ -169,7 +169,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         return null;
                       },
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: 15,
                       minLines: 1,
                       prefixIcon: null,
                     ),
@@ -177,6 +177,10 @@ class _RecipesPageState extends State<RecipesPage> {
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                       builder: (context, state) {
                         return DropDownRecipesSearch(
+                          brandRes: context
+                              .watch<RecipesBrandBloc>()
+                              .insertRecipesObject
+                              .brand_1,
                           hintText: (state is AllRecipesLoadingState ||
                                   state is AllNumLoadingState)
                               ? 'loading'
@@ -208,6 +212,10 @@ class _RecipesPageState extends State<RecipesPage> {
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                       builder: (context, state) {
                         return DropDownRecipesSearch(
+                          brandRes: context
+                              .watch<RecipesBrandBloc>()
+                              .insertRecipesObject
+                              .brand_2,
                           hintText: (state is AllRecipesLoadingState ||
                                   state is AllNumLoadingState)
                               ? 'loading'
@@ -237,6 +245,10 @@ class _RecipesPageState extends State<RecipesPage> {
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                       builder: (context, state) {
                         return DropDownRecipesSearch(
+                          brandRes: context
+                              .watch<RecipesBrandBloc>()
+                              .insertRecipesObject
+                              .brand_3,
                           hintText: (state is AllRecipesLoadingState ||
                                   state is AllNumLoadingState)
                               ? 'loading'
@@ -266,6 +278,10 @@ class _RecipesPageState extends State<RecipesPage> {
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                       builder: (context, state) {
                         return DropDownRecipesSearch(
+                          brandRes: context
+                              .watch<RecipesBrandBloc>()
+                              .insertRecipesObject
+                              .brand_4,
                           hintText: (state is AllRecipesLoadingState ||
                                   state is AllNumLoadingState)
                               ? 'loading'
@@ -303,7 +319,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         return null;
                       },
                       obscureText: false,
-                      maxLines: 4,
+                      maxLines: 15,
                       minLines: 1,
                       inputFormatters: [],
                     ),
@@ -317,7 +333,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         return null;
                       },
                       obscureText: false,
-                      maxLines: 4,
+                      maxLines: 15,
                       minLines: 1,
                       prefixIcon: null,
                     ),
@@ -333,7 +349,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         return null;
                       },
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: 15,
                       minLines: 1,
                       inputFormatters: [],
                       prefixIcon: null,
@@ -352,7 +368,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         return null;
                       },
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: 15,
                       minLines: 1,
                     ),
                     SizedBox(height: 10),
@@ -375,7 +391,12 @@ class _RecipesPageState extends State<RecipesPage> {
                                 .add(SelectNumRecEvent(num: value.toString()));
                           },
                           validator: (value) {
-                            if (value == null) {
+                            if ((value == null) &&
+                                (context
+                                        .read<RecipesBrandBloc>()
+                                        .insertRecipesObject
+                                        .total ==
+                                    "")) {
                               return "يرجى اختيار العدد";
                             }
                             return null;
@@ -395,7 +416,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         return null;
                       },
                       obscureText: false,
-                      maxLines: 4,
+                      maxLines: 15,
                       minLines: 1,
                     ),
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
@@ -656,17 +677,14 @@ class _RecipesPageState extends State<RecipesPage> {
                       listener: (context, state) {
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
-                        }
-                        if (state is InsertRecipesState) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            success(context);
-                            Navigator.of(context).pop();
-                          });
+                        } else if (state is InsertRecipesState) {
+                          success(context);
+                          Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                           );
-                        }
-                        if (state is InsertRecipesErrorState) {
+                        } else if (state is InsertRecipesErrorState) {
+                          success(context);
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
