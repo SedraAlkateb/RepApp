@@ -62,6 +62,7 @@ class AsyncPage extends StatelessWidget {
                       context,
                       Routes.delete,
                     );
+                    BlocProvider.of<AsyncInBloc>(context).add(AsyncInBaseEvent());
                   }
                 },
                 child: ElevatedButton(

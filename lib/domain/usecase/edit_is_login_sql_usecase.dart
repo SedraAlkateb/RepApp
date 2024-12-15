@@ -9,10 +9,7 @@ class EditIsLoginSqlUsecase extends Equatable {
   Future<Either<Failure, Null>> execute(int repId, int isLogin) async{
     return await _repositorySql.editIsLogin(repId, isLogin);
   }
-
-
   @override
-
   List<Object?> get props => [_repositorySql];
 
 }

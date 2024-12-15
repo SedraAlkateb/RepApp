@@ -42,7 +42,7 @@ List<VisitPharmacyModel> vi=[
           emit(AllPlaceState(data));
         });
       }
-      if (event is CheckRepEvent) {
+     else if (event is CheckRepEvent) {
         //   emit(CheckRepLoadingState());
         (await checkRepUsecase.execute(UserInfo.repId)).fold((failure) {
           emit(CheckRepErrorState(failure: failure));
@@ -50,7 +50,8 @@ List<VisitPharmacyModel> vi=[
           emit(CheckRepState(data.accepted??true));
         });
       }
-      else    if (event is SearchPlaceEvent) {
+      else
+        if (event is SearchPlaceEvent) {
         String search = normalizeText(event.value);
         placeSearchModel = placeModel.where((value) {
           if (normalizeText(value.title).contains(search)) {

@@ -8,6 +8,7 @@ class DropDownRecipesSearch extends StatelessWidget {
     required this.onChanged,
     required this.items,
     this.icon,
+    this.brandRes,
     required this.hintText,
   }) : super(key: key);
   final FormFieldValidator<dynamic> validator;
@@ -15,6 +16,7 @@ class DropDownRecipesSearch extends StatelessWidget {
   final List<dynamic> items;
   final String hintText;
   final Icon? icon;
+   final brandRes;
   @override
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
@@ -26,6 +28,7 @@ class DropDownRecipesSearch extends StatelessWidget {
       child: DropdownSearch<dynamic>(
         itemAsString: (dynamic item) => item.title_en,
         validator: validator,
+        selectedItem: brandRes,
         popupProps: PopupProps.menu(
           itemBuilder: (context, item, isSelected) {
             return Column(

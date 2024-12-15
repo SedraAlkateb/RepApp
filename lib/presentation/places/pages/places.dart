@@ -16,7 +16,6 @@ import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../../uniti/local_notifications.dart';
 
 class Places extends StatelessWidget {
   Places({super.key});
