@@ -2,14 +2,14 @@ import 'dart:io';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
+//import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'presentation/uniti/time.dart';
+//import 'presentation/uniti/time.dart';
 
 
 Future<int?> sss() async {
@@ -17,23 +17,23 @@ Future<int?> sss() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
   ///
-  String? nextDay = UserInfo.endDate != null
+  // String? nextDay = UserInfo.endDate != null
+  //
+  //     ? DateTime.parse(UserInfo.endDate!).add(Duration(days: 1)).toIso8601String()
+  //
+  //     : null;
 
-      ? DateTime.parse(UserInfo.endDate!).add(Duration(days: 1)).toIso8601String()
+  //print(nextDay ?? "تاريخ نهاية الخطة غير موجود.");
 
-      : null;
-
-  print(nextDay ?? "تاريخ نهاية الخطة غير موجود.");
-
-if(formatDateTimeFromDataTime( DateTime.now())==formatDateTime(nextDay!)){
-  EditIsLoginSqlUsecase editIsLoginSqlUsecase =EditIsLoginSqlUsecase(instance());
- (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
-   print("object");
-   return 0;
- }, (data) async{
-
- });
-}
+// if(formatDateTimeFromDataTime( DateTime.now())==formatDateTime(nextDay!)){
+//   EditIsLoginSqlUsecase editIsLoginSqlUsecase =EditIsLoginSqlUsecase(instance());
+//  (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+//    print("object");
+//    return 0;
+//  }, (data) async{
+//
+//  });
+// }
   IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   (await isLoginSqlUsecase.execute()).fold((failure) {
     print("object");
