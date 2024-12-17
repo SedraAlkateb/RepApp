@@ -38,7 +38,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       null,
       null,
       null,
-      null);
+      null
+  );
 
   void empty() {
     insertRecipesObject = InsertRecipesObject.empty();
@@ -133,6 +134,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         });
       }
       if (event is InsertReciEvent) {
+        emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
             docId: event.docId.toString(),
@@ -142,7 +144,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             spName: event.doctorSp,
             phone: event.phone);
         insertRecipesObject = updatedUser;
-        emit(InsertRecipesLoadingState());
         (await insertReciUsecase.execute(ReciRequest(
           insertRecipesObject.repId,
           insertRecipesObject.type,

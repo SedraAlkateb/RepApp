@@ -74,47 +74,49 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
       if (event is DeleteBaseEvent) {
-     //   emit(DeleteBaseLoadingState());
+        //   emit(DeleteBaseLoadingState());
         (await deleteSqlUsecase.execute()).fold((failure) {
           emit(DeleteBaseErrorState(failure: failure));
           return false;
         }, (data) async {
           emit(DeleteBaseState());
-
         });
-      }
-      if (event is DeleteAllEvent) {
-     //   emit(DeleteAllLoadingState());
+      } else if (event is DeleteAllEvent) {
+        //   emit(DeleteAllLoadingState());
         (await deleteAllSqlUsecase.execute()).fold((failure) {
           emit(DeleteAllErrorState(failure: failure));
           return false;
         }, (data) async {
-          UserInfo.flag1=0;
+          UserInfo.flag1 = 0;
           emit(DeleteAllState());
         });
       }
-      if (event is UpdateFlagEvent) {
-        (await updateFlagSqlUsecase.execute((visitHospitals.isNotEmpty||visitBrandHospitals.isNotEmpty),(visitDoctors.isNotEmpty||visitBrandDoctors.isNotEmpty))).fold((failure) {
+      else if (event is UpdateFlagEvent) {
+        (await updateFlagSqlUsecase.execute(
+                (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty),
+                (visitDoctors.isNotEmpty || visitBrandDoctors.isNotEmpty)))
+            .fold((failure) {
           emit(UpdateFlagErrorState(failure: failure));
           return false;
         }, (data) async {
           emit(UpdateFlagState());
         });
       }
-      if (event is Async1DataEvent) {
+      else if (event is Async1DataEvent) {
         emit(SyncData1LoadingState());
         bool b = await getData();
         if (b) {
           await setData();
         }
       }
-      else if(event is EditEventIn){
-        (await editIsLoginSqlUsecase.execute(UserInfo.repId,event.num)).fold((failure) {
+      else if (event is EditEventIn) {
+        (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
+            (failure) {
           emit(EditStatusSErrorState(failure: failure));
           return false;
         }, (data) async {
-          UserInfo.isLogging=event.num;
-         emit( EditStatusState());
+          UserInfo.isLogging = event.num;
+          emit(EditStatusState());
         });
       }
     });
@@ -130,38 +132,48 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitHospitals = [];
       visitDoctors = [];
 
-      final brandPharmaciesResult = await getBrandsPharmacyVisitsSqlUsecase.execute();
-      final brandPharmaciesFailureOrSuccess = brandPharmaciesResult.fold((failure) => failure, (data) => data);
+      final brandPharmaciesResult =
+          await getBrandsPharmacyVisitsSqlUsecase.execute();
+      final brandPharmaciesFailureOrSuccess =
+          brandPharmaciesResult.fold((failure) => failure, (data) => data);
       if (brandPharmaciesFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: brandPharmaciesFailureOrSuccess));
         return false;
       }
-      visitBrandPharmacies = brandPharmaciesFailureOrSuccess as List<VisitBrandPharmacyModel>;
+      visitBrandPharmacies =
+          brandPharmaciesFailureOrSuccess as List<VisitBrandPharmacyModel>;
 
       ///////////////////////////////////////////////////s
 
-      final brandDoctorsResult = await getBrandsDoctorVisitsSqlUsecase.execute();
-      final brandDoctorsFailureOrSuccess = brandDoctorsResult.fold((failure) => failure, (data) => data);
+      final brandDoctorsResult =
+          await getBrandsDoctorVisitsSqlUsecase.execute();
+      final brandDoctorsFailureOrSuccess =
+          brandDoctorsResult.fold((failure) => failure, (data) => data);
       if (brandDoctorsFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: brandDoctorsFailureOrSuccess));
         return false;
       }
-      visitBrandDoctors = brandDoctorsFailureOrSuccess as List<VisitBrandPharmacyModel>;
+      visitBrandDoctors =
+          brandDoctorsFailureOrSuccess as List<VisitBrandPharmacyModel>;
 
       ///////////////////////////////////////////////////
 
-      final brandHospitalsResult = await getBrandsHospitalVisitsSqlUsecase.execute();
-      final brandHospitalsFailureOrSuccess = brandHospitalsResult.fold((failure) => failure, (data) => data);
+      final brandHospitalsResult =
+          await getBrandsHospitalVisitsSqlUsecase.execute();
+      final brandHospitalsFailureOrSuccess =
+          brandHospitalsResult.fold((failure) => failure, (data) => data);
       if (brandHospitalsFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: brandHospitalsFailureOrSuccess));
         return false;
       }
-      visitBrandHospitals = brandHospitalsFailureOrSuccess as List<VisitBrandPharmacyModel>;
+      visitBrandHospitals =
+          brandHospitalsFailureOrSuccess as List<VisitBrandPharmacyModel>;
 
       ///////////////////////////////////////////////////
 
       final pharmaciesResult = await getPharmacyVisitsSqlUsecase.execute();
-      final pharmaciesFailureOrSuccess = pharmaciesResult.fold((failure) => failure, (data) => data);
+      final pharmaciesFailureOrSuccess =
+          pharmaciesResult.fold((failure) => failure, (data) => data);
       if (pharmaciesFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: pharmaciesFailureOrSuccess));
         return false;
@@ -171,7 +183,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       ///////////////////////////////////////////////////
 
       final doctorsResult = await getDoctorVisitsSqlUsecase.execute();
-      final doctorsFailureOrSuccess = doctorsResult.fold((failure) => failure, (data) => data);
+      final doctorsFailureOrSuccess =
+          doctorsResult.fold((failure) => failure, (data) => data);
       if (doctorsFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: doctorsFailureOrSuccess));
         return false;
@@ -179,9 +192,9 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitDoctors = doctorsFailureOrSuccess as List<VisitDoctorModel>;
       ///////////////////////////////////////////////////
 
-
       final hospitalsResult = await getHospitalVisitsSqlUsecase.execute();
-      final hospitalsFailureOrSuccess = hospitalsResult.fold((failure) => failure, (data) => data);
+      final hospitalsFailureOrSuccess =
+          hospitalsResult.fold((failure) => failure, (data) => data);
       if (hospitalsFailureOrSuccess is Failure) {
         emit(SyncData1ErrorState(failure: hospitalsFailureOrSuccess));
         return false;
@@ -189,26 +202,30 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitHospitals = hospitalsFailureOrSuccess as List<VisitHospitalModel>;
 
       ///////////////////////////////////////////////////
-   if(UserInfo.otherstatus==1&& UserInfo.flag==0){
-     final planBrandsResult = await getPlanBrandSqlUsecase.execute();
-     final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
-     if (planBrandsFailureOrSuccess is Failure) {
-       emit(SyncData1ErrorState(failure: planBrandsFailureOrSuccess));
-       return false;}
-     planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
-   }
+      if (UserInfo.otherstatus == 1 && UserInfo.flag == 0) {
+        final planBrandsResult = await getPlanBrandSqlUsecase.execute();
+        final planBrandsFailureOrSuccess =
+            planBrandsResult.fold((failure) => failure, (data) => data);
+        if (planBrandsFailureOrSuccess is Failure) {
+          emit(SyncData1ErrorState(failure: planBrandsFailureOrSuccess));
+          return false;
+        }
+        planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
+      }
       return true;
     } catch (error) {
       emit(SyncData1ErrorState(failure: Failure(-9, error.toString())));
       return false;
     }
   }
+
   Future<bool> setData() async {
     try {
       if (visitPharmacies.isNotEmpty || visitBrandPharmacies.isNotEmpty) {
         final visitPharmacyResult = await visitPharmacyUsecase.execute(
             VisitPharmacyRequestBody(visitPharmacies, visitBrandPharmacies));
-        final visitPharmacyFailureOrSuccess = visitPharmacyResult.fold((failure) => failure, (data) => data);
+        final visitPharmacyFailureOrSuccess =
+            visitPharmacyResult.fold((failure) => failure, (data) => data);
         if (visitPharmacyFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(failure: visitPharmacyFailureOrSuccess));
           return false;
@@ -216,42 +233,47 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         print("Visit Pharmacy data sent successfully.");
       }
       if (visitDoctors.isNotEmpty || visitBrandDoctors.isNotEmpty) {
-        final visitDoctorResult = await visitDoctorUsecase.execute(
-            VisitDoctorRequestBody(visitDoctors, visitBrandDoctors));
-        final visitDoctorFailureOrSuccess = visitDoctorResult.fold((failure) => failure, (data) => data);
+        final visitDoctorResult = await visitDoctorUsecase
+            .execute(VisitDoctorRequestBody(visitDoctors, visitBrandDoctors));
+        final visitDoctorFailureOrSuccess =
+            visitDoctorResult.fold((failure) => failure, (data) => data);
         if (visitDoctorFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(failure: visitDoctorFailureOrSuccess));
           return false;
         }
         print("Visit Doctor data sent successfully.");
       }
-      if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty ) {
+      if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty) {
         final visitHospitalResult = await visitHospitalUsecase.execute(
-            VisitHospitalRequestBody(visitHospitals, visitBrandHospitals
-            ));
-        final visitHospitalFailureOrSuccess = visitHospitalResult.fold((failure) => failure, (data) => data);
+            VisitHospitalRequestBody(visitHospitals, visitBrandHospitals));
+        final visitHospitalFailureOrSuccess =
+            visitHospitalResult.fold((failure) => failure, (data) => data);
         if (visitHospitalFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(failure: visitHospitalFailureOrSuccess));
           return false;
         }
         print("Visit Hospital data sent successfully.");
       }
-    if(UserInfo.otherstatus==1&&UserInfo.flag==0){
-      final planBrandResult = await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
-      final planBrandFailureOrSuccess = planBrandResult.fold((failure) => failure, (data) => data);
-      if (planBrandFailureOrSuccess is Failure) {
-        emit(SyncData1ErrorState(failure: planBrandFailureOrSuccess));
-        return false;
+      if (UserInfo.otherstatus == 1 && UserInfo.flag == 0) {
+        final planBrandResult =
+            await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
+        final planBrandFailureOrSuccess =
+            planBrandResult.fold((failure) => failure, (data) => data);
+        if (planBrandFailureOrSuccess is Failure) {
+          emit(SyncData1ErrorState(failure: planBrandFailureOrSuccess));
+          return false;
+        }
+        final planBrandFlagResult =
+            await isPlanSqlUsecase.execute(UserInfo.repId, 1);
+        final planBrandFlagFailureOrSuccess =
+            planBrandFlagResult.fold((failure) => failure, (data) => data);
+        if (planBrandFlagFailureOrSuccess is Failure) {
+          emit(SyncData1ErrorState(failure: planBrandFlagFailureOrSuccess));
+          return false;
+        }
+        UserInfo.flag = 1;
+        print("Plan Brand data sent successfully.");
       }
-      final planBrandFlagResult =   await isPlanSqlUsecase.execute(UserInfo.repId,1);
-      final planBrandFlagFailureOrSuccess = planBrandFlagResult.fold((failure) => failure, (data) => data);
-      if (planBrandFlagFailureOrSuccess is Failure) {
-        emit(SyncData1ErrorState(failure: planBrandFlagFailureOrSuccess));
-        return false;
-      }
-      UserInfo.flag=1;
-      print("Plan Brand data sent successfully.");
-    }
 
       emit(SyncData1State());
       return true;
