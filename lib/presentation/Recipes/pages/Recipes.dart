@@ -419,252 +419,339 @@ class _RecipesPageState extends State<RecipesPage> {
                       maxLines: 15,
                       minLines: 1,
                     ),
+
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
                       builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        bool isCheckeImage1 = 2;
+                        if( state is CheckboxImage1State)
+                          state.isChecked;
+
+                        bool isCheckeImage2 = 2;
+                        if( state is CheckboxImage2State)
+                          state.isChecked;
+
+                        return Column(
                           children: [
-                            Column(
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                InkWell(
-                                  onTap: () async {
-                                    File? f1 = await context
-                                        .read<RecipesBrandBloc>()
-                                        .pickImage();
-                                    print("object");
-                                    print(f1?.path);
-                                    BlocProvider.of<RecipesBrandBloc>(context)
-                                        .add(PickImageEvent(f1, 1));
-                                  },
-                                  child: Card(
-                                    elevation: 5,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.15,
-                                      width:
-                                          MediaQuery.of(context).size.height *
-                                              0.15,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            color: Colors.grey.shade400),
+                                Column(
+                                  children: [
+                                    if (widget.st == 1)
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Checkbox(
+                                            value: isCheckeImage1,
+                                            onChanged: (bool? value) {
+                                              context
+                                                  .read<RecipesBrandBloc>()
+                                                  .add(Checkbox1Event(value ?? false));
+                                            },
+                                            activeColor: ColorManager.secondaryColor3,
+                                          ),
+                                          Text(
+                                            "لا أريد إرسال صورة",
+                                            style: TextStyle(color: Colors.black54),
+                                          ),
+                                          Checkbox(
+                                            value: isCheckeImage2,
+                                            onChanged: (bool? value) {
+                                              context
+                                                  .read<RecipesBrandBloc>()
+                                                  .add(Checkbox2Event(value ?? false));
+                                            },
+                                            activeColor: ColorManager.secondaryColor3,
+                                          ),
+                                          Text(
+                                            "تكرار الصورة",
+                                            style: TextStyle(color: Colors.black54),
+                                          ),
+                                        ],
                                       ),
-                                      child: context
-                                                  .watch<RecipesBrandBloc>()
-                                                  .insertRecipesObject
-                                                  .image1 !=
+                                    InkWell(
+                                      onTap: () async {
+                                        File? f1 = await context
+                                            .read<RecipesBrandBloc>()
+                                            .pickImage();
+                                        print("object");
+                                        print(f1?.path);
+                                        BlocProvider.of<RecipesBrandBloc>(context)
+                                            .add(PickImageEvent(f1, 1));
+                                      },
+                                      child: Card(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Container(
+                                          height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                          width:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            border: Border.all(
+                                                color: Colors.grey.shade400),
+                                          ),
+                                          child: context
+                                              .watch<RecipesBrandBloc>()
+                                              .insertRecipesObject
+                                              .image1 !=
                                               null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: widget.st != 1
-                                                  ? Image.file(
-                                                      context
-                                                          .watch<
-                                                              RecipesBrandBloc>()
-                                                          .insertRecipesObject
-                                                          .image1!,
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Image.network(
-                                                      "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image1!.path}",
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                      fit: BoxFit.cover,
-                                                      loadingBuilder: (BuildContext
-                                                              context,
-                                                          Widget child,
-                                                          ImageChunkEvent?
-                                                              loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        } else {
-                                                          return Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
-                                                                  ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      (loadingProgress
-                                                                              .expectedTotalBytes ??
-                                                                          1)
-                                                                  : null,
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        return Icon(Icons.error,
-                                                            size: 50,
-                                                            color: Colors.red);
-                                                      },
-                                                    ),
+                                              ? ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(8),
+                                            child: widget.st != 1
+                                                ? Image.file(
+                                              context
+                                                  .watch<
+                                                  RecipesBrandBloc>()
+                                                  .insertRecipesObject
+                                                  .image1!,
+                                              height: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.15,
+                                              width: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.15,
+                                              fit: BoxFit.cover,
                                             )
-                                          : Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(Icons.camera_alt,
+                                                : Image.network(
+                                              "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image1!.path}",
+                                              height: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.15,
+                                              width: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.15,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder:
+                                                  (BuildContext
+                                              context,
+                                                  Widget
+                                                  child,
+                                                  ImageChunkEvent?
+                                                  loadingProgress) {
+                                                if (loadingProgress ==
+                                                    null) {
+                                                  return child;
+                                                } else {
+                                                  return Center(
+                                                    child:
+                                                    CircularProgressIndicator(
+                                                      value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                          null
+                                                          ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                          (loadingProgress
+                                                              .expectedTotalBytes ??
+                                                              1)
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              errorBuilder: (context,
+                                                  error,
+                                                  stackTrace) {
+                                                return Icon(
+                                                    Icons.error,
                                                     size: 50,
-                                                    color: ColorManager
-                                                        .secondaryColor),
-                                                SizedBox(height: 5),
-                                              ],
+                                                    color: Colors.red);
+                                              },
                                             ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "صورة 1",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    File? f2 = await context
-                                        .read<RecipesBrandBloc>()
-                                        .pickImage();
-                                    BlocProvider.of<RecipesBrandBloc>(context)
-                                        .add(PickImageEvent(f2, 2));
-                                  },
-                                  child: Card(
-                                    elevation: 5,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.15,
-                                      width:
-                                          MediaQuery.of(context).size.height *
-                                              0.15,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            color: Colors.grey.shade400),
+                                          )
+                                              : Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.camera_alt,
+                                                  size: 50,
+                                                  color: ColorManager
+                                                      .secondaryColor),
+                                              SizedBox(height: 5),
+                                            ],
+                                          ),
+                                        ),
                                       ),
-                                      child: context
-                                                  .watch<RecipesBrandBloc>()
-                                                  .insertRecipesObject
-                                                  .image2 !=
-                                              null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: widget.st != 1
-                                                  ? Image.file(
-                                                      context
-                                                          .watch<
-                                                              RecipesBrandBloc>()
-                                                          .insertRecipesObject
-                                                          .image2!,
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.2,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.2,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Image.network(
-                                                      "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image2!.path}",
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                      fit: BoxFit.cover,
-                                                      loadingBuilder: (BuildContext
-                                                              context,
-                                                          Widget child,
-                                                          ImageChunkEvent?
-                                                              loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        } else {
-                                                          return Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
-                                                                  ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      (loadingProgress
-                                                                              .expectedTotalBytes ??
-                                                                          1)
-                                                                  : null,
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        return Icon(Icons.error,
-                                                            size: 50,
-                                                            color: Colors.red);
-                                                      },
-                                                    ),
-                                            )
-                                          : Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(Icons.camera_alt,
-                                                    size: 50,
-                                                    color: ColorManager
-                                                        .secondaryColor),
-                                                SizedBox(height: 5),
-                                              ],
-                                            ),
                                     ),
-                                  ),
+                                    Text(
+                                      "صورة 1",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "صورة 2",
-                                  style: TextStyle(color: Colors.grey),
+                                Column(
+                                  children: [
+                                    if (widget.st == 1)
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Checkbox(
+                                            value: isCheckeImage1,
+                                            onChanged: (bool? value) {
+                                              context
+                                                  .read<RecipesBrandBloc>()
+                                                  .add(Checkbox0Event(value ?? false));
+                                            },
+                                            activeColor: ColorManager.secondaryColor3,
+                                          ),
+                                          Text(
+                                            "لا أريد إرسال صورة",
+                                            style: TextStyle(color: Colors.black54),
+                                          ),
+                                          Checkbox(
+                                            value: isCheckeImage2,
+                                            onChanged: (bool? value) {
+                                              context
+                                                  .read<RecipesBrandBloc>()
+                                                  .add(Checkbox1Event(value ?? false));
+                                            },
+                                            activeColor: ColorManager.secondaryColor3,
+                                          ),
+                                          Text(
+                                            "تكرار الصورة",
+                                            style: TextStyle(color: Colors.black54),
+                                          ),
+                                        ],
+                                      ),
+                                    InkWell(
+                                      onTap: () async {
+                                        File? f2 = await context
+                                            .read<RecipesBrandBloc>()
+                                            .pickImage();
+                                        BlocProvider.of<RecipesBrandBloc>(
+                                            context)
+                                            .add(PickImageEvent(f2, 2));
+                                      },
+                                      child: Card(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Container(
+                                          height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                          width:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            border: Border.all(
+                                                color: Colors.grey.shade400),
+                                          ),
+                                          child: context
+                                              .watch<RecipesBrandBloc>()
+                                              .insertRecipesObject
+                                              .image2 !=
+                                              null
+                                              ? ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(8),
+                                            child: widget.st != 1
+                                                ? Image.file(
+                                              context
+                                                  .watch<
+                                                  RecipesBrandBloc>()
+                                                  .insertRecipesObject
+                                                  .image2!,
+                                              height: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.2,
+                                              width: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.2,
+                                              fit: BoxFit.cover,
+                                            )
+                                                : Image.network(
+                                              "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image2!.path}",
+                                              height: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.15,
+                                              width: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .height *
+                                                  0.15,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder:
+                                                  (BuildContext
+                                              context,
+                                                  Widget
+                                                  child,
+                                                  ImageChunkEvent?
+                                                  loadingProgress) {
+                                                if (loadingProgress ==
+                                                    null) {
+                                                  return child;
+                                                } else {
+                                                  return Center(
+                                                    child:
+                                                    CircularProgressIndicator(
+                                                      value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                          null
+                                                          ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                          (loadingProgress
+                                                              .expectedTotalBytes ??
+                                                              1)
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              errorBuilder: (context,
+                                                  error,
+                                                  stackTrace) {
+                                                return Icon(
+                                                    Icons.error,
+                                                    size: 50,
+                                                    color: Colors.red);
+                                              },
+                                            ),
+                                          )
+                                              : Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.camera_alt,
+                                                  size: 50,
+                                                  color: ColorManager
+                                                      .secondaryColor),
+                                              SizedBox(height: 5),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "صورة 2",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -672,6 +759,7 @@ class _RecipesPageState extends State<RecipesPage> {
                         );
                       },
                     ),
+
                     SizedBox(height: 20),
                     BlocListener<RecipesBrandBloc, RecipesBrandState>(
                       listener: (context, state) {

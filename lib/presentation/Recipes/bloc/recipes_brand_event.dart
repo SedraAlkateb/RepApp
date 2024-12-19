@@ -64,6 +64,24 @@ class PickImageEvent extends RecipesBrandEvent {
   List<Object?> get props => [image, index];
 }
 
+class Checkbox1Event extends RecipesBrandEvent {
+  final int isChecked;
+
+  Checkbox1Event(this.isChecked);
+
+  @override
+
+  List<Object?> get props =>[isChecked];
+}
+class Checkbox2Event extends RecipesBrandEvent {
+  final int isChecked;
+
+  Checkbox2Event(this.isChecked);
+
+  @override
+
+  List<Object?> get props =>[isChecked];
+}
 class SelectBrandEvent extends RecipesBrandEvent {
   final int index;
   final BrandRes brandRecipeModel;

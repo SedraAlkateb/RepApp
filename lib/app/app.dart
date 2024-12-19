@@ -131,7 +131,9 @@ class _MyAppState extends State<MyApp> {
                 ? Routes.syncData
                 : UserInfo.isLogging == 4
                     ? (Routes.syncData)
-                    : Routes.places,
+                    : UserInfo.isLogging == 5
+                        ? Routes.asyncIn
+                        : Routes.places,
         theme: getApplicationTheme(),
       ),
     );
