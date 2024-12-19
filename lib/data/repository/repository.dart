@@ -42,7 +42,6 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.allPlaces(id);
-
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -220,7 +219,6 @@ class RepositoryImp implements Repository {
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
-          print("hddddddddhh");
           return Right(response.toDomain());
         } else {
           return Left(Failure(ApiInternalStatus.FAILURE,
@@ -583,7 +581,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, CheckRepResponse>> checkRep(int repId)async {
+  Future<Either<Failure, CheckRepResponse>> checkRep(int repId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.checkRep(repId);

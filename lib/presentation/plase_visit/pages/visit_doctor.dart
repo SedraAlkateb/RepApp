@@ -90,7 +90,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                 print("Navigating to Doctor Details...");
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (context) {
-                                    initdoctorModule();
+                                    initDoctorModule();
                                     return DoctorDetails(
                                         doctor: widget.doctorModel);
                                   },

@@ -55,7 +55,7 @@ abstract class AppSqlApiAbs {
   Future<List<DoctorModel>> getDoctorBySpec(int spId);
   Future<List<HospitalModel>> getHospitalBySpec(int spId);
   Future<List<HospitalModel>> getHospital();
-  Future<List<DoctorModel>> getDotors();
+  Future<List<DoctorModel>> getDoctors();
   Future<List<BrandModel>> getBrandsWithFlag();
   Future<LoginModel?> getRep();
   ///////////////////////get visit////////////////////////////
@@ -508,7 +508,7 @@ class AppSqlApi extends AppSqlApiAbs {
     await batch.commit(noResult: true);
   }
 
-  Future<List<DoctorModel>> getDotors() async {
+  Future<List<DoctorModel>> getDoctors() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('doctor');
 
@@ -1276,7 +1276,8 @@ class AppSqlApi extends AppSqlApiAbs {
             (((spPlan.sumDoctor + spPlan.sumBrandHospital) *
                         UserInfo.samplesCount) +
                     ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                        UserInfo.samplesCount / 4))
+                        UserInfo.samplesCount /
+                        4))
                 .toInt());
       }
       !(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)

@@ -25,7 +25,13 @@ class Places extends StatelessWidget {
   Widget build(BuildContext context) {
     print(UserInfo.activePlanId);
     final size = MediaQuery.of(context).size;
-
+    // PhotoHero(
+    //   widget: ,
+    //   width: 300.0,
+    //   onTap: () {
+    //     Navigator.of(context).pop();
+    //   },
+    // )
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
         showDialog(
