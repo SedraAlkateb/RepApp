@@ -87,4 +87,21 @@ final class CopyRecipesState extends RecipesBrandState {
   List<Object?> get props => [];
 }
 
+class CheckboxImage1State extends RecipesBrandState {
+  final int isChecked;
 
+  CheckboxImage1State(this.isChecked);
+
+  @override
+
+  List<Object?> get props => [isChecked];
+}
+class CheckboxImage2State extends RecipesBrandState {
+  final int isChecked;
+
+  CheckboxImage2State(this.isChecked);
+
+  @override
+
+  List<Object?> get props => [isChecked];
+}

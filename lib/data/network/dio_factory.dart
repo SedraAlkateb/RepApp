@@ -49,8 +49,8 @@ class DioFactory{
     dio.options=BaseOptions(
         baseUrl: Constants.baseUrl,
         headers: headers,
-      connectTimeout: Duration(seconds: 15),
-      receiveTimeout: Duration(seconds: 20),
+      connectTimeout: Duration(seconds: 20),
+      receiveTimeout: Duration(seconds: 25),
     );
     dio.interceptors.add( MyApiInterceptor());
     if(!kReleaseMode){

@@ -20,7 +20,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   InsertReciUsecase insertReciUsecase;
   ReciNumUsecase reciNumUsecase;
   CopyReciUsecase copyReciUsecase;
-
+  int isChecked1 = 2;
+  int isChecked2 = 2;
   final _picker = ImagePicker();
   InsertRecipesObject insertRecipesObject = InsertRecipesObject(
       UserInfo.repId.toString(),
@@ -144,6 +145,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             spName: event.doctorSp,
             phone: event.phone);
         insertRecipesObject = updatedUser;
+        print(insertRecipesObject.image1);
+        print('ااااااااااار');
+        print(insertRecipesObject.image2);
         (await insertReciUsecase.execute(ReciRequest(
           insertRecipesObject.repId,
           insertRecipesObject.type,
@@ -190,6 +194,16 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject = updatedUser;
         }
         emit(ImagePickedState(event.image));
+      }
+      if (event is Checkbox1Event){
+          isChecked1 = event.isChecked;
+          emit(CheckboxImage1State(isChecked1));
+
+      }
+      if (event is Checkbox2Event){
+        isChecked2 = event.isChecked;
+        emit(CheckboxImage2State(isChecked2));
+
       }
     });
   }
