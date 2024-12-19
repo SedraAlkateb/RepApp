@@ -1238,3 +1238,10 @@ class CopyReciRequest {
     this.brand_4,
   });
 }
+class StateImage{
+  int id;
+  String type;
+  StateImage(this.id,this.type);
+}
+
+ List<StateImage> stateImage=[StateImage(0,"لا يوجد صورة"),StateImage(1,"تكرار صورة"),StateImage(2,"اضافة صورة")];
