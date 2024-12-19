@@ -231,9 +231,10 @@ Future<void> initPlacesModule() async {
   if (!GetIt.I.isRegistered<AllPlacesSqlUsecase>()) {
     instance.registerFactory<AllPlacesSqlUsecase>(
         () => AllPlacesSqlUsecase(instance()));
-    instance.registerFactory<CheckRepUsecase>(
-            () => CheckRepUsecase(instance()));
-    instance.registerFactory<PlaceBloc>(() => PlaceBloc(instance(),instance()));
+    instance
+        .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
+    instance
+        .registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance()));
   }
 }
 
@@ -281,13 +282,13 @@ Future<void> initBrandRecModule() async {
         () => InsertReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
         () => AllBrandsResUsecase(instance()));
-    instance.registerFactory<CopyReciUsecase>(
-            () => CopyReciUsecase(instance()));
+    instance
+        .registerFactory<CopyReciUsecase>(() => CopyReciUsecase(instance()));
     /////////////
 
     instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-        () => RecipesBrandBloc(instance(), instance(),instance(),instance()));
+        () => RecipesBrandBloc(instance(), instance(), instance(), instance()));
   }
 }
 
@@ -367,17 +368,17 @@ Future<void> initAsyncInModule() async {
   }
 }
 
-Future<void> initdoctorModule() async {
+Future<void> initDoctorModule() async {
   if (!GetIt.I.isRegistered<AllDoctorsSqlUsecase>()) {
     instance.registerFactory<AllDoctorsSqlUsecase>(
         () => AllDoctorsSqlUsecase(instance()));
-    if (!GetIt.I.isRegistered<CheckReciUsecase>()){
-      instance
-          .registerFactory<CheckReciUsecase>(
-              () => CheckReciUsecase(instance()));
+    if (!GetIt.I.isRegistered<CheckReciUsecase>()) {
+      instance.registerFactory<CheckReciUsecase>(
+          () => CheckReciUsecase(instance()));
     }
 
-    instance.registerFactory<DoctorsBloc>(() => DoctorsBloc(instance(),instance()));
+    instance.registerFactory<DoctorsBloc>(
+        () => DoctorsBloc(instance(), instance()));
   }
 }
 
@@ -419,8 +420,8 @@ Future<void> initBrandPlanModule() async {
     instance.registerFactory<AllOtherBrandPlanSqlUsecase>(
         () => AllOtherBrandPlanSqlUsecase(instance()));
     instance.registerFactory<UpdateSaveSqlUsecase>(
-            () => UpdateSaveSqlUsecase(instance()));
-    instance.registerFactory<BrandPlanBloc>(
-        () => BrandPlanBloc(instance(), instance(), instance(), instance(), instance()));
+        () => UpdateSaveSqlUsecase(instance()));
+    instance.registerFactory<BrandPlanBloc>(() => BrandPlanBloc(
+        instance(), instance(), instance(), instance(), instance()));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
 import 'package:domina_app/presentation/upload_delete/page/delete_logout_page.dart';
@@ -38,6 +39,9 @@ class Routes {
   static const String delete = "/delete";
   static const String deleteLogout = "/deleteLogout";
     static const String Recipes = "/Recipes";
+  static const String fadeInWidget = "/fadeInWidget";
+
+
 }
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -45,6 +49,8 @@ class RouteGenerator {
       case Routes.login:
         initLoginModule();
         return MaterialPageRoute(builder: (_) =>    const MyLogin());
+      case Routes.fadeInWidget:
+        return MaterialPageRoute(builder: (_) =>     FadeInWidget());
       case Routes.places:
         initPlacesModule();
         initPlaceVisitModule();
@@ -53,7 +59,7 @@ class RouteGenerator {
         initSpecModule();
         return MaterialPageRoute(builder: (_) =>     SpecializationsPage());
          case Routes.doctors:
-        initdoctorModule();
+        initDoctorModule();
         return MaterialPageRoute(builder: (_) =>     Doctors());
            case Routes.hospital:
         inithospitalModule();
