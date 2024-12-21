@@ -33,6 +33,8 @@ class _RecipesPageState extends State<RecipesPage> {
     if (widget.st == 1) {
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(CopyRecipesEvent(widget.docId));
+      BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
+      BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
 
     super.initState();
@@ -481,7 +483,11 @@ class _RecipesPageState extends State<RecipesPage> {
                                                               0.15,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      : Image.network(
+                                                      :
+                        context
+                            .watch<RecipesBrandBloc>()
+                            .isChecked1!=2?
+                                                  Image.network(
                                                           "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image1!.path}",
                                                           height: MediaQuery.of(
                                                                       context)
@@ -528,7 +534,26 @@ class _RecipesPageState extends State<RecipesPage> {
                                                                 color:
                                                                     Colors.red);
                                                           },
-                                                        ),
+                                                        ):
+                        Image.file(
+                          context
+                              .watch<
+                              RecipesBrandBloc>()
+                              .insertRecipesObject
+                              .image1!,
+                          height: MediaQuery.of(
+                              context)
+                              .size
+                              .height *
+                              0.15,
+                          width: MediaQuery.of(
+                              context)
+                              .size
+                              .height *
+                              0.15,
+                          fit: BoxFit.cover,
+                        )
+                                            ,
                                                 )
                                               : Column(
                                                   mainAxisAlignment:
@@ -557,41 +582,60 @@ class _RecipesPageState extends State<RecipesPage> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         RadioListTile(
+                                          autofocus: true,
+                                          activeColor:
+                                              ColorManager.secondaryColor2,
                                           title: Text(
                                             stateImage[0].type,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
                                           ),
-                                          value: context
+                                          value: stateImage[0].id,
+                                          groupValue: context
                                               .watch<RecipesBrandBloc>()
                                               .isChecked1,
-                                          groupValue: stateImage[0].id,
-                                          onChanged: (int? value) {
-                                            print("object");
-                                            BlocProvider.of<RecipesBrandBloc>(
-                                                    context)
-                                                .add(
-                                                    Checkbox1Event(value ?? 2));
-                                          },
+                                          onChanged: context
+                                                      .watch<RecipesBrandBloc>()
+                                                      .isChecked1 ==
+                                                  2
+                                              ? null
+                                              : (int? value) {
+                                                  print("object");
+                                                  print(value);
+                                                  BlocProvider.of<
+                                                              RecipesBrandBloc>(
+                                                          context)
+                                                      .add(Checkbox1Event(
+                                                          value ?? 2));
+                                                },
                                         ),
                                         RadioListTile(
+                                          autofocus: false,
+                                          activeColor:
+                                              ColorManager.secondaryColor2,
                                           title: Text(
                                             stateImage[1].type,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
                                           ),
-                                          value: context
+                                          value: stateImage[1].id,
+                                          groupValue: context
                                               .watch<RecipesBrandBloc>()
                                               .isChecked1,
-                                          groupValue: stateImage[1].id,
-                                          onChanged: (int? value) {
-                                            BlocProvider.of<RecipesBrandBloc>(
-                                                    context)
-                                                .add(
-                                                    Checkbox1Event(value ?? 2));
-                                          },
+                                          onChanged: context
+                                                      .watch<RecipesBrandBloc>()
+                                                      .isChecked1 ==
+                                                  2
+                                              ? null
+                                              : (int? value) {
+                                                  BlocProvider.of<
+                                                              RecipesBrandBloc>(
+                                                          context)
+                                                      .add(Checkbox1Event(
+                                                          value ?? 2));
+                                                },
                                         ),
                                       ],
                                     ),
@@ -660,7 +704,12 @@ class _RecipesPageState extends State<RecipesPage> {
                                                               0.2,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      : Image.network(
+
+                                                      :
+                                                  context
+                                                      .watch<RecipesBrandBloc>()
+                                                      .isChecked2!=2?
+                                                  Image.network(
                                                           "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image2!.path}",
                                                           height: MediaQuery.of(
                                                                       context)
@@ -707,7 +756,24 @@ class _RecipesPageState extends State<RecipesPage> {
                                                                 color:
                                                                     Colors.red);
                                                           },
-                                                        ),
+                                                        ):Image.file(
+                                                    context
+                                                        .watch<
+                                                        RecipesBrandBloc>()
+                                                        .insertRecipesObject
+                                                        .image2!,
+                                                    height: MediaQuery.of(
+                                                        context)
+                                                        .size
+                                                        .height *
+                                                        0.2,
+                                                    width: MediaQuery.of(
+                                                        context)
+                                                        .size
+                                                        .height *
+                                                        0.2,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 )
                                               : Column(
                                                   mainAxisAlignment:
@@ -736,22 +802,30 @@ class _RecipesPageState extends State<RecipesPage> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         RadioListTile(
+                                          activeColor:
+                                              ColorManager.secondaryColor2,
                                           title: Text(
                                             stateImage[0].type,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
                                           ),
-                                          value: context
+                                          value: stateImage[0].id,
+                                          groupValue: context
                                               .watch<RecipesBrandBloc>()
                                               .isChecked2,
-                                          groupValue: stateImage[0].id,
-                                          onChanged: (int? value) {
-                                            BlocProvider.of<RecipesBrandBloc>(
-                                                    context)
-                                                .add(
-                                                    Checkbox1Event(value ?? 2));
-                                          },
+                                          onChanged: context
+                                                      .watch<RecipesBrandBloc>()
+                                                      .isChecked2 ==
+                                                  2
+                                              ? null
+                                              : (int? value) {
+                                                  BlocProvider.of<
+                                                              RecipesBrandBloc>(
+                                                          context)
+                                                      .add(Checkbox2Event(
+                                                          value ?? 2));
+                                                },
                                         ),
                                         RadioListTile(
                                           title: Text(
@@ -760,16 +834,24 @@ class _RecipesPageState extends State<RecipesPage> {
                                                 .textTheme
                                                 .headlineMedium,
                                           ),
-                                          value: context
+                                          activeColor:
+                                              ColorManager.secondaryColor2,
+                                          value: stateImage[1].id,
+                                          groupValue: context
                                               .watch<RecipesBrandBloc>()
                                               .isChecked2,
-                                          groupValue: stateImage[1].id,
-                                          onChanged: (int? value) {
-                                            BlocProvider.of<RecipesBrandBloc>(
-                                                    context)
-                                                .add(
-                                                    Checkbox1Event(value ?? 2));
-                                          },
+                                          onChanged: context
+                                                      .watch<RecipesBrandBloc>()
+                                                      .isChecked2 ==
+                                                  2
+                                              ? null
+                                              : (int? value) {
+                                                  BlocProvider.of<
+                                                              RecipesBrandBloc>(
+                                                          context)
+                                                      .add(Checkbox2Event(
+                                                          value ?? 2));
+                                                },
                                         ),
                                       ],
                                     ),

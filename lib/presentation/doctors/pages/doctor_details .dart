@@ -153,11 +153,13 @@ class DoctorDetails extends StatelessWidget {
                                     state.failure.code);
                               }
                             },
-                            child: Row(
+                            child: BlocBuilder<DoctorsBloc, DoctorsState>(
+  builder: (context, state) {
+    return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () {
+                                  onPressed:state is CheckRecipesLoadingState?null: () {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       BlocProvider.of<DoctorsBloc>(context)
@@ -167,7 +169,7 @@ class DoctorDetails extends StatelessWidget {
                                   child: Text('إنشاء وصفة'),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {
+                                  onPressed:state is CheckRecipesLoadingState?null: () {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       BlocProvider.of<DoctorsBloc>(context)
@@ -177,7 +179,9 @@ class DoctorDetails extends StatelessWidget {
                                   child: Text('تكرار وصفة'),
                                 ),
                               ],
-                            ),
+                            );
+  },
+),
                           )
                         ],
                       ),
