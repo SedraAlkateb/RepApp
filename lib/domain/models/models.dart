@@ -1022,15 +1022,10 @@ class PlanBrandModel {
       'amount': amount,
     };
   }
+
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(
-        map['id'],
-        map['spId'],
-        map['brandId'],
-        map['repPlanId'],
-        map['brandType'],
-        map['amount']
-    );
+    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
+        map['repPlanId'], map['brandType'], map['amount']);
   }
 }
 
@@ -1176,25 +1171,21 @@ class ReciRequest {
   String? brand_2;
   String? brand_3;
   String? brand_4;
+  int? flag1;
+  int? flag2;
 
-  ReciRequest(
-    this.repId,
-    this.type,
-    this.docId,
-    this.spName,
-    this.brand_1,
-    this.address,
-    this.phone,
-    this.total, {
-    this.note1,
-    this.note2,
-    this.note_emp,
-    this.image1,
-    this.image2,
-    this.brand_2,
-    this.brand_3,
-    this.brand_4,
-  });
+  ReciRequest(this.repId, this.type, this.docId, this.spName, this.brand_1,
+      this.address, this.phone, this.total,
+      {this.note1,
+      this.note2,
+      this.note_emp,
+      this.image1,
+      this.image2,
+      this.brand_2,
+      this.brand_3,
+      this.brand_4,
+      this.flag1,
+      this.flag2});
 }
 
 ///
@@ -1217,7 +1208,6 @@ class CopyReciRequest {
   String? image1;
   String? image2;
 
-
   CopyReciRequest(
     this.id,
     this.repId,
@@ -1238,10 +1228,15 @@ class CopyReciRequest {
     this.brand_4,
   });
 }
-class StateImage{
+
+class StateImage {
   int id;
   String type;
-  StateImage(this.id,this.type);
+  StateImage(this.id, this.type);
 }
 
- List<StateImage> stateImage=[StateImage(0,"لا يوجد صورة"),StateImage(1,"تكرار صورة"),StateImage(2,"اضافة صورة")];
+List<StateImage> stateImage = [
+  StateImage(0, "لا يوجد صورة"),
+  StateImage(1, "تكرار صورة"),
+  StateImage(2, "اضافة صورة")
+];
