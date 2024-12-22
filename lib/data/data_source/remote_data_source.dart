@@ -180,6 +180,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         reciReq.address,
         reciReq.phone,
         reciReq.total,
+         flagImage1:reciReq.flagImage1,
+        flagImage2:reciReq.flagImage2,
         note1: reciReq.note1,
         note2: reciReq.note2,
         image1: reciReq.image1,

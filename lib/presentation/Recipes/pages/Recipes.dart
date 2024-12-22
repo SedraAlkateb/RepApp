@@ -483,77 +483,76 @@ class _RecipesPageState extends State<RecipesPage> {
                                                               0.15,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      :
-                        context
-                            .watch<RecipesBrandBloc>()
-                            .isChecked1!=2?
-                                                  Image.network(
-                                                          "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image1!.path}",
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                          fit: BoxFit.cover,
-                                                          loadingBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  Widget child,
-                                                                  ImageChunkEvent?
-                                                                      loadingProgress) {
-                                                            if (loadingProgress ==
-                                                                null) {
-                                                              return child;
-                                                            } else {
-                                                              return Center(
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  value: loadingProgress
-                                                                              .expectedTotalBytes !=
-                                                                          null
-                                                                      ? loadingProgress
-                                                                              .cumulativeBytesLoaded /
-                                                                          (loadingProgress.expectedTotalBytes ??
-                                                                              1)
-                                                                      : null,
-                                                                ),
-                                                              );
-                                                            }
-                                                          },
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Icon(
-                                                                Icons.error,
-                                                                size: 50,
-                                                                color:
-                                                                    Colors.red);
-                                                          },
-                                                        ):
-                        Image.file(
-                          context
-                              .watch<
-                              RecipesBrandBloc>()
-                              .insertRecipesObject
-                              .image1!,
-                          height: MediaQuery.of(
-                              context)
-                              .size
-                              .height *
-                              0.15,
-                          width: MediaQuery.of(
-                              context)
-                              .size
-                              .height *
-                              0.15,
-                          fit: BoxFit.cover,
-                        )
-                                            ,
+                                                      : context
+                                                                  .watch<
+                                                                      RecipesBrandBloc>()
+                                                                  .isChecked1 !=
+                                                              2
+                                                          ? Image.network(
+                                                              "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image1!.path}",
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              fit: BoxFit.cover,
+                                                              loadingBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      Widget
+                                                                          child,
+                                                                      ImageChunkEvent?
+                                                                          loadingProgress) {
+                                                                if (loadingProgress ==
+                                                                    null) {
+                                                                  return child;
+                                                                } else {
+                                                                  return Center(
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      value: loadingProgress.expectedTotalBytes !=
+                                                                              null
+                                                                          ? loadingProgress.cumulativeBytesLoaded /
+                                                                              (loadingProgress.expectedTotalBytes ?? 1)
+                                                                          : null,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                              errorBuilder:
+                                                                  (context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                return Icon(
+                                                                    Icons.error,
+                                                                    size: 50,
+                                                                    color: Colors
+                                                                        .red);
+                                                              },
+                                                            )
+                                                          : Image.file(
+                                                              context
+                                                                  .watch<
+                                                                      RecipesBrandBloc>()
+                                                                  .insertRecipesObject
+                                                                  .image1!,
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                 )
                                               : Column(
                                                   mainAxisAlignment:
@@ -601,7 +600,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
-                                                  print("object");
+                                                  print("object11");
                                                   print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
@@ -630,6 +629,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
+                                            print("object12");
+                                            print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
                                                           context)
@@ -704,76 +705,76 @@ class _RecipesPageState extends State<RecipesPage> {
                                                               0.2,
                                                           fit: BoxFit.cover,
                                                         )
-
-                                                      :
-                                                  context
-                                                      .watch<RecipesBrandBloc>()
-                                                      .isChecked2!=2?
-                                                  Image.network(
-                                                          "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image2!.path}",
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.15,
-                                                          fit: BoxFit.cover,
-                                                          loadingBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  Widget child,
-                                                                  ImageChunkEvent?
-                                                                      loadingProgress) {
-                                                            if (loadingProgress ==
-                                                                null) {
-                                                              return child;
-                                                            } else {
-                                                              return Center(
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  value: loadingProgress
-                                                                              .expectedTotalBytes !=
-                                                                          null
-                                                                      ? loadingProgress
-                                                                              .cumulativeBytesLoaded /
-                                                                          (loadingProgress.expectedTotalBytes ??
-                                                                              1)
-                                                                      : null,
-                                                                ),
-                                                              );
-                                                            }
-                                                          },
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Icon(
-                                                                Icons.error,
-                                                                size: 50,
-                                                                color:
-                                                                    Colors.red);
-                                                          },
-                                                        ):Image.file(
-                                                    context
-                                                        .watch<
-                                                        RecipesBrandBloc>()
-                                                        .insertRecipesObject
-                                                        .image2!,
-                                                    height: MediaQuery.of(
-                                                        context)
-                                                        .size
-                                                        .height *
-                                                        0.2,
-                                                    width: MediaQuery.of(
-                                                        context)
-                                                        .size
-                                                        .height *
-                                                        0.2,
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                                      : context
+                                                                  .watch<
+                                                                      RecipesBrandBloc>()
+                                                                  .isChecked2 !=
+                                                              2
+                                                          ? Image.network(
+                                                              "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image2!.path}",
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              fit: BoxFit.cover,
+                                                              loadingBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      Widget
+                                                                          child,
+                                                                      ImageChunkEvent?
+                                                                          loadingProgress) {
+                                                                if (loadingProgress ==
+                                                                    null) {
+                                                                  return child;
+                                                                } else {
+                                                                  return Center(
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      value: loadingProgress.expectedTotalBytes !=
+                                                                              null
+                                                                          ? loadingProgress.cumulativeBytesLoaded /
+                                                                              (loadingProgress.expectedTotalBytes ?? 1)
+                                                                          : null,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                              errorBuilder:
+                                                                  (context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                return Icon(
+                                                                    Icons.error,
+                                                                    size: 50,
+                                                                    color: Colors
+                                                                        .red);
+                                                              },
+                                                            )
+                                                          : Image.file(
+                                                              context
+                                                                  .watch<
+                                                                      RecipesBrandBloc>()
+                                                                  .insertRecipesObject
+                                                                  .image2!,
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.2,
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.2,
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                 )
                                               : Column(
                                                   mainAxisAlignment:
@@ -820,6 +821,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
+                                            print("object21");
+                                            print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
                                                           context)
@@ -846,6 +849,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
+                                            print("object22");
+                                          print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
                                                           context)

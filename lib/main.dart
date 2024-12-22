@@ -2,44 +2,52 @@ import 'dart:io';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
-//import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:timezone/data/latest.dart';
 
 //import 'presentation/uniti/time.dart';
+// إنشاء الإشعار باستخدام flutter_local_notifications
+Future<void> _showEndDateNotification() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'your_channel_id', // معرف القناة
+    'التنبيهات', // اسم القناة
+    channelDescription: 'تنبيهات خاصة بالوقت',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+    enableVibration: true,
+    playSound: true,
+  );
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
 
+  await flutterLocalNotificationsPlugin.show(
+    0, // معرف الإشعار
+    'شركة دومِنا', // عنوان الإشعار
+    'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
+    platformChannelSpecifics,
+    payload:
+    'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
+  );
+}
 
 Future<int?> sss() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
-  ///
-  // String? nextDay = UserInfo.endDate != null
-  //
-  //     ? DateTime.parse(UserInfo.endDate!).add(Duration(days: 1)).toIso8601String()
-  //
-  //     : null;
 
-  //print(nextDay ?? "تاريخ نهاية الخطة غير موجود.");
-
-// if(formatDateTimeFromDataTime( DateTime.now())==formatDateTime(nextDay!)){
-//   EditIsLoginSqlUsecase editIsLoginSqlUsecase =EditIsLoginSqlUsecase(instance());
-//  (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
-//    print("object");
-//    return 0;
-//  }, (data) async{
-//
-//  });
-// }
   IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   (await isLoginSqlUsecase.execute()).fold((failure) {
     print("object");
     return 0;
-  },
-  (data) async {
+  }, (data) async {
     if (data != null && (data.isLogin > 0)) {
       UserInfo.name = data.name;
       UserInfo.isLogging = data.isLogin;
@@ -63,20 +71,48 @@ Future<int?> sss() async {
     }
     return data ?? 0;
   });
+
+  final now = formatDateTimeFromDataTime(DateTime.now());
+  final String endDate=UserInfo.endDate??"";
+  if (UserInfo.endDate != null &&
+      now == formatDateTime(endDate)) {
+    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+    _showEndDateNotification();
+  }
+
+  String? nextDay = UserInfo.endDate != null
+      ? formatStringToDataTime().add(Duration(days: 1)).toIso8601String()
+      : null;
+
+  print(nextDay ?? "تاريخ نهاية الخطة غير موجود.");
+
+  if( UserInfo.isLogging!=5){
+    if (now == formatDateTime(nextDay??"")) {
+      EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+      EditIsLoginSqlUsecase(instance());
+      (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+        print("object");
+        return 0;
+      }, (data) async {
+        UserInfo.isLogging = 5;
+      });
+    }
+  }
+
   return null;
 }
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();
-  await _initNotifications();
- await sss();
+   await _initNotifications();
+  await sss();
  //initializeTimeZones();
-  runApp(Phoenix( child: const MyApp()));
+  runApp(Phoenix(child: const MyApp()));
 }
-
 
 Future<void> _initNotifications() async {
   // إعداد الإشعارات المحلية
@@ -87,10 +123,11 @@ Future<void> _initNotifications() async {
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
