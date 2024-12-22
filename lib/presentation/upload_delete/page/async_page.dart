@@ -50,13 +50,13 @@ class AsyncPage extends StatelessWidget {
                   if (state is UpdateFlagErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
+                  // if (state is UpdateFlagState) {
+                  //   BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
+                  // }
+                  // if (state is EditStatusSErrorState) {
+                  //   error(context, state.failure.massage, state.failure.code);
+                  // }
                   if (state is UpdateFlagState) {
-                    BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
-                  }
-                  if (state is EditStatusSErrorState) {
-                    error(context, state.failure.massage, state.failure.code);
-                  }
-                  if (state is EditStatusState) {
                     success(context);
                     Navigator.pushReplacementNamed(
                       context,
