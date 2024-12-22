@@ -15,7 +15,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 class Places extends StatelessWidget {
@@ -103,7 +103,7 @@ class Places extends StatelessWidget {
       {
         timer.cancel();
         // إيقاف الفحص عند تحقق الشرط
-        await _showEndDateNotification();
+        // await _showEndDateNotification();
 
       }
     });
@@ -156,29 +156,29 @@ class Places extends StatelessWidget {
     );
   }
 // إنشاء الإشعار باستخدام flutter_local_notifications
-  Future<void> _showEndDateNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your_channel_id', // معرف القناة
-      'التنبيهات', // اسم القناة
-      channelDescription: 'تنبيهات خاصة بالوقت',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-      enableVibration :true,
-        playSound: true,
-    );
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      0, // معرف الإشعار
-      'شركة دومِنا', // عنوان الإشعار
-      'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
-      platformChannelSpecifics,
-      payload: 'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
-    );
-  }
+//   Future<void> _showEndDateNotification() async {
+    // const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    // AndroidNotificationDetails(
+    //   'your_channel_id', // معرف القناة
+    //   'التنبيهات', // اسم القناة
+    //   channelDescription: 'تنبيهات خاصة بالوقت',
+    //   importance: Importance.max,
+    //   priority: Priority.high,
+    //   ticker: 'ticker',
+    //   enableVibration :true,
+    //     playSound: true,
+    // );
+  //   const NotificationDetails platformChannelSpecifics =
+  //   NotificationDetails(android: androidPlatformChannelSpecifics);
+  //
+  //   await flutterLocalNotificationsPlugin.show(
+  //     0, // معرف الإشعار
+  //     'شركة دومِنا', // عنوان الإشعار
+  //     'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
+  //     platformChannelSpecifics,
+  //     payload: 'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
+  //   );
+  // }
 
   Widget bodyBuild(BuildContext context) {
     return Column(
