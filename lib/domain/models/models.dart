@@ -1163,6 +1163,8 @@ class ReciRequest {
   String address;
   String phone;
   String total;
+  String? flagImage1;
+  String ?flagImage2;
   String? note1;
   String? note2;
   String? note_emp;
@@ -1171,21 +1173,22 @@ class ReciRequest {
   String? brand_2;
   String? brand_3;
   String? brand_4;
-  int? flag1;
-  int? flag2;
+
 
   ReciRequest(this.repId, this.type, this.docId, this.spName, this.brand_1,
       this.address, this.phone, this.total,
+
       {this.note1,
       this.note2,
+        this.flagImage1,
+        this.flagImage2,
       this.note_emp,
       this.image1,
       this.image2,
       this.brand_2,
       this.brand_3,
       this.brand_4,
-      this.flag1,
-      this.flag2});
+     });
 }
 
 ///

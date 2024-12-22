@@ -947,6 +947,8 @@ class _AppServiceClient implements AppServiceClient {
     String address,
     String phone,
     String total, {
+    String? flagImage1,
+    String? flagImage2,
     String? note1,
     String? note2,
     File? image1,
@@ -993,6 +995,18 @@ class _AppServiceClient implements AppServiceClient {
       'total',
       total,
     ));
+    if (flagImage1 != null) {
+      _data.fields.add(MapEntry(
+        'flagImage1',
+        flagImage1,
+      ));
+    }
+    if (flagImage2 != null) {
+      _data.fields.add(MapEntry(
+        'flagImage2',
+        flagImage2,
+      ));
+    }
     if (note1 != null) {
       _data.fields.add(MapEntry(
         'note1',
