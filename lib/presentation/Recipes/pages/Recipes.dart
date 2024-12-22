@@ -14,25 +14,18 @@ class RecipesPage extends StatefulWidget {
   final int docId;
   final int st;
   RecipesPage({super.key, required this.docId, required this.st});
-
   @override
   State<RecipesPage> createState() => _RecipesPageState();
 }
 
 class _RecipesPageState extends State<RecipesPage> {
   final TextEditingController _doctorSpController = TextEditingController();
-
   final TextEditingController firstNoteController =
       TextEditingController(text: "يرجى عدم تبديل الدواء");
-
   final TextEditingController _secondNoteController = TextEditingController();
-
   final TextEditingController _addressController = TextEditingController();
-
   final TextEditingController _connectController = TextEditingController();
-
   final TextEditingController _specialNotesController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
