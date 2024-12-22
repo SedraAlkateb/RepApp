@@ -1006,26 +1006,22 @@ class _AppServiceClient implements AppServiceClient {
       ));
     }
     if (image1 != null) {
-      if (image1 != null) {
-        _data.files.add(MapEntry(
-          'image1',
-          MultipartFile.fromFileSync(
-            image1.path,
-            filename: image1.path.split(Platform.pathSeparator).last,
-          ),
-        ));
-      }
+      _data.files.add(MapEntry(
+        'image1',
+        MultipartFile.fromFileSync(
+          image1.path,
+          filename: image1.path.split(Platform.pathSeparator).last,
+        ),
+      ));
     }
     if (image2 != null) {
-      if (image2 != null) {
-        _data.files.add(MapEntry(
-          'image2',
-          MultipartFile.fromFileSync(
-            image2.path,
-            filename: image2.path.split(Platform.pathSeparator).last,
-          ),
-        ));
-      }
+      _data.files.add(MapEntry(
+        'image2',
+        MultipartFile.fromFileSync(
+          image2.path,
+          filename: image2.path.split(Platform.pathSeparator).last,
+        ),
+      ));
     }
     if (brand_2 != null) {
       _data.fields.add(MapEntry(
