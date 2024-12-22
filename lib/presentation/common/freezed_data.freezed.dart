@@ -2818,6 +2818,8 @@ mixin _$InsertRecipesObject {
   String get address => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
   String get total => throw _privateConstructorUsedError;
+  String get flagImage1 => throw _privateConstructorUsedError;
+  String get flagImage2 => throw _privateConstructorUsedError;
   String? get note1 => throw _privateConstructorUsedError;
   String? get note2 => throw _privateConstructorUsedError;
   String? get note_emp => throw _privateConstructorUsedError;
@@ -2849,6 +2851,8 @@ abstract class $InsertRecipesObjectCopyWith<$Res> {
       String address,
       String phone,
       String total,
+      String flagImage1,
+      String flagImage2,
       String? note1,
       String? note2,
       String? note_emp,
@@ -2882,6 +2886,8 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
     Object? address = null,
     Object? phone = null,
     Object? total = null,
+    Object? flagImage1 = null,
+    Object? flagImage2 = null,
     Object? note1 = freezed,
     Object? note2 = freezed,
     Object? note_emp = freezed,
@@ -2923,6 +2929,14 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
       total: null == total
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
+              as String,
+      flagImage1: null == flagImage1
+          ? _value.flagImage1
+          : flagImage1 // ignore: cast_nullable_to_non_nullable
+              as String,
+      flagImage2: null == flagImage2
+          ? _value.flagImage2
+          : flagImage2 // ignore: cast_nullable_to_non_nullable
               as String,
       note1: freezed == note1
           ? _value.note1
@@ -2977,6 +2991,8 @@ abstract class _$$InsertRecipesObjectImplCopyWith<$Res>
       String address,
       String phone,
       String total,
+      String flagImage1,
+      String flagImage2,
       String? note1,
       String? note2,
       String? note_emp,
@@ -3008,6 +3024,8 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
     Object? address = null,
     Object? phone = null,
     Object? total = null,
+    Object? flagImage1 = null,
+    Object? flagImage2 = null,
     Object? note1 = freezed,
     Object? note2 = freezed,
     Object? note_emp = freezed,
@@ -3049,6 +3067,14 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
       null == total
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == flagImage1
+          ? _value.flagImage1
+          : flagImage1 // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == flagImage2
+          ? _value.flagImage2
+          : flagImage2 // ignore: cast_nullable_to_non_nullable
               as String,
       freezed == note1
           ? _value.note1
@@ -3098,6 +3124,8 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
       this.address,
       this.phone,
       this.total,
+      this.flagImage1,
+      this.flagImage2,
       this.note1,
       this.note2,
       this.note_emp,
@@ -3124,6 +3152,10 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
   @override
   final String total;
   @override
+  final String flagImage1;
+  @override
+  final String flagImage2;
+  @override
   final String? note1;
   @override
   final String? note2;
@@ -3142,7 +3174,7 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
 
   @override
   String toString() {
-    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, note1: $note1, note2: $note2, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
+    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, flagImage1: $flagImage1, flagImage2: $flagImage2, note1: $note1, note2: $note2, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
   }
 
   @override
@@ -3158,6 +3190,10 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
             (identical(other.address, address) || other.address == address) &&
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.total, total) || other.total == total) &&
+            (identical(other.flagImage1, flagImage1) ||
+                other.flagImage1 == flagImage1) &&
+            (identical(other.flagImage2, flagImage2) ||
+                other.flagImage2 == flagImage2) &&
             (identical(other.note1, note1) || other.note1 == note1) &&
             (identical(other.note2, note2) || other.note2 == note2) &&
             (identical(other.note_emp, note_emp) ||
@@ -3180,6 +3216,8 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
       address,
       phone,
       total,
+      flagImage1,
+      flagImage2,
       note1,
       note2,
       note_emp,
@@ -3209,6 +3247,8 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
       final String address,
       final String phone,
       final String total,
+      final String flagImage1,
+      final String flagImage2,
       final String? note1,
       final String? note2,
       final String? note_emp,
@@ -3234,6 +3274,10 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
   String get phone;
   @override
   String get total;
+  @override
+  String get flagImage1;
+  @override
+  String get flagImage2;
   @override
   String? get note1;
   @override

@@ -10,3 +10,9 @@ String formatDateTimeFromDataTime(DateTime now){
 return DateFormat('dd/MM/yyyy').format(now);
 
 }
+DateTime formatStringToDataTime(){
+  String dateString = "21-12-2023 10:00 AM";
+  DateFormat format = DateFormat("dd-MM-yyyy hh:mm a");
+  DateTime dateTime = format.parse(dateString);
+  return dateTime;
+}

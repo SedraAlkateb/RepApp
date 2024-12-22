@@ -32,6 +32,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       'address',
       "phone",
       "total",
+      "flagImage1",
+      "flagImage2",
+
       "note1",
       'note2',
       "note_emp",
@@ -158,6 +161,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
+              flagImage1: isChecked1.toString(),
+              flagImage2:isChecked1.toString(),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,

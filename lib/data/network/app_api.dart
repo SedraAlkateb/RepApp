@@ -117,7 +117,8 @@ abstract class AppServiceClient {
       @Part(name: "address") String address,
       @Part(name: "phone") String phone,
       @Part(name: "total") String total,
-      {
+      { @Part(name: "flagImage1") String? flagImage1,
+        @Part(name: "flagImage2") String? flagImage2,
         @Part(name: "note1") String? note1,
         @Part(name: "note2") String ?note2,
         @Part(name: "image1") File? image1,
