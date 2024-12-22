@@ -70,9 +70,8 @@ dependencies:
   intl: ^0.19.0
   image_picker: ^1.1.2
   html: ^0.15.4
-  timezone: ^0.10.0
   flutter_local_notifications: ^18.0.1
- # timezone: ^0.10.0
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +86,6 @@ flutter_launcher_icons:
     image_path: "assets/images/d.png"
     background_color: "#ffffff"
     theme_color: "#ffffff"
-
   web:
     generate: true
     image_path: "assets/images/d.png"
@@ -100,8 +98,6 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/images/d.png"
-
-
 flutter_icons:
   android: true
   ios: true
@@ -113,7 +109,6 @@ flutter_native_splash:
   ios: true
   android_gravity: fill
   ios_content_mode: scaleAspectFill
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -124,7 +119,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
@@ -144,6 +138,3 @@ flutter:
           weight: 200
         - asset: assets/fonts/Almarai/Almarai-Light.ttf
           weight: 300
-
-
-
