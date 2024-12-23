@@ -7,12 +7,13 @@ import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
- import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 Future<void> _showEndDateNotification() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
+      AndroidNotificationDetails(
     'your_channel_id', // معرف القناة
     'التنبيهات', // اسم القناة
     channelDescription: 'تنبيهات خاصة بالوقت',
@@ -23,15 +24,14 @@ Future<void> _showEndDateNotification() async {
     playSound: true,
   );
   const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
+      NotificationDetails(android: androidPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin.show(
     0, // معرف الإشعار
     'شركة دومِنا', // عنوان الإشعار
     'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
     platformChannelSpecifics,
-    payload:
-    'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
+    payload: 'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
   );
 }
 
@@ -67,11 +67,10 @@ Future<int?> sss() async {
     }
     return data ?? 0;
   });
-  if(UserInfo.isLogging!=0){
+  if (UserInfo.isLogging != 0) {
     final now = formatDateTimeFromDataTime(DateTime.now());
-    final String endDate=UserInfo.endDate??"";
-    if (UserInfo.endDate != null &&
-        now == formatDateTime(endDate)) {
+    final String endDate = UserInfo.endDate ?? "";
+    if (UserInfo.endDate != null && now == formatDateTime(endDate)) {
       print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
       _showEndDateNotification();
     }
@@ -79,11 +78,12 @@ Future<int?> sss() async {
     String? nextDay = UserInfo.endDate != null
         ? formatStringToDataTime().add(Duration(days: 1)).toIso8601String()
         : null;
-    if( UserInfo.isLogging!=5){
-      if (now == formatDateTime(nextDay??"")) {
+    if (UserInfo.isLogging != 5) {
+      if (now == formatDateTime(nextDay ?? "")) {
         EditIsLoginSqlUsecase editIsLoginSqlUsecase =
-        EditIsLoginSqlUsecase(instance());
-        (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+            EditIsLoginSqlUsecase(instance());
+        (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
+            (failure) {
           print("object");
           return 0;
         }, (data) async {
@@ -102,21 +102,26 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();
-   await _initNotifications();
+  await _initNotifications();
+  await requestNotificationPermission(); // طلب الإذن للإشعارات
   await sss();
- //initializeTimeZones();
+  //initializeTimeZones();
   runApp(Phoenix(child: const MyApp()));
 }
 
 Future<void> _initNotifications() async {
-  // إعداد الإشعارات المحلية
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings('@mipmap/ic_launcher');
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+
+  );
 }
+
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -124,4 +129,19 @@ class MyHttpOverrides extends HttpOverrides {
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
   }
+}
+Future<void> requestNotificationPermission() async {
+  if (Platform.isAndroid) {
+    PermissionStatus status = await Permission.notification.request();
+    if (status.isGranted) {
+      print("تم منح إذن الإشعارات.");
+    } else if (status.isDenied) {
+
+      openAppSettings();
+    } else if (status.isPermanentlyDenied) {
+      print("تم رفض الإذن نهائيًا. يمكنك طلبه من إعدادات النظام.");
+    }
+  }
+
+
 }
