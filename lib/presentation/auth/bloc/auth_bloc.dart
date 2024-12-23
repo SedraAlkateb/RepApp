@@ -27,7 +27,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 .execute(LoginRequest(event.userName, event.password)))
             .fold((failure) {
           emit(LoginErrorState(failure: failure));
-        }, (data) async {
+        },
+                (data) async {
           loginModel = data;
           UserInfo.repId = loginModel!.repId;
           UserInfo.otherPlanId = loginModel!.otherPlanId;
