@@ -4,7 +4,6 @@ import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:html/parser.dart';
 
-
 extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
     return VisitPharmacyRequest(
@@ -214,7 +213,7 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.endDate ?? Constants.empty,
       0,
       int.parse(this?.data?.recipesCount ?? "0"),
-     UserInfo.flag1,
+      UserInfo.flag1,
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
@@ -421,8 +420,8 @@ extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
 extension BrandRecipesResponseMapper on BrandRecipesResponse? {
   BrandRes toDomain() {
     return BrandRes(
-        this?.id ?? Constants.zero,
-        this?.title_en ?? Constants.empty,
+      this?.id ?? Constants.zero,
+      this?.title_en ?? Constants.empty,
     );
   }
 }
@@ -485,8 +484,6 @@ extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
   }
 }
 
-
-
 extension CopyRecResponseMapper on CopyRecResponse {
   CopyReciRequest toDomain() {
     return CopyReciRequest(
@@ -499,24 +496,14 @@ extension CopyRecResponseMapper on CopyRecResponse {
       this.recip?.address ?? Constants.empty,
       this.recip?.phone ?? Constants.empty,
       this.recip?.total ?? Constants.empty,
-      note1: this.recip?.note1?? Constants.empty,
-      note2:this.recip?.note2?? Constants.empty,
-      note_emp: this.recip?.note_emp?? Constants.empty,
-      image1: this.recip?.image1?? Constants.empty,
-      image2: this.recip?.image2?? Constants.empty,
-      brand_2:   this.recip?.brand_2.toDomain(),
-      brand_3:   this.recip?.brand_3.toDomain(),
-      brand_4:   this.recip?.brand_4.toDomain(),
-
-
-
-
-
-
-
-
-
+      note1: this.recip?.note1 ?? Constants.empty,
+      note2: this.recip?.note2 ?? Constants.empty,
+      note_emp: this.recip?.note_emp ?? Constants.empty,
+      image1: this.recip?.image1 == "" ? null : this.recip?.image1,
+      image2: this.recip?.image2 == "" ? null : this.recip?.image2,
+      brand_2: this.recip?.brand_2.toDomain(),
+      brand_3: this.recip?.brand_3.toDomain(),
+      brand_4: this.recip?.brand_4.toDomain(),
     );
-
   }
 }

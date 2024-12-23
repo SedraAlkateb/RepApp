@@ -34,7 +34,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "total",
       "flagImage1",
       "flagImage2",
-
       "note1",
       'note2',
       "note_emp",
@@ -72,8 +71,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   void updateRecipes(CopyReciRequest recipes) {
     final updatedUser = insertRecipesObject.copyWith(
         phone: recipes.phone,
-        image2: recipes.image2 != null ? File(recipes.image2 ?? "") : null,
-        image1: recipes.image1 != null ? File(recipes.image1 ?? "") : null,
+        image2: (recipes.image2 != null) ?  File(recipes.image2 ?? "") : null,
+        image1:( recipes.image1 != null) ? File(recipes.image1 ?? "") : null,
         brand_4: recipes.brand_4,
         brand_3: recipes.brand_3,
         brand_2: recipes.brand_2,
@@ -162,15 +161,15 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.phone,
           insertRecipesObject.total,
               flagImage1: isChecked1.toString(),
-              flagImage2:isChecked1.toString(),
+              flagImage2:isChecked2.toString(),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,
-          image1: insertRecipesObject.image1,
+          image1:isChecked1==2? insertRecipesObject.image1:null,
           brand_2: insertRecipesObject.brand_2?.id.toString(),
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
-          image2: insertRecipesObject.image2,
+          image2:isChecked2==2? insertRecipesObject.image2:null,
     //      flag1: isChecked1,
       //    flag2: isChecked2
         )))
@@ -194,6 +193,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         insertRecipesObject = updatedUser;
       }
       if (event is PickImageEvent) {
+        print(event.index);
+
         if (event.index == 1) {
           final updatedUser = insertRecipesObject.copyWith(image1: event.image);
           insertRecipesObject = updatedUser;
@@ -202,9 +203,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         } else {
           final updatedUser = insertRecipesObject.copyWith(image2: event.image);
           insertRecipesObject = updatedUser;
-
           isChecked2=2;
         }
+        print(isChecked2);
         emit(ImagePickedState(event.image));
       }
       if (event is Checkbox1Event){
