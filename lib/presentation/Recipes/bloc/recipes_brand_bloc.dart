@@ -56,7 +56,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       print(pickedFile.path);
       print("pickedFile.path");
       return File(pickedFile.path);
-
     }
 
     return null;
@@ -71,8 +70,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   void updateRecipes(CopyReciRequest recipes) {
     final updatedUser = insertRecipesObject.copyWith(
         phone: recipes.phone,
-        image2: (recipes.image2 != null) ?  File(recipes.image2 ?? "") : null,
-        image1:( recipes.image1 != null) ? File(recipes.image1 ?? "") : null,
+        image2: (recipes.image2 != null) ? File(recipes.image2 ?? "") : null,
+        image1: (recipes.image1 != null) ? File(recipes.image1 ?? "") : null,
         brand_4: recipes.brand_4,
         brand_3: recipes.brand_3,
         brand_2: recipes.brand_2,
@@ -121,8 +120,10 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       if (event is CopyRecipesEvent) {
         emit(RecipesRecipesLoadingState());
         (await copyReciUsecase.execute(event.docId)).fold((failure) {
+          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
           emit(RecipesRecipesErrorState(failure: failure));
         }, (data) async {
+
           updateRecipes(data);
           emit(RecipesRecipesState());
         });
@@ -150,8 +151,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         print(insertRecipesObject.image1);
         print('ااااااااااار');
         print(insertRecipesObject.image2);
-        (await insertReciUsecase.execute(
-            ReciRequest(
+        (await insertReciUsecase.execute(ReciRequest(
           insertRecipesObject.repId,
           insertRecipesObject.type,
           insertRecipesObject.docId,
@@ -160,18 +160,18 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
-              flagImage1: isChecked1.toString(),
-              flagImage2:isChecked2.toString(),
+          flagImage1: isChecked1.toString(),
+          flagImage2: isChecked2.toString(),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,
-          image1:isChecked1==2? insertRecipesObject.image1:null,
+          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
           brand_2: insertRecipesObject.brand_2?.id.toString(),
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
-          image2:isChecked2==2? insertRecipesObject.image2:null,
-    //      flag1: isChecked1,
-      //    flag2: isChecked2
+          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+          //      flag1: isChecked1,
+          //    flag2: isChecked2
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
@@ -198,25 +198,22 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         if (event.index == 1) {
           final updatedUser = insertRecipesObject.copyWith(image1: event.image);
           insertRecipesObject = updatedUser;
-          isChecked1=2;
-
+          isChecked1 = 2;
         } else {
           final updatedUser = insertRecipesObject.copyWith(image2: event.image);
           insertRecipesObject = updatedUser;
-          isChecked2=2;
+          isChecked2 = 2;
         }
         print(isChecked2);
         emit(ImagePickedState(event.image));
       }
-      if (event is Checkbox1Event){
-          isChecked1 = event.isChecked;
-          emit(CheckboxImage1State(isChecked1));
-
+      if (event is Checkbox1Event) {
+        isChecked1 = event.isChecked;
+        emit(CheckboxImage1State(isChecked1));
       }
-      if (event is Checkbox2Event){
+      if (event is Checkbox2Event) {
         isChecked2 = event.isChecked;
         emit(CheckboxImage2State(isChecked2));
-
       }
     });
   }

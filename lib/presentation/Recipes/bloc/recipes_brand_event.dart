@@ -98,3 +98,7 @@ class AllNumEvent extends RecipesBrandEvent {
   AllNumEvent();
   List<Object?> get props => [];
 }
+class RestartEvent extends RecipesBrandEvent {
+
+  List<Object?> get props => [];
+}

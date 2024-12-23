@@ -41,3 +41,10 @@ Widget emptyFullScreen(BuildContext context) {
       message: "لا يوجد بيانات",
       retryActionFunction: () {});
 }
+Widget errorFullScreenWidget(BuildContext context,String message) {
+  return StateRenderer(
+      stateRendererType: StateRendererType.fullScreenEmptyState,
+      message: message,
+      retryActionFunction: () {});
+
+}
