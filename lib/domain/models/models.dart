@@ -1243,3 +1243,9 @@ List<StateImage> stateImage = [
   StateImage(1, "تكرار صورة"),
   StateImage(2, "اضافة صورة")
 ];
+class LoginRequest {
+  String email;
+  String password;
+
+  LoginRequest(this.email, this.password);
+}
