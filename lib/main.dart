@@ -9,10 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
  import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:timezone/data/latest.dart';
 
-//import 'presentation/uniti/time.dart';
-// إنشاء الإشعار باستخدام flutter_local_notifications
 Future<void> _showEndDateNotification() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
   AndroidNotificationDetails(
@@ -42,24 +39,6 @@ Future<int?> sss() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
-
-  String? nextDay = UserInfo.endDate != null
-
-      ? DateTime.parse(UserInfo.endDate!).add(Duration(days: 1)).toIso8601String()
-
-      : null;
-
-  print(nextDay ?? "تاريخ نهاية الخطة غير موجود.");
-
-if(formatDateTimeFromDataTime( DateTime.now())==formatDateTime(nextDay!)){
-  EditIsLoginSqlUsecase editIsLoginSqlUsecase =EditIsLoginSqlUsecase(instance());
- (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
-   print("object");
-   return 0;
- }, (data) async{
-
- });
-}
   IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   (await isLoginSqlUsecase.execute()).fold((failure) {
     print("object");
@@ -88,31 +67,29 @@ if(formatDateTimeFromDataTime( DateTime.now())==formatDateTime(nextDay!)){
     }
     return data ?? 0;
   });
+  if(UserInfo.isLogging!=0){
+    final now = formatDateTimeFromDataTime(DateTime.now());
+    final String endDate=UserInfo.endDate??"";
+    if (UserInfo.endDate != null &&
+        now == formatDateTime(endDate)) {
+      print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+      _showEndDateNotification();
+    }
 
-  final now = formatDateTimeFromDataTime(DateTime.now());
-  final String endDate=UserInfo.endDate??"";
-  if (UserInfo.endDate != null &&
-      now == formatDateTime(endDate)) {
-    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-    _showEndDateNotification();
-  }
-
-  String? nextDay = UserInfo.endDate != null
-      ? formatStringToDataTime().add(Duration(days: 1)).toIso8601String()
-      : null;
-
-  print(nextDay ?? "تاريخ نهاية الخطة غير موجود.");
-
-  if( UserInfo.isLogging!=5){
-    if (now == formatDateTime(nextDay??"")) {
-      EditIsLoginSqlUsecase editIsLoginSqlUsecase =
-      EditIsLoginSqlUsecase(instance());
-      (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
-        print("object");
-        return 0;
-      }, (data) async {
-        UserInfo.isLogging = 5;
-      });
+    String? nextDay = UserInfo.endDate != null
+        ? formatStringToDataTime().add(Duration(days: 1)).toIso8601String()
+        : null;
+    if( UserInfo.isLogging!=5){
+      if (now == formatDateTime(nextDay??"")) {
+        EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+        EditIsLoginSqlUsecase(instance());
+        (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+          print("object");
+          return 0;
+        }, (data) async {
+          UserInfo.isLogging = 5;
+        });
+      }
     }
   }
 

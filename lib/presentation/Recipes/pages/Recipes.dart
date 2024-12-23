@@ -29,12 +29,14 @@ class _RecipesPageState extends State<RecipesPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+
     BlocProvider.of<RecipesBrandBloc>(context).empty();
     if (widget.st == 1) {
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(CopyRecipesEvent(widget.docId));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
+
     }
 
     super.initState();
@@ -42,6 +44,8 @@ class _RecipesPageState extends State<RecipesPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(BlocProvider.of<RecipesBrandBloc>(context).isChecked1);
+    print(BlocProvider.of<RecipesBrandBloc>(context).isChecked2);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -483,11 +487,12 @@ class _RecipesPageState extends State<RecipesPage> {
                                                               0.15,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      : context
+                                                      :
+                                                (  context
                                                                   .watch<
                                                                       RecipesBrandBloc>()
                                                                   .isChecked1 !=
-                                                              2
+                                                              2)
                                                           ? Image.network(
                                                               "${Constants.imageUrl}${context.watch<RecipesBrandBloc>().insertRecipesObject.image1!.path}",
                                                               height: MediaQuery.of(
