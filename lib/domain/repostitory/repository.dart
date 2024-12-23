@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/network/failure.dart';
-import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 abstract class Repository{

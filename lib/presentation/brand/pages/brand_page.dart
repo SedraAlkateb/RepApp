@@ -2,7 +2,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand/bloc/brand_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -68,39 +67,32 @@ class BrandPage extends StatelessWidget {
         (
           itemBuilder: (context, index)
           {
-            return InkWell(
-              onTap: () =>  Navigator.pushNamed(
-                context,
-                Routes.fadeInWidget,
+            return Container(
+              margin: EdgeInsets.all(AppPadding.p8),
+              padding: EdgeInsets.all(AppPadding.p16),
+              //    height: AppSize.s150,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  ColorManager.secondaryColor6,
+                  ColorManager.secondaryColor7,
+                  ColorManager.secondaryColor7,
+                ]),
+                color: ColorManager.white,
 
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(AppSize.s8)),
+                //        color: ColorManager.card,
               ),
-              child: Container(
-                margin: EdgeInsets.all(AppPadding.p8),
-                padding: EdgeInsets.all(AppPadding.p16),
-                //    height: AppSize.s150,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    ColorManager.secondaryColor6,
-                    ColorManager.secondaryColor7,
-                    ColorManager.secondaryColor7,
-                  ]),
-                  color: ColorManager.white,
+              child: Column(
+                children: [
+                  Text(" ${brandModel[index].title} ", style: Theme.of(context)
+                      .textTheme
+                      .labelLarge),
+                  Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
+                      .textTheme
+                      .titleSmall,textAlign: TextAlign.center,),
 
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(AppSize.s8)),
-                  //        color: ColorManager.card,
-                ),
-                child: Column(
-                  children: [
-                    Text(" ${brandModel[index].title} ", style: Theme.of(context)
-                        .textTheme
-                        .labelLarge),
-                    Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
-                        .textTheme
-                        .titleSmall,textAlign: TextAlign.center,),
-
-                  ],
-                ),
+                ],
               ),
             );
           },

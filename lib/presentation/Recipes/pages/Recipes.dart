@@ -3,6 +3,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_num.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_recipes.dart';
+import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,10 @@ class _RecipesPageState extends State<RecipesPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-
+    BlocProvider.of<RecipesBrandBloc>(context).add(RestartEvent());
     BlocProvider.of<RecipesBrandBloc>(context).empty();
     if (widget.st == 1) {
+      print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(CopyRecipesEvent(widget.docId));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
@@ -44,8 +46,6 @@ class _RecipesPageState extends State<RecipesPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(BlocProvider.of<RecipesBrandBloc>(context).isChecked1);
-    print(BlocProvider.of<RecipesBrandBloc>(context).isChecked2);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -62,6 +62,10 @@ class _RecipesPageState extends State<RecipesPage> {
       ),
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
+          if((state is RecipesRecipesErrorState)&&(widget.st == 1)){
+            print("sddddddddddddddddddd");
+            return Center(child: errorFullScreenWidget(context, " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
+          }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =
                 context.watch<RecipesBrandBloc>().insertRecipesObject.spName;
@@ -81,6 +85,7 @@ class _RecipesPageState extends State<RecipesPage> {
                     .note_emp ??
                 "";
           }
+
           return Padding(
             padding: const EdgeInsets.all(14.0),
             child: SingleChildScrollView(

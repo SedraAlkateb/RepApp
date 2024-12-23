@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
-import 'package:domina_app/data/network/requests/requsets.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
@@ -28,7 +27,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 .execute(LoginRequest(event.userName, event.password)))
             .fold((failure) {
           emit(LoginErrorState(failure: failure));
-        }, (data) async {
+        },
+                (data) async {
           loginModel = data;
           UserInfo.repId = loginModel!.repId;
           UserInfo.otherPlanId = loginModel!.otherPlanId;
