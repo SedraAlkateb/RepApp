@@ -44,7 +44,10 @@ Future<int?> sss() async {
     print("object");
     return 0;
   }, (data) async {
+
     if (data != null && (data.isLogin > 0)) {
+print("object");
+print(data.isLogin);
       UserInfo.name = data.name;
       UserInfo.isLogging = data.isLogin;
       UserInfo.activePlanId = data.activePlanId;
@@ -62,12 +65,14 @@ Future<int?> sss() async {
       UserInfo.samplesCount = data.samplesCount;
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
-    } else {
-      UserInfo.isLogging = data?.isLogin ?? 0;
+    }
+    else {
+
+      UserInfo.isLogging =  0;
     }
     return data ?? 0;
   });
-  if (UserInfo.isLogging != 0) {
+  if (UserInfo.isLogging != 0&&UserInfo.endDate!=null) {
     final now = formatDateTimeFromDataTime(DateTime.now());
     final String endDate = UserInfo.endDate ?? "";
     if (UserInfo.endDate != null && now == formatDateTime(endDate)) {
@@ -84,7 +89,7 @@ Future<int?> sss() async {
             EditIsLoginSqlUsecase(instance());
         (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
             (failure) {
-          print("object");
+
           return 0;
         }, (data) async {
           UserInfo.isLogging = 5;
@@ -103,7 +108,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();
   await _initNotifications();
-  await requestNotificationPermission(); // طلب الإذن للإشعارات
+  await requestNotificationPermission();
   await sss();
   //initializeTimeZones();
   runApp(Phoenix(child: const MyApp()));
@@ -111,16 +116,14 @@ void main() async {
 
 Future<void> _initNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
   );
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-
   );
 }
-
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -130,18 +133,16 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+
 Future<void> requestNotificationPermission() async {
   if (Platform.isAndroid) {
     PermissionStatus status = await Permission.notification.request();
     if (status.isGranted) {
       print("تم منح إذن الإشعارات.");
     } else if (status.isDenied) {
-
       openAppSettings();
     } else if (status.isPermanentlyDenied) {
       print("تم رفض الإذن نهائيًا. يمكنك طلبه من إعدادات النظام.");
     }
   }
-
-
 }
