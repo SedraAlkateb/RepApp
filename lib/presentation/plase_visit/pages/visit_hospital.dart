@@ -1,3 +1,4 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital_view_details.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
@@ -74,6 +75,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                   color: ColorManager.white))),
                       InkWell(
                         onTap: () {
+                          initHospitalModule();
                           Navigator.push(context, MaterialPageRoute(builder: (context) =>
                               HospitalViewDetails(hospital: widget.hospitalModel,
                                   hospitalsp: context.read<VisitPlaceBloc>().specialization),));
