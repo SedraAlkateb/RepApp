@@ -75,7 +75,7 @@ if (UserInfo.isLogging != 0&&UserInfo.endDate!=null) {
       ? formatStringToDataTime(UserInfo.endDate??" ").add(Duration(days: 1)).toIso8601String()
       : "";
   if (UserInfo.isLogging != 5) {
-    if (now == formatDateTime(nextDay ?? "")) {
+    if (now == formatDateTime(nextDay)) {
       EditIsLoginSqlUsecase editIsLoginSqlUsecase =
       EditIsLoginSqlUsecase(instance());
       (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(

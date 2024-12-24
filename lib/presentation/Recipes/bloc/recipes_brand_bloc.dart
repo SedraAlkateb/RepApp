@@ -41,8 +41,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       null,
       null,
       null,
-      null
-  );
+      null);
 
   void empty() {
     insertRecipesObject = InsertRecipesObject.empty();
@@ -119,11 +118,11 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       }
       if (event is CopyRecipesEvent) {
         emit(RecipesRecipesLoadingState());
-        (await copyReciUsecase.execute(event.docId,event.recipeType)).fold((failure) {
+        (await copyReciUsecase.execute(event.docId, event.recipeType)).fold(
+            (failure) {
           print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
           emit(RecipesRecipesErrorState(failure: failure));
         }, (data) async {
-
           updateRecipes(data);
           emit(RecipesRecipesState());
         });
