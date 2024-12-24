@@ -1,8 +1,8 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/Recipes/pages/recipes_hospital.dart';
-import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
+import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +99,7 @@ class HospitalDetails extends StatelessWidget {
                           if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
                             buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
                                 hospital.note ?? ''),
-                          BlocListener<DoctorsBloc, DoctorsState>(
+                          BlocListener<HospitalsBloc, HospitalsState>(
                             listener: (context, state) {
                               if (state is CheckRecipesState) {
                                 if (state.isCheck == true) {
@@ -126,7 +126,7 @@ class HospitalDetails extends StatelessWidget {
                                     state.failure.code);
                               }
                             },
-                            child: BlocBuilder<DoctorsBloc, DoctorsState>(
+                            child: BlocBuilder<HospitalsBloc, HospitalsState>(
                               builder: (context, state) {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,8 +135,8 @@ class HospitalDetails extends StatelessWidget {
                                       onPressed:state is CheckRecipesLoadingState?null: () {
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((_) {
-                                          // BlocProvider.of<DoctorsBloc>(context)
-                                          //     .add(CheckReciEvent(doctor.id,0));
+                                          BlocProvider.of<HospitalsBloc>(context)
+                                              .add(CheckReciEvent(hospital.hospitalId??0,0));
                                         });
                                       },
                                       child: Text('إنشاء وصفة'),
@@ -145,8 +145,8 @@ class HospitalDetails extends StatelessWidget {
                                       onPressed:state is CheckRecipesLoadingState?null: () {
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((_) {
-                                          // BlocProvider.of<DoctorsBloc>(context)
-                                          //     .add(CheckReciEvent(doctor.id,1));
+                                          BlocProvider.of<HospitalsBloc>(context)
+                                              .add(CheckReciEvent(hospital.hospitalId??0,1));
                                         });
                                       },
                                       child: Text('تكرار وصفة'),
