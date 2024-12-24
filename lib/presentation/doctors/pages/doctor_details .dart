@@ -84,7 +84,7 @@ class DoctorDetails extends StatelessWidget {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         children: [
-                          buildDetailRow(context, Icons.place,'المنطقة',
+                          buildDetailRow(context, Icons.place, 'المنطقة',
                               doctor.placeTitle),
                           Divider(
                             thickness: 0.5,
@@ -154,34 +154,45 @@ class DoctorDetails extends StatelessWidget {
                               }
                             },
                             child: BlocBuilder<DoctorsBloc, DoctorsState>(
-  builder: (context, state) {
-    return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  onPressed:state is CheckRecipesLoadingState?null: () {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      BlocProvider.of<DoctorsBloc>(context)
-                                          .add(CheckReciEvent(doctor.id,0));
-                                    });
-                                  },
-                                  child: Text('إنشاء وصفة'),
-                                ),
-                                ElevatedButton(
-                                  onPressed:state is CheckRecipesLoadingState?null: () {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      BlocProvider.of<DoctorsBloc>(context)
-                                          .add(CheckReciEvent(doctor.id,1));
-                                    });
-                                  },
-                                  child: Text('تكرار وصفة'),
-                                ),
-                              ],
-                            );
-  },
-),
+                              builder: (context, state) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: state
+                                              is CheckRecipesLoadingState
+                                          ? null
+                                          : () {
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback((_) {
+                                                BlocProvider.of<DoctorsBloc>(
+                                                        context)
+                                                    .add(CheckReciEvent(
+                                                        doctor.id, 0));
+                                              });
+                                            },
+                                      child: Text('إنشاء وصفة'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: state
+                                              is CheckRecipesLoadingState
+                                          ? null
+                                          : () {
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback((_) {
+                                                BlocProvider.of<DoctorsBloc>(
+                                                        context)
+                                                    .add(CheckReciEvent(
+                                                        doctor.id, 1));
+                                              });
+                                            },
+                                      child: Text('تكرار وصفة'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           )
                         ],
                       ),
