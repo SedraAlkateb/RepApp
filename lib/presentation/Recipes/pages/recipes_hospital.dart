@@ -34,7 +34,7 @@ class _RecipesPageState extends State<RecipesHospital> {
     if (widget.st == 1) {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.HospitalId));
+          .add(CopyRecipesEvent(widget.HospitalId,2));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -897,7 +897,7 @@ class _RecipesPageState extends State<RecipesHospital> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<RecipesBrandBloc>(context).add(
-                                InsertReciEvent(
+                                InsertReciHospitalEvent(
                                     _doctorSpController.text,
                                     firstNoteController.text,
                                     _secondNoteController.text,

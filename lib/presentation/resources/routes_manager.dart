@@ -62,7 +62,7 @@ class RouteGenerator {
         initDoctorModule();
         return MaterialPageRoute(builder: (_) =>     Doctors());
            case Routes.hospital:
-        inithospitalModule();
+        initHospitalModule();
         return MaterialPageRoute(builder: (_) =>     Hospital());
       case Routes.brand:
         initBrandModule();

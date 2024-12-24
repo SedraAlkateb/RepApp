@@ -1,9 +1,14 @@
+import 'package:domina_app/app/di.dart';
+import 'package:domina_app/presentation/Recipes/pages/recipes_hospital.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
+import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HospitalViewDetails extends StatelessWidget {
   final List<SpecHospitalSp> hospitalsp;
@@ -232,11 +237,13 @@ class HospitalViewDetails extends StatelessWidget {
                                             ),
                                           ),
                                         ),
+
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
+
                             ],
                           ),
                         );
@@ -245,6 +252,66 @@ class HospitalViewDetails extends StatelessWidget {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: BlocListener<HospitalsBloc, HospitalsState>(
+                  listener: (context, state) {
+                    if (state is CheckRecipesState) {
+                      if (state.isCheck == true) {
+                        initBrandRecModule();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipesHospital(HospitalId: hospital.id,
+                              //  docId: doctor.id,
+                              st: state.st,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'لقد تجاوزت الحد المسموح لعدد الوصفات')),
+                        );
+                      }
+                    }
+                    if (state is CheckRecipesErrorState) {
+                      error(context, state.failure.massage,
+                          state.failure.code);
+                    }
+                  },
+                  child: BlocBuilder<HospitalsBloc, HospitalsState>(
+                    builder: (context, state) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed:state is CheckRecipesLoadingState?null: () {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) {
+                                BlocProvider.of<HospitalsBloc>(context)
+                                    .add(CheckReciEvent(hospital.id??0,0));
+                              });
+                            },
+                            child: Text('إنشاء وصفة'),
+                          ),
+                          ElevatedButton(
+                            onPressed:state is CheckRecipesLoadingState?null: () {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) {
+                                BlocProvider.of<HospitalsBloc>(context)
+                                    .add(CheckReciEvent(hospital.id,1));
+                              });
+                            },
+                            child: Text('تكرار وصفة'),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              )
             ],
           ),
         ),

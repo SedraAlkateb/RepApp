@@ -2,8 +2,12 @@ part of 'hospitals_bloc.dart';
 
 abstract class HospitalsEvent extends Equatable {
   const HospitalsEvent();
-
-
+}
+class CheckReciEvent extends HospitalsEvent {
+  final int hosId;
+  final int st;
+  CheckReciEvent(this.hosId,this.st);
+  List<Object?> get props => [hosId];
 }
 class AllHospitalEvent extends HospitalsEvent {
 

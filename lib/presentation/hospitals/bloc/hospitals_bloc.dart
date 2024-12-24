@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_hospital_sp_n_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 part 'hospitals_event.dart';
@@ -9,8 +11,9 @@ part 'hospitals_state.dart';
 
 class HospitalsBloc extends Bloc<HospitalsEvent, HospitalsState> {
   AllHospitalSpNSqlUsecase allHospitalSpNSqlUsecase;
+  CheckReciUsecase checkReciUsecase;
   List<HospitalSpAllModel> hospital = [];
-  HospitalsBloc(this.allHospitalSpNSqlUsecase) : super(HospitalsInitial()) {
+  HospitalsBloc(this.allHospitalSpNSqlUsecase,this.checkReciUsecase) : super(HospitalsInitial()) {
     on<HospitalsEvent>((event, emit) async {
       if (event is AllHospitalEvent) {
         (await allHospitalSpNSqlUsecase.execute()).fold((failure) {
@@ -42,6 +45,16 @@ class HospitalsBloc extends Bloc<HospitalsEvent, HospitalsState> {
 
         emit(AllHospitalsState(hospitallist));
       }
+      else
+        if (event is CheckReciEvent) {
+          emit(CheckRecipesLoadingState());
+          (await checkReciUsecase.execute(UserInfo.repId)).fold((failure) {
+            emit(CheckRecipesErrorState(failure: failure));
+          }, (data) async {
+            emit(CheckRecipesState(data.accepted ?? false,event.st));
+          });
+        }
+
     });
   }
 }
