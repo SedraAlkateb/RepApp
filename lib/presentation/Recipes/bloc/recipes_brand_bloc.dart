@@ -149,8 +149,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         insertRecipesObject = updatedUser;
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);
-        (await insertReciUsecase.execute
-          (ReciRequest(
+        (await insertReciUsecase.execute(ReciRequest(
           1,
           insertRecipesObject.repId,
           insertRecipesObject.type,
