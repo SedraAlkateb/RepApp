@@ -939,6 +939,7 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<Message1Response> insertReci(
+    String recipeType,
     String repId,
     String type,
     String docId,
@@ -963,6 +964,10 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
+    _data.fields.add(MapEntry(
+      'recipeType',
+      recipeType,
+    ));
     _data.fields.add(MapEntry(
       'repId',
       repId,
@@ -1020,22 +1025,26 @@ class _AppServiceClient implements AppServiceClient {
       ));
     }
     if (image1 != null) {
-      _data.files.add(MapEntry(
-        'image1',
-        MultipartFile.fromFileSync(
-          image1.path,
-          filename: image1.path.split(Platform.pathSeparator).last,
-        ),
-      ));
+      if (image1 != null) {
+        _data.files.add(MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
     }
     if (image2 != null) {
-      _data.files.add(MapEntry(
-        'image2',
-        MultipartFile.fromFileSync(
-          image2.path,
-          filename: image2.path.split(Platform.pathSeparator).last,
-        ),
-      ));
+      if (image2 != null) {
+        _data.files.add(MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
     }
     if (brand_2 != null) {
       _data.fields.add(MapEntry(
@@ -1122,7 +1131,10 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<CopyRecResponse> copyReci(int docId) async {
+  Future<CopyRecResponse> copyReci(
+    int docId,
+    String recipeType,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -1130,6 +1142,10 @@ class _AppServiceClient implements AppServiceClient {
     _data.fields.add(MapEntry(
       'docId',
       docId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'recipeType',
+      recipeType,
     ));
     final _options = _setStreamType<CopyRecResponse>(Options(
       method: 'POST',

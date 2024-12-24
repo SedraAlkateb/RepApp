@@ -32,7 +32,7 @@ abstract class RemoteDataSource {
   Future<CheckBaseResponse> checkPlanBrand(int repPlanId);
   Future<LoginResponse> checkActivePlanBrand(int repDet);
   //
-  Future<CopyRecResponse> copyReci(int docId);
+  Future<CopyRecResponse> copyReci(int docId,String recipeType);
   //
   Future<VisitHospitalBaseResponse> getHosVisit(
     int repPlanId,
@@ -171,6 +171,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<Message1Response> insertReci(ReciRequest reciReq) async {
     return await _appServiceClient.insertReci(
+        reciReq.recipeType.toString(),
         reciReq.repId,
         reciReq.type,
         reciReq.docId,
@@ -202,8 +203,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<CopyRecResponse> copyReci(int docId) async{
-    return await _appServiceClient.copyReci(docId);
+  Future<CopyRecResponse> copyReci(int docId,String recipeType) async{
+    return await _appServiceClient.copyReci(docId,recipeType);
   }
 
   @override

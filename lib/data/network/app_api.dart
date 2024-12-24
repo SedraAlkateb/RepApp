@@ -109,6 +109,7 @@ abstract class AppServiceClient {
       );
   @POST("/reci/insertReci.php")
   Future<Message1Response> insertReci(
+      @Part(name: "recipeType") String recipeType,
       @Part(name: "repId") String repId,
       @Part(name: "type") String type,
       @Part(name: "docId") String docId,
@@ -136,5 +137,6 @@ abstract class AppServiceClient {
   @POST("/reci/copyRe.php")
   Future<CopyRecResponse> copyReci(
       @Part(name: "docId") int docId,
+      @Part(name: "recipeType") String recipeType,
       );
 }

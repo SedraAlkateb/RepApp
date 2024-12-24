@@ -27,8 +27,11 @@ class DatabaseHelper {
   // }
 
   Future<Database> _initDatabase() async {
+
+    print("getDatabasesPath()");
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'task_database.db');
+    print(dbPath);
+    final path = join(dbPath, 'task_database1.db');
     return await openDatabase(
       path,
       version: 1,

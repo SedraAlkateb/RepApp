@@ -28,7 +28,7 @@ abstract class Repository{
   Future<Either<Failure,Message1Response>>insertReci(ReciRequest reciReq);
   Future<Either<Failure,CheckReResponse>>checkRe(int repDet);
   Future<Either<Failure,List<int>>>reciNum();
-  Future<Either<Failure,CopyReciRequest>>copyReci( int docId);
+  Future<Either<Failure,CopyReciRequest>>copyReci( int docId,String recipeType);
   Future<Either<Failure,CheckRepResponse>>checkRep( int depId);
 
 }
