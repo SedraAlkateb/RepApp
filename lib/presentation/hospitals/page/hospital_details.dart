@@ -1,8 +1,13 @@
+import 'package:domina_app/app/di.dart';
+import 'package:domina_app/presentation/Recipes/pages/recipes_hospital.dart';
+import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../resources/color_manager.dart';
 
@@ -86,15 +91,73 @@ class HospitalDetails extends StatelessWidget {
                               '${hospital.rate}'),
                           Divider(thickness: 0.4,),
                           buildDetailRow(
-                              context, Icons.group, 'عدد الاطباء', hospital.totalDocs.toString()),
+                              context, Icons.group, 'عدد الأطباء', hospital.totalDocs.toString()),
                           Divider(thickness: 0.4,),
                           buildDetailRow(
-                              context, Icons.medical_services, 'الاختصاص', hospital.titleSp.toString()),
+                              context, Icons.medical_services, 'الإختصاص', hospital.titleSp.toString()),
                           Divider(thickness: 0.4,),
                           if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
                             buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
                                 hospital.note ?? ''),
+                          BlocListener<DoctorsBloc, DoctorsState>(
+                            listener: (context, state) {
+                              if (state is CheckRecipesState) {
+                                if (state.isCheck == true) {
+                                  initBrandRecModule();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecipesHospital(HospitalId: hospital.hospitalId??0,
+                                      //  docId: doctor.id,
+                                        st: state.st,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'لقد تجاوزت الحد المسموح لعدد الوصفات')),
+                                  );
+                                }
+                              }
+                              if (state is CheckRecipesErrorState) {
+                                error(context, state.failure.massage,
+                                    state.failure.code);
+                              }
+                            },
+                            child: BlocBuilder<DoctorsBloc, DoctorsState>(
+                              builder: (context, state) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed:state is CheckRecipesLoadingState?null: () {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                          // BlocProvider.of<DoctorsBloc>(context)
+                                          //     .add(CheckReciEvent(doctor.id,0));
+                                        });
+                                      },
+                                      child: Text('إنشاء وصفة'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed:state is CheckRecipesLoadingState?null: () {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                          // BlocProvider.of<DoctorsBloc>(context)
+                                          //     .add(CheckReciEvent(doctor.id,1));
+                                        });
+                                      },
+                                      child: Text('تكرار وصفة'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          )
                         ],
+
                       ),
                     ],
                   ),
