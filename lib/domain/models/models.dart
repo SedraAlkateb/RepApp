@@ -1155,6 +1155,7 @@ class StatePlan {
 }
 
 class ReciRequest {
+  int recipeType;
   String repId;
   String type;
   String docId;
@@ -1175,7 +1176,9 @@ class ReciRequest {
   String? brand_4;
 
 
-  ReciRequest(this.repId, this.type, this.docId, this.spName, this.brand_1,
+  ReciRequest(
+      this.recipeType,
+      this.repId, this.type, this.docId, this.spName, this.brand_1,
       this.address, this.phone, this.total,
 
       {this.note1,

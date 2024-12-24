@@ -44,7 +44,6 @@ Future<int?> sss() async {
     print("object");
     return 0;
   }, (data) async {
-
     if (data != null && (data.isLogin > 0)) {
 print("object");
 print(data.isLogin);
@@ -65,6 +64,30 @@ print(data.isLogin);
       UserInfo.samplesCount = data.samplesCount;
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
+if (UserInfo.isLogging != 0&&UserInfo.endDate!=null) {
+  final now = formatDateTimeFromDataTime(DateTime.now());
+  final String endDate = UserInfo.endDate ?? "";
+  if (UserInfo.endDate != null && now == formatDateTime(endDate)) {
+    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+    _showEndDateNotification();
+  }
+  String? nextDay = UserInfo.endDate != null
+      ? formatStringToDataTime(UserInfo.endDate??" ").add(Duration(days: 1)).toIso8601String()
+      : "";
+  if (UserInfo.isLogging != 5) {
+    if (now == formatDateTime(nextDay)) {
+      EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+      EditIsLoginSqlUsecase(instance());
+      (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
+              (failure) {
+
+            return 0;
+          }, (data) async {
+        UserInfo.isLogging = 5;
+      });
+    }
+  }
+}
     }
     else {
 
@@ -72,31 +95,6 @@ print(data.isLogin);
     }
     return data ?? 0;
   });
-  if (UserInfo.isLogging != 0&&UserInfo.endDate!=null) {
-    final now = formatDateTimeFromDataTime(DateTime.now());
-    final String endDate = UserInfo.endDate ?? "";
-    if (UserInfo.endDate != null && now == formatDateTime(endDate)) {
-      print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-      _showEndDateNotification();
-    }
-
-    String? nextDay = UserInfo.endDate != null
-        ? formatStringToDataTime().add(Duration(days: 1)).toIso8601String()
-        : null;
-    if (UserInfo.isLogging != 5) {
-      if (now == formatDateTime(nextDay ?? "")) {
-        EditIsLoginSqlUsecase editIsLoginSqlUsecase =
-            EditIsLoginSqlUsecase(instance());
-        (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
-            (failure) {
-
-          return 0;
-        }, (data) async {
-          UserInfo.isLogging = 5;
-        });
-      }
-    }
-  }
 
   return null;
 }

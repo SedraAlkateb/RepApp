@@ -11,8 +11,8 @@ class AllRecipesEvent extends RecipesBrandEvent {
 
 class CopyRecipesEvent extends RecipesBrandEvent {
   final int docId;
-
-  CopyRecipesEvent(this.docId);
+  final int recipeType;
+  CopyRecipesEvent(this.docId,this.recipeType);
   @override
 
   List<Object?> get props => [docId];
@@ -44,7 +44,26 @@ class InsertReciEvent extends RecipesBrandEvent {
 
   List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
 }
+class InsertReciHospitalEvent extends RecipesBrandEvent {
+  final int docId;
+  final String doctorSp ;
 
+  final String firstNote ;
+
+  final String secondNote ;
+
+  final String address ;
+
+  final String connect ;
+
+  final String specialNotes ;
+  final String phone ;
+
+  InsertReciHospitalEvent(this.doctorSp, this.firstNote, this.secondNote, this.address,
+      this.connect, this.specialNotes,this.docId,this.phone);
+
+  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+}
 class SelectTypeEvent extends RecipesBrandEvent {
   final String selectedTypeDoctor;
 

@@ -939,6 +939,7 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<Message1Response> insertReci(
+    String recipeType,
     String repId,
     String type,
     String docId,
@@ -963,6 +964,10 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
+    _data.fields.add(MapEntry(
+      'recipeType',
+      recipeType,
+    ));
     _data.fields.add(MapEntry(
       'repId',
       repId,
@@ -1122,7 +1127,10 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<CopyRecResponse> copyReci(int docId) async {
+  Future<CopyRecResponse> copyReci(
+    int docId,
+    String recipeType,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -1130,6 +1138,10 @@ class _AppServiceClient implements AppServiceClient {
     _data.fields.add(MapEntry(
       'docId',
       docId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'recipeType',
+      recipeType,
     ));
     final _options = _setStreamType<CopyRecResponse>(Options(
       method: 'POST',

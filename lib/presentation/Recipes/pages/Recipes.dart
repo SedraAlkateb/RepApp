@@ -34,7 +34,7 @@ class _RecipesPageState extends State<RecipesPage> {
     if (widget.st == 1) {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.docId));
+          .add(CopyRecipesEvent(widget.docId,1));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
 

@@ -559,10 +559,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, CopyReciRequest>> copyReci(int docId) async {
+  Future<Either<Failure, CopyReciRequest>> copyReci(int docId, String recipeType) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.copyReci(docId);
+        final response = await _remoteDataSource.copyReci(docId,recipeType);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
