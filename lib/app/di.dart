@@ -386,8 +386,10 @@ Future<void> initHospitalModule() async {
   if (!GetIt.I.isRegistered<AllHospitalSpNSqlUsecase>()) {
     instance.registerFactory<AllHospitalSpNSqlUsecase>(
         () => AllHospitalSpNSqlUsecase(instance()));
-    instance.registerFactory<CheckReciUsecase>(
-            () => CheckReciUsecase(instance()));
+    if (!GetIt.I.isRegistered<CheckReciUsecase>()) {
+      instance.registerFactory<CheckReciUsecase>(
+              () => CheckReciUsecase(instance()));
+    }
     instance.registerFactory<HospitalsBloc>(() => HospitalsBloc(instance(),instance()));
   }
 }

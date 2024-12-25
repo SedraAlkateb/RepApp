@@ -124,7 +124,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           ],
                         )
                       : SizedBox(),
-                  _noteController.text.isNotEmpty
+                  _issueController.text.isNotEmpty
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -151,7 +151,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           ],
                         )
                       : SizedBox(),
-                  _issueController.text.isNotEmpty
+                  _noteController.text.isNotEmpty
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
