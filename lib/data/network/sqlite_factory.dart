@@ -16,16 +16,13 @@ class DatabaseHelper {
     return _database!;
   }
 
-  // Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-  //   if (oldVersion < newVersion) {
-  //     if (oldVersion == 2) {
-  //       await db.execute('''
-  //       ALTER TABLE specialization ADD COLUMN sumBrandHospital INTEGER NOT NULL DEFAULT 0
-  //     ''');
-  //     }
-  //   }
-  // }
-
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+      ALTER TABLE rep ADD COLUMN repType TEXT NOT NULL DEFAULT '';
+    ''');
+    }
+  }
   Future<Database> _initDatabase() async {
 
     print("getDatabasesPath()");
@@ -34,8 +31,8 @@ class DatabaseHelper {
     final path = join(dbPath, 'task_database1.db');
     return await openDatabase(
       path,
-      version: 1,
-      //   onUpgrade: _onUpgrade,
+      version: 2,
+      onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
@@ -54,6 +51,7 @@ class DatabaseHelper {
     flag INTEGER NOT NULL DEFAULT 0,
     flag1 INTEGER NOT NULL DEFAULT 0,
     name TEXT NOT NULL,
+    repType TEXT NOT NULL,
     percentage INTEGER NOT NULL,
     samplesCount INTEGER NOT NULL,
     recipesCount INTEGER NOT NULL DEFAULT 0,

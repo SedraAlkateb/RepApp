@@ -34,10 +34,9 @@ class _RecipesPageState extends State<RecipesPage> {
     if (widget.st == 1) {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.docId,1));
+          .add(CopyRecipesEvent(widget.docId, 1));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
-
     }
 
     super.initState();
@@ -61,9 +60,11 @@ class _RecipesPageState extends State<RecipesPage> {
       ),
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
-          if((state is RecipesRecipesErrorState)&&(widget.st == 1)){
+          if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             print("sddddddddddddddddddd");
-            return Center(child: errorFullScreenWidget(context, " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
+            return Center(
+                child: errorFullScreenWidget(
+                    context, " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
           }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =
@@ -199,7 +200,8 @@ class _RecipesPageState extends State<RecipesPage> {
                             BrandRes brand = value;
                             BlocProvider.of<RecipesBrandBloc>(context).add(
                                 SelectBrandEvent(
-                                    brandRecipeModel: brand, index: 1));
+                                    brandRecipeModel: brand,
+                                    index: 1));
                           },
                           validator: (value) {
                             if (value == null) {
@@ -491,8 +493,7 @@ class _RecipesPageState extends State<RecipesPage> {
                                                               0.15,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      :
-                                                (  context
+                                                      : (context
                                                                   .watch<
                                                                       RecipesBrandBloc>()
                                                                   .isChecked1 !=
@@ -638,8 +639,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
-                                            print("object12");
-                                            print(value);
+                                                  print("object12");
+                                                  print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
                                                           context)
@@ -830,8 +831,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
-                                            print("object21");
-                                            print(value);
+                                                  print("object21");
+                                                  print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
                                                           context)
@@ -858,8 +859,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                                   2
                                               ? null
                                               : (int? value) {
-                                            print("object22");
-                                          print(value);
+                                                  print("object22");
+                                                  print(value);
                                                   BlocProvider.of<
                                                               RecipesBrandBloc>(
                                                           context)
