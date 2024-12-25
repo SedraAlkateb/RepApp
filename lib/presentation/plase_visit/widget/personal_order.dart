@@ -30,8 +30,8 @@ class PersonalOrder extends StatelessWidget {
           prefixIcon: null,
           onChanged: (value) {
             noteeController.text = "";
-            BlocProvider.of<VisitPlaceBloc>(context).br = "";
-            BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
+            BlocProvider.of<VisitPlaceBloc>(context).br="";
+            BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand=[];
             BlocProvider.of<VisitPlaceBloc>(context)
                 .add(TypeAdditionEvent(value));
           },
@@ -46,9 +46,7 @@ class PersonalOrder extends StatelessWidget {
           padding: const EdgeInsets.only(top: AppPadding.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
-              return current is BoxState ||
-                  current is DropDownState ||
-                  current is NothingState;
+              return current is BoxState || current is DropDownState ||current is NothingState;
             },
             builder: (context, state) {
               if (state is BoxState) {
@@ -378,9 +376,7 @@ class PersonalOrder extends StatelessWidget {
                   ],
                 );
               }
-              if (state is NothingState) {
-                return SizedBox();
-              }
+              if (state is NothingState){return SizedBox();}
               return SizedBox();
             },
           ),

@@ -48,7 +48,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   String br = "";
   int isScience = 0;
   bool isBrand = false;
-  Type type = Type(0, "لا شيئ");
+  Type type = Type(2, "لا شيئ");
   VisitPlaceBloc(
       //    this.pharmaciesByPlaceUsecase,
       this.allBrandsFlagSqlUsecase,
@@ -291,7 +291,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         }
         not = event.type.name;
         br = "";
-      } else if (event is SearchDoctorVisitEvent) {
+      } else if (event is SearchDoctorVisitEvent)
+      {
         String search = normalizeText(event.value);
         doctorSearchModel = doctors.where((doctorValue) {
           if (normalizeText(doctorValue.title).contains(search)) {

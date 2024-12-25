@@ -35,6 +35,7 @@ class _VisitHospitalState extends State<VisitHospital>
     BlocProvider.of<VisitPlaceBloc>(context)
         .add(SpecializationHospitalEvent(widget.hospitalModel.id));
     BlocProvider.of<VisitPlaceBloc>(context).isBrand = false;
+    BlocProvider.of<VisitPlaceBloc>(context).type = Type(2, "لا شيئ");
     super.initState();
   }
 
