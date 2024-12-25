@@ -94,74 +94,9 @@ class _RecipesPageState extends State<RecipesHospital> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    activeColor: ColorManager.secondaryColor2,
-                                    value: '0',
-                                    groupValue: context
-                                        .watch<RecipesBrandBloc>()
-                                        .insertRecipesObject
-                                        .type,
-                                    onChanged: (value) {
-                                      BlocProvider.of<RecipesBrandBloc>(context)
-                                          .add(SelectTypeEvent(value ?? "0"));
-                                    },
-                                  ),
-                                  const Text('الدكتور'),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    activeColor: ColorManager.secondaryColor2,
-                                    value: '1',
-                                    groupValue: context
-                                        .watch<RecipesBrandBloc>()
-                                        .insertRecipesObject
-                                        .type,
-                                    onChanged: (value) {
-                                      BlocProvider.of<RecipesBrandBloc>(context)
-                                          .add(SelectTypeEvent(value ?? "0"));
-                                    },
-                                  ),
-                                  const Text('الدكتورة'),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    activeColor: ColorManager.secondaryColor2,
-                                    value: '2',
-                                    groupValue: context
-                                        .watch<RecipesBrandBloc>()
-                                        .insertRecipesObject
-                                        .type,
-                                    onChanged: (value) {
-                                      BlocProvider.of<RecipesBrandBloc>(context)
-                                          .add(SelectTypeEvent(value ?? "0"));
-                                    },
-                                  ),
-                                  const Text('لاشيء'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+
                     SizedBox(height: 10),
-                    Text('اختصاص الطبيب'),
+                    Text('الإختصاص'),
                     BoxTextField(
                       inputFormatters: [],
                       controller: _doctorSpController,
