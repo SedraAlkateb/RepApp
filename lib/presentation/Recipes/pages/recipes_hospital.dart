@@ -94,81 +94,16 @@ class _RecipesPageState extends State<RecipesHospital> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    activeColor: ColorManager.secondaryColor2,
-                                    value: '0',
-                                    groupValue: context
-                                        .watch<RecipesBrandBloc>()
-                                        .insertRecipesObject
-                                        .type,
-                                    onChanged: (value) {
-                                      BlocProvider.of<RecipesBrandBloc>(context)
-                                          .add(SelectTypeEvent(value ?? "0"));
-                                    },
-                                  ),
-                                  const Text('الدكتور'),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    activeColor: ColorManager.secondaryColor2,
-                                    value: '1',
-                                    groupValue: context
-                                        .watch<RecipesBrandBloc>()
-                                        .insertRecipesObject
-                                        .type,
-                                    onChanged: (value) {
-                                      BlocProvider.of<RecipesBrandBloc>(context)
-                                          .add(SelectTypeEvent(value ?? "0"));
-                                    },
-                                  ),
-                                  const Text('الدكتورة'),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    activeColor: ColorManager.secondaryColor2,
-                                    value: '2',
-                                    groupValue: context
-                                        .watch<RecipesBrandBloc>()
-                                        .insertRecipesObject
-                                        .type,
-                                    onChanged: (value) {
-                                      BlocProvider.of<RecipesBrandBloc>(context)
-                                          .add(SelectTypeEvent(value ?? "0"));
-                                    },
-                                  ),
-                                  const Text('لاشيء'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+
                     SizedBox(height: 10),
-                    Text('اختصاص الطبيب'),
+                    Text('الإختصاص'),
                     BoxTextField(
                       inputFormatters: [],
                       controller: _doctorSpController,
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "يرجى إدخال اختصاص الطبيب";
+                          return "يرجى إدخال الإختصاص ";
                         }
                         return null;
                       },
@@ -178,39 +113,54 @@ class _RecipesPageState extends State<RecipesHospital> {
                       prefixIcon: null,
                     ),
                     Text('المستحضر الأول'),
-                    BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
-                      builder: (context, state) {
-                        return DropDownRecipesSearch(
-                          brandRes: context
-                              .watch<RecipesBrandBloc>()
-                              .insertRecipesObject
-                              .brand_1,
-                          hintText: (state is AllRecipesLoadingState ||
+                    FormField<BrandRes>(
+                      validator: (value) {
+                        if (value == null) {
+                          return "يرجى اختيار المستحضر الأول";
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<BrandRes?> state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DropDownRecipesSearch(
+                              brandRes: context
+                                  .watch<RecipesBrandBloc>()
+                                  .insertRecipesObject
+                                  .brand_1,
+                              hintText: (state is AllRecipesLoadingState ||
                                   state is AllNumLoadingState)
-                              ? 'loading'
-                              : widget.st == 1
+                                  ? 'loading'
+                                  : widget.st == 1
                                   ? context
-                                      .watch<RecipesBrandBloc>()
-                                      .insertRecipesObject
-                                      .brand_1
-                                      .title_en
+                                  .watch<RecipesBrandBloc>()
+                                  .insertRecipesObject
+                                  .brand_1
+                                  .title_en
                                   : 'اختر المستحضر',
-                          items: context.watch<RecipesBrandBloc>().brandRecs,
-                          onChanged: (value) {
-                            BrandRes brand = value;
-                            BlocProvider.of<RecipesBrandBloc>(context).add(
-                                SelectBrandEvent(
-                                    brandRecipeModel: brand, index: 1));
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return "يرجى اختيار المستحضر الأول";
-                            }
-                            return null;
-                          },
+                              items: context.watch<RecipesBrandBloc>().brandRecs,
+                              onChanged: (value) {
+                                BrandRes brand = value;
+                                state.didChange(brand);
+                                BlocProvider.of<RecipesBrandBloc>(context).add(
+                                    SelectBrandEvent(
+                                        brandRecipeModel: brand, index: 1));
+                              }, validator: (value) {return null;  },
+                            ),
+                            if (state.hasError)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  state.errorText ?? '',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                          ],
                         );
                       },
                     ),
+
                     SizedBox(height: 5),
                     Text('المستحضر الثاني'),
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
