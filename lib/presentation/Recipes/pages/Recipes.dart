@@ -178,40 +178,54 @@ class _RecipesPageState extends State<RecipesPage> {
                       prefixIcon: null,
                     ),
                     Text('المستحضر الأول'),
-                    BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
-                      builder: (context, state) {
-                        return DropDownRecipesSearch(
-                          brandRes: context
-                              .watch<RecipesBrandBloc>()
-                              .insertRecipesObject
-                              .brand_1,
-                          hintText: (state is AllRecipesLoadingState ||
+                    FormField<BrandRes>(
+                      validator: (value) {
+                        if (value == null) {
+                          return "يرجى اختيار المستحضر الأول";
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<BrandRes?> state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DropDownRecipesSearch(
+                              brandRes: context
+                                  .watch<RecipesBrandBloc>()
+                                  .insertRecipesObject
+                                  .brand_1,
+                              hintText: (state is AllRecipesLoadingState ||
                                   state is AllNumLoadingState)
-                              ? 'loading'
-                              : widget.st == 1
+                                  ? 'loading'
+                                  : widget.st == 1
                                   ? context
-                                      .watch<RecipesBrandBloc>()
-                                      .insertRecipesObject
-                                      .brand_1
-                                      .title_en
+                                  .watch<RecipesBrandBloc>()
+                                  .insertRecipesObject
+                                  .brand_1
+                                  .title_en
                                   : 'اختر المستحضر',
-                          items: context.watch<RecipesBrandBloc>().brandRecs,
-                          onChanged: (value) {
-                            BrandRes brand = value;
-                            BlocProvider.of<RecipesBrandBloc>(context).add(
-                                SelectBrandEvent(
-                                    brandRecipeModel: brand,
-                                    index: 1));
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return "يرجى اختيار المستحضر الأول";
-                            }
-                            return null;
-                          },
+                              items: context.watch<RecipesBrandBloc>().brandRecs,
+                              onChanged: (value) {
+                                BrandRes brand = value;
+                                state.didChange(brand); // لتحديث القيمة داخل النموذج
+                                BlocProvider.of<RecipesBrandBloc>(context).add(
+                                    SelectBrandEvent(
+                                        brandRecipeModel: brand, index: 1));
+                              }, validator: (value) { return null; },
+                            ),
+                            if (state.hasError)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  state.errorText ?? '',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                          ],
                         );
                       },
                     ),
+
                     SizedBox(height: 5),
                     Text('المستحضر الثاني'),
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
