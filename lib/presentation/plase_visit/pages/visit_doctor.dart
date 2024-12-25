@@ -29,10 +29,12 @@ class _VisitDoctorState extends State<VisitDoctor>
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    _noteeController.text="";
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     BlocProvider.of<VisitPlaceBloc>(context).isBrand = false;
+    BlocProvider.of<VisitPlaceBloc>(context).type = Type(2, "لا شيئ");
     super.initState();
   }
 
