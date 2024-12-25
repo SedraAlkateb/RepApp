@@ -1,3 +1,4 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital_view_details.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
@@ -18,7 +19,7 @@ class VisitHospital extends StatefulWidget {
   @override
   State<VisitHospital> createState() => _VisitHospitalState();
 }
- 
+
 class _VisitHospitalState extends State<VisitHospital>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _noteController = TextEditingController();
@@ -74,27 +75,27 @@ class _VisitHospitalState extends State<VisitHospital>
                                   color: ColorManager.white))),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                              HospitalViewDetails(hospital: widget.hospitalModel,
-                                  hospitalsp: context.read<VisitPlaceBloc>().specialization),));
+                          initHospitalModule();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HospitalViewDetails(
+                                    hospital: widget.hospitalModel,
+                                    hospitalsp: context
+                                        .read<VisitPlaceBloc>()
+                                        .specialization),
+                              ));
                         },
                         child: Container(
-                          padding:
-                              EdgeInsets.all(10), 
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors
-                                .transparent, 
-                            shape: BoxShape
-                                .rectangle,
+                            color: Colors.transparent,
+                            shape: BoxShape.rectangle,
                             border: Border.all(
-                              color: ColorManager
-                                  .secondaryColor2, 
+                              color: ColorManager.secondaryColor2,
                               width: 2.0,
-                              
                             ),
-                            borderRadius: BorderRadius.circular(
-                                10),
-                                 
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             widget.hospitalModel.title,
@@ -104,9 +105,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                 .titleMedium
                                 ?.copyWith(
                                   color: Colors.white,
-                                 
-                                  fontWeight: FontWeight.bold, 
-                                 
+                                  fontWeight: FontWeight.bold,
                                 ),
                           ),
                         ),
@@ -136,36 +135,34 @@ class _VisitHospitalState extends State<VisitHospital>
                       height: 0.9,
                     ),
                     BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
-                      listener: (context, state) {
-                        if (state is BrandFlagErrorState) {
-                          error(context, state.failure.massage,
-                              state.failure.code);
-                        }
-                      },
-                      builder: (context, state)
-                         {
-                           List<SpecHospitalSp> specialization=context.watch<VisitPlaceBloc>().specialization;
-                           if(state is SpecializationHospitalState){
-                             specialization  =state.specialization;
-                           }
-                           return  Customdropdownsearchspec(
-                             hintText: "الإختصاصات",
-                             items: specialization,
-                             onChanged: (value) {
-                               SpecHospitalSp specModel = value;
-                               BlocProvider.of<VisitPlaceBloc>(context)
-                                   .add(SelectSpecEvent(specModel));
-                             },
-                             validator: (value) {
-                               if (value == null) {
-                                 return "اختر الإختصاص";
-                               }
-                               return null;
-                             },
-                             errorText: 'لايوجد نتيجة',
-                           );
-                         }
-                    ),
+                        listener: (context, state) {
+                      if (state is BrandFlagErrorState) {
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      }
+                    }, builder: (context, state) {
+                      List<SpecHospitalSp> specialization =
+                          context.watch<VisitPlaceBloc>().specialization;
+                      if (state is SpecializationHospitalState) {
+                        specialization = state.specialization;
+                      }
+                      return Customdropdownsearchspec(
+                        hintText: "الإختصاصات",
+                        items: specialization,
+                        onChanged: (value) {
+                          SpecHospitalSp specModel = value;
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(SelectSpecEvent(specModel));
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return "اختر الإختصاص";
+                          }
+                          return null;
+                        },
+                        errorText: 'لايوجد نتيجة',
+                      );
+                    }),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       buildWhen: (previous, current) {
                         return current is SpecState;
@@ -187,7 +184,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                 Text(
                                   "تمت الزيارة: ${state.visited}",
                                   style:
-                                  Theme.of(context).textTheme.headlineLarge,
+                                      Theme.of(context).textTheme.headlineLarge,
                                 ),
                                 Text(
                                   "عدد الأطباء: ${state.total}",
@@ -272,7 +269,7 @@ class _VisitHospitalState extends State<VisitHospital>
                             Checkbox(
                               focusColor: ColorManager.secondaryColor,
                               activeColor: ColorManager.secondaryColor2,
-                              value: context.read<VisitPlaceBloc>().isBrand ,
+                              value: context.read<VisitPlaceBloc>().isBrand,
                               onChanged: (value) {
                                 BlocProvider.of<VisitPlaceBloc>(context)
                                     .add(IsBrandEvent());
@@ -286,41 +283,43 @@ class _VisitHospitalState extends State<VisitHospital>
                     SizedBox(
                       height: AppSize.s8,
                     ),
-                    context.read<VisitPlaceBloc>().isBrand==false?
-                    BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                      listener: (context, state) {
-                        if (state is BrandFlagErrorState) {
-                          error(context, state.failure.massage,
-                              state.failure.code);
-                        }
-                      },
-                      child: CustomDropDownSearch(
-                        hintText: "العينات",
-                        items: context.watch<VisitPlaceBloc>().bandFlag,
-                        onChanged: (value) {
-                          BrandModel brand = value;
-                          BlocProvider.of<VisitPlaceBloc>(context).add(
-                              SelectBrandEvent(brand, widget.hospitalModel.id));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "اختر نوع الطلب";
-                          }
-                          return null;
-                        },
-                        errorText: 'لايوجد نتيجة',
-                      ),
-                    ):SizedBox(),
+                    context.read<VisitPlaceBloc>().isBrand == false
+                        ? BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                            listener: (context, state) {
+                              if (state is BrandFlagErrorState) {
+                                error(context, state.failure.massage,
+                                    state.failure.code);
+                              }
+                            },
+                            child: CustomDropDownSearch(
+                              hintText: "العينات",
+                              items: context.watch<VisitPlaceBloc>().bandFlag,
+                              onChanged: (value) {
+                                BrandModel brand = value;
+                                BlocProvider.of<VisitPlaceBloc>(context).add(
+                                    SelectBrandEvent(
+                                        brand, widget.hospitalModel.id));
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return "اختر نوع الطلب";
+                                }
+                                return null;
+                              },
+                              errorText: 'لايوجد نتيجة',
+                            ),
+                          )
+                        : SizedBox(),
                     SizedBox(
                       height: 8,
                     ),
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       buildWhen: (previous, current) {
-                        return current is SelectBrandState || current is DeleteBrandState ||current is EditAmountBrandState;
-
+                        return current is SelectBrandState ||
+                            current is DeleteBrandState ||
+                            current is EditAmountBrandState;
                       },
                       builder: (context, state) {
-
                         final selectBrand =
                             context.watch<VisitPlaceBloc>().selectBrand;
                         final visitBrand =
@@ -537,14 +536,15 @@ class _VisitHospitalState extends State<VisitHospital>
                               // String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
                               VisitHospitalModel visitHospitalModel =
                                   VisitHospitalModel(
-                                      0,
-                                      now.toIso8601String(),
-                                      _issueController.text,
-                                      _noteController.text,
-                                      _noteeController.text,
-                                      0,
-                                      0,
-                                    _targetController.text,);
+                                0,
+                                now.toIso8601String(),
+                                _issueController.text,
+                                _noteController.text,
+                                _noteeController.text,
+                                0,
+                                0,
+                                _targetController.text,
+                              );
                               if (context
                                   .read<VisitPlaceBloc>()
                                   .selectBrand
