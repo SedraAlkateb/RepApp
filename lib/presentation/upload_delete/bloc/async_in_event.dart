@@ -33,3 +33,9 @@ final  int num;
 
 }
 
+class GetEvent extends AsyncInEvent{
+
+  @override
+  List<Object?> get props => [];
+
+}

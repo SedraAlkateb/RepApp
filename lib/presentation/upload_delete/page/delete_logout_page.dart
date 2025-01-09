@@ -43,7 +43,7 @@ class DeleteLogoutPage extends StatelessWidget {
                     error(context, state.failure.massage, state.failure.code);
                   }
                   if (state is EditStatusState) {
-                    success(context);
+                  //  success(context);
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       Routes.login,

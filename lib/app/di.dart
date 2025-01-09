@@ -1,6 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:domina_app/app/app_preferences.dart';
 import 'package:domina_app/data/data_source/remote_data_source.dart';
 import 'package:domina_app/data/network/app_api.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
@@ -70,7 +69,8 @@ import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
-import 'package:domina_app/domain/usecase/update_flag_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_flag_doctor_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/update_flag_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
 import 'package:domina_app/domain/usecase/update_save_sql_usecase.dart';
@@ -91,29 +91,19 @@ import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt instance = GetIt.instance;
 Future<void> initAppModule() async {
-  //app module itd a module where are put all generic dependencies
-  //shared prefs instance
-  final sharedPrefs = await SharedPreferences.getInstance();
-  instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
-  //app prefs instance
-  instance
-      .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
-  //network info instance
+
   instance.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(Connectivity()));
-  instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
+  instance.registerLazySingleton<DioFactory>(() => DioFactory());
   Dio dio = await instance<DioFactory>().getDio();
   DatabaseHelper databaseHelper = DatabaseHelper();
   instance.registerLazySingleton<AppSqlApi>(() => AppSqlApi(databaseHelper));
   await instance<AppSqlApi>().initializeDatabase();
-  instance
-      .registerLazySingleton<RepositorySql>(() => RepositroySqlImp(instance()));
+  instance.registerLazySingleton<RepositorySql>(() => RepositroySqlImp(instance()));
   instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
-
   //remote data source
   instance.registerLazySingleton<RemoteDataSource>(
       () => RemoteDataSourceImpl(instance<AppServiceClient>()));
@@ -320,8 +310,10 @@ Future<void> initAsyncInModule() async {
         .registerFactory<IsPlanSqlUsecase>(() => IsPlanSqlUsecase(instance()));
     instance
         .registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
-    instance.registerFactory<UpdateFlagSqlUsecase>(
-        () => UpdateFlagSqlUsecase(instance()));
+    instance.registerFactory<UpdateFlagDoctorSqlUsecase>(
+        () => UpdateFlagDoctorSqlUsecase(instance()));
+    instance.registerFactory<UpdateFlagHospitalSqlUsecase>(
+            () => UpdateFlagHospitalSqlUsecase(instance()));
     if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
       instance.registerFactory<DeleteAllSqlUsecase>(
           () => DeleteAllSqlUsecase(instance()));
@@ -347,6 +339,7 @@ Future<void> initAsyncInModule() async {
     }
 
     instance.registerFactory<AsyncInBloc>(() => AsyncInBloc(
+        instance(),
         instance(),
         instance(),
         instance(),

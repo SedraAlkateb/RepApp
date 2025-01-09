@@ -4,9 +4,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:domina_app/app/app_preferences.dart';
 import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/error_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -21,8 +21,7 @@ const String AUTHORIZATION="authorization";
 const String DEFAULT_LANGUAGE="lang";
 
 class DioFactory{
-  final AppPreferences _appPreferences;
-  DioFactory(this._appPreferences);
+  DioFactory();
 
   Future<Dio> getDio() async {
     Dio dio= Dio();
@@ -32,7 +31,7 @@ class DioFactory{
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
-    String  to=await _appPreferences.getToken()??"";
+    String  to=UserInfo.token??"";
     String token ="Bearer " + to;
     String language ="ar";
 
@@ -66,7 +65,6 @@ class DioFactory{
 }
 
 class MyApiInterceptor extends Interceptor {
-  final AppPreferences _appPreferences =instance<AppPreferences>();
   @override
   Future<void> onRequest(
       RequestOptions options,
@@ -74,7 +72,7 @@ class MyApiInterceptor extends Interceptor {
       ) async {
     // Add the token to the request headers
 
-    String? authToken =await _appPreferences.getToken();
+    String? authToken =UserInfo.token;
     String lang ="en";
 
     if (authToken != null) {

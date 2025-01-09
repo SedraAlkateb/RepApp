@@ -909,6 +909,7 @@ class LoginModel {
   String? otherStartDate;
   String? otherEndDate;
   int flag1;
+
   LoginModel(
       this.samplesCount,
       this.token,

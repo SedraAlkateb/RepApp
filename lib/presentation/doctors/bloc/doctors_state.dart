@@ -35,6 +35,7 @@ final class AllDoctorEmptyState extends DoctorsState{
   List<Object?> get props =>[];
 
 }
+
 final class CheckRecipesState extends DoctorsState {
   final bool isCheck;
   final int st;
