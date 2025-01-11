@@ -19,7 +19,7 @@ class _MyLoginState extends State<MyLogin> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
-  bool _isObscured = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,36 +56,47 @@ class _MyLoginState extends State<MyLogin> {
                           decoration: InputDecoration(
                             fillColor: Colors.grey.shade100,
                             filled: true,
-                            hintText: "الاسم",
+                            hintText: "الإسم",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
                         SizedBox(height: 30),
-                        TextFormField(
-                          controller: password,
-                          validator: (val) => val!.length < 2 ? "كلمة السر يجب ان تكون أطول من 2" : null,
-                          style: TextStyle(),
-                          obscureText: _isObscured,
-                          decoration: InputDecoration(
-                            fillColor: Colors.grey.shade100,
-                            filled: true,
-                            hintText: "كلمة السر",
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _isObscured ? Icons.visibility : Icons.visibility_off, // تغيير الأيقونة حسب الحالة
+                        BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            bool isObscured = true;
+                            if (state is ShowPasswordState) {
+                              isObscured = state.isObscured;
+                            }
+
+                            return TextFormField(
+                              controller: password,
+                              validator: (val) =>
+                              val!.length < 2 ? "كلمة السر يجب ان تكون أطول من 2" : null,
+                              style: TextStyle(),
+                              obscureText: isObscured,
+                              decoration: InputDecoration(
+                                fillColor: Colors.grey.shade100,
+                                filled: true,
+                                hintText: "كلمة السر",
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    isObscured
+                                        ? Icons.visibility
+                                        : Icons.visibility_off, // تغيير الأيقونة حسب الحالة
+                                  ),
+                                  onPressed: () {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(ShowPasswordEvent(!isObscured));
+                                  },
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _isObscured = !_isObscured; // تغيير حالة الإظهار/الإخفاء
-                                });
-                              },
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                         SizedBox(height: 40),
                         Row(
@@ -93,7 +104,8 @@ class _MyLoginState extends State<MyLogin> {
                           children: [
                             Text(
                               'تسجيل الدخول',
-                              style: TextStyle(fontSize: 27, fontWeight: FontWeight.w700),
+                              style:
+                              TextStyle(fontSize: 27, fontWeight: FontWeight.w700),
                             ),
                             BlocListener<AuthBloc, AuthState>(
                               listener: (context, state) {
@@ -101,11 +113,13 @@ class _MyLoginState extends State<MyLogin> {
                                   loading(context);
                                 }
                                 if (state is LoginState) {
-                                  BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
+                                  BlocProvider.of<AuthBloc>(context)
+                                      .add(LoginInsertEvent());
                                 }
                                 if (state is InsertLoginState) {
                                   success(context);
-                                  Navigator.pushNamedAndRemoveUntil(context, Routes.syncData, (route) => false);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, Routes.syncData, (route) => false);
                                 }
                                 if (state is LoginErrorState) {
                                   error(context, state.failure.massage, state.failure.code);
@@ -121,7 +135,8 @@ class _MyLoginState extends State<MyLogin> {
                                   color: Colors.white,
                                   onPressed: () {
                                     if (formKey.currentState!.validate()) {
-                                      BlocProvider.of<AuthBloc>(context).add(LoginEvent(userName.text, password.text));
+                                      BlocProvider.of<AuthBloc>(context)
+                                          .add(LoginEvent(userName.text, password.text));
                                       formKey.currentState!.save();
                                     }
                                   },

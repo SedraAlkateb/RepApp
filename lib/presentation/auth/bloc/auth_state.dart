@@ -86,3 +86,11 @@ final class DeleteState extends AuthState {
 
   List<Object?> get props =>[];
 }
+
+final class ShowPasswordState extends AuthState {
+  final bool isObscured;
+  ShowPasswordState({ required this.isObscured});
+
+  @override
+  List<Object?> get props => [isObscured];
+}
