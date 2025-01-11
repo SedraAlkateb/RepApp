@@ -19,7 +19,7 @@ class _MyLoginState extends State<MyLogin> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
-
+  bool _isObscured = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +67,21 @@ class _MyLoginState extends State<MyLogin> {
                           controller: password,
                           validator: (val) => val!.length < 2 ? "كلمة السر يجب ان تكون أطول من 2" : null,
                           style: TextStyle(),
-                          obscureText: true,
+                          obscureText: _isObscured,
                           decoration: InputDecoration(
                             fillColor: Colors.grey.shade100,
                             filled: true,
                             hintText: "كلمة السر",
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isObscured ? Icons.visibility : Icons.visibility_off, // تغيير الأيقونة حسب الحالة
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isObscured = !_isObscured; // تغيير حالة الإظهار/الإخفاء
+                                });
+                              },
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
