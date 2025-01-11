@@ -46,7 +46,7 @@ class DeletePage extends StatelessWidget {
                   }
                   if(state is EditStatusState){
                     print("object");
-                    success(context);
+                   // success(context);
                     Navigator.pushNamedAndRemoveUntil(context, Routes.syncData,(route) => false,);
                   }
                   if(state is DeleteBaseState){

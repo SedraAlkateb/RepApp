@@ -44,19 +44,8 @@ class AsyncPage extends StatelessWidget {
                     loading(context);
                   }
                   if (state is SyncData1State) {
-                    BlocProvider.of<AsyncInBloc>(context)
-                        .add(UpdateFlagEvent());
-                  }
-                  if (state is UpdateFlagErrorState) {
-                    error(context, state.failure.massage, state.failure.code);
-                  }
-                  // if (state is UpdateFlagState) {
-                  //   BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
-                  // }
-                  // if (state is EditStatusSErrorState) {
-                  //   error(context, state.failure.massage, state.failure.code);
-                  // }
-                  if (state is UpdateFlagState) {
+                    // BlocProvider.of<AsyncInBloc>(context)
+                    //     .add(UpdateFlagEvent());
                     success(context);
                     Navigator.pushReplacementNamed(
                       context,
@@ -64,15 +53,30 @@ class AsyncPage extends StatelessWidget {
                     );
                     BlocProvider.of<AsyncInBloc>(context).add(AsyncInBaseEvent());
                   }
+                  if (state is GetState) {
+                    BlocProvider.of<AsyncInBloc>(context)
+                        .add(GetEvent());
+                  }
+                  // if (state is UpdateFlagErrorState) {
+                  //   error(context, state.failure.massage, state.failure.code);
+                  // }
+                  // if (state is UpdateFlagState) {
+                  //   BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
+                  // }
+                  // if (state is EditStatusSErrorState) {
+                  //   error(context, state.failure.massage, state.failure.code);
+                  // }
+                  // if (state is UpdateFlagState) {
+                  //   success(context);
+                  //   Navigator.pushReplacementNamed(
+                  //     context,
+                  //     Routes.delete,
+                  //   );
+                  //   BlocProvider.of<AsyncInBloc>(context).add(AsyncInBaseEvent());
+                  // }
                 },
                 child: ElevatedButton(
                     onPressed: () {
-                      print(UserInfo.flag1);
-                      print("UserInfo.flag1");
-                      print(UserInfo.flag);
-                      print("UserInfo.flag");
-                      print(UserInfo.otherstatus);
-                      print("UserInfo.otherstatus");
                       BlocProvider.of<AsyncInBloc>(context)
                           .add(Async1DataEvent());
                     },

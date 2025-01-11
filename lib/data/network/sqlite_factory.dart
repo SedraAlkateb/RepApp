@@ -51,7 +51,7 @@ class DatabaseHelper {
     flag INTEGER NOT NULL DEFAULT 0,
     flag1 INTEGER NOT NULL DEFAULT 0,
     name TEXT NOT NULL,
-    repType TEXT NOT NULL,
+    repType TEXT ,
     percentage INTEGER NOT NULL,
     samplesCount INTEGER NOT NULL,
     recipesCount INTEGER NOT NULL DEFAULT 0,
@@ -166,6 +166,7 @@ class DatabaseHelper {
     doctorId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     target TEXT NOT NULL,
+    UNIQUE (science,kaswn),
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
  ''');
@@ -179,6 +180,7 @@ class DatabaseHelper {
     hospitalSpId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
      target TEXT NOT NULL,
+     UNIQUE (science,kaswn),
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
 );
 ''');

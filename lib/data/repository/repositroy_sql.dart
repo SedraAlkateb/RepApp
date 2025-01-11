@@ -618,17 +618,26 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> updateSpecifiedFlagsToOne(
-      bool hos, bool doc) async {
+  Future<Either<Failure, bool>> updateFlagsToDoctor() async {
     try {
       final response =
-          await _databaseHelper.updateSpecifiedFlagsToOne(hos, doc);
+          await _databaseHelper.updateFlagsToDoctor();
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e).failure);
     }
   }
 
+  @override
+  Future<Either<Failure, bool>> updateFlagsToHospital() async {
+    try {
+      final response =
+      await _databaseHelper.updateFlagsToHospital();
+      return Right(response);
+    } catch (e) {
+      return Left(ErrorHandler.handle(e).failure);
+    }
+  }
   @override
   Future<Either<Failure, Null>> updateOtherStatus(
       int repId, int status, List<OtherBrandSpPlanModel> planBrands) async {

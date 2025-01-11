@@ -112,7 +112,9 @@ abstract class RepositorySql {
       getAllHospitalSpecialization();
   Future<Either<Failure, Null>> updateAmounts(
       List<OtherBrandSpPlanModel> planBrands);
-  Future<Either<Failure, Null>> updateSpecifiedFlagsToOne(bool hos, bool doc);
+  Future<Either<Failure, bool>>   updateFlagsToDoctor();
+  Future<Either<Failure, bool>>updateFlagsToHospital();
+
   Future<Either<Failure, Null>> updateOtherStatus(
       int repId , int status ,List<OtherBrandSpPlanModel> planBrands);
   Future<Either<Failure, List<BrandSpPlanModel>>> planBrandByRepPlanId(

@@ -134,6 +134,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             emit(SyncDataErrorState(failure: brandsFailureOrSuccess));
             return false;
           }
+
           brands = brandsFailureOrSuccess as List<BrandModel>;
           emit(LoadingState(1));
           final visitDoctorResult = await getVisitDoctorUsecase.execute(
@@ -170,8 +171,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
             print("Sedra");
           }
-          emit(LoadingState(4));
+
           try {
+            emit(LoadingState(4));
             final doctorsResult =
                 await allDoctorUsecase.execute(UserInfo.repId);
             final doctorsFailureOrSuccess =
@@ -181,12 +183,12 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
               return false;
             }
             doctors = doctorsFailureOrSuccess as List<DoctorModel>;
-            emit(LoadingState(5));
+           // emit(LoadingState(5));
           } catch (e) {
             emit(SyncDataErrorState(failure: Failure(2, e.toString())));
           }
           /////////////////////////////////////////////////
-
+          emit(LoadingState(5));
           final hospitalsResult =
               await allhospitalUsecase.execute(UserInfo.repId);
           final hospitalsFailureOrSuccess =
@@ -282,7 +284,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         }, (data) async {
           emit(DeleteAllState());
         });
-      } else if (event is EditEvent) {
+      }
+      else if (event is EditEvent) {
         (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
             (failure) {
           emit(EditStatusDErrorState(failure: failure));

@@ -13,7 +13,7 @@ class UserInfo{
   static String? otherStartDate=" ";
   static String? otherEndDate=" ";
   static int samplesCount = 2;
-  static int flag = 0; ///==1 arsaltoh        /////////////////////
+  static int flag = 0; ///==1 arsaltoh
   static int recipesCount = -1;
   static int visits = -1;
   static int visited = -1;

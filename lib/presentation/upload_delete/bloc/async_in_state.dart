@@ -86,3 +86,10 @@ final class UpdateFlagErrorState extends AsyncInState {
 
   List<Object?> get props =>[failure];
 }
+
+class GetState extends AsyncInState{
+
+  @override
+  List<Object?> get props => [];
+
+}
