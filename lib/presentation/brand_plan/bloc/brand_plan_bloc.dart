@@ -26,18 +26,22 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
   int sum = 0;
   int sumS = 0;
   int current = 0;
-  BrandPlanBloc(this.updateBrandPlanSqlUsecase, this.allBrandPlanSqlUsecase,
-      this.updateOtherStatusUsecase, this.allOtherBrandPlanSqlUsecase,this.updateSaveSqlUsecase)
+  BrandPlanBloc(
+      this.updateBrandPlanSqlUsecase,
+      this.allBrandPlanSqlUsecase,
+      this.updateOtherStatusUsecase,
+      this.allOtherBrandPlanSqlUsecase,
+      this.updateSaveSqlUsecase)
       : super(BrandPlanInitial()) {
     on<BrandPlanEvent>((event, emit) async {
       if (event is UpdateSaveEvent) {
-        (await updateSaveSqlUsecase.execute(UserInfo.repId,1)).fold(
-                (failure) {
-              emit(UpdateSaveErrorState(failure: failure));
-              return false;
-            }, (data) async {
-                  UserInfo.flag1=1;
-        });}
+        (await updateSaveSqlUsecase.execute(UserInfo.repId, 1)).fold((failure) {
+          emit(UpdateSaveErrorState(failure: failure));
+          return false;
+        }, (data) async {
+          UserInfo.flag1 = 1;
+        });
+      }
       if (event is AllBrandPlanEvent) {
         (await allBrandPlanSqlUsecase.execute(UserInfo.activePlanId)).fold(
             (failure) {
@@ -117,8 +121,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        }
-        else if (x.state == 0) {
+        } else if (x.state == 0) {
           UserInfo.otherstatus = 1;
           (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
               .fold((failure) {
@@ -163,9 +166,9 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
     //state 0 true , state 1 more state 2 0
     for (int i = 0; i < planBrand.length; i++) {
       for (int j = 0; j < planBrand[i].brands.length; j++) {
-        if (planBrand[i].brands[j].amount == 0) {
-          return StatePlan(i, 2);
-        }
+        // if (planBrand[i].brands[j].amount == 0) {
+        //   return StatePlan(i, 2);
+        // }
         sum = sum + (planBrand[i].brands[j].amount);
       }
       if (sum > planBrand[i].brandm) {
