@@ -32,3 +32,10 @@ class DeleteDataEvent extends AuthEvent{
 
 
 }
+class ShowPasswordEvent extends AuthEvent{
+  final bool isObscured ;
+  ShowPasswordEvent(this.isObscured);
+
+  @override
+  List<Object?> get props => [isObscured];
+}

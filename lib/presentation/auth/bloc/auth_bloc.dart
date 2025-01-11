@@ -13,14 +13,18 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   LoginUsecase loginUsecase;
+  bool _isObscured = true;
   LoginSqlUsecase loginSqlUsecase;
   //DeleteSqlUsecase deleteSqlUsecase;
   LoginModel? loginModel;
   AuthBloc(this.loginSqlUsecase, this.loginUsecase
    //   , this.deleteSqlUsecase
+
       )
       : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
+      if(event is ShowPasswordEvent)
+        emit(ShowPasswordState(isObscured: event.isObscured));
       if (event is LoginEvent) {
         emit(LoginLoadingState());
         (await loginUsecase
@@ -28,6 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             .fold((failure) {
           emit(LoginErrorState(failure: failure));
         },
+
                 (data) async {
           loginModel = data;
           UserInfo.repId = loginModel!.repId;
@@ -67,3 +72,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 }
+
