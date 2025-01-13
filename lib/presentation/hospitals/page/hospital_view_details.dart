@@ -77,7 +77,9 @@ class HospitalViewDetails extends StatelessWidget {
                     Divider(
                       thickness: 0.5,
                     ),
-                    if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
+                    if (hospital.note != null &&
+                        hospital.note!.isNotEmpty &&
+                        hospital.note != " ")
                       buildHtmlDetailRow(
                           context, Icons.note, 'ملاحظات', hospital.note ?? ''),
                     Text(
@@ -237,13 +239,11 @@ class HospitalViewDetails extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-
                             ],
                           ),
                         );
@@ -262,7 +262,8 @@ class HospitalViewDetails extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RecipesHospital(HospitalId: hospital.id,
+                            builder: (context) => RecipesHospital(
+                              HospitalId: hospital.id,
                               //  docId: doctor.id,
                               st: state.st,
                             ),
@@ -271,14 +272,13 @@ class HospitalViewDetails extends StatelessWidget {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                              content: Text(
-                                  'لقد تجاوزت الحد المسموح لعدد الوصفات')),
+                              content:
+                                  Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
                         );
                       }
                     }
                     if (state is CheckRecipesErrorState) {
-                      error(context, state.failure.massage,
-                          state.failure.code);
+                      error(context, state.failure.massage, state.failure.code);
                     }
                   },
                   child: BlocBuilder<HospitalsBloc, HospitalsState>(
@@ -287,23 +287,27 @@ class HospitalViewDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
-                            onPressed:state is CheckRecipesLoadingState?null: () {
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((_) {
-                                BlocProvider.of<HospitalsBloc>(context)
-                                    .add(CheckReciEvent(hospital.id??0,0));
-                              });
-                            },
+                            onPressed: state is CheckRecipesLoadingState
+                                ? null
+                                : () {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      BlocProvider.of<HospitalsBloc>(context)
+                                          .add(CheckReciEvent(hospital.id, 0));
+                                    });
+                                  },
                             child: Text('إنشاء وصفة'),
                           ),
                           ElevatedButton(
-                            onPressed:state is CheckRecipesLoadingState?null: () {
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((_) {
-                                BlocProvider.of<HospitalsBloc>(context)
-                                    .add(CheckReciEvent(hospital.id,1));
-                              });
-                            },
+                            onPressed: state is CheckRecipesLoadingState
+                                ? null
+                                : () {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      BlocProvider.of<HospitalsBloc>(context)
+                                          .add(CheckReciEvent(hospital.id, 1));
+                                    });
+                                  },
                             child: Text('تكرار وصفة'),
                           ),
                         ],

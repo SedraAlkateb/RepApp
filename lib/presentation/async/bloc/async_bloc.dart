@@ -113,6 +113,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       }
 
       Future<bool> getData() async {
+
         try {
           brands = [];
           places = [];

@@ -257,6 +257,8 @@ class TokenResponse {
   String? otherStatus;
   @JsonKey(name: "name")
   String? name;
+  @JsonKey(name: "repType")
+  String? repType;
   @JsonKey(name: "percentage")
   int? percentage;
   @JsonKey(name: "endDate")

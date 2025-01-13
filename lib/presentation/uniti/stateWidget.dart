@@ -25,8 +25,14 @@ void errorFullScreen(BuildContext context, String massage, int code) {
       .showPopup(context, StateRendererType.fullScreenErrorState, massage);
 }
 
-void success(BuildContext context) {
-  ContentState().dismissDialog(context);
+String success(BuildContext context) {
+ try{
+   ContentState().dismissDialog(context);
+   return "true";
+ }catch(e){
+   print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+   return"$e ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+ }
 }
 
 void successWithMessage(BuildContext context, String message) {

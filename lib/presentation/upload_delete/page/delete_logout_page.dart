@@ -10,6 +10,8 @@ class DeleteLogoutPage extends StatelessWidget {
   const DeleteLogoutPage({super.key});
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<AsyncInBloc>(context)
+        .add(AsyncInBaseEvent());
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
