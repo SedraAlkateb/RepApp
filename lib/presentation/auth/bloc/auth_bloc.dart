@@ -7,13 +7,12 @@ import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   LoginUsecase loginUsecase;
-  bool _isObscured = true;
+ // bool _isObscured = true;
   LoginSqlUsecase loginSqlUsecase;
   //DeleteSqlUsecase deleteSqlUsecase;
   LoginModel? loginModel;
@@ -33,7 +32,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             .fold((failure) {
           emit(LoginErrorState(failure: failure));
         },
-
                 (data) async {
               print(data.repType);
               print("data.repType");
@@ -63,7 +61,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           print("object");
           emit(InsertLoginState());
         });
-      } /*
+      }
+      /*
       else if (event is DeleteDataEvent) {
         (await deleteSqlUsecase.execute()).fold((failure) {
           emit(DeleteStateError(failure: failure));
