@@ -909,7 +909,7 @@ class LoginModel {
   String? otherStartDate;
   String? otherEndDate;
   int flag1;
-
+  String repType;
   LoginModel(
       this.samplesCount,
       this.token,
@@ -925,8 +925,11 @@ class LoginModel {
       this.flag,
       this.recipesCount,
       this.flag1,
+      this.repType,
       {this.otherStartDate,
-      this.otherEndDate});
+      this.otherEndDate}
+
+      );
   Map<String, dynamic> toMap() {
     return {
       'samplesCount': samplesCount,
@@ -945,6 +948,7 @@ class LoginModel {
       'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
+      'repType':repType
     };
   }
 
@@ -964,6 +968,7 @@ class LoginModel {
       map['flag']??0,
       map['recipesCount']??0,
       map['flag1']??0,
+      map['repType']??"0",
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );

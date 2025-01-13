@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -45,8 +47,7 @@ class AsyncLogoutPage extends StatelessWidget {
                     BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
                   }
                   if (state is GetState) {
-                    BlocProvider.of<AsyncInBloc>(context)
-                        .add(GetEvent());
+                    BlocProvider.of<AsyncInBloc>(context).add(GetEvent());
                   }
                   // if (state is UpdateFlagErrorState) {
                   //   error(context, state.failure.massage, state.failure.code);
@@ -63,6 +64,7 @@ class AsyncLogoutPage extends StatelessWidget {
                       context,
                       Routes.deleteLogout,
                     );
+
                     BlocProvider.of<AsyncInBloc>(context)
                         .add(AsyncInBaseEvent());
                   }

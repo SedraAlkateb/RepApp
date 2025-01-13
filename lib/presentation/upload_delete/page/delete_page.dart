@@ -10,6 +10,8 @@ class DeletePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<AsyncInBloc>(context)
+        .add(AsyncInBaseEvent());
     return Scaffold(
       body:   Padding(
         padding:  EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),

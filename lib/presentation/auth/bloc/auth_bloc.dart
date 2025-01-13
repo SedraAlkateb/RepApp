@@ -26,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if(event is ShowPasswordEvent)
         emit(ShowPasswordState(isObscured: event.isObscured));
       if (event is LoginEvent) {
+
         emit(LoginLoadingState());
         (await loginUsecase
                 .execute(LoginRequest(event.userName, event.password)))
@@ -34,6 +35,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         },
 
                 (data) async {
+              print(data.repType);
+              print("data.repType");
           loginModel = data;
           UserInfo.repId = loginModel!.repId;
           UserInfo.otherPlanId = loginModel!.otherPlanId;
@@ -50,6 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserInfo.otherEndDate=data.otherEndDate;
           loginModel?.flag1=0;
           UserInfo.flag1 =0;
+          UserInfo.repType=data.repType;
           emit(LoginState());
         });
       } else if (event is LoginInsertEvent) {

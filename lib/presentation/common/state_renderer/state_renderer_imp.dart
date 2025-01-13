@@ -138,15 +138,28 @@ extension FlowStateExtension on FlowState{
     }
 
   }
-  _isCurrentDialogShowing(BuildContext context)=>ModalRoute.of(context)?.isCurrent != true;
+  bool _isCurrentDialogShowing(BuildContext context) {
+    return ModalRoute.of(context)?.isCurrent != true;
+  }
+
   dismissDialog(BuildContext context){
-    if(_isCurrentDialogShowing(context)){
-      Navigator.of(context,rootNavigator : true).pop(true);
-    }
+   try{
+     if (Navigator.canPop(context)) {
+       if(_isCurrentDialogShowing(context)){
+         Navigator.of(context,rootNavigator : true).pop(true);
+         print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
+       }
+     }
+   }catch(e){
+     print("$e eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+   }
+
   }
   showPopup(BuildContext context,StateRendererType stateRendererType,String message,{String title =Constants.empty}){
     WidgetsBinding.instance.addPostFrameCallback((_) =>
     showDialog(
+
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context)=>

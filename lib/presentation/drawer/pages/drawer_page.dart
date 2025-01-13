@@ -269,6 +269,7 @@ class DrawerPage extends StatelessWidget {
             ),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
+
                 Navigator.pushNamed(
                   context,
                     Routes.logout

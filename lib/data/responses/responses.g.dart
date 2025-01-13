@@ -270,7 +270,9 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['recipesCount'] as String?,
       json['otherStartDate'] as String?,
       json['otherEndDate'] as String?,
-    )..samplesCount = json['samplesCount'] as String?;
+    )
+      ..samplesCount = json['samplesCount'] as String?
+      ..repType = json['repType'] as String?;
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
@@ -281,6 +283,7 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'activePlanId': instance.activePlanId,
       'otherPlanStatus': instance.otherStatus,
       'name': instance.name,
+      'repType': instance.repType,
       'percentage': instance.percentage,
       'endDate': instance.endDate,
       'startDate': instance.startDate,

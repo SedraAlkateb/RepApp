@@ -44,6 +44,8 @@ Future<int?> sss() async {
     print("object");
     return 0;
   }, (data) async {
+    print(data?.isLogin);
+    print("data?.isLogin");
     if (data != null && (data.isLogin > 0)) {
       print("object");
       print(data.isLogin);

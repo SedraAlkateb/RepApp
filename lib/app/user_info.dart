@@ -19,4 +19,5 @@ class UserInfo{
   static int visited = -1;
   static int flag1 = 0;
   static int version = 2;
+  static String repType="0";
 }

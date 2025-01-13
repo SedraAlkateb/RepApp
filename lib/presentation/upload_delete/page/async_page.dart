@@ -1,6 +1,5 @@
+import 'dart:async';
 import 'dart:ui';
-
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -16,8 +15,8 @@ class AsyncPage extends StatelessWidget {
     precacheImage(AssetImage(ImageAssets.upload), context);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(
-            left: AppPadding.p40, right: AppPadding.p40),
+        padding:
+            const EdgeInsets.only(left: AppPadding.p40, right: AppPadding.p40),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,9 +37,10 @@ class AsyncPage extends StatelessWidget {
               BlocListener<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
                   if (state is SyncData1ErrorState) {
-                    error(context, state.failure.massage, state.failure.code);
+                    error(context, " ${state.failure.massage}ffffff",
+                        state.failure.code);
                   }
-                  if(state is SyncData1LoadingState){
+                  if (state is SyncData1LoadingState) {
                     loading(context);
                   }
                   if (state is SyncData1State) {
@@ -51,11 +51,11 @@ class AsyncPage extends StatelessWidget {
                       context,
                       Routes.delete,
                     );
-                    BlocProvider.of<AsyncInBloc>(context).add(AsyncInBaseEvent());
+                    BlocProvider.of<AsyncInBloc>(context)
+                        .add(AsyncInBaseEvent());
                   }
                   if (state is GetState) {
-                    BlocProvider.of<AsyncInBloc>(context)
-                        .add(GetEvent());
+                    BlocProvider.of<AsyncInBloc>(context).add(GetEvent());
                   }
                   // if (state is UpdateFlagErrorState) {
                   //   error(context, state.failure.massage, state.failure.code);
@@ -77,6 +77,7 @@ class AsyncPage extends StatelessWidget {
                 },
                 child: ElevatedButton(
                     onPressed: () {
+
                       BlocProvider.of<AsyncInBloc>(context)
                           .add(Async1DataEvent());
                     },
