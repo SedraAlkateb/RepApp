@@ -247,7 +247,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         }
        
       }
-      
       if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty) {
         final visitHospitalResult = await visitHospitalUsecase.execute(
             VisitHospitalRequestBody(visitHospitals, visitBrandHospitals));

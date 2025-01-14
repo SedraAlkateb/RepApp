@@ -1276,9 +1276,7 @@ class AppSqlApi extends AppSqlApiAbs {
                 UserInfo.samplesCount),
             (((spPlan.sumDoctor + spPlan.sumBrandHospital) *
                         UserInfo.samplesCount) +
-                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                        UserInfo.samplesCount /
-                        4))
+                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) * UserInfo.samplesCount / 4))
                 .toInt());
       }
       !(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)
@@ -1297,7 +1295,6 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     return SpMap.values.toList();
   }
-
   updateRep(
       int repId,
       int otherPlanId,
@@ -1306,7 +1303,8 @@ class AppSqlApi extends AppSqlApiAbs {
       String startDate,
       String endDate,
       String otherStartDate,
-      String otherEndDate) async {
+      String otherEndDate
+      ) async {
     print(UserInfo.flag1);
     print("UserInfo.flag1");
     Database? mydb = await databaseHelper.database;
