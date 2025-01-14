@@ -103,8 +103,7 @@ class RouteGenerator {
          case Routes.Recipes:
            initBrandRecModule();
         return MaterialPageRoute(builder: (_) =>     RecipesPage(docId: 0,st: 433,));
-      case Routes.Recipes:
-        initBrandRecModule();
+      case Routes.repProfile:
         return MaterialPageRoute(builder: (_) =>     RepProfile());
 
       case Routes.deleteLogout:
