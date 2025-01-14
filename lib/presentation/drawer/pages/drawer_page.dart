@@ -107,7 +107,7 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.list_alt_outlined,
                 color: ColorManager.secondaryColor4),
-            title:  Text('الزيارات المنجزة للمندوبين',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title:  Text('تقارير المندوبين',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(

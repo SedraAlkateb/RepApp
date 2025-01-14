@@ -2,6 +2,7 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
 import 'package:domina_app/presentation/senior/places/place_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
@@ -42,6 +43,7 @@ class Routes {
     static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String PlaceSenior = "/PlaceSenior";
+  static const String repProfile = "/RepProfile";
 
 
 }
@@ -101,7 +103,9 @@ class RouteGenerator {
          case Routes.Recipes:
            initBrandRecModule();
         return MaterialPageRoute(builder: (_) =>     RecipesPage(docId: 0,st: 433,));
-        
+      case Routes.repProfile:
+        return MaterialPageRoute(builder: (_) =>     RepProfile());
+
       case Routes.deleteLogout:
         initAsyncInModule();
         return MaterialPageRoute(builder: (_) =>     DeleteLogoutPage());
