@@ -35,5 +35,6 @@ class JsonAssets{
   static const String suc2 = "$jsonPath/suc2.json";
   static const String suc = "$jsonPath/suc.json";
   static const String suc1 = "$jsonPath/suc1.json";
+  static const String earth = "$jsonPath/earth.json";
 
 }
