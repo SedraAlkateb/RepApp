@@ -105,14 +105,14 @@ class DrawerPage extends StatelessWidget {
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
-            leading: Icon(Icons.medical_services_outlined,
+            leading: Icon(Icons.list_alt_outlined,
                 color: ColorManager.secondaryColor4),
             title:  Text('تقارير المندوبين',style: TextStyle(color: ColorManager.secondaryColor1),),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  Routes.spec,
+                  Routes.PlaceSenior,
                       (route) => false,
                 );
               });
