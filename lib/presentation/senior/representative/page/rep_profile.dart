@@ -1,6 +1,7 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
+import 'package:domina_app/presentation/uniti/text_widght.dart';
 import 'package:flutter/material.dart';
 class RepProfile extends StatelessWidget {
   const RepProfile({super.key});
@@ -42,10 +43,32 @@ class RepProfile extends StatelessWidget {
                 ),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextRach(s2: " : الجوال", s1: ' الجوال',),
+                 Padding(
+                   padding:  EdgeInsets.symmetric(horizontal: AppPadding.p14,vertical: AppPadding.p8),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                     Row(
+                       children: [
+                         Text("الجوال:"),
+                         Text("data")
+                       ],
+                     ),
+
+                       Row(
+                         children: [
+                           Text("data:"),
+                           Text("data")
+                         ],
+                       ),
+
+                     ],
+                   ),
+                 ),
                   Text("data"),
                   Text("data"),
                 ],
