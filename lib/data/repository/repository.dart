@@ -277,7 +277,8 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, Message1Response>> visitDoctor(
-      VisitDoctorRequestBody list1) async {
+      VisitDoctorRequestBody list1)
+  async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.visitDoctor(list1);
@@ -287,7 +288,7 @@ class RepositoryImp implements Repository {
           return Right(response);
         } else {
           return Left(Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT));
+              response.message ?? "ResponseMassage.DEFAULT"));
         }
       } else {
         return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());

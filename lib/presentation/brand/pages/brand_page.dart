@@ -2,6 +2,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand/bloc/brand_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -78,21 +79,29 @@ class BrandPage extends StatelessWidget {
                   ColorManager.secondaryColor7,
                 ]),
                 color: ColorManager.white,
-
                 borderRadius: const BorderRadius.all(
                     Radius.circular(AppSize.s8)),
                 //        color: ColorManager.card,
               ),
-              child: Column(
-                children: [
-                  Text(" ${brandModel[index].title} ", style: Theme.of(context)
-                      .textTheme
-                      .labelLarge),
-                  Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
-                      .textTheme
-                      .titleSmall,textAlign: TextAlign.center,),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.repProfile,
+                    // (route) => false,
+                  );
+                },
+                child: Column(
+                  children: [
+                    Text(" ${brandModel[index].title} ", style: Theme.of(context)
+                        .textTheme
+                        .labelLarge),
+                    Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
+                        .textTheme
+                        .titleSmall,textAlign: TextAlign.center,),
 
-                ],
+                  ],
+                ),
               ),
             );
           },
