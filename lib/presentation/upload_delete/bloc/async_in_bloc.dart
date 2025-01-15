@@ -245,7 +245,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           emit(SyncData1ErrorState(failure: Failure(0,"${visitDoctorFlagFailureOrSuccess.massage} 2")));
           return false;
         }
-       
       }
       if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty) {
         final visitHospitalResult = await visitHospitalUsecase.execute(

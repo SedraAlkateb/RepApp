@@ -22,6 +22,7 @@ import 'package:domina_app/presentation/visits/pages/visits_page.dart';
 import 'package:flutter/material.dart';
 
 import '../Recipes/pages/Recipes.dart';
+
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
@@ -40,75 +41,78 @@ class Routes {
   static const String brandPlan = "/brandPlan";
   static const String delete = "/delete";
   static const String deleteLogout = "/deleteLogout";
-    static const String Recipes = "/Recipes";
+  static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String PlaceSenior = "/PlaceSenior";
   static const String repProfile = "/RepProfile";
-
-
 }
+
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.login:
         initLoginModule();
-        return MaterialPageRoute(builder: (_) =>    const MyLogin());
+        return MaterialPageRoute(builder: (_) => const MyLogin());
       case Routes.fadeInWidget:
-        return MaterialPageRoute(builder: (_) =>     FadeInWidget());
+        return MaterialPageRoute(builder: (_) => FadeInWidget());
       case Routes.places:
         initPlacesModule();
         initPlaceVisitModule();
-        return MaterialPageRoute(builder: (_) =>     Places());
+        return MaterialPageRoute(builder: (_) => Places());
       case Routes.spec:
         initSpecModule();
-        return MaterialPageRoute(builder: (_) =>     SpecializationsPage());
-        //
+        return MaterialPageRoute(builder: (_) => SpecializationsPage());
+      //
       case Routes.PlaceSenior:
         initSpecModule();
-        return MaterialPageRoute(builder: (_) =>     PlaceSenior());
-        //
-         case Routes.doctors:
+        return MaterialPageRoute(builder: (_) => PlaceSenior());
+      //
+      case Routes.doctors:
         initDoctorModule();
-        return MaterialPageRoute(builder: (_) =>     Doctors());
-           case Routes.hospital:
+        return MaterialPageRoute(builder: (_) => Doctors());
+      case Routes.hospital:
         initHospitalModule();
-        return MaterialPageRoute(builder: (_) =>     Hospital());
+        return MaterialPageRoute(builder: (_) => Hospital());
       case Routes.brand:
         initBrandModule();
-        return MaterialPageRoute(builder: (_) =>     BrandPage());
+        return MaterialPageRoute(builder: (_) => BrandPage());
       case Routes.pharmacy:
         initPharmacyModule();
-        return MaterialPageRoute(builder: (_) =>     PharmacyPage());
+        return MaterialPageRoute(builder: (_) => PharmacyPage());
       case Routes.syncData:
         initAsyncModule();
-        return MaterialPageRoute(builder: (_) =>     AsyncLoginPage());
+        return MaterialPageRoute(builder: (_) => AsyncLoginPage());
       case Routes.visits:
         initVisitsModule();
-        return MaterialPageRoute(builder: (_) =>     VisitsPage());
+        return MaterialPageRoute(builder: (_) => VisitsPage());
       case Routes.asyncIn:
         initAsyncInModule();
-        return MaterialPageRoute(builder: (_) =>     AsyncPage());
+        return MaterialPageRoute(builder: (_) => AsyncPage());
       case Routes.logout:
         initAsyncInModule();
-        return MaterialPageRoute(builder: (_) =>     AsyncLogoutPage());
+        return MaterialPageRoute(builder: (_) => AsyncLogoutPage());
       case Routes.placeVisit:
-        return MaterialPageRoute(builder: (_) =>     PlaceVisitPage(placeId: 2));
+        return MaterialPageRoute(builder: (_) => PlaceVisitPage(placeId: 2));
       case Routes.specDH:
-        return MaterialPageRoute(builder: (_) =>     SpecDH(spId: 0));
-          case Routes.brandPlan:
-            initBrandPlanModule();
-        return MaterialPageRoute(builder: (_) =>     BrandPlanPage());
+        return MaterialPageRoute(builder: (_) => SpecDH(spId: 0));
+      case Routes.brandPlan:
+        initBrandPlanModule();
+        return MaterialPageRoute(builder: (_) => BrandPlanPage());
       case Routes.delete:
-        return MaterialPageRoute(builder: (_) =>     DeletePage());
-         case Routes.Recipes:
-           initBrandRecModule();
-        return MaterialPageRoute(builder: (_) =>     RecipesPage(docId: 0,st: 433,));
+        return MaterialPageRoute(builder: (_) => DeletePage());
+      case Routes.Recipes:
+        initBrandRecModule();
+        return MaterialPageRoute(
+            builder: (_) => RecipesPage(
+                  docId: 0,
+                  st: 433,
+                ));
       case Routes.repProfile:
-        return MaterialPageRoute(builder: (_) =>     RepProfile());
+        return MaterialPageRoute(builder: (_) => RepProfile());
 
       case Routes.deleteLogout:
         initAsyncInModule();
-        return MaterialPageRoute(builder: (_) =>     DeleteLogoutPage());
+        return MaterialPageRoute(builder: (_) => DeleteLogoutPage());
       default:
         return unDefinedRoute();
     }
@@ -127,4 +131,3 @@ class RouteGenerator {
             ));
   }
 }
-

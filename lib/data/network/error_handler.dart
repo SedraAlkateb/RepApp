@@ -17,9 +17,8 @@ print("error.message??""");
     failure=Failure(0, error.message);
   }
   else{
-    print(error);
     // default error
-    failure=DataSource.DEFAULT.getFailure();
+    failure=Failure(200, "massage$error");
   }
 }
 }
@@ -35,7 +34,7 @@ Failure _handleError(DioError error){
     case DioErrorType.receiveTimeout:
    return   DataSource.RECIEVE_TIMEOUT.getFailure();
     case DioExceptionType.badCertificate:
-      return DataSource.DEFAULT.getFailure();
+      return  Failure(200, error.message??"badCertificate");;
     case DioErrorType.badResponse:
         final responseBody = error.response?.data;
         String message="";
@@ -45,12 +44,12 @@ Failure _handleError(DioError error){
           print('Error Message: $message');
           return  Failure(error.response?.statusCode ?? 404, message);
         }else{
-          return DataSource.DEFAULT.getFailure();
+          return  Failure(200, error.message??"badResponse");
         }
     case DioErrorType.cancel:
      return DataSource.CANCEL.getFailure();
     case DioErrorType.unknown:
-      return DataSource.DEFAULT.getFailure();
+      return Failure(200, error.message??"unknown");
   }
 }
 Failure _handleErrorSql(DatabaseException error) {
