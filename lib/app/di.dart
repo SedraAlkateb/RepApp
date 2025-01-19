@@ -80,6 +80,7 @@ import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
@@ -422,3 +423,24 @@ Future<void> initBrandPlanModule() async {
         instance(), instance(), instance(), instance(), instance()));
   }
 }
+Future<void> initSeniorProfModule() async {
+  if (!GetIt.I.isRegistered<AllPlaceUsecase>()) {
+    instance.registerFactory<AllPlaceUsecase>(() =>
+        AllPlaceUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
+    instance.registerFactory<AllSpeUsecase>(() =>
+        AllSpeUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<AllHospitalUsecase>()) {
+    instance.registerFactory<AllHospitalUsecase>(() =>
+        AllHospitalUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<AllDoctorUsecase>()) {
+    instance.registerFactory<AllDoctorUsecase>(() =>
+        AllDoctorUsecase(instance()));
+  }
+    instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc( instance(), instance(),instance(), instance()));
+
+
+  }

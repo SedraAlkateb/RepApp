@@ -36,6 +36,7 @@ final class  AllHospitalEmptyState extends HospitalsState {
   @override
   List<Object?> get props =>[];
 }
+
 final class CheckRecipesState extends HospitalsState {
   final bool isCheck;
   final int st;

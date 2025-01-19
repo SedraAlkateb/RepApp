@@ -76,6 +76,7 @@ abstract class AppServiceClient {
     @Part(name: "representativeId") String representativeId,
   );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
   @POST("/insertPlanBrands.php")
   Future<Message1Response> repPlanBrand(@Body() RepPlanBrandBody list);
   @POST("/pharmacyVisit.php")
