@@ -14,45 +14,48 @@ class BrandPage extends StatelessWidget {
   final TextEditingController searchbrandController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-       return Scaffold(
+    return Scaffold(
         drawer: DrawerPage(),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.menu,
-                color:
-                ColorManager.secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+                  Icons.menu,
+                  color: ColorManager
+                      .secondaryColor1, // هنا يمكنك تحديد لون الأيقونة
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+          title: Text(' الأصناف'),
         ),
-        title: Text(
-            ' الأصناف'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            SearchField(searchController: searchbrandController,onPressed: (value) {
-                        BlocProvider.of<BrandBloc>(context).add(SearchbradEvent(value));} ),
-            Expanded(
-              child: BlocConsumer<BrandBloc, BrandState>(
-                listener: (context, state) {
-                  if(state is AllBrandErrorState){
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      error(context, state.failure.massage, state.failure.code);
-                    });
-                  }
-                  /*
+            children: [
+              SearchField(
+                  searchController: searchbrandController,
+                  onPressed: (value) {
+                    BlocProvider.of<BrandBloc>(context)
+                        .add(SearchbradEvent(value));
+                  }),
+              Expanded(
+                child: BlocConsumer<BrandBloc, BrandState>(
+                  listener: (context, state) {
+                    if (state is AllBrandErrorState) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        error(
+                            context, state.failure.massage, state.failure.code);
+                      });
+                    }
+                    /*
                   if(state is AllBrandLoadingState){
                     loading(context);
                   }
@@ -108,15 +111,12 @@ class BrandPage extends StatelessWidget {
           itemCount: brandModel.length);
     }
 
-
-    return SizedBox(
-    );
-  },
-),
-            ),
-          ],
-        ),
-      )
-    );
+                    return SizedBox();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
