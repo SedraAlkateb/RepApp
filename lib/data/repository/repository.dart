@@ -579,7 +579,6 @@ class RepositoryImp implements Repository {
       return Left(ErrorHandler.handle(error).failure);
     }
   }
-
   @override
   Future<Either<Failure, CheckRepResponse>> checkRep(int repId) async {
     try {
