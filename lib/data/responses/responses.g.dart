@@ -853,6 +853,54 @@ Map<String, dynamic> _$PlanBrandResponseToJson(PlanBrandResponse instance) =>
       'amount': instance.amount,
     };
 
+RepresentativeResponse _$RepresentativeResponseFromJson(
+        Map<String, dynamic> json) =>
+    RepresentativeResponse(
+      json['id'] as String?,
+      json['name'] as String?,
+    );
+
+Map<String, dynamic> _$RepresentativeResponseToJson(
+        RepresentativeResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+    };
+
+AllRepresentativeResponse _$AllRepresentativeResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllRepresentativeResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map(
+              (e) => RepresentativeResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllRepresentativeResponseToJson(
+        AllRepresentativeResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.data,
+    };
+
+AllRepresentativeBaseResponse _$AllRepresentativeBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllRepresentativeBaseResponse(
+      json['Representative'] == null
+          ? null
+          : AllRepresentativeResponse.fromJson(
+              json['Representative'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllRepresentativeBaseResponseToJson(
+        AllRepresentativeBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Representative': instance.data,
+    };
+
 AllPlanBrandResponse _$AllPlanBrandResponseFromJson(
         Map<String, dynamic> json) =>
     AllPlanBrandResponse(

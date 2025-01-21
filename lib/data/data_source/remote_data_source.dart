@@ -11,7 +11,6 @@ abstract class RemoteDataSource {
     int repDet,
   );
   Future<CheckRepResponse> checkRep(int repDet);
-
   Future<AllCityBaseResponse> allCity();
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(
       int repDet);
@@ -46,6 +45,7 @@ abstract class RemoteDataSource {
   Future<Message1Response> insertReci(ReciRequest reciReq);
   Future<CheckReResponse> checkRe( int repDet);
   Future<ReciNumResponse> reciNum();
+  //Future<AllRepresentativeBaseResponse> ();
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {

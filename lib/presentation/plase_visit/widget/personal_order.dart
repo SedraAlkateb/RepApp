@@ -40,7 +40,7 @@ class PersonalOrder extends StatelessWidget {
             //   return "اختر نوع الطلب";
             // }
             return null;
-          },
+          }, errorText: '',
         ),
         Padding(
           padding: const EdgeInsets.only(top: AppPadding.p12),

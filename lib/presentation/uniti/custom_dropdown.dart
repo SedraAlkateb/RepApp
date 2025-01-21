@@ -11,7 +11,7 @@ class CustomDropDown extends StatelessWidget {
       required this.validator,
       this.width,
       this.value,
-      this.onTap});
+      this.onTap, required String errorText});
   final String hintText;
   final List<dynamic> items;
   final Icon? prefixIcon;

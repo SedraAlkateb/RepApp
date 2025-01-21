@@ -139,4 +139,11 @@ abstract class AppServiceClient {
       @Part(name: "docId") int docId,
       @Part(name: "recipeType") String recipeType,
       );
+
+  @POST("admin/getReps.php")
+  Future<CopyRecResponse> getReps(
+      @Part(name: "id") int id,
+      @Part(name: "name") String name,
+      );
+
 }

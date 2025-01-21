@@ -54,3 +54,11 @@ Widget errorFullScreenWidget(BuildContext context,String message) {
       retryActionFunction: () {});
 
 }
+
+Widget selectrepScreenWidget(BuildContext context) {
+  return StateRenderer(
+      stateRendererType: StateRendererType.selectrepState,
+
+      retryActionFunction: () {}, message: '',);
+
+}
