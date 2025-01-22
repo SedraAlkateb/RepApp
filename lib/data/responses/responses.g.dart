@@ -339,6 +339,57 @@ Map<String, dynamic> _$AllBrandSpBaseResponseToJson(
       'brands_specializations': instance.data,
     };
 
+VisitNotesResponse _$VisitNotesResponseFromJson(Map<String, dynamic> json) =>
+    VisitNotesResponse(
+      json['docTitle'] as String?,
+      json['spTitle'] as String?,
+      json['address'] as String?,
+      json['visitDate'] as String?,
+      json['note'] as String?,
+    );
+
+Map<String, dynamic> _$VisitNotesResponseToJson(VisitNotesResponse instance) =>
+    <String, dynamic>{
+      'docTitle': instance.docTitle,
+      'spTitle': instance.spTitle,
+      'address': instance.address,
+      'visitDate': instance.visitDate,
+      'note': instance.note,
+    };
+
+AllVisitNotesResponse _$AllVisitNotesResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllVisitNotesResponse(
+      (json['Notes'] as List<dynamic>?)
+          ?.map((e) => VisitNotesResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllVisitNotesResponseToJson(
+        AllVisitNotesResponse instance) =>
+    <String, dynamic>{
+      'Notes': instance.notes,
+    };
+
+AllVisitNotesBaseResponse _$AllVisitNotesBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllVisitNotesBaseResponse(
+      json['Notes'] == null
+          ? null
+          : AllVisitNotesResponse.fromJson(
+              json['Notes'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllVisitNotesBaseResponseToJson(
+        AllVisitNotesBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Notes': instance.data,
+    };
+
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     LoginResponse(
       json['data'] == null

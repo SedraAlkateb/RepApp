@@ -18,6 +18,7 @@ class HospitalDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   print( hospital.hospitalId);
     return Scaffold(
       appBar: AppBar(
         title: Text("معلومات المشفى"),
@@ -102,6 +103,10 @@ class HospitalDetails extends StatelessWidget {
                           BlocListener<HospitalsBloc, HospitalsState>(
                             listener: (context, state) {
                               if (state is CheckRecipesState) {
+                                print(state.st);
+                                print("state.st");
+                                print(hospital.hospitalId);
+                                print("hospital.id");
                                 if (state.isCheck == true) {
                                   initBrandRecModule();
                                   Navigator.push(

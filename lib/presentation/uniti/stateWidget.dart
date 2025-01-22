@@ -7,9 +7,13 @@ void loading(BuildContext context, {String? text}) {
       .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
 }
 
-void loadingFullScreen(BuildContext context) {
-  LoadingState(stateRendererType: StateRendererType.fullScreenLoadingState)
-      .showPopup(context, StateRendererType.fullScreenLoadingState, "");
+Widget loadingFullScreen(BuildContext context) {
+ return LoadingState(stateRendererType: StateRendererType.fullScreenLoadingState)
+      .getScreenWidget(context, SizedBox(), (){});
+}
+Widget errorFullScreen(BuildContext context,{Function? func}) {
+  return ErrorState(StateRendererType.fullScreenErrorState, "")
+      .getScreenWidget(context, SizedBox(), func??(){});
 }
 
 void error(BuildContext context, String massage, int code) {
@@ -18,12 +22,7 @@ void error(BuildContext context, String massage, int code) {
       .showPopup(context, StateRendererType.popupErrorState, massage);
 }
 
-void errorFullScreen(BuildContext context, String massage, int code) {
-  ErrorState(StateRendererType.fullScreenErrorState, massage)
-      .dismissDialog(context);
-  ErrorState(StateRendererType.fullScreenErrorState, massage)
-      .showPopup(context, StateRendererType.fullScreenErrorState, massage);
-}
+
 
 String success(BuildContext context) {
  try{
@@ -42,10 +41,8 @@ void successWithMessage(BuildContext context, String message) {
 }
 
 Widget emptyFullScreen(BuildContext context) {
-  return StateRenderer(
-      stateRendererType: StateRendererType.fullScreenEmptyState,
-      message: "لا يوجد بيانات",
-      retryActionFunction: () {});
+  return ErrorState(StateRendererType.fullScreenEmptyState, "لا يوجد بيانات")
+      .getScreenWidget(context, SizedBox(),(){});
 }
 Widget errorFullScreenWidget(BuildContext context,String message) {
   return StateRenderer(

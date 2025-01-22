@@ -1150,7 +1150,7 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
     SELECT 
-      hospital.id,
+      hospital.id as hospitalId,
       hospital.title,
       hospital.address,
       hospital.placeTitle,

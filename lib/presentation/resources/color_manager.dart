@@ -27,5 +27,14 @@ class ColorManager {
   static Color secondaryColor6=const  Color.fromARGB(255, 200, 214, 220);
   static Color secondaryColor7=const  Color.fromARGB(255, 125, 164, 182);
   static Color secondaryColor8=const  Color(0xffd6e0ef);
+  static Color secondaryColor9=const  Color.fromARGB(255, 211, 221, 225);
+  static Color secondaryColor11=const  Color(0x22f4ac47);
+  static Color secondaryColor12=const   Color(0x280f5773);
+  static Color secondaryColor13=const  Color(0x1859bee6);
+  static Color secondaryColor14=const  Color(0xffF45D3D);
+  static Color secondaryColor16=const  Color(0x18f45d3d);
+
+  static Color secondaryColor15=const   Color(0xff58C373);
+  static Color secondaryColor17=const   Color(0xf58c373);
 
 }

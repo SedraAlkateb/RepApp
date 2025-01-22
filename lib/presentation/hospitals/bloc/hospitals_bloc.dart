@@ -26,7 +26,8 @@ class HospitalsBloc extends Bloc<HospitalsEvent, HospitalsState> {
             emit(AllHospitalEmptyState());
           }
         });
-      } else if (event is SearchhosEvent) {
+      }
+      else if (event is SearchhosEvent) {
         List<HospitalSpAllModel> hospitallist;
         String search = normalizeText(event.contant);
         hospitallist = hospital.where((value) {

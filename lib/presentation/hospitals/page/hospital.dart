@@ -16,6 +16,7 @@ class Hospital extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
@@ -130,6 +131,7 @@ class Hospital extends StatelessWidget {
                                 style: Theme.of(context).textTheme.titleMedium,
                                 textAlign: TextAlign.center,
                               ),
+
                             ],
                           ),
                         ),

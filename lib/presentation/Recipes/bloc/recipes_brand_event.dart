@@ -57,10 +57,16 @@ class InsertReciHospitalEvent extends RecipesBrandEvent {
   final String connect ;
 
   final String specialNotes ;
-  final String phone ;
 
-  InsertReciHospitalEvent(this.doctorSp, this.firstNote, this.secondNote, this.address,
-      this.connect, this.specialNotes,this.docId,this.phone);
+  InsertReciHospitalEvent(
+      this.docId,
+      this.doctorSp,
+      this.firstNote,
+      this.secondNote,
+      this.address,
+      this.connect,
+      this.specialNotes,
+   );
 
   List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
 }

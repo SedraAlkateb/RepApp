@@ -169,7 +169,9 @@ class SpecPlanPage extends StatelessWidget {
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
-                                              "عدد العينات المتاحة: ${planBrandModel[index].brandk.toString()}",
+                                              "عدد العينات المتاحة: ${(planBrandModel[index].brandk / UserInfo.samplesCount)}",
+
+
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,

@@ -1,8 +1,12 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
-import 'package:domina_app/presentation/senior/places/pages/place_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
+import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/note_doctor.dart';
+import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
+import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
@@ -45,6 +49,12 @@ class Routes {
   static const String fadeInWidget = "/fadeInWidget";
   static const String PlaceSenior = "/PlaceSenior";
   static const String repProfile = "/RepProfile";
+  static const String seniorPlaces = "/seniorPlaces";
+  static const String seniorSpec = "/seniorSpec";
+  static const String seniorHos = "/seniorHos";
+  static const String seniorDoc = "/seniorDoc";
+  static const String seniorNoteDoc = "/seniorNoteDoc";
+
 }
 
 class RouteGenerator {
@@ -108,8 +118,18 @@ class RouteGenerator {
                   st: 433,
                 ));
       case Routes.repProfile:
+        initSeniorProfModule();
         return MaterialPageRoute(builder: (_) => RepProfile());
-
+      case Routes.seniorPlaces:
+        return MaterialPageRoute(builder: (_) => PlaceSenior());
+      case Routes.seniorSpec:
+        return MaterialPageRoute(builder: (_) => SpecSeniorPage());
+      case Routes.seniorHos:
+        return MaterialPageRoute(builder: (_) => HospitalSenior());
+      case Routes.seniorDoc:
+        return MaterialPageRoute(builder: (_) => DoctorSenior());
+      case Routes.seniorNoteDoc:
+        return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.deleteLogout:
         initAsyncInModule();
         return MaterialPageRoute(builder: (_) => DeleteLogoutPage());

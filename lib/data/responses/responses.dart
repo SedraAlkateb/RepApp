@@ -328,6 +328,53 @@ class AllBrandSpBaseResponse extends BaseResponse{
 }
 
 
+@JsonSerializable()
+class VisitNotesResponse {
+  @JsonKey(name: "docTitle")
+  String? docTitle;
+  @JsonKey(name: "spTitle")
+  String? spTitle;
+  @JsonKey(name: "address")
+  String? address;
+  @JsonKey(name: "visitDate")
+  String? visitDate;
+  @JsonKey(name: "note")
+  String? note;
+  VisitNotesResponse(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
+
+  factory VisitNotesResponse.fromJson(Map<String,dynamic>json)=>
+      _$VisitNotesResponseFromJson(json);
+
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$VisitNotesResponseToJson(this);
+}
+@JsonSerializable()
+class AllVisitNotesResponse {
+  @JsonKey(name: "Notes")
+  List<VisitNotesResponse>? notes;
+  AllVisitNotesResponse(this.notes);
+  // from json
+  factory AllVisitNotesResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllVisitNotesResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllVisitNotesResponseToJson(this);
+}
+@JsonSerializable()
+class AllVisitNotesBaseResponse extends BaseResponse{
+  @JsonKey(name: "Notes")
+  AllVisitNotesResponse? data;
+  AllVisitNotesBaseResponse(this.data);
+  // from json
+  factory AllVisitNotesBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllVisitNotesBaseResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllVisitNotesBaseResponseToJson(this);
+}
+
 
 @JsonSerializable()
 class LoginResponse extends BaseResponse{
