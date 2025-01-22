@@ -1,6 +1,6 @@
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+//import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class PlaceSenior extends StatelessWidget {
@@ -22,7 +22,7 @@ class PlaceSenior extends StatelessWidget {
         // ),
         child: Column(
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Text(
               "اختر المندوب",
               style: TextStyle(
@@ -34,28 +34,28 @@ class PlaceSenior extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-
-              ),
-              child: CustomDropDown(
-                hintText: "اختر المندوبين",
-                onChanged: (value) {},
-                validator: (value) {
-                  if (value == null) {
-                    return "اختر نوع الطلب";
-                  }
-                  return null;
-                },
-                errorText: 'لايوجد نتيجة',
-                prefixIcon: null,
-                items: [],
-              ),
-            ),
-            SizedBox(height: 10,),
+            // Container(
+            //   width: 200,
+            //   height: 50,
+            //   decoration: BoxDecoration(
+            //     color: ColorManager.white,
+            //
+            //   ),
+            //   child: CustomDropDown(
+            //     hintText: "اختر المندوبين",
+            //     onChanged: (value) {},
+            //     validator: (value) {
+            //       if (value == null) {
+            //         return "اختر نوع الطلب";
+            //       }
+            //       return null;
+            //     },
+            //     errorText: 'لايوجد نتيجة',
+            //     prefixIcon: null,
+            //     items: [],
+            //   ),
+            // ),
+          //  SizedBox(height: 10,),
 
           ],
         ),

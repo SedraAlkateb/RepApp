@@ -19,6 +19,17 @@ class Places extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(UserInfo.activePlanId);
+    print("startDate");
+    print(UserInfo.startDate);
+    print("endDate");
+    print(UserInfo.endDate);
+    print(UserInfo.otherEndDate);
+    print(UserInfo.otherStartDate);
+    //print(UserInfo.);
+
+
+
+
     final size = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
