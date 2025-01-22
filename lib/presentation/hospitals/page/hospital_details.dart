@@ -121,8 +121,7 @@ class HospitalDetails extends StatelessWidget {
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Text(
-                                            'لقد تجاوزت الحد المسموح لعدد الوصفات')),
+                                        content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
                                   );
                                 }
                               }

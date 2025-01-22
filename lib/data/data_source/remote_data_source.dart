@@ -11,7 +11,6 @@ abstract class RemoteDataSource {
     int repDet,
   );
   Future<CheckRepResponse> checkRep(int repDet);
-
   Future<AllCityBaseResponse> allCity();
   Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(
       int repDet);
@@ -32,7 +31,7 @@ abstract class RemoteDataSource {
   Future<CheckBaseResponse> checkPlanBrand(int repPlanId);
   Future<LoginResponse> checkActivePlanBrand(int repDet);
   //
-  Future<CopyRecResponse> copyReci(int docId,String recipeType);
+  Future<CopyRecResponse> copyReci(int docId, String recipeType);
   //
   Future<VisitHospitalBaseResponse> getHosVisit(
     int repPlanId,
@@ -44,11 +43,12 @@ abstract class RemoteDataSource {
   );
   Future<AllBrandResResponse> getBrandRes(int repDet);
   Future<Message1Response> insertReci(ReciRequest reciReq);
-  Future<CheckReResponse> checkRe( int repDet);
+  Future<CheckReResponse> checkRe(int repDet);
   Future<ReciNumResponse> reciNum();
   Future<AllVisitNotesBaseResponse> visitNotes(int repDet);
 
 }
+
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   final AppServiceClient _appServiceClient;
@@ -57,10 +57,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<LoginResponse> login(LoginRequest loginRequest) async {
-
     return await _appServiceClient.login(
-        loginRequest.email, loginRequest.password,UserInfo.version);
+        loginRequest.email, loginRequest.password, UserInfo.version);
   }
+
   @override
   Future<AllPlaceBaseResponse> allPlaces(int id) async {
     return await _appServiceClient.allPlace(id);
@@ -151,7 +151,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<LoginResponse> checkActivePlanBrand(int repDet) async {
-    return await _appServiceClient.checkActivePlanBrand(repDet,UserInfo.version);
+    return await _appServiceClient.checkActivePlanBrand(
+        repDet, UserInfo.version);
   }
 
   @override
@@ -183,8 +184,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         reciReq.address,
         reciReq.phone,
         reciReq.total,
-         flagImage1:reciReq.flagImage1,
-        flagImage2:reciReq.flagImage2,
+        flagImage1: reciReq.flagImage1,
+        flagImage2: reciReq.flagImage2,
         note1: reciReq.note1,
         note2: reciReq.note2,
         image1: reciReq.image1,
@@ -206,12 +207,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<CopyRecResponse> copyReci(int docId,String recipeType) async{
-    return await _appServiceClient.copyReci(docId,recipeType);
+  Future<CopyRecResponse> copyReci(int docId, String recipeType) async {
+    return await _appServiceClient.copyReci(docId, recipeType);
   }
 
   @override
-  Future<CheckRepResponse> checkRep(int repDet) async{
+  Future<CheckRepResponse> checkRep(int repDet) async {
     return await _appServiceClient.checkRep(repDet);
   }
 
@@ -219,7 +220,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<AllVisitNotesBaseResponse> visitNotes(int repDet) async{
   return await _appServiceClient.getVisitNotes(repDet);
   }
-
 
 
 }

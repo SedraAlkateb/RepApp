@@ -874,6 +874,50 @@ class PlanBrandResponse {
   Map<String,dynamic>toJson()=>
       _$PlanBrandResponseToJson(this);
 }
+////
+
+@JsonSerializable()
+class RepresentativeResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "name")
+  String? name;
+
+  RepresentativeResponse(this.id, this.name);
+  // from json
+  factory RepresentativeResponse.fromJson(Map<String,dynamic>json)=>
+      _$RepresentativeResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$RepresentativeResponseToJson(this);
+}
+@JsonSerializable()
+class AllRepresentativeResponse
+{
+  @JsonKey(name:"Representative")
+  List<RepresentativeResponse>? data;
+  AllRepresentativeResponse(this.data);
+  // from json
+  factory AllRepresentativeResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllRepresentativeResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllRepresentativeResponseToJson(this);
+}
+@JsonSerializable()
+class AllRepresentativeBaseResponse extends BaseResponse
+{
+  @JsonKey(name:"Representative")
+  AllRepresentativeResponse? data;
+  AllRepresentativeBaseResponse(this.data);
+  // from json
+  factory AllRepresentativeBaseResponse.fromJson(Map<String,dynamic>json)=>
+      _$AllRepresentativeBaseResponseFromJson(json);
+  // to json
+  Map<String,dynamic>toJson()=>
+      _$AllRepresentativeBaseResponseToJson(this);
+}
+//
 @JsonSerializable()
 class AllPlanBrandResponse{
   @JsonKey(name: "representPlan_brands")

@@ -83,8 +83,8 @@ class _MyLoginState extends State<MyLogin> {
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     isObscured
-                                        ? Icons.visibility
-                                        : Icons.visibility_off, // تغيير الأيقونة حسب الحالة
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
                                   ),
                                   onPressed: () {
                                     BlocProvider.of<AuthBloc>(context)

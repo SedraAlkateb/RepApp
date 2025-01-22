@@ -1298,3 +1298,8 @@ class LoginRequest {
 
   LoginRequest(this.email, this.password);
 }
+class AllRepresentative {
+  int id ;
+  String name;
+  AllRepresentative(this.id,this.name);
+}
