@@ -187,7 +187,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             note2: event.secondNote,
             note_emp: event.specialNotes,
             spName: event.doctorSp,
-            phone: event.phone);
+            phone: event.connect);
         insertRecipesObject = updatedUser;
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);

@@ -775,6 +775,44 @@ class DoctorModel {
   }
 }
 
+class DoctorNoteModel {
+  String docTitle;
+  String spTitle;
+  String address;
+  String visitDate;
+  String? note;
+  DoctorNoteModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
+  Map<String, dynamic> toMap() {
+    return {
+      'docTitle': docTitle,
+      'spTitle': spTitle,
+      'address': address,
+      'visitDate': visitDate,
+      "note": note,
+    };
+  }
+
+  factory DoctorNoteModel.fromMap(Map<String, dynamic> map) {
+    return DoctorNoteModel(
+      map['docTitle'],
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
+      map["note"],
+    );
+  }
+  factory DoctorNoteModel.fromMap1(Map<String, dynamic> map) {
+    return DoctorNoteModel(
+        (map['docTitle']),
+        map['spTitle'],
+        map['address'],
+        map['visitDate'],
+        map['note'],
+      );
+  }
+}
+
 class HospitalSpModel {
   int id;
   int hospitalId;
@@ -927,9 +965,7 @@ class LoginModel {
       this.flag1,
       this.repType,
       {this.otherStartDate,
-      this.otherEndDate}
-
-      );
+      this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
       'samplesCount': samplesCount,
@@ -948,27 +984,27 @@ class LoginModel {
       'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
-      'repType':repType
+      'repType': repType
     };
   }
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
     return LoginModel(
-      map['samplesCount']??0,
-      map['token']??"",
-      map['repId']??0,
-      map['otherPlanId']??0,
-      map['activePlanId']??0,
-      map['otherStatus']??0,
-      map['name']??"",
-      map['percentage']??0,
-      map['isLogin']??0,
+      map['samplesCount'] ?? 0,
+      map['token'] ?? "",
+      map['repId'] ?? 0,
+      map['otherPlanId'] ?? 0,
+      map['activePlanId'] ?? 0,
+      map['otherStatus'] ?? 0,
+      map['name'] ?? "",
+      map['percentage'] ?? 0,
+      map['isLogin'] ?? 0,
       map['endDate'] ?? "",
       map['startDate'] ?? "",
-      map['flag']??0,
-      map['recipesCount']??0,
-      map['flag1']??0,
-      map['repType']??"0",
+      map['flag'] ?? 0,
+      map['recipesCount'] ?? 0,
+      map['flag1'] ?? 0,
+      map['repType'] ?? "0",
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );
@@ -1171,7 +1207,7 @@ class ReciRequest {
   String phone;
   String total;
   String? flagImage1;
-  String ?flagImage2;
+  String? flagImage2;
   String? note1;
   String? note2;
   String? note_emp;
@@ -1181,25 +1217,28 @@ class ReciRequest {
   String? brand_3;
   String? brand_4;
 
-
   ReciRequest(
-      this.recipeType,
-      this.repId, this.type, this.docId, this.spName, this.brand_1,
-      this.address, this.phone, this.total,
-
-      {this.note1,
-      this.note2,
-        this.flagImage1,
-        this.flagImage2,
-      this.note_emp,
-      this.image1,
-      this.image2,
-      this.brand_2,
-      this.brand_3,
-      this.brand_4,
-     });
+    this.recipeType,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total, {
+    this.note1,
+    this.note2,
+    this.flagImage1,
+    this.flagImage2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
 }
-
 
 class CopyReciRequest {
   int id;
@@ -1252,6 +1291,7 @@ List<StateImage> stateImage = [
   StateImage(1, "تكرار صورة"),
   StateImage(2, "اضافة صورة")
 ];
+
 class LoginRequest {
   String email;
   String password;

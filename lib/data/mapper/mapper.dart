@@ -303,7 +303,6 @@ extension PlanBrandMapper on PlanBrandResponse? {
     );
   }
 }
-
 extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
   List<PlanBrandModel> toDomain() {
     List<PlanBrandModel> planBrands =
@@ -508,3 +507,26 @@ extension CopyRecResponseMapper on CopyRecResponse {
     );
   }
 }
+
+extension VisitNotesMapper on VisitNotesResponse? {
+  DoctorNoteModel toDomain() {
+    return DoctorNoteModel(
+      this?.docTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.visitDate ?? Constants.empty,
+      this?.note ?? Constants.empty,
+    );
+  }
+}
+extension AllVisitNotesMapper on AllVisitNotesBaseResponse? {
+  List<DoctorNoteModel> toDomain() {
+    List<DoctorNoteModel> visitNotes =
+    (this?.data?.notes?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorNoteModel>()
+        .toList();
+    return visitNotes;
+  }
+}
+

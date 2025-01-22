@@ -5,12 +5,13 @@ import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_b
 import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HosDocSenior extends StatelessWidget {
-  HosDocSenior({super.key});
-  final TextEditingController searchHosController = TextEditingController();
+class DoctorSenior extends StatelessWidget {
+  DoctorSenior({super.key});
+  final TextEditingController searchDocController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class HosDocSenior extends StatelessWidget {
             return IconButton(
               icon: Icon(
                 size: AppSize.s30,
-                Icons.arrow_back_sharp,
+                Icons.arrow_forward,
                 color: ColorManager.secondaryColor1,
               ),
               onPressed: () {
@@ -30,7 +31,7 @@ class HosDocSenior extends StatelessWidget {
             );
           },
         ),
-        title: Text('أرشيف المشافي واللأطباء'),
+        title: Text('الأطباء'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -41,68 +42,72 @@ class HosDocSenior extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SearchField(
-                    searchController: searchHosController,
+                    searchController: searchDocController,
                     onPressed: (value) {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchHospEvent(value));
+                          .add(SenSearchDoctorEvent(value));
                     },
                   ),
                 ],
               ),
             ),
             BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              buildWhen: (previous, current) =>
+                  current is SenAllDoctorsState ||
+                  current is SenAllDoctorEmptyState,
               builder: (context, state) {
-                List<HospitalModel> hospitalModel =
-                    context.watch<SeniorProfBloc>().hospital;
-                if (state is SenAllHospitalEmptyState) {
+                List<DoctorModel> doctorModel =
+                    context.watch<SeniorProfBloc>().doctor;
+                if (state is SenAllDoctorsState) {
+                  doctorModel = state.doctor;
+                }
+                if (state is SenAllDoctorEmptyState) {
                   return SliverList(
                       delegate: SliverChildListDelegate([
-                        SizedBox(
-                          height: 100,
-                        ),
-                        emptyFullScreen(context)
-                      ]));
+                    SizedBox(
+                      height: 100,
+                    ),
+                    emptyFullScreen(context)
+                  ]));
                 }
-                if (state is SenAllHospitalsState) {
-                  hospitalModel = state.hospital;
-                }
-                if(state is SenAllHospitalLoadingState){
-                  return
-                    SliverList(
+                if (state is SenAllDoctorErrorState) {
+                  return SliverList(
                       delegate: SliverChildListDelegate([
-                      loadingFullScreen(context)
-                      ]),
-                    );
+                    SizedBox(
+                      height: 100,
+                    ),
+                    errorFullScreen(context, func: () {
+                      BlocProvider.of<SeniorProfBloc>(context)
+                          .add(SenAllDoctorEvent(203));
+                    })
+                  ]));
                 }
-                if(state is SenAllHospitalErrorState){
-                  return
-                    SliverList(
+                if (state is SenAllDoctorLoadingState) {
+                  return SliverList(
                       delegate: SliverChildListDelegate([
-                        errorFullScreen(context,
-                        func: (){
-                          BlocProvider.of<SeniorProfBloc>(context).add(SenAllHospitalEvent(203));
-                        }
-                        )
-                      ]),
-                    );
+                    SizedBox(
+                      height: 100,
+                    ),
+                    loadingFullScreen(context)
+                  ]));
                 }
                 return SliverList(
                   delegate: SliverChildListDelegate([
-                    // عرض عدد المستشفيات في Row
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text("عدد المشافي: ",
-                              style: Theme.of(context).textTheme.labelSmall),
-                          CircleNumberWidget(number: hospitalModel.length),
+                          Text(
+                            "عدد الأطباء: ",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                          CircleNumberWidget(number: doctorModel.length),
                         ],
                       ),
                     ),
-                    // القائمة
-                    ...hospitalModel.map((hospital) {
-                      return  Container(
+                    ...doctorModel.map((doctor) {
+                      return Container(
                         margin: EdgeInsets.all(AppPadding.p8),
                         padding: EdgeInsets.all(AppPadding.p16),
                         decoration: BoxDecoration(
@@ -113,21 +118,39 @@ class HosDocSenior extends StatelessWidget {
                             ],
                           ),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s8)),
+                              BorderRadius.all(Radius.circular(AppSize.s8)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              hospital.title,
+                              doctor.spTitle,
+                              style: Theme.of(context).textTheme.titleMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              doctor.title,
                               style: Theme.of(context).textTheme.labelLarge,
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              hospital.title ,
+                              "${doctor.address}_${doctor.placeTitle}",
                               style: Theme.of(context).textTheme.titleMedium,
                               textAlign: TextAlign.center,
+                            ),
+                            TextRach(
+                              s1: "التقيم : ",
+                              s2: doctor.rate.toString(),
+                            ),
+                            Text(
+                              "اوقات العمل_${doctor.workHours}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                            TextRach(
+                              s1: "ملاحظة : ",
+                              s2: doctor.note.toString(),
                             ),
                           ],
                         ),

@@ -17,6 +17,7 @@ class HospitalViewDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print( hospital.id);
     return Scaffold(
       //    backgroundColor: ColorManager.secondaryColor8,
       appBar: AppBar(
@@ -257,6 +258,10 @@ class HospitalViewDetails extends StatelessWidget {
                 child: BlocListener<HospitalsBloc, HospitalsState>(
                   listener: (context, state) {
                     if (state is CheckRecipesState) {
+                      print(state.st);
+                      print("state.st");
+                      print(hospital.id);
+                      print("hospital.id");
                       if (state.isCheck == true) {
                         initBrandRecModule();
                         Navigator.push(
