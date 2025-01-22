@@ -41,6 +41,7 @@ final class SenAllSpecErrorState extends SeniorProfState {
 
   List<Object?> get props =>[failure];
 }
+
 final class SenAllSpecLoadingState extends SeniorProfState {
   @override
   SenAllSpecLoadingState();
@@ -73,3 +74,57 @@ final class  SenAllHospitalEmptyState extends SeniorProfState {
   @override
   List<Object?> get props =>[];
 }
+
+final class SenAllDoctorsState extends SeniorProfState {
+  final List<DoctorModel> doctor;
+  SenAllDoctorsState(this.doctor);
+  @override
+  List<Object?> get props =>[doctor];
+}
+final class  SenAllDoctorErrorState extends SeniorProfState {
+  final Failure failure;
+  SenAllDoctorErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  SenAllDoctorLoadingState extends SeniorProfState {
+  @override
+  SenAllDoctorLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class  SenAllDoctorEmptyState extends SeniorProfState {
+  @override
+  SenAllDoctorEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+
+final class SenAllNoteDoctorsState extends SeniorProfState {
+  final List<DoctorNoteModel> doctorNoteModel;
+  SenAllNoteDoctorsState(this.doctorNoteModel);
+  @override
+  List<Object?> get props =>[doctorNoteModel];
+}
+final class  SenAllNoteDoctorErrorState extends SeniorProfState {
+  final Failure failure;
+  SenAllNoteDoctorErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  SenAllNoteDoctorLoadingState extends SeniorProfState {
+  @override
+  SenAllNoteDoctorLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class  SenAllNoteDoctorEmptyState extends SeniorProfState {
+  @override
+  SenAllNoteDoctorEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+
+

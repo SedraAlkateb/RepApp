@@ -19,6 +19,7 @@ class RecipesHospital extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesHospital> {
+
   final TextEditingController _doctorSpController = TextEditingController();
   final TextEditingController firstNoteController =
       TextEditingController(text: "يرجى عدم تبديل الدواء");
@@ -29,6 +30,8 @@ class _RecipesPageState extends State<RecipesHospital> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    print("widget.HospitalId");
+    print(widget.HospitalId);
     BlocProvider.of<RecipesBrandBloc>(context).add(RestartEvent());
     BlocProvider.of<RecipesBrandBloc>(context).empty();
     if (widget.st == 1) {
@@ -61,7 +64,6 @@ class _RecipesPageState extends State<RecipesHospital> {
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
-            print("sddddddddddddddddddd");
             return Center(
                 child: errorFullScreenWidget(
                     context, " لم يتم ادخال وصفات لهذا المشفى من قبل"));
@@ -848,14 +850,14 @@ class _RecipesPageState extends State<RecipesHospital> {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<RecipesBrandBloc>(context).add(
                                 InsertReciHospitalEvent(
+                                    widget.HospitalId,
                                     _doctorSpController.text,
                                     firstNoteController.text,
                                     _secondNoteController.text,
                                     _addressController.text,
                                     _connectController.text,
                                     _specialNotesController.text,
-                                    widget.HospitalId,
-                                    _connectController.text));
+                                   ));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

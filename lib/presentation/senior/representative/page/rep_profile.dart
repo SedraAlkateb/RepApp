@@ -13,93 +13,176 @@ class RepProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: ColorManager.white,
-      appBar: null,
-      body: Stack(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  ColorManager.secondaryColor10,
-                  ColorManager.secondaryColor7,
-                ],
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(right: AppPadding.p20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 100,
+      backgroundColor: ColorManager.secondaryColor9,
+      appBar: AppBar(
+        shadowColor: null,
+        title: Text("معلومات شخصية"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                  color: ColorManager.white,
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(40),
                   ),
-
-
-                  Row(
+                ),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(40),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorManager.secondaryColor4,
+                        ColorManager.secondaryColor6,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  child: Column(
                     children: [
-                      CircleAvatar(
-                        child: Icon(
-                          Icons.person,
-                          size: 50,
-                          color: ColorManager.secondaryColor4,
-                        ),
-                        maxRadius: 40,
+                      Text(
+                        "الأسم : سيدرا",
+                        style: Theme.of(context).textTheme.labelMedium,
+                        textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                        width: 20,
+                        height: 5,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("الأسم : سيدرا",
-                              style: Theme.of(context).textTheme.titleSmall),
-                          Text("العنوان : شارع الحمرة",
-                              style: Theme.of(context).textTheme.titleSmall),
-                          Text("الجوال : 09635827",
-                              style: Theme.of(context).textTheme.titleSmall),
-                        ],
+                      Text(
+                        "العنوان : شارع الحمرة",
+                        style: Theme.of(context).textTheme.labelMedium,
+                        textAlign: TextAlign.center,
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "الجوال : 09635827",
+                        style: Theme.of(context).textTheme.labelMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      RowListInfo(text1: "عدد الوصفات  :", text2: "66"),
+                      RowListInfo(
+                          text1: "الاختصاصات المرتبط بها :", text2: "588"),
+                      RowListInfo(
+                          text1: "عدد الزيارات المتبقية لتحقيق الهدف :",
+                          text2: "3566"),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      RowListInfo(
-                          text1: "عالاختصاصات المرتبط بها: ", text2: "5063"),
-                      Divider(),
-                      RowListInfo(
-                          text1: "عدد الوصفات المسموح : ", text2: "5063"),
-                      Divider(),
-                      RowListInfo(
-                          text1: "مجموع الزيارات المطلوبة للمندوب",
-                          text2: "5063"),
-                      Divider(),
-                      RowListInfo(
-                          text1: "عدد الزيارات المتبقية لتحقيق الهدف : ",
-                          text2: "5063"),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                ],
-              ),
+                )),
+            SizedBox(
+              height: 20,
             ),
-          ),
-          SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.only(top: 600),
+            Container(
+              margin: EdgeInsets.all(15),
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: ColorManager.white,
                 borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(50),
+                    top: Radius.circular(20), bottom: Radius.circular(20)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BlocProvider.of<SeniorProfBloc>(context)
+                                .add(SenAllSpecEvent(203));
+                            Navigator.pushNamed(context, Routes.seniorSpec);
+                          },
+                          child: CircleAvatar(
+                            maxRadius: 25,
+                            backgroundColor: ColorManager.secondaryColor11,
+                            child: Icon(
+                              FontAwesomeIcons.tag,
+                              color: ColorManager.secondaryColor2,
+                            ),
+                          ),
+                        ),
+                        Text("الاختصاص")
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BlocProvider.of<SeniorProfBloc>(context)
+                                .add(SenAllPlaceEvent(203));
+
+                            Navigator.pushNamed(context, Routes.seniorPlaces);
+                          },
+                          child: CircleAvatar(
+                            maxRadius: 25,
+                            backgroundColor: ColorManager.secondaryColor13,
+                            child: Icon(
+                              FontAwesomeIcons.locationDot,
+                              color: ColorManager.secondaryColor4,
+                            ),
+                          ),
+                        ),
+                        Text("المناطق")
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        InkWell(
+                          child: CircleAvatar(
+                            maxRadius: 25,
+                            backgroundColor: ColorManager.secondaryColor16,
+                            child: Icon(FontAwesomeIcons.userDoctor,
+                                color: ColorManager.secondaryColor14),
+                          ),
+                          onTap: () {
+                            BlocProvider.of<SeniorProfBloc>(context)
+                                .add(SenAllDoctorEvent(156));
+                            Navigator.pushNamed(context, Routes.seniorDoc);
+                          },
+                        ),
+                        Text("الأطباء"),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BlocProvider.of<SeniorProfBloc>(context)
+                                .add(SenAllHospitalEvent(203));
+                            Navigator.pushNamed(context, Routes.seniorHos);
+                          },
+                          child: CircleAvatar(
+                            maxRadius: 25,
+                            backgroundColor: ColorManager.secondaryColor17,
+                            child: Icon(FontAwesomeIcons.hospital,
+                                color: ColorManager.secondaryColor15),
+                          ),
+                        ),
+                        Text("المشافي")
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: ColorManager.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(40),
                 ),
               ),
               child: Column(
@@ -107,85 +190,8 @@ class RepProfile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 30,
+                    height: 40,
                   ),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        size: 50,
-                        Icons.maximize_rounded,
-                        color: ColorManager.secondaryColor1,
-                      )),
-
-                  //
-                  //
-                  // Padding(
-                  //   padding:  EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                  //   child: Divider(color: ColorManager.secondaryColor6,thickness: 0.8,),
-                  // ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              "معلومات عامة",
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          )),
-                      Expanded(
-                        child: Container(
-                          height: 0.5,
-                          color: ColorManager.secondaryColor1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  RowList(
-                      function: () {
-                        BlocProvider.of<SeniorProfBloc>(context).add(SenAllPlaceEvent(203));
-
-                        Navigator.pushNamed(context, Routes.seniorPlaces);
-                      },
-                      icon1: FontAwesomeIcons.locationDot,
-                      text: "المناطق المرتبط بها"),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                    child: Divider(
-                      color: ColorManager.secondaryColor6,
-                      thickness: 0.8,
-                    ),
-                  ),
-                  RowList(
-                      function: () {
-                        BlocProvider.of<SeniorProfBloc>(context)
-                            .add(SenAllSpecEvent(203));
-                        Navigator.pushNamed(context, Routes.seniorSpec);
-                      },
-                      icon1: FontAwesomeIcons.tag,
-                      text: "الاختصاصات المرتبط بها"),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                    child: Divider(
-                      color: ColorManager.secondaryColor6,
-                      thickness: 0.8,
-                    ),
-                  ),
-                  RowList(
-                      icon1: FontAwesomeIcons.folderOpen,
-                      text: "أرشيف الأطباء والمشافي المرتبط بهم",
-                  function: () {
-                        BlocProvider.of<SeniorProfBloc>(context).add(SenAllHospitalEvent(203));
-                        Navigator.pushNamed(context, Routes.seniorHosDoc);
-                  },),
-                  SizedBox(
-                    height: 20,
-                  ),
-
                   Row(
                     children: [
                       Align(
@@ -211,8 +217,13 @@ class RepProfile extends StatelessWidget {
                   ),
                   RowList(
                       icon1: FontAwesomeIcons.userDoctor,
-                      text: "الأطباء الذين تمت زيارتهم"),
-
+                      text: "الأطباء الذين تمت زيارتهم",
+                    function: () {
+                      BlocProvider.of<SeniorProfBloc>(context)
+                          .add(SenAllNoteDoctorEvent(156));
+                      Navigator.pushNamed(context, Routes.seniorNoteDoc);
+                    },
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
@@ -221,8 +232,10 @@ class RepProfile extends StatelessWidget {
                     ),
                   ),
                   RowList(
-                      icon1: FontAwesomeIcons.userDoctor,
-                      text: "الأطباء الذين لم تمت زيارتهم"),
+                    icon1: FontAwesomeIcons.userDoctor,
+                    text: "الأطباء الذين لم تمت زيارتهم",
+
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
@@ -233,7 +246,6 @@ class RepProfile extends StatelessWidget {
                   RowList(
                       icon1: FontAwesomeIcons.solidNoteSticky,
                       text: "قائمة بالملاحظات الخاصة للمكتب العلمي"),
-
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
@@ -244,7 +256,6 @@ class RepProfile extends StatelessWidget {
                   RowList(
                       icon1: FontAwesomeIcons.noteSticky,
                       text: "قائمة بالملاحظات الخاصة بالوكيل"),
-
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
@@ -258,34 +269,8 @@ class RepProfile extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          Positioned(
-            top:40,
-            right: 10,
-            child: Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_sharp,
-                      size: 30,
-                      color: ColorManager.white,
-                    )),
-                Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        "المعلومات الشخصية",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
