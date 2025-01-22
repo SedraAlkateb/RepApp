@@ -24,6 +24,50 @@ class _AppServiceClient implements AppServiceClient {
   final ParseErrorLogger? errorLogger;
 
   @override
+  Future<CopyRecResponse> getReps(
+    int id,
+    String name,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'id',
+      id.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'name',
+      name,
+    ));
+    final _options = _setStreamType<CopyRecResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'admin/getReps.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CopyRecResponse _value;
+    try {
+      _value = CopyRecResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<LoginResponse> login(
     String userName,
     String password,
@@ -1025,23 +1069,27 @@ class _AppServiceClient implements AppServiceClient {
       ));
     }
     if (image1 != null) {
-      _data.files.add(MapEntry(
-        'image1',
-        MultipartFile.fromFileSync(
-          image1.path,
-          filename: image1.path.split(Platform.pathSeparator).last,
-        ),
-      ));
-        }
+      if (image1 != null) {
+        _data.files.add(MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
+    }
     if (image2 != null) {
-      _data.files.add(MapEntry(
-        'image2',
-        MultipartFile.fromFileSync(
-          image2.path,
-          filename: image2.path.split(Platform.pathSeparator).last,
-        ),
-      ));
-        }
+      if (image2 != null) {
+        _data.files.add(MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
+    }
     if (brand_2 != null) {
       _data.fields.add(MapEntry(
         'brand_2',
