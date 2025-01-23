@@ -90,6 +90,26 @@ extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   }
 }
 
+
+extension AllRepresentativeMapper on AllRepresentativeBaseResponse? {
+  List<AllRepresentative> toDomain() {
+    List<AllRepresentative> allRepresentative =
+    (this?.data?.data?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<AllRepresentative>()
+        .toList();
+    return allRepresentative;
+  }
+}
+extension RepresentativeMapper on RepresentativeResponse? {
+  PlaceModel toDomain() {
+    return PlaceModel(
+      int.parse(this?.id ?? "0"),
+      this?.name ?? Constants.empty,
+    );
+  }
+}
+
 extension PlaceResponseMapper on PlaceResponse? {
   PlaceModel toDomain() {
     return PlaceModel(

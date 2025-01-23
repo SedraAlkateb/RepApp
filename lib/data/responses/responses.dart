@@ -538,6 +538,7 @@ class AllMedicalVisitBaseResponse extends BaseResponse{
 @JsonSerializable()
 class CityResponse {
   @JsonKey(name: "id")
+
   String? id;
   @JsonKey(name: "name")
   String? name;

@@ -11,11 +11,7 @@ part 'app_api.g.dart';
 @RestApi(baseUrl: Constants.baseUrl)
 abstract class AppServiceClient {
   factory AppServiceClient(Dio dio, {String baseUrl}) = _AppServiceClient;
-  @POST("admin/getReps.php")
-  Future<CopyRecResponse> getReps(
-      @Part(name: "id") int id,
-      @Part(name: "name") String name,
-      );
+
   @POST("/loginU.php")
   Future<LoginResponse> login(
     @Part(name: "userName") String userName,
@@ -80,7 +76,6 @@ abstract class AppServiceClient {
     @Part(name: "representativeId") String representativeId,
   );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
   @POST("/insertPlanBrands.php")
   Future<Message1Response> repPlanBrand(@Body() RepPlanBrandBody list);
   @POST("/pharmacyVisit.php")
@@ -104,12 +99,10 @@ abstract class AppServiceClient {
   Future<AllBrandResResponse> getBrandRes(
     @Part(name: "repDet") int repDet,
   );
-  //Check Recipes
   @POST("/reci/checkRe.php")
   Future<CheckReResponse> checkRe(
       @Part(name: "repDet") int repDet
       );
-  /////////////Check if valid
   @POST("/reci/checkRep.php")
   Future<CheckRepResponse> checkRep(
       @Part(name: "repDet") int repDet
@@ -145,6 +138,12 @@ abstract class AppServiceClient {
   Future<CopyRecResponse> copyReci(
       @Part(name: "docId") int docId,
       @Part(name: "recipeType") String recipeType,
+      );
+
+  @POST("admin/getReps.php")
+  Future<AllRepresentativeBaseResponse> getReps(
+      @Part(name: "id") int id,
+
       );
   @POST("/admin/getVisitNotes.php")
   Future<AllVisitNotesBaseResponse> getVisitNotes(
