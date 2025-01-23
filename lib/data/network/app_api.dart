@@ -149,4 +149,8 @@ abstract class AppServiceClient {
   Future<AllVisitNotesBaseResponse> getVisitNotes(
       @Part(name: "repDet") int docId,
       );
+  @POST("/admin/noVisitDoc.php")
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(
+      @Part(name: "repDet") int docId,
+      );
 }

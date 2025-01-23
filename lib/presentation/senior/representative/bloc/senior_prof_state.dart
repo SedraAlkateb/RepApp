@@ -127,4 +127,30 @@ final class  SenAllNoteDoctorEmptyState extends SeniorProfState {
   List<Object?> get props =>[];
 }
 
+final class SenNoVisitDocsState extends SeniorProfState {
+  final List<NoVisitDocModel> doctorNoteModel;
+  SenNoVisitDocsState(this.doctorNoteModel);
+  @override
+  List<Object?> get props =>[doctorNoteModel];
+}
+final class  SenNoVisitDocErrorState extends SeniorProfState {
+  final Failure failure;
+  SenNoVisitDocErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  SenNoVisitDocLoadingState extends SeniorProfState {
+  @override
+  SenNoVisitDocLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class  SenNoVisitDocEmptyState extends SeniorProfState {
+  @override
+  SenNoVisitDocEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+
 

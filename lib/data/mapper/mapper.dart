@@ -550,3 +550,24 @@ extension AllVisitNotesMapper on AllVisitNotesBaseResponse? {
   }
 }
 
+extension NoVisitDocMapper on NoVisitDoctorResponse? {
+  NoVisitDocModel toDomain() {
+    return NoVisitDocModel(
+      this?.docTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.rate ?? Constants.empty,
+      this?.visits ?? Constants.empty,
+    );
+  }
+}
+extension AllNoVisitDocMapper on AllNoVisitDoctorBaseResponse? {
+  List<NoVisitDocModel> toDomain() {
+    List<NoVisitDocModel> visitNotes =
+    (this?.data?.res?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<NoVisitDocModel>()
+        .toList();
+    return visitNotes;
+  }
+}
