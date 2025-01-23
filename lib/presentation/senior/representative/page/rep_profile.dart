@@ -235,7 +235,11 @@ class RepProfile extends StatelessWidget {
                   RowList(
                     icon1: FontAwesomeIcons.userDoctor,
                     text: "الأطباء الذين لم تمت زيارتهم",
-
+                    function: () {
+                      BlocProvider.of<SeniorProfBloc>(context)
+                          .add(NoVisitDocEvent(UserInfo.repId));
+                      Navigator.pushNamed(context, Routes.noVisitDoctor);
+                    },
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),

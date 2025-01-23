@@ -128,10 +128,10 @@ final class  SenAllNoteDoctorEmptyState extends SeniorProfState {
 }
 
 final class SenNoVisitDocsState extends SeniorProfState {
-  final List<NoVisitDocModel> doctorNoteModel;
-  SenNoVisitDocsState(this.doctorNoteModel);
+  final List<NoVisitDocModel> noVisitDoc;
+  SenNoVisitDocsState(this.noVisitDoc);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props =>[noVisitDoc];
 }
 final class  SenNoVisitDocErrorState extends SeniorProfState {
   final Failure failure;
