@@ -96,6 +96,7 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
