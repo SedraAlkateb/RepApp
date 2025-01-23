@@ -46,7 +46,7 @@ abstract class RemoteDataSource {
   Future<CheckReResponse> checkRe(int repDet);
   Future<ReciNumResponse> reciNum();
   Future<AllVisitNotesBaseResponse> visitNotes(int repDet);
-
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int docId,);
 }
 
 
@@ -219,6 +219,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<AllVisitNotesBaseResponse> visitNotes(int repDet) async{
   return await _appServiceClient.getVisitNotes(repDet);
+  }
+
+  @override
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int repDet)async{
+    return await _appServiceClient.noVisitDoc(repDet);
   }
 
 

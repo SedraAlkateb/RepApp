@@ -339,6 +339,60 @@ Map<String, dynamic> _$AllBrandSpBaseResponseToJson(
       'brands_specializations': instance.data,
     };
 
+NoVisitDoctorResponse _$NoVisitDoctorResponseFromJson(
+        Map<String, dynamic> json) =>
+    NoVisitDoctorResponse(
+      json['docTitle'] as String?,
+      json['spTitle'] as String?,
+      json['address'] as String?,
+      json['rate'] as String?,
+      json['visits'] as String?,
+    );
+
+Map<String, dynamic> _$NoVisitDoctorResponseToJson(
+        NoVisitDoctorResponse instance) =>
+    <String, dynamic>{
+      'docTitle': instance.docTitle,
+      'spTitle': instance.spTitle,
+      'address': instance.address,
+      'rate': instance.rate,
+      'visits': instance.visits,
+    };
+
+AllNoVisitDoctorResponse _$AllNoVisitDoctorResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllNoVisitDoctorResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map(
+              (e) => NoVisitDoctorResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllNoVisitDoctorResponseToJson(
+        AllNoVisitDoctorResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.res,
+    };
+
+AllNoVisitDoctorBaseResponse _$AllNoVisitDoctorBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllNoVisitDoctorBaseResponse(
+      json['Representative'] == null
+          ? null
+          : AllNoVisitDoctorResponse.fromJson(
+              json['Representative'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllNoVisitDoctorBaseResponseToJson(
+        AllNoVisitDoctorBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Representative': instance.data,
+    };
+
 VisitNotesResponse _$VisitNotesResponseFromJson(Map<String, dynamic> json) =>
     VisitNotesResponse(
       json['docTitle'] as String?,

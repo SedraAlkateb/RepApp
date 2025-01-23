@@ -3,6 +3,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_no_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
@@ -19,12 +20,15 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllHospitalUsecase allHospitalUsecase;
   AllDoctorUsecase allDoctorUsecase;
   AllVisitNotesUsecase allVisitNotesUsecase;
+  AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   List<SpecDModel> specialization = [];
   List<HospitalModel> hospital = [];
   List<DoctorNoteModel> doctorNoteModel = [];
+  List<NoVisitDocModel> noVisitDoc = [];
+
   List<DoctorModel> doctor = [];
   SeniorProfBloc(this.allPlaceUsecase, this.allSpeUsecase,
-      this.allDoctorUsecase, this.allHospitalUsecase, this.allVisitNotesUsecase)
+      this.allDoctorUsecase, this.allHospitalUsecase, this.allVisitNotesUsecase,this.allNoVisitDoctorUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -119,7 +123,26 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           emit(SenAllNoteDoctorErrorState(failure: failure));
         }, (data) async {
           doctorNoteModel=data;
-          emit(SenAllNoteDoctorsState(data));
+          if(data.isEmpty){
+            emit(SenAllNoteDoctorEmptyState());
+          }else{
+            emit(SenAllNoteDoctorsState(data));
+          }
+
+        });
+      }
+      else if (event is NoVisitDocEvent) {
+        emit(SenNoVisitDocLoadingState());
+        (await allNoVisitDoctorUsecase.execute(event.id)).fold((failure) {
+          emit(SenNoVisitDocErrorState(failure: failure));
+        }, (data) async {
+          noVisitDoc=data;
+          if(data.isEmpty){
+            emit(SenNoVisitDocEmptyState());
+          }else{
+            emit(SenNoVisitDocsState(data));
+          }
+
         });
       }
     });

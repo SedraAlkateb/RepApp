@@ -812,6 +812,33 @@ class DoctorNoteModel {
       );
   }
 }
+class NoVisitDocModel {
+  String docTitle;
+  String spTitle;
+  String address;
+  String rate;
+  String? visits;
+  NoVisitDocModel(
+      this.docTitle, this.spTitle, this.address, this.rate, this.visits);
+  Map<String, dynamic> toMap() {
+    return {
+      'docTitle': docTitle,
+      'spTitle': spTitle,
+      'address': address,
+      'rate': rate,
+      "visits": visits,
+    };
+  }
+  factory NoVisitDocModel.fromMap(Map<String, dynamic> map) {
+    return NoVisitDocModel(
+      map['docTitle'],
+      map['spTitle'],
+      map['address'],
+      map['rate'],
+      map["visits"],
+    );
+  }
+}
 
 class HospitalSpModel {
   int id;

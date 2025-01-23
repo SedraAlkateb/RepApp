@@ -620,4 +620,25 @@ class RepositoryImp implements Repository {
       return Left(ErrorHandler.handle(error).failure);
     }
   }
+
+  @override
+  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(int depId) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.noVisitDoc(depId);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          return Left(Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT));
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      return Left(ErrorHandler.handle(error).failure);
+    }
+  }
 }

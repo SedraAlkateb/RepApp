@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -220,7 +221,7 @@ class RepProfile extends StatelessWidget {
                       text: "الأطباء الذين تمت زيارتهم",
                     function: () {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenAllNoteDoctorEvent(156));
+                          .add(SenAllNoteDoctorEvent(UserInfo.repId));
                       Navigator.pushNamed(context, Routes.seniorNoteDoc);
                     },
                   ),
