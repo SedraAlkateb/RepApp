@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/note_doctor.dart';
@@ -47,7 +48,7 @@ class Routes {
   static const String deleteLogout = "/deleteLogout";
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
-  static const String PlaceSenior = "/PlaceSenior";
+  static const String AllRepSenior = "/AllRepSenior";
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
   static const String seniorSpec = "/seniorSpec";
@@ -73,9 +74,9 @@ class RouteGenerator {
         initSpecModule();
         return MaterialPageRoute(builder: (_) => SpecializationsPage());
       //
-      case Routes.PlaceSenior:
+      case Routes.AllRepSenior:
         initSpecModule();
-        return MaterialPageRoute(builder: (_) => PlaceSenior());
+        return MaterialPageRoute(builder: (_) => AllRepSenior());
       //
       case Routes.doctors:
         initDoctorModule();

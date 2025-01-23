@@ -1,10 +1,10 @@
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+//import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
-class PlaceSenior extends StatelessWidget {
-  const PlaceSenior({super.key});
+class AllRepSenior extends StatelessWidget {
+  const AllRepSenior({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +12,14 @@ class PlaceSenior extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              ColorManager.secondaryColor6,
-              ColorManager.secondaryColor7,
-            ],
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [
+        //       ColorManager.secondaryColor6,
+        //       ColorManager.secondaryColor7,
+        //     ],
+        //   ),
+        // ),
         child: Column(
           children: [
             const SizedBox(height: 20),
@@ -34,28 +34,28 @@ class PlaceSenior extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                color: ColorManager.white,
-
-              ),
-              child: CustomDropDown(
-                hintText: "اختر المندوبين",
-                onChanged: (value) {},
-                validator: (value) {
-                  if (value == null) {
-                    return "اختر نوع الطلب";
-                  }
-                  return null;
-                },
-                errorText: 'لايوجد نتيجة',
-                prefixIcon: null,
-                items: [],
-              ),
-            ),
-           SizedBox(height: 10,),
+            // Container(
+            //   width: 200,
+            //   height: 50,
+            //   decoration: BoxDecoration(
+            //     color: ColorManager.white,
+            //
+            //   ),
+            //   child: CustomDropDown(
+            //     hintText: "اختر المندوبين",
+            //     onChanged: (value) {},
+            //     validator: (value) {
+            //       if (value == null) {
+            //         return "اختر نوع الطلب";
+            //       }
+            //       return null;
+            //     },
+            //     errorText: 'لايوجد نتيجة',
+            //     prefixIcon: null,
+            //     items: [],
+            //   ),
+            // ),
+            //  SizedBox(height: 10,),
 
           ],
         ),
