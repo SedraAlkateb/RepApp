@@ -1,4 +1,14 @@
 part of 'senior_reps_bloc.dart';
 
 @immutable
-sealed class SeniorRepsEvent {}
+abstract class SeniorRepsEvent  extends Equatable{
+
+}
+class AllSeniorRepEvent extends SeniorRepsEvent {
+
+  AllSeniorRepEvent();
+
+  @override
+
+  List<Object?> get props => [];
+}
