@@ -1,74 +1,28 @@
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-//import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllRepSenior extends StatelessWidget {
-  const AllRepSenior({super.key});
-
+  AllRepSenior({super.key});
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [
-        //       ColorManager.secondaryColor6,
-        //       ColorManager.secondaryColor7,
-        //     ],
-        //   ),
-        // ),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              "اختر المندوب",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.secondaryColor1,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            // Container(
-            //   width: 200,
-            //   height: 50,
-            //   decoration: BoxDecoration(
-            //     color: ColorManager.white,
-            //
-            //   ),
-            //   child: CustomDropDown(
-            //     hintText: "اختر المندوبين",
-            //     onChanged: (value) {},
-            //     validator: (value) {
-            //       if (value == null) {
-            //         return "اختر نوع الطلب";
-            //       }
-            //       return null;
-            //     },
-            //     errorText: 'لايوجد نتيجة',
-            //     prefixIcon: null,
-            //     items: [],
-            //   ),
-            // ),
-            //  SizedBox(height: 10,),
-
-          ],
-        ),
-      ),
       drawer: DrawerPage(),
       appBar: AppBar(
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: Icon(
-                size: 30,
+                size: AppSize.s30,
                 Icons.menu,
-                color: ColorManager.secondaryColor,
+                color: ColorManager.secondaryColor1,
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
@@ -76,8 +30,54 @@ class AllRepSenior extends StatelessWidget {
             );
           },
         ),
-        title: Text('تقارير المندوبين',),
+        title: Text('المندوبين'),
       ),
+      body: bodyBuild(context),
+    );
+  }
+
+  Widget bodyBuild(BuildContext context) {
+    return   BlocBuilder<SeniorRepsBloc, SeniorRepsState>(
+      builder: (context, state) {
+        if(state is AllSeniorRepState){
+          final List<AllRepresentative> allRepresentative=state.representatives;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.all(AppPadding.p8),
+                  padding: EdgeInsets.all(AppPadding.p16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      ColorManager.secondaryColor6,
+                      ColorManager.secondaryColor7,
+                      ColorManager.secondaryColor7,
+                    ]),
+                    color: ColorManager.white,
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(AppSize.s8)),
+                  ),
+                  child: Text(
+                    allRepresentative[index].name,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                );
+              },
+              itemCount: allRepresentative.length,
+            ),
+          );
+        }
+        if(state is SenAllPlaceLoadingState){
+          return loadingFullScreen(context);
+        }
+        if(state is SenAllPlaceErrorState){
+          return errorFullScreen(context
+              ,func:()=> BlocProvider.of<SeniorProfBloc>(context).add(SenAllPlaceEvent(203))
+          );
+        }
+        return SizedBox();
+      },
     );
   }
 }

@@ -6,7 +6,6 @@ abstract class SeniorRepsEvent  extends Equatable{
 }
 class AllSeniorRepEvent extends SeniorRepsEvent {
 
-  AllSeniorRepEvent();
 
   @override
 

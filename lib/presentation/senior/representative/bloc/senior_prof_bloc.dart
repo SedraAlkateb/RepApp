@@ -10,7 +10,6 @@ import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'senior_prof_event.dart';
 part 'senior_prof_state.dart';
 
@@ -25,7 +24,6 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   List<HospitalModel> hospital = [];
   List<DoctorNoteModel> doctorNoteModel = [];
   List<NoVisitDocModel> noVisitDoc = [];
-
   List<DoctorModel> doctor = [];
   SeniorProfBloc(this.allPlaceUsecase, this.allSpeUsecase,
       this.allDoctorUsecase, this.allHospitalUsecase, this.allVisitNotesUsecase,this.allNoVisitDoctorUsecase)

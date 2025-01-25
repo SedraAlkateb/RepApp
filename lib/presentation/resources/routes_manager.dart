@@ -74,9 +74,9 @@ class RouteGenerator {
         initSpecModule();
         return MaterialPageRoute(builder: (_) => SpecializationsPage());
       //
-      case Routes.AllRepSenior:
-        initSpecModule();
-        return MaterialPageRoute(builder: (_) => AllRepSenior());
+      // case Routes.AllRepSenior:
+      //   initSpecModule();
+      //   return MaterialPageRoute(builder: (_) => AllRepSenior());
       //
       case Routes.doctors:
         initDoctorModule();
@@ -90,6 +90,15 @@ class RouteGenerator {
       case Routes.pharmacy:
         initPharmacyModule();
         return MaterialPageRoute(builder: (_) => PharmacyPage());
+
+      // case Routes.AllRepSenior:
+      //   initPharmacyModule();
+      //   return MaterialPageRoute(builder: (_) => AllRepSenior());
+
+
+
+
+
       case Routes.syncData:
         initAsyncModule();
         return MaterialPageRoute(builder: (_) => AsyncLoginPage());
@@ -121,6 +130,12 @@ class RouteGenerator {
       case Routes.repProfile:
         initSeniorProfModule();
         return MaterialPageRoute(builder: (_) => RepProfile());
+      case Routes.AllRepSenior:
+        initSeniorModule();
+        return MaterialPageRoute(builder: (_) => AllRepSenior());
+
+
+
       case Routes.seniorPlaces:
         return MaterialPageRoute(builder: (_) => PlaceSenior());
       case Routes.seniorSpec:

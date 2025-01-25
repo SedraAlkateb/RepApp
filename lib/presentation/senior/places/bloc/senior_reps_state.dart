@@ -17,3 +17,10 @@ final class AllSeniorRepState extends SeniorRepsState {
   @override
   List<Object?> get props =>[representatives];
 }
+final class AllSeniorRepErrorState extends SeniorRepsState {
+  final Failure failure;
+  AllSeniorRepErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}

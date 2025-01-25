@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
           (
           create: (context) {
             final bloc = instance<SeniorRepsBloc>();
-            //   bloc.add(AllRecipesEvent());
+             bloc.add(AllSeniorRepEvent());
             //   bloc.add(AllNumEvent());
             return bloc;
           },
