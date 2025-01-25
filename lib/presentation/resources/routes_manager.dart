@@ -3,9 +3,11 @@ import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/note_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
+import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
@@ -54,6 +56,8 @@ class Routes {
   static const String seniorHos = "/seniorHos";
   static const String seniorDoc = "/seniorDoc";
   static const String seniorNoteDoc = "/seniorNoteDoc";
+  static const String noVisitDoctor = "/noVisitDoctor";
+  static const String senVisitDoctor = "/senVisitDoctor";
 
 }
 
@@ -130,6 +134,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => DoctorSenior());
       case Routes.seniorNoteDoc:
         return MaterialPageRoute(builder: (_) => NoteDoctor());
+      case Routes.noVisitDoctor:
+        return MaterialPageRoute(builder: (_) => NoVisitDoctor());
+      case Routes.senVisitDoctor:
+        return MaterialPageRoute(builder: (_) => SenVisitDoctor());
       case Routes.deleteLogout:
         initAsyncInModule();
         return MaterialPageRoute(builder: (_) => DeleteLogoutPage());
