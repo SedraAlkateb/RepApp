@@ -83,6 +83,7 @@ import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
@@ -466,3 +467,13 @@ Future<void> initSeniorProfModule() async {
       instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc( instance(), instance(), instance(), instance(),instance(), instance(), instance()));
     }
   }
+///
+Future<void> initSeniorModule() async {
+  if (!GetIt.I.isRegistered<AllSeinor_Rep_Usecase>()) {
+    instance.registerFactory<AllSeinor_Rep_Usecase>(() =>
+        AllSeinor_Rep_Usecase(instance()));
+    instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(
+        instance()));
+  }
+
+}

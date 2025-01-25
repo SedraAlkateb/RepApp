@@ -30,8 +30,8 @@ abstract class Repository{
   Future<Either<Failure,List<int>>>reciNum();
   Future<Either<Failure,CopyReciRequest>>copyReci( int docId,String recipeType);
   Future<Either<Failure,CheckRepResponse>>checkRep( int depId);
-  Future<Either<Failure,List<DoctorNoteModel>>>visitNotes( int repDet);
-  Future<Either<Failure,List<NoVisitDocModel>>>noVisitDoc( int repDet);
-  Future<Either<Failure,List<NoVisitDocModel>>>visitDoc( int repDet);
-
+  Future<Either<Failure,List<DoctorNoteModel>>>visitNotes( int depId);
+  Future<Either<Failure,List<NoVisitDocModel>>>noVisitDoc( int depId);
+  Future<Either<Failure,List<AllRepresentative>>>getReps(int id);
+ Future<Either<Failure,List<NoVisitDocModel>>>visitDoc( int repDet);
 }

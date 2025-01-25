@@ -102,8 +102,8 @@ extension AllRepresentativeMapper on AllRepresentativeBaseResponse? {
   }
 }
 extension RepresentativeMapper on RepresentativeResponse? {
-  PlaceModel toDomain() {
-    return PlaceModel(
+  AllRepresentative toDomain() {
+    return AllRepresentative(
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
     );

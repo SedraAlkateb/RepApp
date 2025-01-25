@@ -1181,7 +1181,7 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
-      'id',
+      'repDet',
       id.toString(),
     ));
     final _options = _setStreamType<AllRepresentativeBaseResponse>(Options(
@@ -1191,7 +1191,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          'admin/getReps.php',
+          '/admin/getReps.php',
           queryParameters: queryParameters,
           data: _data,
         )
