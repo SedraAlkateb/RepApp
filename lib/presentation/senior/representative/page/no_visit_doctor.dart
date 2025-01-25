@@ -44,7 +44,7 @@ class NoVisitDoctor extends StatelessWidget {
                     searchController: searchNoteDoctorController,
                     onPressed: (value) {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchNoteDoctorEvent(value));
+                          .add(SenSearchNoVisitDoctorEvent(value));
                     },
                   ),
                 ],
@@ -116,14 +116,17 @@ class NoVisitDoctor extends StatelessWidget {
                             Text(
                               " ${noVisitDoc.docTitle} ",
                               style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
                             ),
                             Text(
                               " ${noVisitDoc.spTitle} ",
                               style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
                             ),
                             Text(
                               " ${noVisitDoc.address} ",
                               style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
