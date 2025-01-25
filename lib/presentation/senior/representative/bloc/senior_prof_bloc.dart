@@ -5,6 +5,7 @@ import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_no_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
+import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -20,13 +21,17 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllDoctorUsecase allDoctorUsecase;
   AllVisitNotesUsecase allVisitNotesUsecase;
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
+  AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
   List<SpecDModel> specialization = [];
   List<HospitalModel> hospital = [];
   List<DoctorNoteModel> doctorNoteModel = [];
   List<NoVisitDocModel> noVisitDoc = [];
+  List<NoVisitDocModel> VisitDoc = [];
+
   List<DoctorModel> doctor = [];
   SeniorProfBloc(this.allPlaceUsecase, this.allSpeUsecase,
-      this.allDoctorUsecase, this.allHospitalUsecase, this.allVisitNotesUsecase,this.allNoVisitDoctorUsecase)
+      this.allDoctorUsecase, this.allHospitalUsecase,
+      this.allVisitNotesUsecase,this.allNoVisitDoctorUsecase,this.allSenVisitDoctorUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -63,7 +68,8 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           return false;
         }).toList();
         emit(SenAllSpecState(spec));
-      } else if (event is SenSearchHospEvent) {
+      }
+      else if (event is SenSearchHospEvent) {
         List<HospitalModel> hospitalList;
         String search = normalizeText(event.contant);
         hospitalList = hospital.where((value) {
@@ -94,7 +100,52 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenAllDoctorEmptyState());
           }
         });
-      } else if (event is SenSearchDoctorEvent) {
+      }
+      else if (event is SenSearchDoctorEvent) {
+        List<DoctorModel> doctorList;
+        String search = normalizeText(event.contant);
+        doctorList = doctor.where((value) {
+          if (normalizeText(value.title).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.address).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.placeTitle).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.spTitle).contains(search)) {
+            return true;
+          }
+          return false;
+        }).toList();
+
+        emit(SenAllDoctorsState(doctorList));
+      }
+
+      else if (event is SenSearchNoteDoctorEvent) {
+        List<DoctorNoteModel> doctorNote;
+        String search = normalizeText(event.contant);
+        doctorNote = doctorNoteModel.where((value) {
+          if (normalizeText(value.docTitle).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.address).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.spTitle).contains(search)) {
+            return true;
+          }
+          if( value.note!=null){
+            if( normalizeText(value.note!).contains(search)) {
+              return true;
+            }
+          }
+          return false;
+        }).toList();
+        emit(SenAllNoteDoctorsState(doctorNote));
+      }
+      else if (event is SenSearchDoctorEvent) {
         List<DoctorModel> doctorList;
         String search = normalizeText(event.contant);
         doctorList = doctor.where((value) {
@@ -139,6 +190,20 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenNoVisitDocEmptyState());
           }else{
             emit(SenNoVisitDocsState(data));
+          }
+
+        });
+      }
+      else if (event is VisitDocEvent) {
+        emit(SenVisitDocLoadingState());
+        (await allSenVisitDoctorUsecase.execute(event.id)).fold((failure) {
+          emit(SenVisitDocErrorState(failure: failure));
+        }, (data) async {
+          VisitDoc=data;
+          if(data.isEmpty){
+            emit(SenVisitDocEmptyState());
+          }else{
+            emit(SenVisitDocsState(data));
           }
 
         });

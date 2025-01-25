@@ -31,7 +31,7 @@ import 'package:domina_app/domain/usecase/all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
-import 'package:domina_app/domain/usecase/all_seinor_reps_usecase.dart';
+import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
@@ -460,8 +460,11 @@ Future<void> initSeniorProfModule() async {
   }
   instance.registerFactory<AllNoVisitDoctorUsecase>(() =>
       AllNoVisitDoctorUsecase(instance()));
+  instance.registerFactory<AllSenVisitDoctorUsecase>(() =>
+      AllSenVisitDoctorUsecase(instance()));
+
     if(!GetIt.I.isRegistered<SeniorProfBloc>()){
-      instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc( instance(), instance(), instance(),instance(), instance(), instance()));
+      instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc( instance(), instance(), instance(), instance(),instance(), instance(), instance()));
     }
   }
 ///
