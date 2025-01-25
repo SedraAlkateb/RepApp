@@ -112,69 +112,21 @@ class NoteDoctor extends StatelessWidget {
                               BorderRadius.all(Radius.circular(AppSize.s8)),
                         ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  " الإسم :",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    " ${doctorNoteModel.docTitle} ",
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              doctorNoteModel.docTitle,
+                              style: Theme.of(context).textTheme.labelLarge,
+                              textAlign: TextAlign.center,
                             ),
-                            Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  " العنوان :",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    " ${doctorNoteModel.address} ",
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              "${doctorNoteModel.address}",
+                              style: Theme.of(context).textTheme.labelLarge,
+                              textAlign: TextAlign.center,
                             ),
-                            Divider(),
-                            doctorNoteModel.note != null
-                                ? Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        " ملاحظةالمكتب العلمي :",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          " ${doctorNoteModel.note} ",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : SizedBox(),
-                            Divider(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
@@ -211,6 +163,33 @@ class NoteDoctor extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            doctorNoteModel.note != null
+                                ? Divider(
+                                    color: Colors.white,
+                                  )
+                                : SizedBox(),
+                            doctorNoteModel.note != null
+                                ? Text.rich(
+                                  textAlign: TextAlign.start,
+                                  softWrap: false,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  TextSpan(
+                                    text: "ملاحظات المكتب العلمي :  ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge,
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: doctorNoteModel.note,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                : SizedBox(),
                           ],
                         ),
                       );
