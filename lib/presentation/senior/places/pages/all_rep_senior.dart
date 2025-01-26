@@ -3,7 +3,6 @@ import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
-import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,9 +57,11 @@ class AllRepSenior extends StatelessWidget {
                     borderRadius:
                     const BorderRadius.all(Radius.circular(AppSize.s8)),
                   ),
-                  child: Text(
-                    allRepresentative[index].name,
-                    style: Theme.of(context).textTheme.titleSmall,
+                  child: Center(
+                    child: Text(
+                      allRepresentative[index].name,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
                 );
               },
@@ -68,12 +69,11 @@ class AllRepSenior extends StatelessWidget {
             ),
           );
         }
-        if(state is SenAllPlaceLoadingState){
+        if(state is AllSeniorRepLoadingState){
           return loadingFullScreen(context);
         }
-        if(state is SenAllPlaceErrorState){
-          return errorFullScreen(context
-              ,func:()=> BlocProvider.of<SeniorProfBloc>(context).add(SenAllPlaceEvent(203))
+        if(state is AllSeniorRepErrorState){
+          return errorFullScreen(context,func:()=> BlocProvider.of<SeniorRepsBloc>(context).add( AllSeniorRepEvent())
           );
         }
         return SizedBox();

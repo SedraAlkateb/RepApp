@@ -24,3 +24,10 @@ final class AllSeniorRepErrorState extends SeniorRepsState {
 
   List<Object?> get props =>[failure];
 }
+
+final class AllSeniorRepLoadingState extends SeniorRepsState {
+  @override
+  AllSeniorRepLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
