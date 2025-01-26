@@ -256,6 +256,7 @@ class RepProfile extends StatelessWidget {
                     icon1: FontAwesomeIcons.solidNoteSticky,
                     text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
                     function: () {
+
                       initSeniorReportScienceModule();
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
