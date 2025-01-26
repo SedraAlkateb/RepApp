@@ -78,12 +78,12 @@ class AllRepSenior extends StatelessWidget {
             ),
           );
         }
-        if(state is SenAllPlaceLoadingState){
+        if(state is AllSeniorRepLoadingState){
+          print("lllllllllllllllllllllllllll");
           return loadingFullScreen(context);
         }
-        if(state is SenAllPlaceErrorState){
-          return errorFullScreen(context
-              ,func:()=> BlocProvider.of<SeniorProfBloc>(context).add(SenAllPlaceEvent(203))
+        if(state is AllSeniorRepErrorState){
+          return errorFullScreen(context,func:()=> BlocProvider.of<SeniorRepsBloc>(context).add( AllSeniorRepEvent())
           );
         }
         return SizedBox();

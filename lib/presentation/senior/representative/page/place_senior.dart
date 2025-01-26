@@ -70,7 +70,9 @@ class PlaceSenior extends StatelessWidget {
           );
         }
         if(state is SenAllPlaceLoadingState){
+          print("gtggggggggggggggggg");
           return loadingFullScreen(context);
+
         }
         if(state is SenAllPlaceErrorState){
           return errorFullScreen(context
