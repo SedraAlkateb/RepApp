@@ -1,8 +1,11 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,20 +47,26 @@ class AllRepSenior extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.builder(
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.all(AppPadding.p8),
-                  padding: EdgeInsets.all(AppPadding.p16),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      ColorManager.secondaryColor6,
-                      ColorManager.secondaryColor7,
-                      ColorManager.secondaryColor7,
-                    ]),
-                    color: ColorManager.white,
-                    borderRadius:
-                    const BorderRadius.all(Radius.circular(AppSize.s8)),
-                  ),
-                  child: Center(
+                return InkWell(
+                  onTap: () {
+                    initSeniorProfModule();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                      return RepProfile(id: allRepresentative[index].id);
+                    },));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(AppPadding.p8),
+                    padding: EdgeInsets.all(AppPadding.p16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        ColorManager.secondaryColor6,
+                        ColorManager.secondaryColor7,
+                        ColorManager.secondaryColor7,
+                      ]),
+                      color: ColorManager.white,
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(AppSize.s8)),
+                    ),
                     child: Text(
                       allRepresentative[index].name,
                       style: Theme.of(context).textTheme.titleSmall,

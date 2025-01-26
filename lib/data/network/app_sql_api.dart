@@ -163,10 +163,15 @@ class AppSqlApi extends AppSqlApiAbs {
           }
         }
         for (var visitHos in visitHospital.data) {
-          batch.insert('visit_hospital', visitHos.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
+          batch.insert('visit_hospital', visitHos.toMap(),
+              conflictAlgorithm: ConflictAlgorithm.ignore);
         }
         for (var visitDoc in visitDoctor.data) {
-          batch.insert('visit_doctor', visitDoc.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore,);
+          batch.insert(
+            'visit_doctor',
+            visitDoc.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.ignore,
+          );
         }
         await batch.commit(noResult: true);
         await txn.execute("PRAGMA foreign_keys = ON");
@@ -175,7 +180,6 @@ class AppSqlApi extends AppSqlApiAbs {
         }
         for (var visitDocBrand in visitDoctor.brand) {
           txn.insert('visit_brand_doctor', visitDocBrand.toMap());
-
         }
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
@@ -340,7 +344,8 @@ class AppSqlApi extends AppSqlApiAbs {
 
   Future<void> editIsPlan(int repId, int flag) async {
     final mydb = await databaseHelper.database;
-    await mydb.update(//flag=1
+    await mydb.update(
+      //flag=1
       'rep',
       {'flag': flag, 'flag1': 0},
       where: 'repId = ?',
@@ -1276,7 +1281,9 @@ class AppSqlApi extends AppSqlApiAbs {
                 UserInfo.samplesCount),
             (((spPlan.sumDoctor + spPlan.sumBrandHospital) *
                         UserInfo.samplesCount) +
-                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) * UserInfo.samplesCount / 4))
+                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
+                        UserInfo.samplesCount /
+                        4))
                 .toInt());
       }
       !(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)
@@ -1295,6 +1302,7 @@ class AppSqlApi extends AppSqlApiAbs {
     }
     return SpMap.values.toList();
   }
+
   updateRep(
       int repId,
       int otherPlanId,
@@ -1303,8 +1311,7 @@ class AppSqlApi extends AppSqlApiAbs {
       String startDate,
       String endDate,
       String otherStartDate,
-      String otherEndDate
-      ) async {
+      String otherEndDate) async {
     print(UserInfo.flag1);
     print("UserInfo.flag1");
     Database? mydb = await databaseHelper.database;
@@ -1372,16 +1379,19 @@ class AppSqlApi extends AppSqlApiAbs {
     UserInfo.flag1 = 0;
     await batch.commit(noResult: true);
   }
+
   Future<bool> updateFlagsToHospital() async {
     Database? db = await databaseHelper.database;
     try {
       await db.transaction((txn) async {
         try {
-          int visitHospitalResult = await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
-          int visitBrandHospitalResult = await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
+          int visitHospitalResult =
+              await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
+          int visitBrandHospitalResult =
+              await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
           print('Rows affected in visit_hospital: $visitHospitalResult');
-          print('Rows affected in visit_brand_hospital: $visitBrandHospitalResult');
-
+          print(
+              'Rows affected in visit_brand_hospital: $visitBrandHospitalResult');
         } catch (e) {
           return false;
         }
@@ -1392,13 +1402,15 @@ class AppSqlApi extends AppSqlApiAbs {
     return true;
   }
 
- Future<bool> updateFlagsToDoctor() async {
+  Future<bool> updateFlagsToDoctor() async {
     Database? db = await databaseHelper.database;
     try {
       await db.transaction((txn) async {
         try {
-          int visitDoctorResult = await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
-          int visitBrandDoctorResult = await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
+          int visitDoctorResult =
+              await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
+          int visitBrandDoctorResult =
+              await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
           print('Rows affected in visit_doctor: $visitDoctorResult');
           print('Rows affected in visit_brand_doctor: $visitBrandDoctorResult');
         } catch (e) {
@@ -1406,11 +1418,10 @@ class AppSqlApi extends AppSqlApiAbs {
         }
       });
     } catch (e) {
-     return false;
+      return false;
     }
     return true;
   }
-
 
   Future<List<Map<String, dynamic>>> getAllUsers() async {
     Database? db = await databaseHelper.database;

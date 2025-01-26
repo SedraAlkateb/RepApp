@@ -5,7 +5,7 @@ import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart'
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
-import 'package:domina_app/presentation/senior/representative/page/note_doctor.dart';
+import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
@@ -56,7 +56,7 @@ class Routes {
   static const String seniorSpec = "/seniorSpec";
   static const String seniorHos = "/seniorHos";
   static const String seniorDoc = "/seniorDoc";
-  static const String seniorNoteDoc = "/seniorNoteDoc";
+ // static const String seniorNoteDoc = "/seniorNoteDoc";
   static const String noVisitDoctor = "/noVisitDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
 
@@ -133,7 +133,7 @@ class RouteGenerator {
                 ));
       case Routes.repProfile:
         initSeniorProfModule();
-        return MaterialPageRoute(builder: (_) => RepProfile());
+        return MaterialPageRoute(builder: (_) => RepProfile(id: 3));
       case Routes.AllRepSenior:
         initSeniorModule();
         return MaterialPageRoute(builder: (_) => AllRepSenior());
@@ -148,8 +148,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HospitalSenior());
       case Routes.seniorDoc:
         return MaterialPageRoute(builder: (_) => DoctorSenior());
-      case Routes.seniorNoteDoc:
-        return MaterialPageRoute(builder: (_) => NoteDoctor());
+      // case Routes.seniorNoteDoc:
+      //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
         return MaterialPageRoute(builder: (_) => NoVisitDoctor());
       case Routes.senVisitDoctor:
