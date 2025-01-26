@@ -86,25 +86,16 @@ class BrandPage extends StatelessWidget {
                     Radius.circular(AppSize.s8)),
                 //        color: ColorManager.card,
               ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.repProfile,
-                    // (route) => false,
-                  );
-                },
-                child: Column(
-                  children: [
-                    Text(" ${brandModel[index].title} ", style: Theme.of(context)
-                        .textTheme
-                        .labelLarge),
-                    Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
-                        .textTheme
-                        .titleSmall,textAlign: TextAlign.center,),
+              child: Column(
+                children: [
+                  Text(" ${brandModel[index].title} ", style: Theme.of(context)
+                      .textTheme
+                      .labelLarge),
+                  Text(" الشكل الصيدلاني : ${brandModel[index].phTitle} ", style: Theme.of(context)
+                      .textTheme
+                      .titleSmall,textAlign: TextAlign.center,),
 
-                  ],
-                ),
+                ],
               ),
             );
           },

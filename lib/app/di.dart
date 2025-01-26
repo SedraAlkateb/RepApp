@@ -31,6 +31,7 @@ import 'package:domina_app/domain/usecase/all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
+import 'package:domina_app/domain/usecase/all_seinor_reps_usecase.dart';
 import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
@@ -84,6 +85,7 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
+import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
@@ -456,18 +458,18 @@ Future<void> initSeniorProfModule() async {
     instance.registerFactory<AllDoctorUsecase>(() =>
         AllDoctorUsecase(instance()));
   }
-  if (!GetIt.I.isRegistered<AllVisitNotesUsecase>()) {
-    instance.registerFactory<AllVisitNotesUsecase>(() =>
-        AllVisitNotesUsecase(instance()));
-  }
-  instance.registerFactory<AllNoVisitDoctorUsecase>(() =>
-      AllNoVisitDoctorUsecase(instance()));
-  instance.registerFactory<AllSenVisitDoctorUsecase>(() =>
-      AllSenVisitDoctorUsecase(instance()));
+
+  if (!GetIt.I.isRegistered<AllNoVisitDoctorUsecase>()) {
+    instance.registerFactory<AllNoVisitDoctorUsecase>(() =>
+        AllNoVisitDoctorUsecase(instance()));
+    instance.registerFactory<AllSenVisitDoctorUsecase>(() =>
+        AllSenVisitDoctorUsecase(instance()));
 
     if(!GetIt.I.isRegistered<SeniorProfBloc>()){
-      instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc( instance(), instance(), instance(), instance(),instance(), instance(), instance()));
+      instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc(  instance(), instance(), instance(),instance(), instance(), instance()));
     }
+  }
+
   }
 ///
 Future<void> initSeniorModule() async {
@@ -477,5 +479,16 @@ Future<void> initSeniorModule() async {
     instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(
         instance()));
   }
+
+}
+Future<void> initSeniorReportScienceModule() async {
+    if (!GetIt.I.isRegistered<AllVisitNotesUsecase>()) {
+      instance.registerFactory<AllVisitNotesUsecase>(() =>
+          AllVisitNotesUsecase(instance()));
+      instance.registerFactory<ReportScienceBloc>(() => ReportScienceBloc(instance()));
+    }
+
+
+
 
 }

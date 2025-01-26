@@ -19,7 +19,6 @@ class RecipesHospital extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesHospital> {
-
   final TextEditingController _doctorSpController = TextEditingController();
   final TextEditingController firstNoteController =
       TextEditingController(text: "يرجى عدم تبديل الدواء");
@@ -37,7 +36,7 @@ class _RecipesPageState extends State<RecipesHospital> {
     if (widget.st == 1) {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.HospitalId,2));
+          .add(CopyRecipesEvent(widget.HospitalId, 2));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -87,7 +86,6 @@ class _RecipesPageState extends State<RecipesHospital> {
                     .note_emp ??
                 "";
           }
-
           return Padding(
             padding: const EdgeInsets.all(14.0),
             child: SingleChildScrollView(
@@ -96,7 +94,6 @@ class _RecipesPageState extends State<RecipesHospital> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     SizedBox(height: 10),
                     Text('الإختصاص'),
                     BoxTextField(
@@ -132,23 +129,27 @@ class _RecipesPageState extends State<RecipesHospital> {
                                   .insertRecipesObject
                                   .brand_1,
                               hintText: (state is AllRecipesLoadingState ||
-                                  state is AllNumLoadingState)
+                                      state is AllNumLoadingState)
                                   ? 'loading'
                                   : widget.st == 1
-                                  ? context
-                                  .watch<RecipesBrandBloc>()
-                                  .insertRecipesObject
-                                  .brand_1
-                                  .title_en
-                                  : 'اختر المستحضر',
-                              items: context.watch<RecipesBrandBloc>().brandRecs,
+                                      ? context
+                                          .watch<RecipesBrandBloc>()
+                                          .insertRecipesObject
+                                          .brand_1
+                                          .title_en
+                                      : 'اختر المستحضر',
+                              items:
+                                  context.watch<RecipesBrandBloc>().brandRecs,
                               onChanged: (value) {
                                 BrandRes brand = value;
                                 state.didChange(brand);
                                 BlocProvider.of<RecipesBrandBloc>(context).add(
                                     SelectBrandEvent(
                                         brandRecipeModel: brand, index: 1));
-                              }, validator: (value) {return null;  },
+                              },
+                              validator: (value) {
+                                return null;
+                              },
                             ),
                             if (state.hasError)
                               Padding(
@@ -162,7 +163,6 @@ class _RecipesPageState extends State<RecipesHospital> {
                         );
                       },
                     ),
-
                     SizedBox(height: 5),
                     Text('المستحضر الثاني'),
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
@@ -848,16 +848,16 @@ class _RecipesPageState extends State<RecipesHospital> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            BlocProvider.of<RecipesBrandBloc>(context).add(
-                                InsertReciHospitalEvent(
-                                    widget.HospitalId,
-                                    _doctorSpController.text,
-                                    firstNoteController.text,
-                                    _secondNoteController.text,
-                                    _addressController.text,
-                                    _connectController.text,
-                                    _specialNotesController.text,
-                                   ));
+                            BlocProvider.of<RecipesBrandBloc>(context)
+                                .add(InsertReciHospitalEvent(
+                              widget.HospitalId,
+                              _doctorSpController.text,
+                              firstNoteController.text,
+                              _secondNoteController.text,
+                              _addressController.text,
+                              _connectController.text,
+                              _specialNotesController.text,
+                            ));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

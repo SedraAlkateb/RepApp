@@ -58,26 +58,14 @@ class SenSearchNoVisitDoctorEvent extends SeniorProfEvent{
 
 }
 
-class SenSearchNoteDoctorEvent extends SeniorProfEvent{
-  final String contant;
-  SenSearchNoteDoctorEvent(this.contant);
-  @override
-  List<Object?> get props => [contant];
 
-}
 class SenSearchVisitDoctorEvent extends SeniorProfEvent{
   final String contant;
   SenSearchVisitDoctorEvent(this.contant);
   @override
   List<Object?> get props => [contant];
 }
-class SenAllNoteDoctorEvent extends SeniorProfEvent{
-  final  int id;
-  @override
-  SenAllNoteDoctorEvent(this.id);
-  List<Object?> get props => [id];
 
-}
 
 class NoVisitDocEvent extends SeniorProfEvent{
   final  int id;

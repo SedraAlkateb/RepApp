@@ -536,6 +536,7 @@ extension VisitNotesMapper on VisitNotesResponse? {
       this?.address ?? Constants.empty,
       this?.visitDate ?? Constants.empty,
       this?.note ?? Constants.empty,
+      false
     );
   }
 }
