@@ -19,19 +19,18 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllSpeUsecase allSpeUsecase;
   AllHospitalUsecase allHospitalUsecase;
   AllDoctorUsecase allDoctorUsecase;
-  AllVisitNotesUsecase allVisitNotesUsecase;
+
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
   List<SpecDModel> specialization = [];
   List<HospitalModel> hospital = [];
-  List<DoctorNoteModel> doctorNoteModel = [];
+
   List<NoVisitDocModel> noVisitDoc = [];
   List<NoVisitDocModel> VisitDoc = [];
 
   List<DoctorModel> doctor = [];
   SeniorProfBloc(this.allPlaceUsecase, this.allSpeUsecase,
-      this.allDoctorUsecase, this.allHospitalUsecase,
-      this.allVisitNotesUsecase,this.allNoVisitDoctorUsecase,this.allSenVisitDoctorUsecase)
+      this.allDoctorUsecase, this.allHospitalUsecase, this.allNoVisitDoctorUsecase,this.allSenVisitDoctorUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -123,28 +122,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         emit(SenAllDoctorsState(doctorList));
       }
 
-      else if (event is SenSearchNoteDoctorEvent) {
-        List<DoctorNoteModel> doctorNote;
-        String search = normalizeText(event.contant);
-        doctorNote = doctorNoteModel.where((value) {
-          if (normalizeText(value.docTitle).contains(search)) {
-            return true;
-          }
-          if (normalizeText(value.address).contains(search)) {
-            return true;
-          }
-          if (normalizeText(value.spTitle).contains(search)) {
-            return true;
-          }
-          if( value.note!=null){
-            if( normalizeText(value.note!).contains(search)) {
-              return true;
-            }
-          }
-          return false;
-        }).toList();
-        emit(SenAllNoteDoctorsState(doctorNote));
-      }
+
       else if (event is SenSearchDoctorEvent) {
         List<DoctorModel> doctorList;
         String search = normalizeText(event.contant);
@@ -166,20 +144,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
 
         emit(SenAllDoctorsState(doctorList));
       }
-      else if (event is SenAllNoteDoctorEvent) {
-        emit(SenAllNoteDoctorLoadingState());
-        (await allVisitNotesUsecase.execute(event.id)).fold((failure) {
-          emit(SenAllNoteDoctorErrorState(failure: failure));
-        }, (data) async {
-          doctorNoteModel=data;
-          if(data.isEmpty){
-            emit(SenAllNoteDoctorEmptyState());
-          }else{
-            emit(SenAllNoteDoctorsState(data));
-          }
 
-        });
-      }
       else if (event is NoVisitDocEvent) {
         emit(SenNoVisitDocLoadingState());
         (await allNoVisitDoctorUsecase.execute(event.id)).fold((failure) {
