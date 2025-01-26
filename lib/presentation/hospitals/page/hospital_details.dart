@@ -112,7 +112,8 @@ class HospitalDetails extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => RecipesHospital(HospitalId: hospital.hospitalId??0,
+                                      builder: (context) => RecipesHospital(
+                                        HospitalId: hospital.hospitalId??0,
                                       //  docId: doctor.id,
                                         st: state.st,
                                       ),

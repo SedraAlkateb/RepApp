@@ -1,7 +1,10 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
+import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/row_list.dart';
 import 'package:domina_app/presentation/senior/representative/widget/row_list_info.dart';
@@ -10,7 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RepProfile extends StatelessWidget {
-  const RepProfile({super.key});
+  final int id;
+  const RepProfile({super.key, required this.id});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +102,7 @@ class RepProfile extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             BlocProvider.of<SeniorProfBloc>(context)
-                                .add(SenAllSpecEvent(203));
+                                .add(SenAllSpecEvent(id));
                             Navigator.pushNamed(context, Routes.seniorSpec);
                           },
                           child: CircleAvatar(
@@ -118,7 +122,7 @@ class RepProfile extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             BlocProvider.of<SeniorProfBloc>(context)
-                                .add(SenAllPlaceEvent(156));
+                                .add(SenAllPlaceEvent(id));
 
                             Navigator.pushNamed(context, Routes.seniorPlaces);
                           },
@@ -145,7 +149,7 @@ class RepProfile extends StatelessWidget {
                           ),
                           onTap: () {
                             BlocProvider.of<SeniorProfBloc>(context)
-                                .add(SenAllDoctorEvent(156));
+                                .add(SenAllDoctorEvent(id));
                             Navigator.pushNamed(context, Routes.seniorDoc);
                           },
                         ),
@@ -157,7 +161,7 @@ class RepProfile extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             BlocProvider.of<SeniorProfBloc>(context)
-                                .add(SenAllHospitalEvent(203));
+                                .add(SenAllHospitalEvent(id));
                             Navigator.pushNamed(context, Routes.seniorHos);
                           },
                           child: CircleAvatar(
@@ -217,11 +221,11 @@ class RepProfile extends StatelessWidget {
                     ],
                   ),
                   RowList(
-                      icon1: FontAwesomeIcons.userDoctor,
-                      text: "الأطباء الذين تمت زيارتهم",
+                    icon1: FontAwesomeIcons.userDoctor,
+                    text: "الأطباء الذين تمت زيارتهم",
                     function: () {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(VisitDocEvent(UserInfo.repId));
+                          .add(VisitDocEvent(id));
                       Navigator.pushNamed(context, Routes.senVisitDoctor);
                     },
                   ),
@@ -237,7 +241,7 @@ class RepProfile extends StatelessWidget {
                     text: "الأطباء الذين لم تمت زيارتهم",
                     function: () {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(NoVisitDocEvent(UserInfo.repId));
+                          .add(NoVisitDocEvent(id));
                       Navigator.pushNamed(context, Routes.noVisitDoctor);
                     },
                   ),
@@ -249,12 +253,17 @@ class RepProfile extends StatelessWidget {
                     ),
                   ),
                   RowList(
-                      icon1: FontAwesomeIcons.solidNoteSticky,
-                      text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
+                    icon1: FontAwesomeIcons.solidNoteSticky,
+                    text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
                     function: () {
-                      BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenAllNoteDoctorEvent(UserInfo.repId));
-                      Navigator.pushNamed(context, Routes.seniorNoteDoc);
+                      initSeniorReportScienceModule();
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          BlocProvider.of<ReportScienceBloc>(context)
+                              .add(SenAllNoteDoctorEvent(id));
+                          return NoteScienceDoctor(id: id);
+                        },
+                      ));
                     },
                   ),
                   Padding(

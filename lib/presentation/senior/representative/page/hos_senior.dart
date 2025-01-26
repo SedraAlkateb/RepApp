@@ -54,6 +54,9 @@ class HospitalSenior extends StatelessWidget {
               builder: (context, state) {
                 List<HospitalModel> hospitalModel =
                     context.watch<SeniorProfBloc>().hospital;
+                if (state is SenAllHospitalsState) {
+                  hospitalModel = state.hospital;
+                }
                 if (state is SenAllHospitalEmptyState) {
                   return SliverList(
                       delegate: SliverChildListDelegate([
@@ -63,9 +66,7 @@ class HospitalSenior extends StatelessWidget {
                         emptyFullScreen(context)
                       ]));
                 }
-                if (state is SenAllHospitalsState) {
-                  hospitalModel = state.hospital;
-                }
+
                 if(state is SenAllHospitalLoadingState){
                   return
                     SliverList(

@@ -15,6 +15,7 @@ class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
   {
     on<SeniorRepsEvent>((event, emit) async {
       if (event is AllSeniorRepEvent) {
+
         (await allSeinor_Rep_Usecase.execute(UserInfo.repId)).fold((failure) {
       emit(AllSeniorRepErrorState(failure: failure));
       }, (data) async {
