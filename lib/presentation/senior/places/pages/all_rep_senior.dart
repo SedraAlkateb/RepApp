@@ -70,6 +70,7 @@ class AllRepSenior extends StatelessWidget {
           );
         }
         if(state is AllSeniorRepLoadingState){
+          print("lllllllllllllllllllllllllll");
           return loadingFullScreen(context);
         }
         if(state is AllSeniorRepErrorState){
