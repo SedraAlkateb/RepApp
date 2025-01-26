@@ -12,10 +12,8 @@ class NoteScienceDoctor extends StatelessWidget {
   NoteScienceDoctor({super.key,required this.id});
   final int id;
   final TextEditingController searchNoteDoctorController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leading: Builder(

@@ -56,12 +56,13 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
         });
       }
     else  if(event is ChangeReadScienceNoteEvent){
-      print("isRead");
       print(event.isRead);
-      List<DoctorNoteModel> doctorNote=doctorNoteModel;
-      doctorNote[event.id].isRead=event.isRead;
-      doctorNoteModel=doctorNote;
-        emit(SenAsReadState(doctorNote));
+      List<DoctorNoteModel> doctorNote = List.from(doctorNoteModel);
+      DoctorNoteModel doctorNote1=DoctorNoteModel(doctorNote[event.id].docTitle, doctorNote[event.id].spTitle,
+          doctorNote[event.id].address, doctorNote[event.id].visitDate, doctorNote[event.id].note, event.isRead) ;
+      doctorNoteModel[event.id]=doctorNote1;
+      doctorNote[event.id]=doctorNote1;
+      emit(SenAsReadState(doctorNote));
       }
     });
   }
