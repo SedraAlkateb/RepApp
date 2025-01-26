@@ -118,7 +118,7 @@ class RepProfile extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             BlocProvider.of<SeniorProfBloc>(context)
-                                .add(SenAllPlaceEvent(203));
+                                .add(SenAllPlaceEvent(156));
 
                             Navigator.pushNamed(context, Routes.seniorPlaces);
                           },
@@ -221,8 +221,8 @@ class RepProfile extends StatelessWidget {
                       text: "الأطباء الذين تمت زيارتهم",
                     function: () {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenAllNoteDoctorEvent(UserInfo.repId));
-                      Navigator.pushNamed(context, Routes.seniorNoteDoc);
+                          .add(VisitDocEvent(UserInfo.repId));
+                      Navigator.pushNamed(context, Routes.senVisitDoctor);
                     },
                   ),
                   Padding(
@@ -235,7 +235,11 @@ class RepProfile extends StatelessWidget {
                   RowList(
                     icon1: FontAwesomeIcons.userDoctor,
                     text: "الأطباء الذين لم تمت زيارتهم",
-
+                    function: () {
+                      BlocProvider.of<SeniorProfBloc>(context)
+                          .add(NoVisitDocEvent(UserInfo.repId));
+                      Navigator.pushNamed(context, Routes.noVisitDoctor);
+                    },
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
@@ -246,7 +250,13 @@ class RepProfile extends StatelessWidget {
                   ),
                   RowList(
                       icon1: FontAwesomeIcons.solidNoteSticky,
-                      text: "قائمة بالملاحظات الخاصة للمكتب العلمي"),
+                      text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
+                    function: () {
+                      BlocProvider.of<SeniorProfBloc>(context)
+                          .add(SenAllNoteDoctorEvent(UserInfo.repId));
+                      Navigator.pushNamed(context, Routes.seniorNoteDoc);
+                    },
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
