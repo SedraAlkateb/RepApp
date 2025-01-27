@@ -113,20 +113,17 @@ class NoteScienceDoctor extends StatelessWidget {
                         decoration:
                         doctorNoteModel.isRead?
                         BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorManager.secondaryColor6,
-                              ColorManager.secondaryColor7,
-                            ],
-                          ),
+                          border: Border.all(color: ColorManager.secondaryColor18),
+
+                          color: ColorManager.secondaryColor7,
                           borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s8)),
+                          BorderRadius.all(Radius.circular(AppSize.s14)),
                         ):
                         BoxDecoration(
                           color: ColorManager.white,
                           border: Border.all(color: ColorManager.hintGrey),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s8)),
+                          BorderRadius.all(Radius.circular(AppSize.s14)),
                         ),
                         child: Column(
                           children: [
@@ -138,12 +135,12 @@ class NoteScienceDoctor extends StatelessWidget {
                                 children: [
                                   Text(
                                     doctorNoteModel.docTitle,
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                    style:  doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "${doctorNoteModel.address}",
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                    style: doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                   Row(

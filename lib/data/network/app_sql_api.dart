@@ -159,28 +159,35 @@ class AppSqlApi extends AppSqlApiAbs {
         }
         if (planBrands != null && planBrands.isNotEmpty) {
           for (var planBrand in planBrands) {
-            batch.insert('planBrand', planBrand.toMap());
+            batch.insert('planBrand', planBrand.toMap(),
+              conflictAlgorithm: ConflictAlgorithm.abort,
+            );
           }
         }
         for (var visitHos in visitHospital.data) {
           batch.insert('visit_hospital', visitHos.toMap(),
-              conflictAlgorithm: ConflictAlgorithm.ignore);
-        }
-        for (var visitDoc in visitDoctor.data) {
-          batch.insert(
-            'visit_doctor',
-            visitDoc.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.ignore,
+            conflictAlgorithm: ConflictAlgorithm.abort,
           );
         }
-        await batch.commit(noResult: true);
-        await txn.execute("PRAGMA foreign_keys = ON");
+        for (var visitDoc in visitDoctor.data) {
+          batch.insert('visit_doctor', visitDoc.toMap(),
+             conflictAlgorithm: ConflictAlgorithm.abort,
+          );
+        }
         for (var visitHosBrand in visitHospital.brand) {
-          txn.insert('visit_brand_hospital', visitHosBrand.toMap());
+          batch.insert('visit_brand_hospital', visitHosBrand.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.abort,
+
+          );
         }
         for (var visitDocBrand in visitDoctor.brand) {
-          txn.insert('visit_brand_doctor', visitDocBrand.toMap());
+          batch.insert('visit_brand_doctor', visitDocBrand.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.abort,
+
+          );
         }
+        await txn.execute("PRAGMA foreign_keys = ON");
+        await batch.commit(noResult: true);
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
           specialization.id AS specialization_id, 
@@ -240,6 +247,7 @@ class AppSqlApi extends AppSqlApiAbs {
       });
       return "";
     } catch (error) {
+       print(error.toString());
       return error.toString();
       //throw error;
     }
