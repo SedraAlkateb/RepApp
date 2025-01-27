@@ -99,6 +99,8 @@ import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../domain/usecase/all_seinor_reps_usecase.dart';
+
 GetIt instance = GetIt.instance;
 Future<void> initAppModule() async {
 

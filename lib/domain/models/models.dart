@@ -774,7 +774,49 @@ class DoctorModel {
         map['workHours']);
   }
 }
+//
+class DoctorIssueModel {
+  String docTitle;
+  String spTitle;
+  String address;
+  String visitDate;
+  String? issue;
 
+  DoctorIssueModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
+  Map<String, dynamic> toMap() {
+    return {
+      'docTitle': docTitle,
+      'spTitle': spTitle,
+      'address': address,
+      'visitDate': visitDate,
+      "issue": issue,
+
+    };
+  }
+
+  factory DoctorIssueModel.fromMap(Map<String, dynamic> map) {
+    return DoctorIssueModel(
+      map['docTitle'],
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
+      map["issue"],
+
+    );
+  }
+  factory DoctorIssueModel.fromMap1(Map<String, dynamic> map) {
+    return DoctorIssueModel(
+      (map['docTitle']),
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
+      map['issue'],
+
+    );
+  }
+}
+//
 class DoctorNoteModel {
   String docTitle;
   String spTitle;

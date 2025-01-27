@@ -550,6 +550,30 @@ extension AllVisitNotesMapper on AllVisitNotesBaseResponse? {
     return visitNotes;
   }
 }
+//
+extension VisitIssueMapper on VisitIssueResponse? {
+  DoctorIssueModel toDomain() {
+    return DoctorIssueModel(
+        this?.docTitle ?? Constants.empty,
+        this?.spTitle ?? Constants.empty,
+        this?.address ?? Constants.empty,
+        this?.visitDate ?? Constants.empty,
+        this?.issue ?? Constants.empty,
+
+    );
+  }
+}
+extension AllVisitIssueMapper on AllVisitIssueBaseResponse? {
+  List<DoctorIssueModel> toDomain() {
+    List<DoctorIssueModel> visitIssue =
+    (this?.data?.notes?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorIssueModel>()
+        .toList();
+    return visitIssue;
+  }
+}
+//
 
 extension NoVisitDocMapper on NoVisitDoctorResponse? {
   NoVisitDocModel toDomain() {
