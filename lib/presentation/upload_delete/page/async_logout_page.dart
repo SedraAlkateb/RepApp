@@ -38,7 +38,7 @@ class AsyncLogoutPage extends StatelessWidget {
                   if (state is SyncData1ErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if (state is SyncData1LoadingState) {
+                  if (state is SyncData0LoadingState) {
                     loading(context);
                   }
                   if (state is SyncData1State) {
