@@ -97,7 +97,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         });
       }
       else if (event is Async1DataEvent) {
-        emit(SyncData1LoadingState());
+    event.x==0?    emit(SyncData0LoadingState()): emit(SyncData1LoadingState());
         await getData();
       }
       else if (event is GetEvent){
@@ -117,6 +117,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   }
 
   Future<bool> getData() async {
+
     try {
       planBrands = [];
     //  visitBrandPharmacies = [];

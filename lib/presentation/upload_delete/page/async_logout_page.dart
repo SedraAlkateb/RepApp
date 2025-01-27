@@ -38,7 +38,7 @@ class AsyncLogoutPage extends StatelessWidget {
                   if (state is SyncData1ErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if (state is SyncData1LoadingState) {
+                  if (state is SyncData0LoadingState) {
                     loading(context);
                   }
                   if (state is SyncData1State) {
@@ -70,7 +70,7 @@ class AsyncLogoutPage extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       BlocProvider.of<AsyncInBloc>(context)
-                          .add(Async1DataEvent());
+                          .add(Async1DataEvent(0));
                     },
                     child: Text(
                       " رفع البيانات ",
