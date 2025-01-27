@@ -70,7 +70,7 @@ class AsyncLogoutPage extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       BlocProvider.of<AsyncInBloc>(context)
-                          .add(Async1DataEvent());
+                          .add(Async1DataEvent(0));
                     },
                     child: Text(
                       " رفع البيانات ",

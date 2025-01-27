@@ -3,6 +3,8 @@ part of 'async_in_bloc.dart';
 @immutable
 sealed class AsyncInEvent extends Equatable{}
 class Async1DataEvent extends AsyncInEvent{
+  final int x;
+  Async1DataEvent(this.x);
   @override
   List<Object?> get props => [];
 

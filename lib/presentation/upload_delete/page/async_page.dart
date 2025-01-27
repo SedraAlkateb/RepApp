@@ -77,7 +77,7 @@ class AsyncPage extends StatelessWidget {
                     onPressed: () {
 
                       BlocProvider.of<AsyncInBloc>(context)
-                          .add(Async1DataEvent());
+                          .add(Async1DataEvent(1));
                     },
                     child: Text(
                       " رفع البيانات ",

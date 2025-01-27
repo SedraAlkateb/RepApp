@@ -15,6 +15,12 @@ final class SyncData1LoadingState extends AsyncInState {
   @override
   List<Object?> get props =>[];
 }
+final class SyncData0LoadingState extends AsyncInState {
+  @override
+  SyncData0LoadingState();
+  @override
+  List<Object?> get props =>[];
+}
 final class SyncData1State extends AsyncInState {
   SyncData1State();
   @override
