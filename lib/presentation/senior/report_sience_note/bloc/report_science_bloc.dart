@@ -5,7 +5,6 @@ import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'report_science_event.dart';
 part 'report_science_state.dart';
 
@@ -14,11 +13,8 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
   AllVisitNotesUsecase allVisitNotesUsecase;
   ReportScienceBloc(
       this.allVisitNotesUsecase
-
       ) : super(ReportScienceInitial()) {
-
     on<ReportScienceEvent>((event, emit)async {
-
       if (event is SenSearchNoteDoctorEvent) {
         List<DoctorNoteModel> doctorNote;
         String search = normalizeText(event.contant);

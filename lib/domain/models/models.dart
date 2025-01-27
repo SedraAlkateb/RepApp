@@ -427,14 +427,14 @@ class VisitDoctorModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'data': data,
-      'kaswn': kaswn,
-      'science': science,
-      'additaion': additaion,
-      'doctorId': doctorId,
-      'flag': flag,
-      'target': target
+      'id': id??0,
+      'data': data??"",
+      'kaswn': kaswn??"",
+      'science': science??"",
+      'additaion': additaion??"",
+      'doctorId': doctorId??0,
+      'flag': flag??0,
+      'target': target??""
     };
   }
 

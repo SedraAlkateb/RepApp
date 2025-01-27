@@ -38,112 +38,6 @@ class DatabaseHelper {
         await db.execute("PRAGMA foreign_keys = ON");
       },
     );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
 
   Future _onCreate(Database db, int version) async {
@@ -229,7 +123,8 @@ class DatabaseHelper {
      falg INTEGER NOT NULL,
      sampleCoast INTEGER NOT NULL
     );
-    ''');
+    '''
+    );
     await db.execute('''
         CREATE TABLE hospitalSp (
         id INTEGER PRIMARY KEY,
@@ -251,7 +146,9 @@ class DatabaseHelper {
     repPlanId INTEGER NOT NULL,
     brandType TEXT NOT NULL DEFAULT 0,
     amount TEXT NOT NULL,
-    flag INTEGER NOT NULL DEFAULT 0
+    flag INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (brandId) REFERENCES brand(id),
+    FOREIGN KEY (spId) REFERENCES specialization(id)
     );
     ''');
     await db.execute('''
@@ -259,20 +156,21 @@ class DatabaseHelper {
     id INTEGER PRIMARY KEY,
     spId INTEGER NOT NULL,
     brandId INTEGER NOT NULL,
-    brandType TEXT NOT NULL
+    brandType TEXT NOT NULL,
+    FOREIGN KEY (spId) REFERENCES specialization(id)
+
     );
    ''');
     await db.execute('''
      CREATE TABLE visit_doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data TEXT NOT NULL,
-    kaswn TEXT NOT NULL,
-    science TEXT ,
+    kaswn TEXT,
+    science TEXT NOT NULL,
     additaion TEXT , 
     doctorId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     target TEXT NOT NULL,
-    UNIQUE (science,kaswn),
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
  ''');
@@ -280,13 +178,12 @@ class DatabaseHelper {
     CREATE TABLE visit_hospital(
     id INTEGER PRIMARY  KEY AUTOINCREMENT,
     data TEXT NOT NULL,
-    kaswn TEXT NOT NULL,
-    science TEXT ,
+    kaswn TEXT ,
+    science TEXT NOT NULL,
     additaion TEXT , 
     hospitalSpId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
      target TEXT NOT NULL,
-     UNIQUE (science,kaswn),
     FOREIGN KEY (hospitalSpId) REFERENCES hospitalSp(id)
 );
 ''');
