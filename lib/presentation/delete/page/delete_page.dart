@@ -6,12 +6,17 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DeletePage extends StatelessWidget {
+class DeletePage extends StatefulWidget {
   const DeletePage({super.key});
 
   @override
+  State<DeletePage> createState() => _DeletePageState();
+}
+
+class _DeletePageState extends State<DeletePage> {
+  @override
   Widget build(BuildContext context) {
-    success(context);
+   // success(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(

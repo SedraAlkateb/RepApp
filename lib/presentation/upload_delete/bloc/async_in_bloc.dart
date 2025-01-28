@@ -216,6 +216,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
             await updateFlagDoctorSqlUsecase.execute();
         final visitDoctorFlagFailureOrSuccess =
             visitDoctorFlagResult.fold((failure) => failure, (data) => data);
+        print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
         if (visitDoctorFlagFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(
               failure:
@@ -238,6 +239,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
             await updateFlagHospitalSqlUsecase.execute();
         final visitHospitalFlagFailureOrSuccess =
             visitHospitalFlagResult.fold((failure) => failure, (data) => data);
+        print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+
         if (visitHospitalFlagFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(
               failure: Failure(

@@ -32,24 +32,22 @@ class AsyncPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: AppSize.s40),
-              BlocListener<AsyncInBloc, AsyncInState>(
+              BlocConsumer<AsyncInBloc, AsyncInState>(
+                buildWhen: (previous, current) {
+                  return current is SyncData1LoadingState || current is SyncData1ErrorState ;
+                },
                 listener: (context, state) {
                   if (state is SyncData1ErrorState) {
                     error(context, " ${state.failure.massage}ffffff",
                         state.failure.code);
                   }
-                  if (state is SyncData1LoadingState) {
-                    loading(context);
-                  }
                   if (state is SyncData1State) {
                     // BlocProvider.of<AsyncInBloc>(context)
                     //     .add(UpdateFlagEvent());
-                    success(context);
                     Navigator.pushReplacementNamed(
                       context,
                       Routes.delete,
                     );
-
                   }
                   if (state is GetState) {
                     BlocProvider.of<AsyncInBloc>(context).add(GetEvent());
@@ -72,14 +70,15 @@ class AsyncPage extends StatelessWidget {
                   //   BlocProvider.of<AsyncInBloc>(context).add(AsyncInBaseEvent());
                   // }
                 },
-                child: ElevatedButton(
-                    onPressed: () {
-
+                builder: (context, state) => ElevatedButton(
+                    onPressed:  state is SyncData1LoadingState?null:() {
                       BlocProvider.of<AsyncInBloc>(context)
                           .add(Async1DataEvent());
                     },
                     child: Text(
-                      " رفع البيانات ",
+                      state is SyncData1LoadingState
+                          ? "loading"
+                          : " رفع البيانات ",
                     )),
               ),
               SizedBox(height: AppSize.s50),

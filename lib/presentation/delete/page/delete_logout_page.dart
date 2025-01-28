@@ -10,7 +10,7 @@ class DeleteLogoutPage extends StatelessWidget {
   const DeleteLogoutPage({super.key});
   @override
   Widget build(BuildContext context) {
-    success(context);
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
