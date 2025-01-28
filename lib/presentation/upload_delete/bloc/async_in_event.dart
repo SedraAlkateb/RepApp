@@ -12,19 +12,12 @@ class Async0DataEvent extends AsyncInEvent{
   List<Object?> get props => [];
 
 }
-class DeleteBaseEvent extends AsyncInEvent{
-  @override
-  List<Object?> get props => [];
-}
+
 class AsyncInBaseEvent extends AsyncInEvent{
   @override
   List<Object?> get props => [];
 }
-class DeleteAllEvent extends AsyncInEvent{
-  @override
-  List<Object?> get props => [];
 
-}
 class UpdateFlagEvent extends AsyncInEvent{
   @override
   List<Object?> get props => [];

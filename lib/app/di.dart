@@ -84,6 +84,7 @@ import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
+import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
@@ -333,20 +334,11 @@ Future<void> initAsyncInModule() async {
         () => UpdateFlagDoctorSqlUsecase(instance()));
     instance.registerFactory<UpdateFlagHospitalSqlUsecase>(
             () => UpdateFlagHospitalSqlUsecase(instance()));
-    if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
-      instance.registerFactory<DeleteAllSqlUsecase>(
-          () => DeleteAllSqlUsecase(instance()));
-    }
-    if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
-      instance.registerFactory<DeleteSqlUsecase>(
-          () => DeleteSqlUsecase(instance()));
-    }
 
     // if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
     //   instance.registerFactory<DeleteSqlUsecase>(
     //       () => DeleteSqlUsecase(instance()));
     // }
-
     if (!GetIt.I.isRegistered<EditIsLoginSqlUsecase>()) {
       instance.registerFactory<EditIsLoginSqlUsecase>(
           () => EditIsLoginSqlUsecase(instance()));
@@ -374,12 +366,31 @@ Future<void> initAsyncInModule() async {
         instance(),
         instance(),
         instance(),
+        instance()));
+  }
+}
+
+Future<void> initDeleteModule() async {
+  if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
+    instance.registerFactory<DeleteAllSqlUsecase>(
+            () => DeleteAllSqlUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<EditIsLoginSqlUsecase>()) {
+    instance.registerFactory<EditIsLoginSqlUsecase>(
+            () => EditIsLoginSqlUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
+    instance.registerFactory<DeleteSqlUsecase>(
+            () => DeleteSqlUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<DeleteBloc>()) {
+
+    instance.registerFactory<DeleteBloc>(() => DeleteBloc(
         instance(),
         instance(),
         instance()));
   }
 }
-
 Future<void> initDoctorModule() async {
   if (!GetIt.I.isRegistered<AllDoctorsSqlUsecase>()) {
     instance.registerFactory<AllDoctorsSqlUsecase>(
