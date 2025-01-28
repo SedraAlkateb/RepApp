@@ -33,16 +33,12 @@ class AsyncLogoutPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: AppSize.s40),
-              BlocListener<AsyncInBloc, AsyncInState>(
+              BlocConsumer<AsyncInBloc, AsyncInState>(
                 listener: (context, state) {
                   if (state is SyncData1ErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if (state is SyncData0LoadingState) {
-                    loading(context);
-                  }
                   if (state is SyncData1State) {
-                    success(context);
                     Navigator.pushReplacementNamed(
                       context,
                       Routes.deleteLogout,
@@ -57,15 +53,14 @@ class AsyncLogoutPage extends StatelessWidget {
                   // if (state is UpdateFlagState) {
                   //   BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
                   // }
-
                 },
-                child: ElevatedButton(
-                    onPressed: () {
+                builder:(context, state) =>  ElevatedButton(
+                    onPressed:state is SyncData0LoadingState?null: () {
                       BlocProvider.of<AsyncInBloc>(context)
                           .add(Async0DataEvent());
                     },
                     child: Text(
-                      " رفع البيانات ",
+                      state is SyncData0LoadingState?"loading":    " رفع البيانات ",
                     )),
               ),
               SizedBox(height: AppSize.s50),

@@ -24,13 +24,13 @@ void error(BuildContext context, String massage, int code) {
 
 
 
-String success(BuildContext context) {
+Future<bool> success(BuildContext context) async{
   try {
     ContentState().dismissDialog(context);
-    return "Success: Dialog dismissed.";
+    return true;
   } catch (e) {
-    print("Error in success method: $e");
-    return "Error: $e";
+    print("ssssssssssssssssss: $e");
+    return false;
   }
 }
 void successWithMessage(BuildContext context, String message) {
