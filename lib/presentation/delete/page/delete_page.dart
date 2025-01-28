@@ -11,6 +11,7 @@ class DeletePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    success(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(

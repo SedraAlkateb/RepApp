@@ -339,18 +339,12 @@ Future<void> initAsyncInModule() async {
     //   instance.registerFactory<DeleteSqlUsecase>(
     //       () => DeleteSqlUsecase(instance()));
     // }
-    if (!GetIt.I.isRegistered<EditIsLoginSqlUsecase>()) {
-      instance.registerFactory<EditIsLoginSqlUsecase>(
-          () => EditIsLoginSqlUsecase(instance()));
-    }
-/////////////////////////////////////////////////////////////////////////////////////Todo
     if (!GetIt.I.isRegistered<IsActiveUsecase>()) {
       instance
           .registerFactory<IsActiveUsecase>(() => IsActiveUsecase(instance()));
     }
 
     instance.registerFactory<AsyncInBloc>(() => AsyncInBloc(
-        instance(),
         instance(),
         instance(),
         instance(),
@@ -399,7 +393,6 @@ Future<void> initDoctorModule() async {
       instance.registerFactory<CheckReciUsecase>(
           () => CheckReciUsecase(instance()));
     }
-
     instance.registerFactory<DoctorsBloc>(
         () => DoctorsBloc(instance(), instance()));
   }

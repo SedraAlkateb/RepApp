@@ -42,7 +42,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   GetPharmacyVisitsSqlUsecase getPharmacyVisitsSqlUsecase;
   GetHospitalSpVisitsSqlUsecase getHospitalSpVisitsSqlUsecase;
   GetPlanBrandSqlUsecase getPlanBrandSqlUsecase;
-  EditIsLoginSqlUsecase editIsLoginSqlUsecase;
   IsPlanSqlUsecase isPlanSqlUsecase;
 
   List<PlanBrandModel> planBrands = [];
@@ -56,7 +55,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   AsyncInBloc(
       this.isPlanSqlUsecase,
       this.isActiveUsecase,
-      this.editIsLoginSqlUsecase,
       this.visitPharmacyUsecase,
       this.visitDoctorUsecase,
       this.visitHospitalUsecase,
@@ -83,20 +81,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       }
     else if (event is GetEvent) {
         await setData();
-      } else
-        if (event is EditEventIn) {
-        (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
-            (failure) {
-          emit(EditStatusSErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          UserInfo.isLogging = event.num;
-          emit(EditStatusState());
-        });
       }
-    else if (event is AsyncInBaseEvent) {
-        emit(EndState());
-      }
+
     });
   }
 

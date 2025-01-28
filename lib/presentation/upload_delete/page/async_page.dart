@@ -42,8 +42,6 @@ class AsyncPage extends StatelessWidget {
                     loading(context);
                   }
                   if (state is SyncData1State) {
-                    BlocProvider.of<AsyncInBloc>(context)
-                        .add(AsyncInBaseEvent());
                     // BlocProvider.of<AsyncInBloc>(context)
                     //     .add(UpdateFlagEvent());
                     success(context);

@@ -13,19 +13,9 @@ class Async0DataEvent extends AsyncInEvent{
 
 }
 
-class AsyncInBaseEvent extends AsyncInEvent{
-  @override
-  List<Object?> get props => [];
-}
+
 
 class UpdateFlagEvent extends AsyncInEvent{
-  @override
-  List<Object?> get props => [];
-
-}
-class EditEventIn extends AsyncInEvent{
-final  int num;
-  EditEventIn(this.num);
   @override
   List<Object?> get props => [];
 
