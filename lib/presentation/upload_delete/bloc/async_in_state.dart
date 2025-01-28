@@ -99,3 +99,9 @@ class GetState extends AsyncInState{
   List<Object?> get props => [];
 
 }
+class EndState extends AsyncInState{
+
+  @override
+  List<Object?> get props => [];
+
+}

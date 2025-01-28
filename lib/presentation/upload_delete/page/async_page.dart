@@ -42,6 +42,8 @@ class AsyncPage extends StatelessWidget {
                     loading(context);
                   }
                   if (state is SyncData1State) {
+                    BlocProvider.of<AsyncInBloc>(context)
+                        .add(AsyncInBaseEvent());
                     // BlocProvider.of<AsyncInBloc>(context)
                     //     .add(UpdateFlagEvent());
                     success(context);
@@ -49,8 +51,7 @@ class AsyncPage extends StatelessWidget {
                       context,
                       Routes.delete,
                     );
-                    BlocProvider.of<AsyncInBloc>(context)
-                        .add(AsyncInBaseEvent());
+
                   }
                   if (state is GetState) {
                     BlocProvider.of<AsyncInBloc>(context).add(GetEvent());
@@ -77,7 +78,7 @@ class AsyncPage extends StatelessWidget {
                     onPressed: () {
 
                       BlocProvider.of<AsyncInBloc>(context)
-                          .add(Async1DataEvent(1));
+                          .add(Async1DataEvent());
                     },
                     child: Text(
                       " رفع البيانات ",
