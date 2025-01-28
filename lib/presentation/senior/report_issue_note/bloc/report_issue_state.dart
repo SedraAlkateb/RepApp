@@ -1,7 +1,7 @@
 part of 'report_issue_bloc.dart';
 
 @immutable
-sealed class ReportIssueState {}
+sealed class ReportIssueState extends Equatable {}
 
 final class ReportIssueInitial extends ReportIssueState {
   @override
