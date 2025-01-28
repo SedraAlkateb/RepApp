@@ -34,6 +34,9 @@ class AsyncLogoutPage extends StatelessWidget {
               ),
               SizedBox(height: AppSize.s40),
               BlocConsumer<AsyncInBloc, AsyncInState>(
+                buildWhen: (previous, current) {
+                  return current is SyncData0LoadingState || current is SyncData1ErrorState ;
+                },
                 listener: (context, state) {
                   if (state is SyncData1ErrorState) {
                     error(context, state.failure.massage, state.failure.code);
