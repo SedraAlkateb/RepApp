@@ -97,32 +97,32 @@ class DrawerPage extends StatelessWidget {
             },
           ),
 
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 10),
-          //   child: Divider(
-          //     thickness: 0.5,
-          //     color: ColorManager.hintGrey,
-          //   ),
-          // ),
-          // ListTile(
-          //   focusColor: ColorManager.secondaryColor,
-          //   minTileHeight: 10,
-          //   leading: Icon(Icons.list_alt_outlined,
-          //       color: ColorManager.secondaryColor4),
-          //   title: Text(
-          //     'تقارير المندوبين',
-          //     style: TextStyle(color: ColorManager.secondaryColor1),
-          //   ),
-          //   onTap: () {
-          //     WidgetsBinding.instance.addPostFrameCallback((_) {
-          //       Navigator.pushNamedAndRemoveUntil(
-          //         context,
-          //         Routes.AllRepSenior,
-          //         (route) => false,
-          //       );
-          //     });
-          //   },
-          // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
+            ),
+          ),
+          ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
+            leading: Icon(Icons.list_alt_outlined,
+                color: ColorManager.secondaryColor4),
+            title: Text(
+              'تقارير المندوبين',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.AllRepSenior,
+                  (route) => false,
+                );
+              });
+            },
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
