@@ -25,15 +25,14 @@ void error(BuildContext context, String massage, int code) {
 
 
 String success(BuildContext context) {
- try{
-   ContentState().dismissDialog(context);
-   return "true";
- }catch(e){
-   print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-   return"$e ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
- }
+  try {
+    ContentState().dismissDialog(context);
+    return "Success: Dialog dismissed.";
+  } catch (e) {
+    print("Error in success method: $e");
+    return "Error: $e";
+  }
 }
-
 void successWithMessage(BuildContext context, String message) {
   ContentState().dismissDialog(context);
   SuccessState(message)

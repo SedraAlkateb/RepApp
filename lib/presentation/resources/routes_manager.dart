@@ -13,8 +13,8 @@ import 'package:domina_app/presentation/senior/representative/page/spec_senior.d
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
-import 'package:domina_app/presentation/upload_delete/page/delete_logout_page.dart';
-import 'package:domina_app/presentation/upload_delete/page/delete_page.dart';
+import 'package:domina_app/presentation/delete/page/delete_logout_page.dart';
+import 'package:domina_app/presentation/delete/page/delete_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/doctors/pages/doctors.dart';
 import 'package:domina_app/presentation/hospitals/page/hospital.dart';
@@ -123,6 +123,7 @@ class RouteGenerator {
         initBrandPlanModule();
         return MaterialPageRoute(builder: (_) => BrandPlanPage());
       case Routes.delete:
+        initDeleteModule();
         return MaterialPageRoute(builder: (_) => DeletePage());
       case Routes.Recipes:
         initBrandRecModule();
@@ -155,7 +156,7 @@ class RouteGenerator {
       case Routes.senVisitDoctor:
         return MaterialPageRoute(builder: (_) => SenVisitDoctor());
       case Routes.deleteLogout:
-        initAsyncInModule();
+        initDeleteModule();
         return MaterialPageRoute(builder: (_) => DeleteLogoutPage());
       default:
         return unDefinedRoute();

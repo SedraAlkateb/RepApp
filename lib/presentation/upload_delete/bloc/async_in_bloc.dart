@@ -42,10 +42,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   GetPharmacyVisitsSqlUsecase getPharmacyVisitsSqlUsecase;
   GetHospitalSpVisitsSqlUsecase getHospitalSpVisitsSqlUsecase;
   GetPlanBrandSqlUsecase getPlanBrandSqlUsecase;
-  EditIsLoginSqlUsecase editIsLoginSqlUsecase;
   IsPlanSqlUsecase isPlanSqlUsecase;
-  DeleteSqlUsecase deleteSqlUsecase;
-  DeleteAllSqlUsecase deleteAllSqlUsecase;
+
   List<PlanBrandModel> planBrands = [];
   List<VisitBrandPharmacyModel> visitBrandPharmacies = [];
   List<VisitBrandPharmacyModel> visitBrandDoctors = [];
@@ -57,7 +55,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   AsyncInBloc(
       this.isPlanSqlUsecase,
       this.isActiveUsecase,
-      this.editIsLoginSqlUsecase,
       this.visitPharmacyUsecase,
       this.visitDoctorUsecase,
       this.visitHospitalUsecase,
@@ -69,50 +66,23 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.getDoctorVisitsSqlUsecase,
       this.getPharmacyVisitsSqlUsecase,
       this.getPlanBrandSqlUsecase,
-      this.deleteSqlUsecase,
-      this.deleteAllSqlUsecase,
       this.planBrandUsecase,
       this.updateFlagDoctorSqlUsecase,
       this.updateFlagHospitalSqlUsecase)
       : super(AsyncInInitial()) {
     on<AsyncInEvent>((event, emit) async {
-      if (event is DeleteBaseEvent) {
-        //   emit(DeleteBaseLoadingState());
-        (await deleteSqlUsecase.execute()).fold((failure) {
-          emit(DeleteBaseErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          emit(DeleteBaseState());
-        });
-      } else if (event is DeleteAllEvent) {
-        //   emit(DeleteAllLoadingState());
-        (await deleteAllSqlUsecase.execute()).fold((failure) {
-          emit(DeleteAllErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          UserInfo.flag1 = 0;
-          emit(DeleteAllState());
-        });
-      } else if (event is Async1DataEvent) {
+    if (event is Async1DataEvent) {
         emit(SyncData1LoadingState());
         await getData();
-      } else if (event is Async0DataEvent) {
+      }
+    else if (event is Async0DataEvent) {
         emit(SyncData0LoadingState());
         await getData();
-      } else if (event is GetEvent) {
-        await setData();
-      } else if (event is EditEventIn) {
-        (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
-            (failure) {
-          emit(EditStatusSErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          UserInfo.isLogging = event.num;
-          emit(EditStatusState());
-        });
-      } else if (event is AsyncInBaseEvent) {
-        emit(EndState());
       }
+    else if (event is GetEvent) {
+        await setData();
+      }
+
     });
   }
 

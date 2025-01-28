@@ -142,19 +142,17 @@ extension FlowStateExtension on FlowState{
     return ModalRoute.of(context)?.isCurrent != true;
   }
 
-  dismissDialog(BuildContext context){
-   try{
-     if (Navigator.canPop(context)) {
-       if(_isCurrentDialogShowing(context)){
-         Navigator.of(context,rootNavigator : true).pop(true);
-         print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-
-       }
-     }
-   }catch(e){
-     print("$e eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-   }
-
+  void dismissDialog(BuildContext context) {
+    try {
+      // التحقق مما إذا كان يمكن إغلاق نافذة dialog حاليًا
+      if (_isCurrentDialogShowing(context)) {
+        Navigator.of(context, rootNavigator: true).pop(true);
+        print("Dialog dismissed successfully.");
+      }
+    } catch (e) {
+      // طباعة الخطأ في حال حدوث استثناء
+      print("Error dismissing dialog: $e");
+    }
   }
   showPopup(BuildContext context,StateRendererType stateRendererType,String message,{String title =Constants.empty}){
     WidgetsBinding.instance.addPostFrameCallback((_) =>

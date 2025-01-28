@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
+import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -10,8 +10,7 @@ class DeleteLogoutPage extends StatelessWidget {
   const DeleteLogoutPage({super.key});
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<AsyncInBloc>(context)
-        .add(AsyncInBaseEvent());
+    success(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -35,16 +34,16 @@ class DeleteLogoutPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: AppSize.s50),
-              BlocListener<AsyncInBloc, AsyncInState>(
+              BlocListener<DeleteBloc, DeleteState>(
                 listener: (context, state) {
                   if (state is DeleteAllErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
 
-                  if (state is EditStatusSErrorState) {
+                  if (state is Edit1StatusSErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-                  if (state is EditStatusState) {
+                  if (state is Edit1StatusState) {
                   //  success(context);
                     Navigator.pushNamedAndRemoveUntil(
                       context,
@@ -53,12 +52,12 @@ class DeleteLogoutPage extends StatelessWidget {
                     );
                   }
                   if (state is DeleteAllState) {
-                    BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(0));
+                    BlocProvider.of<DeleteBloc>(context).add(Edit1EventIn(0));
                   }
                 },
                 child: ElevatedButton(
                     onPressed: () {
-                      BlocProvider.of<AsyncInBloc>(context)
+                      BlocProvider.of<DeleteBloc>(context)
                           .add(DeleteAllEvent());
                     },
                     child: Text(
