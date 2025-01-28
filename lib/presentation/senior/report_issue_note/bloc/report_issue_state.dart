@@ -8,10 +8,10 @@ final class ReportIssueInitial extends ReportIssueState {
 List<Object?> get props =>[];}
 
 final class SenAllNoteDoctorsState extends ReportIssueState {
-  final List<DoctorIssueModel> doctorNoteModel;
-  SenAllNoteDoctorsState(this.doctorNoteModel);
+  final List<DoctorIssueModel> doctorIssueModel;
+  SenAllNoteDoctorsState(this.doctorIssueModel);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props =>[doctorIssueModel];
 }
 final class  SenAllNoteDoctorErrorState extends ReportIssueState {
   final Failure failure;
@@ -31,8 +31,8 @@ final class  SenAllNoteDoctorEmptyState extends ReportIssueState {
   List<Object?> get props =>[];
 }
 final class SenAsReadState extends ReportIssueState {
-  final List<DoctorNoteModel> doctorNoteModel;
-  SenAsReadState(this.doctorNoteModel);
+  final List<DoctorIssueModel> doctorIssueModel;
+  SenAsReadState(this.doctorIssueModel);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props =>[doctorIssueModel];
 }
