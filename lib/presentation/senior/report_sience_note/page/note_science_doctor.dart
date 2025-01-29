@@ -167,7 +167,7 @@ class NoteScienceDoctor extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            "الاختصاص :",
+                                            "الإختصاص :",
                                             style:
                                             Theme.of(context).textTheme.bodySmall,
                                           ),
@@ -188,7 +188,8 @@ class NoteScienceDoctor extends StatelessWidget {
                             ),
                             Align(
                               child: IconButton(onPressed: (){
-                                BlocProvider.of<ReportScienceBloc>(context).add(ChangeReadScienceNoteEvent(index, !doctorNoteModel.isRead));
+                                BlocProvider.of<ReportScienceBloc>(context).
+                                add(ChangeReadScienceNoteEvent(index, !doctorNoteModel.isRead));
                               }, icon: Icon(Icons.book_outlined)),
                               alignment: Alignment.bottomLeft,
 

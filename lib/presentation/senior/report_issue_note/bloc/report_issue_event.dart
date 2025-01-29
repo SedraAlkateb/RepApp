@@ -1,7 +1,7 @@
 part of 'report_issue_bloc.dart';
 
 @immutable
-sealed class ReportIssueEvent {}
+sealed class ReportIssueEvent extends Equatable {}
 class SenSearchIssueDoctorEvent extends ReportIssueEvent{
   final String contant;
   SenSearchIssueDoctorEvent(this.contant);
