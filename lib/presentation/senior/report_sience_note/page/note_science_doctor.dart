@@ -30,7 +30,7 @@ class NoteScienceDoctor extends StatelessWidget {
             );
           },
         ),
-        title: Text('ملاحظات الأطباء'),
+        title: Text('ملاحظات المكتب العلمي'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),

@@ -9,6 +9,7 @@ part 'report_issue_event.dart';
 part 'report_issue_state.dart';
 
 class ReportIssueBloc extends Bloc<ReportIssueEvent, ReportIssueState> {
+
   List<DoctorIssueModel> doctorIssueModel = [];
   AllVisitIssueUsecase allVisitIssueUsecase;
   ReportIssueBloc(this.allVisitIssueUsecase) : super(ReportIssueInitial()) {
