@@ -9,7 +9,6 @@ part 'report_issue_state.dart';
 class ReportIssueBloc extends Bloc<ReportIssueEvent, ReportIssueState> {
   ReportIssueBloc() : super(ReportIssueInitial()) {
     on<ReportIssueEvent>((event, emit) {
-      // TODO: implement event handler
     });
   }
 }

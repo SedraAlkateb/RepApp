@@ -1451,10 +1451,13 @@ class AppSqlApi extends AppSqlApiAbs {
   }
   @override
   Future<void> exceptionApi(ExceptionModel exceptionModel) async{
-    Database? mydb = await databaseHelper.database;
-    Batch batch = mydb.batch();
-    batch.insert('exception_table', exceptionModel.toMap());
-    await batch.commit(noResult: true);
+    if(exceptionModel.exceptionModel!="Connection closed before full header was received"){
+      Database? mydb = await databaseHelper.database;
+      Batch batch = mydb.batch();
+      batch.insert('exception_table', exceptionModel.toMap());
+      await batch.commit(noResult: true);
+    }
+
   }
 
   @override
