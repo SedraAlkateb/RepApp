@@ -50,6 +50,7 @@ abstract class RemoteDataSource {
   Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int repDet,);
   Future<AllNoVisitDoctorBaseResponse> visitDoc(int repDet,);
   Future<AllVisitIssueBaseResponse> getVisitIssue(int repDet);
+  Future<Message1Response> insertLog(ExceptionRequestBody list);
 }
 
 
@@ -242,4 +243,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
     return await _appServiceClient.getVisitIssue(repDet);
   }
+
+  @override
+  Future<Message1Response> insertLog(ExceptionRequestBody list)async {
+
+    return await _appServiceClient.insertLog(list);
+  }
+
 }

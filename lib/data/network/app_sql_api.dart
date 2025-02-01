@@ -98,6 +98,9 @@ abstract class AppSqlApiAbs {
   Future<List<VisitPharmacyModel>> visitPharmacyAs();
   Future<List<VisitBrandPharmacyModel>> visitBrandPharmacyAs();
   Future<List<PlanBrandModel>> planBrandsAs();
+  Future<void> exceptionApi(ExceptionModel exceptionModel);
+  Future<List<ExceptionModel>> allException();
+
 }
 
 class AppSqlApi extends AppSqlApiAbs {
@@ -192,6 +195,7 @@ class AppSqlApi extends AppSqlApiAbs {
         SELECT 
           specialization.id AS specialization_id, 
           specialization.title AS specialization_title, 
+           specialization.flag AS specialization_flag, 
           COALESCE(SUM(CAST(doctor.visits AS INTEGER)), 0) AS sumDoctor
         FROM 
           specialization
@@ -204,6 +208,7 @@ class AppSqlApi extends AppSqlApiAbs {
   SELECT 
       specialization.id AS specialization_id, 
       specialization.title AS specialization_title, 
+      specialization.flag AS specialization_flag, 
       COALESCE(
         SUM(
           CASE 
@@ -380,6 +385,7 @@ class AppSqlApi extends AppSqlApiAbs {
       'hospital',
       'place',
       'brand',
+      'exception_table'
     ];
 
     Batch batch = db.batch();
@@ -411,6 +417,7 @@ class AppSqlApi extends AppSqlApiAbs {
       'place',
       'brand',
       'rep',
+      'exception_table'
     ];
     Batch batch = db.batch();
     for (var table in tables) {
@@ -684,7 +691,7 @@ class AppSqlApi extends AppSqlApiAbs {
       hospital.note,
       specialization.id as specialization_id,
       specialization.title as specialization_title
-      
+      specialization.flag AS specialization_flag, 
     FROM visit_hospital
     JOIN hospitalSp ON visit_hospital.hospitalSpId = hospitalSp.id
     JOIN hospital ON hospitalSp.hospitalId = hospital.id
@@ -960,6 +967,7 @@ class AppSqlApi extends AppSqlApiAbs {
     SELECT hospitalSp.*, 
            specialization.id AS specialization_id,
            specialization.title AS specialization_title,
+           specialization.flag AS specialization_flag,
            COUNT(visit_hospital.id) AS visited
     FROM specialization
     JOIN hospitalSp ON hospitalSp.spId = specialization.id
@@ -1172,7 +1180,8 @@ class AppSqlApi extends AppSqlApiAbs {
       hospitalSp.totalDocs,
       hospitalSp.visit,
       hospitalSp.flag,
-      specialization.title as titleSp 
+      specialization.title as titleSp ,
+      specialization.flag as flagSp 
     FROM hospital
     JOIN hospitalSp ON hospitalSp.hospitalId = hospital.id
     JOIN specialization ON hospitalSp.spId = specialization.id
@@ -1196,6 +1205,7 @@ class AppSqlApi extends AppSqlApiAbs {
     brand.sampleCoast AS brand_sampleCost,
     specialization.id AS specialization_id,
     specialization.title AS specialization_title,
+    specialization.flag AS specialization_flag,
     specialization.sumDoctor AS sumDoctor,
     specialization.sumHospital AS sumHospital,
     specialization.sumBrandHospital AS sumBrandHospital
@@ -1235,6 +1245,7 @@ class AppSqlApi extends AppSqlApiAbs {
                 row['specialization_title'] as String,
                 row['brandType'],
                 row['specialization_id'],
+                row['specialization_flag'],
                 row['sumDoctor'],
                 row['sumHospital'],
                 row['sumBrandHospital']),
@@ -1259,6 +1270,7 @@ class AppSqlApi extends AppSqlApiAbs {
       brand.sampleCoast AS brand_sampleCost,
       specialization.id AS specialization_id,
       specialization.title AS specialization_title,
+      specialization.flag AS specialization_flag,
       specialization.sumDoctor AS sumDoctor,
       specialization.sumHospital AS sumHospital,
       specialization.sumBrandHospital AS sumBrandHospital
@@ -1279,6 +1291,7 @@ class AppSqlApi extends AppSqlApiAbs {
         SpecDModel spPlan = SpecDModel(
             specializationId,
             row['specialization_title'],
+            row['specialization_flag'],
             row['sumDoctor'],
             row['sumHospital'],
             row['sumBrandHospital']);
@@ -1432,7 +1445,30 @@ class AppSqlApi extends AppSqlApiAbs {
   }
 
   Future<List<Map<String, dynamic>>> getAllUsers() async {
+
     Database? db = await databaseHelper.database;
     return await db.query('users');
   }
+  @override
+  Future<void> exceptionApi(ExceptionModel exceptionModel) async{
+    if(exceptionModel.exceptionModel!="Connection closed before full header was received"){
+      Database? mydb = await databaseHelper.database;
+      Batch batch = mydb.batch();
+      batch.insert('exception_table', exceptionModel.toMap());
+      await batch.commit(noResult: true);
+    }
+
+  }
+
+  @override
+  Future<List<ExceptionModel>> allException() async{
+    final db = await databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('exception_table');
+
+    return List.generate(maps.length, (i) {
+      return ExceptionModel.fromMap(maps[i]);
+    });
+  }
+
+
 }

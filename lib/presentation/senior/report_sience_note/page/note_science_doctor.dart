@@ -64,7 +64,6 @@ class NoteScienceDoctor extends StatelessWidget {
                       ]));
                 }
                 if(state is SenAsReadState){
-                  print("SDKff");
                   doctorNoteModel = state.doctorNoteModel;
                 }
                 if (state is SenAllNoteDoctorsState) {
@@ -108,8 +107,8 @@ class NoteScienceDoctor extends StatelessWidget {
                       final index = entry.key;
                       final doctorNoteModel = entry.value;
                       return  Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.symmetric(horizontal:  AppPadding.p8),
+                        margin: EdgeInsets.all(AppPadding.p12),
+                        padding: EdgeInsets.symmetric(horizontal:  AppPadding.p12),
                         decoration:
                         doctorNoteModel.isRead?
                         BoxDecoration(

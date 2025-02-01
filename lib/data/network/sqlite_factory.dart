@@ -66,6 +66,7 @@ class DatabaseHelper {
   CREATE TABLE specialization (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
+    flag INTEGER NOT NULL,
     sumDoctor INTEGER DEFAULT 0,
     sumHospital INTEGER DEFAULT 0,
     sumBrandHospital INTEGER DEFAULT 0
@@ -226,6 +227,14 @@ class DatabaseHelper {
     flag INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (visitId) REFERENCES visit_hospital(id),
     FOREIGN KEY (brandId) REFERENCES brand(id)
+    )
+ ''');
+    await db.execute('''
+     CREATE TABLE exception_table(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    exception TEXT NOT NULL,
+   type TEXT NOT NULL,
+   createDate TEXT
     )
  ''');
   }
