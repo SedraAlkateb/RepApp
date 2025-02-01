@@ -2,13 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
 import 'package:domina_app/data/network/error_handler.dart';
 import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/ex.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository_sql.dart';
 
 class RepositroySqlImp extends RepositorySql {
   final AppSqlApi _databaseHelper;
-
-  RepositroySqlImp(this._databaseHelper);
+  final ExcRepository excRepository;
+  RepositroySqlImp(this._databaseHelper, this.excRepository);
 
   @override
   Future<Either<Failure, List<BrandModel>>> getBrandsSql() async {
@@ -16,7 +17,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getBrands();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getBrandsSql"));
+      return Left(failure);
     }
   }
 
@@ -26,7 +30,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getPharmacy();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getPharmacySql"));
+      return Left(failure);
     }
   }
 
@@ -36,7 +43,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getPlace();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getPlaceSql"));
+      return Left(failure);
     }
   }
 
@@ -46,7 +56,9 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getSpec();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "getSpecSql"));
+      return Left(failure);
     }
   }
 
@@ -57,7 +69,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertBrands(brandModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertBrandsSql"));
+      return Left(failure);
     }
   }
 
@@ -69,7 +84,10 @@ class RepositroySqlImp extends RepositorySql {
       return Right(response);
     } catch (e) {
       print(e);
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertPharmacy"));
+      return Left(failure);
     }
   }
 
@@ -79,7 +97,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertPlace(placeModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertPlace"));
+      return Left(failure);
     }
   }
 
@@ -89,7 +110,9 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertSpec(specModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "insertSpec"));
+      return Left(failure);
     }
   }
 
@@ -99,7 +122,10 @@ class RepositroySqlImp extends RepositorySql {
       await _databaseHelper.clearDatabase();
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "clearDatabase"));
+      return Left(failure);
     }
   }
 
@@ -109,7 +135,9 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertLogin(loginModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "loginSql"));
+      return Left(failure);
     }
   }
 
@@ -119,7 +147,9 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getRep();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "getRep"));
+      return Left(failure);
     }
   }
 
@@ -130,7 +160,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getPharmaciesByPlaceId(placeId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "getPharmaciesByPlaceId"));
+      return Left(failure);
     }
   }
 
@@ -163,10 +196,15 @@ class RepositroySqlImp extends RepositorySql {
       if (response == "") {
         return Right(response);
       } else {
-        return Left(Failure(6, response));
+        Failure failure = Failure(6, response);
+        excRepository
+            .exceptionApi(ExceptionModel(failure.massage, "asyncData"));
+        return Left(failure);
       }
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "asyncData"));
+      return Left(failure);
     }
   }
 
@@ -176,7 +214,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getBrandsWithFlag();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getBrandsWithFlag"));
+      return Left(failure);
     }
   }
 
@@ -188,7 +229,10 @@ class RepositroySqlImp extends RepositorySql {
       return Right(response);
     } catch (e) {
       print(e);
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertDoctor"));
+      return Left(failure);
     }
   }
 
@@ -198,7 +242,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getHospital();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getHospitalSql"));
+      return Left(failure);
     }
   }
 
@@ -209,7 +256,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.inserthospital(hospitalModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertHospital"));
+      return Left(failure);
     }
   }
 
@@ -219,7 +269,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getDoctors();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getDoctorSql"));
+      return Left(failure);
     }
   }
 
@@ -230,7 +283,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getDoctorByPlaceId(placeId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getDoctorByPlaceId"));
+      return Left(failure);
     }
   }
 
@@ -241,7 +297,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getHospitalByPlaceId(placeId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "getHospitalByPlaceId"));
+      return Left(failure);
     }
   }
 
@@ -252,7 +311,10 @@ class RepositroySqlImp extends RepositorySql {
       await _databaseHelper.insertVisitPharmacy(visitPharmacyModel);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertVisitPharmacy"));
+      return Left(failure);
     }
   }
 
@@ -263,7 +325,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getVisitPharmacy();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getVisitPharmacy"));
+      return Left(failure);
     }
   }
 
@@ -273,7 +338,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getVisitDoctor();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getVisitDoctor"));
+      return Left(failure);
     }
   }
 
@@ -285,7 +353,10 @@ class RepositroySqlImp extends RepositorySql {
           await _databaseHelper.insertVisitDoctor(visitDoctorModel);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertVisitDoctor"));
+      return Left(failure);
     }
   }
 
@@ -296,7 +367,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.insertHospitalSp(hospitalSps);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertHospitalSp"));
+      return Left(failure);
     }
   }
 
@@ -310,7 +384,10 @@ class RepositroySqlImp extends RepositorySql {
           visitPharmacyModel, visitBrandPharmacyModels);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "insertVisitBrandPharmacy"));
+      return Left(failure);
     }
   }
 
@@ -322,7 +399,10 @@ class RepositroySqlImp extends RepositorySql {
           await _databaseHelper.getBrandsPharmacyByVisitId(visitId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "getBrandsPharmacyByVisitId"));
+      return Left(failure);
     }
   }
 
@@ -333,7 +413,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getBrandsDoctorByVisitId(visitId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "getBrandsDoctorByVisitId"));
+      return Left(failure);
     }
   }
 
@@ -346,7 +429,10 @@ class RepositroySqlImp extends RepositorySql {
           visitDoctorModel, visitBrandDoctorModels);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "insertVisitBrandDoctor"));
+      return Left(failure);
     }
   }
 
@@ -358,7 +444,10 @@ class RepositroySqlImp extends RepositorySql {
           await _databaseHelper.specializationByHospitalId(hospitalId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "specializationByHospitalId"));
+      return Left(failure);
     }
   }
 
@@ -373,7 +462,10 @@ class RepositroySqlImp extends RepositorySql {
           visitHospitalModel, visitBrandPharmacyModels, hos, spec);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "insertVisitBrandHospital"));
+      return Left(failure);
     }
   }
 
@@ -384,7 +476,10 @@ class RepositroySqlImp extends RepositorySql {
       await _databaseHelper.insertVisitHospital(visitHospitalModel, hos, spec);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "insertVisitHospital"));
+      return Left(failure);
     }
   }
 
@@ -394,7 +489,10 @@ class RepositroySqlImp extends RepositorySql {
       await _databaseHelper.editIsLogin(repId, isLogin);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "editIsLogin"));
+      return Left(failure);
     }
   }
 
@@ -406,7 +504,10 @@ class RepositroySqlImp extends RepositorySql {
           await _databaseHelper.getBrandsHospitalByVisitId(visitId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "getBrandsHospitalByVisitId"));
+      return Left(failure);
     }
   }
 
@@ -417,7 +518,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getVisitHospital();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getVisitHospital"));
+      return Left(failure);
     }
   }
 
@@ -430,7 +534,10 @@ class RepositroySqlImp extends RepositorySql {
           id: id, kaswn: kaswn, science: science, target: target);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "updateVisitDoctorFields"));
+      return Left(failure);
     }
   }
 
@@ -446,7 +553,10 @@ class RepositroySqlImp extends RepositorySql {
           id: id, kaswn: kaswn, science: science, target: target);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "updateVisitHospitalFields"));
+      return Left(failure);
     }
   }
 
@@ -458,7 +568,10 @@ class RepositroySqlImp extends RepositorySql {
           visitId: visitId, newNote: newNote);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "updateVisitPharmacy"));
+      return Left(failure);
     }
   }
 
@@ -468,7 +581,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getDoctorBySpec(spId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getDoctorBySpec"));
+      return Left(failure);
     }
   }
 
@@ -479,7 +595,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getHospitalBySpec(spId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getHospitalBySpec"));
+      return Left(failure);
     }
   }
 
@@ -489,7 +608,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.planBrandsAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "planBrandsAs"));
+      return Left(failure);
     }
   }
 
@@ -500,7 +622,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitBrandDoctorAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "visitBrandDoctorAs"));
+      return Left(failure);
     }
   }
 
@@ -511,7 +636,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitBrandHospitalAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "visitBrandHospitalAs"));
+      return Left(failure);
     }
   }
 
@@ -522,7 +650,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitBrandPharmacyAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "visitBrandPharmacyAs"));
+      return Left(failure);
     }
   }
 
@@ -532,7 +663,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitDoctorAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "visitDoctorAs"));
+      return Left(failure);
     }
   }
 
@@ -542,7 +676,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitHospitalAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "visitHospitalAs"));
+      return Left(failure);
     }
   }
 
@@ -552,7 +689,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitHospitalSpAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "visitHospitalSpAs"));
+      return Left(failure);
     }
   }
 
@@ -562,7 +702,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.visitPharmacyAs();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "visitPharmacyAs"));
+      return Left(failure);
     }
   }
 
@@ -572,7 +715,10 @@ class RepositroySqlImp extends RepositorySql {
       await _databaseHelper.clearDatabaseAll();
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "clearDatabaseAll"));
+      return Left(failure);
     }
   }
 
@@ -591,7 +737,9 @@ class RepositroySqlImp extends RepositorySql {
           otherStatus, startDate, endDate, otherStartDate, otherEndDate);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateRep"));
+      return Left(failure);
     }
   }
 
@@ -602,7 +750,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.getAllHospitalSpecialization();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "getAllHospitalSpecialization"));
+      return Left(failure);
     }
   }
 
@@ -613,29 +764,36 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.updateAmounts(planBrands);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "updateAmounts"));
+      return Left(failure);
     }
   }
 
   @override
   Future<Either<Failure, bool>> updateFlagsToDoctor() async {
     try {
-      final response =
-          await _databaseHelper.updateFlagsToDoctor();
+      final response = await _databaseHelper.updateFlagsToDoctor();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "updateFlagsToDoctor"));
+      return Left(failure);
     }
   }
 
   @override
   Future<Either<Failure, bool>> updateFlagsToHospital() async {
     try {
-      final response =
-      await _databaseHelper.updateFlagsToHospital();
+      final response = await _databaseHelper.updateFlagsToHospital();
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "updateFlagsToHospital"));
+      return Left(failure);
     }
   }
   @override
@@ -646,7 +804,10 @@ class RepositroySqlImp extends RepositorySql {
           await _databaseHelper.updateOtherStatus(repId, status, planBrands);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "updateOtherStatus"));
+      return Left(failure);
     }
   }
 
@@ -657,7 +818,10 @@ class RepositroySqlImp extends RepositorySql {
       final response = await _databaseHelper.planBrandByRepPlanId(repPlanId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "planBrandByRepPlanId"));
+      return Left(failure);
     }
   }
 
@@ -669,17 +833,21 @@ class RepositroySqlImp extends RepositorySql {
           await _databaseHelper.otherPlanBrandByRepPlanId(repPlanId);
       return Right(response);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(
+          ExceptionModel(failure.massage, "otherPlanBrandByRepPlanId"));
+      return Left(failure);
     }
   }
-
   @override
   Future<Either<Failure, Null>> editIsPlan(int repId, int flag) async {
     try {
       await _databaseHelper.editIsPlan(repId, flag);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "editIsPlan"));
+      return Left(failure);
     }
   }
 
@@ -689,7 +857,34 @@ class RepositroySqlImp extends RepositorySql {
       await _databaseHelper.updateSave(repId, flag1);
       return Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e).failure);
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Null>> exceptionApi(
+      ExceptionModel exceptionModel) async {
+    try {
+      await _databaseHelper.exceptionApi(exceptionModel);
+      return Right(null);
+    } catch (e) {
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ExceptionModel>>> allException()  async {
+    try {
+      final response = await _databaseHelper.allException();
+      return Right(response);
+    } catch (e) {
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
+      return Left(failure);
     }
   }
 }

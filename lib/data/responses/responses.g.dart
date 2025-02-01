@@ -556,12 +556,14 @@ Map<String, dynamic> _$AllPlaceBaseResponseToJson(
 SpecResponse _$SpecResponseFromJson(Map<String, dynamic> json) => SpecResponse(
       json['id'] as String?,
       json['title'] as String?,
+      (json['flag'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SpecResponseToJson(SpecResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
+      'flag': instance.flag,
     };
 
 AllSpcResponse _$AllSpcResponseFromJson(Map<String, dynamic> json) =>

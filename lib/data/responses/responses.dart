@@ -538,7 +538,9 @@ class SpecResponse {
   String? id;
   @JsonKey(name: "title")
   String? title;
-  SpecResponse(this.id, this.title);
+  @JsonKey(name: "flag")
+  int? flag;
+  SpecResponse(this.id, this.title,this.flag);
   // from json
   factory SpecResponse.fromJson(Map<String, dynamic> json) =>
       _$SpecResponseFromJson(json);

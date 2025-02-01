@@ -96,7 +96,6 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
@@ -322,7 +321,7 @@ class DrawerPage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               textAlign: TextAlign.left,
-              'Version 2',
+              'Version 3',
               style: TextStyle(
                 color: ColorManager.secondaryColor7,
                 shadows: [

@@ -64,7 +64,6 @@ class NoteScienceDoctor extends StatelessWidget {
                       ]));
                 }
                 if(state is SenAsReadState){
-                  print("SDKff");
                   doctorNoteModel = state.doctorNoteModel;
                 }
                 if (state is SenAllNoteDoctorsState) {
@@ -108,8 +107,8 @@ class NoteScienceDoctor extends StatelessWidget {
                       final index = entry.key;
                       final doctorNoteModel = entry.value;
                       return  Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.symmetric(horizontal:  AppPadding.p8),
+                        margin: EdgeInsets.all(AppPadding.p12),
+                        padding: EdgeInsets.symmetric(horizontal:  AppPadding.p12),
                         decoration:
                         doctorNoteModel.isRead?
                         BoxDecoration(
@@ -189,7 +188,9 @@ class NoteScienceDoctor extends StatelessWidget {
                             Align(
                               child: IconButton(onPressed: (){
                                 BlocProvider.of<ReportScienceBloc>(context).add(ChangeReadScienceNoteEvent(index, !doctorNoteModel.isRead));
-                              }, icon: Icon(Icons.book_outlined)),
+                              }, icon: Icon(
+                                  doctorNoteModel.isRead?
+                                  Icons.check_circle_sharp:Icons.check_circle_outline_sharp),iconSize: 25,),
                               alignment: Alignment.bottomLeft,
 
                             ),
