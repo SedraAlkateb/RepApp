@@ -153,4 +153,6 @@ abstract class AppServiceClient {
   Future<AllVisitIssueBaseResponse> getVisitIssue(
       @Part(name: "repDet") int id,
       );
+  @POST("/insertLog.php")
+  Future<Message1Response> insertLog(@Body() ExceptionRequestBody list);
 }

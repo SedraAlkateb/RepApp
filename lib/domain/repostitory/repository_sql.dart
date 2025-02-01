@@ -123,5 +123,6 @@ abstract class RepositorySql {
       otherPlanBrandByRepPlanId(int repPlanId);
   Future<Either<Failure, Null>> editIsPlan(int repId, int flag) ;
   Future<Either<Failure, Null>> updateSave(int repId, int flag1) ;
-
+  Future<Either<Failure, Null>>exceptionApi(ExceptionModel exceptionModel);
+  Future<Either<Failure, List<ExceptionModel>>> allException();
 }

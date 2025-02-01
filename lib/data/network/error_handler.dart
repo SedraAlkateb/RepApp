@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {
+
     print(error);
     if (error is DioError) {
       print("error.message??" "");
@@ -14,7 +15,7 @@ class ErrorHandler implements Exception {
     } else if (error is DatabaseException) {
       failure = _handleErrorSql(error);
     } else if (error is FormatException) {
-      failure = Failure(0, error.message);
+      failure = Failure(0, "${error.message} ${error.source.toString()}");
     } else {
       // default error
       failure = Failure(200, "massage${error}");
@@ -56,17 +57,17 @@ Failure _handleError(DioError error) {
 Failure _handleErrorSql(DatabaseException error) {
   String errorMessage = error.result.toString();
   if (errorMessage.contains("no such table")) {
-    return DataSource.TABLE_NOT_FOUND.getFailure();
+    return Failure(4, errorMessage);
   } else if (errorMessage.contains("syntax error")) {
-    return DataSource.SYNTAX_ERROR.getFailure();
+    return Failure(4, errorMessage);
   } else if (errorMessage.contains("constraint failed")) {
-    return DataSource.CONSTRAINT_VIOLATION.getFailure();
+    return Failure(4, errorMessage);
   } else if (errorMessage.contains("database is locked")) {
-    return DataSource.DB_LOCKED.getFailure();
+    return Failure(4, errorMessage);
   } else if (errorMessage.contains("readonly database")) {
-    return DataSource.READ_ONLY.getFailure();
+    return Failure(4, errorMessage);
   } else {
-    return DataSource.DEFAULT.getFailure();
+    return Failure(4, errorMessage);
   }
 }
 
@@ -118,30 +119,23 @@ extension DataSouceExtension on DataSource {
       case DataSource.INTERNAL_SERVER_ERROR:
         return Failure(ResponseCode.INTERNAL_SERVER_ERROR,
             ResponseMassage.INTERNAL_SERVER_ERROR);
-
       case DataSource.CONNECT_TIOMOUT:
         return Failure(
             ResponseCode.CONNECT_TIOMOUT, ResponseMassage.CONNECT_TIOMOUT);
-
       case DataSource.CANCEL:
         return Failure(ResponseCode.CANCEL, ResponseMassage.CANCEL);
-
       case DataSource.RECIEVE_TIMEOUT:
         return Failure(
             ResponseCode.RECIEVE_TIMEOUT, ResponseMassage.RECIEVE_TIMEOUT);
-
       case DataSource.SEND_TIMOUT:
         return Failure(ResponseCode.SEND_TIMOUT, ResponseMassage.SEND_TIMOUT);
-
       case DataSource.CACHE_ERROR:
         return Failure(ResponseCode.CACHE_ERROR, ResponseMassage.CACHE_ERROR);
-
       case DataSource.NO_INTERNET_CONNECTION:
         return Failure(ResponseCode.NO_INTERNET_CONNECTION,
             ResponseMassage.NO_INTERNET_CONNECTION);
       case DataSource.DEFAULT:
         return Failure(ResponseCode.DEFAULT, ResponseMassage.DEFAULT);
-
       case DataSource.TABLE_NOT_FOUND:
         return Failure(
             ResponseCode.TABLE_NOT_FOUND, ResponseMassage.TABLE_NOT_FOUND);

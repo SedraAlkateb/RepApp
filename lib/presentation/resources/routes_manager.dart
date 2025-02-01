@@ -5,7 +5,6 @@ import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart'
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
-import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
