@@ -2,6 +2,8 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
+import 'package:domina_app/presentation/senior/report_issue_note/page/note_issue_doctor.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
@@ -51,7 +53,7 @@ class RepProfile extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "الأسم : سيدرا",
+                        "الإسم : سيدرا",
                         style: Theme.of(context).textTheme.labelMedium,
                         textAlign: TextAlign.center,
                       ),
@@ -113,7 +115,7 @@ class RepProfile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text("الاختصاص")
+                        Text("الإختصاص")
                       ],
                     ),
                     Column(
@@ -275,7 +277,23 @@ class RepProfile extends StatelessWidget {
                   ),
                   RowList(
                       icon1: FontAwesomeIcons.noteSticky,
-                      text: "قائمة بالملاحظات الخاصة بالوكيل"),
+                      text: "قائمة بالملاحظات الخاصة بالوكيل",
+                    function: () {
+
+                      initSeniorReportIssueModule();
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          BlocProvider.of<ReportIssueBloc>(context)
+                              .add(SenAllIssueDoctorEvent(id));
+                          return NoteIssueDoctor(id: id);
+                        },
+                      ));
+                    },
+
+
+
+                  ),
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(

@@ -30,7 +30,7 @@ class NoteScienceDoctor extends StatelessWidget {
             );
           },
         ),
-        title: Text('ملاحظات الأطباء'),
+        title: Text('ملاحظات المكتب العلمي'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -166,7 +166,7 @@ class NoteScienceDoctor extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            "الاختصاص :",
+                                            "الإختصاص :",
                                             style:
                                             Theme.of(context).textTheme.bodySmall,
                                           ),
@@ -187,10 +187,9 @@ class NoteScienceDoctor extends StatelessWidget {
                             ),
                             Align(
                               child: IconButton(onPressed: (){
-                                BlocProvider.of<ReportScienceBloc>(context).add(ChangeReadScienceNoteEvent(index, !doctorNoteModel.isRead));
-                              }, icon: Icon(
-                                  doctorNoteModel.isRead?
-                                  Icons.check_circle_sharp:Icons.check_circle_outline_sharp),iconSize: 25,),
+                                BlocProvider.of<ReportScienceBloc>(context).
+                                add(ChangeReadScienceNoteEvent(index, !doctorNoteModel.isRead));
+                              }, icon: Icon(Icons.book_outlined)),
                               alignment: Alignment.bottomLeft,
 
                             ),

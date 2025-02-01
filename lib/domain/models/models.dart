@@ -796,9 +796,9 @@ class DoctorIssueModel {
   String address;
   String visitDate;
   String? issue;
-
+  bool isRead;
   DoctorIssueModel(
-      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue,this.isRead);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -806,6 +806,7 @@ class DoctorIssueModel {
       'address': address,
       'visitDate': visitDate,
       "issue": issue,
+      "isRead":isRead
     };
   }
 
@@ -816,6 +817,8 @@ class DoctorIssueModel {
       map['address'],
       map['visitDate'],
       map["issue"],
+      map["isRead"],
+
     );
   }
   factory DoctorIssueModel.fromMap1(Map<String, dynamic> map) {
@@ -825,6 +828,7 @@ class DoctorIssueModel {
       map['address'],
       map['visitDate'],
       map['issue'],
+      map["isRead"],
     );
   }
 }

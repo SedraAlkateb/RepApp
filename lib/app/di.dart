@@ -40,6 +40,7 @@ import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/all_visit_issue_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
@@ -103,6 +104,9 @@ import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
+
+import '../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
+
 
 GetIt instance = GetIt.instance;
 Future<void> initAppModule() async {
@@ -499,10 +503,19 @@ Future<void> initSeniorReportScienceModule() async {
     if (!GetIt.I.isRegistered<AllVisitNotesUsecase>()) {
       instance.registerFactory<AllVisitNotesUsecase>(() =>
           AllVisitNotesUsecase(instance()));
-      instance.registerFactory<ReportScienceBloc>(() => ReportScienceBloc(instance()));
+      instance.registerFactory<ReportScienceBloc>(() =>
+          ReportScienceBloc(instance()));
     }
 
 
 
 
+}
+Future<void> initSeniorReportIssueModule() async {
+  if (!GetIt.I.isRegistered<AllVisitIssueUsecase>()) {
+    instance.registerFactory<AllVisitIssueUsecase>(() =>
+        AllVisitIssueUsecase(instance()));
+    instance.registerFactory<ReportIssueBloc>(() =>
+        ReportIssueBloc(instance()));
+  }
 }

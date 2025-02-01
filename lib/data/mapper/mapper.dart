@@ -559,6 +559,7 @@ extension VisitIssueMapper on VisitIssueResponse? {
         this?.address ?? Constants.empty,
         this?.visitDate ?? Constants.empty,
         this?.issue ?? Constants.empty,
+        false
 
     );
   }

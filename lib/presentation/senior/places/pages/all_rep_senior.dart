@@ -31,7 +31,7 @@ class AllRepSenior extends StatelessWidget {
             );
           },
         ),
-        title: Text('المندوبين'),
+        title: Text('تقارير المندوبين'),
       ),
       body: bodyBuild(context),
     );
@@ -66,9 +66,11 @@ class AllRepSenior extends StatelessWidget {
                       borderRadius:
                       const BorderRadius.all(Radius.circular(AppSize.s8)),
                     ),
-                    child: Text(
-                      allRepresentative[index].name,
-                      style: Theme.of(context).textTheme.titleSmall,
+                    child: Center(
+                      child: Text(
+                        allRepresentative[index].name,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
                     ),
                   ),
                 );
