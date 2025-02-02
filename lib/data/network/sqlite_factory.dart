@@ -31,8 +31,8 @@ class DatabaseHelper {
     final path = join(dbPath, 'task_database1.db');
     return await openDatabase(
       path,
-      version: 2,
-      onUpgrade: _onUpgrade,
+      version: 1,
+    //  onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");

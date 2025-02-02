@@ -37,6 +37,10 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
         }).toList();
         emit(SenAllNoteDoctorsState(doctorNote));
       }
+      else if (event is IsExpandedNoteEvent){
+        print("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        emit(IsExpandedNoteState(event.isExpanded,event.index));
+      }
       else if (event is SenAllNoteDoctorEvent) {
         emit(SenAllNoteDoctorLoadingState());
         (await allVisitNotesUsecase.execute(event.id)).fold((failure) {

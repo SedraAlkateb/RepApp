@@ -9,9 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NoteScienceDoctor extends StatelessWidget {
-  NoteScienceDoctor({super.key,required this.id});
+  NoteScienceDoctor({super.key, required this.id});
   final int id;
-  final TextEditingController searchNoteDoctorController = TextEditingController();
+  final TextEditingController searchNoteDoctorController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,173 +35,219 @@ class NoteScienceDoctor extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SearchField(
-                    searchController: searchNoteDoctorController,
-                    onPressed: (value) {
-                      BlocProvider.of<ReportScienceBloc>(context)
-                          .add(SenSearchNoteDoctorEvent(value));
-                    },
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SearchField(
+                        searchController: searchNoteDoctorController,
+                        onPressed: (value) {
+                          BlocProvider.of<ReportScienceBloc>(context)
+                              .add(SenSearchNoteDoctorEvent(value));
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            BlocBuilder<ReportScienceBloc, ReportScienceState>(
-              builder: (context, state) {
-                List<DoctorNoteModel> doctorNoteModel =
-                    context.watch<ReportScienceBloc>().doctorNoteModel;
-                if (state is SenAllNoteDoctorEmptyState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
+                ),
+                BlocBuilder<ReportScienceBloc, ReportScienceState>(
+                  builder: (context, state) {
+
+                    List<DoctorNoteModel> doctorNoteModel =
+                        context.watch<ReportScienceBloc>().doctorNoteModel;
+                    if (state is SenAllNoteDoctorEmptyState) {
+                      return SliverList(
+                          delegate: SliverChildListDelegate([
                         SizedBox(
                           height: 100,
                         ),
                         emptyFullScreen(context)
                       ]));
-                }
-                if(state is SenAsReadState){
-                  doctorNoteModel = state.doctorNoteModel;
-                }
-                if (state is SenAllNoteDoctorsState) {
-                  doctorNoteModel = state.doctorNoteModel;
-                }
-                if(state is SenAllNoteDoctorLoadingState){
-                  return
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        loadingFullScreen(context)
-                      ]),
-                    );
-                }
-                if(state is SenAllNoteDoctorErrorState){
-                  return
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        errorFullScreen(context,
-                            func: (){
-                              BlocProvider.of<ReportScienceBloc>(context).add(SenAllNoteDoctorEvent(id));
-                            }
-                        )
-                      ]),
-                    );
-                }
-                return SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("عدد الملاحظات: ",
-                              style: Theme.of(context).textTheme.titleLarge),
-                          CircleNumberWidget(number: doctorNoteModel.length),
-                        ],
-                      ),
-                    ),
-                    // القائمة
-                    ...doctorNoteModel.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final doctorNoteModel = entry.value;
-                      return  Container(
-                        margin: EdgeInsets.all(AppPadding.p12),
-                        padding: EdgeInsets.symmetric(horizontal:  AppPadding.p12),
-                        decoration:
-                        doctorNoteModel.isRead?
-                        BoxDecoration(
-                          border: Border.all(color: ColorManager.secondaryColor18),
+                    }
+                    if (state is SenAsReadState) {
+                      doctorNoteModel = state.doctorNoteModel;
+                    }
+                    if (state is SenAllNoteDoctorsState) {
+                      doctorNoteModel = state.doctorNoteModel;
+                    }
+                    if (state is SenAllNoteDoctorLoadingState) {
+                      return SliverList(
+                        delegate:
+                            SliverChildListDelegate([loadingFullScreen(context)]),
+                      );
+                    }
+                    if (state is SenAllNoteDoctorErrorState) {
+                      return SliverList(
+                        delegate: SliverChildListDelegate([
+                          errorFullScreen(context, func: () {
+                            BlocProvider.of<ReportScienceBloc>(context)
+                                .add(SenAllNoteDoctorEvent(id));
+                          })
+                        ]),
+                      );
+                    }
 
-                          color: ColorManager.secondaryColor7,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s14)),
-                        ):
-                        BoxDecoration(
-                          color: ColorManager.white,
-                          border: Border.all(color: ColorManager.hintGrey),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s14)),
+                    return SliverList(
+                      delegate: SliverChildListDelegate([
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("عدد الملاحظات: ",
+                                  style: Theme.of(context).textTheme.titleLarge),
+                              CircleNumberWidget(number: doctorNoteModel.length),
+                            ],
+                          ),
                         ),
-                        child: Column(
-                          children: [
-                            InkWell(
-
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    doctorNoteModel.docTitle,
-                                    style:  doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
-                                    textAlign: TextAlign.center,
+                        // القائمة
+                        ...doctorNoteModel.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final doctorNoteModel = entry.value;
+                          return Container(
+                            margin: EdgeInsets.all(AppPadding.p8),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: AppPadding.p8,
+                                vertical: AppPadding.p12),
+                            decoration: doctorNoteModel.isRead
+                                ? BoxDecoration(
+                                    border: Border.all(
+                                        color: ColorManager.secondaryColor18),
+                                    color: ColorManager.secondaryColor7,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(AppSize.s14)),
+                                  )
+                                : BoxDecoration(
+                                    color: ColorManager.white,
+                                    border:
+                                        Border.all(color: ColorManager.hintGrey),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(AppSize.s14)),
                                   ),
-                                  Text(
-                                    "${doctorNoteModel.address}",
-                                    style: doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            " التاريخ :",
-                                            style:
-                                            Theme.of(context).textTheme.bodySmall,
-                                          ),
-                                          Text(
-                                            " ${doctorNoteModel.visitDate} ",
-                                            style: Theme.of(context)
+                                      Text(
+                                        doctorNoteModel.docTitle,
+                                        style: doctorNoteModel.isRead
+                                            ? Theme.of(context).textTheme.titleSmall
+                                            : Theme.of(context)
                                                 .textTheme
-                                                .bodySmall,
-                                          ),
-                                        ],
+                                                .labelLarge,
+                                        textAlign: TextAlign.center,
                                       ),
-                                      SizedBox(
-                                        width: 10,
+                                      Text(
+                                        "${doctorNoteModel.address}",
+                                        style: doctorNoteModel.isRead
+                                            ? Theme.of(context).textTheme.titleSmall
+                                            : Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                        textAlign: TextAlign.center,
                                       ),
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            "الإختصاص :",
-                                            style:
-                                            Theme.of(context).textTheme.bodySmall,
+                                          Row(
+                                            children: [
+                                              Text(
+                                                " التاريخ :",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                              Text(
+                                                " ${doctorNoteModel.visitDate} ",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            " ${doctorNoteModel.spTitle} ",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "الإختصاص :",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                              Text(
+                                                " ${doctorNoteModel.spTitle} ",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-
-                                ],
-                              ),
-
+                                  onTap: () {
+                                    BlocProvider.of<ReportScienceBloc>(context)
+                                        .add(IsExpandedNoteEvent(true, index));
+                                  },
+                                ),
+                                Align(
+                                  child: IconButton(
+                                      onPressed: () {
+                                        BlocProvider.of<ReportScienceBloc>(context)
+                                            .add(ChangeReadScienceNoteEvent(
+                                                index, !doctorNoteModel.isRead));
+                                      },
+                                      icon: Icon(Icons.book_outlined)),
+                                  alignment: Alignment.bottomLeft,
+                                ),
+                              ],
                             ),
-                            Align(
-                              child: IconButton(onPressed: (){
-                                BlocProvider.of<ReportScienceBloc>(context).
-                                add(ChangeReadScienceNoteEvent(index, !doctorNoteModel.isRead));
-                              }, icon: Icon(Icons.book_outlined)),
-                              alignment: Alignment.bottomLeft,
+                          );
+                        }).toList(),
 
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ]),
-                );
-              },
+
+                      ]),
+                    );
+                  },
+                ),
+              ],
             ),
+
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(
+                  horizontal: AppPadding.p8,
+                 ),
+              decoration: BoxDecoration(
+                color:
+                ColorManager.secondaryColor2,
+                borderRadius: BorderRadius.circular(AppSize.s14),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "معلومات إضافية:",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(height: AppSize.s8),
+                  Text(
+                        "لا توجد معلومات إضافية",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

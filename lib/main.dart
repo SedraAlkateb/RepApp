@@ -64,6 +64,7 @@ Future<int?> sss() async {
       UserInfo.otherStartDate = data.otherStartDate;
       UserInfo.otherEndDate = data.otherEndDate;
       UserInfo.samplesCount = data.samplesCount;
+      UserInfo.repType = data.repType;
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
       if (UserInfo.isLogging != 0 && UserInfo.endDate != null) {
