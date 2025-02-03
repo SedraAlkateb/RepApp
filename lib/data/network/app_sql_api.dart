@@ -701,8 +701,8 @@ class AppSqlApi extends AppSqlApiAbs {
       hospital.placeTitle as hospital_placeTitle,
       hospital.note,
       specialization.id as specialization_id,
-      specialization.title as specialization_title
-      specialization.flag AS specialization_flag, 
+      specialization.title as specialization_title,
+      specialization.flag AS specialization_flag
     FROM visit_hospital
     JOIN hospitalSp ON visit_hospital.hospitalSpId = hospitalSp.id
     JOIN hospital ON hospitalSp.hospitalId = hospital.id

@@ -12,7 +12,8 @@ class NoteScienceDoctor extends StatelessWidget {
   NoteScienceDoctor({super.key, required this.id});
   final int id;
   final TextEditingController searchNoteDoctorController =
-      TextEditingController();
+  TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +34,12 @@ class NoteScienceDoctor extends StatelessWidget {
         ),
         title: Text('ملاحظات المكتب العلمي'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Stack(
-          children: [
-            CustomScrollView(
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
                   child: Column(
@@ -55,17 +57,16 @@ class NoteScienceDoctor extends StatelessWidget {
                 ),
                 BlocBuilder<ReportScienceBloc, ReportScienceState>(
                   builder: (context, state) {
-
                     List<DoctorNoteModel> doctorNoteModel =
                         context.watch<ReportScienceBloc>().doctorNoteModel;
                     if (state is SenAllNoteDoctorEmptyState) {
                       return SliverList(
                           delegate: SliverChildListDelegate([
-                        SizedBox(
-                          height: 100,
-                        ),
-                        emptyFullScreen(context)
-                      ]));
+                            SizedBox(
+                              height: 100,
+                            ),
+                            emptyFullScreen(context)
+                          ]));
                     }
                     if (state is SenAsReadState) {
                       doctorNoteModel = state.doctorNoteModel;
@@ -75,8 +76,8 @@ class NoteScienceDoctor extends StatelessWidget {
                     }
                     if (state is SenAllNoteDoctorLoadingState) {
                       return SliverList(
-                        delegate:
-                            SliverChildListDelegate([loadingFullScreen(context)]),
+                        delegate: SliverChildListDelegate(
+                            [loadingFullScreen(context)]),
                       );
                     }
                     if (state is SenAllNoteDoctorErrorState) {
@@ -89,7 +90,6 @@ class NoteScienceDoctor extends StatelessWidget {
                         ]),
                       );
                     }
-
                     return SliverList(
                       delegate: SliverChildListDelegate([
                         Padding(
@@ -98,8 +98,10 @@ class NoteScienceDoctor extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text("عدد الملاحظات: ",
-                                  style: Theme.of(context).textTheme.titleLarge),
-                              CircleNumberWidget(number: doctorNoteModel.length),
+                                  style:
+                                  Theme.of(context).textTheme.titleLarge),
+                              CircleNumberWidget(
+                                  number: doctorNoteModel.length),
                             ],
                           ),
                         ),
@@ -114,47 +116,52 @@ class NoteScienceDoctor extends StatelessWidget {
                                 vertical: AppPadding.p12),
                             decoration: doctorNoteModel.isRead
                                 ? BoxDecoration(
-                                    border: Border.all(
-                                        color: ColorManager.secondaryColor18),
-                                    color: ColorManager.secondaryColor7,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(AppSize.s14)),
-                                  )
+                              border: Border.all(
+                                  color: ColorManager.primary),
+                              color: ColorManager.secondaryColor8,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(AppSize.s14)),
+                            )
                                 : BoxDecoration(
-                                    color: ColorManager.white,
-                                    border:
-                                        Border.all(color: ColorManager.hintGrey),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(AppSize.s14)),
-                                  ),
+                              color: ColorManager.white,
+                              border: Border.all(
+                                  color: ColorManager.hintGrey),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(AppSize.s14)),
+                            ),
                             child: Column(
                               children: [
                                 InkWell(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         doctorNoteModel.docTitle,
                                         style: doctorNoteModel.isRead
-                                            ? Theme.of(context).textTheme.titleSmall
+                                            ? Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
                                             : Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
+                                            .textTheme
+                                            .labelLarge,
                                         textAlign: TextAlign.center,
                                       ),
                                       Text(
                                         "${doctorNoteModel.address}",
                                         style: doctorNoteModel.isRead
-                                            ? Theme.of(context).textTheme.titleSmall
+                                            ? Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
                                             : Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
+                                            .textTheme
+                                            .labelLarge,
                                         textAlign: TextAlign.center,
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
                                             children: [
@@ -197,7 +204,8 @@ class NoteScienceDoctor extends StatelessWidget {
                                   ),
                                   onTap: () {
                                     BlocProvider.of<ReportScienceBloc>(context)
-                                        .add(IsExpandedNoteEvent(true, index));
+                                        .add(IsExpandedNoteEvent(
+                                        doctorNoteModel));
                                   },
                                 ),
                                 Align(
@@ -205,51 +213,108 @@ class NoteScienceDoctor extends StatelessWidget {
                                       onPressed: () {
                                         BlocProvider.of<ReportScienceBloc>(context)
                                             .add(ChangeReadScienceNoteEvent(
-                                                index, !doctorNoteModel.isRead));
+                                            index,
+                                            !doctorNoteModel.isRead));
                                       },
-                                      icon: Icon(Icons.book_outlined)),
+                                      icon: Icon(Icons.book_outlined,color: doctorNoteModel.isRead?ColorManager.white:ColorManager.secondaryColor,)),
                                   alignment: Alignment.bottomLeft,
                                 ),
                               ],
                             ),
                           );
                         }).toList(),
-
-
                       ]),
                     );
                   },
                 ),
               ],
             ),
+          ),
+          BlocBuilder<ReportScienceBloc, ReportScienceState>(
+            builder: (context, state) {
+              bool isExpanded = state is IsExpandedNoteState;
 
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(
-                  horizontal: AppPadding.p8,
-                 ),
-              decoration: BoxDecoration(
-                color:
-                ColorManager.secondaryColor2,
-                borderRadius: BorderRadius.circular(AppSize.s14),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Stack(
                 children: [
-                  Text(
-                    "معلومات إضافية:",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  SizedBox(height: AppSize.s8),
-                  Text(
-                        "لا توجد معلومات إضافية",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  // الطبقة المظللة عندما يكون الـ DraggableScrollableSheet مفتوحًا
+                  if (isExpanded)
+                    ModalBarrier(
+                      color: Colors.black.withOpacity(0.5),
+                     dismissible: false,
+
+                    ),
+                  isExpanded
+                      ? DraggableScrollableSheet(
+                    initialChildSize: 0.4,
+                    minChildSize: 0.2,
+                    maxChildSize: 0.8,
+                    builder: (context, scrollController) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color:ColorManager.secondaryColor3),
+                          color: ColorManager.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(AppSize.s30),
+                            topRight: Radius.circular(AppSize.s30),
+                          ),
+                        ),
+                        child: SingleChildScrollView(
+                          controller: scrollController,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    BlocProvider.of<ReportScienceBloc>(context)
+                                        .add(NoIsExpandedNoteEvent());
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(16),
+                                    padding: EdgeInsets.symmetric(vertical: AppPadding.p8),
+                                    child: Column(
+                                      children: List.generate(3, (index) => Container(
+                                        width: 70,
+                                        height: 3,
+                                        margin: EdgeInsets.symmetric(vertical: 3),
+                                        decoration: BoxDecoration(
+                                          color: ColorManager.secondaryColor1,
+                                          borderRadius: BorderRadius.circular(2),
+                                        ),
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(AppPadding.p16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "معلومات إضافية:",
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    SizedBox(height: AppSize.s8),
+                                    Text(
+                                      state.doctorNoteModel.note ?? "لا توجد معلومات إضافية",
+                                      style: Theme.of(context).textTheme.bodyMedium,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                      : SizedBox(),
                 ],
-              ),
-            )
-          ],
-        ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

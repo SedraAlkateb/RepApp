@@ -111,18 +111,17 @@ import '../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 GetIt instance = GetIt.instance;
 Future<void> initAppModule() async {
   instance.registerLazySingleton<NetworkInfo>(
-      () => NetworkInfoImpl(Connectivity()));
+          () => NetworkInfoImpl(Connectivity()));
   instance.registerLazySingleton<DioFactory>(() => DioFactory());
   Dio dio = await instance<DioFactory>().getDio();
+  instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
+  instance.registerLazySingleton<RemoteDataSource>(
+          () => RemoteDataSourceImpl(instance<AppServiceClient>()));
   DatabaseHelper databaseHelper = DatabaseHelper();
   instance.registerLazySingleton<AppSqlApi>(() => AppSqlApi(databaseHelper));
   await instance<AppSqlApi>().initializeDatabase();
   instance.registerLazySingleton<ExcRepository>(() => ExcRepository(instance()));
   instance.registerLazySingleton<RepositorySql>(() => RepositroySqlImp(instance(),instance()));
-  instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
-  //remote data source
-  instance.registerLazySingleton<RemoteDataSource>(
-      () => RemoteDataSourceImpl(instance<AppServiceClient>()));
   //repository
   instance.registerLazySingleton<Repository>(
       () => RepositoryImp(instance(), instance(), instance()));
@@ -314,8 +313,10 @@ Future<void> initAsyncInModule() async {
   if (!GetIt.I.isRegistered<GetPharmacyVisitsSqlUsecase>()) {
     instance.registerFactory<VisitHospitalUsecase>(
         () => VisitHospitalUsecase(instance()));
-    instance.registerFactory<AllExceptionUsecase>(
-            () => AllExceptionUsecase(instance()));
+    if (!GetIt.I.isRegistered<AllExceptionUsecase>()) {
+  instance.registerFactory<AllExceptionUsecase>(
+          () => AllExceptionUsecase(instance()));
+}
     instance.registerFactory<AllExceptionSqlUsecase>(
             () => AllExceptionSqlUsecase(instance()));
     instance.registerFactory<VisitDoctorUsecase>(

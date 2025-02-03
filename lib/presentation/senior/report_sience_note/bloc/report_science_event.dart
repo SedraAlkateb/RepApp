@@ -26,10 +26,15 @@ class ChangeReadScienceNoteEvent extends ReportScienceEvent{
 
 }
 class IsExpandedNoteEvent extends ReportScienceEvent{
-  final  bool isExpanded;
-  final int index;
+ final DoctorNoteModel doctorNoteModel;
   @override
-  IsExpandedNoteEvent(this.isExpanded,this.index);
-  List<Object?> get props => [isExpanded,index];
+  IsExpandedNoteEvent(this.doctorNoteModel);
+  List<Object?> get props => [doctorNoteModel];
+
+}
+class NoIsExpandedNoteEvent extends ReportScienceEvent{
+  @override
+  NoIsExpandedNoteEvent();
+  List<Object?> get props => [];
 
 }

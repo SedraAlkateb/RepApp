@@ -41,14 +41,9 @@ Future<int?> sss() async {
   HttpOverrides.global = MyHttpOverrides();
   IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   (await isLoginSqlUsecase.execute()).fold((failure) {
-    print("object");
     return 0;
   }, (data) async {
-    print(data?.isLogin);
-    print("data?.isLogin");
     if (data != null && (data.isLogin > 0)) {
-      print("object");
-      print(data.isLogin);
       UserInfo.name = data.name;
       UserInfo.isLogging = data.isLogin;
       UserInfo.activePlanId = data.activePlanId;
@@ -64,7 +59,7 @@ Future<int?> sss() async {
       UserInfo.otherStartDate = data.otherStartDate;
       UserInfo.otherEndDate = data.otherEndDate;
       UserInfo.samplesCount = data.samplesCount;
-      UserInfo.repType = data.repType;
+      UserInfo.repType = data.repType??"0";
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
       if (UserInfo.isLogging != 0 && UserInfo.endDate != null) {
