@@ -118,8 +118,8 @@ class SpPlan {
   int sumDoctor;
   int sumHospital;
   int sumBrandHospital;
-  SpPlan(this.id, this.amount, this.title, this.brandType, this.idSp,this.flagSp,
-      this.sumDoctor, this.sumHospital, this.sumBrandHospital);
+  SpPlan(this.id, this.amount, this.title, this.brandType, this.idSp,
+      this.flagSp, this.sumDoctor, this.sumHospital, this.sumBrandHospital);
 }
 
 class BrandAddition {
@@ -443,7 +443,7 @@ class VisitDoctorModel {
       'kaswn': kaswn ?? "",
       'science': science ?? "",
       'additaion': additaion ?? "",
-      'doctorId': doctorId ,
+      'doctorId': doctorId,
       'flag': flag ?? 0,
       'target': target ?? ""
     };
@@ -606,7 +606,7 @@ class SpecDModel {
   int sumDoctor;
   int sumHospital;
   int sumBrandHospital;
-  SpecDModel(this.id, this.title,this.flag, this.sumDoctor, this.sumHospital,
+  SpecDModel(this.id, this.title, this.flag, this.sumDoctor, this.sumHospital,
       this.sumBrandHospital);
   Map<String, dynamic> toMap() {
     return {
@@ -620,16 +620,21 @@ class SpecDModel {
   }
 
   factory SpecDModel.fromJson(Map<String, dynamic> map) {
-    return SpecDModel(map['id'], map['title'],map['flag'], map["sumDoctor"],
+    return SpecDModel(map['id'], map['title'], map['flag'], map["sumDoctor"],
         map['sumHospital'], map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap(Map<String, dynamic> map) {
-    return SpecDModel(map['specialization_id'], map['specialization_title'],map['specialization_flag'],
-        map["sumDoctor"], map['sumHospital'], map['sumBrandHospital']);
+    return SpecDModel(
+        map['specialization_id'],
+        map['specialization_title'],
+        map['specialization_flag'],
+        map["sumDoctor"],
+        map['sumHospital'],
+        map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap2(Map<String, dynamic> map) {
-    return SpecDModel(
-        map['specialization_id'], map['specialization_title'],map['specialization_flag'], 0, 0, 0);
+    return SpecDModel(map['specialization_id'], map['specialization_title'],
+        map['specialization_flag'], 0, 0, 0);
   }
   factory SpecDModel.fromMap1(
       Map<String, dynamic> map, Map<String, dynamic> map1) {
@@ -797,8 +802,8 @@ class DoctorIssueModel {
   String visitDate;
   String? issue;
   bool isRead;
-  DoctorIssueModel(
-      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue,this.isRead);
+  DoctorIssueModel(this.docTitle, this.spTitle, this.address, this.visitDate,
+      this.issue, this.isRead);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -806,7 +811,7 @@ class DoctorIssueModel {
       'address': address,
       'visitDate': visitDate,
       "issue": issue,
-      "isRead":isRead
+      "isRead": isRead
     };
   }
 
@@ -818,7 +823,6 @@ class DoctorIssueModel {
       map['visitDate'],
       map["issue"],
       map["isRead"],
-
     );
   }
   factory DoctorIssueModel.fromMap1(Map<String, dynamic> map) {
@@ -1176,6 +1180,7 @@ class ExceptionModel {
       'createDate': createDate
     };
   }
+
   Map<String, dynamic> toJson() {
     return {
       'repId': UserInfo.repId,
@@ -1184,8 +1189,13 @@ class ExceptionModel {
       'createDate': createDate
     };
   }
+
   factory ExceptionModel.fromMap(Map<String, dynamic> map) {
-    return ExceptionModel(map['exception'], map['type'], createDate: map['createDate'],);
+    return ExceptionModel(
+      map['exception'],
+      map['type'],
+      createDate: map['createDate'],
+    );
   }
 }
 
@@ -1269,8 +1279,17 @@ class HospitalSpAllModel {
   int? visited;
   String? titleSp;
   int? flagSp;
-  HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
-      this.note, this.rate, this.totalDocs, this.visit, this.titleSp,this.flagSp,
+  HospitalSpAllModel(
+      this.hospitalId,
+      this.title,
+      this.address,
+      this.placeTitle,
+      this.note,
+      this.rate,
+      this.totalDocs,
+      this.visit,
+      this.titleSp,
+      this.flagSp,
       {this.visited});
   Map<String, dynamic> toMap() {
     return {
@@ -1284,7 +1303,7 @@ class HospitalSpAllModel {
       'visit': visit,
       'visited': visited,
       'titleSp': titleSp,
-      'flagSp':flagSp
+      'flagSp': flagSp
     };
   }
 
@@ -1300,9 +1319,7 @@ class HospitalSpAllModel {
         map['visit'],
         visited: map['visited'],
         map['titleSp'],
-      map['flagSp']
-
-    );
+        map['flagSp']);
   }
 }
 

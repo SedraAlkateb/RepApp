@@ -6,6 +6,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_sp_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_exception_usecase.dart';
 import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
@@ -54,6 +55,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   VisitDoctorBase? visitDoctor;
   VisitHospitalBase? visitHospital;
   LoginModel? checkActiveModel;
+
   int loading = 0;
   AsyncBloc(
       this.allBrandsUsecase,
@@ -198,7 +200,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             emit(SyncDataErrorState(failure: hospitalsFailureOrSuccess));
             return false;
           }
-
           hospitals = hospitalsFailureOrSuccess as List<HospitalModel>;
           emit(LoadingState(6));
 

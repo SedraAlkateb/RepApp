@@ -25,3 +25,16 @@ class ChangeReadScienceNoteEvent extends ReportScienceEvent{
   List<Object?> get props => [id,isRead];
 
 }
+class IsExpandedNoteEvent extends ReportScienceEvent{
+ final DoctorNoteModel doctorNoteModel;
+  @override
+  IsExpandedNoteEvent(this.doctorNoteModel);
+  List<Object?> get props => [doctorNoteModel];
+
+}
+class NoIsExpandedNoteEvent extends ReportScienceEvent{
+  @override
+  NoIsExpandedNoteEvent();
+  List<Object?> get props => [];
+
+}

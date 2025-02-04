@@ -17,14 +17,25 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
+    // إنشاء الجدول إذا لم يكن موجودًا
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS exception_table (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      exception TEXT NOT NULL,
+      type TEXT NOT NULL,
+      createDate TEXT NOT NULL
+    );
+  ''');
+    List<Map<String, dynamic>> result = await db.rawQuery('PRAGMA table_info(specialization)');
+    bool columnExists = result.any((column) => column['name'] == 'flag');
+    if (!columnExists) {
       await db.execute('''
-      ALTER TABLE rep ADD COLUMN repType TEXT NOT NULL DEFAULT '';
+      ALTER TABLE specialization ADD COLUMN flag INTEGER NOT NULL DEFAULT 0;
     ''');
     }
   }
-  Future<Database> _initDatabase() async {
 
+  Future<Database> _initDatabase() async {
     print("getDatabasesPath()");
     final dbPath = await getDatabasesPath();
     print(dbPath);
@@ -124,8 +135,7 @@ class DatabaseHelper {
      falg INTEGER NOT NULL,
      sampleCoast INTEGER NOT NULL
     );
-    '''
-    );
+    ''');
     await db.execute('''
         CREATE TABLE hospitalSp (
         id INTEGER PRIMARY KEY,

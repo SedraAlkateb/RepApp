@@ -18,6 +18,6 @@ class UserInfo{
   static int visits = -1;
   static int visited = -1;
   static int flag1 = 0;
-  static int version = 2;
+  static int version = 4;
   static String repType="0";
 }
