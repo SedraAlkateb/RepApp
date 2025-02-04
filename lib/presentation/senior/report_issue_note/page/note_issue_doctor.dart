@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class NoteIssueDoctor extends StatelessWidget {
   NoteIssueDoctor({super.key,required this.id});
   final int id;
-  final TextEditingController searchNoteDoctorController = TextEditingController();
+  final TextEditingController searchIssueDoctorController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +41,10 @@ class NoteIssueDoctor extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SearchField(
-                    searchController: searchNoteDoctorController,
+                    searchController: searchIssueDoctorController,
                     onPressed: (value) {
                       BlocProvider.of<ReportIssueBloc>(context)
-                          .add(SenAllIssueDoctorEvent(id));
+                          .add(SenSearchIssueDoctorEvent(value));
                     },
                   ),
                 ],
