@@ -206,7 +206,7 @@ class NoteScienceDoctor extends StatelessWidget {
                                   onTap: () {
                                     BlocProvider.of<ReportScienceBloc>(context)
                                         .add(IsExpandedNoteEvent(
-                                            doctorNoteModel));
+                                            doctorNoteModel,index));
                                   },
                                 ),
                                 Align(
@@ -240,10 +240,8 @@ class NoteScienceDoctor extends StatelessWidget {
           BlocBuilder<ReportScienceBloc, ReportScienceState>(
             builder: (context, state) {
               bool isExpanded = state is IsExpandedNoteState;
-
               return Stack(
                 children: [
-                  // الطبقة المظللة عندما يكون الـ DraggableScrollableSheet مفتوحًا
                   if (isExpanded)
                     ModalBarrier(
                       color: Colors.black.withOpacity(0.5),
@@ -283,9 +281,9 @@ class NoteScienceDoctor extends StatelessWidget {
                                               vertical: AppPadding.p8),
                                           child: Column(
                                             children: List.generate(
-                                                3,
+                                                2,
                                                 (index) => Container(
-                                                      width: 70,
+                                                      width: 60,
                                                       height: 3,
                                                       margin:
                                                           EdgeInsets.symmetric(
@@ -303,7 +301,8 @@ class NoteScienceDoctor extends StatelessWidget {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.all(AppPadding.p16),
+                                      padding: EdgeInsets.all(AppPadding.p20
+                                      ),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -315,27 +314,15 @@ class NoteScienceDoctor extends StatelessWidget {
                                                 .labelLarge,
                                             textAlign: TextAlign.center,
                                           ),
-                                          SizedBox(height: 2,),
-                                          Text(
+                                          Padding(
+                                              padding: const EdgeInsets.only(top: 5,right: 5),
+                                              child:Text(
                                             state.doctorNoteModel.docTitle,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall,
-                                          ),
-                                          Text(
-                                            "اسم الدكتور",
-                                            style:  Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          SizedBox(height: 2,),
-                                          Text(
-                                            state.doctorNoteModel.docTitle,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
-                                          ),
+                                          ) ),
+                                          SizedBox(height: 8,),
                                           Text(
                                             "الاختصاص",
                                             style:  Theme.of(context)
@@ -343,26 +330,82 @@ class NoteScienceDoctor extends StatelessWidget {
                                                 .labelLarge,
                                             textAlign: TextAlign.center,
                                           ),
-                                          SizedBox(height: 2,),
-                                          Text(
+                                          Padding(
+                                              padding: const EdgeInsets.only(top: 5,right: 5),
+                                              child: Text(
                                             state.doctorNoteModel.spTitle,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall,
+                                          )),
+                                          SizedBox(height: 8,),
+                                          Text(
+                                            "العنوان",
+                                            style:  Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                            textAlign: TextAlign.center,
                                           ),
+                                          Padding(
+                                              padding: const EdgeInsets.only(top: 5,right: 5),
+                                              child:
+                                          Text(
+                                           "${ state.doctorNoteModel.address}_${ state.doctorNoteModel.docTitle}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          )),
+                                          SizedBox(height: 8,),
+                                          Text(
+                                            "التاريخ",
+                                            style:  Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 5,right: 5),
+                                            child: Text(
+                                              "${ state.doctorNoteModel.visitDate}",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8,),
                                           Text(
                                             "note",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .labelLarge,
                                           ),
-                                          SizedBox(height: AppSize.s8),
-                                          Text(
+                                          Padding(
+                                              padding: const EdgeInsets.only(top:5,right: 5),
+                                              child:  Text(
                                             state.doctorNoteModel.note ??
                                                 "لا توجد معلومات إضافية",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyMedium,
+                                                .bodySmall,
+                                          )),
+                                          Align(
+
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  BlocProvider.of<ReportScienceBloc>(
+                                                      context)
+                                                      .add(ChangeReadScienceNoteEvent(
+                                                     state.index,
+                                                      !state.doctorNoteModel.isRead));
+                                                },
+                                                icon: Icon(
+                                                  size: 30,
+                                                  Icons.book_outlined,
+                                                  color: state.doctorNoteModel.isRead
+                                                      ? ColorManager.secondaryColor4
+                                                      : ColorManager.secondaryColor,
+                                                )),
+                                            alignment: Alignment.bottomLeft,
                                           ),
                                         ],
                                       ),

@@ -17,32 +17,24 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // إنشاء الجدول إذا لم يكن موجودًا
-    await db.execute('''
-    CREATE TABLE IF NOT EXISTS exception_table (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      exception TEXT NOT NULL,
-      type TEXT NOT NULL,
-      createDate TEXT NOT NULL
+    await db.execute("PRAGMA foreign_keys = OFF");
+    List<Map<String, dynamic>> tables = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"
     );
-  ''');
-    List<Map<String, dynamic>> result = await db.rawQuery('PRAGMA table_info(specialization)');
-    bool columnExists = result.any((column) => column['name'] == 'flag');
-    if (!columnExists) {
-      await db.execute('''
-      ALTER TABLE specialization ADD COLUMN flag INTEGER NOT NULL DEFAULT 0;
-    ''');
+    for (var table in tables) {
+      String tableName = table['name'];
+      await db.execute("DROP TABLE IF EXISTS $tableName");
     }
+    await _onCreate(db, newVersion);
+    await db.execute("PRAGMA foreign_keys = ON");
   }
 
   Future<Database> _initDatabase() async {
-    print("getDatabasesPath()");
     final dbPath = await getDatabasesPath();
-    print(dbPath);
     final path = join(dbPath, 'task_database1.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
@@ -50,7 +42,6 @@ class DatabaseHelper {
       },
     );
   }
-
   Future _onCreate(Database db, int version) async {
     await db.execute('''
     CREATE TABLE rep (

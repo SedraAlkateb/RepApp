@@ -15,17 +15,15 @@ class ReportInventoryBloc extends Bloc<ReportInventoryEvent, ReportInventoryStat
   ReportInventoryBloc(this.allInventoryUsecase) : super(ReportInventoryInitial()) {
     on<ReportInventoryEvent>((event, emit) async {
       if (event is SenSearchInventoryEvent) {
-        List<InventoryModel> inventoryNote;
+        List<InventoryModel> inventoryNote=[];
         String search = normalizeText(event.contant);
         inventoryNote = inventoryModel.where((value) {
           if (normalizeText(value.title).contains(search)) {
             return true;
           }
-
-
           return false;
         }).toList();
-        emit(SenAllInventoryState(inventoryModel));
+        emit(SenAllInventoryState(inventoryNote));
       }
       else if (event is SenAllInventoryEvent) {
         emit(SenAllInventoryLoadingState());
@@ -38,7 +36,6 @@ class ReportInventoryBloc extends Bloc<ReportInventoryEvent, ReportInventoryStat
       }else{
       emit(SenAllInventoryState(data));
       }
-
       });
       }
 
