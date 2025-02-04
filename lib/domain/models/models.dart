@@ -1427,3 +1427,10 @@ class AllRepresentative {
   String name;
   AllRepresentative(this.id, this.name);
 }
+class InventoryModel{
+  String title;
+  String used;
+  String total;
+  int rest;
+  InventoryModel(this.title,this.used,this.total,this.rest);
+}

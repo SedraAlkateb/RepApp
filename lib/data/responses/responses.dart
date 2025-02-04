@@ -1173,3 +1173,33 @@ class VisitHospitalBaseResponse extends BaseResponse {
       _$VisitHospitalBaseResponseFromJson(json);
   Map<String, dynamic> toJson() => _$VisitHospitalBaseResponseToJson(this);
 }
+
+@JsonSerializable()
+class InventoryResponse {
+
+  @JsonKey(name: "title")
+  String? title;
+  @JsonKey(name: "used")
+  String? used;
+  @JsonKey(name: "total")
+  String? total;
+  @JsonKey(name: "rest")
+  int? rest;
+  InventoryResponse(
+      this.title, this.used, this.total, this.rest);
+
+  factory InventoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$InventoryResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$InventoryResponseToJson(this);
+}
+
+@JsonSerializable()
+class InventoryResponseBaseResponse  extends BaseResponse {
+  @JsonKey(name: "Brands", defaultValue: [])
+  List<InventoryResponse>? brand;
+  InventoryResponseBaseResponse(this.brand);
+  factory InventoryResponseBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$InventoryResponseBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$InventoryResponseBaseResponseToJson(this);
+}

@@ -36,5 +36,5 @@ abstract class Repository{
  Future<Either<Failure,List<NoVisitDocModel>>>visitDoc( int repDet);
   Future<Either<Failure,List<DoctorIssueModel>>> getVisitIssue ( int repDet);
   Future<Either<Failure,Message1Response>>insertLog(ExceptionRequestBody list1);
-
+  Future<Either<Failure,List<InventoryModel>>> getInventory ( int repDet);
 }
