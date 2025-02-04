@@ -11,10 +11,8 @@ part 'report_science_state.dart';
 class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
   List<DoctorNoteModel> doctorNoteModel = [];
   AllVisitNotesUsecase allVisitNotesUsecase;
-  ReportScienceBloc(
-      this.allVisitNotesUsecase
-      ) : super(ReportScienceInitial()) {
-    on<ReportScienceEvent>((event, emit)async {
+  ReportScienceBloc(this.allVisitNotesUsecase) : super(ReportScienceInitial()) {
+    on<ReportScienceEvent>((event, emit) async {
       if (event is SenSearchNoteDoctorEvent) {
         List<DoctorNoteModel> doctorNote;
         String search = normalizeText(event.contant);
@@ -28,37 +26,46 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
           if (normalizeText(value.spTitle).contains(search)) {
             return true;
           }
-          if( value.note!=null){
-            if( normalizeText(value.note!).contains(search)) {
+          if (value.note != null) {
+            if (normalizeText(value.note!).contains(search)) {
               return true;
             }
           }
           return false;
         }).toList();
         emit(SenAllNoteDoctorsState(doctorNote));
-      }
-      else if (event is SenAllNoteDoctorEvent) {
+      } else if (event is IsExpandedNoteEvent) {
+        emit(IsExpandedNoteState(event.doctorNoteModel));
+      } else if (event is SenAllNoteDoctorEvent) {
         emit(SenAllNoteDoctorLoadingState());
         (await allVisitNotesUsecase.execute(event.id)).fold((failure) {
           emit(SenAllNoteDoctorErrorState(failure: failure));
         }, (data) async {
-          doctorNoteModel=data;
-          if(data.isEmpty){
+          doctorNoteModel = data;
+          if (data.isEmpty) {
             emit(SenAllNoteDoctorEmptyState());
-          }else{
+          } else {
             emit(SenAllNoteDoctorsState(data));
           }
-
         });
       }
-    else  if(event is ChangeReadScienceNoteEvent){
-      print(event.isRead);
-      List<DoctorNoteModel> doctorNote = List.from(doctorNoteModel);
-      DoctorNoteModel doctorNote1=DoctorNoteModel(doctorNote[event.id].docTitle, doctorNote[event.id].spTitle,
-          doctorNote[event.id].address, doctorNote[event.id].visitDate, doctorNote[event.id].note, event.isRead) ;
-      doctorNoteModel[event.id]=doctorNote1;
-      doctorNote[event.id]=doctorNote1;
-      emit(SenAsReadState(doctorNote));
+      else if(event is NoIsExpandedNoteEvent){
+        print("object");
+        emit(NoIsExpandedNoteState());
+      }
+      else if (event is ChangeReadScienceNoteEvent) {
+        print(event.isRead);
+        List<DoctorNoteModel> doctorNote = List.from(doctorNoteModel);
+        DoctorNoteModel doctorNote1 = DoctorNoteModel(
+            doctorNote[event.id].docTitle,
+            doctorNote[event.id].spTitle,
+            doctorNote[event.id].address,
+            doctorNote[event.id].visitDate,
+            doctorNote[event.id].note,
+            event.isRead);
+        doctorNoteModel[event.id] = doctorNote1;
+        doctorNote[event.id] = doctorNote1;
+        emit(SenAsReadState(doctorNote));
       }
     });
   }

@@ -100,7 +100,6 @@ abstract class AppSqlApiAbs {
   Future<List<PlanBrandModel>> planBrandsAs();
   Future<void> exceptionApi(ExceptionModel exceptionModel);
   Future<List<ExceptionModel>> allException();
-
 }
 
 class AppSqlApi extends AppSqlApiAbs {
@@ -162,31 +161,39 @@ class AppSqlApi extends AppSqlApiAbs {
         }
         if (planBrands != null && planBrands.isNotEmpty) {
           for (var planBrand in planBrands) {
-            batch.insert('planBrand', planBrand.toMap(),
+            batch.insert(
+              'planBrand',
+              planBrand.toMap(),
               conflictAlgorithm: ConflictAlgorithm.abort,
             );
           }
         }
         for (var visitHos in visitHospital.data) {
-          batch.insert('visit_hospital', visitHos.toMap(),
+          batch.insert(
+            'visit_hospital',
+            visitHos.toMap(),
             conflictAlgorithm: ConflictAlgorithm.abort,
           );
         }
         for (var visitDoc in visitDoctor.data) {
-          batch.insert('visit_doctor', visitDoc.toMap(),
-             conflictAlgorithm: ConflictAlgorithm.abort,
+          batch.insert(
+            'visit_doctor',
+            visitDoc.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.abort,
           );
         }
         for (var visitHosBrand in visitHospital.brand) {
-          batch.insert('visit_brand_hospital', visitHosBrand.toMap(),
+          batch.insert(
+            'visit_brand_hospital',
+            visitHosBrand.toMap(),
             conflictAlgorithm: ConflictAlgorithm.abort,
-
           );
         }
         for (var visitDocBrand in visitDoctor.brand) {
-          batch.insert('visit_brand_doctor', visitDocBrand.toMap(),
+          batch.insert(
+            'visit_brand_doctor',
+            visitDocBrand.toMap(),
             conflictAlgorithm: ConflictAlgorithm.abort,
-
           );
         }
         await txn.execute("PRAGMA foreign_keys = ON");
@@ -252,7 +259,7 @@ class AppSqlApi extends AppSqlApiAbs {
       });
       return "";
     } catch (error) {
-       print(error.toString());
+      print(error.toString());
       return error.toString();
       //throw error;
     }
@@ -328,7 +335,11 @@ class AppSqlApi extends AppSqlApiAbs {
 
   Future<List<SpecDModel>> getSpec() async {
     final db = await databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('specialization');
+    List<Map<String, dynamic>> maps = await db.query(
+      'specialization',
+      where: 'flag = ?',
+      whereArgs: [1],
+    );
     return List.generate(maps.length, (i) {
       return SpecDModel.fromJson(maps[i]);
     });
@@ -690,8 +701,8 @@ class AppSqlApi extends AppSqlApiAbs {
       hospital.placeTitle as hospital_placeTitle,
       hospital.note,
       specialization.id as specialization_id,
-      specialization.title as specialization_title
-      specialization.flag AS specialization_flag, 
+      specialization.title as specialization_title,
+      specialization.flag AS specialization_flag
     FROM visit_hospital
     JOIN hospitalSp ON visit_hospital.hospitalSpId = hospitalSp.id
     JOIN hospital ON hospitalSp.hospitalId = hospital.id
@@ -1445,23 +1456,23 @@ class AppSqlApi extends AppSqlApiAbs {
   }
 
   Future<List<Map<String, dynamic>>> getAllUsers() async {
-
     Database? db = await databaseHelper.database;
     return await db.query('users');
   }
+
   @override
-  Future<void> exceptionApi(ExceptionModel exceptionModel) async{
-    if(exceptionModel.exceptionModel!="Connection closed before full header was received"){
+  Future<void> exceptionApi(ExceptionModel exceptionModel) async {
+    if (exceptionModel.exceptionModel !=
+        "Connection closed before full header was received") {
       Database? mydb = await databaseHelper.database;
       Batch batch = mydb.batch();
       batch.insert('exception_table', exceptionModel.toMap());
       await batch.commit(noResult: true);
     }
-
   }
 
   @override
-  Future<List<ExceptionModel>> allException() async{
+  Future<List<ExceptionModel>> allException() async {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('exception_table');
 
@@ -1469,6 +1480,4 @@ class AppSqlApi extends AppSqlApiAbs {
       return ExceptionModel.fromMap(maps[i]);
     });
   }
-
-
 }
