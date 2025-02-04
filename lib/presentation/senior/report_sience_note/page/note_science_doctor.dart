@@ -137,6 +137,7 @@ class NoteScienceDoctor extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
+
                                       Text(
                                         doctorNoteModel.docTitle,
                                         style: doctorNoteModel.isRead
@@ -308,10 +309,52 @@ class NoteScienceDoctor extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "معلومات إضافية:",
+                                           "اسم الدكتور",
+                                            style:  Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(height: 2,),
+                                          Text(
+                                            state.doctorNoteModel.docTitle,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleMedium,
+                                                .bodySmall,
+                                          ),
+                                          Text(
+                                            "اسم الدكتور",
+                                            style:  Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(height: 2,),
+                                          Text(
+                                            state.doctorNoteModel.docTitle,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                          Text(
+                                            "الاختصاص",
+                                            style:  Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(height: 2,),
+                                          Text(
+                                            state.doctorNoteModel.spTitle,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                          Text(
+                                            "note",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
                                           ),
                                           SizedBox(height: AppSize.s8),
                                           Text(
