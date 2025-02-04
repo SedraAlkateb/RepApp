@@ -564,6 +564,34 @@ extension VisitIssueMapper on VisitIssueResponse? {
     );
   }
 }
+//
+extension InventoryMapper on InventoryResponse? {
+  InventoryModel toDomain() {
+    return InventoryModel(
+        this?.title ?? Constants.empty,
+        this?.used ?? Constants.empty,
+        this?.total ?? Constants.empty,
+       this?.rest ?? Constants.zero,
+
+    );
+  }
+}
+
+
+extension AllInventoryMapper on InventoryResponseBaseResponse? {
+  List<InventoryModel> toDomain() {
+    List<InventoryModel> Inventory =
+    (this?.brand?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<InventoryModel>()
+        .toList();
+    return Inventory;
+  }
+}
+
+
+//
+
 extension AllVisitIssueMapper on AllVisitIssueBaseResponse? {
   List<DoctorIssueModel> toDomain() {
     List<DoctorIssueModel> visitIssue =

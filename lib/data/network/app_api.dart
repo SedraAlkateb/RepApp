@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:domina_app/app/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/responses/responses.dart';
@@ -74,7 +73,7 @@ abstract class AppServiceClient {
     @Part(name: "repPlanId") String repPlanId,
     @Part(name: "representativeId") String representativeId,
   );
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
   @POST("/insertPlanBrands.php")
   Future<Message1Response> repPlanBrand(@Body() RepPlanBrandBody list);
   @POST("/pharmacyVisit.php")
@@ -84,7 +83,6 @@ abstract class AppServiceClient {
   @POST("/hosVisit.php")
   Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
 
-//////////////////////////////////////
   @POST("/checkPlanStatus.php")
   Future<CheckBaseResponse> checkPlanBrand(
     @Part(name: "repPlanId") int repPlanId,
@@ -155,4 +153,14 @@ abstract class AppServiceClient {
       );
   @POST("/insertLog.php")
   Future<Message1Response> insertLog(@Body() ExceptionRequestBody list);
+
+  @POST("/admin/inventory.php")
+  Future<InventoryResponseBaseResponse> getInventory(
+      @Part(name: "repDet") int id,
+
+      );
+
+
+
+
 }

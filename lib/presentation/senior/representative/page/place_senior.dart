@@ -59,9 +59,11 @@ class PlaceSenior extends StatelessWidget {
                     borderRadius:
                     const BorderRadius.all(Radius.circular(AppSize.s8)),
                   ),
-                  child: Text(
-                    placeModel[index].title,
-                    style: Theme.of(context).textTheme.titleSmall,
+                  child: Center(
+                    child: Text(
+                      placeModel[index].title,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
                 );
               },

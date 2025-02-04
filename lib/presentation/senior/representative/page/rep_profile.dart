@@ -2,6 +2,8 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
+import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/page/note_issue_doctor.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
@@ -301,7 +303,17 @@ class RepProfile extends StatelessWidget {
                       thickness: 0.8,
                     ),
                   ),
-                  RowList(
+                  RowList(function: () {
+
+                    initSeniorReportInventoryModule();
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        BlocProvider.of<ReportInventoryBloc>(context)
+                            .add(SenAllInventoryEvent(id));
+                        return ReportInventory();
+                      },
+                    ));
+                  },
                       icon1: FontAwesomeIcons.clipboard,
                       text: "تقرير توزيع العينات (الجرد)"),
                 ],

@@ -1256,3 +1256,39 @@ Map<String, dynamic> _$VisitHospitalBaseResponseToJson(
       'HosVisitTemp': instance.data,
       'Brands Visit': instance.brandsVisit,
     };
+
+InventoryResponse _$InventoryResponseFromJson(Map<String, dynamic> json) =>
+    InventoryResponse(
+      json['title'] as String?,
+      json['used'] as String?,
+      json['total'] as String?,
+      (json['rest'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$InventoryResponseToJson(InventoryResponse instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'used': instance.used,
+      'total': instance.total,
+      'rest': instance.rest,
+    };
+
+InventoryResponseBaseResponse _$InventoryResponseBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    InventoryResponseBaseResponse(
+      (json['Brands'] as List<dynamic>?)
+              ?.map(
+                  (e) => InventoryResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$InventoryResponseBaseResponseToJson(
+        InventoryResponseBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Brands': instance.brand,
+    };
