@@ -25,7 +25,7 @@ class ReportInventoryBloc extends Bloc<ReportInventoryEvent, ReportInventoryStat
 
           return false;
         }).toList();
-        emit(SenAllInventoryState(inventoryModel));
+        emit(SenAllInventoryState(inventoryNote));
       }
       else if (event is SenAllInventoryEvent) {
         emit(SenAllInventoryLoadingState());
