@@ -100,7 +100,7 @@ class DoctorSenior extends StatelessWidget {
                         children: [
                           Text(
                             "عدد الأطباء: ",
-                            style: Theme.of(context).textTheme.labelSmall,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                           CircleNumberWidget(number: doctorModel.length),
                         ],

@@ -95,7 +95,7 @@ class HospitalSenior extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text("عدد المشافي: ",
-                              style: Theme.of(context).textTheme.labelSmall),
+                              style: Theme.of(context).textTheme.labelLarge),
                           CircleNumberWidget(number: hospitalModel.length),
                         ],
                       ),
