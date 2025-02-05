@@ -11,6 +11,7 @@ import 'package:domina_app/presentation/senior/report_sience_note/page/note_scie
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/row_list.dart';
 import 'package:domina_app/presentation/senior/representative/widget/row_list_info.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -52,36 +53,53 @@ class RepProfile extends StatelessWidget {
                       top: Radius.circular(20),
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "الإسم : سيدرا",
-                        style: Theme.of(context).textTheme.labelMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "العنوان : شارع الحمرة",
-                        style: Theme.of(context).textTheme.labelMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "الجوال : 09635827",
-                        style: Theme.of(context).textTheme.labelMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      RowListInfo(text1: "عدد الوصفات  :", text2: "66"),
-                      RowListInfo(
-                          text1: "الاختصاصات المرتبط بها :", text2: "588"),
-                      RowListInfo(
-                          text1: "عدد الزيارات المتبقية لتحقيق الهدف :",
-                          text2: "3566"),
-                    ],
+                  child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+                    buildWhen: (previous, current) => current is RepInfoState ,
+                    builder: (context, state) {
+                      if(state is RepInfoLoadingState){
+                        return loadingFullScreen(context);
+                      }
+                      else if(state is RepInfoErrorState){
+                        return errorFullScreen(context);
+                      }
+                      else  if(state is RepInfoState){
+                        return Column(
+                          children: [
+                            Text(
+                              "الإسم :${state.infoRep.name}",
+                              style: Theme.of(context).textTheme.labelMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "العنوان : ${state.infoRep.address}",
+                              style: Theme.of(context).textTheme.labelMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "الجوال : ${state.infoRep.mobile}",
+                              style: Theme.of(context).textTheme.labelMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                            RowListInfo(text1: "عدد الوصفات  :", text2: "${state.infoRep.recipesCount}"),
+                            RowListInfo(
+                                          text1: "عدد الزيارات المتبقية لتحقيق الهدف :", text2: "${state.infoRep.visitNoteYet}"),
+                            RowListInfo(
+                                          text1: "عدد الزيارات للاطباء التي تمت زيارتهم :",
+                                          text2: "${state.infoRep.visitDon}"),
+                            RowListInfo(
+                                text1: "عدد الزيارات:",
+                                text2: "${state.infoRep.totalVisit}"),
+                          ],
+                        );
+                      }
+                      return SizedBox();
+                    },
                   ),
                 )),
             SizedBox(

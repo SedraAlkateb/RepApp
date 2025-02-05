@@ -100,32 +100,6 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<CityModel>>> allMedicalRepresentative(
-      int id) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.allMedicalRepresentative(id);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allMedicalRepresentative")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allMedicalRepresentative")]));
-      return Left(failure);
-    }
-  }
-
-  @override
   Future<Either<Failure, List<BrandModel>>> allBrand(int id) async {
     try {
       if (await _networkInfo.isConnected) {
@@ -909,7 +883,7 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+          excRepository.exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
           return Left(failure);
         }
       } else {
@@ -917,7 +891,7 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
       return Left(failure);
     }
   }

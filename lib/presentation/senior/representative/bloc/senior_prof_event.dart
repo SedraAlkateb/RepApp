@@ -17,6 +17,13 @@ class SenAllHospitalEvent extends SeniorProfEvent{
   List<Object?> get props => [id];
 
 }
+class getInfoRepEvent extends SeniorProfEvent{
+  final  int id;
+  @override
+  getInfoRepEvent(this.id);
+  List<Object?> get props => [id];
+
+}
 class SenAllDoctorEvent extends SeniorProfEvent{
   final  int id;
   @override

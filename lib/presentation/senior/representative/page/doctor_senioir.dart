@@ -124,18 +124,14 @@ class DoctorSenior extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              doctor.spTitle,
-                              style: Theme.of(context).textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ),
+
                             Text(
                               doctor.title,
                               style: Theme.of(context).textTheme.labelLarge,
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              "${doctor.address}_${doctor.placeTitle}",
+                              doctor.spTitle,
                               style: Theme.of(context).textTheme.titleMedium,
                               textAlign: TextAlign.center,
                             ),
@@ -144,14 +140,22 @@ class DoctorSenior extends StatelessWidget {
                               s2: doctor.rate.toString(),
                             ),
                             Text(
-                              "اوقات العمل_${doctor.workHours}",
+                              "${doctor.address}_${doctor.placeTitle}",
                               style: Theme.of(context).textTheme.titleMedium,
                               textAlign: TextAlign.center,
                             ),
+
+                            doctor.workHours!=null&& doctor.workHours!=""?
+                            Text(
+                              "اوقات العمل${doctor.workHours}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                              textAlign: TextAlign.center,
+                            ):SizedBox(),
+                            doctor.note!=null&& doctor.note!=""?
                             TextRach(
                               s1: "ملاحظة : ",
                               s2: doctor.note.toString(),
-                            ),
+                            ):SizedBox(),
                           ],
                         ),
                       );

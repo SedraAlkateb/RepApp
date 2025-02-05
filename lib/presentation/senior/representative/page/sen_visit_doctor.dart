@@ -52,8 +52,8 @@ class SenVisitDoctor extends StatelessWidget {
             ),
             BlocBuilder<SeniorProfBloc, SeniorProfState>(
               builder: (context, state) {
-                List<NoVisitDocModel> VisitDoc =
-                    context.watch<SeniorProfBloc>().VisitDoc;
+                List<NoVisitDocModel> visitDoc =
+                    context.watch<SeniorProfBloc>().visitDoc;
                 if (state is SenVisitDocEmptyState) {
                   return SliverList(
                       delegate: SliverChildListDelegate([
@@ -64,7 +64,7 @@ class SenVisitDoctor extends StatelessWidget {
                   ]));
                 }
                 if (state is SenVisitDocsState) {
-                  VisitDoc = state.VisitDoc;
+                  visitDoc = state.visitDoc;
                 }
                 if (state is SenVisitDocLoadingState) {
                   return SliverList(
@@ -91,11 +91,11 @@ class SenVisitDoctor extends StatelessWidget {
                         children: [
                           Text("عدد الملاحظات: ",
                               style: Theme.of(context).textTheme.labelLarge),
-                          CircleNumberWidget(number: VisitDoc.length),
+                          CircleNumberWidget(number: visitDoc.length),
                         ],
                       ),
                     ),
-                    ...VisitDoc.map((VisitDoc) {
+                    ...visitDoc.map((visitDoc) {
                       return Container(
                         margin: EdgeInsets.all(AppPadding.p8),
                         padding: EdgeInsets.all(AppPadding.p16),
@@ -114,17 +114,17 @@ class SenVisitDoctor extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              " ${VisitDoc.docTitle} ",
+                              " ${visitDoc.docTitle} ",
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              " ${VisitDoc.spTitle} ",
+                              " ${visitDoc.spTitle} ",
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              " ${VisitDoc.address} ",
+                              " ${visitDoc.address} ",
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
@@ -139,7 +139,7 @@ class SenVisitDoctor extends StatelessWidget {
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      " ${VisitDoc.rate} ",
+                                      " ${visitDoc.rate} ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,
@@ -157,7 +157,7 @@ class SenVisitDoctor extends StatelessWidget {
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      " ${VisitDoc.visits} ",
+                                      " ${visitDoc.visits} ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,
