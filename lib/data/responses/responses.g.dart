@@ -1292,3 +1292,61 @@ Map<String, dynamic> _$InventoryResponseBaseResponseToJson(
       'message': instance.message,
       'Brands': instance.brand,
     };
+
+RepInfoResponse _$RepInfoResponseFromJson(Map<String, dynamic> json) =>
+    RepInfoResponse(
+      json['id'] as String?,
+      json['name'] as String?,
+      json['mobile'] as String?,
+      json['address'] as String?,
+      json['sampleCount'] as String?,
+      json['recipesCount'] as String?,
+      (json['totalVisit'] as num?)?.toInt(),
+      (json['visitDon'] as num?)?.toInt(),
+      (json['visitnotYet'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$RepInfoResponseToJson(RepInfoResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'mobile': instance.mobile,
+      'address': instance.address,
+      'sampleCount': instance.sampleCount,
+      'recipesCount': instance.recipesCount,
+      'totalVisit': instance.totalVisit,
+      'visitDon': instance.visitDon,
+      'visitnotYet': instance.visitnotYet,
+    };
+
+AllRepInfoResponse _$AllRepInfoResponseFromJson(Map<String, dynamic> json) =>
+    AllRepInfoResponse(
+      (json['Representative'] as List<dynamic>?)
+              ?.map((e) => RepInfoResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$AllRepInfoResponseToJson(AllRepInfoResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.repInfoResponse,
+    };
+
+AllRepInfoResponseBaseResponse _$AllRepInfoResponseBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllRepInfoResponseBaseResponse(
+      json['Representative'] == null
+          ? null
+          : AllRepInfoResponse.fromJson(
+              json['Representative'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllRepInfoResponseBaseResponseToJson(
+        AllRepInfoResponseBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Representative': instance.data,
+    };

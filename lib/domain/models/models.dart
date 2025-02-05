@@ -1451,3 +1451,24 @@ class InventoryModel{
   int rest;
   InventoryModel(this.title,this.used,this.total,this.rest);
 }
+class InfoRep{
+  int id;
+  String name;
+  String mobile;
+  String address;
+  String sampleCount;
+  String recipesCount;
+  int totalVisit;
+  int visitDon;
+  int visitNoteYet;
+  InfoRep(
+      this.id,
+      this.name,
+      this.mobile,
+      this.address,
+      this.sampleCount,
+      this.recipesCount,
+      this.totalVisit,
+      this.visitDon,
+      this.visitNoteYet);
+}

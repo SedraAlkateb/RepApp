@@ -38,9 +38,10 @@ final class SenAsReadState extends ReportScienceState {
 }
 final class IsExpandedNoteState extends ReportScienceState {
   final DoctorNoteModel doctorNoteModel;
-  IsExpandedNoteState(this.doctorNoteModel);
+  final int index;
+  IsExpandedNoteState(this.doctorNoteModel,this.index);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props =>[doctorNoteModel,index];
 }
 final class   NoIsExpandedNoteState extends ReportScienceState {
   NoIsExpandedNoteState();
