@@ -909,7 +909,7 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+          excRepository.exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
           return Left(failure);
         }
       } else {
@@ -917,7 +917,7 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
       return Left(failure);
     }
   }
