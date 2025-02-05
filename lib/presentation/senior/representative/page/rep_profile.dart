@@ -283,10 +283,11 @@ class RepProfile extends StatelessWidget {
                     function: () {
 
                       initSeniorReportIssueModule();
+                      BlocProvider.of<ReportIssueBloc>(context)
+                          .add(SenAllIssueDoctorEvent(id));
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
-                          BlocProvider.of<ReportIssueBloc>(context)
-                              .add(SenAllIssueDoctorEvent(id));
+
                           return NoteIssueDoctor(id: id);
                         },
                       ));
