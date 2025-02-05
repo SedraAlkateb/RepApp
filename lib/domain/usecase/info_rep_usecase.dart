@@ -10,7 +10,6 @@ class InfoRepUsecase extends Equatable {
   Future<Either<Failure, InfoRep>> execute(int id) async{
     return await _repository.getInfoRep(id);
   }
-
   @override
   List<Object?> get props => [_repository];
 

@@ -31,9 +31,7 @@ abstract class AppServiceClient {
   );
   @POST("/getCity.php")
   Future<AllCityBaseResponse> allCity();
-  @POST("/getRep.php")
-  Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(
-      @Part(name: "repDet") int repDet);
+
   @POST("/getAllBrand.php")
   Future<AllBrandBaseResponse> allBrand(
     @Part(name: "repPlanId") int repPlanId,

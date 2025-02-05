@@ -130,10 +130,10 @@ final class  SenNoVisitDocEmptyState extends SeniorProfState {
 
 
 final class SenVisitDocsState extends SeniorProfState {
-  final List<NoVisitDocModel> VisitDoc;
-  SenVisitDocsState(this.VisitDoc);
+  final List<NoVisitDocModel> visitDoc;
+  SenVisitDocsState(this.visitDoc);
   @override
-  List<Object?> get props =>[VisitDoc];
+  List<Object?> get props =>[visitDoc];
 }
 final class  SenVisitDocErrorState extends SeniorProfState {
   final Failure failure;
@@ -151,6 +151,27 @@ final class  SenVisitDocLoadingState extends SeniorProfState {
 final class  SenVisitDocEmptyState extends SeniorProfState {
   @override
   SenVisitDocEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+
+
+final class RepInfoState extends SeniorProfState {
+  final InfoRep infoRep;
+  RepInfoState(this.infoRep);
+  @override
+  List<Object?> get props =>[infoRep];
+}
+final class  RepInfoErrorState extends SeniorProfState {
+  final Failure failure;
+  RepInfoErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  RepInfoLoadingState extends SeniorProfState {
+  @override
+  RepInfoLoadingState();
   @override
   List<Object?> get props =>[];
 }
