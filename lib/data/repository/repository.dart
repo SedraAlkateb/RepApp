@@ -897,5 +897,30 @@ class RepositoryImp implements Repository {
   }
   }
 
+  @override
+  Future<Either<Failure, InfoRep>> getInfoRep(int repDet)  async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getRepInfo(repDet);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+      return Left(failure);
+    }
+  }
+
 
 }

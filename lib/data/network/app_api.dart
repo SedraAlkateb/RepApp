@@ -159,7 +159,10 @@ abstract class AppServiceClient {
       @Part(name: "repDet") int id,
 
       );
-
+  @POST("/admin/getRepInfo.php")
+  Future<AllRepInfoResponseBaseResponse> getRepInfo(
+      @Part(name: "repDet") int id
+      );
 
 
 

@@ -52,6 +52,7 @@ abstract class RemoteDataSource {
   Future<AllVisitIssueBaseResponse> getVisitIssue(int repDet);
   Future<Message1Response> insertLog(ExceptionRequestBody list);
   Future<InventoryResponseBaseResponse> getInventory(int repDet);
+  Future<AllRepInfoResponseBaseResponse> getRepInfo( int id);
 }
 
 
@@ -257,4 +258,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   }
 
+  @override
+  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id) async {
+    return await _appServiceClient.getRepInfo(id);
+  }
 }

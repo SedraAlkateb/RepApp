@@ -354,7 +354,7 @@ class NoteScienceDoctor extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 5, right: 5),
                                               child: Text(
-                                                "${state.doctorNoteModel.address}_${state.doctorNoteModel.docTitle}",
+                                                "${state.doctorNoteModel.address}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,

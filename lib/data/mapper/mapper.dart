@@ -16,7 +16,21 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
     );
   }
 }
-
+extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
+  InfoRep toDomain() {
+    return InfoRep(
+     int.parse( this?.data?.repInfoResponse![0].id ??"0"),
+      this?.data?.repInfoResponse![0].name?? Constants.empty,
+      this?.data?.repInfoResponse![0].mobile?? Constants.empty,
+      this?.data?.repInfoResponse![0].address?? Constants.empty,
+      this?.data?.repInfoResponse![0].sampleCount?? Constants.empty,
+      this?.data?.repInfoResponse![0].recipesCount?? Constants.empty,
+      this?.data?.repInfoResponse![0].totalVisit?? Constants.zero,
+      this?.data?.repInfoResponse![0].visitDon?? Constants.zero,
+      this?.data?.repInfoResponse![0].visitnotYet?? Constants.zero,
+    );
+  }
+}
 extension ActiveResposeMapper on CheckBaseResponse? {
   ActiveModel toDomain() {
     return ActiveModel(
