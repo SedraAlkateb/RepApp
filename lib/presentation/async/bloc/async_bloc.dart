@@ -173,7 +173,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             planBrands = planBrandsFailureOrSuccess as List<PlanBrandModel>;
             print("Sedra");
           }
-
           try {
             emit(LoadingState(4));
             final doctorsResult =
@@ -303,7 +302,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           emit(IsActiveErrorState(failure: failure));
         }, (data) async {
           checkActiveModel = data;
-          UserInfo.activePlanId = data.activePlanId;
+          UserInfo.activePlanId = data.activePlanId??-5;
           UserInfo.otherPlanId = data.otherPlanId ?? 0;
           UserInfo.otherstatus = data.otherStatus ?? -1;
           UserInfo.percentage = data.percentage;
@@ -322,10 +321,10 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         (await updateActiveSqlUsecase.execute(
                 UserInfo.repId,
                 checkActiveModel!.otherPlanId ?? 9,
-                checkActiveModel!.activePlanId,
+                checkActiveModel!.activePlanId??-5,
                 checkActiveModel!.otherStatus ?? 9,
-                checkActiveModel!.startDate,
-                checkActiveModel!.endDate,
+                checkActiveModel!.startDate??"",
+                checkActiveModel!.endDate??"",
                 checkActiveModel!.otherStartDate ?? "",
                 checkActiveModel!.otherEndDate ?? ""))
             .fold((failure) {

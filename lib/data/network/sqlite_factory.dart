@@ -47,8 +47,8 @@ class DatabaseHelper {
     CREATE TABLE rep (
     token  TEXT NOT NULL,
     repId INTEGER NOT NULL,
-    otherPlanId INTEGER NOT NULL,
-    activePlanId INTEGER NOT NULL,
+    otherPlanId INTEGER ,
+    activePlanId INTEGER ,
     otherStatus INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     flag1 INTEGER NOT NULL DEFAULT 0,
@@ -58,8 +58,8 @@ class DatabaseHelper {
     samplesCount INTEGER NOT NULL,
     recipesCount INTEGER NOT NULL DEFAULT 0,
     isLogin INTEGER NOT NULL DEFAULT 0,
-    endDate TEXT NOT NULL,
-    startDate TEXT NOT NULL,
+    endDate TEXT ,
+    startDate TEXT ,
     otherStartDate TEXT ,
     otherEndDate TEXT 
     );
@@ -173,6 +173,7 @@ class DatabaseHelper {
     doctorId INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     target TEXT NOT NULL,
+   
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
  ''');

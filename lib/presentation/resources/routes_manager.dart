@@ -76,11 +76,6 @@ class RouteGenerator {
       case Routes.spec:
         initSpecModule();
         return MaterialPageRoute(builder: (_) => SpecializationsPage());
-      //
-      // case Routes.AllRepSenior:
-      //   initSpecModule();
-      //   return MaterialPageRoute(builder: (_) => AllRepSenior());
-      //
       case Routes.doctors:
         initDoctorModule();
         return MaterialPageRoute(builder: (_) => Doctors());
@@ -93,12 +88,6 @@ class RouteGenerator {
       case Routes.pharmacy:
         initPharmacyModule();
         return MaterialPageRoute(builder: (_) => PharmacyPage());
-
-      // case Routes.AllRepSenior:
-      //   initPharmacyModule();
-      //   return MaterialPageRoute(builder: (_) => AllRepSenior());
-
-
 
 
 

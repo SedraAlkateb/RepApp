@@ -14,8 +14,8 @@ import 'package:permission_handler/permission_handler.dart';
 Future<void> _showEndDateNotification() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-    'your_channel_id', // معرف القناة
-    'التنبيهات', // اسم القناة
+    'your_channel_id',
+    'التنبيهات',
     channelDescription: 'تنبيهات خاصة بالوقت',
     importance: Importance.max,
     priority: Priority.high,
@@ -27,11 +27,11 @@ Future<void> _showEndDateNotification() async {
       NotificationDetails(android: androidPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin.show(
-    0, // معرف الإشعار
-    'شركة دومِنا', // عنوان الإشعار
+    0,
+    'شركة دومِنا',
     'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
     platformChannelSpecifics,
-    payload: 'end_date_notification', // يمكن استخدام هذا في التنقل بين الصفحات
+    payload: 'end_date_notification',
   );
 }
 
@@ -46,7 +46,7 @@ Future<int?> sss() async {
     if (data != null && (data.isLogin > 0)) {
       UserInfo.name = data.name;
       UserInfo.isLogging = data.isLogin;
-      UserInfo.activePlanId = data.activePlanId;
+      UserInfo.activePlanId = data.activePlanId??-5;
       UserInfo.otherPlanId = data.otherPlanId;
       UserInfo.otherstatus = data.otherStatus;
       UserInfo.percentage = data.percentage;
