@@ -12,7 +12,7 @@ class NoteScienceDoctor extends StatelessWidget {
   NoteScienceDoctor({super.key, required this.id});
   final int id;
   final TextEditingController searchNoteDoctorController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -162,41 +162,55 @@ class NoteScienceDoctor extends StatelessWidget {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                " التاريخ :",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              ),
-                                              Text(
-                                                " ${doctorNoteModel.visitDate} ",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              ),
-                                            ],
+                                          Expanded(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  " التاريخ :",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    " ${doctorNoteModel.visitDate} ",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "الإختصاص :",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              ),
-                                              Text(
-                                                " ${doctorNoteModel.spTitle} ",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              ),
-                                            ],
+                                          Expanded(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "الإختصاص :",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    " ${doctorNoteModel.spTitle} ",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -250,7 +264,7 @@ class NoteScienceDoctor extends StatelessWidget {
                       ? DraggableScrollableSheet(
                           initialChildSize: 0.4,
                           minChildSize: 0.2,
-                          maxChildSize: 0.8,
+                          maxChildSize: 0.9,
                           builder: (context, scrollController) {
                             return Container(
                               decoration: BoxDecoration(
