@@ -29,8 +29,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   List<NoVisitDocModel> visitDoc = [];
 
   List<DoctorModel> doctor = [];
-  SeniorProfBloc(this.allPlaceUsecase, this.allSpeUsecase,
-      this.allDoctorUsecase, this.allHospitalUsecase, this.allNoVisitDoctorUsecase,this.allSenVisitDoctorUsecase,this.infoRepUsecase)
+  SeniorProfBloc(
+      this.allPlaceUsecase,
+      this.allSpeUsecase,
+      this.allDoctorUsecase,
+      this.allHospitalUsecase,
+      this.allNoVisitDoctorUsecase,
+      this.allSenVisitDoctorUsecase,
+      this.infoRepUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -41,16 +47,16 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           emit(SenAllPlaceState(data));
         });
       }
-      if (event is SenAllHospitalEvent) {
+      else  if (event is SenAllHospitalEvent) {
         emit(SenAllHospitalLoadingState());
         (await allHospitalUsecase.execute(event.id)).fold((failure) {
           emit(SenAllHospitalErrorState(failure: failure));
         }, (data) async {
-          hospital=data;
+          hospital = data;
           emit(SenAllHospitalsState(data));
         });
       }
-      if (event is getInfoRepEvent) {
+      else  if (event is getInfoRepEvent) {
         emit(RepInfoLoadingState());
         (await infoRepUsecase.execute(event.id)).fold((failure) {
           emit(RepInfoErrorState(failure: failure));
@@ -58,7 +64,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           emit(RepInfoState(data));
         });
       }
-      if (event is SenAllSpecEvent) {
+      else  if (event is SenAllSpecEvent) {
         emit(SenAllSpecLoadingState());
         (await allSpeUsecase.execute(event.id)).fold((failure) {
           emit(SenAllSpecErrorState(failure: failure));
@@ -114,7 +120,6 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           }
           return false;
         }).toList();
-
         emit(SenVisitDocsState(visitDocModel));
       }
       else if (event is SenSearchNoVisitDoctorEvent) {
@@ -135,11 +140,9 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           }
           return false;
         }).toList();
-
         emit(SenNoVisitDocsState(noVisitDocModel));
       }
-
-      if (event is SenAllDoctorEvent) {
+      else  if (event is SenAllDoctorEvent) {
         emit(SenAllDoctorLoadingState());
         (await allDoctorUsecase.execute(event.id)).fold((failure) {
           emit(SenAllDoctorErrorState(failure: failure));
@@ -173,19 +176,17 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         }).toList();
         emit(SenAllDoctorsState(doctorList));
       }
-
       else if (event is NoVisitDocEvent) {
         emit(SenNoVisitDocLoadingState());
         (await allNoVisitDoctorUsecase.execute(event.id)).fold((failure) {
           emit(SenNoVisitDocErrorState(failure: failure));
         }, (data) async {
-          noVisitDoc=data;
-          if(data.isEmpty){
+          noVisitDoc = data;
+          if (data.isEmpty) {
             emit(SenNoVisitDocEmptyState());
-          }else{
+          } else {
             emit(SenNoVisitDocsState(data));
           }
-
         });
       }
       else if (event is VisitDocEvent) {
@@ -193,13 +194,12 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         (await allSenVisitDoctorUsecase.execute(event.id)).fold((failure) {
           emit(SenVisitDocErrorState(failure: failure));
         }, (data) async {
-          visitDoc=data;
-          if(data.isEmpty){
+          visitDoc = data;
+          if (data.isEmpty) {
             emit(SenVisitDocEmptyState());
-          }else{
+          } else {
             emit(SenVisitDocsState(data));
           }
-
         });
       }
     });

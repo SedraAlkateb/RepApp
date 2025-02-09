@@ -217,45 +217,6 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllMedicalRepresentativeBaseResponse> allMedicalRepresentative(
-      int repDet) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options =
-        _setStreamType<AllMedicalRepresentativeBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/getRep.php',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late AllMedicalRepresentativeBaseResponse _value;
-    try {
-      _value = AllMedicalRepresentativeBaseResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<AllBrandBaseResponse> allBrand(int repPlanId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -1024,7 +985,6 @@ class _AppServiceClient implements AppServiceClient {
         note2,
       ));
     }
-    if (image1 != null) {
       if (image1 != null) {
         _data.files.add(MapEntry(
           'image1',
@@ -1034,8 +994,8 @@ class _AppServiceClient implements AppServiceClient {
           ),
         ));
       }
-    }
-    if (image2 != null) {
+
+
       if (image2 != null) {
         _data.files.add(MapEntry(
           'image2',
@@ -1045,7 +1005,6 @@ class _AppServiceClient implements AppServiceClient {
           ),
         ));
       }
-    }
     if (brand_2 != null) {
       _data.fields.add(MapEntry(
         'brand_2',

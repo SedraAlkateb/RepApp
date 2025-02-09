@@ -1030,14 +1030,14 @@ class LoginModel {
   String token;
   int repId;
   int? otherPlanId = -1;
-  int activePlanId;
+  int? activePlanId;
   int? otherStatus = -1;
   int percentage;
   int samplesCount;
   String name;
   int isLogin;
-  String endDate;
-  String startDate;
+  String? endDate;
+  String? startDate;
   int flag;
   int recipesCount;
   String? otherStartDate;
@@ -1068,7 +1068,7 @@ class LoginModel {
       'token': token,
       'repId': repId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
-      'activePlanId': activePlanId,
+      'activePlanId': activePlanId== null ? -5 :activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
@@ -1090,7 +1090,7 @@ class LoginModel {
       map['token'] ?? "",
       map['repId'] ?? 0,
       map['otherPlanId'] ?? 0,
-      map['activePlanId'] ?? 0,
+      map['activePlanId'] ?? -5,
       map['otherStatus'] ?? 0,
       map['name'] ?? "",
       map['percentage'] ?? 0,
