@@ -18,18 +18,6 @@ class Places extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print(UserInfo.activePlanId);
-    print("startDate");
-    print(UserInfo.startDate);
-    print("endDate");
-    print(UserInfo.endDate);
-    print(UserInfo.otherEndDate);
-    print(UserInfo.otherStartDate);
-    //print(UserInfo.);
-
-
-
-
     final size = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
@@ -93,8 +81,6 @@ class Places extends StatelessWidget {
         context.read<PlaceBloc>().k = 1;
       }
     });
-    // التحقق من الوقت الحالي مقابل UserInfo.endDate
-
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
