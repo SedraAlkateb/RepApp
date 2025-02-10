@@ -241,6 +241,24 @@ class RepProfile extends StatelessWidget {
                       ),
                     ],
                   ),
+                  RowList(function: () {
+                    // Navigator.push(context, MaterialPageRoute(
+                    //   builder: (context) {
+                    //     BlocProvider.of<ReportInventoryBloc>(context)
+                    //         .add(SenAllInventoryEvent(id));
+                    //     return ReportInventory();
+                    //   },
+                    // ));
+                  },
+                      icon1: FontAwesomeIcons.table,
+                      text: "الخطة المستقبلية للمندوب"),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                    child: Divider(
+                      color: ColorManager.secondaryColor6,
+                      thickness: 0.8,
+                    ),
+                  ),
                   RowList(
                     icon1: FontAwesomeIcons.userDoctor,
                     text: "الأطباء الذين تمت زيارتهم",
@@ -335,6 +353,7 @@ class RepProfile extends StatelessWidget {
                   },
                       icon1: FontAwesomeIcons.clipboard,
                       text: "تقرير توزيع العينات (الجرد)"),
+
                 ],
               ),
             ),
