@@ -1140,7 +1140,11 @@ class BrandSpModel {
         map['id'], map['spId'], map['brandId'], map['brandType']);
   }
 }
-
+class Rep{
+  int activeRepId;
+  int? otherRepId;
+  Rep(this.activeRepId,{this.otherRepId});
+}
 class PlanBrandModel {
   int id;
   int spId;
