@@ -90,7 +90,7 @@ class RepProfile extends StatelessWidget {
                             RowListInfo(
                                           text1: "عدد الزيارات المتبقية لتحقيق الهدف :", text2: "${state.infoRep.visitNoteYet}"),
                             RowListInfo(
-                                          text1: "عدد الزيارات للاطباء التي تمت زيارتهم :",
+                                          text1: "عدد الزيارات للأطباء الذين تمت زيارتهم :",
                                           text2: "${state.infoRep.visitDon}"),
                             RowListInfo(
                                 text1: "عدد الزيارات:",

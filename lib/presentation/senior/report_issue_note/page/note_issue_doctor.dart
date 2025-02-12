@@ -154,7 +154,7 @@ class NoteIssueDoctor extends StatelessWidget {
                                             Theme.of(context).textTheme.bodySmall,
                                           ),
                                           Text(
-                                            " ${doctorNoteModel.visitDate} ",
+                                            "${doctorNoteModel.visitDate}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall,
@@ -172,16 +172,33 @@ class NoteIssueDoctor extends StatelessWidget {
                                             Theme.of(context).textTheme.bodySmall,
                                           ),
                                           Text(
-                                            " ${doctorNoteModel.spTitle} ",
+                                            "${doctorNoteModel.spTitle}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall,
                                           ),
                                         ],
                                       ),
+
                                     ],
                                   ),
-
+                                  SizedBox(height:20,),
+                                  Row(mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                      "الملاحظات :",
+                                      style:
+                                      Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                      Expanded(
+                                        child: Text(
+                                          "${doctorNoteModel.issue}",
+                                          style: doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
 
