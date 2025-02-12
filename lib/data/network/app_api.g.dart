@@ -440,21 +440,24 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
-    int repPlanIdActive,
-    int repPlanIdOther,
-  ) async {
+    int repPlanIdActive, {
+    int? repPlanIdOther,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
       'repPlanIdActive',
       repPlanIdActive.toString(),
     ));
-    _data.fields.add(MapEntry(
-      'repPlanIdOther',
-      repPlanIdOther.toString(),
-    ));
+    if (repPlanIdOther != null) {
+      _data.fields.add(MapEntry(
+        'repPlanIdOther',
+        repPlanIdOther.toString(),
+      ));
+    }
     final _options = _setStreamType<AllPlanBrandsBaseResponse>(Options(
       method: 'POST',
       headers: _headers,
@@ -985,6 +988,7 @@ class _AppServiceClient implements AppServiceClient {
         note2,
       ));
     }
+    if (image1 != null) {
       if (image1 != null) {
         _data.files.add(MapEntry(
           'image1',
@@ -994,8 +998,8 @@ class _AppServiceClient implements AppServiceClient {
           ),
         ));
       }
-
-
+    }
+    if (image2 != null) {
       if (image2 != null) {
         _data.files.add(MapEntry(
           'image2',
@@ -1005,6 +1009,7 @@ class _AppServiceClient implements AppServiceClient {
           ),
         ));
       }
+    }
     if (brand_2 != null) {
       _data.fields.add(MapEntry(
         'brand_2',

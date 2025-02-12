@@ -382,11 +382,11 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrands(
-      int repPlanIdActive, int repPlanIdOther) async {
+      Rep rep) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getAllPlanBrands(
-            repPlanIdActive, repPlanIdOther);
+            rep.activeRepId, repPlanIdOther: rep.otherRepId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

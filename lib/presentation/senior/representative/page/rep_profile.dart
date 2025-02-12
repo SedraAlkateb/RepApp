@@ -2,6 +2,7 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
@@ -242,13 +243,10 @@ class RepProfile extends StatelessWidget {
                     ],
                   ),
                   RowList(function: () {
-                    // Navigator.push(context, MaterialPageRoute(
-                    //   builder: (context) {
-                    //     BlocProvider.of<ReportInventoryBloc>(context)
-                    //         .add(SenAllInventoryEvent(id));
-                    //     return ReportInventory();
-                    //   },
-                    // ));
+                    initFutureSpecializationsModule();
+                    Navigator.pushNamed(context, Routes.futureSpecializations);
+                    BlocProvider.of<FutureRepBloc>(context)
+                        .add(FutureSpEvent(id));
                   },
                       icon1: FontAwesomeIcons.table,
                       text: "الخطة المستقبلية للمندوب"),

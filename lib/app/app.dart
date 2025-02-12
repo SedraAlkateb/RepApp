@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
+import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
@@ -65,6 +66,15 @@ class _MyAppState extends State<MyApp> {
             final bloc = instance<SeniorProfBloc>();
          //   bloc.add(AllRecipesEvent());
          //   bloc.add(AllNumEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<FutureRepBloc>
+          (
+          create: (context) {
+            final bloc = instance<FutureRepBloc>();
+            //   bloc.add(AllRecipesEvent());
+            //   bloc.add(AllNumEvent());
             return bloc;
           },
         ),

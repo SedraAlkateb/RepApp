@@ -17,7 +17,7 @@ abstract class Repository{
   Future<Either<Failure,Message1Response>>visitDoctor(VisitDoctorRequestBody list1);
   Future<Either<Failure,Message1Response>>visitHospital(VisitHospitalRequestBody list1);
   Future<Either<Failure,List<BrandSpModel>>> getBrandsSp(int repDet);
-  Future<Either<Failure,List<PlanBrandModel>>> getAllPlanBrands( int repPlanIdActive,int repPlanIdOther);
+  Future<Either<Failure,List<PlanBrandModel>>> getAllPlanBrands( Rep rep);
   Future<Either<Failure,Message1Response>>repPlanBrand(RepPlanBrandBody list1);
   Future<Either<Failure,ActiveModel>>isActive( int repPlaneId);
   Future<Either<Failure,LoginModel>>checkActivePlanBrand( int repDe);
