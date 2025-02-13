@@ -226,7 +226,7 @@ class RepProfile extends StatelessWidget {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
-                              "تفاصيل الخط الفعالة",
+                              "تفاصيل الخطة الفعالة",
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           )),
