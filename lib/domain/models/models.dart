@@ -1446,7 +1446,8 @@ class LoginRequest {
 class AllRepresentative {
   int id;
   String name;
-  AllRepresentative(this.id, this.name);
+  int? number;
+  AllRepresentative(this.id, this.name, {this.number});
 }
 class InventoryModel{
   String title;

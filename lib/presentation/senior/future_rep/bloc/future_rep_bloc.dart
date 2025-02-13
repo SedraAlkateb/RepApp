@@ -32,10 +32,8 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
           if (normalizeText(value.title).contains(search)) {
             return true;
           }
-
           return false;
         }).toList();
-
         emit(FutureSpRepState(spec));
       }
     });
