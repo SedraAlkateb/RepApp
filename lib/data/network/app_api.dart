@@ -80,11 +80,10 @@ abstract class AppServiceClient {
   Future<Message1Response> visitDoctor(@Body() VisitDoctorRequestBody list);
   @POST("/hosVisit.php")
   Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
-
   @POST("/checkPlanStatus.php")
   Future<CheckBaseResponse> checkPlanBrand(
-    @Part(name: "repPlanId") int repPlanId,
-  );
+      @Part(name: "repPlanId") int repPlanId,
+      );
   @POST("/getPlans.php")
   Future<LoginResponse> checkActivePlanBrand(
       @Part(name: "repDet") int repDet, @Part(name: "ver") int ver);
