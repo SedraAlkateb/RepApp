@@ -91,7 +91,7 @@ class RepProfile extends StatelessWidget {
                             RowListInfo(
                                           text1: "عدد الزيارات المتبقية لتحقيق الهدف :", text2: "${state.infoRep.visitNoteYet}"),
                             RowListInfo(
-                                          text1: "عدد الزيارات للاطباء التي تمت زيارتهم :",
+                                          text1: "عدد الزيارات للأطباء الذين تمت زيارتهم :",
                                           text2: "${state.infoRep.visitDon}"),
                             RowListInfo(
                                 text1: "عدد الزيارات:",
@@ -227,7 +227,7 @@ class RepProfile extends StatelessWidget {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
-                              "تفاصيل الخط الفعالة",
+                              "تفاصيل الخطة الفعالة",
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           )),

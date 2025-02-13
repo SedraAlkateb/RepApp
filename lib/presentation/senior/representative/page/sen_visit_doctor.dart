@@ -16,7 +16,7 @@ class SenVisitDoctor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(  title: Text("الأطباء الذين تمت زيارتهم"),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -107,7 +107,7 @@ class SenVisitDoctor extends StatelessWidget {
                             ],
                           ),
                           borderRadius:
-                              BorderRadius.all(Radius.circular(AppSize.s8)),
+                              BorderRadius.all(Radius.circular(AppSize.s4)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -118,10 +118,31 @@ class SenVisitDoctor extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
-                            Text(
-                              " ${visitDoc.spTitle} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
+                            Row(mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                " الإختصاص :",
+                                style:
+                                Theme.of(context).textTheme.bodySmall,
+                              ),
+                                Text(
+                                  " ${visitDoc.spTitle} ",
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),  Row(mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text(
+                                " تاريخ الزيارة :",
+                                style:
+                                Theme.of(context).textTheme.bodySmall,
+                              ),
+                                Text(
+                                  " 2-20-2025 ",
+                                  style:
+                                  Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ],
                             ),
                             Text(
                               " ${visitDoc.address} ",

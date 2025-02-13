@@ -16,7 +16,7 @@ class NoVisitDoctor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(  title: Text("الأطباء الذين لم يتم زيارتهم"),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
