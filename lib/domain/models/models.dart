@@ -171,6 +171,15 @@ class OtherBrandModel {
   OtherBrandModel(this.id, this.title, this.phTitle, this.flag,
       this.sampleCoast, this.Plan, this.amount, this.brandType);
 }
+class FutureBrandModel {
+  int id;
+  String title;
+  String phTitle;
+  int flag;
+  int amount;
+  String brandType;
+  FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount, this.brandType);
+}
 
 class PharmacyBrandModel {
   int id;

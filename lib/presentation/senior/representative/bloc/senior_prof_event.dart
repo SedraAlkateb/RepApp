@@ -17,6 +17,13 @@ class SenAllHospitalEvent extends SeniorProfEvent{
   List<Object?> get props => [id];
 
 }
+class SenAllBrandEvent extends SeniorProfEvent{
+  final  int id;
+  @override
+  SenAllBrandEvent(this.id);
+  List<Object?> get props => [id];
+
+}
 class getInfoRepEvent extends SeniorProfEvent{
   final  int id;
   @override
@@ -64,7 +71,12 @@ class SenSearchNoVisitDoctorEvent extends SeniorProfEvent{
   List<Object?> get props => [contant];
 
 }
-
+class SenSearchBrandEvent extends SeniorProfEvent{
+  final String contant;
+  SenSearchBrandEvent(this.contant);
+  @override
+  List<Object?> get props => [contant];
+}
 
 class SenSearchVisitDoctorEvent extends SeniorProfEvent{
   final String contant;

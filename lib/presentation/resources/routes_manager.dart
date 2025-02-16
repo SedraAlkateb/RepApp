@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
 import 'package:domina_app/presentation/senior/future_rep/page/future_spec.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/auditing_plan.dart';
+import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
@@ -57,7 +58,7 @@ class Routes {
   static const String seniorSpec = "/seniorSpec";
   static const String seniorHos = "/seniorHos";
   static const String seniorDoc = "/seniorDoc";
- // static const String seniorNoteDoc = "/seniorNoteDoc";
+ static const String allBrand = "/allBrand";
   static const String noVisitDoctor = "/noVisitDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String AuditingPlan = "/AuditingPlan";
@@ -71,6 +72,8 @@ class RouteGenerator {
       case Routes.login:
         initLoginModule();
         return MaterialPageRoute(builder: (_) => const MyLogin());
+      case Routes.allBrand:
+        return MaterialPageRoute(builder: (_) =>  AllBrand());
       case Routes.fadeInWidget:
         return MaterialPageRoute(builder: (_) => FadeInWidget());
       case Routes.places:
