@@ -121,7 +121,7 @@ class SenVisitDoctor extends StatelessWidget {
                             Row(mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                " الإختصاص :",
+                                "الإختصاص :",
                                 style:
                                 Theme.of(context).textTheme.bodySmall,
                               ),
