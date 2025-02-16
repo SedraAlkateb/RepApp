@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_no_visit_doctor_usecase.dart';
@@ -19,11 +20,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllSpeUsecase allSpeUsecase;
   AllHospitalUsecase allHospitalUsecase;
   AllDoctorUsecase allDoctorUsecase;
+  AllBrandsUsecase allBrandsUsecase;
+
   InfoRepUsecase infoRepUsecase;
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
   List<SpecDModel> specialization = [];
   List<HospitalModel> hospital = [];
+  List<BrandModel> brand = [];
 
   List<NoVisitDocModel> noVisitDoc = [];
   List<NoVisitDocModel> visitDoc = [];
@@ -36,7 +40,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       this.allHospitalUsecase,
       this.allNoVisitDoctorUsecase,
       this.allSenVisitDoctorUsecase,
-      this.infoRepUsecase)
+      this.infoRepUsecase,this.allBrandsUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -54,6 +58,15 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         }, (data) async {
           hospital = data;
           emit(SenAllHospitalsState(data));
+        });
+      }
+      else  if (event is SenAllBrandEvent) {
+        emit(SenAllBrandLoadingState());
+        (await allBrandsUsecase.execute(event.id)).fold((failure) {
+          emit(SenAllBrandErrorState(failure: failure));
+        }, (data) async {
+          brand = data;
+          emit(SenAllBrandsState(data));
         });
       }
       else  if (event is getInfoRepEvent) {

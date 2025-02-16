@@ -10,9 +10,7 @@ import 'package:domina_app/data/network/error_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-
 const String APPLICATION_JSON="application/json";
-
 const String MULTIPART="multipart/form-data";
 const String CONTENT_TYPE="contentType";
 const String ACCEPT="accept";
