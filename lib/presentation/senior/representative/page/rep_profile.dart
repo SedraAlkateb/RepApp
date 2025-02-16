@@ -258,6 +258,21 @@ class RepProfile extends StatelessWidget {
                     ),
                   ),
                   RowList(
+                    icon1: FontAwesomeIcons.table,
+                    text: "تدقيق خطة المندوب",
+                    function: () {
+                      BlocProvider.of<SeniorProfBloc>(context).add(VisitDocEvent(id));
+                      Navigator.pushNamed(context, Routes.AuditingPlan);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                    child: Divider(
+                      color: ColorManager.secondaryColor6,
+                      thickness: 0.8,
+                    ),
+                  ),
+                  RowList(
                     icon1: FontAwesomeIcons.userDoctor,
                     text: "الأطباء الذين تمت زيارتهم",
                     function: () {
