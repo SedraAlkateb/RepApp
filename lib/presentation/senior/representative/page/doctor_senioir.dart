@@ -147,7 +147,7 @@ class DoctorSenior extends StatelessWidget {
 
                             doctor.workHours!=null&& doctor.workHours!=""?
                             Text(
-                              "اوقات العمل${doctor.workHours}",
+                              "أوقات العمل${doctor.workHours}",
                               style: Theme.of(context).textTheme.titleMedium,
                               textAlign: TextAlign.center,
                             ):SizedBox(),
