@@ -196,6 +196,24 @@ class RepProfile extends StatelessWidget {
                         Text("المشافي")
                       ],
                     ),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BlocProvider.of<SeniorProfBloc>(context)
+                                .add(SenAllBrandEvent(id));
+                            Navigator.pushNamed(context, Routes.allBrand);
+                          },
+                          child: CircleAvatar(
+                            maxRadius: 25,
+                            backgroundColor: ColorManager.secondaryColor20,
+                            child: Icon(FontAwesomeIcons.hospital,
+                                color: ColorManager.secondaryColor19),
+                          ),
+                        ),
+                        Text("الاصناف")
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -293,7 +311,6 @@ class RepProfile extends StatelessWidget {
                     icon1: FontAwesomeIcons.solidNoteSticky,
                     text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
                     function: () {
-
                       initSeniorReportScienceModule();
                       BlocProvider.of<ReportScienceBloc>(context)
                           .add(SenAllNoteDoctorEvent(id));

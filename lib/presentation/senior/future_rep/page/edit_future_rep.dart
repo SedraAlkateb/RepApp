@@ -1,178 +1,181 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
-import 'package:domina_app/presentation/uniti/search_field.dart';
-import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 class EditFutureRep extends StatelessWidget {
-  EditFutureRep({super.key});
-  final TextEditingController searchteDoctorController =
-      TextEditingController();
-
+  final List<FutureBrandModel> futureBrandModel;
+  @override
+  const EditFutureRep({super.key, required this.futureBrandModel});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.arrow_back_sharp,
-                color: ColorManager.secondaryColor1,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SearchField(
-                    searchController: searchteDoctorController,
-                    onPressed: (value) {
-                      BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchVisitDoctorEvent(value));
-                    },
-                  ),
-                ],
-              ),
-            ),
-            BlocBuilder<SeniorProfBloc, SeniorProfState>(
-              builder: (context, state) {
-                List<NoVisitDocModel> visitDoc =
-                    context.watch<SeniorProfBloc>().visitDoc;
-                if (state is SenVisitDocEmptyState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
-                    SizedBox(
-                      height: 100,
-                    ),
-                    emptyFullScreen(context)
-                  ]));
-                }
-                if (state is SenVisitDocsState) {
-                  visitDoc = state.visitDoc;
-                }
-                if (state is SenVisitDocLoadingState) {
-                  return SliverList(
-                    delegate:
-                        SliverChildListDelegate([loadingFullScreen(context)]),
-                  );
-                }
-                if (state is SenVisitDocErrorState) {
-                  return SliverList(
-                    delegate: SliverChildListDelegate([
-                      errorFullScreen(context, func: () {
-                        BlocProvider.of<SeniorProfBloc>(context)
-                            .add(VisitDocEvent(156));
-                      })
-                    ]),
-                  );
-                }
-                return SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("عدد الملاحظات: ",
-                              style: Theme.of(context).textTheme.labelLarge),
-                          CircleNumberWidget(number: visitDoc.length),
-                        ],
-                      ),
-                    ),
-                    ...visitDoc.map((visitDoc) {
-                      return Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.all(AppPadding.p16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorManager.secondaryColor6,
-                              ColorManager.secondaryColor7,
+          centerTitle: true, title: Text("futureBrandModel[index].title")),
+      backgroundColor: ColorManager.white,
+      body: Container(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: BlocBuilder<BrandPlanBloc, BrandPlanState>(
+                    builder: (context, state) {
+                      return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => Container(
+                          margin: EdgeInsets.all(AppPadding.p8),
+                          padding: EdgeInsets.all(AppPadding.p16),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: ColorManager.secondaryColor),
+                            ],
+                            color: ColorManager.white,
+                            border:
+                                Border.all(color: ColorManager.secondaryColor7),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(AppSize.s8)),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Icon(
+                                        Icons.medication_outlined,
+                                        color: ColorManager.secondaryColor4,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        "العينة : ${futureBrandModel[index].title}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: AppPadding.p8,
+                                        horizontal: AppPadding.p14,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: int.parse(futureBrandModel[index]
+                                                    .brandType) ==
+                                                1
+                                            ? ColorManager.secondaryColor1
+                                            : ColorManager.secondaryColor2,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(AppSize.s8),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        int.parse(futureBrandModel[index]
+                                                    .brandType) ==
+                                                1
+                                            ? "هدف"
+                                            : "مساعد",
+                                        style: TextStyle(
+                                          color: ColorManager.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Divider(color: ColorManager.secondaryColor7),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Icon(
+                                        Icons.medical_information_outlined,
+                                        color: ColorManager.secondaryColor4,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8), // مسافة صغيرة
+                                    Expanded(
+                                      child: Text(
+                                        "النوع : ${futureBrandModel[index].phTitle}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(color: ColorManager.secondaryColor7),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Text(
+                                        'العدد ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            10), // مسافة بين النص وحقل الإدخال
+                                    Expanded(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: futureBrandModel[index]
+                                              .amount
+                                              .toString(),
+                                          enabled: UserInfo.otherstatus == 0
+                                              ? true
+                                              : state is SumErrorState
+                                                  ? false
+                                                  : false,
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(
+                                            vertical: 8,
+                                            horizontal: 10,
+                                          ),
+                                        ),
+                                        onChanged: (value) {},
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(AppSize.s8)),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              " ${visitDoc.docTitle} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              " ${visitDoc.spTitle} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              " ${visitDoc.address} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      " التقيم :",
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                    Text(
-                                      " ${visitDoc.rate} ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "عدد الزيارات :",
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                    Text(
-                                      " ${visitDoc.visits} ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        itemCount: futureBrandModel.length,
                       );
-                    }).toList(),
-                  ]),
-                );
-              },
+                    },
+                  )),
             ),
           ],
         ),

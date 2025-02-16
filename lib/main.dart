@@ -25,7 +25,6 @@ Future<void> _showEndDateNotification() async {
   );
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
-
   await flutterLocalNotificationsPlugin.show(
     0,
     'شركة دومِنا',
@@ -34,7 +33,6 @@ Future<void> _showEndDateNotification() async {
     payload: 'end_date_notification',
   );
 }
-
 Future<int?> sss() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -94,10 +92,8 @@ Future<int?> sss() async {
 
   return null;
 }
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppModule();
@@ -107,7 +103,6 @@ void main() async {
   //initializeTimeZones();
   runApp(Phoenix(child: const MyApp()));
 }
-
 Future<void> _initNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -118,7 +113,6 @@ Future<void> _initNotifications() async {
     initializationSettings,
   );
 }
-
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -127,7 +121,6 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
-
 Future<void> requestNotificationPermission() async {
   if (Platform.isAndroid) {
     PermissionStatus status = await Permission.notification.request();

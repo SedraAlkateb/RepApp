@@ -175,3 +175,29 @@ final class  RepInfoLoadingState extends SeniorProfState {
   @override
   List<Object?> get props =>[];
 }
+
+final class SenAllBrandsState extends SeniorProfState {
+  final List<BrandModel> brand;
+  SenAllBrandsState(this.brand);
+  @override
+  List<Object?> get props =>[brand];
+}
+final class  SenAllBrandErrorState extends SeniorProfState {
+  final Failure failure;
+  SenAllBrandErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  SenAllBrandLoadingState extends SeniorProfState {
+  @override
+  SenAllBrandLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class  SenAllBrandEmptyState extends SeniorProfState {
+  @override
+  SenAllBrandEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
