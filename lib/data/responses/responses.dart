@@ -410,6 +410,7 @@ class VisitIssueResponse {
   // to json
   Map<String, dynamic> toJson() => _$VisitIssueResponseToJson(this);
 }
+
 @JsonSerializable()
 class AllVisitIssueResponse {
   @JsonKey(name: "Notes")
@@ -433,6 +434,7 @@ class AllVisitIssueBaseResponse extends BaseResponse {
   // to json
   Map<String, dynamic> toJson() => _$AllVisitIssueBaseResponseToJson(this);
 }
+
 //
 @JsonSerializable()
 class VisitNotesResponse {
@@ -540,7 +542,7 @@ class SpecResponse {
   String? title;
   @JsonKey(name: "flag")
   int? flag;
-  SpecResponse(this.id, this.title,this.flag);
+  SpecResponse(this.id, this.title, this.flag);
   // from json
   factory SpecResponse.fromJson(Map<String, dynamic> json) =>
       _$SpecResponseFromJson(json);
@@ -980,8 +982,10 @@ class RepresentativeResponse {
   String? id;
   @JsonKey(name: "name")
   String? name;
+  @JsonKey(name: "unRead")
+  int? unRead;
 
-  RepresentativeResponse(this.id, this.name);
+  RepresentativeResponse(this.id, this.name,this.unRead);
   // from json
   factory RepresentativeResponse.fromJson(Map<String, dynamic> json) =>
       _$RepresentativeResponseFromJson(json);
@@ -1176,7 +1180,6 @@ class VisitHospitalBaseResponse extends BaseResponse {
 
 @JsonSerializable()
 class InventoryResponse {
-
   @JsonKey(name: "title")
   String? title;
   @JsonKey(name: "used")
@@ -1185,8 +1188,7 @@ class InventoryResponse {
   String? total;
   @JsonKey(name: "rest")
   int? rest;
-  InventoryResponse(
-      this.title, this.used, this.total, this.rest);
+  InventoryResponse(this.title, this.used, this.total, this.rest);
 
   factory InventoryResponse.fromJson(Map<String, dynamic> json) =>
       _$InventoryResponseFromJson(json);
@@ -1195,7 +1197,7 @@ class InventoryResponse {
 }
 
 @JsonSerializable()
-class InventoryResponseBaseResponse  extends BaseResponse {
+class InventoryResponseBaseResponse extends BaseResponse {
   @JsonKey(name: "Brands", defaultValue: [])
   List<InventoryResponse>? brand;
   InventoryResponseBaseResponse(this.brand);
@@ -1204,10 +1206,8 @@ class InventoryResponseBaseResponse  extends BaseResponse {
   Map<String, dynamic> toJson() => _$InventoryResponseBaseResponseToJson(this);
 }
 
-
 @JsonSerializable()
 class RepInfoResponse {
-
   @JsonKey(name: "id")
   String? id;
   @JsonKey(name: "name")
@@ -1227,9 +1227,15 @@ class RepInfoResponse {
   @JsonKey(name: "visitnotYet")
   int? visitnotYet;
 
-
-  RepInfoResponse(this.id, this.name, this.mobile, this.address,
-      this.sampleCount, this.recipesCount, this.totalVisit, this.visitDon,
+  RepInfoResponse(
+      this.id,
+      this.name,
+      this.mobile,
+      this.address,
+      this.sampleCount,
+      this.recipesCount,
+      this.totalVisit,
+      this.visitDon,
       this.visitnotYet);
 
   factory RepInfoResponse.fromJson(Map<String, dynamic> json) =>
@@ -1237,6 +1243,72 @@ class RepInfoResponse {
   // to json
   Map<String, dynamic> toJson() => _$RepInfoResponseToJson(this);
 }
+
+@JsonSerializable()
+class RepVisitsResponse {
+  @JsonKey(name: "visitId")
+  String? visitId;
+  @JsonKey(name: "visitDate")
+  String? visitDate;
+  @JsonKey(name: "placeTitle")
+  String? placeTitle;
+  @JsonKey(name: "docTitle")
+  String? docTitle;
+  @JsonKey(name: "rate")
+  String? rate;
+  @JsonKey(name: "spTitle")
+  String? spTitle;
+  @JsonKey(name: "note")
+  String? note;
+  @JsonKey(name: "issue")
+  String? issue;
+  @JsonKey(name: "special")
+  String? special;
+  @JsonKey(name: "target")
+  String? target;
+  @JsonKey(name: "flag")
+  String? flag;
+  @JsonKey(name: "samples")
+  List<String>? samples;
+  RepVisitsResponse(
+      this.visitId,
+      this.visitDate,
+      this.placeTitle,
+      this.docTitle,
+      this.rate,
+      this.spTitle,
+      this.note,
+      this.issue,
+      this.special,
+      this.target,
+      this.flag,
+      this.samples);
+
+  factory RepVisitsResponse.fromJson(Map<String, dynamic> json) =>
+      _$RepVisitsResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$RepVisitsResponseToJson(this);
+}
+@JsonSerializable()
+class AllRepVisitsResponse {
+  @JsonKey(name: "Representative", defaultValue: [])
+  List<RepVisitsResponse>? repVisits;
+  AllRepVisitsResponse(this.repVisits);
+  factory AllRepVisitsResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllRepVisitsResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$AllRepVisitsResponseToJson(this);
+}
+
+@JsonSerializable()
+class AllRepVisitsResponseBaseResponse extends BaseResponse {
+  @JsonKey(name: "Representative")
+  AllRepVisitsResponse? data;
+  AllRepVisitsResponseBaseResponse(this.data);
+  factory AllRepVisitsResponseBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllRepVisitsResponseBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$AllRepVisitsResponseBaseResponseToJson(this);
+}
+
 @JsonSerializable()
 class AllRepInfoResponse {
   @JsonKey(name: "Representative", defaultValue: [])

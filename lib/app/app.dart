@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => instance<AuthBloc>()),
+        BlocProvider(create: (_) => instance<ReportVisitDoctorBloc>()),
         BlocProvider(create: (_) => instance<AsyncInBloc>()),
         BlocProvider<PharmacyBloc>(
           create: (context) {

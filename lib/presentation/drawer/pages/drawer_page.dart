@@ -196,7 +196,7 @@ class DrawerPage extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.hospital,
-                (route) => false,
+                    (route) => false,
               );
             },
           ),

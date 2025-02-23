@@ -85,7 +85,6 @@ extension FlowStateExtension on FlowState{
           //show content ui of the screen
           return contentScreenWidget;
         }else{
-          //full screen state loading
          return StateRenderer(
             message: getMessage(),
               stateRendererType: getStateRendererType(),
@@ -94,9 +93,9 @@ extension FlowStateExtension on FlowState{
         }
       }
       case ErrorState :{
-        dismissDialog(context);
+
         if(getStateRendererType()==StateRendererType.popupErrorState){
-          //show popup loading
+          dismissDialog(context);
           showPopup(context, getStateRendererType(), getMessage());
           //show content ui of the screen
           return contentScreenWidget;
@@ -132,7 +131,6 @@ extension FlowStateExtension on FlowState{
         return contentScreenWidget;
       }
       default:{
-        dismissDialog(context);
         return contentScreenWidget;
       }
     }
@@ -159,7 +157,6 @@ extension FlowStateExtension on FlowState{
   showPopup(BuildContext context,StateRendererType stateRendererType,String message,{String title =Constants.empty}){
     WidgetsBinding.instance.addPostFrameCallback((_) =>
     showDialog(
-
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context)=>

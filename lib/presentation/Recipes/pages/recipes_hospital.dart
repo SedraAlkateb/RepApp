@@ -64,8 +64,8 @@ class _RecipesPageState extends State<RecipesHospital> {
         builder: (context, state) {
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             return Center(
-                child: errorFullScreenWidget(
-                    context, " لم يتم ادخال وصفات لهذا المشفى من قبل"));
+                child: emptyFullScreen(
+                    context,message:  " لم يتم ادخال وصفات لهذا المشفى من قبل"));
           }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =

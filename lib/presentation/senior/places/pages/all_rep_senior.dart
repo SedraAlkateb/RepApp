@@ -55,7 +55,7 @@ class AllRepSenior extends StatelessWidget {
                 context.watch<SeniorRepsBloc>().allRepresentative;
             if (state is AllSeniorRepState) {
               allRepresentative = state.representatives;
-              return  Expanded(
+              return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ListView.builder(
@@ -77,7 +77,8 @@ class AllRepSenior extends StatelessWidget {
                           padding: EdgeInsets.all(AppPadding.p16),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                              ColorManager.secondaryColor6,
+                            //  ColorManager.secondaryColor6,
+                              ColorManager.secondaryColor7,
                               ColorManager.secondaryColor7,
                               ColorManager.secondaryColor7,
                             ]),
@@ -85,11 +86,19 @@ class AllRepSenior extends StatelessWidget {
                             borderRadius: const BorderRadius.all(
                                 Radius.circular(AppSize.s8)),
                           ),
-                          child: Center(
-                            child: Text(
-                             "${allRepresentative[index].number??0} _${allRepresentative[index].name}",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${allRepresentative[index].name}",
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              Text(
+                                "${allRepresentative[index].number}",
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -98,8 +107,8 @@ class AllRepSenior extends StatelessWidget {
                   ),
                 ),
               );
-            } else if (state is AllSeniorRepLoadingState) {
-              print("lllllllllllllllllllllllllll");
+            }
+            else if (state is AllSeniorRepLoadingState) {
               return loadingFullScreen(context);
             } else if (state is AllSeniorRepErrorState) {
               return errorFullScreen(context,

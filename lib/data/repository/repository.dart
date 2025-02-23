@@ -29,7 +29,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "login")]));
+          insertLog(
+              ExceptionRequestBody([ExceptionModel(failure.massage, "login")]));
           return Left(failure);
 
           // return Left(Failure(ApiInternalStatus.FAILURE,
@@ -40,7 +41,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "login")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "login")]));
       return Left(failure);
     }
   }
@@ -57,17 +59,20 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-           insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "AllPlace")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "AllPlace")]));
           return Left(failure);
         }
       } else {
         Failure failure = DataSource.NO_INTERNET_CONNECTION.getFailure();
-        insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allPlace")]));
+        insertLog(ExceptionRequestBody(
+            [ExceptionModel(failure.massage, "allPlace")]));
         return Left(failure);
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allPlace")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "allPlace")]));
       return Left(failure);
     }
   }
@@ -86,7 +91,8 @@ class RepositoryImp implements Repository {
           //failure --business error
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allSpec")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "allSpec")]));
           return Left(failure);
         }
       } else {
@@ -94,7 +100,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allSpec")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "allSpec")]));
       return Left(failure);
     }
   }
@@ -111,7 +118,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-           insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allBrand")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "allBrand")]));
           return Left(failure);
         }
       } else {
@@ -119,7 +127,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allBrand")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "allBrand")]));
       return Left(failure);
     }
   }
@@ -136,7 +145,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allCity")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "allCity")]));
           return Left(failure);
         }
       } else {
@@ -144,7 +154,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allCity")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "allCity")]));
       return Left(failure);
     }
   }
@@ -161,7 +172,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allVisitDoctor")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "allVisitDoctor")]));
           return Left(failure);
         }
       } else {
@@ -169,7 +181,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "allVisitDoctor")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "allVisitDoctor")]));
       return Left(failure);
     }
   }
@@ -187,7 +200,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllPharmacy")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getAllPharmacy")]));
           return Left(failure);
         }
       } else {
@@ -195,7 +209,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllPharmacy")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getAllPharmacy")]));
       return Left(failure);
     }
   }
@@ -212,7 +227,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllDoctor")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getAllDoctor")]));
           return Left(failure);
         }
       } else {
@@ -220,7 +236,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllDoctor")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getAllDoctor")]));
       return Left(failure);
     }
   }
@@ -238,7 +255,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllHospital")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getAllHospital")]));
           return Left(failure);
         }
       } else {
@@ -246,7 +264,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllHospital")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getAllHospital")]));
       return Left(failure);
     }
   }
@@ -264,7 +283,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllHospitalSp")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getAllHospitalSp")]));
           return Left(failure);
         }
       } else {
@@ -272,7 +292,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllHospitalSp")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getAllHospitalSp")]));
       return Left(failure);
     }
   }
@@ -290,7 +311,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitPharmacy")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "visitPharmacy")]));
           return Left(failure);
         }
       } else {
@@ -298,7 +320,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitPharmacy")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "visitPharmacy")]));
       return Left(failure);
     }
   }
@@ -316,7 +339,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitDoctor")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "visitDoctor")]));
           return Left(failure);
         }
       } else {
@@ -324,7 +348,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitDoctor")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "visitDoctor")]));
       return Left(failure);
     }
   }
@@ -342,7 +367,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitHospital")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "visitHospital")]));
           return Left(failure);
         }
       } else {
@@ -350,7 +376,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitHospital")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "visitHospital")]));
       return Left(failure);
     }
   }
@@ -367,7 +394,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getBrandsSp")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getBrandsSp")]));
           return Left(failure);
         }
       } else {
@@ -375,7 +403,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getBrandsSp")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getBrandsSp")]));
       return Left(failure);
     }
   }
@@ -385,8 +414,8 @@ class RepositoryImp implements Repository {
       Rep rep) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllPlanBrands(
-            rep.activeRepId, repPlanIdOther: rep.otherRepId);
+        final response = await _remoteDataSource
+            .getAllPlanBrands(rep.activeRepId, repPlanIdOther: rep.otherRepId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -394,7 +423,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllPlanBrands")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getAllPlanBrands")]));
           return Left(failure);
         }
       } else {
@@ -402,7 +432,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getAllPlanBrands")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getAllPlanBrands")]));
       return Left(failure);
     }
   }
@@ -420,7 +451,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "repPlanBrand")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "repPlanBrand")]));
           return Left(failure);
         }
       } else {
@@ -428,7 +460,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "repPlanBrand")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "repPlanBrand")]));
       return Left(failure);
     }
   }
@@ -445,7 +478,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "isActive")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "isActive")]));
           return Left(failure);
         }
       } else {
@@ -453,7 +487,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "isActive")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "isActive")]));
       return Left(failure);
     }
   }
@@ -470,31 +505,34 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-           insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkActivePlanBrand")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "checkActivePlanBrand")]));
 
-           return Left(failure);
+          return Left(failure);
         }
       } else {
         Failure failure = DataSource.NO_INTERNET_CONNECTION.getFailure();
-        insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkActivePlanBrand")]));
+        insertLog(ExceptionRequestBody(
+            [ExceptionModel(failure.massage, "checkActivePlanBrand")]));
 
         return Left(failure);
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkActivePlanBrand")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "checkActivePlanBrand")]));
 
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, VisitDoctorBase>> getDocVisit(String repPlanId,
-      String representativeId) async {
+  Future<Either<Failure, VisitDoctorBase>> getDocVisit(
+      String repPlanId, String representativeId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response =
-        await _remoteDataSource.getDocVisit(repPlanId, representativeId);
+            await _remoteDataSource.getDocVisit(repPlanId, representativeId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -502,7 +540,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getDocVisit")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getDocVisit")]));
           return Left(failure);
         }
       } else {
@@ -510,18 +549,19 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getDocVisit")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getDocVisit")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, VisitHospitalBase>> getHosVisit(int repPlanId,
-      int representativeId) async {
+  Future<Either<Failure, VisitHospitalBase>> getHosVisit(
+      int repPlanId, int representativeId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response =
-        await _remoteDataSource.getHosVisit(repPlanId, representativeId);
+            await _remoteDataSource.getHosVisit(repPlanId, representativeId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -529,7 +569,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getHosVisit")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getHosVisit")]));
           return Left(failure);
         }
       } else {
@@ -537,7 +578,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getHosVisit")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getHosVisit")]));
       return Left(failure);
     }
   }
@@ -554,7 +596,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getBrandRes")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getBrandRes")]));
           return Left(failure);
         }
       } else {
@@ -562,7 +605,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getBrandRes")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getBrandRes")]));
       return Left(failure);
     }
   }
@@ -580,7 +624,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "insertReci")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "insertReci")]));
           return Left(failure);
         }
       } else {
@@ -588,7 +633,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "insertReci")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "insertReci")]));
       return Left(failure);
     }
   }
@@ -605,7 +651,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkRe")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "checkRe")]));
           return Left(failure);
         }
       } else {
@@ -613,7 +660,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkRe")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "checkRe")]));
       return Left(failure);
     }
   }
@@ -630,7 +678,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "reciNum")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "reciNum")]));
           return Left(failure);
         }
       } else {
@@ -638,14 +687,15 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "reciNum")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "reciNum")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, CopyReciRequest>> copyReci(int docId,
-      String recipeType) async {
+  Future<Either<Failure, CopyReciRequest>> copyReci(
+      int docId, String recipeType) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.copyReci(docId, recipeType);
@@ -656,7 +706,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "copyReci")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "copyReci")]));
           return Left(failure);
         }
       } else {
@@ -664,7 +715,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "copyReci")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "copyReci")]));
       return Left(failure);
     }
   }
@@ -681,7 +733,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkRep")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "checkRep")]));
           return Left(failure);
         }
       } else {
@@ -689,7 +742,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "checkRep")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "checkRep")]));
       return Left(failure);
     }
   }
@@ -706,7 +760,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitNotes")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "visitNotes")]));
           return Left(failure);
         }
       } else {
@@ -714,7 +769,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitNotes")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "visitNotes")]));
       return Left(failure);
     }
   }
@@ -733,7 +789,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getVisitIssue")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getVisitIssue")]));
           return Left(failure);
         }
       } else {
@@ -741,7 +798,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getVisitIssue")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getVisitIssue")]));
       return Left(failure);
     }
   }
@@ -759,7 +817,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getReps")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getReps")]));
           return Left(failure);
         }
       } else {
@@ -767,7 +826,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "getReps")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "getReps")]));
       return Left(failure);
     }
   }
@@ -784,7 +844,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "noVisitDoc")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "noVisitDoc")]));
           return Left(failure);
         }
       } else {
@@ -792,7 +853,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "noVisitDoc")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "noVisitDoc")]));
       return Left(failure);
     }
   }
@@ -809,7 +871,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitDoc")]));
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "visitDoc")]));
           return Left(failure);
         }
       } else {
@@ -817,7 +880,8 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, "visitDoc")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "visitDoc")]));
       return Left(failure);
     }
   }
@@ -848,31 +912,33 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet) async {
-  try {
-  if (await _networkInfo.isConnected) {
-  final response = await _remoteDataSource.getInventory(repDet);
-  if (response.status == null ||
-  response.status == ApiInternalStatus.SUCCESS ||
-  response.status == "200") {
-  return Right(response.toDomain());
-  } else {
-  Failure failure = Failure(ApiInternalStatus.FAILURE,
-  response.message ?? ResponseMassage.DEFAULT);
-  excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
-  return Left(failure);
-  }
-  } else {
-  return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-  }
-  } catch (error) {
-  Failure failure = ErrorHandler.handle(error).failure;
-  excRepository.exceptionApi(ExceptionModel(failure.massage, "getInventory"));
-  return Left(failure);
-  }
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getInventory(repDet);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          excRepository
+              .exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getInventory"));
+      return Left(failure);
+    }
   }
 
   @override
-  Future<Either<Failure, InfoRep>> getInfoRep(int repDet)  async {
+  Future<Either<Failure, InfoRep>> getInfoRep(int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getRepInfo(repDet);
@@ -883,7 +949,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          excRepository.exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
+          excRepository
+              .exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
           return Left(failure);
         }
       } else {
@@ -896,5 +963,84 @@ class RepositoryImp implements Repository {
     }
   }
 
+  @override
+  Future<Either<Failure, List<RepVisitsModel>>> getRepVisits(
+      VisitRepSen visitRepSen) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getRepVisits(visitRepSen);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          excRepository
+              .exceptionApi(ExceptionModel(failure.massage, "visitRepSen"));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getRepVisits"));
+      return Left(failure);
+    }
+  }
 
+  @override
+  Future<Either<Failure, Message1Response>> readVisit(AsRead asRead) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.readVisit(asRead);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response);
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          excRepository
+              .exceptionApi(ExceptionModel(failure.massage, "readVisit"));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "readVisit"));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RepVisitsModel>>> getRepVisitsHos(VisitRepSen visitRepSen)  async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getRepVisitsHos(visitRepSen);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          excRepository
+              .exceptionApi(ExceptionModel(failure.massage, "getRepVisitsHos"));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "getRepVisitsHos"));
+      return Left(failure);
+    }
+  }
 }

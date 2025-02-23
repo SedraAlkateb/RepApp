@@ -40,7 +40,6 @@ class Hospital extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CustomScrollView(
           slivers: [
-            // عنصر البحث
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,14 +54,7 @@ class Hospital extends StatelessWidget {
                 ],
               ),
             ),
-            BlocConsumer<HospitalsBloc, HospitalsState>(
-              listener: (context, state) {
-                if (state is AllHospitalErrorState) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    error(context, state.failure.massage, state.failure.code);
-                  });
-                }
-              },
+            BlocBuilder<HospitalsBloc, HospitalsState>(
               builder: (context, state) {
                 List<HospitalSpAllModel> hospitalModel =
                     context.watch<HospitalsBloc>().hospital;
@@ -74,6 +66,15 @@ class Hospital extends StatelessWidget {
                     ),
                     emptyFullScreen(context)
                   ]));
+                }
+                if (state is AllHospitalErrorState) {
+                  return SliverList(
+                      delegate: SliverChildListDelegate([
+                        SizedBox(
+                          height: 100,
+                        ),
+                        errorFullScreen(context)
+                      ]));
                 }
                 if (state is AllHospitalsState) {
                   hospitalModel = state.hospital;
@@ -92,7 +93,6 @@ class Hospital extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // القائمة
                     ...hospitalModel.map((hospital) {
                       return InkWell(
                         onTap: () {

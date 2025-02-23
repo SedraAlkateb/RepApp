@@ -150,17 +150,29 @@ abstract class AppServiceClient {
       );
   @POST("/insertLog.php")
   Future<Message1Response> insertLog(@Body() ExceptionRequestBody list);
-
   @POST("/admin/inventory.php")
   Future<InventoryResponseBaseResponse> getInventory(
       @Part(name: "repDet") int id,
-
       );
   @POST("/admin/getRepInfo.php")
   Future<AllRepInfoResponseBaseResponse> getRepInfo(
       @Part(name: "repDet") int id
       );
-
-
-
+  @POST("/admin/getRepVisits.php")
+  Future<AllRepVisitsResponseBaseResponse> getRepVisits(
+      @Part(name: "repId") int repId,
+      @Part(name: "userId") int userId
+      );
+  @POST("/admin/readVisit.php")
+  Future<Message1Response> readVisit(
+      @Part(name: "visitId") int visitId,
+      @Part(name: "userId") int userId,
+      @Part(name: "status") int status,
+      @Part(name: "reqType") int reqType
+      );
+  @POST("/admin/getRepVisitsHos.php")
+  Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
+      @Part(name: "repId") int repId,
+      @Part(name: "userId") int userId
+      );
 }

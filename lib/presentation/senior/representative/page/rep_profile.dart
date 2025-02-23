@@ -1,14 +1,20 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/future_rep/page/future_spec.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/page/note_issue_doctor.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_doctor.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_hospital.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/row_list.dart';
 import 'package:domina_app/presentation/senior/representative/widget/row_list_info.dart';
@@ -22,6 +28,7 @@ class RepProfile extends StatelessWidget {
   const RepProfile({super.key, required this.id});
   @override
   Widget build(BuildContext context) {
+    String name="";
     return Scaffold(
       backgroundColor: ColorManager.secondaryColor9,
       appBar: AppBar(
@@ -57,6 +64,7 @@ class RepProfile extends StatelessWidget {
                   child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
                     buildWhen: (previous, current) => current is RepInfoState ,
                     builder: (context, state) {
+
                       if(state is RepInfoLoadingState){
                         return loadingFullScreen(context);
                       }
@@ -64,6 +72,7 @@ class RepProfile extends StatelessWidget {
                         return errorFullScreen(context);
                       }
                       else  if(state is RepInfoState){
+                        name=state.infoRep.name;
                         return Column(
                           children: [
                             Text(
@@ -261,8 +270,50 @@ class RepProfile extends StatelessWidget {
                     ],
                   ),
                   RowList(function: () {
+                    initReportVisitDoctorModule();
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return ReportVisitDoctorPage(repId: id,userId: UserInfo.repId,repName: name,);
+                      },
+                    ));
+                    BlocProvider.of<ReportVisitDoctorBloc>(context)
+                        .add(AllReportVisitDoctorEvent(VisitRepSen(id, UserInfo.repId)));
+                  },
+                      icon1: FontAwesomeIcons.table,
+                      text: "تقرير الأطباء"),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                    child: Divider(
+                      color: ColorManager.secondaryColor6,
+                      thickness: 0.8,
+                    ),
+                  ),
+                  RowList(function: () {
+                    initReportVisitDoctorModule();
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return ReportVisitHospital(repId: id,userId: UserInfo.repId,repName: name,);
+                      },
+                    ));
+                    BlocProvider.of<ReportVisitDoctorBloc>(context)
+                        .add(AllReportVisitHospitalEvent(VisitRepSen(id, UserInfo.repId)));
+                  },
+                      icon1: FontAwesomeIcons.table,
+                      text: "تقرير المشافي"),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                    child: Divider(
+                      color: ColorManager.secondaryColor6,
+                      thickness: 0.8,
+                    ),
+                  ),
+                  RowList(function: () {
                     initFutureSpecializationsModule();
-                    Navigator.pushNamed(context, Routes.futureSpecializations);
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return FutureSpecializationsPage(id: id);
+                      },
+                    ));
                     BlocProvider.of<FutureRepBloc>(context)
                         .add(FutureSpEvent(id));
                   },
@@ -275,6 +326,7 @@ class RepProfile extends StatelessWidget {
                       thickness: 0.8,
                     ),
                   ),
+                  
                   RowList(
                     icon1: FontAwesomeIcons.table,
                     text: "تدقيق خطة المندوب",
