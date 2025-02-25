@@ -58,9 +58,8 @@ abstract class AppServiceClient {
   );
   @POST("/getAllPlanBrands.php")
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
-    @Part(name: "repPlanIdActive") int repPlanIdActive,
-      { @Part(name: "repPlanIdOther") int? repPlanIdOther}
-  );
+      @Part(name: "repPlanIdActive") int repPlanIdActive,
+      {@Part(name: "repPlanIdOther") int? repPlanIdOther});
   @POST("/getHosVisit.php")
   Future<VisitHospitalBaseResponse> getHosVisit(
     @Part(name: "repPlanId") int repPlanId,
@@ -82,8 +81,8 @@ abstract class AppServiceClient {
   Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
   @POST("/checkPlanStatus.php")
   Future<CheckBaseResponse> checkPlanBrand(
-      @Part(name: "repPlanId") int repPlanId,
-      );
+    @Part(name: "repPlanId") int repPlanId,
+  );
   @POST("/getPlans.php")
   Future<LoginResponse> checkActivePlanBrand(
       @Part(name: "repDet") int repDet, @Part(name: "ver") int ver);
@@ -129,9 +128,8 @@ abstract class AppServiceClient {
 
   @POST("/admin/getReps.php")
   Future<AllRepresentativeBaseResponse> getReps(
-      @Part(name: "repDet") int id,
-
-      );
+    @Part(name: "repDet") int id,
+  );
   @POST("/admin/getVisitNotes.php")
   Future<AllVisitNotesBaseResponse> getVisitNotes(
     @Part(name: "repDet") int docId,
@@ -142,37 +140,31 @@ abstract class AppServiceClient {
   );
   @POST("/admin/visitDoc.php")
   Future<AllNoVisitDoctorBaseResponse> visitDoc(
-      @Part(name: "repDet") int docId,
-      );
+    @Part(name: "repDet") int docId,
+  );
   @POST("/admin/getVisitIssue.php")
   Future<AllVisitIssueBaseResponse> getVisitIssue(
-      @Part(name: "repDet") int id,
-      );
+    @Part(name: "repDet") int id,
+  );
   @POST("/insertLog.php")
   Future<Message1Response> insertLog(@Body() ExceptionRequestBody list);
   @POST("/admin/inventory.php")
   Future<InventoryResponseBaseResponse> getInventory(
-      @Part(name: "repDet") int id,
-      );
+    @Part(name: "repDet") int id,
+  );
   @POST("/admin/getRepInfo.php")
   Future<AllRepInfoResponseBaseResponse> getRepInfo(
-      @Part(name: "repDet") int id
-      );
+      @Part(name: "repDet") int id);
   @POST("/admin/getRepVisits.php")
   Future<AllRepVisitsResponseBaseResponse> getRepVisits(
-      @Part(name: "repId") int repId,
-      @Part(name: "userId") int userId
-      );
+      @Part(name: "repId") int repId, @Part(name: "userId") int userId);
   @POST("/admin/readVisit.php")
   Future<Message1Response> readVisit(
       @Part(name: "visitId") int visitId,
       @Part(name: "userId") int userId,
       @Part(name: "status") int status,
-      @Part(name: "reqType") int reqType
-      );
+      @Part(name: "reqType") int reqType);
   @POST("/admin/getRepVisitsHos.php")
   Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
-      @Part(name: "repId") int repId,
-      @Part(name: "userId") int userId
-      );
+      @Part(name: "repId") int repId, @Part(name: "userId") int userId);
 }
