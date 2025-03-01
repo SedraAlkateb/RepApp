@@ -17,7 +17,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   List<PlaceModel> placeModel = [];
   List<PlaceModel> placeSearchModel = [];
   int k = 0;
-  String data= formatDateTime(DateTime.now().toString());
+  String data= formatDateTime(DateTime.now().toIso8601String());
   PlaceBloc(this.allPlaceUsecase,this.checkRepUsecase) : super(PlaceInitial()) {
     on<PlaceEvent>((event, emit) async {
       //  VisitPharmacyRequestBody  v=VisitPharmacyRequestBody(vi.toDomain(), list2);

@@ -985,7 +985,7 @@ class RepresentativeResponse {
   @JsonKey(name: "unRead")
   int? unRead;
 
-  RepresentativeResponse(this.id, this.name,this.unRead);
+  RepresentativeResponse(this.id, this.name, this.unRead);
   // from json
   factory RepresentativeResponse.fromJson(Map<String, dynamic> json) =>
       _$RepresentativeResponseFromJson(json);
@@ -1289,6 +1289,7 @@ class RepVisitsResponse {
   // to json
   Map<String, dynamic> toJson() => _$RepVisitsResponseToJson(this);
 }
+
 @JsonSerializable()
 class AllRepVisitsResponse {
   @JsonKey(name: "Representative", defaultValue: [])
@@ -1304,9 +1305,11 @@ class AllRepVisitsResponseBaseResponse extends BaseResponse {
   @JsonKey(name: "Representative")
   AllRepVisitsResponse? data;
   AllRepVisitsResponseBaseResponse(this.data);
-  factory AllRepVisitsResponseBaseResponse.fromJson(Map<String, dynamic> json) =>
+  factory AllRepVisitsResponseBaseResponse.fromJson(
+          Map<String, dynamic> json) =>
       _$AllRepVisitsResponseBaseResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$AllRepVisitsResponseBaseResponseToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$AllRepVisitsResponseBaseResponseToJson(this);
 }
 
 @JsonSerializable()
