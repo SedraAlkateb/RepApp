@@ -31,7 +31,6 @@ class DioFactory{
     String  to=UserInfo.token??"";
     String token ="Bearer " + to;
     String language ="ar";
-
     Map<String,String> headers={
       CONTENT_TYPE:MULTIPART,
       ACCEPT:APPLICATION_JSON,
@@ -40,13 +39,12 @@ class DioFactory{
       DEFAULT_LANGUAGE:language,
       "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
-
     };
     dio.options=BaseOptions(
         baseUrl: Constants.baseUrl,
         headers: headers,
-      connectTimeout: Duration(seconds: 20),
-      receiveTimeout: Duration(seconds: 25),
+      connectTimeout: Duration(seconds: 50),
+      receiveTimeout: Duration(seconds: 50),
     );
     dio.interceptors.add( MyApiInterceptor());
     if(!kReleaseMode){

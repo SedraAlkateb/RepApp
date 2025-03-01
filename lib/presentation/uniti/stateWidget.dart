@@ -1,29 +1,27 @@
 import 'package:domina_app/presentation/common/state_renderer/state_renderer.dart';
 import 'package:domina_app/presentation/common/state_renderer/state_renderer_imp.dart';
 import 'package:flutter/cupertino.dart';
-
-void loading(BuildContext context, {String? text}) {
-  LoadingState(stateRendererType: StateRendererType.popupLoadingState)
-      .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
-}
-
 Widget loadingFullScreen(BuildContext context) {
  return LoadingState(stateRendererType: StateRendererType.fullScreenLoadingState)
       .getScreenWidget(context, SizedBox(), (){});
 }
-Widget errorFullScreen(BuildContext context,{Function? func}) {
-  return ErrorState(StateRendererType.fullScreenErrorState, "")
+Widget errorFullScreen(BuildContext context,{Function? func,String? mes}) {
+  return ErrorState(StateRendererType.fullScreenErrorState, mes??"")
       .getScreenWidget(context, SizedBox(), func??(){});
 }
-
+Widget emptyFullScreen(BuildContext context,{String ? message}) {
+  return ErrorState(StateRendererType.fullScreenEmptyState,message?? "لا يوجد بيانات")
+      .getScreenWidget(context, SizedBox(),(){});
+}
 void error(BuildContext context, String massage, int code) {
-  ErrorState(StateRendererType.popupErrorState, massage).dismissDialog(context);
+  dismissDialog(context);
   ErrorState(StateRendererType.popupErrorState, massage)
       .showPopup(context, StateRendererType.popupErrorState, massage);
 }
-
-
-
+void loading(BuildContext context, {String? text}) {
+  LoadingState(stateRendererType: StateRendererType.popupLoadingState)
+      .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
+}
 Future<bool> success(BuildContext context) async{
   try {
     ContentState().dismissDialog(context);
@@ -34,27 +32,21 @@ Future<bool> success(BuildContext context) async{
   }
 }
 void successWithMessage(BuildContext context, String message) {
-  ContentState().dismissDialog(context);
   SuccessState(message)
       .showPopup(context, StateRendererType.popupSuccess, message);
 }
-
-Widget emptyFullScreen(BuildContext context) {
-  return ErrorState(StateRendererType.fullScreenEmptyState, "لا يوجد بيانات")
-      .getScreenWidget(context, SizedBox(),(){});
+Future<bool> dismissDialog(BuildContext context) async {
+  try {
+    if (_isCurrentDialogShowing(context)) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+      print("Dialog dismissed successfully.");
+    }
+    return true;
+  } catch (e) {
+    print("ssssssssssssssssss: $e");
+    return false;
+  }
 }
-Widget errorFullScreenWidget(BuildContext context,String message) {
-  return StateRenderer(
-      stateRendererType: StateRendererType.fullScreenEmptyState,
-      message: message,
-      retryActionFunction: () {});
-
-}
-
-Widget selectrepScreenWidget(BuildContext context) {
-  return StateRenderer(
-      stateRendererType: StateRendererType.selectrepState,
-
-      retryActionFunction: () {}, message: '',);
-
+bool _isCurrentDialogShowing(BuildContext context) {
+  return ModalRoute.of(context)?.isCurrent != true;
 }

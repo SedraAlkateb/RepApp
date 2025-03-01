@@ -5,7 +5,6 @@ import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_b
 import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -16,6 +16,35 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
     );
   }
 }
+extension AllVisitDoctorRepSenMapper on AllRepVisitsResponseBaseResponse? {
+  List<RepVisitsModel> toDomain() {
+    List<RepVisitsModel> repVisitsModel =
+    (this?.data?.repVisits?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<RepVisitsModel>()
+        .toList();
+    return repVisitsModel;
+  }
+}
+
+extension visitDoctorRepSenMapper on RepVisitsResponse? {
+  RepVisitsModel toDomain() {
+    return RepVisitsModel(
+      this?.visitId.toString() ?? Constants.empty,
+      this?.visitDate.toString() ?? Constants.empty,
+      this?.placeTitle.toString() ?? Constants.empty,
+      this?.docTitle.toString() ?? Constants.empty,
+      this?.rate.toString() ?? Constants.empty,
+      this?.spTitle.toString() ?? Constants.empty,
+      this?.note.toString() ?? Constants.empty,
+      this?.issue.toString() ?? Constants.empty,
+      this?.special.toString() ?? Constants.empty,
+      this?.target.toString() ?? Constants.empty,
+      this?.flag=="1"?true:false,
+      this!.samples?.toList()??[],
+    );
+  }
+}
 extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
   InfoRep toDomain() {
     return InfoRep(
@@ -120,6 +149,7 @@ extension RepresentativeMapper on RepresentativeResponse? {
     return AllRepresentative(
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
+      this?.unRead ?? Constants.zero,
     );
   }
 }

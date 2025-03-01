@@ -6,10 +6,14 @@ String formatDateTime(String dateTimeString) {
 }
 
 String formatDateTimeFromDataTime(DateTime now){
-return DateFormat('dd/MM/yyyy').format(now);
+return DateFormat('dd-MM-yyyy').format(now);
 }
-DateTime formatStringToDataTime(String dateString){
-  DateFormat format = DateFormat("dd-MM-yyyy");
-  DateTime dateTime = format.parse(dateString);
-  return dateTime;
+DateTime formatStringToDataTime(String dateString) {
+  try {
+    DateFormat format = DateFormat("dd-MM-yyyy");
+    return format.parse(dateString);
+  } catch (e) {
+    print("خطأ في تحليل التاريخ: $e");
+    return DateTime(2000, 1, 1); // قيمة افتراضية لتجنب الكراش
+  }
 }

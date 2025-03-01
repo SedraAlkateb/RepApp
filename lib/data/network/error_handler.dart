@@ -7,7 +7,6 @@ import 'package:sqflite/sqflite.dart';
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {
-
     print(error);
     if (error is DioError) {
       print("error.message??" "");
@@ -17,12 +16,10 @@ class ErrorHandler implements Exception {
     } else if (error is FormatException) {
       failure = Failure(0, "${error.message} ${error.source.toString()}");
     } else {
-      // default error
       failure = Failure(200, "massage${error}");
     }
   }
 }
-
 Failure _handleError(DioError error) {
   switch (error.type) {
     case DioErrorType.connectionTimeout:
@@ -41,7 +38,6 @@ Failure _handleError(DioError error) {
       if (responseBody != null) {
         message =
             responseBody['message'] ?? responseBody['error'] ?? responseBody;
-
         print('Error Message: $message');
         return Failure(error.response?.statusCode ?? 404, message);
       } else {
@@ -53,7 +49,6 @@ Failure _handleError(DioError error) {
       return Failure(200, error.message ?? "unknown ${error.error}");
   }
 }
-
 Failure _handleErrorSql(DatabaseException error) {
   String errorMessage = error.result.toString();
   if (errorMessage.contains("no such table")) {
@@ -70,7 +65,6 @@ Failure _handleErrorSql(DatabaseException error) {
     return Failure(4, errorMessage);
   }
 }
-
 enum DataSource {
   TABLE_NOT_FOUND,
   SYNTAX_ERROR,
@@ -212,7 +206,6 @@ class ResponseMassage {
       "يرجى التأكد من اتصالك بالانترنت";
   static const String DEFAULT = "حدث خطأ, يرجى إعادة المحاولة";
 }
-
 class ApiInternalStatus {
   static const String SUCCESS = "success";
   static const int FAILURE = 0;

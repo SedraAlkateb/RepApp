@@ -30,8 +30,8 @@ class _MyLoginState extends State<MyLogin> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/login.png'), // مسار الصورة
-              fit: BoxFit.cover, // لتغطية الشاشة بالكامل
+              image: AssetImage('assets/images/login.png'),
+              fit: BoxFit.cover,
             ),
           ),
           child: SingleChildScrollView(
@@ -41,8 +41,7 @@ class _MyLoginState extends State<MyLogin> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 100), // للمسافة في أعلى الصفحة
-
+                  SizedBox(height: 100),
                   Image.asset(ImageAssets.domina, scale: 5),
                   SizedBox(height: 8),
                   Container(
