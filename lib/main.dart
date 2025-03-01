@@ -139,6 +139,7 @@ Future<void> requestNotificationPermission() async {
   if (Platform.isAndroid) {
     PermissionStatus status = await Permission.notification.request();
     if (status.isGranted) {
+
       print("تم منح إذن الإشعارات.");
     } else if (status.isDenied) {
       openAppSettings();
