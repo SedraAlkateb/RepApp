@@ -22,6 +22,7 @@ class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
         (await allSeinor_Rep_Usecase.execute(UserInfo.repId)).fold((failure) {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
+         data.sort((a, b) => b.number.compareTo(a.number));
           allRepresentative=data;
           emit(AllSeniorRepState(data));
         });

@@ -9,8 +9,8 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ReportVisitDoctorPage extends StatelessWidget {
-  ReportVisitDoctorPage(
+class ReportVisitHospital extends StatelessWidget {
+  ReportVisitHospital(
       {super.key,
       required this.userId,
       required this.repId,
@@ -56,7 +56,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                         searchController: searchNoteDoctorController,
                         onPressed: (value) {
                           BlocProvider.of<ReportVisitDoctorBloc>(context)
-                              .add(SenSearchNoteVisitDoctorEvent(value));
+                              .add(SenSearchNoteVisitHospitalEvent(value));
                         },
                       ),
                     ],
@@ -70,8 +70,8 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   },
                   builder: (context, state) {
                     List<RepVisitsModel> doctorNoteModel =
-                        context.watch<ReportVisitDoctorBloc>().repVisits;
-                    if (state is AllReportVisitDoctorEmptyState) {
+                        context.watch<ReportVisitDoctorBloc>().repVisitHospital;
+                    if (state is AllReportVisitHospitalEmptyState) {
                       return SliverList(
                           delegate: SliverChildListDelegate([
                         SizedBox(
@@ -83,22 +83,22 @@ class ReportVisitDoctorPage extends StatelessWidget {
                     if (state is SenVisitDoctorAsReadState) {
                       doctorNoteModel = state.doctorNoteModel;
                     }
-                    if (state is AllReportVisitDoctorsState) {
+                    if (state is AllReportVisitHospitalsState) {
                       doctorNoteModel = state.repVisitsModel;
                     }
-                    if (state is AllReportVisitDoctorLoadingState) {
+                    if (state is AllReportVisitHospitalLoadingState) {
                       return SliverList(
                         delegate: SliverChildListDelegate(
                             [loadingFullScreen(context)]),
                       );
                     }
 
-                    if (state is AllReportVisitDoctorErrorState) {
+                    if (state is AllReportVisitHospitalErrorState) {
                       return SliverList(
                         delegate: SliverChildListDelegate([
                           errorFullScreen(context, func: () {
                             BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                AllReportVisitDoctorEvent(
+                                AllReportVisitHospitalEvent(
                                     VisitRepSen(repId, userId)));
                           })
                         ]),
@@ -281,7 +281,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                           BlocProvider.of<
                                                                       ReportVisitDoctorBloc>(
                                                                   context)
-                                                              .add(ChangeReadDocNoteEvent(
+                                                              .add(ChangeReadHosNoteEvent(
                                                                   index,
                                                                   !doctorNoteModel
                                                                       .flag));
@@ -312,18 +312,8 @@ class ReportVisitDoctorPage extends StatelessWidget {
           ),
           BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
             builder: (context, state) {
-              bool num=BlocProvider.of<ReportVisitDoctorBloc>(context).num;
-              bool isExpanded=BlocProvider.of<ReportVisitDoctorBloc>(context).isExpanded;
-               RepVisitsModel doctorNoteModel=BlocProvider.of<ReportVisitDoctorBloc>(context).doctorNoteModel;
-               int index=0;
-              if(state is DocIsExpandedNoteState){
-                isExpanded=true;
-                index=state.index;
-                doctorNoteModel=state.doctorNoteModel;
-              }
-
-              return
-                Stack(
+              bool isExpanded = state is DocIsExpandedNoteState;
+              return Stack(
                 children: [
                   if (isExpanded)
                     ModalBarrier(
@@ -334,188 +324,223 @@ class ReportVisitDoctorPage extends StatelessWidget {
                       ? DraggableScrollableSheet(
                           initialChildSize: 0.4,
                           minChildSize: 0.2,
-                          maxChildSize: 1,
+                          maxChildSize: 0.97,
                           builder: (context, scrollController) {
-                            return NotificationListener<
-                                DraggableScrollableNotification>(
-                              onNotification: (notification) {
-                                if (notification.extent == 1) {
-                                  BlocProvider.of<ReportVisitDoctorBloc>(
-                                      context).add(ExpandedBorder(true));
-                                }
-                               else if(BlocProvider.of<ReportVisitDoctorBloc>(
-                                    context).num==true ){
-                                  BlocProvider.of<ReportVisitDoctorBloc>(
-                                      context).add(ExpandedBorder(false));
-                                }
-                                // else {
-                                //   BlocProvider.of<ReportVisitDoctorBloc>(context).add(ExpandedBorder(1));
-                                // }
-                                return true;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: ColorManager.secondaryColor3),
-                                  color: ColorManager.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(((num==true)) ? 0:AppSize.s40),
-                                    topRight: Radius.circular(((num==true)) ? 0:AppSize.s40),
-                                  ),
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: ColorManager.secondaryColor3),
+                                color: ColorManager.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(AppSize.s40),
+                                  topRight: Radius.circular(AppSize.s40),
                                 ),
-                                child: SingleChildScrollView(
-                                  controller: scrollController,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Center(
-                                        child: InkWell(
-                                          onTap: () {
-                                            BlocProvider.of<
-                                                        ReportVisitDoctorBloc>(
-                                                    context)
-                                                .add(
-                                                    DocNoIsExpandedNoteEvent());
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.all(16),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: AppPadding.p8),
-                                            child: Column(
-                                              children: List.generate(
+                              ),
+                              child: SingleChildScrollView(
+                                controller: scrollController,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Center(
+                                      child: InkWell(
+                                        onTap: () {
+                                          BlocProvider.of<
+                                                      ReportVisitDoctorBloc>(
+                                                  context)
+                                              .add(DocNoIsExpandedNoteEvent());
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.all(16),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: AppPadding.p8),
+                                          child: Column(
+                                            children: List.generate(
                                                 2,
                                                 (index) => Container(
-                                                  width: 60,
-                                                  height: 3,
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 3),
-                                                  decoration: BoxDecoration(
-                                                    color: ColorManager
-                                                        .secondaryColor1,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                                      width: 60,
+                                                      height: 3,
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 3),
+                                                      decoration: BoxDecoration(
+                                                        color: ColorManager
+                                                            .secondaryColor1,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(2),
+                                                      ),
+                                                    )),
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.all(AppPadding.p20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            TextInfo(
-                                              title: "اسم الدكتور",
-                                              supTitle: doctorNoteModel.docTitle,
-                                            ),
-                                            TextInfo(
-                                              title: "العنوان",
-                                              supTitle: doctorNoteModel.placeTitle,
-                                            ),
-                                            TextInfo(
-                                              title: "الاختصاص",
-                                              supTitle:
-                                                  doctorNoteModel.spTitle,
-                                            ),
-                                            TextInfo(
-                                              title: "التقييم",
-                                              supTitle:
-                                                  doctorNoteModel.rate,
-                                            ),
-                                            TextInfo(
-                                              title: "التاريخ",
-                                              supTitle: doctorNoteModel.visitDate,
-                                            ),
-                                            TextInfo(
-                                              title: "ملاحظات المكتب العلمي",
-                                              supTitle:
-                                                  doctorNoteModel.note,
-                                            ),
-                                            TextInfo(
-                                              title: "ملاحظات إضافية",
-                                              supTitle:
-                                                  doctorNoteModel.special,
-                                            ),
-                                            TextInfo(
-                                              title: "ملاحظات مستودع قاسيون",
-                                              supTitle:
-                                                  doctorNoteModel.issue,
-                                            ),
-                                            doctorNoteModel.samples
-                                                    .isNotEmpty
-                                                ? Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "المستحضرات: ",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .labelLarge,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(AppPadding.p20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          TextInfo(
+                                            title: "اسم الدكتور",
+                                            supTitle:
+                                                state.doctorNoteModel.docTitle,
+                                          ),
+                                          TextInfo(
+                                            title: "العنوان",
+                                            supTitle: state
+                                                .doctorNoteModel.placeTitle,
+                                          ),
+                                          TextInfo(
+                                            title: "الاختصاص",
+                                            supTitle:
+                                                state.doctorNoteModel.spTitle,
+                                          ),
+                                          TextInfo(
+                                            title: "التقيم",
+                                            supTitle:
+                                                state.doctorNoteModel.rate,
+                                          ),
+                                          TextInfo(
+                                            title: "التاريخ",
+                                            supTitle:
+                                                state.doctorNoteModel.visitDate,
+                                          ),
+                                          TextInfo(
+                                            title: "ملاحظات المكتب العلمي",
+                                            supTitle:
+                                                state.doctorNoteModel.note,
+                                          ),
+                                          TextInfo(
+                                            title: "ملاحظات إضافية",
+                                            supTitle:
+                                                state.doctorNoteModel.special,
+                                          ),
+                                          TextInfo(
+                                            title: "ملاحظات مستودع قاسيون",
+                                            supTitle:
+                                                state.doctorNoteModel.issue,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: AppPadding.p8),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text.rich(
                                                         textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      SizedBox(height: 8),
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            NeverScrollableScrollPhysics(),
-                                                        itemCount: doctorNoteModel
-                                                            .samples
-                                                            .length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                                    vertical: 5,
-                                                                    horizontal:
-                                                                        5),
-                                                            child: Container(
-                                                              alignment: Alignment
-                                                                  .bottomRight,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(10),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border.all(
-                                                                    color: ColorManager
-                                                                        .secondaryColor7),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                              ),
-                                                              child: Text(
-                                                                doctorNoteModel
-                                                                        .samples[
-                                                                    index],
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodySmall,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
+                                                            TextAlign.start,
+                                                        softWrap: false,
+                                                        maxLines: 3,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        TextSpan(
+                                                          text:
+                                                              "الهدف من الزيارة : ",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .labelLarge,
+                                                          children: <TextSpan>[
+                                                            TextSpan(
+                                                              text: state
+                                                                  .doctorNoteModel
+                                                                  .target,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodySmall,
                                                             ),
-                                                          );
-                                                        },
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
-                                                  )
-                                                : SizedBox(),
-                                            Align(
-                                              child: IconButton(
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          state.doctorNoteModel.samples
+                                                      .length !=
+                                                  0
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "المستحضرات: ",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .labelLarge,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    SizedBox(height: 8),
+                                                    ListView.builder(
+                                                      shrinkWrap: true,
+                                                      physics:
+                                                          NeverScrollableScrollPhysics(),
+                                                      itemCount: state
+                                                          .doctorNoteModel
+                                                          .samples
+                                                          .length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 5,
+                                                                  horizontal:
+                                                                      5),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .bottomRight,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    10),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: ColorManager
+                                                                      .secondaryColor7),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                            ),
+                                                            child: Text(
+                                                              state.doctorNoteModel
+                                                                      .samples[
+                                                                  index],
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodySmall,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                          Align(
+                                            child: IconButton(
                                                 onPressed:
                                                     state is AsReadLoadingState
                                                         ? null
@@ -523,32 +548,28 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                             BlocProvider.of<
                                                                         ReportVisitDoctorBloc>(
                                                                     context)
-                                                                .add(
-                                                              ChangeReadDocNoteEvent(
-                                                                index,
-                                                                !doctorNoteModel
-                                                                    .flag,
-                                                              ),
-                                                            );
+                                                                .add(ChangeReadHosNoteEvent(
+                                                                    state.index,
+                                                                    !state
+                                                                        .doctorNoteModel
+                                                                        .flag));
                                                           },
                                                 icon: Icon(
                                                   size: 30,
                                                   Icons.book_outlined,
                                                   color:
-                                                     doctorNoteModel.flag
+                                                      state.doctorNoteModel.flag
                                                           ? ColorManager
                                                               .secondaryColor4
                                                           : ColorManager
                                                               .secondaryColor,
-                                                ),
-                                              ),
-                                              alignment: Alignment.bottomLeft,
-                                            ),
-                                          ],
-                                        ),
+                                                )),
+                                            alignment: Alignment.bottomLeft,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             );

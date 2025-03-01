@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FutureSpecializationsPage extends StatelessWidget {
-  FutureSpecializationsPage({super.key});
+  FutureSpecializationsPage({super.key, required this.id});
+ final int id;
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -57,25 +58,20 @@ class FutureSpecializationsPage extends StatelessWidget {
                         .add(FutureSearchSpecEvent(value));
                   },
                 ),
-                BlocConsumer<FutureRepBloc, FutureRepState>(
-                  listener: (context, state) {
-                    /*
-                          if (state is AllSpecLoadingState) {
-                            loading(context);
-                          }
-                          if (state is AllSpecState) {
-                            success(context);
-                          }
-                          */
-                    if (state is FutureSpRepErrorState) {
-                      error(context, state.failure.massage, state.failure.code);
-                    }
-                  },
+                BlocBuilder<FutureRepBloc, FutureRepState>(
                   builder: (context, state) {
                     List<SpecDModel> placeModel =
                         context.watch<FutureRepBloc>().specialization;
                     if (state is FutureSpRepState) {
                       placeModel = state.Specs;
+                    }
+                    if(state is FutureSpRepLoadingState){
+                    return  loadingFullScreen(context);
+                    }
+                    if (state is FutureSpRepErrorState) {
+                   return   errorFullScreen(context,mes: state.failure.massage,func: ()=>
+                       BlocProvider.of<FutureRepBloc>(context)
+                       .add(FutureSpEvent(id)));
                     }
                     return GridView.builder(
                       shrinkWrap: true,

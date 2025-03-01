@@ -30,6 +30,7 @@ final class  SenAllNoteDoctorEmptyState extends ReportIssueState {
   @override
   List<Object?> get props =>[];
 }
+
 final class SenAsReadState extends ReportIssueState {
   final List<DoctorIssueModel> doctorIssueModel;
   SenAsReadState(this.doctorIssueModel);

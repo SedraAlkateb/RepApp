@@ -171,6 +171,7 @@ class OtherBrandModel {
   OtherBrandModel(this.id, this.title, this.phTitle, this.flag,
       this.sampleCoast, this.Plan, this.amount, this.brandType);
 }
+
 class FutureBrandModel {
   int id;
   String title;
@@ -178,7 +179,8 @@ class FutureBrandModel {
   int flag;
   int amount;
   String brandType;
-  FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount, this.brandType);
+  FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount,
+      this.brandType);
 }
 
 class PharmacyBrandModel {
@@ -1077,7 +1079,7 @@ class LoginModel {
       'token': token,
       'repId': repId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
-      'activePlanId': activePlanId== null ? -5 :activePlanId,
+      'activePlanId': activePlanId == null ? -5 : activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
@@ -1149,11 +1151,13 @@ class BrandSpModel {
         map['id'], map['spId'], map['brandId'], map['brandType']);
   }
 }
-class Rep{
+
+class Rep {
   int activeRepId;
   int? otherRepId;
-  Rep(this.activeRepId,{this.otherRepId});
+  Rep(this.activeRepId, {this.otherRepId});
 }
+
 class PlanBrandModel {
   int id;
   int spId;
@@ -1455,17 +1459,25 @@ class LoginRequest {
 class AllRepresentative {
   int id;
   String name;
-  int? number;
-  AllRepresentative(this.id, this.name, {this.number});
+  int number;
+  AllRepresentative(this.id, this.name, this.number);
 }
-class InventoryModel{
+
+class InventoryModel {
   String title;
   String used;
   String total;
   int rest;
-  InventoryModel(this.title,this.used,this.total,this.rest);
+  InventoryModel(this.title, this.used, this.total, this.rest);
 }
-class InfoRep{
+class AsRead {
+  int visitId;
+  int userId;
+  int status;
+  int reqType;
+  AsRead(this.visitId, this.userId, this.status, this.reqType);
+}
+class InfoRep {
   int id;
   String name;
   String mobile;
@@ -1475,14 +1487,40 @@ class InfoRep{
   int totalVisit;
   int visitDon;
   int visitNoteYet;
-  InfoRep(
-      this.id,
-      this.name,
-      this.mobile,
-      this.address,
-      this.sampleCount,
-      this.recipesCount,
-      this.totalVisit,
-      this.visitDon,
-      this.visitNoteYet);
+  InfoRep(this.id, this.name, this.mobile, this.address, this.sampleCount,
+      this.recipesCount, this.totalVisit, this.visitDon, this.visitNoteYet);
+}
+
+class VisitRepSen {
+  int repId;
+  int userId;
+  VisitRepSen(this.repId, this.userId);
+}
+
+class RepVisitsModel {
+  String visitId;
+  String visitDate;
+  String placeTitle;
+  String docTitle;
+  String rate;
+  String spTitle;
+  String note;
+  String issue;
+  String special;
+  String target;
+  bool flag;
+  List<String> samples;
+  RepVisitsModel(
+      this.visitId,
+      this.visitDate,
+      this.placeTitle,
+      this.docTitle,
+      this.rate,
+      this.spTitle,
+      this.note,
+      this.issue,
+      this.special,
+      this.target,
+      this.flag,
+      this.samples);
 }
