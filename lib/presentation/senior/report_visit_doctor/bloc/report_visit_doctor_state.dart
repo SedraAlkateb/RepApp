@@ -33,9 +33,10 @@ final class  AllReportVisitDoctorEmptyState extends ReportVisitDoctorState {
 
 final class SenVisitDoctorAsReadState extends ReportVisitDoctorState {
   final List<RepVisitsModel> doctorNoteModel;
-  SenVisitDoctorAsReadState(this.doctorNoteModel);
+  final RepVisitsModel repVisitsModel;
+  SenVisitDoctorAsReadState(this.doctorNoteModel,this.repVisitsModel);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props =>[doctorNoteModel,repVisitsModel];
 }
 final class DocIsExpandedNoteState extends ReportVisitDoctorState {
   final RepVisitsModel doctorNoteModel;

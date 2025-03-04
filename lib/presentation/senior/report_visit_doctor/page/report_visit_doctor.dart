@@ -20,30 +20,26 @@ class ReportVisitDoctorPage extends StatelessWidget {
   final String repName;
   final TextEditingController searchNoteDoctorController =
       TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    icon: Icon(
-                      size: AppSize.s30,
-                      Icons.arrow_back_sharp,
-                      color: ColorManager.secondaryColor1,
-                    ),
-                    onPressed: () {
-                      BlocProvider.of<
-                          ReportVisitDoctorBloc>(
-                          context)
-                          .add(
-                          DocNoIsExpandedNoteEvent());
-                      Navigator.pop(context);
-                    },
-                  );
-                },
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                size: AppSize.s30,
+                Icons.arrow_back_sharp,
+                color: ColorManager.secondaryColor1,
               ),
+              onPressed: () {
+                BlocProvider.of<ReportVisitDoctorBloc>(context)
+                    .add(DocNoIsExpandedNoteEvent());
+                Navigator.pop(context);
+              },
+            );
+          },
+        ),
         title: Text(repName),
       ),
       body: Stack(
@@ -323,7 +319,8 @@ class ReportVisitDoctorPage extends StatelessWidget {
               RepVisitsModel doctorNoteModel =
                   BlocProvider.of<ReportVisitDoctorBloc>(context)
                       .doctorNoteModel;
-              int index = 0;
+              int index = BlocProvider.of<ReportVisitDoctorBloc>(context).index;
+
               if (state is DocIsExpandedNoteState) {
                 isExpanded = true;
                 index = state.index;
