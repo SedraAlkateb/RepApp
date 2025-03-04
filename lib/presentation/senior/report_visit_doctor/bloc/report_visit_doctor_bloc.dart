@@ -8,10 +8,8 @@ import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'report_visit_doctor_event.dart';
 part 'report_visit_doctor_state.dart';
-
 class ReportVisitDoctorBloc
     extends Bloc<ReportVisitDoctorEvent, ReportVisitDoctorState> {
   AllVisitDoctorRepSenUsecase allVisitDoctorRepSenUsecase;
@@ -21,7 +19,7 @@ class ReportVisitDoctorBloc
   List<RepVisitsModel> repVisitHospital = [];
   bool isExpanded=false;
   bool num=false;
-  RepVisitsModel doctorNoteModel=RepVisitsModel("", "", "", "", "", "", "", "", "", "", false,[] );
+  RepVisitsModel doctorNoteModel=RepVisitsModel("", "", "", "", "", "", "", "", "", "", false,[]);
   ReportVisitDoctorBloc(this.allVisitDoctorRepSenUsecase,this.readVisitUsecase,this.allVisitHospitalRepSenUsecase)
       : super(ReportVisitDoctorInitial()) {
     on<ReportVisitDoctorEvent>((event, emit) async {
@@ -99,13 +97,15 @@ class ReportVisitDoctorBloc
         emit(DocIsExpandedNoteState(event.repVisitsModel,event.index,num));
       }
       else if(event is DocNoIsExpandedNoteEvent){
+        isExpanded=false;
+        num=false;
         emit(DocNoIsExpandedNoteState());
       }
       else if (event is ChangeReadDocNoteEvent) {
         emit(AsReadLoadingState());
         List<RepVisitsModel> doctorNote = List.from(repVisits);
         (await readVisitUsecase.execute(AsRead(int.parse(repVisits[event.id].visitId) ,
-            UserInfo.repId, 1, event.isRead==true?1:0))).fold(
+            UserInfo.repId, event.isRead==true?1:0,1))).fold(
                 (failure) {
               emit(AsReadErrorState(failure: failure));
             }, (data) async {
