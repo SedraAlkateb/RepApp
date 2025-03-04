@@ -1417,8 +1417,8 @@ class AppSqlApi extends AppSqlApiAbs {
     try {
       await db.transaction((txn) async {
         try {
-              await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
-              await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
+          await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
+          await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
         } catch (e) {
           return false;
         }
@@ -1434,8 +1434,8 @@ class AppSqlApi extends AppSqlApiAbs {
     try {
       await db.transaction((txn) async {
         try {
-              await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
-              await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
+          await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
+          await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
         } catch (e) {
           return false;
         }

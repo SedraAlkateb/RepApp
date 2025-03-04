@@ -26,19 +26,24 @@ class ReportVisitDoctorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.arrow_back_sharp,
-                color: ColorManager.secondaryColor1,
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: Icon(
+                      size: AppSize.s30,
+                      Icons.arrow_back_sharp,
+                      color: ColorManager.secondaryColor1,
+                    ),
+                    onPressed: () {
+                      BlocProvider.of<
+                          ReportVisitDoctorBloc>(
+                          context)
+                          .add(
+                          DocNoIsExpandedNoteEvent());
+                      Navigator.pop(context);
+                    },
+                  );
+                },
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
         title: Text(repName),
       ),
       body: Stack(
@@ -312,18 +317,22 @@ class ReportVisitDoctorPage extends StatelessWidget {
           ),
           BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
             builder: (context, state) {
-              bool num=BlocProvider.of<ReportVisitDoctorBloc>(context).num;
-              bool isExpanded=BlocProvider.of<ReportVisitDoctorBloc>(context).isExpanded;
-               RepVisitsModel doctorNoteModel=BlocProvider.of<ReportVisitDoctorBloc>(context).doctorNoteModel;
-               int index=0;
-              if(state is DocIsExpandedNoteState){
-                isExpanded=true;
-                index=state.index;
-                doctorNoteModel=state.doctorNoteModel;
+              bool num = BlocProvider.of<ReportVisitDoctorBloc>(context).num;
+              bool isExpanded =
+                  BlocProvider.of<ReportVisitDoctorBloc>(context).isExpanded;
+              RepVisitsModel doctorNoteModel =
+                  BlocProvider.of<ReportVisitDoctorBloc>(context)
+                      .doctorNoteModel;
+              int index = 0;
+              if (state is DocIsExpandedNoteState) {
+                isExpanded = true;
+                index = state.index;
+                doctorNoteModel = state.doctorNoteModel;
               }
-
-              return
-                Stack(
+              if (state is DocNoIsExpandedNoteState) {
+                isExpanded = false;
+              }
+              return Stack(
                 children: [
                   if (isExpanded)
                     ModalBarrier(
@@ -341,12 +350,15 @@ class ReportVisitDoctorPage extends StatelessWidget {
                               onNotification: (notification) {
                                 if (notification.extent == 1) {
                                   BlocProvider.of<ReportVisitDoctorBloc>(
-                                      context).add(ExpandedBorder(true));
-                                }
-                               else if(BlocProvider.of<ReportVisitDoctorBloc>(
-                                    context).num==true ){
+                                          context)
+                                      .add(ExpandedBorder(true));
+                                } else if (BlocProvider.of<
+                                            ReportVisitDoctorBloc>(context)
+                                        .num ==
+                                    true) {
                                   BlocProvider.of<ReportVisitDoctorBloc>(
-                                      context).add(ExpandedBorder(false));
+                                          context)
+                                      .add(ExpandedBorder(false));
                                 }
                                 // else {
                                 //   BlocProvider.of<ReportVisitDoctorBloc>(context).add(ExpandedBorder(1));
@@ -359,8 +371,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                       color: ColorManager.secondaryColor3),
                                   color: ColorManager.white,
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(((num==true)) ? 0:AppSize.s40),
-                                    topRight: Radius.circular(((num==true)) ? 0:AppSize.s40),
+                                    topLeft: Radius.circular(
+                                        ((num == true)) ? 0 : AppSize.s40),
+                                    topRight: Radius.circular(
+                                        ((num == true)) ? 0 : AppSize.s40),
                                   ),
                                 ),
                                 child: SingleChildScrollView(
@@ -369,40 +383,44 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Center(
-                                        child: InkWell(
-                                          onTap: () {
-                                            BlocProvider.of<
-                                                        ReportVisitDoctorBloc>(
-                                                    context)
-                                                .add(
-                                                    DocNoIsExpandedNoteEvent());
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.all(16),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: AppPadding.p8),
-                                            child: Column(
-                                              children: List.generate(
-                                                2,
-                                                (index) => Container(
-                                                  width: 60,
-                                                  height: 3,
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 3),
-                                                  decoration: BoxDecoration(
-                                                    color: ColorManager
-                                                        .secondaryColor1,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2),
+                                      num == false
+                                          ? Center(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  BlocProvider.of<
+                                                              ReportVisitDoctorBloc>(
+                                                          context)
+                                                      .add(
+                                                          DocNoIsExpandedNoteEvent());
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.all(16),
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: AppPadding.p8),
+                                                  child: Column(
+                                                    children: List.generate(
+                                                      2,
+                                                      (index) => Container(
+                                                        width: 60,
+                                                        height: 3,
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 3),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: ColorManager
+                                                              .secondaryColor1,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(2),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                            )
+                                          : SizedBox(),
                                       Padding(
                                         padding: EdgeInsets.all(AppPadding.p20),
                                         child: Column(
@@ -412,43 +430,40 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                             SizedBox(height: 20),
                                             TextInfo(
                                               title: "اسم الدكتور",
-                                              supTitle: doctorNoteModel.docTitle,
+                                              supTitle:
+                                                  doctorNoteModel.docTitle,
                                             ),
                                             TextInfo(
                                               title: "العنوان",
-                                              supTitle: doctorNoteModel.placeTitle,
+                                              supTitle:
+                                                  doctorNoteModel.placeTitle,
                                             ),
                                             TextInfo(
                                               title: "الاختصاص",
-                                              supTitle:
-                                                  doctorNoteModel.spTitle,
+                                              supTitle: doctorNoteModel.spTitle,
                                             ),
                                             TextInfo(
                                               title: "التقييم",
-                                              supTitle:
-                                                  doctorNoteModel.rate,
+                                              supTitle: doctorNoteModel.rate,
                                             ),
                                             TextInfo(
                                               title: "التاريخ",
-                                              supTitle: doctorNoteModel.visitDate,
+                                              supTitle:
+                                                  doctorNoteModel.visitDate,
                                             ),
                                             TextInfo(
                                               title: "ملاحظات المكتب العلمي",
-                                              supTitle:
-                                                  doctorNoteModel.note,
+                                              supTitle: doctorNoteModel.note,
                                             ),
                                             TextInfo(
                                               title: "ملاحظات إضافية",
-                                              supTitle:
-                                                  doctorNoteModel.special,
+                                              supTitle: doctorNoteModel.special,
                                             ),
                                             TextInfo(
                                               title: "ملاحظات مستودع قاسيون",
-                                              supTitle:
-                                                  doctorNoteModel.issue,
+                                              supTitle: doctorNoteModel.issue,
                                             ),
-                                            doctorNoteModel.samples
-                                                    .isNotEmpty
+                                            doctorNoteModel.samples.isNotEmpty
                                                 ? Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -467,9 +482,9 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                         shrinkWrap: true,
                                                         physics:
                                                             NeverScrollableScrollPhysics(),
-                                                        itemCount: doctorNoteModel
-                                                            .samples
-                                                            .length,
+                                                        itemCount:
+                                                            doctorNoteModel
+                                                                .samples.length,
                                                         itemBuilder:
                                                             (context, index) {
                                                           return Padding(
@@ -534,12 +549,11 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                 icon: Icon(
                                                   size: 30,
                                                   Icons.book_outlined,
-                                                  color:
-                                                     doctorNoteModel.flag
-                                                          ? ColorManager
-                                                              .secondaryColor4
-                                                          : ColorManager
-                                                              .secondaryColor,
+                                                  color: doctorNoteModel.flag
+                                                      ? ColorManager
+                                                          .secondaryColor4
+                                                      : ColorManager
+                                                          .secondaryColor,
                                                 ),
                                               ),
                                               alignment: Alignment.bottomLeft,
