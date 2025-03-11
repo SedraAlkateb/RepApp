@@ -20,30 +20,27 @@ class ReportVisitDoctorPage extends StatelessWidget {
   final String repName;
   final TextEditingController searchNoteDoctorController =
       TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ReportVisitDoctorBloc>(context).clear();
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    icon: Icon(
-                      size: AppSize.s30,
-                      Icons.arrow_back_sharp,
-                      color: ColorManager.secondaryColor1,
-                    ),
-                    onPressed: () {
-                      BlocProvider.of<
-                          ReportVisitDoctorBloc>(
-                          context)
-                          .add(
-                          DocNoIsExpandedNoteEvent());
-                      Navigator.pop(context);
-                    },
-                  );
-                },
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                size: AppSize.s30,
+                Icons.arrow_back_sharp,
+                color: ColorManager.secondaryColor1,
               ),
+              onPressed: () {
+                BlocProvider.of<ReportVisitDoctorBloc>(context)
+                    .add(DocNoIsExpandedNoteEvent());
+                Navigator.pop(context);
+              },
+            );
+          },
+        ),
         title: Text(repName),
       ),
       body: Stack(
@@ -323,7 +320,8 @@ class ReportVisitDoctorPage extends StatelessWidget {
               RepVisitsModel doctorNoteModel =
                   BlocProvider.of<ReportVisitDoctorBloc>(context)
                       .doctorNoteModel;
-              int index = 0;
+              int index = BlocProvider.of<ReportVisitDoctorBloc>(context).index;
+
               if (state is DocIsExpandedNoteState) {
                 isExpanded = true;
                 index = state.index;
@@ -335,14 +333,23 @@ class ReportVisitDoctorPage extends StatelessWidget {
               return Stack(
                 children: [
                   if (isExpanded)
-                    ModalBarrier(
-                      color: Colors.black.withOpacity(0.5),
-                      dismissible: false,
+                    GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<
+                            ReportVisitDoctorBloc>(
+                            context)
+                            .add(
+                            DocNoIsExpandedNoteEvent());
+                      },
+                      child: ModalBarrier(
+                        color: Colors.black.withOpacity(0.5),
+                        dismissible: true,
+                      ),
                     ),
                   isExpanded
                       ? DraggableScrollableSheet(
                           initialChildSize: 0.4,
-                          minChildSize: 0.2,
+                          minChildSize: 0.1,
                           maxChildSize: 1,
                           builder: (context, scrollController) {
                             return NotificationListener<
@@ -359,6 +366,12 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                   BlocProvider.of<ReportVisitDoctorBloc>(
                                           context)
                                       .add(ExpandedBorder(false));
+                                }else if (notification.extent <= 0.1) {
+                                  BlocProvider.of<
+                                      ReportVisitDoctorBloc>(
+                                      context)
+                                      .add(
+                                      DocNoIsExpandedNoteEvent());
                                 }
                                 // else {
                                 //   BlocProvider.of<ReportVisitDoctorBloc>(context).add(ExpandedBorder(1));

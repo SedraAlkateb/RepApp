@@ -318,7 +318,8 @@ class RepProfile extends StatelessWidget {
                         .add(FutureSpEvent(id));
                   },
                       icon1: FontAwesomeIcons.table,
-                      text: "الخطة المستقبلية للمندوب"),
+                      text: "تدقيق خطة المندوب",
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
@@ -329,7 +330,7 @@ class RepProfile extends StatelessWidget {
                   
                   RowList(
                     icon1: FontAwesomeIcons.table,
-                    text: "تدقيق خطة المندوب",
+                    text:"تعديل أصناف الخطة",
                     function: () {
                       BlocProvider.of<SeniorProfBloc>(context).add(VisitDocEvent(id));
                       Navigator.pushNamed(context, Routes.AuditingPlan);
@@ -360,7 +361,7 @@ class RepProfile extends StatelessWidget {
                   ),
                   RowList(
                     icon1: FontAwesomeIcons.userDoctor,
-                    text: "الأطباء الذين لم تمت زيارتهم",
+                    text: "الأطباء الذين لم تتم زيارتهم",
                     function: () {
                       BlocProvider.of<SeniorProfBloc>(context)
                           .add(NoVisitDocEvent(id));
@@ -410,9 +411,6 @@ class RepProfile extends StatelessWidget {
                         },
                       ));
                     },
-
-
-
                   ),
 
                   Padding(

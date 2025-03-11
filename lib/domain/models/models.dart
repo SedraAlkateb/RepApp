@@ -1524,3 +1524,10 @@ class RepVisitsModel {
       this.flag,
       this.samples);
 }
+class BrandFlag{
+  int id;
+  String brand;
+  int flag;
+
+  BrandFlag(this.id, this.brand, this.flag);
+}

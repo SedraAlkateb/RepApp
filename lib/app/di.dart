@@ -567,3 +567,15 @@ Future<void> initReportVisitDoctorModule() async {
         () => ReportVisitDoctorBloc(instance(), instance(), instance()));
   }
 }
+Future<void> iniFutureModule() async {
+  if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
+    instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<FutureRepBloc>()) {
+   // instance.registerFactory<LoginUsecase>(() => LoginUsecase(instance()));
+   // instance.registerFactory<LoginSqlUsecase>(() => LoginSqlUsecase(instance()));
+    //  instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
+
+    instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(instance()));
+  }
+}

@@ -15,12 +15,7 @@ void main()async {
         home: Ss(s: "jujhhhhhhhhhhhhhhhhhhhhhhhhhhh",)
       ),
     );
-    final Finder iconFinder = find.byIcon(Icons.add);
-  //  expect(iconFinder, findsOneWidget);
 
-    // // ✅ اضغط على الأيقونة
-    // await tester.tap(iconFinder);
-    // await tester.pump();
   });
 
 }

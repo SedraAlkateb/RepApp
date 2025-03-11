@@ -109,7 +109,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           visitHospital?.data = [];
           emit(SyncDataState());
         });
-
         return false;
       }
 

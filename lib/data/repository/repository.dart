@@ -1018,7 +1018,8 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<RepVisitsModel>>> getRepVisitsHos(VisitRepSen visitRepSen)  async {
+  Future<Either<Failure, List<RepVisitsModel>>> getRepVisitsHos(
+      VisitRepSen visitRepSen) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getRepVisitsHos(visitRepSen);
