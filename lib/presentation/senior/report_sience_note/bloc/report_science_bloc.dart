@@ -36,7 +36,7 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
         emit(SenAllNoteDoctorsState(doctorNote));
       }
       else if (event is IsExpandedNoteEvent) {
-        emit(IsExpandedNoteState(event.doctorNoteModel,event.index));
+        emit(IsExpandedNoteState(event.doctorNoteModel, event.index));
       }
       else if (event is SenAllNoteDoctorEvent) {
         emit(SenAllNoteDoctorLoadingState());
@@ -51,7 +51,7 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
           }
         });
       }
-      else if(event is NoIsExpandedNoteEvent){
+      else if (event is NoIsExpandedNoteEvent) {
         print("object");
         emit(NoIsExpandedNoteState());
       }

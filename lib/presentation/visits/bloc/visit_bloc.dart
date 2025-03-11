@@ -27,7 +27,8 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
   // List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors = [];
   List<VisitHospitalAndHospital> hospitals = [];
-
+  List<VisitBrandPharmacyModel> visitBrandPharmacys = [];
+  List<BrandModel> selectBrand = [];
   List<PharmacyBrandModel> brands = [];
 
   VisitBloc(

@@ -21,12 +21,18 @@ class ReportVisitDoctorBloc
   bool isExpanded = false;
   bool num = false;
   int index = 0;
+  void clear(){
+     isExpanded = false;
+     num = false;
+     index = 0;
+  }
   RepVisitsModel doctorNoteModel =
       RepVisitsModel("", "", "", "", "", "", "", "", "", "", false, []);
   ReportVisitDoctorBloc(this.allVisitDoctorRepSenUsecase, this.readVisitUsecase,
       this.allVisitHospitalRepSenUsecase)
       : super(ReportVisitDoctorInitial()) {
     on<ReportVisitDoctorEvent>((event, emit) async {
+
       if (event is AllReportVisitDoctorEvent) {
         emit(AllReportVisitDoctorLoadingState());
         (await allVisitDoctorRepSenUsecase.execute(event.visitRepSen)).fold(
@@ -54,7 +60,8 @@ class ReportVisitDoctorBloc
             emit(AllReportVisitHospitalsState(data));
           }
         });
-      } else if (event is SenSearchNoteVisitHospitalEvent) {
+      }
+      else if (event is SenSearchNoteVisitHospitalEvent) {
         List<RepVisitsModel> hospitalNote;
         String search = normalizeText(event.contant);
         hospitalNote = repVisitHospital.where((value) {
@@ -73,7 +80,8 @@ class ReportVisitDoctorBloc
           return false;
         }).toList();
         emit(AllReportVisitHospitalsState(hospitalNote));
-      } else if (event is SenSearchNoteVisitDoctorEvent) {
+      }
+      else if (event is SenSearchNoteVisitDoctorEvent) {
         List<RepVisitsModel> doctorNote;
         String search = normalizeText(event.contant);
         doctorNote = repVisits.where((value) {
@@ -92,17 +100,20 @@ class ReportVisitDoctorBloc
           return false;
         }).toList();
         emit(AllReportVisitDoctorsState(doctorNote));
-      } else if (event is DocIsExpandedNoteEvent) {
+      }
+      else if (event is DocIsExpandedNoteEvent) {
         isExpanded = true;
         doctorNoteModel = event.repVisitsModel;
         index = event.index;
         emit(DocIsExpandedNoteState(event.repVisitsModel, event.index, num));
-      } else if (event is DocNoIsExpandedNoteEvent) {
+      }
+      else if (event is DocNoIsExpandedNoteEvent) {
         isExpanded = false;
         num = false;
         index = -1;
         emit(DocNoIsExpandedNoteState());
-      } else if (event is ChangeReadDocNoteEvent) {
+      }
+      else if (event is ChangeReadDocNoteEvent) {
         emit(AsReadLoadingState());
         List<RepVisitsModel> doctorNote = List.from(repVisits);
         (await readVisitUsecase.execute(AsRead(
@@ -133,12 +144,13 @@ class ReportVisitDoctorBloc
           doctorNoteModel = doctorNote[event.id];
           emit(SenVisitDoctorAsReadState(doctorNote, doctorNote1));
         });
-      } else if (event is ChangeReadHosNoteEvent) {
+      }
+      else if (event is ChangeReadHosNoteEvent) {
         emit(AsReadLoadingState());
 
-        List<RepVisitsModel> doctorNote = List.from(repVisits);
+        List<RepVisitsModel> doctorNote = List.from(repVisitHospital);
         (await readVisitUsecase.execute(AsRead(
-                int.parse(repVisits[event.id].visitId),
+                int.parse(repVisitHospital[event.id].visitId),
                 UserInfo.repId,
                 0,
                 event.isRead == true ? 1 : 0)))
@@ -160,12 +172,13 @@ class ReportVisitDoctorBloc
             doctorNote[event.id].samples,
           );
           index = event.id;
-          repVisits[event.id] = doctorNote1;
+          repVisitHospital[event.id] = doctorNote1;
           doctorNote[event.id] = doctorNote1;
           doctorNoteModel = doctorNote[event.id];
           emit(SenVisitDoctorAsReadState(doctorNote, doctorNote1));
         });
-      } else if (event is ExpandedBorder) {
+      }
+      else if (event is ExpandedBorder) {
         num = event.num;
         emit(ExpandedBorderState(event.num));
       }

@@ -7,7 +7,6 @@ class SenSearchNoteDoctorEvent extends ReportScienceEvent{
   SenSearchNoteDoctorEvent(this.contant);
   @override
   List<Object?> get props => [contant];
-
 }
 class SenAllNoteDoctorEvent extends ReportScienceEvent{
   final  int id;

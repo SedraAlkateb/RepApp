@@ -12,6 +12,7 @@ part 'future_rep_state.dart';
 class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
   AllSpeUsecase allSpeUsecase;
   List<SpecDModel> specialization = [];
+  List<BrandFlag> brandFlag = [];
 
   FutureRepBloc(this.allSpeUsecase) : super(FutureRepInitial()) {
     on<FutureRepEvent>((event, emit) async{

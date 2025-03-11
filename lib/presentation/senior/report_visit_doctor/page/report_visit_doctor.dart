@@ -22,6 +22,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
       TextEditingController();
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ReportVisitDoctorBloc>(context).clear();
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -332,14 +333,23 @@ class ReportVisitDoctorPage extends StatelessWidget {
               return Stack(
                 children: [
                   if (isExpanded)
-                    ModalBarrier(
-                      color: Colors.black.withOpacity(0.5),
-                      dismissible: false,
+                    GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<
+                            ReportVisitDoctorBloc>(
+                            context)
+                            .add(
+                            DocNoIsExpandedNoteEvent());
+                      },
+                      child: ModalBarrier(
+                        color: Colors.black.withOpacity(0.5),
+                        dismissible: true,
+                      ),
                     ),
                   isExpanded
                       ? DraggableScrollableSheet(
                           initialChildSize: 0.4,
-                          minChildSize: 0.2,
+                          minChildSize: 0.1,
                           maxChildSize: 1,
                           builder: (context, scrollController) {
                             return NotificationListener<
@@ -356,6 +366,12 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                   BlocProvider.of<ReportVisitDoctorBloc>(
                                           context)
                                       .add(ExpandedBorder(false));
+                                }else if (notification.extent <= 0.1) {
+                                  BlocProvider.of<
+                                      ReportVisitDoctorBloc>(
+                                      context)
+                                      .add(
+                                      DocNoIsExpandedNoteEvent());
                                 }
                                 // else {
                                 //   BlocProvider.of<ReportVisitDoctorBloc>(context).add(ExpandedBorder(1));
