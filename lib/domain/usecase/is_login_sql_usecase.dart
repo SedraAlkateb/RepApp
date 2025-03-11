@@ -9,10 +9,8 @@ class IsLoginSqlUsecase extends Equatable {
   Future<Either<Failure, LoginModel?>> execute() async{
     return await _repositorySql.getRep();
   }
-
   @override
   List<Object?> get props => [_repositorySql];
-
 }
 
 

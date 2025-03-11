@@ -11,15 +11,22 @@ class AllDoctorEvent extends DoctorsEvent {
 
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class SearchDocEvent extends DoctorsEvent {
   final String contant;
+
   SearchDocEvent(this.contant);
   @override
   List<Object?> get props => [contant];
 
 
 
+}
+class CheckReciEvent extends DoctorsEvent {
+  final int docId;
+  final int st;
+  CheckReciEvent(this.docId,this.st);
+  List<Object?> get props => [docId];
 }

@@ -2,6 +2,7 @@ import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:html/parser.dart';
 
 extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
@@ -15,7 +16,50 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
     );
   }
 }
+extension AllVisitDoctorRepSenMapper on AllRepVisitsResponseBaseResponse? {
+  List<RepVisitsModel> toDomain() {
+    List<RepVisitsModel> repVisitsModel =
+    (this?.data?.repVisits?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<RepVisitsModel>()
+        .toList();
+    return repVisitsModel;
+  }
+}
 
+extension visitDoctorRepSenMapper on RepVisitsResponse? {
+  RepVisitsModel toDomain() {
+    return RepVisitsModel(
+      this?.visitId.toString() ?? Constants.empty,
+      this?.visitDate.toString() ?? Constants.empty,
+      this?.placeTitle.toString() ?? Constants.empty,
+      this?.docTitle.toString() ?? Constants.empty,
+      this?.rate.toString() ?? Constants.empty,
+      this?.spTitle.toString() ?? Constants.empty,
+      this?.note.toString() ?? Constants.empty,
+      this?.issue.toString() ?? Constants.empty,
+      this?.special.toString() ?? Constants.empty,
+      this?.target.toString() ?? Constants.empty,
+      this?.flag=="1"?true:false,
+      this!.samples?.toList()??[],
+    );
+  }
+}
+extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
+  InfoRep toDomain() {
+    return InfoRep(
+     int.parse( this?.data?.repInfoResponse![0].id ??"0"),
+      this?.data?.repInfoResponse![0].name?? Constants.empty,
+      this?.data?.repInfoResponse![0].mobile?? Constants.empty,
+      this?.data?.repInfoResponse![0].address?? Constants.empty,
+      this?.data?.repInfoResponse![0].sampleCount?? Constants.empty,
+      this?.data?.repInfoResponse![0].recipesCount?? Constants.empty,
+      this?.data?.repInfoResponse![0].totalVisit?? Constants.zero,
+      this?.data?.repInfoResponse![0].visitDon?? Constants.zero,
+      this?.data?.repInfoResponse![0].visitnotYet?? Constants.zero,
+    );
+  }
+}
 extension ActiveResposeMapper on CheckBaseResponse? {
   ActiveModel toDomain() {
     return ActiveModel(
@@ -68,6 +112,16 @@ extension ListVisitPharmacyRequestMapper on List<VisitPharmacyModel>? {
   }
 }
 
+extension ListReciNumMapper on ReciNumResponse? {
+  List<int> toDomain() {
+    List<int> reci = (this?.recICounts?.map((response) => response) ??
+            const Iterable.empty())
+        .cast<int>()
+        .toList();
+    return reci;
+  }
+}
+
 extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   List<PlaceModel> toDomain() {
     List<PlaceModel> places =
@@ -76,6 +130,27 @@ extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
             .cast<PlaceModel>()
             .toList();
     return places;
+  }
+}
+
+
+extension AllRepresentativeMapper on AllRepresentativeBaseResponse? {
+  List<AllRepresentative> toDomain() {
+    List<AllRepresentative> allRepresentative =
+    (this?.data?.data?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<AllRepresentative>()
+        .toList();
+    return allRepresentative;
+  }
+}
+extension RepresentativeMapper on RepresentativeResponse? {
+  AllRepresentative toDomain() {
+    return AllRepresentative(
+      int.parse(this?.id ?? "0"),
+      this?.name ?? Constants.empty,
+      this?.unRead ?? Constants.zero,
+    );
   }
 }
 
@@ -91,7 +166,7 @@ extension PlaceResponseMapper on PlaceResponse? {
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
     return SpecDModel(
-        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty, 0, 0);
+        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty,this?.flag ?? Constants.zero, 0, 0, 0);
   }
 }
 
@@ -200,6 +275,10 @@ extension LoginResponseMapper on LoginResponse? {
       1,
       this?.data?.startDate ?? Constants.empty,
       this?.data?.endDate ?? Constants.empty,
+      0,
+      int.parse(this?.data?.recipesCount ?? "0"),
+      UserInfo.flag1,
+      this?.data?.repType ?? Constants.empty,
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
@@ -242,6 +321,28 @@ extension AllDoctorResponseMapper on AllDoctorsBaseResponse? {
   }
 }
 
+extension BrandResResponseMapper on BrandReResponse? {
+  BrandRes toDomain() {
+    var document = parse(this?.title_en ?? Constants.empty);
+    String plainText = document.body!.text;
+    return BrandRes(
+      int.parse(this?.id ?? "0"),
+      plainText,
+    );
+  }
+}
+
+extension AllBrandResResponseMapper on AllBrandResResponse? {
+  List<BrandRes> toDomain() {
+    List<BrandRes> brand =
+        (this?.brandRes?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<BrandRes>()
+            .toList();
+    return brand;
+  }
+}
+
 extension HospitalResponseMapper on HospitalResponse? {
   HospitalModel toDomain() {
     return HospitalModel(
@@ -266,7 +367,6 @@ extension PlanBrandMapper on PlanBrandResponse? {
     );
   }
 }
-
 extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
   List<PlanBrandModel> toDomain() {
     List<PlanBrandModel> planBrands =
@@ -350,7 +450,7 @@ extension VisitDoctorResponseMapper on VisitResponse? {
       (this?.special ?? Constants.zero).toString(),
       int.parse((this?.docId ?? "0")),
       1,
-      "ff",
+      (this?.target ?? Constants.zero).toString(),
     );
   }
 }
@@ -365,7 +465,7 @@ extension VisitHospitalResponseMapper on VisitHosResponse? {
       (this?.special ?? Constants.zero).toString(),
       int.parse((this?.docId ?? "0")),
       1,
-      "ff",
+      (this?.target ?? Constants.zero).toString(),
     );
   }
 }
@@ -378,6 +478,15 @@ extension VisitDoctorBrandResponseMapper on VisitBrandPharmacyResponse? {
         int.parse((this?.brandId ?? "0")),
         int.parse((this?.amount ?? "0")),
         1);
+  }
+}
+
+extension BrandRecipesResponseMapper on BrandRecipesResponse? {
+  BrandRes toDomain() {
+    return BrandRes(
+      this?.id ?? Constants.zero,
+      this?.title_en ?? Constants.empty,
+    );
   }
 }
 
@@ -436,5 +545,127 @@ extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
   VisitDoctorBase toDomain() {
     return VisitDoctorBase(
         this?.brandsVisit.toDomain() ?? [], this?.data.toDomain() ?? []);
+  }
+}
+
+extension CopyRecResponseMapper on CopyRecResponse {
+  CopyReciRequest toDomain() {
+    return CopyReciRequest(
+      int.parse(this.recip?.id ?? "0"),
+      int.parse(this.recip?.repId ?? "0"),
+      int.parse(this.recip?.type ?? "0"),
+      int.parse(this.recip?.docId ?? "0"),
+      this.recip?.spName ?? Constants.empty,
+      this.recip!.brand_1.toDomain(),
+      this.recip?.address ?? Constants.empty,
+      this.recip?.phone ?? Constants.empty,
+      this.recip?.total ?? Constants.empty,
+      note1: this.recip?.note1 ?? Constants.empty,
+      note2: this.recip?.note2 ?? Constants.empty,
+      note_emp: this.recip?.note_emp ?? Constants.empty,
+      image1: this.recip?.image1 == "" ? null : this.recip?.image1,
+      image2: this.recip?.image2 == "" ? null : this.recip?.image2,
+      brand_2: this.recip?.brand_2.toDomain(),
+      brand_3: this.recip?.brand_3.toDomain(),
+      brand_4: this.recip?.brand_4.toDomain(),
+    );
+  }
+}
+
+extension VisitNotesMapper on VisitNotesResponse? {
+  DoctorNoteModel toDomain() {
+    return DoctorNoteModel(
+      this?.docTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.visitDate ?? Constants.empty,
+      this?.note ?? Constants.empty,
+      false
+    );
+  }
+}
+extension AllVisitNotesMapper on AllVisitNotesBaseResponse? {
+  List<DoctorNoteModel> toDomain() {
+    List<DoctorNoteModel> visitNotes =
+    (this?.data?.notes?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorNoteModel>()
+        .toList();
+    return visitNotes;
+  }
+}
+//
+extension VisitIssueMapper on VisitIssueResponse? {
+  DoctorIssueModel toDomain() {
+    return DoctorIssueModel(
+        this?.docTitle ?? Constants.empty,
+        this?.spTitle ?? Constants.empty,
+        this?.address ?? Constants.empty,
+        this?.visitDate ?? Constants.empty,
+        this?.issue ?? Constants.empty,
+        false
+
+    );
+  }
+}
+//
+extension InventoryMapper on InventoryResponse? {
+  InventoryModel toDomain() {
+    return InventoryModel(
+        this?.title ?? Constants.empty,
+        this?.used ?? Constants.empty,
+        this?.total ?? Constants.empty,
+       this?.rest ?? Constants.zero,
+
+    );
+  }
+}
+
+
+extension AllInventoryMapper on InventoryResponseBaseResponse? {
+  List<InventoryModel> toDomain() {
+    List<InventoryModel> Inventory =
+    (this?.brand?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<InventoryModel>()
+        .toList();
+    return Inventory;
+  }
+}
+
+
+//
+
+extension AllVisitIssueMapper on AllVisitIssueBaseResponse? {
+  List<DoctorIssueModel> toDomain() {
+    List<DoctorIssueModel> visitIssue =
+    (this?.data?.notes?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorIssueModel>()
+        .toList();
+    return visitIssue;
+  }
+}
+//
+
+extension NoVisitDocMapper on NoVisitDoctorResponse? {
+  NoVisitDocModel toDomain() {
+    return NoVisitDocModel(
+      this?.docTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.rate ?? Constants.empty,
+      this?.visits ?? Constants.empty,
+    );
+  }
+}
+extension AllNoVisitDocMapper on AllNoVisitDoctorBaseResponse? {
+  List<NoVisitDocModel> toDomain() {
+    List<NoVisitDocModel> visitNotes =
+    (this?.data?.res?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<NoVisitDocModel>()
+        .toList();
+    return visitNotes;
   }
 }

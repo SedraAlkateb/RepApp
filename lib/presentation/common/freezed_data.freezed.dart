@@ -2807,3 +2807,498 @@ abstract class _CreateProductObject implements CreateProductObject {
   _$$CreateProductObjectImplCopyWith<_$CreateProductObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$InsertRecipesObject {
+  String get repId => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  String get docId => throw _privateConstructorUsedError;
+  String get spName => throw _privateConstructorUsedError;
+  BrandRes get brand_1 => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  String get phone => throw _privateConstructorUsedError;
+  String get total => throw _privateConstructorUsedError;
+  String get flagImage1 => throw _privateConstructorUsedError;
+  String get flagImage2 => throw _privateConstructorUsedError;
+  String? get note1 => throw _privateConstructorUsedError;
+  String? get note2 => throw _privateConstructorUsedError;
+  String? get note_emp => throw _privateConstructorUsedError;
+  File? get image1 => throw _privateConstructorUsedError;
+  File? get image2 => throw _privateConstructorUsedError;
+  BrandRes? get brand_2 => throw _privateConstructorUsedError;
+  BrandRes? get brand_3 => throw _privateConstructorUsedError;
+  BrandRes? get brand_4 => throw _privateConstructorUsedError;
+
+  /// Create a copy of InsertRecipesObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $InsertRecipesObjectCopyWith<InsertRecipesObject> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $InsertRecipesObjectCopyWith<$Res> {
+  factory $InsertRecipesObjectCopyWith(
+          InsertRecipesObject value, $Res Function(InsertRecipesObject) then) =
+      _$InsertRecipesObjectCopyWithImpl<$Res, InsertRecipesObject>;
+  @useResult
+  $Res call(
+      {String repId,
+      String type,
+      String docId,
+      String spName,
+      BrandRes brand_1,
+      String address,
+      String phone,
+      String total,
+      String flagImage1,
+      String flagImage2,
+      String? note1,
+      String? note2,
+      String? note_emp,
+      File? image1,
+      File? image2,
+      BrandRes? brand_2,
+      BrandRes? brand_3,
+      BrandRes? brand_4});
+}
+
+/// @nodoc
+class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
+    implements $InsertRecipesObjectCopyWith<$Res> {
+  _$InsertRecipesObjectCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of InsertRecipesObject
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? repId = null,
+    Object? type = null,
+    Object? docId = null,
+    Object? spName = null,
+    Object? brand_1 = null,
+    Object? address = null,
+    Object? phone = null,
+    Object? total = null,
+    Object? flagImage1 = null,
+    Object? flagImage2 = null,
+    Object? note1 = freezed,
+    Object? note2 = freezed,
+    Object? note_emp = freezed,
+    Object? image1 = freezed,
+    Object? image2 = freezed,
+    Object? brand_2 = freezed,
+    Object? brand_3 = freezed,
+    Object? brand_4 = freezed,
+  }) {
+    return _then(_value.copyWith(
+      repId: null == repId
+          ? _value.repId
+          : repId // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      docId: null == docId
+          ? _value.docId
+          : docId // ignore: cast_nullable_to_non_nullable
+              as String,
+      spName: null == spName
+          ? _value.spName
+          : spName // ignore: cast_nullable_to_non_nullable
+              as String,
+      brand_1: null == brand_1
+          ? _value.brand_1
+          : brand_1 // ignore: cast_nullable_to_non_nullable
+              as BrandRes,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      phone: null == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String,
+      total: null == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as String,
+      flagImage1: null == flagImage1
+          ? _value.flagImage1
+          : flagImage1 // ignore: cast_nullable_to_non_nullable
+              as String,
+      flagImage2: null == flagImage2
+          ? _value.flagImage2
+          : flagImage2 // ignore: cast_nullable_to_non_nullable
+              as String,
+      note1: freezed == note1
+          ? _value.note1
+          : note1 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      note2: freezed == note2
+          ? _value.note2
+          : note2 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      note_emp: freezed == note_emp
+          ? _value.note_emp
+          : note_emp // ignore: cast_nullable_to_non_nullable
+              as String?,
+      image1: freezed == image1
+          ? _value.image1
+          : image1 // ignore: cast_nullable_to_non_nullable
+              as File?,
+      image2: freezed == image2
+          ? _value.image2
+          : image2 // ignore: cast_nullable_to_non_nullable
+              as File?,
+      brand_2: freezed == brand_2
+          ? _value.brand_2
+          : brand_2 // ignore: cast_nullable_to_non_nullable
+              as BrandRes?,
+      brand_3: freezed == brand_3
+          ? _value.brand_3
+          : brand_3 // ignore: cast_nullable_to_non_nullable
+              as BrandRes?,
+      brand_4: freezed == brand_4
+          ? _value.brand_4
+          : brand_4 // ignore: cast_nullable_to_non_nullable
+              as BrandRes?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$InsertRecipesObjectImplCopyWith<$Res>
+    implements $InsertRecipesObjectCopyWith<$Res> {
+  factory _$$InsertRecipesObjectImplCopyWith(_$InsertRecipesObjectImpl value,
+          $Res Function(_$InsertRecipesObjectImpl) then) =
+      __$$InsertRecipesObjectImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String repId,
+      String type,
+      String docId,
+      String spName,
+      BrandRes brand_1,
+      String address,
+      String phone,
+      String total,
+      String flagImage1,
+      String flagImage2,
+      String? note1,
+      String? note2,
+      String? note_emp,
+      File? image1,
+      File? image2,
+      BrandRes? brand_2,
+      BrandRes? brand_3,
+      BrandRes? brand_4});
+}
+
+/// @nodoc
+class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
+    extends _$InsertRecipesObjectCopyWithImpl<$Res, _$InsertRecipesObjectImpl>
+    implements _$$InsertRecipesObjectImplCopyWith<$Res> {
+  __$$InsertRecipesObjectImplCopyWithImpl(_$InsertRecipesObjectImpl _value,
+      $Res Function(_$InsertRecipesObjectImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of InsertRecipesObject
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? repId = null,
+    Object? type = null,
+    Object? docId = null,
+    Object? spName = null,
+    Object? brand_1 = null,
+    Object? address = null,
+    Object? phone = null,
+    Object? total = null,
+    Object? flagImage1 = null,
+    Object? flagImage2 = null,
+    Object? note1 = freezed,
+    Object? note2 = freezed,
+    Object? note_emp = freezed,
+    Object? image1 = freezed,
+    Object? image2 = freezed,
+    Object? brand_2 = freezed,
+    Object? brand_3 = freezed,
+    Object? brand_4 = freezed,
+  }) {
+    return _then(_$InsertRecipesObjectImpl(
+      null == repId
+          ? _value.repId
+          : repId // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == docId
+          ? _value.docId
+          : docId // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == spName
+          ? _value.spName
+          : spName // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == brand_1
+          ? _value.brand_1
+          : brand_1 // ignore: cast_nullable_to_non_nullable
+              as BrandRes,
+      null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == flagImage1
+          ? _value.flagImage1
+          : flagImage1 // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == flagImage2
+          ? _value.flagImage2
+          : flagImage2 // ignore: cast_nullable_to_non_nullable
+              as String,
+      freezed == note1
+          ? _value.note1
+          : note1 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      freezed == note2
+          ? _value.note2
+          : note2 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      freezed == note_emp
+          ? _value.note_emp
+          : note_emp // ignore: cast_nullable_to_non_nullable
+              as String?,
+      freezed == image1
+          ? _value.image1
+          : image1 // ignore: cast_nullable_to_non_nullable
+              as File?,
+      freezed == image2
+          ? _value.image2
+          : image2 // ignore: cast_nullable_to_non_nullable
+              as File?,
+      freezed == brand_2
+          ? _value.brand_2
+          : brand_2 // ignore: cast_nullable_to_non_nullable
+              as BrandRes?,
+      freezed == brand_3
+          ? _value.brand_3
+          : brand_3 // ignore: cast_nullable_to_non_nullable
+              as BrandRes?,
+      freezed == brand_4
+          ? _value.brand_4
+          : brand_4 // ignore: cast_nullable_to_non_nullable
+              as BrandRes?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
+  _$InsertRecipesObjectImpl(
+      this.repId,
+      this.type,
+      this.docId,
+      this.spName,
+      this.brand_1,
+      this.address,
+      this.phone,
+      this.total,
+      this.flagImage1,
+      this.flagImage2,
+      this.note1,
+      this.note2,
+      this.note_emp,
+      this.image1,
+      this.image2,
+      this.brand_2,
+      this.brand_3,
+      this.brand_4);
+
+  @override
+  final String repId;
+  @override
+  final String type;
+  @override
+  final String docId;
+  @override
+  final String spName;
+  @override
+  final BrandRes brand_1;
+  @override
+  final String address;
+  @override
+  final String phone;
+  @override
+  final String total;
+  @override
+  final String flagImage1;
+  @override
+  final String flagImage2;
+  @override
+  final String? note1;
+  @override
+  final String? note2;
+  @override
+  final String? note_emp;
+  @override
+  final File? image1;
+  @override
+  final File? image2;
+  @override
+  final BrandRes? brand_2;
+  @override
+  final BrandRes? brand_3;
+  @override
+  final BrandRes? brand_4;
+
+  @override
+  String toString() {
+    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, flagImage1: $flagImage1, flagImage2: $flagImage2, note1: $note1, note2: $note2, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InsertRecipesObjectImpl &&
+            (identical(other.repId, repId) || other.repId == repId) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.docId, docId) || other.docId == docId) &&
+            (identical(other.spName, spName) || other.spName == spName) &&
+            (identical(other.brand_1, brand_1) || other.brand_1 == brand_1) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.total, total) || other.total == total) &&
+            (identical(other.flagImage1, flagImage1) ||
+                other.flagImage1 == flagImage1) &&
+            (identical(other.flagImage2, flagImage2) ||
+                other.flagImage2 == flagImage2) &&
+            (identical(other.note1, note1) || other.note1 == note1) &&
+            (identical(other.note2, note2) || other.note2 == note2) &&
+            (identical(other.note_emp, note_emp) ||
+                other.note_emp == note_emp) &&
+            (identical(other.image1, image1) || other.image1 == image1) &&
+            (identical(other.image2, image2) || other.image2 == image2) &&
+            (identical(other.brand_2, brand_2) || other.brand_2 == brand_2) &&
+            (identical(other.brand_3, brand_3) || other.brand_3 == brand_3) &&
+            (identical(other.brand_4, brand_4) || other.brand_4 == brand_4));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      repId,
+      type,
+      docId,
+      spName,
+      brand_1,
+      address,
+      phone,
+      total,
+      flagImage1,
+      flagImage2,
+      note1,
+      note2,
+      note_emp,
+      image1,
+      image2,
+      brand_2,
+      brand_3,
+      brand_4);
+
+  /// Create a copy of InsertRecipesObject
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InsertRecipesObjectImplCopyWith<_$InsertRecipesObjectImpl> get copyWith =>
+      __$$InsertRecipesObjectImplCopyWithImpl<_$InsertRecipesObjectImpl>(
+          this, _$identity);
+}
+
+abstract class _InsertRecipesObject implements InsertRecipesObject {
+  factory _InsertRecipesObject(
+      final String repId,
+      final String type,
+      final String docId,
+      final String spName,
+      final BrandRes brand_1,
+      final String address,
+      final String phone,
+      final String total,
+      final String flagImage1,
+      final String flagImage2,
+      final String? note1,
+      final String? note2,
+      final String? note_emp,
+      final File? image1,
+      final File? image2,
+      final BrandRes? brand_2,
+      final BrandRes? brand_3,
+      final BrandRes? brand_4) = _$InsertRecipesObjectImpl;
+
+  @override
+  String get repId;
+  @override
+  String get type;
+  @override
+  String get docId;
+  @override
+  String get spName;
+  @override
+  BrandRes get brand_1;
+  @override
+  String get address;
+  @override
+  String get phone;
+  @override
+  String get total;
+  @override
+  String get flagImage1;
+  @override
+  String get flagImage2;
+  @override
+  String? get note1;
+  @override
+  String? get note2;
+  @override
+  String? get note_emp;
+  @override
+  File? get image1;
+  @override
+  File? get image2;
+  @override
+  BrandRes? get brand_2;
+  @override
+  BrandRes? get brand_3;
+  @override
+  BrandRes? get brand_4;
+
+  /// Create a copy of InsertRecipesObject
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InsertRecipesObjectImplCopyWith<_$InsertRecipesObjectImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

@@ -7,13 +7,17 @@ import 'package:equatable/equatable.dart';
 class AsyncDataSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   AsyncDataSqlUsecase(this._repositorySql);
-  Future<Either<Failure, String>> execute(List<BrandModel> brands, List<PharmacyModel> pharmacies, List<PlaceModel> places, List<SpecDModel> specs,List<DoctorModel>doctors,
-      List<HospitalModel>hospitals,  List<HospitalSpModel>hospitalSps,   List<BrandSpModel> brandSps,  List<PlanBrandModel> planBrands,
+  Future<Either<Failure, String>> execute(List<BrandModel> brands,
+      //List<PharmacyModel> pharmacies,
+      List<PlaceModel> places,
+      List<SpecDModel> specs,List<DoctorModel>doctors,
+      List<HospitalModel>hospitals,  List<HospitalSpModel>hospitalSps,   List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor
-
-      ) async{
-    return await _repositorySql.asyncData(brands, pharmacies, places, specs,doctors,hospitals,hospitalSps,brandSps,planBrands,
-        visitHospital,visitDoctor
+,{List<PlanBrandModel> ?planBrands}) async
+  {
+    return await _repositorySql.asyncData(brands,
+    //    pharmacies,
+        places, specs,doctors,hospitals,hospitalSps,brandSps, visitHospital,visitDoctor,planBrands: planBrands
     );
   }
 

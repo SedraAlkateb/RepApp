@@ -8,12 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AsyncLogoutPage extends StatelessWidget {
   const AsyncLogoutPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: AppPadding.p40, right:  AppPadding.p40, top: 20),
+        padding:
+            const EdgeInsets.only(left: AppPadding.p40, right: AppPadding.p40),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,7 +25,6 @@ class AsyncLogoutPage extends StatelessWidget {
                 child: Image.asset(
                   ImageAssets.upload,
                   height: 500,
-
                 ),
               ),
               Text(
@@ -33,42 +32,41 @@ class AsyncLogoutPage extends StatelessWidget {
                 "تأكد من اتصالك بالانترنت واضغط على زر رفع البيانات ",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(
-                  height: AppSize.s50
-              ),
-              BlocListener<AsyncInBloc, AsyncInState>(
+              SizedBox(height: AppSize.s40),
+              BlocConsumer<AsyncInBloc, AsyncInState>(
+                buildWhen: (previous, current) {
+                  return current is SyncData0LoadingState || current is SyncData1ErrorState ;
+                },
                 listener: (context, state) {
-                  if(state is SyncData1ErrorState){
+                  if (state is SyncData1ErrorState) {
                     error(context, state.failure.massage, state.failure.code);
                   }
-
-                  if(state is SyncData1State){
-                    BlocProvider.of<AsyncInBloc>(context).add(UpdateFlagEvent());
-                  }
-                  if(state is UpdateFlagErrorState){
-                    error(context, state.failure.massage, state.failure.code);
-
-                  }
-                  if(state is UpdateFlagState){
-                    BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
-                  }
-                  if(state is EditStatusSErrorState){
-                    error(context, state.failure.massage, state.failure.code);
-                  }
-                  if(state is EditStatusState){
-                    success(context);
+                  if (state is SyncData1State) {
                     Navigator.pushReplacementNamed(
-                      context, Routes.deleteLogout,
+                      context,
+                      Routes.deleteLogout,
                     );
                   }
+                  if (state is GetState) {
+                    BlocProvider.of<AsyncInBloc>(context).add(GetEvent());
+                  }
+                  // if (state is UpdateFlagErrorState) {
+                  //   error(context, state.failure.massage, state.failure.code);
+                  // }
+                  // if (state is UpdateFlagState) {
+                  //   BlocProvider.of<AsyncInBloc>(context).add(EditEventIn(3));
+                  // }
                 },
-                child: ElevatedButton(onPressed: (){
-                  BlocProvider.of<AsyncInBloc>(context).add(Async1DataEvent());
-                },
+                builder:(context, state) =>  ElevatedButton(
+                    onPressed:state is SyncData0LoadingState?null: () {
+                      BlocProvider.of<AsyncInBloc>(context)
+                          .add(Async0DataEvent());
+                    },
                     child: Text(
-                      " رفع البيانات ",
+                      state is SyncData0LoadingState?"loading":    " رفع البيانات ",
                     )),
               ),
+              SizedBox(height: AppSize.s50),
             ],
           ),
         ),

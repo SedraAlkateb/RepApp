@@ -35,6 +35,15 @@ final class AllBrandPlanErrorState extends BrandPlanState {
 
   List<Object?> get props =>[failure,];
 }
+
+final class UpdateSaveErrorState extends BrandPlanState {
+
+  final Failure failure;
+  UpdateSaveErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure,];
+}
 final class SumErrorState extends BrandPlanState {
 
   final Failure failure;
@@ -61,7 +70,17 @@ final class UpdateAmountState extends BrandPlanState {
   @override
   List<Object?> get props =>[];
 }
+final class UpdateAmountSendState extends BrandPlanState {
+  @override
+  List<Object?> get props =>[];
+}
 final class UpdateAmountLoadingState extends BrandPlanState {
   @override
   List<Object?> get props =>[];
+}
+final class SearchBrandState extends BrandPlanState {
+  final  List<BrandSpPlanModel> brand;
+  SearchBrandState(this.brand);
+  @override
+  List<Object?> get props =>[brand];
 }

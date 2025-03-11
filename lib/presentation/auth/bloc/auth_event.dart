@@ -12,7 +12,7 @@ class LoginEvent extends AuthEvent{
   LoginEvent(this.userName,this.password);
   @override
 
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 
 
 }
@@ -31,4 +31,11 @@ class DeleteDataEvent extends AuthEvent{
   List<Object?> get props => [];
 
 
+}
+class ShowPasswordEvent extends AuthEvent{
+  final bool isObscured ;
+  ShowPasswordEvent(this.isObscured);
+
+  @override
+  List<Object?> get props => [isObscured];
 }

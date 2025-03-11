@@ -3,14 +3,12 @@ class ColorManager {
   static Color shadowCard =const Color(0xffF3F4F3) ;
   static Color hintGrey =const Color(0xFFA3A09D) ;
   static Color gr =const Color(0x9CFFFFFF);
-  //new colors
   static Color primaryField =const Color(0xff787370);
   static Color grey =const Color(0x18737477) ;
   static Color shadow=const Color(0xff031c4c);
   static Color shadow1=const Color(0xE3242A2C);
-
   static Color darkPrimary =const Color(0x30DDDD85);
-  static Color lightPrimary =const Color(0x80DDDD85);// color with 80 opacity
+  static Color lightPrimary =const Color(0x80DDDD85);
   static Color grey1 = const Color(0xffA3A09D);
   static Color white =const Color(0xFFFFFFFF);
   static Color error =const Color(0xffe61f34);
@@ -21,7 +19,6 @@ class ColorManager {
   static Color myGrays3=const Color(0xffA3A09D);
   static Color primary =const  Color(0xffFDF8F5);
   static Color secondaryColor=const  Color(0xff3A434D);
-
   static Color secondaryColor4=const  Color(0xff59BEE6);
   static Color secondaryColor2=const  Color(0xffF4AC47);
   static Color secondaryColor3=const  Color(0x243a434d);
@@ -30,5 +27,17 @@ class ColorManager {
   static Color secondaryColor6=const  Color.fromARGB(255, 200, 214, 220);
   static Color secondaryColor7=const  Color.fromARGB(255, 125, 164, 182);
   static Color secondaryColor8=const  Color(0xffd6e0ef);
+  static Color secondaryColor9=const  Color.fromARGB(255, 211, 221, 225);
+  static Color secondaryColor11=const  Color(0x22f4ac47);
+  static Color secondaryColor12=const   Color(0x280f5773);
+  static Color secondaryColor13=const  Color(0x1859bee6);
+  static Color secondaryColor14=const  Color(0xffF45D3D);
+  static Color secondaryColor16=const  Color(0x18f45d3d);
+
+  static Color secondaryColor15=const   Color(0xff58C373);
+  static Color secondaryColor17=const   Color(0xf58c373);
+  static Color secondaryColor18=const  Color.fromARGB(123, 125, 164, 182);
+  static Color secondaryColor19=const   Color(0xffc358c1);
+  static Color secondaryColor20=const   Color(0x69c7adc7);
 
 }

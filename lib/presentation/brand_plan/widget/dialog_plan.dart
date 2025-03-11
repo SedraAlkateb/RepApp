@@ -41,12 +41,12 @@ import 'package:flutter/material.dart';
                  children: [
                    ElevatedButton(onPressed: (){
                      Navigator.pop(context);
-                   }, child: Text("الغاء")),
+                   }, child: Text("إلغاء")),
                    SizedBox(width: 8,),
                    ElevatedButton(
                        onPressed: fun
 
-                       , child: Text("تاكيد"))
+                       , child: Text("تأكيد"))
                  ],),
                SizedBox(height: 20,)
              ],

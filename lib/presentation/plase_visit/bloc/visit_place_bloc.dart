@@ -10,6 +10,7 @@ import 'package:domina_app/domain/usecase/insert_visit_brand_hospital_sql_usecas
 import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'visit_place_event.dart';
@@ -46,7 +47,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   String not = "";
   String br = "";
   int isScience = 0;
-  Type type=Type(0, "لا شيئ");
+  bool isBrand = false;
+  Type type = Type(2, "لا شيئ");
   VisitPlaceBloc(
       //    this.pharmaciesByPlaceUsecase,
       this.allBrandsFlagSqlUsecase,
@@ -122,7 +124,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(BrandFlagState(data));
         });
       } else if (event is SelectBrandEvent) {
-        final existingIndex = selectBrand.indexWhere((brand) => brand.id == event.brandModel.id);
+        final existingIndex =
+            selectBrand.indexWhere((brand) => brand.id == event.brandModel.id);
         if (existingIndex != -1) {
           List<VisitBrandPharmacyModel> updatedList =
               List.from(visitBrandPharmacys);
@@ -130,7 +133,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
               updatedList[existingIndex].id,
               updatedList[existingIndex].visitId,
               updatedList[existingIndex].brandId,
-              updatedList[existingIndex].amount + 1, 0);
+              updatedList[existingIndex].amount + 1,
+              0);
           visitBrandPharmacys = updatedList;
           emit(EditAmountBrandState(visitBrandPharmacys));
         } else {
@@ -167,9 +171,11 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       //   });
       // }
       else if (event is InsertVisitDoctorEvent) {
-
-        event.visitDoctorModel.additaion =type.i==2?null:not==""?null:
-         addition();
+        event.visitDoctorModel.additaion = type.i == 2
+            ? null
+            : not == ""
+                ? null
+                : addition();
         (await insertVisitDoctorSqlUsecase.execute(event.visitDoctorModel))
             .fold((failure) {
           print(failure.massage);
@@ -191,8 +197,11 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       //   });
       // }
       else if (event is InsertBrandVisitDoctorEvent) {
-        event.visitDoctorModel.additaion =type.i==2?null:not==""?null:
-        addition();
+        event.visitDoctorModel.additaion = type.i == 2
+            ? null
+            : not == ""
+                ? null
+                : addition();
         emit(AllVisitBrandDoctorLoadingState());
         (await insertVisitBrandDoctorSqlUsecase.execute(
                 visitBrandPharmacys, event.visitDoctorModel))
@@ -203,10 +212,12 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           selectBrand = [];
           emit(AllVisitBrandDoctorState());
         });
-      }
-      else if (event is InsertBrandVisitHospitalEvent) {
-        event.visitHospitalModel.additaion =type.i==2?null:not ==""?null:
-        addition();
+      } else if (event is InsertBrandVisitHospitalEvent) {
+        event.visitHospitalModel.additaion = type.i == 2
+            ? null
+            : not == ""
+                ? null
+                : addition();
         (await insertVisitBrandHospitalSqlUsecase.execute(visitBrandPharmacys,
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -216,10 +227,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           selectBrand = [];
           emit(AllVisitBrandHospitalState());
         });
-      }
-      else if (event is InsertVisitHospitalEvent) {
-        event.visitHospitalModel.additaion =type.i==2?null: (not ==""?null:
-        addition());
+      } else if (event is InsertVisitHospitalEvent) {
+        event.visitHospitalModel.additaion =
+            type.i == 2 ? null : (not == "" ? null : addition());
         (await insertVisitHospitalSqlUsecase.execute(
                 event.visitHospitalModel, event.hospitalId, spec!.specModel.id))
             .fold((failure) {
@@ -234,6 +244,15 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       } else if (event is IsScienceEvent) {
         isScience = event.isScience;
         emit(IsScienceState(isScience));
+      } else if (event is IsBrandEvent) {
+        isBrand = !isBrand;
+        print(isBrand);
+        if (isBrand == true) {
+          selectBrand = [];
+          visitBrandPharmacys = [];
+          selectAddBrand = [];
+        }
+        emit(IsBrandState(isBrand));
       } else if (event is RemoveBrandEvent) {
         List<BrandModel> updatedList = List.from(selectBrand);
         updatedList.removeWhere(
@@ -259,24 +278,24 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(SpecializationHospitalState(data));
         });
       } else if (event is TypeAdditionEvent) {
-        type=event.type;
+        type = event.type;
 
         if (event.type.i == 0) {
-
           emit(BoxState(event.type.name));
         } else if (event.type.i == 1) {
           emit(DropDownState(event.type.name));
-        }
-        else if (event.type.i == 2) {
+        } else if (event.type.i == 2) {
           emit(NothingState());
-        }else {
+        } else {
           emit(BoxState(event.type.name));
         }
         not = event.type.name;
         br = "";
-      } else if (event is SearchDoctorVisitEvent) {
-        doctorSearchModel = doctors.where((doctorvalue) {
-          if (doctorvalue.title.contains(event.value)) {
+      } else if (event is SearchDoctorVisitEvent)
+      {
+        String search = normalizeText(event.value);
+        doctorSearchModel = doctors.where((doctorValue) {
+          if (normalizeText(doctorValue.title).contains(search)) {
             return true;
           } else {
             return false;
@@ -284,8 +303,9 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         }).toList();
         emit(SearchVisitDoctorState(doctorSearchModel));
       } else if (event is SearchHospitalVisitEvent) {
+        String search = normalizeText(event.value);
         hospitalSearchModel = hospitals.where((hospital) {
-          if (hospital.title.contains(event.value)) {
+          if (normalizeText(hospital.title).contains(search)) {
             return true;
           } else {
             return false;
@@ -312,16 +332,14 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
     });
   }
   String addition() {
-    String brand="";
-   if(br==""){
-     for( var ss in selectAddBrand ){
-       brand= "${brand} ${ss.title} ${ss.phTitle} ${ss.amount} \n";
-     }
-   }
-
-   else{
-     brand= "${br}\n";
-   }
+    String brand = "";
+    if (br == "") {
+      for (var ss in selectAddBrand) {
+        brand = "${brand} ${ss.title} ${ss.phTitle} ${ss.amount} \n";
+      }
+    } else {
+      brand = "${br}\n";
+    }
     String add =
         "${not} \n ${brand} ${isScience == 0 ? " مكتب علمي " : isScience == 1 ? "مع الخطة " : "مع الموزع "}";
     return add;

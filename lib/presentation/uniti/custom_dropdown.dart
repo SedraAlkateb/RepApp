@@ -11,7 +11,7 @@ class CustomDropDown extends StatelessWidget {
       required this.validator,
       this.width,
       this.value,
-      this.onTap});
+      this.onTap, required String errorText});
   final String hintText;
   final List<dynamic> items;
   final Icon? prefixIcon;
@@ -24,7 +24,6 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
     return DropdownButtonFormField<dynamic>(
-      
       elevation: 3,
       validator: validator,
       hint: Text(
@@ -33,7 +32,6 @@ class CustomDropDown extends StatelessWidget {
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
-   
         filled: true,
         fillColor: ColorManager.secondaryColor3,
         prefixIcon: prefixIcon,
@@ -46,25 +44,26 @@ class CustomDropDown extends StatelessWidget {
       isExpanded: true,
       items: items.map((dynamic val) {
         return DropdownMenuItem(
-            value: val,
-            onTap: onTap ?? () {},
-            child:  Text(
-                   "${ val.name}",
-                    style: TextStyle(
-                      fontSize: tablet ? 19 : 14,
-                      color: Colors.black,
-                    ),
-                    softWrap: false,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),);
+          value: val,
+          onTap: onTap ?? () {},
+          child: Text(
+            "${val.name}",
+            style: TextStyle(
+              fontSize: tablet ? 19 : 14,
+              color: Colors.black,
+            ),
+            softWrap: false,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
       }).toList(),
       onChanged: onChanged,
       onTap: () {
         // Workshop workshop = item as Workshop;
         //Navigator.pushNamed(context, workshopProfile,arguments:workshop.id );
       },
-      
+
       value: value,
     );
   }

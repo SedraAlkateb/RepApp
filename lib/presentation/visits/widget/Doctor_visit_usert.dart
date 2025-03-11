@@ -105,7 +105,8 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                                 TextRach(
                                     s1: "التاريخ الزيارة: ",
                                     s2: formatDateTime(doctors[index]
-                                        .visitDoctorModel.data))
+                                        .visitDoctorModel.data)),
+
                               ],
                             ),
                           ),

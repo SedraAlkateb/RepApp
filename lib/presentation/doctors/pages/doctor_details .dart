@@ -1,15 +1,18 @@
+import 'package:domina_app/app/di.dart';
+import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
+import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DoctorDetails extends StatelessWidget {
   final DoctorModel doctor;
-
-   DoctorDetails({required this.doctor});
-
+  DoctorDetails({required this.doctor});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +25,9 @@ class DoctorDetails extends StatelessWidget {
           Image.asset(
             ImageAssets.doctor2,
             fit: BoxFit.cover,
-                 width: MediaQuery.of(context).size.width,
-                 height:MediaQuery.of(context).size.height ,
-                   color: ColorManager.secondaryColor4.withOpacity(0.07),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: ColorManager.secondaryColor4.withOpacity(0.07),
             colorBlendMode: BlendMode.modulate,
           ),
           SingleChildScrollView(
@@ -40,7 +43,7 @@ class DoctorDetails extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   elevation: 20,
-                  shadowColor:ColorManager.secondaryColor4.withOpacity(0.5),
+                  shadowColor: ColorManager.secondaryColor4.withOpacity(0.5),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -48,10 +51,11 @@ class DoctorDetails extends StatelessWidget {
                       children: [
                         Text(
                           doctor.title,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                         ),
                         SizedBox(height: 10),
                         Row(
@@ -60,7 +64,7 @@ class DoctorDetails extends StatelessWidget {
                             Icon(Icons.medical_services, color: Colors.blue),
                             SizedBox(width: 8),
                             Text(
-                              'الاختصاص: ${doctor.spTitle}',
+                              'الإختصاص: ${doctor.spTitle}',
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
@@ -69,7 +73,6 @@ class DoctorDetails extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -80,36 +83,117 @@ class DoctorDetails extends StatelessWidget {
                       ListView(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        children: [   buildDetailRow(context, Icons.place, 'المنطقة',
-                            doctor.placeTitle),    Divider(thickness: 0.5,),
-                          buildDetailRow(context, Icons.location_city_outlined, 'العنوان',
-                              doctor.address),
-
-
-                          Divider(thickness: 0.5,),
+                        children: [
+                          buildDetailRow(context, Icons.place, 'المنطقة',
+                              doctor.placeTitle),
+                          Divider(
+                            thickness: 0.5,
+                          ),
+                          buildDetailRow(context, Icons.location_city_outlined,
+                              'العنوان', doctor.address),
+                          Divider(
+                            thickness: 0.5,
+                          ),
                           buildDetailRow(context, Icons.visibility,
                               'عدد الزيارات', '${doctor.visits}'),
-                          Divider(thickness: 0.5,),
+                          Divider(
+                            thickness: 0.5,
+                          ),
                           buildDetailRow(
                               context, Icons.star, 'التصنيف', '${doctor.rate}'),
-
                           if (doctor.note != null && doctor.note!.isNotEmpty)
                             Column(
                               children: [
-                                Divider(thickness: 0.5,),
-                                buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
-                                    doctor.note ?? ''),
+                                Divider(
+                                  thickness: 0.5,
+                                ),
+                                buildHtmlDetailRow(context, Icons.note,
+                                    'ملاحظات', doctor.note ?? ''),
                               ],
-
                             ),
-                          if (doctor.workHours != null && doctor.workHours!.isNotEmpty&&doctor.workHours!=" ")
+                          if (doctor.workHours != null &&
+                              doctor.workHours!.isNotEmpty &&
+                              doctor.workHours != " ")
                             Column(
                               children: [
-                                Divider(thickness: 0.5,),
-                                buildHtmlDetailRow(context, Icons.work, 'أوقات العمل',
-                                    doctor.workHours ?? ''),
+                                Divider(
+                                  thickness: 0.5,
+                                ),
+                                buildHtmlDetailRow(context, Icons.work,
+                                    'أوقات العمل', doctor.workHours ?? ''),
                               ],
                             ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          BlocListener<DoctorsBloc, DoctorsState>(
+                            listener: (context, state) {
+                              if (state is CheckRecipesState) {
+                                if (state.isCheck == true) {
+                                  initBrandRecModule();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecipesPage(
+                                        docId: doctor.id,
+                                        st: state.st,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'لقد تجاوزت الحد المسموح لعدد الوصفات')),
+                                  );
+                                }
+                              }
+                              if (state is CheckRecipesErrorState) {
+                                error(context, state.failure.massage,
+                                    state.failure.code);
+                              }
+                            },
+                            child: BlocBuilder<DoctorsBloc, DoctorsState>(
+                              builder: (context, state) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: state
+                                              is CheckRecipesLoadingState
+                                          ? null
+                                          : () {
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback((_) {
+                                                BlocProvider.of<DoctorsBloc>(
+                                                        context)
+                                                    .add(CheckReciEvent(
+                                                        doctor.id, 0));
+                                              });
+                                            },
+                                      child: Text('إنشاء وصفة'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: state
+                                              is CheckRecipesLoadingState
+                                          ? null
+                                          : () {
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback((_) {
+                                                BlocProvider.of<DoctorsBloc>(
+                                                        context)
+                                                    .add(CheckReciEvent(
+                                                        doctor.id, 1));
+                                              });
+                                            },
+                                      child: Text('تكرار وصفة'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          )
                         ],
                       ),
                     ],

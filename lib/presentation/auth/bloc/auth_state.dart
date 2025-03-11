@@ -6,18 +6,18 @@ sealed class AuthState extends Equatable{}
 final class AuthInitial extends AuthState {
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 class FinishedAsync extends AuthState{
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 class ErrorAsync extends AuthState{
 
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 
 }
 final class InsertAllBrandState extends AuthState {
@@ -85,4 +85,12 @@ final class DeleteState extends AuthState {
   @override
 
   List<Object?> get props =>[];
+}
+
+final class ShowPasswordState extends AuthState {
+  final bool isObscured;
+  ShowPasswordState({ required this.isObscured});
+
+  @override
+  List<Object?> get props => [isObscured];
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -15,104 +13,95 @@ class AsyncLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: SizedBox(),
-            actions:  [
-
-            IconButton(
-                onPressed: (){
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    Routes.login,
-                        (route) => false,
-                  );
-                  BlocProvider.of<AsyncBloc>(context).add(DeleteAllEvent());
-
-
-                }, icon: Icon(Icons.arrow_forward)),
-          ]
-        ),
+        appBar: AppBar(leading: SizedBox(), actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.login,
+                  (route) => false,
+                );
+                BlocProvider.of<AsyncBloc>(context).add(DeleteAllEvent());
+              },
+              icon: Icon(Icons.arrow_forward)),
+        ]),
         body: Padding(
-          padding: const EdgeInsets.only(left: AppPadding.p40,right: AppPadding.p40),
+          padding: const EdgeInsets.only(
+              left: AppPadding.p40, right: AppPadding.p40),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-
-                BlocBuilder<AsyncBloc,AsyncState>
-                  (builder: (context, state) =>  state is LoadingState?CircleNumberWidget(number: state.loading):SizedBox(),),
+                BlocBuilder<AsyncBloc, AsyncState>(
+                  builder: (context, state) => state is LoadingState
+                      ? CircleNumberWidget(number: state.loading)
+                      : SizedBox(),
+                ),
                 Image.asset(
                   ImageAssets.download,
                   height: 300,
-
                 ),
                 Text(
                   textAlign: TextAlign.center,
                   "تأكد من اتصالك بالإنترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق ",
-                style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                SizedBox(
-                  height: AppSize.s25
-                ),
+                SizedBox(height: AppSize.s25),
                 BlocConsumer<AsyncBloc, AsyncState>(
                   listener: (context, state) {
-
-                    if(state is DeleteAllErrorState){
+                    if (state is DeleteAllErrorState) {
                       error(context, state.failure.massage, state.failure.code);
-
                     }
-                   if(state is SyncDataErrorState){
-                     error(context, state.failure.massage, state.failure.code);
-                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
-                   }
-                   if(state is IsActiveErrorState){
-                     error(context, state.failure.massage, state.failure.code);
-                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
-                   }
-                   if(state is UpdateIsActiveErrorState){
-                     error(context, state.failure.massage, state.failure.code);
-                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
-                   }
-                   if(state is getDataSucState){
-                   BlocProvider.of<AsyncBloc>(context).add(SetDataSEvent());
-                   }
-                   if(state is IsActiveState){
-                     BlocProvider.of<AsyncBloc>(context).add(UpdateRepEvent());
-                   }
-                   if(state is UpdateIsActiveState){
-                     BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
-                   }
-                   if(state is SyncDataLoadingState){
-                     loading(context,text: state.loading.toString());
-                   }
-                   if(state is SyncDataState){
-                     BlocProvider.of<AsyncBloc>(context).add(EditEvent(2));
-                   }
-                   if(state is EditStatusDErrorState){
-                     error(context, state.failure.massage, state.failure.code);
-                     BlocProvider.of<AsyncBloc>(context).add(OkEvent());
-                   }
-                   if(state is EditStatusDState){
-                     success(context);
-                     Phoenix.rebirth(context);
-                   }
+                    if (state is SyncDataErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                      BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+                    }
+                    if (state is IsActiveErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                      BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+                    }
+                    if (state is UpdateIsActiveErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                      BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+                    }
+                    if (state is getDataSucState) {
+                      BlocProvider.of<AsyncBloc>(context).add(SetDataSEvent());
+                    }
+                    if (state is IsActiveState) {
+                      BlocProvider.of<AsyncBloc>(context).add(UpdateRepEvent());
+                    }
+                    if (state is UpdateIsActiveState) {
+                      BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
+                    }
+                    if (state is SyncDataLoadingState) {
+                      loading(context, text: state.loading.toString());
+                    }
+                    if (state is SyncDataState) {
+                      BlocProvider.of<AsyncBloc>(context).add(EditEvent(2));
+                    }
+                    if (state is EditStatusDErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                      BlocProvider.of<AsyncBloc>(context).add(OkEvent());
+                    }
+                    if (state is EditStatusDState) {
+                      success(context);
+                      Phoenix.rebirth(context);
+                    }
                   },
-
-                    builder: (context, state)=>
-
-                        ElevatedButton(onPressed: (){
-
-                    BlocProvider.of<AsyncBloc>(context).add(PlanIsActiveEvent());
-                  },
+                  builder: (context, state) => ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<AsyncBloc>(context)
+                            .add(PlanIsActiveEvent());
+                      },
                       child: Text(
-                      "تحميل البيانات",
-                  )),
+                        "تحميل البيانات",
+                      )),
                 ),
               ],
             ),

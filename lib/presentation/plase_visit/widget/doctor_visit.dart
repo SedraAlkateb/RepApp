@@ -29,7 +29,7 @@ class _DoctorVisitState extends State<DoctorVisit>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SearchField(
+             SearchField(
               searchController: searchController,
               onPressed: (value) {
                 BlocProvider.of<VisitPlaceBloc>(context)

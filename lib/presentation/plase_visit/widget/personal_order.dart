@@ -25,7 +25,7 @@ class PersonalOrder extends StatelessWidget {
           height: AppSize.s8,
         ),
         CustomDropDown(
-          hintText: "نوع الطلب",
+          hintText: "لا شييء",
           items: type,
           prefixIcon: null,
           onChanged: (value) {
@@ -40,7 +40,7 @@ class PersonalOrder extends StatelessWidget {
             //   return "اختر نوع الطلب";
             // }
             return null;
-          },
+          }, errorText: '',
         ),
         Padding(
           padding: const EdgeInsets.only(top: AppPadding.p12),

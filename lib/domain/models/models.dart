@@ -1,8 +1,8 @@
+import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
 
 class VisitPharmacyModel {
   int id;
-
   String data;
   String note;
   int pharmacyId;
@@ -111,22 +111,24 @@ class OtherBrandSpPlanModel {
 class SpPlan {
   int id;
   int idSp;
+  int flagSp;
   int amount;
   String title;
   String brandType;
   int sumDoctor;
   int sumHospital;
+  int sumBrandHospital;
   SpPlan(this.id, this.amount, this.title, this.brandType, this.idSp,
-      this.sumDoctor, this.sumHospital);
+      this.flagSp, this.sumDoctor, this.sumHospital, this.sumBrandHospital);
 }
 
 class BrandAddition {
-int id;
+  int id;
   String title;
   String phTitle;
   int amount;
 
-  BrandAddition(this.id,this.title, this.phTitle, this.amount);
+  BrandAddition(this.id, this.title, this.phTitle, this.amount);
 }
 
 class BrandModel {
@@ -168,6 +170,17 @@ class OtherBrandModel {
   String brandType;
   OtherBrandModel(this.id, this.title, this.phTitle, this.flag,
       this.sampleCoast, this.Plan, this.amount, this.brandType);
+}
+
+class FutureBrandModel {
+  int id;
+  String title;
+  String phTitle;
+  int flag;
+  int amount;
+  String brandType;
+  FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount,
+      this.brandType);
 }
 
 class PharmacyBrandModel {
@@ -366,6 +379,16 @@ class VisitHospitalRequestBody {
   }
 }
 
+class ExceptionRequestBody {
+  List<ExceptionModel> list1;
+  ExceptionRequestBody(this.list1);
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': list1.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
 class VisitPharmacyAndPharmacy {
   PharmacyModel pharmacyModel;
   VisitPharmacyModel visitPharmacyModel;
@@ -379,7 +402,6 @@ class VisitDoctorAndDoctor {
 }
 
 class VisitHospitalAndHospital {
-  //
   HospitalModel hospitalModel;
   VisitHospitalModel visitHospitalModel;
   SpecDModel specModel;
@@ -429,12 +451,12 @@ class VisitDoctorModel {
     return {
       'id': id,
       'data': data,
-      'kaswn': kaswn,
-      'science': science,
-      'additaion': additaion,
+      'kaswn': kaswn ?? "",
+      'science': science ?? "",
+      'additaion': additaion ?? "",
       'doctorId': doctorId,
-      'flag': flag,
-      'target': target
+      'flag': flag ?? 0,
+      'target': target ?? ""
     };
   }
 
@@ -591,34 +613,49 @@ class SpecHospitalSp {
 class SpecDModel {
   int id;
   String title;
+  int flag;
   int sumDoctor;
   int sumHospital;
-  SpecDModel(this.id, this.title, this.sumDoctor, this.sumHospital);
+  int sumBrandHospital;
+  SpecDModel(this.id, this.title, this.flag, this.sumDoctor, this.sumHospital,
+      this.sumBrandHospital);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
+      'flag': flag,
       'sumDoctor': sumDoctor,
-      'sumHospital': sumHospital
+      'sumHospital': sumHospital,
+      'sumBrandHospital': sumBrandHospital,
     };
   }
 
   factory SpecDModel.fromJson(Map<String, dynamic> map) {
-    return SpecDModel(
-        map['id'], map['title'], map["sumDoctor"], map['sumHospital']);
+    return SpecDModel(map['id'], map['title'], map['flag'], map["sumDoctor"],
+        map['sumHospital'], map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap(Map<String, dynamic> map) {
-    return SpecDModel(map['specialization_id'], map['specialization_title'],
-        map["sumDoctor"], map['sumHospital']);
+    return SpecDModel(
+        map['specialization_id'],
+        map['specialization_title'],
+        map['specialization_flag'],
+        map["sumDoctor"],
+        map['sumHospital'],
+        map['sumBrandHospital']);
   }
   factory SpecDModel.fromMap2(Map<String, dynamic> map) {
-    return SpecDModel(
-        map['specialization_id'], map['specialization_title'], 0, 0);
+    return SpecDModel(map['specialization_id'], map['specialization_title'],
+        map['specialization_flag'], 0, 0, 0);
   }
   factory SpecDModel.fromMap1(
       Map<String, dynamic> map, Map<String, dynamic> map1) {
-    return SpecDModel(map['specialization_id'], map['specialization_title'],
-        map['sumDoctor'] ?? 0, map1['sumHospital'] ?? 0);
+    return SpecDModel(
+        map['specialization_id'],
+        map['specialization_title'],
+        map['specialization_flag'],
+        map['sumDoctor'] ?? 0,
+        map1['sumHospital'] ?? 0,
+        map1['sumBrandHospital'] ?? 0);
   }
 }
 
@@ -707,9 +744,19 @@ class DoctorModel {
   int spId;
   int? visited;
   String? workHours;
-  DoctorModel(this.id, this.title, this.placeId, this.address, this.placeTitle,
-      this.visits, this.note, this.rate, this.spTitle, this.spId,
-      this.workHours,{this.visited});
+  DoctorModel(
+      this.id,
+      this.title,
+      this.placeId,
+      this.address,
+      this.placeTitle,
+      this.visits,
+      this.note,
+      this.rate,
+      this.spTitle,
+      this.spId,
+      this.workHours,
+      {this.visited});
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -722,40 +769,153 @@ class DoctorModel {
       "rate": rate,
       "spTitle": spTitle,
       "spId": spId,
-      "workHours":workHours
+      "workHours": workHours
     };
   }
 
   factory DoctorModel.fromMap(Map<String, dynamic> map) {
     return DoctorModel(
-      map['id'],
-      map['title'],
-      map['placeId'],
-      map['address'],
-      map["placeTitle"],
-      map["visits"],
-      map["note"],
-      map["rate"],
-      map["spTitle"],
-      map['spId'],
-      visited: map["visited"],
-      map['workHours']
-    );
+        map['id'],
+        map['title'],
+        map['placeId'],
+        map['address'],
+        map["placeTitle"],
+        map["visits"],
+        map["note"],
+        map["rate"],
+        map["spTitle"],
+        map['spId'],
+        visited: map["visited"],
+        map['workHours']);
   }
   factory DoctorModel.fromMap1(Map<String, dynamic> map) {
     return DoctorModel(
-      (map['doctor_id']),
-      map['doctor_title'],
-      map['doctor_placeId'],
-      map['doctor_address'],
-      map['doctor_placeTitle'],
-      map['doctor_visits'],
-      visited: map['doctor_visited'],
+        (map['doctor_id']),
+        map['doctor_title'],
+        map['doctor_placeId'],
+        map['doctor_address'],
+        map['doctor_placeTitle'],
+        map['doctor_visits'],
+        visited: map['doctor_visited'],
+        map["note"],
+        map["rate"],
+        map['doctor_spTitle'],
+        map['doctor_spId'],
+        map['workHours']);
+  }
+}
+
+//
+class DoctorIssueModel {
+  String docTitle;
+  String spTitle;
+  String address;
+  String visitDate;
+  String? issue;
+  bool isRead;
+  DoctorIssueModel(this.docTitle, this.spTitle, this.address, this.visitDate,
+      this.issue, this.isRead);
+  Map<String, dynamic> toMap() {
+    return {
+      'docTitle': docTitle,
+      'spTitle': spTitle,
+      'address': address,
+      'visitDate': visitDate,
+      "issue": issue,
+      "isRead": isRead
+    };
+  }
+
+  factory DoctorIssueModel.fromMap(Map<String, dynamic> map) {
+    return DoctorIssueModel(
+      map['docTitle'],
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
+      map["issue"],
+      map["isRead"],
+    );
+  }
+  factory DoctorIssueModel.fromMap1(Map<String, dynamic> map) {
+    return DoctorIssueModel(
+      (map['docTitle']),
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
+      map['issue'],
+      map["isRead"],
+    );
+  }
+}
+
+//
+class DoctorNoteModel {
+  String docTitle;
+  String spTitle;
+  String address;
+  String visitDate;
+  String? note;
+  bool isRead;
+  DoctorNoteModel(this.docTitle, this.spTitle, this.address, this.visitDate,
+      this.note, this.isRead);
+  Map<String, dynamic> toMap() {
+    return {
+      'docTitle': docTitle,
+      'spTitle': spTitle,
+      'address': address,
+      'visitDate': visitDate,
+      "note": note,
+      "isRead": isRead
+    };
+  }
+
+  factory DoctorNoteModel.fromMap(Map<String, dynamic> map) {
+    return DoctorNoteModel(
+      map['docTitle'],
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
       map["note"],
-      map["rate"],
-      map['doctor_spTitle'],
-      map['doctor_spId'],
-      map['workHours']
+      map["isRead"],
+    );
+  }
+  factory DoctorNoteModel.fromMap1(Map<String, dynamic> map) {
+    return DoctorNoteModel(
+      (map['docTitle']),
+      map['spTitle'],
+      map['address'],
+      map['visitDate'],
+      map['note'],
+      map["isRead"],
+    );
+  }
+}
+
+class NoVisitDocModel {
+  String docTitle;
+  String spTitle;
+  String address;
+  String rate;
+  String? visits;
+  NoVisitDocModel(
+      this.docTitle, this.spTitle, this.address, this.rate, this.visits);
+  Map<String, dynamic> toMap() {
+    return {
+      'docTitle': docTitle,
+      'spTitle': spTitle,
+      'address': address,
+      'rate': rate,
+      "visits": visits,
+    };
+  }
+
+  factory NoVisitDocModel.fromMap(Map<String, dynamic> map) {
+    return NoVisitDocModel(
+      map['docTitle'],
+      map['spTitle'],
+      map['address'],
+      map['rate'],
+      map["visits"],
     );
   }
 }
@@ -881,16 +1041,20 @@ class LoginModel {
   String token;
   int repId;
   int? otherPlanId = -1;
-  int activePlanId;
+  int? activePlanId;
   int? otherStatus = -1;
   int percentage;
   int samplesCount;
   String name;
   int isLogin;
-  String endDate;
-  String startDate;
+  String? endDate;
+  String? startDate;
+  int flag;
+  int recipesCount;
   String? otherStartDate;
   String? otherEndDate;
+  int flag1;
+  String repType;
   LoginModel(
       this.samplesCount,
       this.token,
@@ -903,39 +1067,51 @@ class LoginModel {
       this.isLogin,
       this.startDate,
       this.endDate,
+      this.flag,
+      this.recipesCount,
+      this.flag1,
+      this.repType,
       {this.otherStartDate,
       this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
-      'samplesCount':samplesCount,
+      'samplesCount': samplesCount,
       'token': token,
       'repId': repId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
-      'activePlanId': activePlanId,
+      'activePlanId': activePlanId == null ? -5 : activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
       'isLogin': 1,
       'endDate': endDate,
       'startDate': startDate,
+      'flag': flag,
+      'flag1': flag1,
+      'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
+      'repType': repType
     };
   }
 
   factory LoginModel.fromMap(Map<String, dynamic> map) {
     return LoginModel(
-      map['samplesCount'],
-      map['token'],
-      map['repId'],
-      map['otherPlanId'],
-      map['activePlanId'],
-      map['otherStatus'],
-      map['name'],
-      map['percentage'],
-      map['isLogin'],
+      map['samplesCount'] ?? 0,
+      map['token'] ?? "",
+      map['repId'] ?? 0,
+      map['otherPlanId'] ?? 0,
+      map['activePlanId'] ?? -5,
+      map['otherStatus'] ?? 0,
+      map['name'] ?? "",
+      map['percentage'] ?? 0,
+      map['isLogin'] ?? 0,
       map['endDate'] ?? "",
       map['startDate'] ?? "",
+      map['flag'] ?? 0,
+      map['recipesCount'] ?? 0,
+      map['flag1'] ?? 0,
+      map['repType'] ?? "0",
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );
@@ -976,6 +1152,12 @@ class BrandSpModel {
   }
 }
 
+class Rep {
+  int activeRepId;
+  int? otherRepId;
+  Rep(this.activeRepId, {this.otherRepId});
+}
+
 class PlanBrandModel {
   int id;
   int spId;
@@ -999,6 +1181,38 @@ class PlanBrandModel {
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
     return PlanBrandModel(map['id'], map['spId'], map['brandId'],
         map['repPlanId'], map['brandType'], map['amount']);
+  }
+}
+
+class ExceptionModel {
+  String exceptionModel;
+  String type;
+  String createDate;
+  ExceptionModel(this.exceptionModel, this.type, {String? createDate})
+      : createDate = createDate ?? DateTime.now().toString();
+  Map<String, dynamic> toMap() {
+    return {
+      'exception': exceptionModel.toString(),
+      'type': type.toString(),
+      'createDate': createDate
+    };
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'repId': UserInfo.repId,
+      'issue': exceptionModel.toString(),
+      'type': type.toString(),
+      'createDate': createDate
+    };
+  }
+
+  factory ExceptionModel.fromMap(Map<String, dynamic> map) {
+    return ExceptionModel(
+      map['exception'],
+      map['type'],
+      createDate: map['createDate'],
+    );
   }
 }
 
@@ -1081,8 +1295,18 @@ class HospitalSpAllModel {
   int visit;
   int? visited;
   String? titleSp;
-  HospitalSpAllModel(this.hospitalId, this.title, this.address, this.placeTitle,
-      this.note, this.rate, this.totalDocs, this.visit, this.titleSp,
+  int? flagSp;
+  HospitalSpAllModel(
+      this.hospitalId,
+      this.title,
+      this.address,
+      this.placeTitle,
+      this.note,
+      this.rate,
+      this.totalDocs,
+      this.visit,
+      this.titleSp,
+      this.flagSp,
       {this.visited});
   Map<String, dynamic> toMap() {
     return {
@@ -1095,7 +1319,8 @@ class HospitalSpAllModel {
       'totalDocs': totalDocs,
       'visit': visit,
       'visited': visited,
-      'titleSp': titleSp
+      'titleSp': titleSp,
+      'flagSp': flagSp
     };
   }
 
@@ -1110,6 +1335,199 @@ class HospitalSpAllModel {
         map['totalDocs'],
         map['visit'],
         visited: map['visited'],
-        map['titleSp']);
+        map['titleSp'],
+        map['flagSp']);
   }
+}
+
+class BrandRes {
+  int id;
+  String title_en;
+  BrandRes(this.id, this.title_en);
+}
+
+class StatePlan {
+  int index;
+  int state;
+  StatePlan(this.index, this.state);
+//state 0 true , state 1 more state 2 0
+}
+
+class ReciRequest {
+  int recipeType;
+  String repId;
+  String type;
+  String docId;
+  String spName;
+  String brand_1;
+  String address;
+  String phone;
+  String total;
+  String? flagImage1;
+  String? flagImage2;
+  String? note1;
+  String? note2;
+  String? note_emp;
+  File? image1;
+  File? image2;
+  String? brand_2;
+  String? brand_3;
+  String? brand_4;
+
+  ReciRequest(
+    this.recipeType,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total, {
+    this.note1,
+    this.note2,
+    this.flagImage1,
+    this.flagImage2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
+}
+
+class CopyReciRequest {
+  int id;
+  int repId;
+  int type;
+  int docId;
+  String spName;
+  BrandRes brand_1;
+  BrandRes? brand_2;
+  BrandRes? brand_3;
+  BrandRes? brand_4;
+  String? note1;
+  String? note2;
+  String address;
+  String phone;
+  String total;
+  String? note_emp;
+  String? image1;
+  String? image2;
+
+  CopyReciRequest(
+    this.id,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total, {
+    this.note1,
+    this.note2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
+}
+
+class StateImage {
+  int id;
+  String type;
+  StateImage(this.id, this.type);
+}
+
+List<StateImage> stateImage = [
+  StateImage(0, "لا يوجد صورة"),
+  StateImage(1, "تكرار صورة"),
+  StateImage(2, "اضافة صورة")
+];
+
+class LoginRequest {
+  String email;
+  String password;
+
+  LoginRequest(this.email, this.password);
+}
+
+class AllRepresentative {
+  int id;
+  String name;
+  int number;
+  AllRepresentative(this.id, this.name, this.number);
+}
+
+class InventoryModel {
+  String title;
+  String used;
+  String total;
+  int rest;
+  InventoryModel(this.title, this.used, this.total, this.rest);
+}
+class AsRead {
+  int visitId;
+  int userId;
+  int status;
+  int reqType;
+  AsRead(this.visitId, this.userId, this.status, this.reqType);
+}
+class InfoRep {
+  int id;
+  String name;
+  String mobile;
+  String address;
+  String sampleCount;
+  String recipesCount;
+  int totalVisit;
+  int visitDon;
+  int visitNoteYet;
+  InfoRep(this.id, this.name, this.mobile, this.address, this.sampleCount,
+      this.recipesCount, this.totalVisit, this.visitDon, this.visitNoteYet);
+}
+
+class VisitRepSen {
+  int repId;
+  int userId;
+  VisitRepSen(this.repId, this.userId);
+}
+
+class RepVisitsModel {
+  String visitId;
+  String visitDate;
+  String placeTitle;
+  String docTitle;
+  String rate;
+  String spTitle;
+  String note;
+  String issue;
+  String special;
+  String target;
+  bool flag;
+  List<String> samples;
+  RepVisitsModel(
+      this.visitId,
+      this.visitDate,
+      this.placeTitle,
+      this.docTitle,
+      this.rate,
+      this.spTitle,
+      this.note,
+      this.issue,
+      this.special,
+      this.target,
+      this.flag,
+      this.samples);
+}
+class BrandFlag{
+  int id;
+  String brand;
+  int flag;
+
+  BrandFlag(this.id, this.brand, this.flag);
 }

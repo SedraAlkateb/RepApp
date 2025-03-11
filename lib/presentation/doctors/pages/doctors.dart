@@ -46,22 +46,34 @@ class Doctors extends StatelessWidget {
                   SearchField(
                     searchController: searchDocController,
                     onPressed: (value) {
-                      BlocProvider.of<DoctorsBloc>(context).add(SearchDocEvent(value));
+                      BlocProvider.of<DoctorsBloc>(context)
+                          .add(SearchDocEvent(value));
                     },
                   ),
                 ],
               ),
             ),
             BlocConsumer<DoctorsBloc, DoctorsState>(
+              buildWhen: (previous, current) => current is AllDoctorState||current is AllDoctorEmptyState,
               listener: (context, state) {
                 if (state is AllDoctorErrorState) {
                   error(context, state.failure.massage, state.failure.code);
                 }
               },
               builder: (context, state) {
+                List<DoctorModel> doctorModel=context.watch<DoctorsBloc>().doctor;
                 if (state is AllDoctorState) {
-                  List<DoctorModel> doctorModel = state.doctor;
-
+                  doctorModel = state.doctor;
+                }
+                if (state is AllDoctorEmptyState) {
+                  return SliverList(
+                      delegate: SliverChildListDelegate([
+                        SizedBox(
+                          height: 100,
+                        ),
+                        emptyFullScreen(context)
+                      ]));
+                }
                   return SliverList(
                     delegate: SliverChildListDelegate([
                       Padding(
@@ -83,7 +95,8 @@ class Doctors extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DoctorDetails(doctor: doctor),
+                                builder: (context) =>
+                                    DoctorDetails(doctor: doctor),
                               ),
                             );
                           },
@@ -97,7 +110,8 @@ class Doctors extends StatelessWidget {
                                   ColorManager.secondaryColor7,
                                 ],
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(AppSize.s8)),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -115,17 +129,8 @@ class Doctors extends StatelessWidget {
                       }).toList(),
                     ]),
                   );
-                }
-                if(state is AllDoctorEmptyState){
-                  return SliverList(
-                      delegate: SliverChildListDelegate(
 
-                          [
-                            SizedBox(height: 100,),
-                            emptyFullScreen(context)
-                          ]));
-                }
-                return SliverToBoxAdapter(child: SizedBox());
+
               },
             ),
           ],

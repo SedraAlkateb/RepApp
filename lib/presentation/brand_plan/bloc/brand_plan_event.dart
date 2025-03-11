@@ -29,6 +29,12 @@ class UpdateEvent extends BrandPlanEvent{
  List<Object?> get props => [];
 
 }
+class UpdateSaveEvent extends BrandPlanEvent{
+
+ @override
+ List<Object?> get props => [];
+
+}
 class UpdateAmountSucEvent extends BrandPlanEvent{
 
  @override
@@ -45,6 +51,15 @@ class UpdateAmount1SucEvent extends BrandPlanEvent{
 class SendToS extends BrandPlanEvent{
 
  @override
+ List<Object?> get props => [];
+
+}
+class SearchBrandEvent extends BrandPlanEvent{
+  final  List<BrandSpPlanModel> brand;
+ final String value;
+  SearchBrandEvent({required this.value,required this.brand});
+ @override
+
  List<Object?> get props => [];
 
 }

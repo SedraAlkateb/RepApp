@@ -43,24 +43,22 @@ class DrawerPage extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-
-
-
-
-                    UserInfo.name??"",
+                    UserInfo.name ?? "",
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
             ),
           ),
-
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
             leading: Icon(Icons.location_city_outlined,
                 color: ColorManager.secondaryColor4),
-            title:  Text('إجراء زيارة',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title: Text(
+              'إجراء زيارة',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -83,7 +81,10 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.location_history_outlined,
                 color: ColorManager.secondaryColor4),
-            title:  Text('الزيارات',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title: Text(
+              'الزيارات',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -102,12 +103,45 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
+          UserInfo.repType != "7"
+              ? ListTile(
+                  focusColor: ColorManager.secondaryColor,
+                  minTileHeight: 10,
+                  leading: Icon(Icons.list_alt_outlined,
+                      color: ColorManager.secondaryColor4),
+                  title: Text(
+                    'تقارير المندوبين',
+                    style: TextStyle(color: ColorManager.secondaryColor1),
+                  ),
+                  onTap: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        Routes.AllRepSenior,
+                        (route) => false,
+                      );
+                    });
+                  },
+                )
+              : SizedBox(),
+          UserInfo.repType != "7"
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Divider(
+                    thickness: 0.5,
+                    color: ColorManager.hintGrey,
+                  ),
+                )
+              : SizedBox(),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
             leading: Icon(Icons.medical_services_outlined,
                 color: ColorManager.secondaryColor4),
-            title:  Text('الاختصاصات',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title: Text(
+              'الإختصاصات',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -130,7 +164,10 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading:
                 Icon(Icons.group_outlined, color: ColorManager.secondaryColor4),
-            title:  Text('الأطباء ',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title: Text(
+              'الأطباء ',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -151,12 +188,15 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.local_hospital_outlined,
                 color: ColorManager.secondaryColor4),
-            title:  Text('المشافي ',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title: Text(
+              'المشافي ',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.hospital,
-                (route) => false,
+                    (route) => false,
               );
             },
           ),
@@ -195,7 +235,10 @@ class DrawerPage extends StatelessWidget {
             minTileHeight: 10,
             leading: Icon(Icons.medication_outlined,
                 color: ColorManager.secondaryColor4),
-            title:  Text('الأصناف',style: TextStyle(color: ColorManager.secondaryColor1),),
+            title: Text(
+              'الأصناف',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -207,33 +250,37 @@ class DrawerPage extends StatelessWidget {
             },
           ),
           Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(thickness:0.5, color: ColorManager.hintGrey),
-        ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(thickness: 0.5, color: ColorManager.hintGrey),
+          ),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
-             leading:  Icon(Icons.list_alt_outlined ,color: ColorManager.secondaryColor4),
-            title:  Text('الخطط',style: TextStyle(color: ColorManager.secondaryColor1)),
+            leading: Icon(Icons.list_alt_outlined,
+                color: ColorManager.secondaryColor4),
+            title: Text('الخطط',
+                style: TextStyle(color: ColorManager.secondaryColor1)),
             onTap: () {
-             WidgetsBinding.instance.addPostFrameCallback((_) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushNamed(
                   context,
                   Routes.brandPlan,
                 );
-
               });
             },
-          ), 
-           Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(thickness:0.5, color: ColorManager.hintGrey,),
-        ),  
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
+            ),
+          ),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
-            leading:
-                Icon(Icons. wifi_protected_setup_outlined, color: ColorManager.secondaryColor4),
+            leading: Icon(Icons.wifi_protected_setup_outlined,
+                color: ColorManager.secondaryColor4),
             title: Text(
               'المزامنة',
               style: TextStyle(color: ColorManager.secondaryColor1),
@@ -267,13 +314,30 @@ class DrawerPage extends StatelessWidget {
             ),
             onTap: () {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
-                  context,
-                    Routes.logout
-                );
+                Navigator.pushNamed(context, Routes.logout);
               });
             },
           ),
+          SizedBox(
+            height: 35,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              textAlign: TextAlign.left,
+              'Version 4',
+              style: TextStyle(
+                color: ColorManager.secondaryColor7,
+                shadows: [
+                  Shadow(
+                    offset: Offset(1.0, 1.5),
+                    blurRadius: 1.0,
+                    color: ColorManager.secondaryColor.withOpacity(0.5),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

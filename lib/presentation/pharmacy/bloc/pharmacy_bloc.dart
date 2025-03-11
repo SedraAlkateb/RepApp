@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_pharmacy_sql_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -29,11 +30,11 @@ class PharmacyBloc extends Bloc<PharmacyEvent, PharmacyState> {
     }
       else if (event is SearchphEvent) {
         List<PharmacyModel> PharmacyModelList ;
-
+        String search = normalizeText(event.contant);
        PharmacyModelList=Pharmacy.where((value) {
-          if (value.title.contains(event.contant)) {
+          if (normalizeText(value.title).contains(search)) {
           return true;
-          }  if (value.address.contains(event.contant)) {
+          }  if (normalizeText(value.address).contains(search)) {
           return true;
           }
           return false;

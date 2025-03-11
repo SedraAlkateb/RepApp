@@ -1,0 +1,23 @@
+
+import 'package:dartz/dartz.dart';
+import 'package:domina_app/data/responses/responses.dart';
+import 'package:domina_app/domain/repostitory/repository.dart';
+import 'package:domina_app/data/network/failure.dart';
+import 'package:equatable/equatable.dart';
+
+class CheckRepUsecase  extends Equatable {
+  final Repository _repository;
+  CheckRepUsecase(this._repository);
+  Future<Either<Failure, CheckRepResponse>> execute(int id) async{
+    return await _repository.checkRep(id);
+  }
+
+  @override
+
+  List<Object?> get props => [_repository];
+
+}
+
+
+
+

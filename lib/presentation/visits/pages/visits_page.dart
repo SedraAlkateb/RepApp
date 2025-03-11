@@ -35,7 +35,8 @@ class VisitsPage extends StatelessWidget {
               ),
               Tab(
                 icon: context.watch<VisitBloc>().current == 1
-                    ? Icon(Icons.local_hospital, color: ColorManager.secondaryColor1)
+                    ? Icon(Icons.local_hospital,
+                        color: ColorManager.secondaryColor1)
                     : Icon(Icons.local_hospital),
                 text: 'المشافي',
               ),
@@ -58,10 +59,7 @@ class VisitsPage extends StatelessWidget {
                 onPressed: () {
                   initAsyncInModule();
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamed(
-                        context,
-                        Routes .asyncIn
-                    );
+                    Navigator.pushNamed(context, Routes.asyncIn);
                   });
                 },
                 backgroundColor: ColorManager.secondaryColor1,

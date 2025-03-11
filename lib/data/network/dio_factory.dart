@@ -4,16 +4,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:domina_app/app/app_preferences.dart';
 import 'package:domina_app/app/constants.dart';
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/error_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-
 const String APPLICATION_JSON="application/json";
-
 const String MULTIPART="multipart/form-data";
 const String CONTENT_TYPE="contentType";
 const String ACCEPT="accept";
@@ -21,8 +18,7 @@ const String AUTHORIZATION="authorization";
 const String DEFAULT_LANGUAGE="lang";
 
 class DioFactory{
-  final AppPreferences _appPreferences;
-  DioFactory(this._appPreferences);
+  DioFactory();
 
   Future<Dio> getDio() async {
     Dio dio= Dio();
@@ -32,10 +28,9 @@ class DioFactory{
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
-    String  to=await _appPreferences.getToken()??"";
+    String  to=UserInfo.token??"";
     String token ="Bearer " + to;
     String language ="ar";
-
     Map<String,String> headers={
       CONTENT_TYPE:MULTIPART,
       ACCEPT:APPLICATION_JSON,
@@ -44,13 +39,12 @@ class DioFactory{
       DEFAULT_LANGUAGE:language,
       "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
-
     };
     dio.options=BaseOptions(
         baseUrl: Constants.baseUrl,
         headers: headers,
-      connectTimeout: Duration(seconds: 15),
-      receiveTimeout: Duration(seconds: 20),
+      connectTimeout: Duration(seconds: 50),
+      receiveTimeout: Duration(seconds: 50),
     );
     dio.interceptors.add( MyApiInterceptor());
     if(!kReleaseMode){
@@ -66,7 +60,6 @@ class DioFactory{
 }
 
 class MyApiInterceptor extends Interceptor {
-  final AppPreferences _appPreferences =instance<AppPreferences>();
   @override
   Future<void> onRequest(
       RequestOptions options,
@@ -74,7 +67,7 @@ class MyApiInterceptor extends Interceptor {
       ) async {
     // Add the token to the request headers
 
-    String? authToken =await _appPreferences.getToken();
+    String? authToken =UserInfo.token;
     String lang ="en";
 
     if (authToken != null) {
