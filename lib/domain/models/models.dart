@@ -44,55 +44,6 @@ class VisitPharmacyModel {
   }
 }
 
-class VisitBrandPharmacyModel {
-  int id;
-  int visitId;
-  int brandId;
-  int amount = 1;
-  int? flag = 0;
-  VisitBrandPharmacyModel(
-      this.id, this.visitId, this.brandId, this.amount, this.flag);
-  Map<String, dynamic> toJson() {
-    return {
-      'visitId': visitId,
-      'brandId': brandId,
-      'amount': amount == 0 ? 1 : amount,
-      //  'flag': flag
-    };
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'visitId': visitId,
-      'brandId': brandId,
-      'amount': amount == 0 ? 1 : amount,
-      'flag': 1
-    };
-  }
-
-  factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-        map['id'],
-        map['visitId'],
-        map['brandId'],
-        int.parse(
-          map['amount'],
-        ),
-        1);
-  }
-
-  factory VisitBrandPharmacyModel.fromJson1(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-        map['id'],
-        map['visitId'],
-        map['brandId'],
-        int.parse(
-          map['amount'],
-        ),
-        map['flag']);
-  }
-}
 
 class BrandSpPlanModel {
   BrandModel brandModel;
@@ -182,12 +133,61 @@ class FutureBrandModel {
   FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount,
       this.brandType);
 }
+class VisitBrandPharmacyModel {
+  int id;
+  int visitId;
+  int brandId;
+  int amount = 1;
+  int? flag = 0;
+  VisitBrandPharmacyModel(
+      this.id, this.visitId, this.brandId, this.amount, this.flag);
+  Map<String, dynamic> toJson() {
+    return {
+      'visitId': visitId,
+      'brandId': brandId,
+      'amount': amount == 0 ? 1 : amount,
+      //  'flag': flag
+    };
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'visitId': visitId,
+      'brandId': brandId,
+      'amount': amount == 0 ? 1 : amount,
+      'flag': 1
+    };
+  }
+
+  factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+        map['id'],
+        map['visitId'],
+        map['brandId'],
+        int.parse(
+          map['amount'],
+        ),
+        1);
+  }
+
+  factory VisitBrandPharmacyModel.fromJson1(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+        map['id'],
+        map['visitId'],
+        map['brandId'],
+        int.parse(
+          map['amount'],
+        ),
+        map['flag']);
+  }
+}
 
 class PharmacyBrandModel {
   int id;
   String title;
   String phTitle;
-  String? amount;
+  String amount;
   Map<String, dynamic> toMap() {
     return {
       'id': id,

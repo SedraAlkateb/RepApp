@@ -243,7 +243,7 @@ class AppSqlApi extends AppSqlApiAbs {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = (maps[i]['sumDoctor'] ?? 0) as int;
           int sumBrandHospital =
-              (maps1[i]['sumBrandHospital'] ?? 0) as int; //الجمع للخطة
+              (maps1[i]['sumBrandHospital'] ?? 0) as int;
           int sumHospital = (maps1[i]['sumHospital'] ?? 0) as int;
           await txn.update(
             'specialization',
