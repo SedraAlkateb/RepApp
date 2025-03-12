@@ -267,6 +267,9 @@ Future<void> initPlacesModule() async {
 
 Future<void> initVisitsModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorSqlUsecase>()) {
+    if (!GetIt.I.isRegistered<AllBrandsFlagSqlUsecase>()) {
+    instance.registerFactory<AllBrandsFlagSqlUsecase>(
+            () => AllBrandsFlagSqlUsecase(instance()));}
     instance.registerFactory<UpdateHospitalUsecase>(
         () => UpdateHospitalUsecase(instance()));
     instance.registerFactory<UpdateDoctorUsecase>(
@@ -280,7 +283,7 @@ Future<void> initVisitsModule() async {
     instance.registerFactory<AllVisitHospitalSqlUsecase>(
         () => AllVisitHospitalSqlUsecase(instance()));
     instance.registerFactory<VisitBloc>(() => VisitBloc(
-        instance(), instance(), instance(), instance(), instance(), instance()
+        instance(), instance(), instance(), instance(), instance(), instance(), instance()
         //  ,instance(),instance(),instance()
         ));
   }

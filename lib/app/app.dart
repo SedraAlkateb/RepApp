@@ -167,6 +167,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) {
             final bloc = instance<VisitBloc>();
             bloc.add(VisitDoctorEvent());
+            bloc.add(BrandFlagEditeEvent());
             return bloc;
           },
         ),

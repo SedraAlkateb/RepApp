@@ -104,3 +104,32 @@ class UpdateVisitPharmacyEvent extends VisitEvent{
   List<Object?> get props => [data];
 }
 
+class IsBrandEvent extends VisitEvent {
+
+  @override
+  List<Object?> get props => [];
+}
+class BrandFlagEditeEvent extends VisitEvent{
+  BrandFlagEditeEvent();
+  @override
+  List<Object?> get props => [];
+}
+class SelectBrandEvent extends VisitEvent{
+  final  BrandModel brandModel;
+  SelectBrandEvent(this.brandModel);
+  @override
+  List<Object?> get props => [brandModel];
+}
+class RemoveBrandEvent extends VisitEvent {
+  final  PharmacyBrandModel brandModel;
+  RemoveBrandEvent(this.brandModel);
+  @override
+  List<Object?> get props => [brandModel];
+}
+class EditAmountBrandEvent extends VisitEvent{
+  final  int index;
+  final int brand;
+  EditAmountBrandEvent(this.index,this.brand);
+  @override
+  List<Object?> get props => [index,brand];
+}
