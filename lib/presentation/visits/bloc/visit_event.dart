@@ -83,7 +83,8 @@ class UpdateVisitDoctorEvent extends VisitEvent{
  final String? kas;
  final  String? sc;
  final String? target;
-  UpdateVisitDoctorEvent({ this.kas,this.sc, required this.id,this.target});
+ final  List<PharmacyBrandModel>? selectBrand;
+  UpdateVisitDoctorEvent({ this.kas,this.sc, required this.id,this.target,this.selectBrand});
   @override
   List<Object?> get props => [kas,sc];
 }
@@ -92,7 +93,8 @@ class UpdateVisitHospitalEvent extends VisitEvent{
   final String? kas;
   final  String? sc;
   final String? target;
-  UpdateVisitHospitalEvent({ this.kas,this.sc, required this.id,this.target});
+  final  List<PharmacyBrandModel>? selectBrand;
+  UpdateVisitHospitalEvent({ this.kas,this.sc, required this.id,this.target,this.selectBrand});
   @override
   List<Object?> get props => [kas,sc];
 }

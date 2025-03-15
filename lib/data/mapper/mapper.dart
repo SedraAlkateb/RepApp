@@ -150,6 +150,8 @@ extension RepresentativeMapper on RepresentativeResponse? {
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
       this?.unRead ?? Constants.zero,
+      int.parse(this?.activePlan ?? "0"),
+
     );
   }
 }
@@ -580,7 +582,6 @@ extension VisitNotesMapper on VisitNotesResponse? {
       this?.address ?? Constants.empty,
       this?.visitDate ?? Constants.empty,
       this?.note ?? Constants.empty,
-      false
     );
   }
 }
@@ -603,8 +604,6 @@ extension VisitIssueMapper on VisitIssueResponse? {
         this?.address ?? Constants.empty,
         this?.visitDate ?? Constants.empty,
         this?.issue ?? Constants.empty,
-        false
-
     );
   }
 }

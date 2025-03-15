@@ -984,8 +984,10 @@ class RepresentativeResponse {
   String? name;
   @JsonKey(name: "unRead")
   int? unRead;
+  @JsonKey(name: "activePlan")
+  String? activePlan;
 
-  RepresentativeResponse(this.id, this.name, this.unRead);
+  RepresentativeResponse(this.id, this.name, this.unRead,this.activePlan);
   // from json
   factory RepresentativeResponse.fromJson(Map<String, dynamic> json) =>
       _$RepresentativeResponseFromJson(json);

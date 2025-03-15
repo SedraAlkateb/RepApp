@@ -181,7 +181,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       if (event is UpdateVisitDoctorEvent) {
         print(event.target);
         (await updateDoctorUsecase.execute(
-            event.id, event.sc, event.kas, event.target))
+            event.id, event.sc, event.kas, event.target,event.selectBrand))
             .fold((failure) {
           print(failure.massage);
           emit(UpdateVisitDoctorErrorState(failure: failure));
@@ -191,7 +191,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       }
       if (event is UpdateVisitHospitalEvent) {
         (await updateHospitalUsecase.execute(
-            event.id, event.sc, event.kas, event.target))
+            event.id, event.sc, event.kas, event.target,event.selectBrand))
             .fold((failure) {
           print(failure.massage);
           emit(UpdateVisitHospitalErrorState(failure: failure));

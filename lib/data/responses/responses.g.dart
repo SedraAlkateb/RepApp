@@ -1017,6 +1017,7 @@ RepresentativeResponse _$RepresentativeResponseFromJson(
       json['id'] as String?,
       json['name'] as String?,
       (json['unRead'] as num?)?.toInt(),
+      json['activePlan'] as String?,
     );
 
 Map<String, dynamic> _$RepresentativeResponseToJson(
@@ -1025,6 +1026,7 @@ Map<String, dynamic> _$RepresentativeResponseToJson(
       'id': instance.id,
       'name': instance.name,
       'unRead': instance.unRead,
+      'activePlan': instance.activePlan,
     };
 
 AllRepresentativeResponse _$AllRepresentativeResponseFromJson(

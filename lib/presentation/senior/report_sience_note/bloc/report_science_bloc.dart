@@ -64,7 +64,7 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
             doctorNote[event.id].address,
             doctorNote[event.id].visitDate,
             doctorNote[event.id].note,
-            event.isRead);
+           );
         doctorNoteModel[event.id] = doctorNote1;
         doctorNote[event.id] = doctorNote1;
         emit(SenAsReadState(doctorNote));

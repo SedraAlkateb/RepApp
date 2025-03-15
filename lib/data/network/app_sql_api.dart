@@ -100,6 +100,8 @@ abstract class AppSqlApiAbs {
   Future<List<PlanBrandModel>> planBrandsAs();
   Future<void> exceptionApi(ExceptionModel exceptionModel);
   Future<List<ExceptionModel>> allException();
+  Future<NumVisit> numVisit();
+
 }
 
 class AppSqlApi extends AppSqlApiAbs {
@@ -256,6 +258,7 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
+
       });
       return "";
     } catch (error) {
@@ -458,9 +461,12 @@ class AppSqlApi extends AppSqlApiAbs {
         UserInfo.flag1 = 0;
       }
       return LoginModel.fromMap(results[0]);
-    } else {
+    }
+
+    else {
       return null;
     }
+
   }
 
   Future<Map<String, dynamic>> fetchTotalSums(Database db) async {
@@ -1014,6 +1020,7 @@ class AppSqlApi extends AppSqlApiAbs {
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
@@ -1034,6 +1041,19 @@ class AppSqlApi extends AppSqlApiAbs {
         whereArgs: [id],
       );
     }
+    await mydb.delete(
+      'visit_brand_hospital',
+      where: 'visitId = ?',
+      whereArgs: [id],
+    );
+    if (selectBrand != null && selectBrand.isNotEmpty) {
+      for (var selectBrandDoctor in selectBrand) {
+        mydb.insert(
+          'visit_brand_hospital',
+          selectBrandDoctor.toMapEditBrand(selectBrandDoctor, id),
+        );
+      }
+    }
   }
 
   Future<void> updateVisitHospitalFields({
@@ -1041,6 +1061,7 @@ class AppSqlApi extends AppSqlApiAbs {
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
@@ -1061,8 +1082,21 @@ class AppSqlApi extends AppSqlApiAbs {
         whereArgs: [id],
       );
     }
+    /////////////////////////////////////////////////////////
+    await mydb.delete(
+      'visit_brand_hospital',
+      where: 'visitId = ?',
+      whereArgs: [id],
+    );
+    if (selectBrand != null && selectBrand.isNotEmpty) {
+      for (var selectBrandDoctor in selectBrand) {
+        mydb.insert(
+          'visit_brand_hospital',
+          selectBrandDoctor.toMapEditBrand(selectBrandDoctor, id),
+        );
+      }
+    }
   }
-
   getPharmaciesVisit() async {
     final db = await databaseHelper.database;
     await db.transaction((txn) async {
@@ -1471,4 +1505,21 @@ class AppSqlApi extends AppSqlApiAbs {
       return ExceptionModel.fromMap(maps[i]);
     });
   }
+
+  @override
+  Future<NumVisit> numVisit() async {
+    Database? mydb = await databaseHelper.database;
+
+    final List<Map<String, dynamic>> hospitalResult = await mydb.rawQuery(
+        '''SELECT COUNT(*) as count FROM visit_hospital'''
+    );
+    final List<Map<String, dynamic>> doctorResult = await mydb.rawQuery(
+        '''SELECT COUNT(*) as count FROM visit_doctor'''
+    );
+    int visitHospital = hospitalResult.first['count'] ?? 0;
+    int visitDoctor = doctorResult.isNotEmpty ? doctorResult.first['count'] ?? 0 : 0;
+
+    return NumVisit(visitDoctor, visitHospital);
+  }
+
 }
