@@ -33,7 +33,12 @@ final class FutureSpRepErrorState extends FutureRepState {
   @override
   List<Object?> get props => [failure];
 }
-
+final class FutureChangePlanBrandTypeErrorState extends FutureRepState {
+  final Failure failure;
+  FutureChangePlanBrandTypeErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
 final class FutureSpRepLoadingState extends FutureRepState {
   @override
   FutureSpRepLoadingState();

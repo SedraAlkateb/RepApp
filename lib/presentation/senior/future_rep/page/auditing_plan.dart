@@ -71,7 +71,7 @@ class _AuditingPlanState extends State<AuditingPlan> {
               }
 
               if (state is FutureSpRepErrorState) {
-                errorFullScreen(context, func: () {});
+              return  errorFullScreen(context, func: () {});
               }
 
               return Expanded(
@@ -145,7 +145,7 @@ class _AuditingPlanState extends State<AuditingPlan> {
                               },
                               listener:
                                   (BuildContext context, FutureRepState state) {
-                                if (state is FutureSpRepErrorState) {
+                                if (state is FutureChangePlanBrandTypeErrorState) {
                                   loadingItemId = -1;
                                   error(context, state.failure.massage,
                                       state.failure.code);
