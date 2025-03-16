@@ -25,10 +25,7 @@ abstract class AppServiceClient {
   Future<AllSpcBaseResponse> allSpecializations(
     @Part(name: "repDet") int repDet,
   );
-  @POST("/getVisitDoc.php")
-  Future<AllMedicalVisitBaseResponse> allVisitDoctor(
-    @Part(name: "repDet") int repDet,
-  );
+
   @POST("/getCity.php")
   Future<AllCityBaseResponse> allCity();
 

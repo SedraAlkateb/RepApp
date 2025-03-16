@@ -7,12 +7,8 @@ abstract class RemoteDataSource {
   Future<LoginResponse> login(LoginRequest loginRequest);
   Future<AllPlaceBaseResponse> allPlaces(int id);
   Future<AllSpcBaseResponse> allSpecializations(int repDet);
-  Future<AllMedicalVisitBaseResponse> allVisitDoctor(
-    int repDet,
-  );
   Future<CheckRepResponse> checkRep(int repDet);
   Future<AllCityBaseResponse> allCity();
-
   Future<AllBrandBaseResponse> allBrand(int id);
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet);
   Future<AllDoctorsBaseResponse> getAllDoctor(int repDet);
@@ -94,10 +90,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return await _appServiceClient.allCity();
   }
 
-  @override
-  Future<AllMedicalVisitBaseResponse> allVisitDoctor(int repDet) async {
-    return await _appServiceClient.allVisitDoctor(repDet);
-  }
+
 
   @override
   Future<AllPharmacyBaseResponse> getAllPharmacy(int repDet) async {
