@@ -423,10 +423,7 @@ class ReportVisitHospital extends StatelessWidget {
                                               title: "الاختصاص",
                                               supTitle: doctorNoteModel.spTitle,
                                             ),
-                                            TextInfo(
-                                              title: "التقييم",
-                                              supTitle: doctorNoteModel.rate,
-                                            ),
+
                                             TextInfo(
                                               title: "التاريخ",
                                               supTitle:
