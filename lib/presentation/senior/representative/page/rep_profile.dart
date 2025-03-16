@@ -336,7 +336,7 @@ class RepProfile extends StatelessWidget {
                         thickness: 0.8,
                       ),
                     ),
-                    UserInfo.repType != "6"
+                    UserInfo.repType != "7"
                         ? Column(
                             children: [
                               RowList(
