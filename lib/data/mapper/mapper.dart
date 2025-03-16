@@ -154,6 +154,8 @@ extension RepresentativeMapper on RepresentativeResponse? {
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
       this?.unRead ?? Constants.zero,
+      int.parse(this?.activePlan ?? "0"),
+
     );
   }
 }
@@ -250,20 +252,7 @@ extension AllCityResponseMapper on AllCityBaseResponse? {
   }
 }
 
-extension MedicalVisitsResponseMapper on MedicalVisitsResponse? {
-  MedicalVisits toDomain() {
-    return MedicalVisits(
-        int.parse(this?.visID ?? "0"),
-        this?.visitDate ?? Constants.empty,
-        this?.title ?? Constants.empty,
-        this?.address ?? Constants.empty,
-        (this?.issue ?? Constants.zero).toString(),
-        (this?.note ?? Constants.zero).toString(),
-        this?.spTitle ?? Constants.empty,
-        this?.special ?? Constants.empty,
-        this?.brands ?? Constants.empty);
-  }
-}
+
 
 extension LoginResponseMapper on LoginResponse? {
   LoginModel toDomain() {
@@ -289,16 +278,7 @@ extension LoginResponseMapper on LoginResponse? {
   }
 }
 
-extension AllMedicalVisitsResponseMapper on AllMedicalVisitBaseResponse? {
-  List<MedicalVisits> toDomain() {
-    List<MedicalVisits> medicalVisits =
-        (this?.data?.medicalVisits?.map((response) => response.toDomain()) ??
-                const Iterable.empty())
-            .cast<MedicalVisits>()
-            .toList();
-    return medicalVisits;
-  }
-}
+
 
 extension MedicalRepresentativeResponseMapper
     on AllMedicalRepresentativeBaseResponse? {
@@ -581,12 +561,12 @@ extension CopyRecResponseMapper on CopyRecResponse {
 extension VisitNotesMapper on VisitNotesResponse? {
   DoctorNoteModel toDomain() {
     return DoctorNoteModel(
-        this?.docTitle ?? Constants.empty,
-        this?.spTitle ?? Constants.empty,
-        this?.address ?? Constants.empty,
-        this?.visitDate ?? Constants.empty,
-        this?.note ?? Constants.empty,
-        false);
+      this?.docTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.visitDate ?? Constants.empty,
+      this?.note ?? Constants.empty,
+    );
   }
 }
 
@@ -610,7 +590,7 @@ extension VisitIssueMapper on VisitIssueResponse? {
         this?.address ?? Constants.empty,
         this?.visitDate ?? Constants.empty,
         this?.issue ?? Constants.empty,
-        false);
+    );
   }
 }
 

@@ -146,4 +146,38 @@ final class UpdateVisitPharmacyState extends VisitState {
   @override
   List<Object?> get props =>[];
 }
+class DeleteBrandState extends VisitState{
+  final List<PharmacyBrandModel> brands;
+  DeleteBrandState(this.brands);
+  @override
+  List<Object?> get props => [brands];
+}
 
+class EditAmountBrandState extends VisitState{
+  final List<PharmacyBrandModel> brands;
+  EditAmountBrandState(this.brands);
+  List<Object?> get props => [brands];
+}
+class IsBrandState extends VisitState {
+  final  bool isBrand;
+  IsBrandState(this.isBrand);
+  @override
+  List<Object?> get props => [isBrand];
+}
+final class BrandFlagErrorState extends VisitState {
+  final Failure failure;
+  BrandFlagErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+final class BrandFlagState extends VisitState {
+  final List<BrandModel> brands;
+  BrandFlagState(this.brands);
+  @override
+  List<Object?> get props =>[brands];
+}
+class SelectBrandState extends VisitState{
+  final List<PharmacyBrandModel> brands;
+  SelectBrandState(this.brands);
+  List<Object?> get props => [brands];
+}

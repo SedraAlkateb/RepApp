@@ -48,18 +48,18 @@ class DocNoIsExpandedNoteEvent extends ReportVisitDoctorEvent {
 class ChangeReadDocNoteEvent extends ReportVisitDoctorEvent {
   final int id;
   final bool isRead;
-
+  final int index;
   @override
-  ChangeReadDocNoteEvent(this.id, this.isRead);
+  ChangeReadDocNoteEvent({required this.id,required this.isRead,required this.index});
   List<Object?> get props => [id, isRead];
 }
 
 class ChangeReadHosNoteEvent extends ReportVisitDoctorEvent {
   final int id;
   final bool isRead;
-
+  final index;
   @override
-  ChangeReadHosNoteEvent(this.id, this.isRead);
+  ChangeReadHosNoteEvent({required this.id,required this.isRead, required this.index});
   List<Object?> get props => [id, isRead];
 }
 

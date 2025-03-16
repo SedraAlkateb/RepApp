@@ -160,32 +160,6 @@ class RepositoryImp implements Repository {
     }
   }
 
-  @override
-  Future<Either<Failure, List<MedicalVisits>>> allVisitDoctor(int id) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.allVisitDoctor(id);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "allVisitDoctor")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "allVisitDoctor")]));
-      return Left(failure);
-    }
-  }
 
   @override
   Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(

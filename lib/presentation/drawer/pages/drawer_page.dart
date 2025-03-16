@@ -1,7 +1,9 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/presentation/drawer/widget/text_drawer.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +30,7 @@ class DrawerPage extends StatelessWidget {
             ),
             height: 150,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -38,7 +40,8 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: ColorManager.secondaryColor5,
                     child: Text(
                       UserInfo.name![0],
-                      style: TextStyle(fontSize: 30.0, color: Colors.blue),
+                      style:
+                      TextStyle(fontSize: 30.0, color: Colors.blue),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -48,6 +51,29 @@ class DrawerPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextDrawer(
+                  s1: "زيارات المشافي : ",
+                  s2: "${UserInfo.numOfHospitalVisit.toString()}",
+                ),
+                TextDrawer(
+                  s1: "زيارات الأطباء : ",
+                  s2: "${UserInfo.numOfDoctorVisit.toString()}",
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
             ),
           ),
           ListTile(
@@ -110,7 +136,7 @@ class DrawerPage extends StatelessWidget {
                   leading: Icon(Icons.list_alt_outlined,
                       color: ColorManager.secondaryColor4),
                   title: Text(
-                    'تقارير المندوبين',
+                    ' المندوبين',
                     style: TextStyle(color: ColorManager.secondaryColor1),
                   ),
                   onTap: () {
@@ -196,7 +222,7 @@ class DrawerPage extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.hospital,
-                    (route) => false,
+                (route) => false,
               );
             },
           ),

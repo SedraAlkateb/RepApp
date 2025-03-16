@@ -147,13 +147,11 @@ class ReportVisitDoctorBloc
       }
       else if (event is ChangeReadHosNoteEvent) {
         emit(AsReadLoadingState());
-
         List<RepVisitsModel> doctorNote = List.from(repVisitHospital);
         (await readVisitUsecase.execute(AsRead(
                 int.parse(repVisitHospital[event.id].visitId),
                 UserInfo.repId,
-                0,
-                event.isRead == true ? 1 : 0)))
+                event.isRead == true ? 1 : 0,0)))
             .fold((failure) {
           emit(AsReadErrorState(failure: failure));
         }, (data) async {

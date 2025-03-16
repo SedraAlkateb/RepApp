@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
+import 'package:domina_app/presentation/brand_plan/widget/data_plan.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -26,14 +27,10 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 14,),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Card(shadowColor: ColorManager.secondaryColor7,child:
-              Text(textAlign: TextAlign.center,style: TextStyle(color: ColorManager.secondaryColor2,fontSize: 17,  fontWeight: FontWeight.bold, ), "\nتاريخ الخطة : ${UserInfo.startDate ?? 'غير متاح'} >>> ${UserInfo.endDate ?? 'غير متاح'} \n ",
-                      ),
-              margin: EdgeInsets.symmetric( horizontal:20),),
+            SizedBox(
+              height: 14,
             ),
+            dataPlan(UserInfo.startDate, UserInfo.endDate ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: BlocConsumer<BrandPlanBloc, BrandPlanState>(
@@ -45,15 +42,17 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                 builder: (context, state) {
                   List<BrandSpPlanModel> planBrandModel =
                       context.watch<BrandPlanBloc>().planBrandActive;
-                  if(state is SearchBrandState){
-                    planBrandModel=state.brand;
+                  if (state is SearchBrandState) {
+                    planBrandModel = state.brand;
                   }
                   return Column(
                     children: [
                       SearchField(
                         searchController: searchController,
                         onPressed: (value) {
-                          BlocProvider.of<BrandPlanBloc>(context).add(SearchBrandEvent(value: value, brand: planBrandModel));
+                          BlocProvider.of<BrandPlanBloc>(context).add(
+                              SearchBrandEvent(
+                                  value: value, brand: planBrandModel));
                         },
                       ),
                       ListView.builder(
@@ -61,29 +60,29 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                         shrinkWrap: true,
                         itemBuilder: (context, index) => Container(
                           margin: EdgeInsets.all(AppPadding.p8),
-                        //  padding: EdgeInsets.all(AppPadding.p16),
+                          //  padding: EdgeInsets.all(AppPadding.p16),
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(color: ColorManager.secondaryColor3),
                             ],
                             color: ColorManager.white,
-                            border: Border.all(color: ColorManager.secondaryColor7),
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(AppSize.s8)),
+                            border:
+                                Border.all(color: ColorManager.secondaryColor7),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(AppSize.s8)),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Container(
-
-                                decoration:
-                                BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: ColorManager.secondaryColor7,
-                                  border: Border.symmetric(vertical: BorderSide(color:  ColorManager.secondaryColor7)),
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(AppSize.s8)),
+                                  border: Border.symmetric(
+                                      vertical: BorderSide(
+                                          color: ColorManager.secondaryColor7)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(AppSize.s8)),
                                 ),
                                 child: Column(
                                   children: [
@@ -92,30 +91,45 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                                         vertical: 8,
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            planBrandModel[index].brandModel.title,
-                                            style:
-                                            Theme.of(context).textTheme.titleMedium,
+                                            planBrandModel[index]
+                                                .brandModel
+                                                .title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
                                           ),
                                           Container(
-                                            margin: EdgeInsets.symmetric(horizontal: AppPadding.p8),
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: AppPadding.p8),
                                             padding: EdgeInsets.symmetric(
                                               vertical: AppPadding.p8,
                                               horizontal: AppPadding.p14,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: int.parse(planBrandModel[index].spPlan[0].brandType) == 1
+                                              color: int.parse(
+                                                          planBrandModel[index]
+                                                              .spPlan[0]
+                                                              .brandType) ==
+                                                      1
                                                   ? ColorManager.secondaryColor1
-                                                  : ColorManager.secondaryColor2,
-                                              borderRadius: const BorderRadius.all(
+                                                  : ColorManager
+                                                      .secondaryColor2,
+                                              borderRadius:
+                                                  const BorderRadius.all(
                                                 Radius.circular(AppSize.s8),
                                               ),
                                             ),
                                             child: Text(
-                                              int.parse(planBrandModel[index].spPlan[0].brandType) == 1
+                                              int.parse(planBrandModel[index]
+                                                          .spPlan[0]
+                                                          .brandType) ==
+                                                      1
                                                   ? "هدف"
                                                   : "مساعد",
                                               style: TextStyle(
@@ -124,21 +138,25 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                                               ),
                                             ),
                                           )
-
                                         ],
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Expanded(
                                             child: Text(
                                               "النوع : ${planBrandModel[index].brandModel.phTitle}",
-                                              style:
-                                              Theme.of(context).textTheme.titleMedium,textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                              textAlign: TextAlign.center,
                                             ),
                                           ),
                                         ],
@@ -149,7 +167,8 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                               ),
                               // Divider(color: ColorManager.secondaryColor7),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,39 +182,50 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                                     ),
                                     Text(
                                       'الاختصاص ',
-                                      style: Theme.of(context).textTheme.headlineMedium,
-
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
                                     ),
                                   ],
                                 ),
                               ),
-                              Divider( thickness: 0.5,color: ColorManager.secondaryColor7,),
+                              Divider(
+                                thickness: 0.5,
+                                color: ColorManager.secondaryColor7,
+                              ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
                                 child: ListView.separated(
-                                  separatorBuilder: (context, index)
-                                  => Divider( thickness: 0.5,color: ColorManager.secondaryColor7,),
+                                  separatorBuilder: (context, index) => Divider(
+                                    thickness: 0.5,
+                                    color: ColorManager.secondaryColor7,
+                                  ),
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
-                                  itemCount: planBrandModel[index].spPlan.length,
+                                  itemCount:
+                                      planBrandModel[index].spPlan.length,
                                   itemBuilder: (context, index1) {
                                     return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-
                                           Text(
-                                            '${planBrandModel[index].spPlan[index1].title} :'
-                                            ,
-                                            style:
-                                            Theme.of(context).textTheme.headlineMedium,
+                                            '${planBrandModel[index].spPlan[index1].title} :',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium,
                                           ),
                                           Text(
                                             ' ${planBrandModel[index].spPlan[index1].amount}',
-                                            style:
-                                            Theme.of(context).textTheme.headlineMedium,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium,
                                           ),
                                         ],
                                       ),

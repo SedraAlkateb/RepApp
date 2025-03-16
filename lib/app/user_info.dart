@@ -20,4 +20,6 @@ class UserInfo{
   static int flag1 = 0;
   static int version = 4;
   static String repType="0";
+  static int numOfDoctorVisit = -1;
+  static int numOfHospitalVisit = -1;
 }

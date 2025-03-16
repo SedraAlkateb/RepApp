@@ -527,11 +527,11 @@ class RepositroySqlImp extends RepositorySql {
 
   @override
   Future<Either<Failure, Null>> updateVisitDoctorFields(
-      {required int id, String? kaswn, String? science, String? target}) async {
+      {required int id, String? kaswn, String? science, String? target, List<PharmacyBrandModel>? selectBrand}) async {
     try {
       ;
       await _databaseHelper.updateVisitDoctorFields(
-          id: id, kaswn: kaswn, science: science, target: target);
+          id: id, kaswn: kaswn, science: science, target: target,selectBrand: selectBrand);
       return Right(null);
     } catch (e) {
       Failure failure = ErrorHandler.handle(e).failure;
@@ -547,10 +547,11 @@ class RepositroySqlImp extends RepositorySql {
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   }) async {
     try {
       await _databaseHelper.updateVisitHospitalFields(
-          id: id, kaswn: kaswn, science: science, target: target);
+          id: id, kaswn: kaswn, science: science, target: target,selectBrand:selectBrand );
       return Right(null);
     } catch (e) {
       Failure failure = ErrorHandler.handle(e).failure;
@@ -884,6 +885,18 @@ class RepositroySqlImp extends RepositorySql {
     } catch (e) {
       Failure failure = ErrorHandler.handle(e).failure;
       excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, NumVisit>> numVisit() async {
+    try {
+      final response = await _databaseHelper.numVisit();
+      return Right(response);
+    } catch (e) {
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "numVisit"));
       return Left(failure);
     }
   }

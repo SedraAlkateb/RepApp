@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/text_info.dart';
 import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
@@ -14,10 +15,14 @@ class ReportVisitDoctorPage extends StatelessWidget {
       {super.key,
       required this.userId,
       required this.repId,
-      required this.repName});
+      required this.repName,
+        required this.indexRep,
+
+      });
   final int userId;
   final int repId;
   final String repName;
+  final  int indexRep;
   final TextEditingController searchNoteDoctorController =
       TextEditingController();
   @override
@@ -280,13 +285,19 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                   state is AsReadLoadingState
                                                       ? null
                                                       : () {
+                                                print(  doctorNoteModel
+                                                    .flag);
+                                                print( indexRep);
+
                                                           BlocProvider.of<
                                                                       ReportVisitDoctorBloc>(
                                                                   context)
                                                               .add(ChangeReadDocNoteEvent(
-                                                                  index,
-                                                                  !doctorNoteModel
-                                                                      .flag));
+                                                            isRead: !doctorNoteModel
+                                                                .flag,
+                                                                  id:index ,
+                                                                  index: indexRep,
+                                                                  ));
                                                         },
                                               icon: Icon(
                                                 Icons.book_outlined,
@@ -553,9 +564,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                                     context)
                                                                 .add(
                                                               ChangeReadDocNoteEvent(
-                                                                index,
-                                                                !doctorNoteModel
+                                                                isRead: !doctorNoteModel
                                                                     .flag,
+                                                                id:index ,
+                                                                index: indexRep,
                                                               ),
                                                             );
                                                           },

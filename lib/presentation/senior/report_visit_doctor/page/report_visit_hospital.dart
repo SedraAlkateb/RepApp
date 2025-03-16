@@ -14,10 +14,12 @@ class ReportVisitHospital extends StatelessWidget {
       {super.key,
       required this.userId,
       required this.repId,
+        required this.indexRep,
       required this.repName});
   final int userId;
   final int repId;
   final String repName;
+  final  int indexRep;
   final TextEditingController searchNoteDoctorController =
       TextEditingController();
   @override
@@ -238,67 +240,34 @@ class ReportVisitHospital extends StatelessWidget {
                                             doctorNoteModel, index));
                                   },
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              " التقيم :",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                " ${doctorNoteModel.rate} ",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    BlocBuilder<ReportVisitDoctorBloc,
-                                        ReportVisitDoctorState>(
-                                      builder: (context, state) {
-                                        return Align(
-                                          child: IconButton(
-                                              onPressed:
-                                                  state is AsReadLoadingState
-                                                      ? null
-                                                      : () {
-                                                          BlocProvider.of<
-                                                                      ReportVisitDoctorBloc>(
-                                                                  context)
-                                                              .add(ChangeReadHosNoteEvent(
-                                                                  index,
-                                                                  !doctorNoteModel
-                                                                      .flag));
-                                                        },
-                                              icon: Icon(
-                                                Icons.book_outlined,
-                                                color: doctorNoteModel.flag
-                                                    ? ColorManager.white
-                                                    : ColorManager
-                                                        .secondaryColor,
-                                              )),
-                                          alignment: Alignment.bottomLeft,
-                                        );
-                                      },
-                                    ),
-                                  ],
+                                BlocBuilder<ReportVisitDoctorBloc,
+                                    ReportVisitDoctorState>(
+                                  builder: (context, state) {
+                                    return Align(
+                                      child: IconButton(
+                                          onPressed:
+                                          state is AsReadLoadingState
+                                              ? null
+                                              : () {
+                                            BlocProvider.of<
+                                                ReportVisitDoctorBloc>(
+                                                context)
+                                                .add(ChangeReadHosNoteEvent(
+                                              index: indexRep,
+                                                id:index ,
+                                                isRead: !doctorNoteModel.flag,
+                                                ));
+                                          },
+                                          icon: Icon(
+                                            Icons.book_outlined,
+                                            color: doctorNoteModel.flag
+                                                ? ColorManager.white
+                                                : ColorManager
+                                                .secondaryColor,
+                                          )),
+                                      alignment: Alignment.bottomLeft,
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -454,10 +423,7 @@ class ReportVisitHospital extends StatelessWidget {
                                               title: "الاختصاص",
                                               supTitle: doctorNoteModel.spTitle,
                                             ),
-                                            TextInfo(
-                                              title: "التقييم",
-                                              supTitle: doctorNoteModel.rate,
-                                            ),
+
                                             TextInfo(
                                               title: "التاريخ",
                                               supTitle:
@@ -547,14 +513,15 @@ class ReportVisitHospital extends StatelessWidget {
                                                     state is AsReadLoadingState
                                                         ? null
                                                         : () {
+
                                                             BlocProvider.of<
                                                                         ReportVisitDoctorBloc>(
                                                                     context)
                                                                 .add(
                                                               ChangeReadHosNoteEvent(
-                                                                index,
-                                                                !doctorNoteModel
-                                                                    .flag,
+                                                                index: indexRep,
+                                                                id:index ,
+                                                                isRead: !doctorNoteModel.flag,
                                                               ),
                                                             );
                                                           },

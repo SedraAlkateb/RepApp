@@ -8,6 +8,12 @@ class AllPlaceEvent extends PlaceEvent{
   List<Object?> get props => [];
 
 }
+class NumVisitEvent extends PlaceEvent{
+  @override
+  NumVisitEvent();
+  List<Object?> get props => [];
+
+}
 class CheckRepEvent extends PlaceEvent{
   @override
   CheckRepEvent();

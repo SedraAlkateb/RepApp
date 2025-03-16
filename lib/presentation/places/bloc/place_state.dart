@@ -55,3 +55,14 @@ final class CheckRepLoadingState extends PlaceState {
   @override
   List<Object?> get props =>[];
 }
+final class NumVisitState extends PlaceState {
+
+  List<Object?> get props =>[];
+}
+final class NumVisitErrorState extends PlaceState {
+  final Failure failure;
+  NumVisitErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}

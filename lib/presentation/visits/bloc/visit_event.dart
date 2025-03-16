@@ -83,7 +83,8 @@ class UpdateVisitDoctorEvent extends VisitEvent{
  final String? kas;
  final  String? sc;
  final String? target;
-  UpdateVisitDoctorEvent({ this.kas,this.sc, required this.id,this.target});
+ final  List<PharmacyBrandModel>? selectBrand;
+  UpdateVisitDoctorEvent({ this.kas,this.sc, required this.id,this.target,this.selectBrand});
   @override
   List<Object?> get props => [kas,sc];
 }
@@ -92,7 +93,8 @@ class UpdateVisitHospitalEvent extends VisitEvent{
   final String? kas;
   final  String? sc;
   final String? target;
-  UpdateVisitHospitalEvent({ this.kas,this.sc, required this.id,this.target});
+  final  List<PharmacyBrandModel>? selectBrand;
+  UpdateVisitHospitalEvent({ this.kas,this.sc, required this.id,this.target,this.selectBrand});
   @override
   List<Object?> get props => [kas,sc];
 }
@@ -104,3 +106,32 @@ class UpdateVisitPharmacyEvent extends VisitEvent{
   List<Object?> get props => [data];
 }
 
+class IsBrandEvent extends VisitEvent {
+
+  @override
+  List<Object?> get props => [];
+}
+class BrandFlagEditeEvent extends VisitEvent{
+  BrandFlagEditeEvent();
+  @override
+  List<Object?> get props => [];
+}
+class SelectBrandEvent extends VisitEvent{
+  final  BrandModel brandModel;
+  SelectBrandEvent(this.brandModel);
+  @override
+  List<Object?> get props => [brandModel];
+}
+class RemoveBrandEvent extends VisitEvent {
+  final  PharmacyBrandModel brandModel;
+  RemoveBrandEvent(this.brandModel);
+  @override
+  List<Object?> get props => [brandModel];
+}
+class EditAmountBrandEvent extends VisitEvent{
+  final  int index;
+  final int brand;
+  EditAmountBrandEvent(this.index,this.brand);
+  @override
+  List<Object?> get props => [index,brand];
+}

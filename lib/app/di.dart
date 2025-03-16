@@ -77,6 +77,7 @@ import 'package:domina_app/domain/usecase/is_active_usecase.dart';
 import 'package:domina_app/domain/usecase/is_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
+import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
@@ -256,18 +257,24 @@ Future<void> initPlaceVisitModule() async {
 }
 
 Future<void> initPlacesModule() async {
+
   if (!GetIt.I.isRegistered<AllPlacesSqlUsecase>()) {
     instance.registerFactory<AllPlacesSqlUsecase>(
         () => AllPlacesSqlUsecase(instance()));
+    instance.registerFactory<NumVisitSqlUsecase>(
+            () => NumVisitSqlUsecase(instance()));
     instance
         .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
     instance
-        .registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance()));
+        .registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance(), instance()));
   }
 }
 
 Future<void> initVisitsModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorSqlUsecase>()) {
+    if (!GetIt.I.isRegistered<AllBrandsFlagSqlUsecase>()) {
+    instance.registerFactory<AllBrandsFlagSqlUsecase>(
+            () => AllBrandsFlagSqlUsecase(instance()));}
     instance.registerFactory<UpdateHospitalUsecase>(
         () => UpdateHospitalUsecase(instance()));
     instance.registerFactory<UpdateDoctorUsecase>(
@@ -281,7 +288,7 @@ Future<void> initVisitsModule() async {
     instance.registerFactory<AllVisitHospitalSqlUsecase>(
         () => AllVisitHospitalSqlUsecase(instance()));
     instance.registerFactory<VisitBloc>(() => VisitBloc(
-        instance(), instance(), instance(), instance(), instance(), instance()
+        instance(), instance(), instance(), instance(), instance(), instance(), instance()
         //  ,instance(),instance(),instance()
         ));
   }

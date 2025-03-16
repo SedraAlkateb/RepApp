@@ -53,6 +53,13 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
+        BlocProvider<SeniorRepsBloc>(
+          create: (context) {
+            final bloc = instance<SeniorRepsBloc>();
+            bloc.add(AllSeniorRepEvent());
+            return bloc;
+          },
+        ),
         BlocProvider<RecipesBrandBloc>(
           create: (context) {
             final bloc = instance<RecipesBrandBloc>();
@@ -98,6 +105,7 @@ class _MyAppState extends State<MyApp> {
             final bloc = instance<PlaceBloc>();
             bloc.add(AllPlaceEvent());
             bloc.add(CheckRepEvent());
+            bloc.add(NumVisitEvent());
             return bloc;
           },
         ),
@@ -164,6 +172,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) {
             final bloc = instance<VisitBloc>();
             bloc.add(VisitDoctorEvent());
+            bloc.add(BrandFlagEditeEvent());
             return bloc;
           },
         ),

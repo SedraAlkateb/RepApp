@@ -12,7 +12,6 @@ class HospitalSp extends StatefulWidget {
 }
 
 class _HospitalSpState extends State<HospitalSp> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +34,15 @@ class _HospitalSpState extends State<HospitalSp> {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
-                              child: Text("عدد المشافي  :  ${state.hospitals.length} "
-                                  ,style: Theme.of(context).textTheme.displayLarge),
-                            ),
-                          ],
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 20),
+                            child: Text(
+                                "عدد المشافي  :  ${state.hospitals.length} ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                          ),
                         ),
                         ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
@@ -53,7 +53,8 @@ class _HospitalSpState extends State<HospitalSp> {
                               padding: EdgeInsets.all(AppPadding.p16),
                               decoration: BoxDecoration(
                                 color: ColorManager.white,
-                                border: Border.all(color: ColorManager.hintGrey),
+                                border:
+                                    Border.all(color: ColorManager.hintGrey),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                               ),
@@ -61,10 +62,13 @@ class _HospitalSpState extends State<HospitalSp> {
                                 children: [
                                   Text(
                                     state.hospitals[index].title,
-                                    style: Theme.of(context).textTheme.labelLarge,textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                    textAlign: TextAlign.center,
                                   ),
                                   TextRach(
-                                      s1: "العنوان: ", s2: state.hospitals[index].placeTitle),
+                                      s1: "العنوان: ",
+                                      s2: "${state.hospitals[index].placeTitle }${state.hospitals[index].id }"),
                                 ],
                               ),
                             );
@@ -76,7 +80,7 @@ class _HospitalSpState extends State<HospitalSp> {
                   );
                 }
 
-               return SizedBox();
+                return SizedBox();
               },
             ),
           ],

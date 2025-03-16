@@ -42,7 +42,6 @@ class SelectBrandEvent extends VisitPlaceEvent{
   @override
   List<Object?> get props => [brandModel];
 }
-
 class SelectBrandAdditionAddEvent extends VisitPlaceEvent{
   final  BrandModel brand;
   SelectBrandAdditionAddEvent(this.brand);
