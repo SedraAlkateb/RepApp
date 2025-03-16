@@ -81,7 +81,6 @@ class HospitalSenior extends StatelessWidget {
                       delegate: SliverChildListDelegate([
                         errorFullScreen(context,
                         func: (){
-                          BlocProvider.of<SeniorProfBloc>(context).add(SenAllHospitalEvent(203));
                         }
                         )
                       ]),

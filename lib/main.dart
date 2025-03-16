@@ -63,7 +63,7 @@ Future<int?> sss() async {
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
    //   UserInfo.endDate="27-02-2025";
       if (UserInfo.isLogging != 0 && UserInfo.endDate != null) {
-
+//
         final now = formatDateTimeFromDataTime(DateTime.now());
         final String endDate = UserInfo.endDate ?? "";
         if (UserInfo.endDate != null && now == formatDateTime(endDate)) {

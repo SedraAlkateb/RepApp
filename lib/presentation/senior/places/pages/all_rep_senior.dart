@@ -13,7 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllRepSenior extends StatelessWidget {
   AllRepSenior({super.key});
+
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +55,18 @@ class AllRepSenior extends StatelessWidget {
           builder: (context, state) {
             List<AllRepresentative> allRepresentative =
                 context.watch<SeniorRepsBloc>().allRepresentative;
-            if (state is AllSeniorRepState) {
+             if (state is AllSeniorRepLoadingState) {
+            return loadingFullScreen(context);
+            }
+            else if (state is AllSeniorRepErrorState) {
+            return errorFullScreen(context,
+            func: () => BlocProvider.of<SeniorRepsBloc>(context)
+                .add(AllSeniorRepEvent()));
+            }
+          else  if (state is AllSeniorRepState) {
               allRepresentative = state.representatives;
-              return Expanded(
+            }
+            return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ListView.builder(
@@ -68,6 +79,9 @@ class AllRepSenior extends StatelessWidget {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
                               return RepProfile(
+                                index: index,
+                                  repPlanId:
+                                      allRepresentative[index].activePlan,
                                   id: allRepresentative[index].id);
                             },
                           ));
@@ -77,7 +91,7 @@ class AllRepSenior extends StatelessWidget {
                           padding: EdgeInsets.all(AppPadding.p16),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                            //  ColorManager.secondaryColor6,
+                              //  ColorManager.secondaryColor6,
                               ColorManager.secondaryColor7,
                               ColorManager.secondaryColor7,
                               ColorManager.secondaryColor7,
@@ -107,15 +121,7 @@ class AllRepSenior extends StatelessWidget {
                   ),
                 ),
               );
-            }
-            else if (state is AllSeniorRepLoadingState) {
-              return loadingFullScreen(context);
-            } else if (state is AllSeniorRepErrorState) {
-              return errorFullScreen(context,
-                  func: () => BlocProvider.of<SeniorRepsBloc>(context)
-                      .add(AllSeniorRepEvent()));
-            }
-            return SizedBox();
+
           },
         ),
       ],

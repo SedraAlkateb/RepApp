@@ -6,6 +6,8 @@ import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
+import 'package:domina_app/presentation/visits/widget/table_visit_dynamic.dart';
+import 'package:domina_app/presentation/visits/widget/table_visit_static.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -248,116 +250,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           is BrandPharmacyVisitState) {
                             selectBrand = state.brands;
                           }
-                          return selectBrand.isNotEmpty ?
-                          BlocBuilder<VisitBloc, VisitState>(
-                            builder: (context, state) {
+                          return TableVisitStatic(selectBrand: selectBrand);
 
-                              return selectBrand.isNotEmpty
-                                  ? Padding(
-                                  padding:
-                                  const EdgeInsets.all(8.0),
-                                  child: Table(
-                                      border: TableBorder.all(),
-                                      columnWidths: {
-                                        0: FlexColumnWidth(1),
-                                        1: FlexColumnWidth(1),
-                                        2: FlexColumnWidth(1),
-                                      },
-                                      children: [
-                                        TableRow(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                    'العينات',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold)),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                    'نوع العينة',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold)),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                    'الكمية',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        ...selectBrand
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                          //    final index = entry.key;
-                                          final brand =
-                                              entry.value;
-                                          return TableRow(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .only(
-                                                    top: 8),
-                                                child: Text(
-                                                  brand.title,
-                                                  textAlign:
-                                                  TextAlign
-                                                      .center,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .only(
-                                                    top: 8),
-                                                child: Text(
-                                                    brand
-                                                        .phTitle,
-                                                    textAlign:
-                                                    TextAlign
-                                                        .center),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .only(
-                                                    top: 8),
-                                                child: Text(
-                                                  brand.amount
-                                                      .toString(),
-                                                  textAlign:
-                                                  TextAlign
-                                                      .center,
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        })
-                                      ]))
-                                  : SizedBox();
-                            },
-                          )
-                              : SizedBox();
                         },
                       ):
                       Column(
@@ -373,7 +267,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           BlocListener<VisitBloc, VisitState>(
                             listener: (context, state) {
                               if (state is BrandFlagErrorState) {
-                                print("object");
                                 error(context, state.failure.massage,
                                     state.failure.code);
                               }
@@ -401,9 +294,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           Text(
                             " العينات :",
                             style: Theme.of(context).textTheme.labelLarge,
-                          )
-
-                          ,
+                          ),
                           BlocBuilder<VisitBloc, VisitState>(
                             buildWhen: (previous, current) {
                               return current is SelectBrandState ||
@@ -418,179 +309,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                               is BrandPharmacyVisitState) {
                                 selectBrand = state.brands;
                               }
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Table(
-                                  border: TableBorder.all(
-                                      width: 1,
-                                      color: ColorManager.grey1,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  columnWidths: {
-                                    0: FlexColumnWidth(1),
-                                    1: FlexColumnWidth(1),
-                                    2: FlexColumnWidth(1),
-                                    3: FlexColumnWidth(1),
-                                  },
-                                  children: [
-                                    TableRow(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(15),
-                                          child: Center(
-                                            child: Text('العينات',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold)),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(15),
-                                          child: Center(
-                                            child: Text('نوع العينة',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold)),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(15),
-                                          child: Center(
-                                            child: Text('الكمية',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold)),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(15),
-                                          child: Center(
-                                            child: Text('حذف العينة',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    ...selectBrand
-                                        .asMap()
-                                        .entries
-                                        .map((entry) {
-                                      final index = entry.key;
-                                      final brand = entry.value;
-                                      TextEditingController amount =
-                                      TextEditingController();
-                                      amount.text = selectBrand[index]
-                                          .amount
-                                          .toString();
-                                      return TableRow(
-                                        children: [
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.all(8),
-                                            child: Text(
-                                              brand.title,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.all(8),
-                                            child: Text(brand.phTitle,
-                                                textAlign:
-                                                TextAlign.center),
-                                          ),
-                                          IntrinsicHeight(
-                                            child: TextField(
-                                              controller: amount,
-                                              onChanged: (value) {
-                                                if (value.isEmpty) {
-                                                  BlocProvider.of<
-                                                      VisitBloc>(
-                                                      context)
-                                                      .add(
-                                                      EditAmountBrandEvent(
-                                                          index, 1));
-                                                } else {
-                                                  BlocProvider.of<
-                                                      VisitBloc>(
-                                                      context)
-                                                      .add(
-                                                      EditAmountBrandEvent(
-                                                          index,
-                                                          int.parse(
-                                                              value)));
-                                                }
-                                              },
-                                              keyboardType:
-                                              TextInputType.number,
-                                              decoration: InputDecoration(
-                                                hintText: '1',
-                                                hintStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .labelSmall,
-                                                errorText: null,
-                                                enabledBorder:
-                                                OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color:
-                                                    Colors.transparent,
-                                                    width: AppSize.s1_5,
-                                                  ),
-                                                ),
-                                                focusedBorder:
-                                                OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color:
-                                                    Colors.transparent,
-                                                    width: AppSize.s1_5,
-                                                  ),
-                                                ),
-                                                focusedErrorBorder:
-                                                OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color:
-                                                    Colors.transparent,
-                                                    width: AppSize.s1_5,
-                                                  ),
-                                                ),
-                                                fillColor:
-                                                ColorManager.white,
-                                                filled: true,
-                                              ),
-                                              cursorColor: Colors.black,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.all(8.0),
-                                            child: Center(
-                                              child: IconButton(
-                                                color: const Color.fromARGB(
-                                                    255, 155, 23, 14),
-                                                icon: Icon(
-                                                    Icons.delete_forever),
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                      VisitBloc>(
-                                                      context)
-                                                      .add(RemoveBrandEvent(
-                                                      brand));
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }).toList(),
-                                  ],
-                                ),
-                              );
+                              return TableVisitDynamic(selectBrand: selectBrand,);
                             },
                           )
 
@@ -598,7 +317,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       ),
 
                     ],
-                  ):  Row(
+                  ):
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -612,7 +332,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       ),
                     ],
                   ),
-
+                  widget.doctorModel.visitDoctorModel.flag==0?
                   BlocListener<VisitBloc, VisitState>(
                     listener: (context, state) {
                       if (state is UpdateVisitDoctorState) {
@@ -623,18 +343,19 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          widget.doctorModel.visitDoctorModel.flag == 0
-                              ? BlocProvider.of<VisitBloc>(context).add(
+                           BlocProvider.of<VisitBloc>(context).add(
                               UpdateVisitDoctorEvent(
                                   kas: _issueController.text,
                                   sc: _noteController.text,
                                   id: widget
                                       .doctorModel.visitDoctorModel.id,
-                                  target: _targetController.text))
-                              : null;
+                                  target: _targetController.text,
+                                  selectBrand:context.read<VisitBloc>().brands
+                              ))
+                             ;
                         },
                         child: Text("تعديل")),
-                  )
+                  ):SizedBox()
                 ],
               ),
             )

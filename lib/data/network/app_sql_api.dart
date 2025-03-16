@@ -100,6 +100,8 @@ abstract class AppSqlApiAbs {
   Future<List<PlanBrandModel>> planBrandsAs();
   Future<void> exceptionApi(ExceptionModel exceptionModel);
   Future<List<ExceptionModel>> allException();
+  Future<NumVisit> numVisit();
+
 }
 
 class AppSqlApi extends AppSqlApiAbs {
@@ -256,6 +258,7 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
+
       });
       return "";
     } catch (error) {
@@ -458,9 +461,12 @@ class AppSqlApi extends AppSqlApiAbs {
         UserInfo.flag1 = 0;
       }
       return LoginModel.fromMap(results[0]);
-    } else {
+    }
+
+    else {
       return null;
     }
+
   }
 
   Future<Map<String, dynamic>> fetchTotalSums(Database db) async {
@@ -1014,6 +1020,7 @@ class AppSqlApi extends AppSqlApiAbs {
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
@@ -1034,6 +1041,19 @@ class AppSqlApi extends AppSqlApiAbs {
         whereArgs: [id],
       );
     }
+    await mydb.delete(
+      'visit_brand_hospital',
+      where: 'visitId = ?',
+      whereArgs: [id],
+    );
+    if (selectBrand != null && selectBrand.isNotEmpty) {
+      for (var selectBrandDoctor in selectBrand) {
+        mydb.insert(
+          'visit_brand_hospital',
+          selectBrandDoctor.toMapEditBrand(selectBrandDoctor, id),
+        );
+      }
+    }
   }
 
   Future<void> updateVisitHospitalFields({
@@ -1041,6 +1061,7 @@ class AppSqlApi extends AppSqlApiAbs {
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   }) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
@@ -1061,8 +1082,21 @@ class AppSqlApi extends AppSqlApiAbs {
         whereArgs: [id],
       );
     }
+    /////////////////////////////////////////////////////////
+    await mydb.delete(
+      'visit_brand_hospital',
+      where: 'visitId = ?',
+      whereArgs: [id],
+    );
+    if (selectBrand != null && selectBrand.isNotEmpty) {
+      for (var selectBrandDoctor in selectBrand) {
+        mydb.insert(
+          'visit_brand_hospital',
+          selectBrandDoctor.toMapEditBrand(selectBrandDoctor, id),
+        );
+      }
+    }
   }
-
   getPharmaciesVisit() async {
     final db = await databaseHelper.database;
     await db.transaction((txn) async {
@@ -1270,30 +1304,31 @@ class AppSqlApi extends AppSqlApiAbs {
       int repPlanId) async {
     Database? mydb = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await mydb.rawQuery('''
-    SELECT  
-      planBrand.id AS plan_id,
-      planBrand.repPlanId,
-      planBrand.brandType,
-      planBrand.amount,
-      brand.id AS brand_id,
-      brand.title AS brand_title,
-      brand.phTitle AS brand_phTitle,
-      brand.sampleCoast AS brand_sampleCost,
-      specialization.id AS specialization_id,
-      specialization.title AS specialization_title,
-      specialization.flag AS specialization_flag,
-      specialization.sumDoctor AS sumDoctor,
-      specialization.sumHospital AS sumHospital,
-      specialization.sumBrandHospital AS sumBrandHospital
-    FROM 
-      planBrand
-    JOIN  
-      brand ON planBrand.brandId = brand.id
-    JOIN 
-      specialization ON planBrand.spId = specialization.id
-    WHERE 
-      planBrand.repPlanId = ?;
-  ''', [repPlanId]);
+  SELECT  
+    planBrand.id AS plan_id,
+    planBrand.repPlanId,
+    planBrand.brandType,
+    planBrand.amount,
+    brand.id AS brand_id,
+    brand.title AS brand_title,
+    brand.phTitle AS brand_phTitle,
+    brand.sampleCoast AS brand_sampleCost,
+    specialization.id AS specialization_id,
+    specialization.title AS specialization_title,
+    specialization.flag AS specialization_flag,
+    specialization.sumDoctor AS sumDoctor,
+    specialization.sumHospital AS sumHospital,
+    specialization.sumBrandHospital AS sumBrandHospital
+  FROM 
+    planBrand
+  JOIN  
+    brand ON planBrand.brandId = brand.id
+  JOIN 
+    specialization ON planBrand.spId = specialization.id
+  WHERE 
+    planBrand.repPlanId = ?;
+''', [repPlanId]);
+
     Map<int, OtherBrandSpPlanModel> SpMap = {};
     for (var row in maps) {
       int specializationId = row['specialization_id'] as int;
@@ -1312,27 +1347,42 @@ class AppSqlApi extends AppSqlApiAbs {
             ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
                 UserInfo.samplesCount),
             (((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                        UserInfo.samplesCount) +
-                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                        UserInfo.samplesCount /
-                        4))
+                UserInfo.samplesCount) +
+                ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
+                    UserInfo.samplesCount /
+                    4))
                 .toInt());
       }
-      !(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)
-          ? SpMap[specializationId]!.brands.add(
-                OtherBrandModel(
-                    row['brand_id'],
-                    row['brand_title'] as String,
-                    row['brand_phTitle'] as String,
-                    0,
-                    row['brand_sampleCost'],
-                    row['plan_id'],
-                    int.parse(row['amount']),
-                    row['brandType']),
-              )
-          : null;
+      if (!(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)) {
+        SpMap[specializationId]!.brands.add(
+          OtherBrandModel(
+              row['brand_id'],
+              row['brand_title'] as String,
+              row['brand_phTitle'] as String,
+              0,
+              row['brand_sampleCost'],
+              row['plan_id'],
+              int.parse(row['amount']),
+              row['brandType']),
+        );
+      }
     }
-    return SpMap.values.toList();
+
+    // ترتيب العلامات التجارية داخل كل تخصص حسب brandType
+    for (var model in SpMap.values) {
+      model.brands.sort((a, b) => a.brandType.compareTo(b.brandType));
+    }
+
+    // ترتيب القائمة النهائية حسب أول brandType في كل تخصص (إذا كان التخصص يحتوي على علامات تجارية)
+    List<OtherBrandSpPlanModel> sortedList = SpMap.values.toList()
+      ..sort((a, b) {
+        if (a.brands.isNotEmpty && b.brands.isNotEmpty) {
+          return a.brands.first.brandType.compareTo(b.brands.first.brandType);
+        }
+        return 0;
+      });
+
+    return sortedList;
   }
 
   updateRep(
@@ -1471,4 +1521,21 @@ class AppSqlApi extends AppSqlApiAbs {
       return ExceptionModel.fromMap(maps[i]);
     });
   }
+
+  @override
+  Future<NumVisit> numVisit() async {
+    Database? mydb = await databaseHelper.database;
+
+    final List<Map<String, dynamic>> hospitalResult = await mydb.rawQuery(
+        '''SELECT COUNT(*) as count FROM visit_hospital'''
+    );
+    final List<Map<String, dynamic>> doctorResult = await mydb.rawQuery(
+        '''SELECT COUNT(*) as count FROM visit_doctor'''
+    );
+    int visitHospital = hospitalResult.first['count'] ?? 0;
+    int visitDoctor = doctorResult.isNotEmpty ? doctorResult.first['count'] ?? 0 : 0;
+
+    return NumVisit(visitDoctor, visitHospital);
+  }
+
 }

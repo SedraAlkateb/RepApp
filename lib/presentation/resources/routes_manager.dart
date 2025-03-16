@@ -128,7 +128,7 @@ class RouteGenerator {
                 ));
       case Routes.repProfile:
         initSeniorProfModule();
-        return MaterialPageRoute(builder: (_) => RepProfile(id: 3));
+        return MaterialPageRoute(builder: (_) => RepProfile(id: 3,repPlanId: 3,index: 3,));
       case Routes.AllRepSenior:
         initSeniorModule();
         return MaterialPageRoute(builder: (_) => AllRepSenior());
