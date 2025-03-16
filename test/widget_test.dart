@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 import 'package:domina_app/presentation/ss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main()async {
@@ -19,3 +20,57 @@ void main()async {
   });
 
 }
+
+
+class AnimatedDropdownButtonFormField extends StatefulWidget {
+  @override
+  _AnimatedDropdownButtonFormFieldState createState() => _AnimatedDropdownButtonFormFieldState();
+}
+
+class _AnimatedDropdownButtonFormFieldState extends State<AnimatedDropdownButtonFormField> {
+  bool _isLoading = true;
+  List<String> _dropdownItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    // Simulate a network call
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
+      _dropdownItems = ['Item 1', 'Item 2', 'Item 3'];
+      _isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Animated DropdownButtonFormField')),
+      body: Center(
+        child: _isLoading
+            ? SpinKitCircle(color: Colors.blue, size: 50.0)
+            : DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Select Item',
+                  border: OutlineInputBorder(),
+                ),
+                items: _dropdownItems.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  // Handle change
+                },
+              ),
+      ),
+    );
+  }
+}
+
+

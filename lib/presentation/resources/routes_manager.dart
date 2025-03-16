@@ -57,11 +57,10 @@ class Routes {
   static const String seniorSpec = "/seniorSpec";
   static const String seniorHos = "/seniorHos";
   static const String seniorDoc = "/seniorDoc";
- static const String allBrand = "/allBrand";
+  static const String allBrand = "/allBrand";
   static const String noVisitDoctor = "/noVisitDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String AuditingPlan = "/AuditingPlan";
-
 }
 
 class RouteGenerator {
@@ -71,7 +70,7 @@ class RouteGenerator {
         initLoginModule();
         return MaterialPageRoute(builder: (_) => const MyLogin());
       case Routes.allBrand:
-        return MaterialPageRoute(builder: (_) =>  AllBrand());
+        return MaterialPageRoute(builder: (_) => AllBrand());
       case Routes.fadeInWidget:
         return MaterialPageRoute(builder: (_) => FadeInWidget());
       case Routes.places:
@@ -93,8 +92,6 @@ class RouteGenerator {
       case Routes.pharmacy:
         initPharmacyModule();
         return MaterialPageRoute(builder: (_) => PharmacyPage());
-
-
 
       case Routes.syncData:
         initAsyncModule();
@@ -133,8 +130,6 @@ class RouteGenerator {
         initSeniorModule();
         return MaterialPageRoute(builder: (_) => AllRepSenior());
 
-
-
       case Routes.seniorPlaces:
         return MaterialPageRoute(builder: (_) => PlaceSenior());
       case Routes.seniorSpec:
@@ -151,7 +146,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SenVisitDoctor());
       case Routes.AuditingPlan:
         iniFutureModule();
-        return MaterialPageRoute(builder: (_) => AuditingPlan());
+        return MaterialPageRoute(builder: (_) {
+          return AuditingPlan();
+        });
       case Routes.deleteLogout:
         initDeleteModule();
         return MaterialPageRoute(builder: (_) => DeleteLogoutPage());

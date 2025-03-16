@@ -45,6 +45,7 @@ import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_issue_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/changePlanBrandType_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
 import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
@@ -558,7 +559,8 @@ Future<void> initFutureSpecializationsModule() async {
     instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<FutureRepBloc>()) {
-    instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(instance()));
+    instance.registerFactory<FutureRepBloc>(
+        () => FutureRepBloc(instance(), instance(), instance()));
   }
 }
 
@@ -569,20 +571,26 @@ Future<void> initReportVisitDoctorModule() async {
     instance
         .registerFactory<ReadVisitUsecase>(() => ReadVisitUsecase(instance()));
     instance.registerFactory<AllVisitHospitalRepSenUsecase>(
-            () => AllVisitHospitalRepSenUsecase(instance()));
+        () => AllVisitHospitalRepSenUsecase(instance()));
     instance.registerFactory<ReportVisitDoctorBloc>(
         () => ReportVisitDoctorBloc(instance(), instance(), instance()));
   }
 }
+
 Future<void> iniFutureModule() async {
   if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
     instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
   }
+  if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+    instance.registerFactory<AllPlanBrandsUsecase>(
+        () => AllPlanBrandsUsecase(instance()));
+  }
+    if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
+    instance.registerFactory<ChangePlanBrandTypeUsecase>(
+        () => ChangePlanBrandTypeUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<FutureRepBloc>()) {
-   // instance.registerFactory<LoginUsecase>(() => LoginUsecase(instance()));
-   // instance.registerFactory<LoginSqlUsecase>(() => LoginSqlUsecase(instance()));
-    //  instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
-
-    instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(instance()));
+    instance.registerFactory<FutureRepBloc>(
+        () => FutureRepBloc(instance(), instance(), instance()));
   }
 }

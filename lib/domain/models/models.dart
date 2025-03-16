@@ -1132,6 +1132,11 @@ final List<Type> type = [
   Type(1, "عينات"),
   Type(2, "لاشيء"),
 ];
+final List<Type> brandType = [
+  Type(1, "هدف"),
+  Type(2, "مساعد"),
+  Type(3, "لاشيء"),
+];
 
 class BrandSpModel {
   int id;
@@ -1167,9 +1172,10 @@ class PlanBrandModel {
   int brandId;
   int repPlanId;
   String brandType;
+  String title;
   String amount;
   PlanBrandModel(this.id, this.spId, this.brandId, this.repPlanId,
-      this.brandType, this.amount);
+      this.brandType, this.title, this.amount);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -1177,13 +1183,14 @@ class PlanBrandModel {
       'brandId': brandId,
       'repPlanId': repPlanId,
       'brandType': brandType,
+      //  'title': title,
       'amount': amount,
     };
   }
 
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
     return PlanBrandModel(map['id'], map['spId'], map['brandId'],
-        map['repPlanId'], map['brandType'], map['amount']);
+        map['repPlanId'], map['brandType'], map['title'], map['amount']);
   }
 }
 
@@ -1474,6 +1481,7 @@ class InventoryModel {
   int rest;
   InventoryModel(this.title, this.used, this.total, this.rest);
 }
+
 class AsRead {
   int visitId;
   int userId;
@@ -1481,18 +1489,37 @@ class AsRead {
   int reqType;
   AsRead(this.visitId, this.userId, this.status, this.reqType);
 }
+
+class ChangePlanBrandType {
+  int id;
+  int brandType;
+
+  ChangePlanBrandType(this.id, this.brandType);
+}
+
 class InfoRep {
   int id;
   String name;
   String mobile;
   String address;
   String sampleCount;
+
   String recipesCount;
+  int repPlanId;
   int totalVisit;
   int visitDon;
   int visitNoteYet;
-  InfoRep(this.id, this.name, this.mobile, this.address, this.sampleCount,
-      this.recipesCount, this.totalVisit, this.visitDon, this.visitNoteYet);
+  InfoRep(
+      this.id,
+      this.name,
+      this.mobile,
+      this.address,
+      this.sampleCount,
+      this.recipesCount,
+      this.repPlanId,
+      this.totalVisit,
+      this.visitDon,
+      this.visitNoteYet);
 }
 
 class VisitRepSen {
@@ -1528,7 +1555,8 @@ class RepVisitsModel {
       this.flag,
       this.samples);
 }
-class BrandFlag{
+
+class BrandFlag {
   int id;
   String brand;
   int flag;
