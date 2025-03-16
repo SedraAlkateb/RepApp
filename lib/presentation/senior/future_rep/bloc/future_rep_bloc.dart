@@ -54,7 +54,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
      //   planBrands = [];
       emit(FutureChangePlanBrandTypeLoadingState());
         (await changePlanBrandTypeUsecase.execute(ChangePlanBrandType(event.id , event.brandType))).fold((failure) {
-          emit(FutureSpRepErrorState(failure: failure));
+          emit(FutureChangePlanBrandTypeErrorState(failure: failure));
         },
         (data) async {
           emit(FutureChangePlanBrandTypeState(planBrands));
