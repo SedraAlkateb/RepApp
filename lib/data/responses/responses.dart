@@ -961,6 +961,8 @@ class PlanBrandResponse {
   String? brandId;
   @JsonKey(name: "brandType")
   String? brandType;
+  @JsonKey(name: "title")
+  String? title;
   @JsonKey(name: "spId")
   String? spId;
   @JsonKey(name: "amount")
@@ -1218,8 +1220,11 @@ class RepInfoResponse {
   String? address;
   @JsonKey(name: "sampleCount")
   String? sampleCount;
+
   @JsonKey(name: "recipesCount")
   String? recipesCount;
+  @JsonKey(name: "repPlanId")
+  int? repPlanId;
   @JsonKey(name: "totalVisit")
   int? totalVisit;
   @JsonKey(name: "visitDon")
@@ -1234,6 +1239,7 @@ class RepInfoResponse {
       this.address,
       this.sampleCount,
       this.recipesCount,
+      this.repPlanId,
       this.totalVisit,
       this.visitDon,
       this.visitnotYet);

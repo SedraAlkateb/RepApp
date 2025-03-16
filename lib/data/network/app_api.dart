@@ -167,4 +167,7 @@ abstract class AppServiceClient {
   @POST("/admin/getRepVisitsHos.php")
   Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
       @Part(name: "repId") int repId, @Part(name: "userId") int userId);
+        @POST("/admin/changePlanBrandType.php")
+  Future<Message1Response> changePlanBrandType(
+      @Part(name: "id") int id, @Part(name: "brandType") int brandType);
 }

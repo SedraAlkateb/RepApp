@@ -40,5 +40,6 @@ abstract class Repository{
   Future<Either<Failure,List<RepVisitsModel>>> getRepVisits (VisitRepSen visitRepSen);
   Future<Either<Failure,Message1Response>>readVisit(AsRead asRead);
   Future<Either<Failure,List<RepVisitsModel>>> getRepVisitsHos (VisitRepSen visitRepSen);
+    Future<Either<Failure,Message1Response>>changePlanBrandType(ChangePlanBrandType changePlanBrandType);
 
 }

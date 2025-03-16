@@ -28,7 +28,8 @@ class RepProfile extends StatelessWidget {
   const RepProfile({super.key, required this.id});
   @override
   Widget build(BuildContext context) {
-    String name="";
+    String name = "";
+    int repPlanId = 0;
     return Scaffold(
       backgroundColor: ColorManager.secondaryColor9,
       appBar: AppBar(
@@ -62,17 +63,15 @@ class RepProfile extends StatelessWidget {
                     ),
                   ),
                   child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-                    buildWhen: (previous, current) => current is RepInfoState ,
+                    buildWhen: (previous, current) => current is RepInfoState,
                     builder: (context, state) {
-
-                      if(state is RepInfoLoadingState){
+                      if (state is RepInfoLoadingState) {
                         return loadingFullScreen(context);
-                      }
-                      else if(state is RepInfoErrorState){
+                      } else if (state is RepInfoErrorState) {
                         return errorFullScreen(context);
-                      }
-                      else  if(state is RepInfoState){
-                        name=state.infoRep.name;
+                      } else if (state is RepInfoState) {
+                        name = state.infoRep.name;
+                        repPlanId = state.infoRep.repPlanId;
                         return Column(
                           children: [
                             Text(
@@ -96,12 +95,16 @@ class RepProfile extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               textAlign: TextAlign.center,
                             ),
-                            RowListInfo(text1: "عدد الوصفات  :", text2: "${state.infoRep.recipesCount}"),
                             RowListInfo(
-                                          text1: "عدد الزيارات المتبقية لتحقيق الهدف :", text2: "${state.infoRep.visitNoteYet}"),
+                                text1: "عدد الوصفات  :",
+                                text2: "${state.infoRep.recipesCount}"),
                             RowListInfo(
-                                          text1: "عدد الزيارات للأطباء الذين تمت زيارتهم :",
-                                          text2: "${state.infoRep.visitDon}"),
+                                text1: "عدد الزيارات المتبقية لتحقيق الهدف :",
+                                text2: "${state.infoRep.visitNoteYet}"),
+                            RowListInfo(
+                                text1:
+                                    "عدد الزيارات للأطباء الذين تمت زيارتهم :",
+                                text2: "${state.infoRep.visitDon}"),
                             RowListInfo(
                                 text1: "عدد الزيارات:",
                                 text2: "${state.infoRep.totalVisit}"),
@@ -269,16 +272,22 @@ class RepProfile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  RowList(function: () {
-                    initReportVisitDoctorModule();
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return ReportVisitDoctorPage(repId: id,userId: UserInfo.repId,repName: name,);
+                  RowList(
+                      function: () {
+                        initReportVisitDoctorModule();
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return ReportVisitDoctorPage(
+                              repId: id,
+                              userId: UserInfo.repId,
+                              repName: name,
+                            );
+                          },
+                        ));
+                        BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                            AllReportVisitDoctorEvent(
+                                VisitRepSen(id, UserInfo.repId)));
                       },
-                    ));
-                    BlocProvider.of<ReportVisitDoctorBloc>(context)
-                        .add(AllReportVisitDoctorEvent(VisitRepSen(id, UserInfo.repId)));
-                  },
                       icon1: FontAwesomeIcons.table,
                       text: "تقرير الأطباء"),
                   Padding(
@@ -288,16 +297,22 @@ class RepProfile extends StatelessWidget {
                       thickness: 0.8,
                     ),
                   ),
-                  RowList(function: () {
-                    initReportVisitDoctorModule();
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return ReportVisitHospital(repId: id,userId: UserInfo.repId,repName: name,);
+                  RowList(
+                      function: () {
+                        initReportVisitDoctorModule();
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return ReportVisitHospital(
+                              repId: id,
+                              userId: UserInfo.repId,
+                              repName: name,
+                            );
+                          },
+                        ));
+                        BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                            AllReportVisitHospitalEvent(
+                                VisitRepSen(id, UserInfo.repId)));
                       },
-                    ));
-                    BlocProvider.of<ReportVisitDoctorBloc>(context)
-                        .add(AllReportVisitHospitalEvent(VisitRepSen(id, UserInfo.repId)));
-                  },
                       icon1: FontAwesomeIcons.table,
                       text: "تقرير المشافي"),
                   Padding(
@@ -307,18 +322,19 @@ class RepProfile extends StatelessWidget {
                       thickness: 0.8,
                     ),
                   ),
-                  RowList(function: () {
-                    initFutureSpecializationsModule();
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return FutureSpecializationsPage(id: id);
-                      },
-                    ));
-                    BlocProvider.of<FutureRepBloc>(context)
-                        .add(FutureSpEvent(id));
-                  },
-                      icon1: FontAwesomeIcons.table,
-                      text: "تدقيق خطة المندوب",
+                  RowList(
+                    function: () {
+                      initFutureSpecializationsModule();
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return FutureSpecializationsPage(id: id);
+                        },
+                      ));
+                      BlocProvider.of<FutureRepBloc>(context)
+                          .add(FutureSpEvent(id));
+                    },
+                    icon1: FontAwesomeIcons.table,
+                    text: "تدقيق خطة المندوب",
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
@@ -327,13 +343,18 @@ class RepProfile extends StatelessWidget {
                       thickness: 0.8,
                     ),
                   ),
-                  
                   RowList(
                     icon1: FontAwesomeIcons.table,
-                    text:"تعديل أصناف الخطة",
+                    text: "تعديل أصناف الخطة",
                     function: () {
-                      BlocProvider.of<SeniorProfBloc>(context).add(VisitDocEvent(id));
-                      Navigator.pushNamed(context, Routes.AuditingPlan);
+                      iniFutureModule();
+                      BlocProvider.of<FutureRepBloc>(context)
+                          .add(FutureGetPlanBrandEvent(Rep(repPlanId)));
+
+                      Navigator.pushNamed(
+                        context,
+                        Routes.AuditingPlan,
+                      );
                     },
                   ),
                   Padding(
@@ -397,22 +418,19 @@ class RepProfile extends StatelessWidget {
                     ),
                   ),
                   RowList(
-                      icon1: FontAwesomeIcons.noteSticky,
-                      text: "قائمة بالملاحظات الخاصة بالوكيل",
+                    icon1: FontAwesomeIcons.noteSticky,
+                    text: "قائمة بالملاحظات الخاصة بالوكيل",
                     function: () {
-
                       initSeniorReportIssueModule();
                       BlocProvider.of<ReportIssueBloc>(context)
                           .add(SenAllIssueDoctorEvent(id));
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
-
                           return NoteIssueDoctor(id: id);
                         },
                       ));
                     },
                   ),
-
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                     child: Divider(
@@ -420,20 +438,19 @@ class RepProfile extends StatelessWidget {
                       thickness: 0.8,
                     ),
                   ),
-                  RowList(function: () {
-
-                    initSeniorReportInventoryModule();
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        BlocProvider.of<ReportInventoryBloc>(context)
-                            .add(SenAllInventoryEvent(id));
-                        return ReportInventory();
+                  RowList(
+                      function: () {
+                        initSeniorReportInventoryModule();
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            BlocProvider.of<ReportInventoryBloc>(context)
+                                .add(SenAllInventoryEvent(id));
+                            return ReportInventory();
+                          },
+                        ));
                       },
-                    ));
-                  },
                       icon1: FontAwesomeIcons.clipboard,
                       text: "تقرير توزيع العينات (الجرد)"),
-
                 ],
               ),
             ),

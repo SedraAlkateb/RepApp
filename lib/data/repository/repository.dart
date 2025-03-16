@@ -1044,4 +1044,29 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
+    @override
+  Future<Either<Failure, Message1Response>> changePlanBrandType(ChangePlanBrandType changePlanBrandType) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.changePlanBrandType(changePlanBrandType);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response);
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          excRepository
+              .exceptionApi(ExceptionModel(failure.massage, "changePlanBrandType"));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "changePlanBrandType"));
+      return Left(failure);
+    }
+  }
 }

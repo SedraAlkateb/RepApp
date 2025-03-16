@@ -41,7 +41,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => instance<AuthBloc>()),
@@ -62,29 +61,26 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-        BlocProvider<SeniorProfBloc>
-          (
+        BlocProvider<SeniorProfBloc>(
           create: (context) {
             final bloc = instance<SeniorProfBloc>();
-         //   bloc.add(AllRecipesEvent());
-         //   bloc.add(AllNumEvent());
-            return bloc;
-          },
-        ),
-        BlocProvider<FutureRepBloc>
-          (
-          create: (context) {
-            final bloc = instance<FutureRepBloc>();
             //   bloc.add(AllRecipesEvent());
             //   bloc.add(AllNumEvent());
             return bloc;
           },
         ),
-        BlocProvider<SeniorRepsBloc>
-          (
+        BlocProvider<FutureRepBloc>(
+          create: (context) {
+            final bloc = instance<FutureRepBloc>();
+
+            //   bloc.add(AllNumEvent());
+            return bloc;
+          },
+        ),
+        BlocProvider<SeniorRepsBloc>(
           create: (context) {
             final bloc = instance<SeniorRepsBloc>();
-             bloc.add(AllSeniorRepEvent());
+            bloc.add(AllSeniorRepEvent());
             //   bloc.add(AllNumEvent());
             return bloc;
           },
@@ -137,7 +133,8 @@ class _MyAppState extends State<MyApp> {
             final bloc = instance<ReportIssueBloc>();
             return bloc;
           },
-        ),BlocProvider<ReportInventoryBloc>(
+        ),
+        BlocProvider<ReportInventoryBloc>(
           create: (context) {
             final bloc = instance<ReportInventoryBloc>();
             return bloc;

@@ -999,7 +999,7 @@ PlanBrandResponse _$PlanBrandResponseFromJson(Map<String, dynamic> json) =>
       json['brandType'] as String?,
       json['spId'] as String?,
       json['amount'] as String?,
-    );
+    )..title = json['title'] as String?;
 
 Map<String, dynamic> _$PlanBrandResponseToJson(PlanBrandResponse instance) =>
     <String, dynamic>{
@@ -1007,6 +1007,7 @@ Map<String, dynamic> _$PlanBrandResponseToJson(PlanBrandResponse instance) =>
       'repPlanId': instance.repPlanId,
       'brandId': instance.brandId,
       'brandType': instance.brandType,
+      'title': instance.title,
       'spId': instance.spId,
       'amount': instance.amount,
     };
@@ -1303,6 +1304,7 @@ RepInfoResponse _$RepInfoResponseFromJson(Map<String, dynamic> json) =>
       json['address'] as String?,
       json['sampleCount'] as String?,
       json['recipesCount'] as String?,
+      (json['repPlanId'] as num?)?.toInt(),
       (json['totalVisit'] as num?)?.toInt(),
       (json['visitDon'] as num?)?.toInt(),
       (json['visitnotYet'] as num?)?.toInt(),
@@ -1316,6 +1318,7 @@ Map<String, dynamic> _$RepInfoResponseToJson(RepInfoResponse instance) =>
       'address': instance.address,
       'sampleCount': instance.sampleCount,
       'recipesCount': instance.recipesCount,
+      'repPlanId': instance.repPlanId,
       'totalVisit': instance.totalVisit,
       'visitDon': instance.visitDon,
       'visitnotYet': instance.visitnotYet,

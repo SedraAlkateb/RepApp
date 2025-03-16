@@ -61,6 +61,7 @@ abstract class RemoteDataSource {
   Future<Message1Response> readVisit(AsRead asRead);
   Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
       VisitRepSen visitRepSen);
+       Future<Message1Response> changePlanBrandType(ChangePlanBrandType changePlanBrandType);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -280,5 +281,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       VisitRepSen visitRepSen) async {
     return await _appServiceClient.getRepVisitsHos(
         visitRepSen.repId, visitRepSen.userId);
+  }
+  
+  @override
+  Future<Message1Response> changePlanBrandType(ChangePlanBrandType changePlanBrandType)async {
+    return await _appServiceClient.changePlanBrandType(
+        changePlanBrandType.id, changePlanBrandType.brandType);
   }
 }

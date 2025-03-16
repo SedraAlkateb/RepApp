@@ -16,13 +16,14 @@ extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
     );
   }
 }
+
 extension AllVisitDoctorRepSenMapper on AllRepVisitsResponseBaseResponse? {
   List<RepVisitsModel> toDomain() {
     List<RepVisitsModel> repVisitsModel =
-    (this?.data?.repVisits?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<RepVisitsModel>()
-        .toList();
+        (this?.data?.repVisits?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<RepVisitsModel>()
+            .toList();
     return repVisitsModel;
   }
 }
@@ -40,26 +41,29 @@ extension visitDoctorRepSenMapper on RepVisitsResponse? {
       this?.issue.toString() ?? Constants.empty,
       this?.special.toString() ?? Constants.empty,
       this?.target.toString() ?? Constants.empty,
-      this?.flag=="1"?true:false,
-      this!.samples?.toList()??[],
+      this?.flag == "1" ? true : false,
+      this!.samples?.toList() ?? [],
     );
   }
 }
+
 extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
   InfoRep toDomain() {
     return InfoRep(
-     int.parse( this?.data?.repInfoResponse![0].id ??"0"),
-      this?.data?.repInfoResponse![0].name?? Constants.empty,
-      this?.data?.repInfoResponse![0].mobile?? Constants.empty,
-      this?.data?.repInfoResponse![0].address?? Constants.empty,
-      this?.data?.repInfoResponse![0].sampleCount?? Constants.empty,
-      this?.data?.repInfoResponse![0].recipesCount?? Constants.empty,
-      this?.data?.repInfoResponse![0].totalVisit?? Constants.zero,
-      this?.data?.repInfoResponse![0].visitDon?? Constants.zero,
-      this?.data?.repInfoResponse![0].visitnotYet?? Constants.zero,
+      int.parse(this?.data?.repInfoResponse![0].id ?? "0"),
+      this?.data?.repInfoResponse![0].name ?? Constants.empty,
+      this?.data?.repInfoResponse![0].mobile ?? Constants.empty,
+      this?.data?.repInfoResponse![0].address ?? Constants.empty,
+      this?.data?.repInfoResponse![0].sampleCount ?? Constants.empty,
+      this?.data?.repInfoResponse![0].recipesCount ?? Constants.empty,
+      this?.data?.repInfoResponse![0].repPlanId ?? Constants.zero,
+      this?.data?.repInfoResponse![0].totalVisit ?? Constants.zero,
+      this?.data?.repInfoResponse![0].visitDon ?? Constants.zero,
+      this?.data?.repInfoResponse![0].visitnotYet ?? Constants.zero,
     );
   }
 }
+
 extension ActiveResposeMapper on CheckBaseResponse? {
   ActiveModel toDomain() {
     return ActiveModel(
@@ -133,17 +137,17 @@ extension AllPlaceResponseMapper on AllPlaceBaseResponse? {
   }
 }
 
-
 extension AllRepresentativeMapper on AllRepresentativeBaseResponse? {
   List<AllRepresentative> toDomain() {
     List<AllRepresentative> allRepresentative =
-    (this?.data?.data?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<AllRepresentative>()
-        .toList();
+        (this?.data?.data?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<AllRepresentative>()
+            .toList();
     return allRepresentative;
   }
 }
+
 extension RepresentativeMapper on RepresentativeResponse? {
   AllRepresentative toDomain() {
     return AllRepresentative(
@@ -165,8 +169,8 @@ extension PlaceResponseMapper on PlaceResponse? {
 
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
-    return SpecDModel(
-        int.parse(this?.id ?? "0"), this?.title ?? Constants.empty,this?.flag ?? Constants.zero, 0, 0, 0);
+    return SpecDModel(int.parse(this?.id ?? "0"),
+        this?.title ?? Constants.empty, this?.flag ?? Constants.zero, 0, 0, 0);
   }
 }
 
@@ -363,10 +367,12 @@ extension PlanBrandMapper on PlanBrandResponse? {
       int.parse(this?.brandId ?? "0"),
       int.parse(this?.repPlanId ?? "0"),
       this?.brandType ?? Constants.empty,
+      this?.title ?? Constants.empty,
       this?.amount ?? Constants.empty,
     );
   }
 }
+
 extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
   List<PlanBrandModel> toDomain() {
     List<PlanBrandModel> planBrands =
@@ -575,25 +581,26 @@ extension CopyRecResponseMapper on CopyRecResponse {
 extension VisitNotesMapper on VisitNotesResponse? {
   DoctorNoteModel toDomain() {
     return DoctorNoteModel(
-      this?.docTitle ?? Constants.empty,
-      this?.spTitle ?? Constants.empty,
-      this?.address ?? Constants.empty,
-      this?.visitDate ?? Constants.empty,
-      this?.note ?? Constants.empty,
-      false
-    );
+        this?.docTitle ?? Constants.empty,
+        this?.spTitle ?? Constants.empty,
+        this?.address ?? Constants.empty,
+        this?.visitDate ?? Constants.empty,
+        this?.note ?? Constants.empty,
+        false);
   }
 }
+
 extension AllVisitNotesMapper on AllVisitNotesBaseResponse? {
   List<DoctorNoteModel> toDomain() {
     List<DoctorNoteModel> visitNotes =
-    (this?.data?.notes?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<DoctorNoteModel>()
-        .toList();
+        (this?.data?.notes?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<DoctorNoteModel>()
+            .toList();
     return visitNotes;
   }
 }
+
 //
 extension VisitIssueMapper on VisitIssueResponse? {
   DoctorIssueModel toDomain() {
@@ -603,46 +610,42 @@ extension VisitIssueMapper on VisitIssueResponse? {
         this?.address ?? Constants.empty,
         this?.visitDate ?? Constants.empty,
         this?.issue ?? Constants.empty,
-        false
-
-    );
+        false);
   }
 }
+
 //
 extension InventoryMapper on InventoryResponse? {
   InventoryModel toDomain() {
     return InventoryModel(
-        this?.title ?? Constants.empty,
-        this?.used ?? Constants.empty,
-        this?.total ?? Constants.empty,
-       this?.rest ?? Constants.zero,
-
+      this?.title ?? Constants.empty,
+      this?.used ?? Constants.empty,
+      this?.total ?? Constants.empty,
+      this?.rest ?? Constants.zero,
     );
   }
 }
 
-
 extension AllInventoryMapper on InventoryResponseBaseResponse? {
   List<InventoryModel> toDomain() {
     List<InventoryModel> Inventory =
-    (this?.brand?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<InventoryModel>()
-        .toList();
+        (this?.brand?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<InventoryModel>()
+            .toList();
     return Inventory;
   }
 }
-
 
 //
 
 extension AllVisitIssueMapper on AllVisitIssueBaseResponse? {
   List<DoctorIssueModel> toDomain() {
     List<DoctorIssueModel> visitIssue =
-    (this?.data?.notes?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<DoctorIssueModel>()
-        .toList();
+        (this?.data?.notes?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<DoctorIssueModel>()
+            .toList();
     return visitIssue;
   }
 }
@@ -659,13 +662,14 @@ extension NoVisitDocMapper on NoVisitDoctorResponse? {
     );
   }
 }
+
 extension AllNoVisitDocMapper on AllNoVisitDoctorBaseResponse? {
   List<NoVisitDocModel> toDomain() {
     List<NoVisitDocModel> visitNotes =
-    (this?.data?.res?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<NoVisitDocModel>()
-        .toList();
+        (this?.data?.res?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<NoVisitDocModel>()
+            .toList();
     return visitNotes;
   }
 }
