@@ -71,7 +71,7 @@ class _AuditingPlanState extends State<AuditingPlan> {
               }
 
               if (state is FutureSpRepErrorState) {
-                errorFullScreen(context, func: () {});
+              return  errorFullScreen(context, func: () {});
               }
 
               return Expanded(
