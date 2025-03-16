@@ -367,10 +367,14 @@ class RepProfile extends StatelessWidget {
                                 icon1: FontAwesomeIcons.table,
                                 text: "تعديل أصناف الخطة",
                                 function: () {
-                                  BlocProvider.of<SeniorProfBloc>(context)
-                                      .add(VisitDocEvent(id));
+                                  iniFutureModule();
+                                  BlocProvider.of<FutureRepBloc>(context)
+                                      .add(FutureGetPlanBrandEvent(Rep(repPlanId)));
+
                                   Navigator.pushNamed(
-                                      context, Routes.AuditingPlan);
+                                    context,
+                                    Routes.AuditingPlan,
+                                  );
                                 },
                               ),
 
