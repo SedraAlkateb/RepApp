@@ -558,6 +558,12 @@ Future<void> initFutureSpecializationsModule() async {
   if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
     instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
   }
+  if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
+    instance.registerFactory<ChangePlanBrandTypeUsecase>(() => ChangePlanBrandTypeUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+    instance.registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<FutureRepBloc>()) {
     instance.registerFactory<FutureRepBloc>(
         () => FutureRepBloc(instance(), instance(), instance()));
