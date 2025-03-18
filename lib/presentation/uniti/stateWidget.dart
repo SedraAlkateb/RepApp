@@ -32,7 +32,7 @@ Future<bool> success(BuildContext context) async{
   }
 }
 void successWithMessage(BuildContext context, String message) {
-  SuccessState(message)
+  SuccessState(message)//
       .showPopup(context, StateRendererType.popupSuccess, message);
 }
 Future<bool> dismissDialog(BuildContext context) async {

@@ -1139,6 +1139,44 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repDet',
+      id.toString(),
+    ));
+    final _options =
+        _setStreamType<AllRepresentativeFutureBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/admin/getRepsFuture.php',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllRepresentativeFutureBaseResponse _value;
+    try {
+      _value = AllRepresentativeFutureBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<AllVisitNotesBaseResponse> getVisitNotes(int docId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -1473,6 +1511,60 @@ class _AppServiceClient implements AppServiceClient {
         .compose(
           _dio.options,
           '/admin/readVisit.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> readAllVisits(
+    int repPlanId,
+    int userId,
+    int type,
+    int flag,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'repPlanId',
+      repPlanId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'userId',
+      userId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'type',
+      type.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'flag',
+      flag.toString(),
+    ));
+    final _options = _setStreamType<Message1Response>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/admin/readAllVisits.php',
           queryParameters: queryParameters,
           data: _data,
         )

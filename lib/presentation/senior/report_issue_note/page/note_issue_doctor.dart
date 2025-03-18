@@ -101,7 +101,6 @@ class NoteIssueDoctor extends StatelessWidget {
                     ),
                     // القائمة
                     ...doctorIssueModel.asMap().entries.map((entry) {
-                      final index = entry.key;
                       final doctorNoteModel = entry.value;
                       return Container(
                         margin: EdgeInsets.all(AppPadding.p8),

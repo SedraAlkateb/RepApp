@@ -7,7 +7,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 //presentation
 ThemeData getApplicationTheme() {
   return ThemeData(
-    fontFamily: 'Amiri',
+    fontFamily: 'Almarai',
     tabBarTheme: TabBarTheme(
         labelColor: ColorManager.white,
         indicatorColor: ColorManager.secondaryColor1,

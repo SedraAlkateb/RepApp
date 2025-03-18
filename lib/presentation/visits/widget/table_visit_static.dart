@@ -107,6 +107,6 @@ final  List<PharmacyBrandModel> selectBrand;
                 );
               })
             ]))
-        : SizedBox();;
+        : SizedBox();
   }
 }

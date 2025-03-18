@@ -44,7 +44,6 @@ class VisitPharmacyModel {
   }
 }
 
-
 class BrandSpPlanModel {
   BrandModel brandModel;
   List<SpPlan> spPlan = [];
@@ -133,6 +132,7 @@ class FutureBrandModel {
   FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount,
       this.brandType);
 }
+
 class VisitBrandPharmacyModel {
   int id;
   int visitId;
@@ -205,6 +205,7 @@ class PharmacyBrandModel {
       'flag': 0
     };
   }
+
   factory PharmacyBrandModel.fromMap(Map<String, dynamic> map) {
     return PharmacyBrandModel(
       map['id'],
@@ -820,8 +821,8 @@ class DoctorIssueModel {
   String address;
   String visitDate;
   String? issue;
-  DoctorIssueModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.issue);
+  DoctorIssueModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -848,7 +849,6 @@ class DoctorIssueModel {
       map['address'],
       map['visitDate'],
       map['issue'],
-
     );
   }
 }
@@ -861,8 +861,8 @@ class DoctorNoteModel {
   String visitDate;
   String? note;
 
-  DoctorNoteModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.note);
+  DoctorNoteModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -880,7 +880,6 @@ class DoctorNoteModel {
       map['address'],
       map['visitDate'],
       map["note"],
-
     );
   }
   factory DoctorNoteModel.fromMap1(Map<String, dynamic> map) {
@@ -1189,8 +1188,13 @@ class PlanBrandModel {
   }
 
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
-        map['repPlanId'], map['brandType'], map['title'], map['amount']);
+    return PlanBrandModel(map['id'],
+        map['spId'],
+        map['brandId'],
+        map['repPlanId'],
+        map['brandType'],
+        "",
+        map['amount']);
   }
 }
 
@@ -1471,7 +1475,15 @@ class AllRepresentative {
   int activePlan;
   String name;
   int number;
-  AllRepresentative(this.id, this.name, this.number,this.activePlan);
+  AllRepresentative(this.id, this.name, this.number, this.activePlan);
+}
+
+class AllRepresentativeFuture {
+  int id;
+  int activePlan;
+  String name;
+  int flag;
+  AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
 }
 
 class InventoryModel {
@@ -1527,7 +1539,16 @@ class VisitRepSen {
   int userId;
   VisitRepSen(this.repId, this.userId);
 }
-
+class ReadAll {
+  int repPlanId;
+  int userId;
+  int type;
+  int flag;
+  ReadAll(this.repPlanId,
+      this.userId,
+      this.type,
+      this.flag);
+}
 class RepVisitsModel {
   String visitId;
   String visitDate;
@@ -1555,6 +1576,35 @@ class RepVisitsModel {
       this.flag,
       this.samples);
 }
+class RepVisitsModelSearch {
+  int index;
+  String visitId;
+  String visitDate;
+  String placeTitle;
+  String docTitle;
+  String rate;
+  String spTitle;
+  String note;
+  String issue;
+  String special;
+  String target;
+  bool flag;
+  List<String> samples;
+  RepVisitsModelSearch(
+      this.index,
+      this.visitId,
+      this.visitDate,
+      this.placeTitle,
+      this.docTitle,
+      this.rate,
+      this.spTitle,
+      this.note,
+      this.issue,
+      this.special,
+      this.target,
+      this.flag,
+      this.samples);
+}
 
 class BrandFlag {
   int id;
@@ -1563,8 +1613,9 @@ class BrandFlag {
 
   BrandFlag(this.id, this.brand, this.flag);
 }
-class NumVisit{
-int  visitDoctor;
-int visitHospital;
-NumVisit(this.visitDoctor,this.visitHospital);
+
+class NumVisit {
+  int visitDoctor;
+  int visitHospital;
+  NumVisit(this.visitDoctor, this.visitHospital);
 }

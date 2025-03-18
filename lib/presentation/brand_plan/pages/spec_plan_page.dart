@@ -3,7 +3,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_other_page.dart';
 import 'package:domina_app/presentation/brand_plan/widget/data_plan.dart';
-import 'package:domina_app/presentation/brand_plan/widget/dialog_plan.dart';
 import 'package:domina_app/presentation/brand_plan/widget/save_send_bottom.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -190,9 +189,11 @@ class SpecPlanPage extends StatelessWidget {
                     if (state is UpdateAmountState) {
                       BlocProvider.of<BrandPlanBloc>(context)
                           .add(UpdateSaveEvent());
+                      Navigator.pop(context);
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                     if (state is UpdateAmountSendState) {
+                      Navigator.pop(context);
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                   },
