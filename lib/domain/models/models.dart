@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/mapper/mapper.dart';
+import 'package:domina_app/data/responses/responses.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -43,7 +45,6 @@ class VisitPharmacyModel {
     );
   }
 }
-
 
 class BrandSpPlanModel {
   BrandModel brandModel;
@@ -133,6 +134,7 @@ class FutureBrandModel {
   FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount,
       this.brandType);
 }
+
 class VisitBrandPharmacyModel {
   int id;
   int visitId;
@@ -205,6 +207,7 @@ class PharmacyBrandModel {
       'flag': 0
     };
   }
+
   factory PharmacyBrandModel.fromMap(Map<String, dynamic> map) {
     return PharmacyBrandModel(
       map['id'],
@@ -396,7 +399,15 @@ class ExceptionRequestBody {
     };
   }
 }
-
+class ExceptionRequestBody2 {
+  ExceptionModel list1;
+  ExceptionRequestBody2(this.list1);
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': list1,
+    };
+  }
+}
 class VisitPharmacyAndPharmacy {
   PharmacyModel pharmacyModel;
   VisitPharmacyModel visitPharmacyModel;
@@ -820,8 +831,8 @@ class DoctorIssueModel {
   String address;
   String visitDate;
   String? issue;
-  DoctorIssueModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.issue);
+  DoctorIssueModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -848,7 +859,6 @@ class DoctorIssueModel {
       map['address'],
       map['visitDate'],
       map['issue'],
-
     );
   }
 }
@@ -861,8 +871,8 @@ class DoctorNoteModel {
   String visitDate;
   String? note;
 
-  DoctorNoteModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.note);
+  DoctorNoteModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -880,7 +890,6 @@ class DoctorNoteModel {
       map['address'],
       map['visitDate'],
       map["note"],
-
     );
   }
   factory DoctorNoteModel.fromMap1(Map<String, dynamic> map) {
@@ -1166,6 +1175,13 @@ class Rep {
   Rep(this.activeRepId, {this.otherRepId});
 }
 
+class RepSp {
+  int spId;
+  int repPlanId;
+  int repId;
+  RepSp(this.repPlanId, this.spId, this.repId);
+}
+
 class PlanBrandModel {
   int id;
   int spId;
@@ -1191,6 +1207,89 @@ class PlanBrandModel {
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
     return PlanBrandModel(map['id'], map['spId'], map['brandId'],
         map['repPlanId'], map['brandType'], map['title'], map['amount']);
+  }
+}
+
+class PlanBrandsSp {
+  int id;
+  int spId;
+  int brandId;
+  String brandType;
+  String titleAr;
+  String phTitle;
+  String totalAmount;
+
+  // Constructor
+  PlanBrandsSp(this.id, this.spId, this.brandId, this.brandType, this.titleAr,
+      this.phTitle, this.totalAmount);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'spId': spId,
+      'brandId': brandId,
+      'brandType': brandType,
+      'titleAr': titleAr,
+      'phTitle': phTitle,
+      'totalAmount': totalAmount,
+    };
+  }
+
+  factory PlanBrandsSp.fromMap(Map<String, dynamic> map) {
+    return PlanBrandsSp(map['id'], map['spId'], map['brandId'],
+        map['brandType'], map['titleAr'], map['phTitle'], map['totalAmount']);
+  }
+}
+class BrandPlanBrandsSpWithSamples {
+  int totalSamplesDoctors;
+  int totalSamplesHospitals;
+  int totalSamplesDepartments;
+
+
+  // Constructor
+  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors, this.totalSamplesHospitals, this.totalSamplesDepartments);
+  Map<String, dynamic> toMap() {
+    return {
+      'totalSamplesDoctors': totalSamplesDoctors,
+      'totalSamplesHospitals': totalSamplesHospitals,
+      'totalSamplesDepartments': totalSamplesDepartments,
+     
+    };
+  }
+
+  factory BrandPlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
+    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'], map['totalSamplesHospitals'], map['totalSamplesDepartments']);
+  }
+}
+class PlanBrandsSpWithSamples {
+  List<PlanBrandSpecResponse> PlanBrands;
+  BrandPlanBrandsSpWithSamples Brands;
+
+
+  // Constructor
+  PlanBrandsSpWithSamples(
+      this.PlanBrands,
+      this.Brands,
+
+   );
+
+
+  Map<String, dynamic> toMap() {
+    return {
+      'PlanBrands': PlanBrands.map((item) => item.toDomain()).toList(),
+      'Brands': Brands.toMap(),
+
+    };
+  }
+
+ 
+  factory PlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
+    var list = map['PlanBrands'] as List;
+    List<PlanBrandSpecResponse> PlanBrands = list.map((item) => PlanBrandSpecResponse.fromJson(item)).toList();
+
+    return PlanBrandsSpWithSamples(
+      PlanBrands,
+      BrandPlanBrandsSpWithSamples.fromMap(map['Brands']),
+    );
   }
 }
 
@@ -1471,7 +1570,7 @@ class AllRepresentative {
   int activePlan;
   String name;
   int number;
-  AllRepresentative(this.id, this.name, this.number,this.activePlan);
+  AllRepresentative(this.id, this.name, this.number, this.activePlan);
 }
 
 class InventoryModel {
@@ -1563,8 +1662,9 @@ class BrandFlag {
 
   BrandFlag(this.id, this.brand, this.flag);
 }
-class NumVisit{
-int  visitDoctor;
-int visitHospital;
-NumVisit(this.visitDoctor,this.visitHospital);
+
+class NumVisit {
+  int visitDoctor;
+  int visitHospital;
+  NumVisit(this.visitDoctor, this.visitHospital);
 }

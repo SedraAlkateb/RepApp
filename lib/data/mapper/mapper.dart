@@ -155,7 +155,6 @@ extension RepresentativeMapper on RepresentativeResponse? {
       this?.name ?? Constants.empty,
       this?.unRead ?? Constants.zero,
       int.parse(this?.activePlan ?? "0"),
-
     );
   }
 }
@@ -252,8 +251,6 @@ extension AllCityResponseMapper on AllCityBaseResponse? {
   }
 }
 
-
-
 extension LoginResponseMapper on LoginResponse? {
   LoginModel toDomain() {
     return LoginModel(
@@ -277,8 +274,6 @@ extension LoginResponseMapper on LoginResponse? {
     );
   }
 }
-
-
 
 extension MedicalRepresentativeResponseMapper
     on AllMedicalRepresentativeBaseResponse? {
@@ -353,6 +348,45 @@ extension PlanBrandMapper on PlanBrandResponse? {
   }
 }
 
+extension RepPlanBrandSpecMapper on PlanBrandSpecWithSamplesResponse? {
+  PlanBrandsSpWithSamples toDomain() {
+    List<PlanBrandSpecResponse> planBrandsList =
+        this?.PlanBrands.map((planBrand) {
+              return PlanBrandSpecResponse(
+                planBrand.id ?? "0",
+                planBrand.brandId ?? "0",
+                planBrand.spId ?? "0",
+                planBrand.brandType ?? Constants.empty,
+                planBrand.titleAr ?? Constants.empty,
+                planBrand.phTitle ?? Constants.empty,
+                planBrand.totalAmount ?? Constants.empty,
+              );
+            }).toList() ??
+            [];
+    BrandPlanBrandsSpWithSamples brand = BrandPlanBrandsSpWithSamples(
+      this?.Brands.totalSamplesDepartments ?? 0,
+      this?.Brands.totalSamplesDoctors ?? 0,
+      this?.Brands.totalSamplesHospitals ?? 0,
+    );
+
+    return PlanBrandsSpWithSamples(planBrandsList, brand);
+  }
+}
+
+extension RepBrandSpMapper on PlanBrandSpecResponse? {
+  PlanBrandSpecResponse toDomain() {
+    return PlanBrandSpecResponse(
+      this?.id ?? "0",
+      this?.brandId ?? "0",
+      this?.spId ?? "0",
+      this?.brandType ?? Constants.empty,
+      this?.titleAr ?? Constants.empty,
+      this?.phTitle ?? Constants.empty,
+      this?.totalAmount ?? Constants.empty,
+    );
+  }
+}
+
 extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
   List<PlanBrandModel> toDomain() {
     List<PlanBrandModel> planBrands =
@@ -361,6 +395,25 @@ extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
             .cast<PlanBrandModel>()
             .toList();
     return planBrands;
+  }
+}
+
+extension RepPlanBrandSpMapper on PlanBrandsBaseSpResponse? {
+  PlanBrandSpecWithSamplesResponse toDomain() {
+    List<PlanBrandSpecResponse> planBrands =
+        (this?.data?.PlanBrands.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<PlanBrandSpecResponse>()
+            .toList();
+    Brand brand = Brand(
+      this?.data?.Brands.totalSamplesDepartments ?? 0,
+      this?.data?.Brands.totalSamplesDoctors ?? 0,
+      this?.data?.Brands.totalSamplesHospitals ?? 0,
+    );
+    return PlanBrandSpecWithSamplesResponse(
+      PlanBrands: planBrands,
+      Brands: brand,
+    );
   }
 }
 
@@ -585,11 +638,11 @@ extension AllVisitNotesMapper on AllVisitNotesBaseResponse? {
 extension VisitIssueMapper on VisitIssueResponse? {
   DoctorIssueModel toDomain() {
     return DoctorIssueModel(
-        this?.docTitle ?? Constants.empty,
-        this?.spTitle ?? Constants.empty,
-        this?.address ?? Constants.empty,
-        this?.visitDate ?? Constants.empty,
-        this?.issue ?? Constants.empty,
+      this?.docTitle ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.visitDate ?? Constants.empty,
+      this?.issue ?? Constants.empty,
     );
   }
 }

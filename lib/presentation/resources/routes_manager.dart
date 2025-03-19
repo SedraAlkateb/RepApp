@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/senior/future_rep/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/future_rep/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
@@ -61,6 +62,7 @@ class Routes {
   static const String noVisitDoctor = "/noVisitDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String AuditingPlan = "/AuditingPlan";
+  static const String RepPlanBrandSp = "/RepPlanBrandSp";
 }
 
 class RouteGenerator {
@@ -125,7 +127,12 @@ class RouteGenerator {
                 ));
       case Routes.repProfile:
         initSeniorProfModule();
-        return MaterialPageRoute(builder: (_) => RepProfile(id: 3,repPlanId: 3,index: 3,));
+        return MaterialPageRoute(
+            builder: (_) => RepProfile(
+                  id: 3,
+                  repPlanId: 3,
+                  index: 3,
+                ));
       case Routes.AllRepSenior:
         initSeniorModule();
         return MaterialPageRoute(builder: (_) => AllRepSenior());
@@ -148,6 +155,14 @@ class RouteGenerator {
         iniFutureModule();
         return MaterialPageRoute(builder: (_) {
           return AuditingPlan();
+        });
+      case Routes.RepPlanBrandSp:
+        iniFutureModule();
+        final args = settings.arguments as Map<String, dynamic>?;
+        final title = args?['title'];
+
+        return MaterialPageRoute(builder: (_) {
+          return RepPlanBrandSpPage(title: title);
         });
       case Routes.deleteLogout:
         initDeleteModule();

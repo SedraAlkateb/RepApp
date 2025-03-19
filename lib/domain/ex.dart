@@ -10,7 +10,8 @@ class ExcRepository  {
   Future<Either<Failure, Null>> exceptionApi(ExceptionModel exceptionModel) async {
     try {
       await _databaseHelper.exceptionApi(exceptionModel);
-      print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+      print("_____________________hhhh______________________________");
+            print("تنتين بيكفو");
       return Right(null);
     } catch (e) {
       return Left(ErrorHandler.handle(e).failure);

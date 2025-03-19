@@ -915,7 +915,76 @@ class PlanBrandResponse {
   // to json
   Map<String, dynamic> toJson() => _$PlanBrandResponseToJson(this);
 }
-////
+
+@JsonSerializable()
+class PlanBrandSpecResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "brandId")
+  String? brandId;
+  @JsonKey(name: "brandType")
+  String? brandType;
+  @JsonKey(name: "titleAr")
+  String? titleAr;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "phTitle")
+  String? phTitle;
+  @JsonKey(name: "totalAmount")
+  String? totalAmount;
+
+  PlanBrandSpecResponse(this.id, this.titleAr, this.brandId, this.brandType,
+      this.spId, this.phTitle, this.totalAmount);
+  // from json
+  factory PlanBrandSpecResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanBrandSpecResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$PlanBrandSpecResponseToJson(this);
+} 
+@JsonSerializable()
+class Brand {
+
+  @JsonKey(name: 'totalSamplesDoctors')
+  int totalSamplesDoctors;
+
+  @JsonKey(name: 'totalSamplesHospitals')
+  int totalSamplesHospitals;
+
+  @JsonKey(name: 'totalSamplesDepartments')
+  int totalSamplesDepartments;
+
+  Brand( this.totalSamplesDoctors,
+       this.totalSamplesHospitals,
+       this.totalSamplesDepartments);
+  // from json
+  factory Brand.fromJson(Map<String, dynamic> json) =>
+      _$BrandFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$BrandToJson(this);
+}//
+
+@JsonSerializable()
+class PlanBrandSpecWithSamplesResponse {
+  @JsonKey(name: 'PlanBrands')
+  List<PlanBrandSpecResponse> PlanBrands;
+
+  @JsonKey(name: 'Brands')
+  Brand Brands;
+
+  PlanBrandSpecWithSamplesResponse(
+      {required this.PlanBrands,
+      required this.Brands,
+  });
+
+  // from json
+  factory PlanBrandSpecWithSamplesResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$PlanBrandSpecWithSamplesResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() =>
+      _$PlanBrandSpecWithSamplesResponseToJson(this);
+}
 
 @JsonSerializable()
 class RepresentativeResponse {
@@ -928,7 +997,7 @@ class RepresentativeResponse {
   @JsonKey(name: "activePlan")
   String? activePlan;
 
-  RepresentativeResponse(this.id, this.name, this.unRead,this.activePlan);
+  RepresentativeResponse(this.id, this.name, this.unRead, this.activePlan);
   // from json
   factory RepresentativeResponse.fromJson(Map<String, dynamic> json) =>
       _$RepresentativeResponseFromJson(json);
@@ -974,6 +1043,33 @@ class AllPlanBrandResponse {
 }
 
 @JsonSerializable()
+class RepPlanBrandSpResponse {
+  @JsonKey(name: 'PlanBrands')
+  List<PlanBrandSpecResponse> PlanBrands;
+
+  @JsonKey(name: 'Brands')
+  Brand Brands;
+
+  RepPlanBrandSpResponse(this.PlanBrands,this.Brands);
+  // from json
+  factory RepPlanBrandSpResponse.fromJson(Map<String, dynamic> json) =>
+      _$RepPlanBrandSpResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$RepPlanBrandSpResponseToJson(this);
+}
+
+// @JsonSerializable()
+// class PlanBrandsSpecResponse {
+//   @JsonKey(name: "PlanBrands")
+//   List<PlanBrandSpecResponse>? planBrand;
+//   PlanBrandsSpecResponse(this.planBrand);
+//   // from json
+//   factory PlanBrandsSpecResponse.fromJson(Map<String, dynamic> json) =>
+//       _$PlanBrandsSpecResponseFromJson(json);
+//   // to json
+//   Map<String, dynamic> toJson() => _$PlanBrandsSpecResponseToJson(this);
+// }
+@JsonSerializable()
 class AllPlanBrandsBaseResponse extends BaseResponse {
   @JsonKey(name: "representativeActivePlan_brands")
   AllPlanBrandResponse? data;
@@ -983,6 +1079,18 @@ class AllPlanBrandsBaseResponse extends BaseResponse {
       _$AllPlanBrandsBaseResponseFromJson(json);
   // to json
   Map<String, dynamic> toJson() => _$AllPlanBrandsBaseResponseToJson(this);
+}
+
+@JsonSerializable()
+class PlanBrandsBaseSpResponse extends BaseResponse {
+  @JsonKey(name: "PlanBrands")
+  RepPlanBrandSpResponse? data;
+  PlanBrandsBaseSpResponse(this.data);
+  // from json
+  factory PlanBrandsBaseSpResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanBrandsBaseSpResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$PlanBrandsBaseSpResponseToJson(this);
 }
 
 @JsonSerializable()

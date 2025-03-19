@@ -57,6 +57,14 @@ abstract class AppServiceClient {
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
       @Part(name: "repPlanIdActive") int repPlanIdActive,
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
+
+      @POST("/admin/getRepPlanBrandSp.php")
+  Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
+      @Part(name: "repPlanId") int repPlanId,
+       @Part(name: "repId") int? repId,
+      @Part(name: "spId") int? spId);
+        
+
   @POST("/getHosVisit.php")
   Future<VisitHospitalBaseResponse> getHosVisit(
     @Part(name: "repPlanId") int repPlanId,

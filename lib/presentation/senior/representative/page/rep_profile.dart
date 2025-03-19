@@ -344,7 +344,7 @@ class RepProfile extends StatelessWidget {
                                   initFutureSpecializationsModule();
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
-                                      return FutureSpecializationsPage(id: id);
+                                      return FutureSpecializationsPage(id: id,repPlanId:repPlanId );
                                     },
                                   ));
                                   BlocProvider.of<FutureRepBloc>(context)
@@ -353,8 +353,6 @@ class RepProfile extends StatelessWidget {
                                 icon1: FontAwesomeIcons.table,
                                 text: "تدقيق خطة المندوب",
                               ),
-
-
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: AppPadding.p14),
