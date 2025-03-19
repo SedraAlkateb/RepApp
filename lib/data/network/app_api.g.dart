@@ -451,8 +451,8 @@ class _AppServiceClient implements AppServiceClient {
   @override
   Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
     int repPlanId,
-    int? repId,
     int? spId,
+    int? repId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -463,16 +463,16 @@ class _AppServiceClient implements AppServiceClient {
       'repPlanId',
       repPlanId.toString(),
     ));
-    if (repId != null) {
-      _data.fields.add(MapEntry(
-        'repId',
-        repId.toString(),
-      ));
-    }
     if (spId != null) {
       _data.fields.add(MapEntry(
         'spId',
         spId.toString(),
+      ));
+    }
+    if (repId != null) {
+      _data.fields.add(MapEntry(
+        'repId',
+        repId.toString(),
       ));
     }
     final _options = _setStreamType<PlanBrandsBaseSpResponse>(Options(

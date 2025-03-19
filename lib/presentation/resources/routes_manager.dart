@@ -4,7 +4,7 @@ import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
 import 'package:domina_app/presentation/senior/future_rep/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
-import 'package:domina_app/presentation/senior/future_rep/page/auditing_plan.dart';
+import 'package:domina_app/presentation/senior/edit_brand/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
@@ -156,9 +156,9 @@ class RouteGenerator {
       case Routes.senVisitDoctor:
         return MaterialPageRoute(builder: (_) => SenVisitDoctor());
       case Routes.AuditingPlan:
-        iniFutureModule();
+        iniEditBrandPlanModule();
         return MaterialPageRoute(builder: (_) {
-          return AuditingPlan();
+          return AuditingPlan( repPlan: 7,);
         });
       case Routes.RepPlanBrandSp:
         iniFutureModule();

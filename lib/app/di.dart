@@ -100,6 +100,7 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
+import 'package:domina_app/presentation/senior/edit_brand/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
@@ -565,27 +566,6 @@ Future<void> initSeniorManageFutureModule() async {
   }
 }
 
-Future<void> initFutureSpecializationsModule() async {
-  if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
-    instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<RepPlanBrandSpUsecase>()) {
-    instance.registerFactory<RepPlanBrandSpUsecase>(
-        () => RepPlanBrandSpUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
-    instance.registerFactory<ChangePlanBrandTypeUsecase>(
-        () => ChangePlanBrandTypeUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
-    instance.registerFactory<AllPlanBrandsUsecase>(
-        () => AllPlanBrandsUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<FutureRepBloc>()) {
-    instance.registerFactory<FutureRepBloc>(
-        () => FutureRepBloc(instance(), instance(), instance(), instance()));
-  }
-}
 
 Future<void> initReportVisitDoctorModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorRepSenUsecase>()) {
@@ -606,14 +586,7 @@ Future<void> iniFutureModule() async {
   if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
     instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
   }
-  if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
-    instance.registerFactory<AllPlanBrandsUsecase>(
-        () => AllPlanBrandsUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
-    instance.registerFactory<ChangePlanBrandTypeUsecase>(
-        () => ChangePlanBrandTypeUsecase(instance()));
-  }
+
   if (!GetIt.I.isRegistered<RepPlanBrandSpUsecase>()) {
     instance.registerFactory<RepPlanBrandSpUsecase>(
         () => RepPlanBrandSpUsecase(instance()));
@@ -622,8 +595,22 @@ Future<void> iniFutureModule() async {
     instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(
           instance(),
           instance(),
-          instance(),
-          instance(),
         ));
+  }
+}
+Future<void> iniEditBrandPlanModule() async {
+  if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+    instance.registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+  }
+
+  if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
+    instance.registerFactory<ChangePlanBrandTypeUsecase>(
+            () => ChangePlanBrandTypeUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<EditBrandPlanBloc>()) {
+    instance.registerFactory<EditBrandPlanBloc>(() => EditBrandPlanBloc(
+      instance(),
+      instance(),
+    ));
   }
 }

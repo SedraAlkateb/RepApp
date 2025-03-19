@@ -1048,7 +1048,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, PlanBrandSpecWithSamplesResponse>> getRepPlanBrandSp(RepSp rep) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepPlanBrandSp(rep);
+        final response = await _remoteDataSource.getRepPlanBrandSp(rep.repPlanId,rep.spId,rep.repId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

@@ -15,41 +15,12 @@ final class FutureSpRepState extends FutureRepState {
   List<Object?> get props => [Specs];
 }
 
-final class FuturePlanBrandState extends FutureRepState {
-  final List<PlanBrandModel> planbrand;
-  FuturePlanBrandState(this.planbrand);
-  @override
-  List<Object?> get props => [planbrand];
-}
-final class FutureChangePlanBrandTypeState extends FutureRepState {
-  final List<PlanBrandModel> planbrand;
-  FutureChangePlanBrandTypeState(this.planbrand);
-  @override
-  List<Object?> get props => [planbrand];
-}
+
 final class FutureRepPlanBrandSpState extends FutureRepState {
   final PlanBrandSpecWithSamplesResponse planbrandsp;
   FutureRepPlanBrandSpState(this.planbrandsp);
   @override
   List<Object?> get props => [planbrandsp];
-}
-final class FutureSpRepErrorState extends FutureRepState {
-  final Failure failure;
-  FutureSpRepErrorState({required this.failure});
-  @override
-  List<Object?> get props => [failure];
-}
-final class FutureChangePlanBrandTypeErrorState extends FutureRepState {
-  final Failure failure;
-  FutureChangePlanBrandTypeErrorState({required this.failure});
-  @override
-  List<Object?> get props => [failure];
-}
-final class FutureRepPlanBrandSpErrorState extends FutureRepState {
-  final Failure failure;
-  FutureRepPlanBrandSpErrorState({required this.failure});
-  @override
-  List<Object?> get props => [failure];
 }
 final class FutureSpRepLoadingState extends FutureRepState {
   @override
@@ -57,11 +28,20 @@ final class FutureSpRepLoadingState extends FutureRepState {
   @override
   List<Object?> get props => [];
 }
-final class FutureChangePlanBrandTypeLoadingState extends FutureRepState {
+final class FutureSpRepErrorState extends FutureRepState {
+  final Failure failure;
+  FutureSpRepErrorState({required this.failure});
   @override
-  FutureChangePlanBrandTypeLoadingState();
+  List<Object?> get props => [failure];
+}
+
+
+
+final class FutureRepPlanBrandSpErrorState extends FutureRepState {
+  final Failure failure;
+  FutureRepPlanBrandSpErrorState({required this.failure});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [failure];
 }
 
 final class FutureRepPlanBrandSpLoadingState extends FutureRepState {

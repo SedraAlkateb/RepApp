@@ -1,7 +1,13 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/edit_brand/bloc/edit_brand_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/edit_brand/page/auditing_plan.dart';
+import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/future_rep/page/future_spec.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -77,8 +83,8 @@ class AllRepWithFuture extends StatelessWidget {
                           ColorManager.secondaryColor7,
                         ]),
                         color: ColorManager.white,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(AppSize.s8)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(AppSize.s8)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -111,26 +117,45 @@ class AllRepWithFuture extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: allRepresentative[index].flag.flag!=4?() {
+
+                                  iniFutureModule();
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return FutureSpecializationsPage(id: allRepresentative[index].id,repPlanId:allRepresentative[index].activePlan );
+                                    },
+                                  ));
+                                  BlocProvider.of<FutureRepBloc>(context)
+                                      .add(FutureSpEvent(allRepresentative[index].id));
+                                }:null,
                                 child: Text(
                                   "تدقيق الخطة",
                                   style:
-                                  Theme.of(context).textTheme.titleMedium,
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
-
                               ),
-                              SizedBox(width: 10,),
+                              SizedBox(
+                                width: 10,
+                              ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  iniEditBrandPlanModule();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AuditingPlan(
+                                            repPlan: allRepresentative[index]
+                                                .activePlan),
+                                      ));
+                                },
                                 child: Text(
                                   "تعديل الاصناف",
                                   style:
-                                  Theme.of(context).textTheme.titleMedium,
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
                             ],
                           ),
-
                         ],
                       ),
                     );
