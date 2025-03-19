@@ -23,6 +23,14 @@ class FutureGetPlanBrandEvent extends FutureRepEvent {
   @override
   List<Object?> get props => [rep];
 }
+class FutureRepPlanBrandSpEvent extends FutureRepEvent {
+  final RepSp rep;
+  FutureRepPlanBrandSpEvent(this.rep);
+  @override
+  List<Object?> get props => [rep];
+}
+
+
 class FutureChangePlanBrandTypeEvent extends FutureRepEvent {
   final int id;
   final int brandType;

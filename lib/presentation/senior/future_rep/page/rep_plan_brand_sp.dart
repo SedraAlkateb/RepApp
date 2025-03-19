@@ -1,41 +1,45 @@
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
+
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BrandPlanOtherPage extends StatefulWidget {
-  final OtherBrandSpPlanModel otherBrandSpPlanModel;
-  final int index1;
+class RepPlanBrandSpPage extends StatefulWidget {
+//   final OtherBrandSpPlanModel otherBrandSpPlanModel;
+//  final int index1;
+  final String title;
   @override
-  const BrandPlanOtherPage(
-      {super.key, required this.otherBrandSpPlanModel, required this.index1});
+  const RepPlanBrandSpPage({super.key, required this.title
+      // , required this.otherBrandSpPlanModel
+      //   ,required this.index1
+      });
 
-  State<BrandPlanOtherPage> createState() => _BrandPlanOtherPageState();
+  State<RepPlanBrandSpPage> createState() => _RepPlanBrandSpPageState();
 }
 
-class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
+class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     with AutomaticKeepAliveClientMixin {
-  int summ = 0;
-  @override
-  void initState() {
-    for (var brand in widget.otherBrandSpPlanModel.brands) {
-      summ = summ + brand.amount;
-    }
-    BlocProvider.of<BrandPlanBloc>(context).sumS = summ;
-    super.initState();
-  }
-
+  // int summ=0;
+  // @override
+  // void initState() {
+  //   for (var brand in widget.otherBrandSpPlanModel.brands) {
+  //     summ=summ+brand.amount;
+  //   }
+  //   BlocProvider.of<BrandPlanBloc>(context).sumS=summ;
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    PlanBrandSpecWithSamplesResponse planBrandsp = context.watch<FutureRepBloc>().planBrandsp;
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.otherBrandSpPlanModel.specModel.title)),
+      appBar: AppBar(centerTitle: true, title: Text(widget.title)),
       backgroundColor: ColorManager.white,
       body: Container(
         child: Stack(
@@ -43,21 +47,31 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
             SingleChildScrollView(
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: BlocConsumer<BrandPlanBloc, BrandPlanState>(
+                  child: BlocConsumer<FutureRepBloc, FutureRepState>(
                     listener: (context, state) {
-                      if (state is SumErrorState) {
-                        error(
+                      if (state is FutureRepPlanBrandSpErrorState) {
+                        return error(
                             context, state.failure.massage, state.failure.code);
-                        BlocProvider.of<BrandPlanBloc>(context)
-                            .add(UpdateEvent());
+                        // BlocProvider.of<BrandPlanBloc>(context)
+                        //     .add(UpdateEvent());
+                      }
+
+                      if (state is FutureRepPlanBrandSpState) {
+                        planBrandsp = state.planbrandsp;
                       }
                     },
                     builder: (context, state) {
+                      if (state is FutureRepPlanBrandSpLoadingState) {
+                        return loadingFullScreen(context);
+                      }
+                      if (state is FutureRepPlanBrandSpEmptyState) {
+                        return emptyFullScreen(context);
+                      }
                       return ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
-                            BlocBuilder<BrandPlanBloc, BrandPlanState>(
+                            BlocBuilder<FutureRepBloc, FutureRepState>(
                           builder: (context, state) {
                             return Container(
                               margin: EdgeInsets.all(AppPadding.p8),
@@ -97,11 +111,11 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                         SizedBox(width: 8),
                                         Expanded(
                                           child: Text(
-                                            "العينة : ${widget.otherBrandSpPlanModel.brands[index].title}",
+                                            "العينة : ${planBrandsp.PlanBrands[index].titleAr}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
-                                            overflow: TextOverflow.ellipsis,
+                                            overflow: TextOverflow.visible,
                                           ),
                                         ),
                                         Container(
@@ -110,10 +124,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                             horizontal: AppPadding.p14,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: int.parse(widget
-                                                        .otherBrandSpPlanModel
-                                                        .brands[index]
-                                                        .brandType) ==
+                                            color: int.parse(planBrandsp.PlanBrands[index]
+                                                        .brandType ?? '0') ==
                                                     1
                                                 ? ColorManager.secondaryColor1
                                                 : ColorManager.secondaryColor2,
@@ -123,10 +135,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                             ),
                                           ),
                                           child: Text(
-                                            int.parse(widget
-                                                        .otherBrandSpPlanModel
-                                                        .brands[index]
-                                                        .brandType) ==
+                                            int.parse(planBrandsp.PlanBrands[index]
+                                                        .brandType??"0") ==
                                                     1
                                                 ? "هدف"
                                                 : "مساعد",
@@ -160,7 +170,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                         SizedBox(width: 8), // مسافة صغيرة
                                         Expanded(
                                           child: Text(
-                                            "النوع : ${widget.otherBrandSpPlanModel.brands[index].phTitle}",
+                                            "النوع : ${planBrandsp.PlanBrands[index].phTitle}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
@@ -196,10 +206,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                         Expanded(
                                           child: TextField(
                                             decoration: InputDecoration(
-                                              hintText: widget
-                                                  .otherBrandSpPlanModel
-                                                  .brands[index]
-                                                  .amount
+                                              hintText: planBrandsp.PlanBrands[index]
+                                                  .totalAmount
                                                   .toString(),
                                               enabled: UserInfo.otherstatus == 0
                                                   ? true
@@ -214,20 +222,16 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                               ),
                                             ),
                                             onChanged: (value) {
-                                              if (value.isNotEmpty &&
-                                                  value != "") {
-                                                print(value);
-                                                print("value");
-                                                BlocProvider.of<BrandPlanBloc>(
-                                                        context)
-                                                    .add(ChangeFieldEvent(
-                                                        int.parse(value),
-                                                        widget.index1,
-                                                        index,
-                                                        widget
-                                                            .otherBrandSpPlanModel
-                                                            .brandm));
-                                              }
+                                              // if (value.isNotEmpty && value != "") {
+                                              //   print(value);
+                                              //   print("value");
+                                              //   BlocProvider.of<BrandPlanBloc>(
+                                              //           context)
+                                              //       .add(ChangeFieldEvent(
+                                              //           int.parse(value),
+                                              //       widget.index1,
+                                              //         index, widget.otherBrandSpPlanModel.brandm));
+                                              // }
                                             },
                                             keyboardType: TextInputType.number,
                                           ),
@@ -240,7 +244,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                             );
                           },
                         ),
-                        itemCount: widget.otherBrandSpPlanModel.brands.length,
+                        itemCount: planBrandsp.PlanBrands.length,
                       );
                     },
                   )),

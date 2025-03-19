@@ -1,6 +1,8 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -9,8 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FutureSpecializationsPage extends StatelessWidget {
-  FutureSpecializationsPage({super.key, required this.id});
+  FutureSpecializationsPage({super.key, required this.id, required this.repPlanId});
  final int id;
+  final int repPlanId;
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -85,8 +88,17 @@ class FutureSpecializationsPage extends StatelessWidget {
                       itemCount: placeModel.length,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: () {
-                          },
+                          onTap: ()  {
+                                  iniFutureModule();
+                                  BlocProvider.of<FutureRepBloc>(context)
+                                      .add(FutureRepPlanBrandSpEvent(RepSp(repPlanId,placeModel[index].id , id)));
+
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.RepPlanBrandSp,
+                                    arguments: {'title': placeModel[index].title},
+                                  );
+                                },
                           child: Container(
                             margin: EdgeInsets.all(AppPadding.p10),
                             padding: EdgeInsets.all(AppPadding.p5),

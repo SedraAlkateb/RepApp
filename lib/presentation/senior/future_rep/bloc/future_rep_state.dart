@@ -27,6 +27,12 @@ final class FutureChangePlanBrandTypeState extends FutureRepState {
   @override
   List<Object?> get props => [planbrand];
 }
+final class FutureRepPlanBrandSpState extends FutureRepState {
+  final PlanBrandSpecWithSamplesResponse planbrandsp;
+  FutureRepPlanBrandSpState(this.planbrandsp);
+  @override
+  List<Object?> get props => [planbrandsp];
+}
 final class FutureSpRepErrorState extends FutureRepState {
   final Failure failure;
   FutureSpRepErrorState({required this.failure});
@@ -36,6 +42,12 @@ final class FutureSpRepErrorState extends FutureRepState {
 final class FutureChangePlanBrandTypeErrorState extends FutureRepState {
   final Failure failure;
   FutureChangePlanBrandTypeErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class FutureRepPlanBrandSpErrorState extends FutureRepState {
+  final Failure failure;
+  FutureRepPlanBrandSpErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }
@@ -50,4 +62,17 @@ final class FutureChangePlanBrandTypeLoadingState extends FutureRepState {
   FutureChangePlanBrandTypeLoadingState();
   @override
   List<Object?> get props => [];
+}
+
+final class FutureRepPlanBrandSpLoadingState extends FutureRepState {
+  @override
+  FutureRepPlanBrandSpLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class FutureRepPlanBrandSpEmptyState extends FutureRepState {
+  final PlanBrandSpecWithSamplesResponse planbrandsp;
+  FutureRepPlanBrandSpEmptyState(this.planbrandsp);
+  @override
+  List<Object?> get props =>[planbrandsp];
 }
