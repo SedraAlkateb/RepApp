@@ -228,8 +228,13 @@ class AppSqlApi extends AppSqlApiAbs {
           END
         ), 0) AS sumBrandHospital,
       COALESCE(
-        SUM(
-          CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
+         SUM(
+          CASE 
+            WHEN hospital.title LIKE '%شعب%' THEN 
+              CAST(hospitalSp.visit AS INTEGER) 
+            ELSE 
+              CAST(hospitalSp.totalDocs AS INTEGER) * CAST(hospitalSp.visit AS INTEGER)
+          END
         ), 0) AS sumHospital
   FROM 
       specialization
@@ -469,14 +474,14 @@ class AppSqlApi extends AppSqlApiAbs {
 
   }
 
-  Future<Map<String, dynamic>> fetchTotalSums(Database db) async {
-    final List<Map<String, dynamic>> result = await db.rawQuery('''
-    SELECT 
-        SUM(sumDoctor + sumHospital) AS grandTotal
-    FROM specialization;
-  ''');
-    return result.first; // لأننا نتوقع صفًا واحدًا فقط
-  }
+  // Future<Map<String, dynamic>> fetchTotalSums(Database db) async {
+  //   final List<Map<String, dynamic>> result = await db.rawQuery('''
+  //   SELECT
+  //       SUM(sumDoctor + sumHospital) AS grandTotal
+  //   FROM specialization;
+  // ''');
+  //   return result.first; // لأننا نتوقع صفًا واحدًا فقط
+  // }
 
   Future<List<BrandModel>> getBrandsWithFlag() async {
     final db = await databaseHelper.database;

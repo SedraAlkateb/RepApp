@@ -1205,8 +1205,13 @@ class PlanBrandModel {
   }
 
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
-        map['repPlanId'], map['brandType'], map['title'], map['amount']);
+    return PlanBrandModel(map['id'],
+        map['spId'],
+        map['brandId'],
+        map['repPlanId'],
+        map['brandType'],
+        "",
+        map['amount']);
   }
 }
 
@@ -1573,6 +1578,38 @@ class AllRepresentative {
   AllRepresentative(this.id, this.name, this.number, this.activePlan);
 }
 
+class AllRepresentativeFuture {
+  int id;
+  int activePlan;
+  String name;
+  FlagModel flag;
+  AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
+}
+class FlagModel {
+  final int flag;
+  final String name;
+
+  FlagModel(this.flag) : name = _getFlagName(flag);
+
+  static String _getFlagName(int flag) {
+    switch (flag) {
+      case 0:
+        return "بانتظار موافقة المندوب";
+      case 1:
+        return "بانتظار موافقة المشرف";
+      case 2:
+        return "فعالة";
+      case 3:
+        return "منتهية";
+      case 4:
+        return "بانتظار موافقة المستودع";
+      default:
+        return "خطأ";
+    }
+  }
+}
+
+
 class InventoryModel {
   String title;
   String used;
@@ -1626,7 +1663,16 @@ class VisitRepSen {
   int userId;
   VisitRepSen(this.repId, this.userId);
 }
-
+class ReadAll {
+  int repPlanId;
+  int userId;
+  int type;
+  int flag;
+  ReadAll(this.repPlanId,
+      this.userId,
+      this.type,
+      this.flag);
+}
 class RepVisitsModel {
   String visitId;
   String visitDate;
@@ -1641,6 +1687,35 @@ class RepVisitsModel {
   bool flag;
   List<String> samples;
   RepVisitsModel(
+      this.visitId,
+      this.visitDate,
+      this.placeTitle,
+      this.docTitle,
+      this.rate,
+      this.spTitle,
+      this.note,
+      this.issue,
+      this.special,
+      this.target,
+      this.flag,
+      this.samples);
+}
+class RepVisitsModelSearch {
+  int index;
+  String visitId;
+  String visitDate;
+  String placeTitle;
+  String docTitle;
+  String rate;
+  String spTitle;
+  String note;
+  String issue;
+  String special;
+  String target;
+  bool flag;
+  List<String> samples;
+  RepVisitsModelSearch(
+      this.index,
       this.visitId,
       this.visitDate,
       this.placeTitle,

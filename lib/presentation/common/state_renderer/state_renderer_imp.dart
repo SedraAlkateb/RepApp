@@ -147,6 +147,8 @@ extension FlowStateExtension on FlowState {
         builder: (BuildContext context) => StateRenderer(
             stateRendererType: stateRendererType,
             message: message,
-            retryActionFunction: () {}));
+            retryActionFunction: () {}
+        )
+    );
   }
 }

@@ -951,7 +951,7 @@ class RepositoryImp implements Repository {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
           excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "visitRepSen"));
+              .exceptionApi(ExceptionModel(failure.massage, "getRepVisits"));
           return Left(failure);
         }
       } else {
@@ -1048,8 +1048,7 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, PlanBrandSpecWithSamplesResponse>> getRepPlanBrandSp(RepSp rep) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource
-            .getRepPlanBrandSp(rep.repPlanId, rep.repId, rep.spId);
+        final response = await _remoteDataSource.getRepPlanBrandSp(rep);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1066,8 +1065,62 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getRepPlanBrandSp")]));
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepPlanBrandSp")]));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id)  async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getRepsFuture(id);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getRepsFuture")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepsFuture")]));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Message1Response>> readAllVisits(ReadAll readAll) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.readAllVisits(readAll);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response);
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "readAllVisits")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "readAllVisits")]));
       return Left(failure);
     }
   }

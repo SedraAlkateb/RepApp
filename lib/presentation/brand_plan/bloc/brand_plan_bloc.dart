@@ -95,14 +95,16 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             sum = sum1;
             sumS = sum2;
             emit(SumState(planBrand));
-          } else {
+          }
+          else {
             planBrand[event.index].brands[event.indexBr].amount = event.number;
             sum = sum1;
             sumS = sum2;
             emit(SumErrorState(
                 failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
           }
-        } else {
+        }
+        else {
           planBrand[event.index].brands[event.indexBr].amount = event.number;
           sumS = sum2;
           emit(SumErrorState(
@@ -117,11 +119,11 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
       if (event is SendToS) {
         emit(UpdateAmountLoadingState());
         StatePlan x = isSumSend();
-
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        } else if (x.state == 0) {
+        }
+        else if (x.state == 0) {
           UserInfo.otherstatus = 1;
           (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
               .fold((failure) {
@@ -130,11 +132,13 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           }, (data) async {
             emit(UpdateAmountSendState());
           });
-        } else if (x.state == 1) {
+        }
+        else if (x.state == 1) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
                   "لقد تجاوزت الحد المسموح في إختصاص ${planBrand[x.index].specModel.title}")));
-        } else if (x.state == 2) {
+        }
+        else if (x.state == 2) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
                   "لم يتم تعبئة إختصاص (${planBrand[x.index].specModel.title})")));
@@ -146,14 +150,16 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         if (sum > UserInfo.percentage) {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
-        } else if (x.state == 0) {
+        }
+        else if (x.state == 0) {
           (await updateBrandPlanSqlUsecase.execute(planBrand)).fold((failure) {
             emit(UpdateAmountErrorState(failure: failure));
             return false;
           }, (data) async {
             emit(UpdateAmountState());
           });
-        } else if (x.state == 1) {
+        }
+        else if (x.state == 1) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
                   "لقد تجاوزت الحد المسموح في اختصاص ${planBrand[x.index].specModel.title}")));

@@ -1054,6 +1054,58 @@ Map<String, dynamic> _$AllRepresentativeBaseResponseToJson(
       'Representative': instance.data,
     };
 
+RepresentativeFutureResponse _$RepresentativeFutureResponseFromJson(
+        Map<String, dynamic> json) =>
+    RepresentativeFutureResponse(
+      json['repId'] as String?,
+      json['name'] as String?,
+      json['flag'] as String?,
+      json['futurePlan'] as String?,
+    );
+
+Map<String, dynamic> _$RepresentativeFutureResponseToJson(
+        RepresentativeFutureResponse instance) =>
+    <String, dynamic>{
+      'repId': instance.id,
+      'name': instance.name,
+      'flag': instance.flag,
+      'futurePlan': instance.activePlan,
+    };
+
+AllRepresentativeFutureResponse _$AllRepresentativeFutureResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllRepresentativeFutureResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map((e) =>
+              RepresentativeFutureResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllRepresentativeFutureResponseToJson(
+        AllRepresentativeFutureResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.data,
+    };
+
+AllRepresentativeFutureBaseResponse
+    _$AllRepresentativeFutureBaseResponseFromJson(Map<String, dynamic> json) =>
+        AllRepresentativeFutureBaseResponse(
+          json['Representative'] == null
+              ? null
+              : AllRepresentativeFutureResponse.fromJson(
+                  json['Representative'] as Map<String, dynamic>),
+        )
+          ..status = json['status'] as String?
+          ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllRepresentativeFutureBaseResponseToJson(
+        AllRepresentativeFutureBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Representative': instance.data,
+    };
+
 AllPlanBrandResponse _$AllPlanBrandResponseFromJson(
         Map<String, dynamic> json) =>
     AllPlanBrandResponse(

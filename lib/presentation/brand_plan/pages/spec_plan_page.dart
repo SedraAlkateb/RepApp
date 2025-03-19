@@ -189,9 +189,11 @@ class SpecPlanPage extends StatelessWidget {
                     if (state is UpdateAmountState) {
                       BlocProvider.of<BrandPlanBloc>(context)
                           .add(UpdateSaveEvent());
+                      Navigator.pop(context);
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                     if (state is UpdateAmountSendState) {
+                      Navigator.pop(context);
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                   },

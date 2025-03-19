@@ -41,6 +41,7 @@ class RepProfile extends StatelessWidget {
       return true;
     }
     String name = "";
+    int repPlan=0;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -84,6 +85,7 @@ class RepProfile extends StatelessWidget {
                           return errorFullScreen(context);
                         } else if (state is RepInfoState) {
                           name = state.infoRep.name;
+                          repPlan=state.infoRep.repPlanId;
                           return Column(
                             children: [
                               Text(
@@ -108,18 +110,21 @@ class RepProfile extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               RowListInfo(
-                                  text1: "عدد الوصفات  :",
-                                  text2: "${state.infoRep.recipesCount}"),
-                              RowListInfo(
-                                  text1: "عدد الزيارات المتبقية لتحقيق الهدف :",
-                                  text2: "${state.infoRep.visitNoteYet}"),
+                                  text1: "عدد الزيارات الكلي:",
+                                  text2: "${state.infoRep.totalVisit}"),
                               RowListInfo(
                                   text1:
-                                      "عدد الزيارات للأطباء الذين تمت زيارتهم :",
+                                  "عدد الزيارات المحققة :",
                                   text2: "${state.infoRep.visitDon}"),
                               RowListInfo(
-                                  text1: "عدد الزيارات:",
-                                  text2: "${state.infoRep.totalVisit}"),
+                                  text1: "عدد الزيارات المتبقية :",
+                                  text2: "${state.infoRep.visitNoteYet}"),
+                              RowListInfo(
+                                  text1: "عدد الوصفات  :",
+                                  text2: "${state.infoRep.recipesCount}"),
+
+
+
                             ],
                           );
                         }
@@ -294,6 +299,7 @@ class RepProfile extends StatelessWidget {
                                 userId: UserInfo.repId,
                                 repName: name,
                                 indexRep: index,
+                                repPlan: repPlan,
                               );
                             },
                           ));
@@ -320,6 +326,7 @@ class RepProfile extends StatelessWidget {
                                 userId: UserInfo.repId,
                                 repName: name,
                                 indexRep: index,
+                                repPlan: repPlan,
                               );
                             },
                           ));
@@ -336,7 +343,7 @@ class RepProfile extends StatelessWidget {
                         thickness: 0.8,
                       ),
                     ),
-                    UserInfo.repType != "7"
+                    (UserInfo.repType == "5"||UserInfo.repType == "4")
                         ? Column(
                             children: [
                               RowList(

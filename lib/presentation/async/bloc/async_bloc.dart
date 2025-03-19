@@ -30,7 +30,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllPlaceUsecase allPlaceUsecase;
   AllSpeUsecase allSpeUsecase;
   AsyncDataSqlUsecase asyncDataSqlUsecase;
-  AllHospitalUsecase allhospitalUsecase;
+  AllHospitalUsecase allHospitalUsecase;
   AllDoctorUsecase allDoctorUsecase;
   AllHospialSpUsecase allHospialSpUsecase;
   AllBrandsSpUsecase allBrandsSpUsecase;
@@ -63,7 +63,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.allSpeUsecase,
       this.asyncDataSqlUsecase,
       this.allDoctorUsecase,
-      this.allhospitalUsecase,
+      this.allHospitalUsecase,
       this.allHospialSpUsecase,
       this.editIsLoginSqlUsecase,
       this.allBrandsSpUsecase,
@@ -191,7 +191,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           /////////////////////////////////////////////////
           emit(LoadingState(5));
           final hospitalsResult =
-              await allhospitalUsecase.execute(UserInfo.repId);
+              await allHospitalUsecase.execute(UserInfo.repId);
           final hospitalsFailureOrSuccess =
               hospitalsResult.fold((failure) => failure, (data) => data);
           if (hospitalsFailureOrSuccess is Failure) {

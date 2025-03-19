@@ -3,7 +3,6 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/drawer/widget/text_drawer.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -129,7 +128,7 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
-          UserInfo.repType != "7"
+          (UserInfo.repType != "7")
               ? ListTile(
                   focusColor: ColorManager.secondaryColor,
                   minTileHeight: 10,
@@ -150,7 +149,7 @@ class DrawerPage extends StatelessWidget {
                   },
                 )
               : SizedBox(),
-          UserInfo.repType != "7"
+          (UserInfo.repType != "7")
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Divider(
@@ -158,6 +157,37 @@ class DrawerPage extends StatelessWidget {
                     color: ColorManager.hintGrey,
                   ),
                 )
+              : SizedBox(),
+          (UserInfo.repType != "7"&&UserInfo.repType != "6")
+              ? ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
+            leading: Icon(Icons.list_alt_outlined,
+                color: ColorManager.secondaryColor4),
+            title: Text(
+              ' إدارة الخطط',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.manageFuture,
+                      (route) => false,
+                );
+              });
+            },
+          )
+              : SizedBox(),
+          (UserInfo.repType != "7"&&UserInfo.repType != "6")
+
+              ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
+            ),
+          )
               : SizedBox(),
           ListTile(
             focusColor: ColorManager.secondaryColor,

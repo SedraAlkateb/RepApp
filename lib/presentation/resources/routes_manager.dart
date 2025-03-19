@@ -2,6 +2,7 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
 import 'package:domina_app/presentation/senior/future_rep/page/rep_plan_brand_sp.dart';
+import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/future_rep/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
@@ -29,7 +30,6 @@ import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
 import 'package:domina_app/presentation/visits/pages/visits_page.dart';
 import 'package:flutter/material.dart';
-
 import '../Recipes/pages/Recipes.dart';
 
 class Routes {
@@ -63,6 +63,7 @@ class Routes {
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String AuditingPlan = "/AuditingPlan";
   static const String RepPlanBrandSp = "/RepPlanBrandSp";
+  static const String manageFuture = "/manageFuture";
 }
 
 class RouteGenerator {
@@ -143,6 +144,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SpecSeniorPage());
       case Routes.seniorHos:
         return MaterialPageRoute(builder: (_) => HospitalSenior());
+      case Routes.manageFuture:
+        initSeniorManageFutureModule();
+        return MaterialPageRoute(builder: (_) => AllRepWithFuture());
       case Routes.seniorDoc:
         return MaterialPageRoute(builder: (_) => DoctorSenior());
       // case Routes.seniorNoteDoc:
