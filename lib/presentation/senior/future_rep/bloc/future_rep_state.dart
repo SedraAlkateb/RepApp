@@ -35,6 +35,8 @@ final class FutureSpRepErrorState extends FutureRepState {
   List<Object?> get props => [failure];
 }
 
+
+
 final class FutureRepPlanBrandSpErrorState extends FutureRepState {
   final Failure failure;
   FutureRepPlanBrandSpErrorState({required this.failure});

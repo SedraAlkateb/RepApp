@@ -110,7 +110,11 @@ abstract class AppServiceClient {
     @Part(name: "brand_1") String brand_1,
     @Part(name: "address") String address,
     @Part(name: "phone") String phone,
-    @Part(name: "total") String total, {
+    @Part(name: "total") String total,
+      {
+
+
+
     @Part(name: "flagImage1") String? flagImage1,
     @Part(name: "flagImage2") String? flagImage2,
     @Part(name: "note1") String? note1,
