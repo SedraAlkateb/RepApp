@@ -1482,9 +1482,33 @@ class AllRepresentativeFuture {
   int id;
   int activePlan;
   String name;
-  int flag;
+  FlagModel flag;
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
 }
+class FlagModel {
+  final int flag;
+  final String name;
+
+  FlagModel(this.flag) : name = _getFlagName(flag);
+
+  static String _getFlagName(int flag) {
+    switch (flag) {
+      case 0:
+        return "بانتظار موافقة المندوب";
+      case 1:
+        return "بانتظار موافقة المشرف";
+      case 2:
+        return "فعالة";
+      case 3:
+        return "منتهية";
+      case 4:
+        return "بانتظار موافقة المستودع";
+      default:
+        return "خطأ";
+    }
+  }
+}
+
 
 class InventoryModel {
   String title;

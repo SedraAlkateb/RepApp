@@ -174,9 +174,8 @@ extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
     return AllRepresentativeFuture(
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
-      int.parse(this?.flag ?? "0"),
+      FlagModel(int.parse(this?.flag ?? "0")),
       int.parse(this?.activePlan ?? "0"),
-
     );
   }
 }
@@ -188,7 +187,6 @@ extension PlaceResponseMapper on PlaceResponse? {
     );
   }
 }
-
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
     return SpecDModel(int.parse(this?.id ?? "0"),

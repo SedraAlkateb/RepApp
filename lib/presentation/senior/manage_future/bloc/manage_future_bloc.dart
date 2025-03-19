@@ -14,31 +14,27 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
   List<AllRepresentativeFuture> allRepresentative = [];
   AllRepsFutureUsecase allRepsFutureUsecase;
   ManageFutureBloc(this.allRepsFutureUsecase) : super(ManageFutureInitial()) {
-
-    on<ManageFutureEvent>((event, emit) async{
-
+    on<ManageFutureEvent>((event, emit) async {
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
         (await allRepsFutureUsecase.execute(UserInfo.repId)).fold((failure) {
-      emit(AllSeniorRepErrorState(failure: failure));
-      }, (data) async {
-      data.sort((a, b) => b.flag.compareTo(a.flag));
-      allRepresentative=data;
-      emit(AllSeniorRepState(data));
-      });
-      }
-      else if (event is SenSearchRepFutureEvent) {
-      List<AllRepresentativeFuture> allRepresentativeModel=[];
-      String search = normalizeText(event.contant);
-      allRepresentativeModel = allRepresentative.where((value) {
-      if (normalizeText(value.name).contains(search)) {
-      return true;
-      }
-      return false;
-      }).toList();
-      emit(AllSeniorRepState(allRepresentativeModel));
+          emit(AllSeniorRepErrorState(failure: failure));
+        }, (data) async {
+          data.sort((a, b) => b.flag.flag.compareTo(a.flag.flag));
+          allRepresentative = data;
+          emit(AllSeniorRepState(data));
+        });
+      } else if (event is SenSearchRepFutureEvent) {
+        List<AllRepresentativeFuture> allRepresentativeModel = [];
+        String search = normalizeText(event.contant);
+        allRepresentativeModel = allRepresentative.where((value) {
+          if (normalizeText(value.name).contains(search)) {
+            return true;
+          }
+          return false;
+        }).toList();
+        emit(AllSeniorRepState(allRepresentativeModel));
       }
     });
   }
-
 }

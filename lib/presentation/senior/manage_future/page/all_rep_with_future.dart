@@ -54,13 +54,11 @@ class AllRepWithFuture extends StatelessWidget {
                 context.watch<ManageFutureBloc>().allRepresentative;
             if (state is AllSeniorRepLoadingState) {
               return loadingFullScreen(context);
-            }
-            else if (state is AllSeniorRepErrorState) {
+            } else if (state is AllSeniorRepErrorState) {
               return errorFullScreen(context,
                   func: () => BlocProvider.of<ManageFutureBloc>(context)
                       .add(AllSeniorRepFutureEvent()));
-            }
-            else  if (state is AllSeniorRepState) {
+            } else if (state is AllSeniorRepState) {
               allRepresentative = state.representatives;
             }
             return Expanded(
@@ -68,37 +66,72 @@ class AllRepWithFuture extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
+                    return Container(
+                      margin: EdgeInsets.all(AppPadding.p8),
+                      padding: EdgeInsets.all(AppPadding.p16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          //  ColorManager.secondaryColor6,
+                          ColorManager.secondaryColor7,
+                          ColorManager.secondaryColor7,
+                          ColorManager.secondaryColor7,
+                        ]),
+                        color: ColorManager.white,
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(AppSize.s8)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${allRepresentative[index].name}",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              shape: BoxShape.rectangle,
+                              border: Border.all(
+                                color: ColorManager.white,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [],
+                            ),
+                            child: Text(
+                              "${allRepresentative[index].flag.name}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "تدقيق الخطة",
+                                  style:
+                                  Theme.of(context).textTheme.titleMedium,
+                                ),
 
-                      },
-                      child: Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.all(AppPadding.p16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            //  ColorManager.secondaryColor6,
-                            ColorManager.secondaryColor7,
-                            ColorManager.secondaryColor7,
-                            ColorManager.secondaryColor7,
-                          ]),
-                          color: ColorManager.white,
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(AppSize.s8)),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${allRepresentative[index].name}",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            Icon(Icons.circle,
-                            color: ColorManager.error,
-                            ),
-                          ],
-                        ),
+                              ),
+                              SizedBox(width: 10,),
+                              ElevatedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "تعديل الاصناف",
+                                  style:
+                                  Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
                       ),
                     );
                   },
@@ -106,7 +139,6 @@ class AllRepWithFuture extends StatelessWidget {
                 ),
               ),
             );
-
           },
         ),
       ],
