@@ -2,7 +2,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/edit_brand/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -13,8 +13,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class AuditingPlan extends StatefulWidget {
   AuditingPlan({
     super.key,
+    required this.repPlan
   });
-
+final int repPlan;
   @override
   State<AuditingPlan> createState() => _AuditingPlanState();
 }
@@ -22,10 +23,16 @@ class AuditingPlan extends StatefulWidget {
 class _AuditingPlanState extends State<AuditingPlan> {
   final TextEditingController searchController = TextEditingController();
   int? loadingItemId;
+@override
+  void initState() {
 
+  BlocProvider.of<EditBrandPlanBloc>(context)
+      .add(FutureGetPlanBrandEvent(Rep(widget.repPlan)));
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    List<PlanBrandModel> planBrand = context.watch<FutureRepBloc>().planBrands;
+    List<PlanBrandModel> planBrand = context.watch<EditBrandPlanBloc>().planBrands;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
@@ -53,14 +60,14 @@ class _AuditingPlanState extends State<AuditingPlan> {
           SearchField(
             searchController: searchController,
             onPressed: (value) {
-              BlocProvider.of<FutureRepBloc>(context)
+              BlocProvider.of<EditBrandPlanBloc>(context)
                   .add(FutureSearchSpecEvent(value));
             },
           ),
-          BlocBuilder<FutureRepBloc, FutureRepState>(
+          BlocBuilder<EditBrandPlanBloc, EditBrandPlanState>(
             builder: (context, state) {
               // List<PlanBrandModel> planBrand =
-              //     context.watch<FutureRepBloc>().planBrands;
+              //     context.watch<EditBrandPlanBloc>().planBrands;
               if (state is FuturePlanBrandState) {
                 planBrand = state.planbrand;
               }
@@ -108,7 +115,7 @@ class _AuditingPlanState extends State<AuditingPlan> {
                             SizedBox(
                               height: AppSize.s8,
                             ),
-                            BlocConsumer<FutureRepBloc, FutureRepState>(
+                            BlocConsumer<EditBrandPlanBloc, EditBrandPlanState>(
                               builder: (context, state) {
                                 if (state is FutureChangePlanBrandTypeState) {
                                   loadingItemId = -1;
@@ -127,7 +134,7 @@ class _AuditingPlanState extends State<AuditingPlan> {
                                             loadingItemId = index;
                                           });
 
-                                          BlocProvider.of<FutureRepBloc>(
+                                          BlocProvider.of<EditBrandPlanBloc>(
                                                   context)
                                               .add(
                                             FutureChangePlanBrandTypeEvent(
@@ -143,7 +150,7 @@ class _AuditingPlanState extends State<AuditingPlan> {
                                       );
                               },
                               listener:
-                                  (BuildContext context, FutureRepState state) {
+                                  (BuildContext context, EditBrandPlanState state) {
                                 if (state is FutureChangePlanBrandTypeErrorState) {
                                   loadingItemId = -1;
                                   error(context, state.failure.massage,

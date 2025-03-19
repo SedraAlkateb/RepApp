@@ -343,57 +343,6 @@ class RepProfile extends StatelessWidget {
                         thickness: 0.8,
                       ),
                     ),
-                    (UserInfo.repType == "5"||UserInfo.repType == "4")
-                        ? Column(
-                            children: [
-                              RowList(
-                                function: () {
-                                  initFutureSpecializationsModule();
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return FutureSpecializationsPage(id: id,repPlanId:repPlanId );
-                                    },
-                                  ));
-                                  BlocProvider.of<FutureRepBloc>(context)
-                                      .add(FutureSpEvent(id));
-                                },
-                                icon1: FontAwesomeIcons.table,
-                                text: "تدقيق خطة المندوب",
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: AppPadding.p14),
-                                child: Divider(
-                                  color: ColorManager.secondaryColor6,
-                                  thickness: 0.8,
-                                ),
-                              ),
-                              RowList(
-                                icon1: FontAwesomeIcons.table,
-                                text: "تعديل أصناف الخطة",
-                                function: () {
-                                  iniFutureModule();
-                                  BlocProvider.of<FutureRepBloc>(context)
-                                      .add(FutureGetPlanBrandEvent(Rep(repPlanId)));
-
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.AuditingPlan,
-                                  );
-                                },
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: AppPadding.p14),
-                                child: Divider(
-                                  color: ColorManager.secondaryColor6,
-                                  thickness: 0.8,
-                                ),
-                              ),
-                            ],
-                          )
-                        : SizedBox(),
                     RowList(
                       icon1: FontAwesomeIcons.userDoctor,
                       text: "الأطباء الذين تمت زيارتهم",

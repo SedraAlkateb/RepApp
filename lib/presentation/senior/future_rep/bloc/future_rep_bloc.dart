@@ -15,16 +15,14 @@ part 'future_rep_state.dart';
 
 class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
   AllSpeUsecase allSpeUsecase;
-  AllPlanBrandsUsecase allPlanBrandsUsecase;
   RepPlanBrandSpUsecase repPlanBrandSpUsecase;
-  ChangePlanBrandTypeUsecase changePlanBrandTypeUsecase;
+
   List<SpecDModel> specialization = [];
   List<BrandFlag> brandFlag = [];
-  List<PlanBrandModel> planBrands = [];
   PlanBrandSpecWithSamplesResponse planBrandsp = PlanBrandSpecWithSamplesResponse(PlanBrands: [],Brands: Brand(0,0,0));
 
-  FutureRepBloc(this.allSpeUsecase, this.allPlanBrandsUsecase,
-      this.changePlanBrandTypeUsecase, this.repPlanBrandSpUsecase)
+  FutureRepBloc(this.allSpeUsecase,
+      this.repPlanBrandSpUsecase)
       : super(FutureRepInitial()) {
     on<FutureRepEvent>((event, emit) async {
       if (event is FutureSpEvent) {
@@ -36,36 +34,9 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
           specialization = data;
           emit(FutureSpRepState(data));
         });
-      } else if (event is FutureSearchSpecEvent) {
-        List<PlanBrandModel> planBrand2;
-        String search = normalizeText(event.contan);
-        planBrand2 = planBrands.where((value) {
-          if (normalizeText(value.title).contains(search)) {
-            return true;
-          }
-          return false;
-        }).toList();
-        emit(FuturePlanBrandState(planBrand2));
-      } else if (event is FutureGetPlanBrandEvent) {
-        planBrands = [];
-        emit(FutureSpRepLoadingState());
-        (await allPlanBrandsUsecase.execute(event.rep)).fold((failure) {
-          emit(FutureSpRepErrorState(failure: failure));
-        }, (data) async {
-          planBrands = data;
-          emit(FuturePlanBrandState(data));
-        });
-      } else if (event is FutureChangePlanBrandTypeEvent) {
-        //   planBrands = [];
-        emit(FutureChangePlanBrandTypeLoadingState());
-        (await changePlanBrandTypeUsecase
-                .execute(ChangePlanBrandType(event.id, event.brandType)))
-            .fold((failure) {
-          emit(FutureChangePlanBrandTypeErrorState(failure: failure));
-        }, (data) async {
-          emit(FutureChangePlanBrandTypeState(planBrands));
-        });
-      } else if (event is FutureRepPlanBrandSpEvent) {
+      }
+
+      else if (event is FutureRepPlanBrandSpEvent) {
         planBrandsp = PlanBrandSpecWithSamplesResponse(PlanBrands: [],Brands: Brand(0,0,0));
         emit(FutureRepPlanBrandSpLoadingState());
         (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
