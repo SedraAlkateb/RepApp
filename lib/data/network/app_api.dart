@@ -127,6 +127,10 @@ abstract class AppServiceClient {
   Future<AllRepresentativeBaseResponse> getReps(
     @Part(name: "repDet") int id,
   );
+  @POST("/admin/getRepsFuture.php")
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
+      @Part(name: "repDet") int id,
+      );
   @POST("/admin/getVisitNotes.php")
   Future<AllVisitNotesBaseResponse> getVisitNotes(
     @Part(name: "repDet") int docId,
@@ -161,6 +165,13 @@ abstract class AppServiceClient {
       @Part(name: "userId") int userId,
       @Part(name: "status") int status,
       @Part(name: "reqType") int reqType);
+  @POST("/admin/readAllVisits.php")
+  Future<Message1Response> readAllVisits(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "userId") int userId,
+      @Part(name: "type") int type,
+      @Part(name: "flag") int flag);
+
   @POST("/admin/getRepVisitsHos.php")
   Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
       @Part(name: "repId") int repId, @Part(name: "userId") int userId);

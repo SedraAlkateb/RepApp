@@ -251,7 +251,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                             SizedBox(
                               height: AppSize.s8,
                             ),
-                            widget.hospitalModel.visitHospitalModel.flag == 1
+                           ( widget.hospitalModel.visitHospitalModel.flag == 1&&context.watch<VisitBloc>().brands.isNotEmpty)
                                 ?
                                 ///////////////////////////////ss
                                 BlocBuilder<VisitBloc, VisitState>(
@@ -271,7 +271,23 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                                           selectBrand: selectBrand);
                                     },
                                   )
-                                : Column(
+                                :
+                           ( widget.hospitalModel.visitHospitalModel.flag == 1&&context.watch<VisitBloc>().brands.isEmpty)  ?
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                             children: [
+                               Icon(
+                                 Icons.circle,
+                                 color: ColorManager.secondaryColor1,
+                               ),
+                               Text(
+                                 " لم يتم توزيع عينات ",
+                                 style: Theme.of(context).textTheme.labelLarge,
+                               ),
+                             ],
+                           ):
+                            Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -342,7 +358,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitHospital> {
                                         },
                                       )
                                     ],
-                                  ),
+                                  )
+
                           ],
                         )
                       : Row(

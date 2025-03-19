@@ -147,6 +147,16 @@ extension AllRepresentativeMapper on AllRepresentativeBaseResponse? {
     return allRepresentative;
   }
 }
+extension AllRepresentativeFutureMapper on AllRepresentativeFutureBaseResponse? {
+  List<AllRepresentativeFuture> toDomain() {
+    List<AllRepresentativeFuture> allRepresentative =
+    (this?.data?.data?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<AllRepresentativeFuture>()
+        .toList();
+    return allRepresentative;
+  }
+}
 
 extension RepresentativeMapper on RepresentativeResponse? {
   AllRepresentative toDomain() {
@@ -159,7 +169,16 @@ extension RepresentativeMapper on RepresentativeResponse? {
     );
   }
 }
-
+extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
+  AllRepresentativeFuture toDomain() {
+    return AllRepresentativeFuture(
+      int.parse(this?.id ?? "0"),
+      this?.name ?? Constants.empty,
+      FlagModel(int.parse(this?.flag ?? "0")),
+      int.parse(this?.activePlan ?? "0"),
+    );
+  }
+}
 extension PlaceResponseMapper on PlaceResponse? {
   PlaceModel toDomain() {
     return PlaceModel(
@@ -168,7 +187,6 @@ extension PlaceResponseMapper on PlaceResponse? {
     );
   }
 }
-
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
     return SpecDModel(int.parse(this?.id ?? "0"),

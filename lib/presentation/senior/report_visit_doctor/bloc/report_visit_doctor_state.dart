@@ -94,3 +94,20 @@ class ExpandedBorderState extends ReportVisitDoctorState{
   List<Object?> get props => [num];
 
 }
+final class  AllReadErrorState extends ReportVisitDoctorState {
+  final Failure failure;
+  AllReadErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllReadLoadingState extends ReportVisitDoctorState {
+  AllReadLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllReadSucState extends ReportVisitDoctorState {
+  AllReadSucState();
+  @override
+  List<Object?> get props =>[];
+}

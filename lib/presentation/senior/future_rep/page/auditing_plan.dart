@@ -1,4 +1,3 @@
-import 'dart:isolate';
 
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
