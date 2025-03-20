@@ -25,7 +25,6 @@ class _AuditingPlanState extends State<AuditingPlan> {
   int? loadingItemId;
 @override
   void initState() {
-
   BlocProvider.of<EditBrandPlanBloc>(context)
       .add(FutureGetPlanBrandEvent(Rep(widget.repPlan)));
     super.initState();
