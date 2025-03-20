@@ -2,7 +2,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/senior/edit_brand/bloc/edit_brand_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';

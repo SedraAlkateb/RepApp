@@ -22,7 +22,7 @@ class PharmacyPage extends StatelessWidget {
                 icon: Icon(
                   size: AppSize.s30,
                   Icons.menu,
-                  color: ColorManager.secondaryColor1, 
+                  color: ColorManager.secondaryColor1,
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -30,17 +30,21 @@ class PharmacyPage extends StatelessWidget {
               );
             },
           ),
-          title: Text('الصيدليات ' ),
+          title: Text('الصيدليات '),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [  SearchField(searchController: searchphController,onPressed: (value) {
-                        BlocProvider.of<PharmacyBloc>(context).add(SearchphEvent(value));
-                      },
-                      ),
+            children: [
+              SearchField(
+                searchController: searchphController,
+                onPressed: (value) {
+                  BlocProvider.of<PharmacyBloc>(context)
+                      .add(SearchphEvent(value));
+                },
+              ),
               Expanded(
                 child: BlocConsumer<PharmacyBloc, PharmacyState>(
                   listener: (context, state) {
@@ -81,12 +85,17 @@ class PharmacyPage extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
-                                  Text("${pharmacyModel[index].title} ", style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge,textAlign: TextAlign.center,),
-                                  Text(" العنوان : ${pharmacyModel[index].address} ", style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall),
+                                  Text(
+                                    "${pharmacyModel[index].title} ",
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                      " العنوان : ${pharmacyModel[index].address} ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
                                 ],
                               ),
                             );
