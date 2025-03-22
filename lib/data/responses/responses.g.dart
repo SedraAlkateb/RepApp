@@ -974,13 +974,16 @@ Map<String, dynamic> _$PlanBrandSpecResponseToJson(
       'totalAmount': instance.totalAmount,
     };
 
-Brand _$BrandFromJson(Map<String, dynamic> json) => Brand(
-      (json['totalSamplesDoctors'] as num).toInt(),
-      (json['totalSamplesHospitals'] as num).toInt(),
-      (json['totalSamplesDepartments'] as num).toInt(),
+BrandAmountResponse _$BrandAmountResponseFromJson(Map<String, dynamic> json) =>
+    BrandAmountResponse(
+      (json['totalSamplesDoctors'] as num?)?.toInt(),
+      (json['totalSamplesHospitals'] as num?)?.toInt(),
+      (json['totalSamplesDepartments'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$BrandToJson(Brand instance) => <String, dynamic>{
+Map<String, dynamic> _$BrandAmountResponseToJson(
+        BrandAmountResponse instance) =>
+    <String, dynamic>{
       'totalSamplesDoctors': instance.totalSamplesDoctors,
       'totalSamplesHospitals': instance.totalSamplesHospitals,
       'totalSamplesDepartments': instance.totalSamplesDepartments,
@@ -992,14 +995,15 @@ PlanBrandSpecWithSamplesResponse _$PlanBrandSpecWithSamplesResponseFromJson(
       PlanBrands: (json['PlanBrands'] as List<dynamic>)
           .map((e) => PlanBrandSpecResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
-      Brands: Brand.fromJson(json['Brands'] as Map<String, dynamic>),
+      brands:
+          BrandAmountResponse.fromJson(json['Brands'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$PlanBrandSpecWithSamplesResponseToJson(
         PlanBrandSpecWithSamplesResponse instance) =>
     <String, dynamic>{
       'PlanBrands': instance.PlanBrands,
-      'Brands': instance.Brands,
+      'Brands': instance.brands,
     };
 
 RepresentativeResponse _$RepresentativeResponseFromJson(
@@ -1123,10 +1127,14 @@ Map<String, dynamic> _$AllPlanBrandResponseToJson(
 RepPlanBrandSpResponse _$RepPlanBrandSpResponseFromJson(
         Map<String, dynamic> json) =>
     RepPlanBrandSpResponse(
-      (json['PlanBrands'] as List<dynamic>)
-          .map((e) => PlanBrandSpecResponse.fromJson(e as Map<String, dynamic>))
+      (json['PlanBrands'] as List<dynamic>?)
+          ?.map(
+              (e) => PlanBrandSpecResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
-      Brand.fromJson(json['Brands'] as Map<String, dynamic>),
+      json['Brands'] == null
+          ? null
+          : BrandAmountResponse.fromJson(
+              json['Brands'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RepPlanBrandSpResponseToJson(

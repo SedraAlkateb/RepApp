@@ -118,6 +118,9 @@ class HospitalViewDetails extends StatelessWidget {
                                   height: 60,
                                   color: ColorManager.secondaryColor4,
                                   colorBlendMode: BlendMode.modulate,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return SizedBox();
+                                  },
                                 ),
                               ),
                               Expanded(

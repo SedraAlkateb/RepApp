@@ -19,6 +19,9 @@ class AllRepWithFuture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.microtask(() {
+      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
+    });
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
@@ -120,7 +123,13 @@ class AllRepWithFuture extends StatelessWidget {
                                   iniFutureModule();
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
-                                      return FutureSpecializationsPage(id: allRepresentative[index].id,repPlanId:allRepresentative[index].activePlan );
+                                      return FutureSpecializationsPage(
+                                          id: allRepresentative[index].id,
+                                          repPlanId:allRepresentative[index].activePlan
+                                          ,
+                                        flag: allRepresentative[index].flag,
+
+                                      );
                                     },
                                   ));
                                   BlocProvider.of<FutureRepBloc>(context)

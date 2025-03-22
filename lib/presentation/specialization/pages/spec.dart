@@ -128,6 +128,9 @@ class SpecializationsPage extends StatelessWidget {
                                     height: 45,
                                     color: ColorManager.white.withOpacity(0.8),
                                     colorBlendMode: BlendMode.modulate,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return SizedBox();
+                                    },
                                   ),
                                   SizedBox(height: 10),
                                   Column(

@@ -164,9 +164,9 @@ class RouteGenerator {
         iniFutureModule();
         final args = settings.arguments as Map<String, dynamic>?;
         final title = args?['title'];
-
+        final flag = args?['flag'];
         return MaterialPageRoute(builder: (_) {
-          return RepPlanBrandSpPage(title: title);
+          return RepPlanBrandSpPage(title: title,flag: flag,);
         });
       case Routes.deleteLogout:
         initDeleteModule();
