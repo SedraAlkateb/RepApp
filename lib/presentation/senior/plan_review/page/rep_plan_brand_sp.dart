@@ -1,41 +1,31 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RepPlanBrandSpPage extends StatefulWidget {
-//   final OtherBrandSpPlanModel otherBrandSpPlanModel;
-//  final int index1;
+
   final String title;
+  final int? flag;
   @override
-  const RepPlanBrandSpPage({super.key, required this.title
-      // , required this.otherBrandSpPlanModel
-      //   ,required this.index1
-      });
+  const RepPlanBrandSpPage({super.key, required this.title,this.flag});
 
   State<RepPlanBrandSpPage> createState() => _RepPlanBrandSpPageState();
 }
 
 class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     with AutomaticKeepAliveClientMixin {
-  // int summ=0;
-  // @override
-  // void initState() {
-  //   for (var brand in widget.otherBrandSpPlanModel.brands) {
-  //     summ=summ+brand.amount;
-  //   }
-  //   BlocProvider.of<BrandPlanBloc>(context).sumS=summ;
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
+
     super.build(context);
-    PlanBrandSpecWithSamplesResponse planBrandsp = context.watch<FutureRepBloc>().planBrandsp;
+    List<PlanBrandSp> planBrandsp = context.watch<FutureRepBloc>().planBrandSp.planBrandSps;
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text(widget.title)),
       backgroundColor: ColorManager.white,
@@ -53,9 +43,14 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                         // BlocProvider.of<BrandPlanBloc>(context)
                         //     .add(UpdateEvent());
                       }
-
+                      if (state is SumErrorState) {
+                        return error(
+                            context, state.failure.massage, state.failure.code);
+                        // BlocProvider.of<BrandPlanBloc>(context)
+                        //     .add(UpdateEvent());
+                      }
                       if (state is FutureRepPlanBrandSpState) {
-                        planBrandsp = state.planbrandsp;
+                        planBrandsp = state.planBrandSp;
                       }
                     },
                     builder: (context, state) {
@@ -109,7 +104,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                         SizedBox(width: 8),
                                         Expanded(
                                           child: Text(
-                                            "العينة : ${planBrandsp.PlanBrands[index].titleAr}",
+                                            "العينة : ${planBrandsp[index].titleAr}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
@@ -122,8 +117,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                             horizontal: AppPadding.p14,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: int.parse(planBrandsp.PlanBrands[index]
-                                                        .brandType ?? '0') ==
+                                            color: planBrandsp[index].brandType ==
                                                     1
                                                 ? ColorManager.secondaryColor1
                                                 : ColorManager.secondaryColor2,
@@ -133,8 +127,8 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                             ),
                                           ),
                                           child: Text(
-                                            int.parse(planBrandsp.PlanBrands[index]
-                                                        .brandType??"0") ==
+                                            planBrandsp[index]
+                                                .brandType ==
                                                     1
                                                 ? "هدف"
                                                 : "مساعد",
@@ -168,7 +162,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                         SizedBox(width: 8), // مسافة صغيرة
                                         Expanded(
                                           child: Text(
-                                            "النوع : ${planBrandsp.PlanBrands[index].phTitle}",
+                                            "النوع : ${planBrandsp[index].phTitle}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium,
@@ -203,8 +197,10 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                                 10), // مسافة بين النص وحقل الإدخال
                                         Expanded(
                                           child: TextField(
+
                                             decoration: InputDecoration(
-                                              hintText: planBrandsp.PlanBrands[index]
+
+                                              hintText: planBrandsp[index]
                                                   .totalAmount
                                                   .toString(),
                                               enabled: UserInfo.otherstatus == 0
@@ -219,17 +215,16 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                                 horizontal: 10,
                                               ),
                                             ),
+                                            enabled: widget.flag==1?true:false,
                                             onChanged: (value) {
-                                              // if (value.isNotEmpty && value != "") {
-                                              //   print(value);
-                                              //   print("value");
-                                              //   BlocProvider.of<BrandPlanBloc>(
-                                              //           context)
-                                              //       .add(ChangeFieldEvent(
-                                              //           int.parse(value),
-                                              //       widget.index1,
-                                              //         index, widget.otherBrandSpPlanModel.brandm));
-                                              // }
+                                              if (value.isNotEmpty && value != "") {
+                                                BlocProvider.of<FutureRepBloc>(
+                                                        context)
+                                                    .add(ChangeFieldEvent(
+                                                        int.parse(value),
+                                                   index,
+                                                      ));
+                                              }
                                             },
                                             keyboardType: TextInputType.number,
                                           ),
@@ -242,7 +237,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                             );
                           },
                         ),
-                        itemCount: planBrandsp.PlanBrands.length,
+                        itemCount: planBrandsp.length,
                       );
                     },
                   )),

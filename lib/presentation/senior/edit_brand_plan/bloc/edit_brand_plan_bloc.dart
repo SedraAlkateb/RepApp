@@ -28,7 +28,8 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
           return false;
         }).toList();
         emit(FuturePlanBrandState(planBrand2));
-      } else if (event is FutureGetPlanBrandEvent) {
+      }
+      else if (event is FutureGetPlanBrandEvent) {
         planBrands = [];
         emit(FutureSpRepLoadingState());
         (await allPlanBrandsUsecase.execute(event.rep)).fold((failure) {
@@ -38,8 +39,8 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
 
           emit(FuturePlanBrandState(data));
         });
-      } else if (event is FutureChangePlanBrandTypeEvent) {
-        //   planBrands = [];
+      }
+      else if (event is FutureChangePlanBrandTypeEvent) {
         emit(FutureChangePlanBrandTypeLoadingState());
         (await changePlanBrandTypeUsecase
                 .execute(ChangePlanBrandType(event.id, event.brandType)))

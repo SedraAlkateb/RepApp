@@ -161,7 +161,7 @@ class DrawerPage extends StatelessWidget {
                   leading: Icon(Icons.list_alt_outlined,
                       color: ColorManager.secondaryColor4),
                   title: Text(
-                    ' المندوبين',
+                    'تقارير المندوبين',
                     style: TextStyle(color: ColorManager.secondaryColor1),
                   ),
                   onTap: () {

@@ -945,25 +945,23 @@ class PlanBrandSpecResponse {
   Map<String, dynamic> toJson() => _$PlanBrandSpecResponseToJson(this);
 } 
 @JsonSerializable()
-class Brand {
+class BrandAmountResponse {
 
   @JsonKey(name: 'totalSamplesDoctors')
-  int totalSamplesDoctors;
+  int? totalSamplesDoctors;
 
   @JsonKey(name: 'totalSamplesHospitals')
-  int totalSamplesHospitals;
+  int ?totalSamplesHospitals;
 
   @JsonKey(name: 'totalSamplesDepartments')
-  int totalSamplesDepartments;
+  int? totalSamplesDepartments;
 
-  Brand( this.totalSamplesDoctors,
-       this.totalSamplesHospitals,
-       this.totalSamplesDepartments);
-  // from json
-  factory Brand.fromJson(Map<String, dynamic> json) =>
-      _$BrandFromJson(json);
+  BrandAmountResponse(this.totalSamplesDoctors, this.totalSamplesHospitals,
+      this.totalSamplesDepartments); // from json
+  factory BrandAmountResponse.fromJson(Map<String, dynamic> json) =>
+      _$BrandAmountResponseFromJson(json);
   // to json
-  Map<String, dynamic> toJson() => _$BrandToJson(this);
+  Map<String, dynamic> toJson() => _$BrandAmountResponseToJson(this);
 }//
 
 @JsonSerializable()
@@ -972,11 +970,11 @@ class PlanBrandSpecWithSamplesResponse {
   List<PlanBrandSpecResponse> PlanBrands;
 
   @JsonKey(name: 'Brands')
-  Brand Brands;
+  BrandAmountResponse brands;
 
   PlanBrandSpecWithSamplesResponse(
       {required this.PlanBrands,
-      required this.Brands,
+      required this.brands,
   });
 
   // from json
@@ -1095,10 +1093,10 @@ class AllPlanBrandResponse {
 @JsonSerializable()
 class RepPlanBrandSpResponse {
   @JsonKey(name: 'PlanBrands')
-  List<PlanBrandSpecResponse> PlanBrands;
+  List<PlanBrandSpecResponse>?PlanBrands;
 
   @JsonKey(name: 'Brands')
-  Brand Brands;
+  BrandAmountResponse? Brands;
 
   RepPlanBrandSpResponse(this.PlanBrands,this.Brands);
   // from json

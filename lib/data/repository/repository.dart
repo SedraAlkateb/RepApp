@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/data/data_source/remote_data_source.dart';
 import 'package:domina_app/data/mapper/mapper.dart';
+
+import 'package:domina_app/data/data_source/remote_data_source.dart';
 import 'package:domina_app/data/network/error_handler.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/data/network/network_info.dart';
@@ -1045,7 +1046,7 @@ class RepositoryImp implements Repository {
   }
   
   @override
-  Future<Either<Failure, PlanBrandSpecWithSamplesResponse>> getRepPlanBrandSp(RepSp rep) async {
+  Future<Either<Failure, AllPlanBrandSp>> getRepPlanBrandSp(RepSp rep) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getRepPlanBrandSp(rep.repPlanId,rep.spId,rep.repId);

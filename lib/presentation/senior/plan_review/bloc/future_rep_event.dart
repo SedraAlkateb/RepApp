@@ -26,3 +26,10 @@ class FutureSearchSpecEvent extends FutureRepEvent {
   @override
   List<Object?> get props => [contan];
 }
+class ChangeFieldEvent extends FutureRepEvent{
+  final int number;
+  final int index;
+  ChangeFieldEvent(this.number,this.index);
+  @override
+  List<Object?> get props => [number,index];
+}
