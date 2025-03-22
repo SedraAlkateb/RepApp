@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: unused_element
+
 part of 'responses.dart';
 
 // **************************************************************************
@@ -259,6 +261,7 @@ Map<String, dynamic> _$CheckActiveBaseResponseToJson(
 TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
     TokenResponse(
       json['token'] as String?,
+      json['cityId'] as String?,
       json['repId'] as String?,
       json['otherPlanId'] as String?,
       json['activePlanId'] as String?,
@@ -277,6 +280,7 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
       'token': instance.token,
+      'cityId': instance.cityId,
       'repId': instance.repId,
       'otherPlanId': instance.otherPlanId,
       'samplesCount': instance.samplesCount,

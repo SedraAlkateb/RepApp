@@ -14,6 +14,12 @@ final class FuturePlanBrandState extends EditBrandPlanState {
   @override
   List<Object?> get props => [planbrand];
 }
+final class FutureChangeLoadingItemValueState extends EditBrandPlanState {
+  final int index;
+  FutureChangeLoadingItemValueState(this.index);
+  @override
+  List<Object?> get props => [index];
+}
 final class FutureSpRepErrorState extends EditBrandPlanState {
   final Failure failure;
   FutureSpRepErrorState({required this.failure});

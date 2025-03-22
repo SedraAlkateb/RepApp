@@ -61,7 +61,7 @@ class Routes {
   static const String allBrand = "/allBrand";
   static const String noVisitDoctor = "/noVisitDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
-  static const String AuditingPlan = "/AuditingPlan";
+  static const String EditingPlan = "/EditingPlan";
   static const String RepPlanBrandSp = "/RepPlanBrandSp";
   static const String manageFuture = "/manageFuture";
 }
@@ -155,10 +155,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => NoVisitDoctor());
       case Routes.senVisitDoctor:
         return MaterialPageRoute(builder: (_) => SenVisitDoctor());
-      case Routes.AuditingPlan:
+      case Routes.EditingPlan:
         iniEditBrandPlanModule();
         return MaterialPageRoute(builder: (_) {
-          return AuditingPlan( repPlan: 7,);
+          return EditingPlan(
+            repPlan: 7,
+          );
         });
       case Routes.RepPlanBrandSp:
         iniFutureModule();

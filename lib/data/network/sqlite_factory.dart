@@ -19,8 +19,7 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     await db.execute("PRAGMA foreign_keys = OFF");
     List<Map<String, dynamic>> tables = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"
-    );
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
     for (var table in tables) {
       String tableName = table['name'];
       await db.execute("DROP TABLE IF EXISTS $tableName");
@@ -34,7 +33,7 @@ class DatabaseHelper {
     final path = join(dbPath, 'task_database1.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 5,
       onUpgrade: _onUpgrade,
       onCreate: _onCreate,
       onOpen: (db) async {
@@ -42,11 +41,13 @@ class DatabaseHelper {
       },
     );
   }
+
   Future _onCreate(Database db, int version) async {
     await db.execute('''
     CREATE TABLE rep (
     token  TEXT NOT NULL,
     repId INTEGER NOT NULL,
+    cityId INTEGER NOT NULL,
     otherPlanId INTEGER ,
     activePlanId INTEGER ,
     otherStatus INTEGER NOT NULL,

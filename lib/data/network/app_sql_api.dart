@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';

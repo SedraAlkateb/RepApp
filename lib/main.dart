@@ -46,6 +46,7 @@ Future<int?> sss() async {
     if (data != null && (data.isLogin > 0)) {
       UserInfo.name = data.name;
       UserInfo.isLogging = data.isLogin;
+      UserInfo.cityId = data.cityId;
       UserInfo.activePlanId = data.activePlanId ?? -5;
       UserInfo.otherPlanId = data.otherPlanId;
       UserInfo.otherstatus = data.otherStatus;
@@ -61,7 +62,7 @@ Future<int?> sss() async {
       UserInfo.repType = data.repType;
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
-   //   UserInfo.endDate="27-02-2025";
+      //   UserInfo.endDate="27-02-2025";
       if (UserInfo.isLogging != 0 && UserInfo.endDate != null) {
 //
         final now = formatDateTimeFromDataTime(DateTime.now());
@@ -71,16 +72,17 @@ Future<int?> sss() async {
         }
         String? nextDay = UserInfo.endDate != null
             ? DateFormat("dd-MM-yyyy").format(
-            formatStringToDataTime(UserInfo.endDate!).add(Duration(days: 1)))
+                formatStringToDataTime(UserInfo.endDate!)
+                    .add(Duration(days: 1)))
             : "";
 
-        print(UserInfo.isLogging );
+        print(UserInfo.isLogging);
         if (UserInfo.isLogging != 5) {
           print("now");
           print(now);
           print("nextDay");
           print(nextDay);
-          if (now==nextDay) {
+          if (now == nextDay) {
             print(now);
             print(nextDay);
             EditIsLoginSqlUsecase editIsLoginSqlUsecase =
@@ -139,7 +141,6 @@ Future<void> requestNotificationPermission() async {
   if (Platform.isAndroid) {
     PermissionStatus status = await Permission.notification.request();
     if (status.isGranted) {
-
       print("تم منح إذن الإشعارات.");
     } else if (status.isDenied) {
       openAppSettings();

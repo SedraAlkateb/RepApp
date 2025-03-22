@@ -399,6 +399,7 @@ class ExceptionRequestBody {
     };
   }
 }
+
 class ExceptionRequestBody2 {
   ExceptionModel list1;
   ExceptionRequestBody2(this.list1);
@@ -408,6 +409,7 @@ class ExceptionRequestBody2 {
     };
   }
 }
+
 class VisitPharmacyAndPharmacy {
   PharmacyModel pharmacyModel;
   VisitPharmacyModel visitPharmacyModel;
@@ -1051,6 +1053,7 @@ class CityModel {
 
 class LoginModel {
   String token;
+  int cityId;
   int repId;
   int? otherPlanId = -1;
   int? activePlanId;
@@ -1082,6 +1085,7 @@ class LoginModel {
       this.flag,
       this.recipesCount,
       this.flag1,
+           this.cityId,
       this.repType,
       {this.otherStartDate,
       this.otherEndDate});
@@ -1090,6 +1094,7 @@ class LoginModel {
       'samplesCount': samplesCount,
       'token': token,
       'repId': repId,
+      'cityId': cityId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
       'activePlanId': activePlanId == null ? -5 : activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
@@ -1111,6 +1116,7 @@ class LoginModel {
     return LoginModel(
       map['samplesCount'] ?? 0,
       map['token'] ?? "",
+      map['cityId'] ?? 0,
       map['repId'] ?? 0,
       map['otherPlanId'] ?? 0,
       map['activePlanId'] ?? -5,
@@ -1172,7 +1178,8 @@ class BrandSpModel {
 class Rep {
   int activeRepId;
   int? otherRepId;
-  Rep(this.activeRepId, {this.otherRepId});
+  int? flag;
+  Rep(this.activeRepId,this.flag, {this.otherRepId});
 }
 
 class RepSp {
@@ -1205,13 +1212,8 @@ class PlanBrandModel {
   }
 
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(map['id'],
-        map['spId'],
-        map['brandId'],
-        map['repPlanId'],
-        map['brandType'],
-        "",
-        map['amount']);
+    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
+        map['repPlanId'], map['brandType'], "", map['amount']);
   }
 }
 
@@ -1244,52 +1246,50 @@ class PlanBrandsSp {
         map['brandType'], map['titleAr'], map['phTitle'], map['totalAmount']);
   }
 }
+
 class BrandPlanBrandsSpWithSamples {
   int totalSamplesDoctors;
   int totalSamplesHospitals;
   int totalSamplesDepartments;
 
-
   // Constructor
-  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors, this.totalSamplesHospitals, this.totalSamplesDepartments);
+  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors,
+      this.totalSamplesHospitals, this.totalSamplesDepartments);
   Map<String, dynamic> toMap() {
     return {
       'totalSamplesDoctors': totalSamplesDoctors,
       'totalSamplesHospitals': totalSamplesHospitals,
       'totalSamplesDepartments': totalSamplesDepartments,
-     
     };
   }
 
   factory BrandPlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
-    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'], map['totalSamplesHospitals'], map['totalSamplesDepartments']);
+    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'],
+        map['totalSamplesHospitals'], map['totalSamplesDepartments']);
   }
 }
+
 class PlanBrandsSpWithSamples {
   List<PlanBrandSpecResponse> PlanBrands;
   BrandPlanBrandsSpWithSamples Brands;
 
-
   // Constructor
   PlanBrandsSpWithSamples(
-      this.PlanBrands,
-      this.Brands,
-
-   );
-
+    this.PlanBrands,
+    this.Brands,
+  );
 
   Map<String, dynamic> toMap() {
     return {
       'PlanBrands': PlanBrands.map((item) => item.toDomain()).toList(),
       'Brands': Brands.toMap(),
-
     };
   }
 
- 
   factory PlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
     var list = map['PlanBrands'] as List;
-    List<PlanBrandSpecResponse> PlanBrands = list.map((item) => PlanBrandSpecResponse.fromJson(item)).toList();
+    List<PlanBrandSpecResponse> PlanBrands =
+        list.map((item) => PlanBrandSpecResponse.fromJson(item)).toList();
 
     return PlanBrandsSpWithSamples(
       PlanBrands,
@@ -1585,6 +1585,7 @@ class AllRepresentativeFuture {
   FlagModel flag;
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
 }
+
 class FlagModel {
   final int flag;
   final String name;
@@ -1608,7 +1609,6 @@ class FlagModel {
     }
   }
 }
-
 
 class InventoryModel {
   String title;
@@ -1663,16 +1663,15 @@ class VisitRepSen {
   int userId;
   VisitRepSen(this.repId, this.userId);
 }
+
 class ReadAll {
   int repPlanId;
   int userId;
   int type;
   int flag;
-  ReadAll(this.repPlanId,
-      this.userId,
-      this.type,
-      this.flag);
+  ReadAll(this.repPlanId, this.userId, this.type, this.flag);
 }
+
 class RepVisitsModel {
   String visitId;
   String visitDate;
@@ -1700,6 +1699,7 @@ class RepVisitsModel {
       this.flag,
       this.samples);
 }
+
 class RepVisitsModelSearch {
   int index;
   String visitId;

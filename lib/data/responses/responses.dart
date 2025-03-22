@@ -253,6 +253,8 @@ class CheckActiveBaseResponse extends BaseResponse {
 class TokenResponse {
   @JsonKey(name: "token")
   String? token;
+   @JsonKey(name: "cityId")
+  String? cityId;
   @JsonKey(name: "repId")
   String? repId;
   @JsonKey(name: "otherPlanId")
@@ -281,6 +283,7 @@ class TokenResponse {
   String? otherEndDate;
   TokenResponse(
       this.token,
+      this.cityId,
       this.repId,
       this.otherPlanId,
       this.activePlanId,
