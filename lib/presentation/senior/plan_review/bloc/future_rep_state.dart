@@ -15,10 +15,10 @@ final class FutureSpRepState extends FutureRepState {
   List<Object?> get props => [Specs];
 }
 final class FutureRepPlanBrandSpState extends FutureRepState {
-  final PlanBrandSpecWithSamplesResponse planbrandsp;
-  FutureRepPlanBrandSpState(this.planbrandsp);
+  final List<PlanBrandSp> planBrandSp;
+  FutureRepPlanBrandSpState(this.planBrandSp);
   @override
-  List<Object?> get props => [planbrandsp];
+  List<Object?> get props => [planBrandSp];
 }
 final class FutureSpRepLoadingState extends FutureRepState {
   @override
@@ -45,8 +45,15 @@ final class FutureRepPlanBrandSpLoadingState extends FutureRepState {
   List<Object?> get props => [];
 }
 final class FutureRepPlanBrandSpEmptyState extends FutureRepState {
-  final PlanBrandSpecWithSamplesResponse planbrandsp;
-  FutureRepPlanBrandSpEmptyState(this.planbrandsp);
+  final AllPlanBrandSp planBrandSp;
+  FutureRepPlanBrandSpEmptyState(this.planBrandSp);
   @override
-  List<Object?> get props =>[planbrandsp];
+  List<Object?> get props =>[planBrandSp];
+}
+
+final class SumErrorState extends FutureRepState {
+  final Failure failure;
+  SumErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
 }

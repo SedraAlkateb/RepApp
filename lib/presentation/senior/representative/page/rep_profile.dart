@@ -4,8 +4,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
-import 'package:domina_app/presentation/senior/future_rep/page/future_spec.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
@@ -40,8 +38,9 @@ class RepProfile extends StatelessWidget {
       BlocProvider.of<SeniorRepsBloc>(context).add(AllSeniorRepEvent());
       return true;
     }
+
     String name = "";
-    int repPlan=0;
+    int repPlan = 0;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -85,7 +84,7 @@ class RepProfile extends StatelessWidget {
                           return errorFullScreen(context);
                         } else if (state is RepInfoState) {
                           name = state.infoRep.name;
-                          repPlan=state.infoRep.repPlanId;
+                          repPlan = state.infoRep.repPlanId;
                           return Column(
                             children: [
                               Text(
@@ -113,8 +112,7 @@ class RepProfile extends StatelessWidget {
                                   text1: "عدد الزيارات الكلي:",
                                   text2: "${state.infoRep.totalVisit}"),
                               RowListInfo(
-                                  text1:
-                                  "عدد الزيارات المحققة :",
+                                  text1: "عدد الزيارات المحققة :",
                                   text2: "${state.infoRep.visitDon}"),
                               RowListInfo(
                                   text1: "عدد الزيارات المتبقية :",
@@ -122,9 +120,6 @@ class RepProfile extends StatelessWidget {
                               RowListInfo(
                                   text1: "عدد الوصفات  :",
                                   text2: "${state.infoRep.recipesCount}"),
-
-
-
                             ],
                           );
                         }

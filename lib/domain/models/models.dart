@@ -1265,38 +1265,7 @@ class BrandPlanBrandsSpWithSamples {
     return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'], map['totalSamplesHospitals'], map['totalSamplesDepartments']);
   }
 }
-class PlanBrandsSpWithSamples {
-  List<PlanBrandSpecResponse> PlanBrands;
-  BrandPlanBrandsSpWithSamples Brands;
 
-
-  // Constructor
-  PlanBrandsSpWithSamples(
-      this.PlanBrands,
-      this.Brands,
-
-   );
-
-
-  Map<String, dynamic> toMap() {
-    return {
-      'PlanBrands': PlanBrands.map((item) => item.toDomain()).toList(),
-      'Brands': Brands.toMap(),
-
-    };
-  }
-
- 
-  factory PlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
-    var list = map['PlanBrands'] as List;
-    List<PlanBrandSpecResponse> PlanBrands = list.map((item) => PlanBrandSpecResponse.fromJson(item)).toList();
-
-    return PlanBrandsSpWithSamples(
-      PlanBrands,
-      BrandPlanBrandsSpWithSamples.fromMap(map['Brands']),
-    );
-  }
-}
 
 class ExceptionModel {
   String exceptionModel;
@@ -1742,4 +1711,30 @@ class NumVisit {
   int visitDoctor;
   int visitHospital;
   NumVisit(this.visitDoctor, this.visitHospital);
+}
+class PlanBrandSp{
+  int id;
+  int brandId;
+  int brandType;
+  String titleAr;
+  int spId;
+  String phTitle;
+  int totalAmount;
+
+  PlanBrandSp(this.id, this.brandId, this.brandType, this.titleAr, this.spId,
+      this.phTitle, this.totalAmount);
+
+}
+class BrandAmountModel{
+  int numDoctor;
+  int numHospital;
+  int numDepartment;
+  BrandAmountModel(this.numDoctor, this.numHospital, this.numDepartment);
+
+}
+class AllPlanBrandSp{
+  List<PlanBrandSp> planBrandSps;
+  int amount;
+
+  AllPlanBrandSp(this.planBrandSps, this.amount);
 }

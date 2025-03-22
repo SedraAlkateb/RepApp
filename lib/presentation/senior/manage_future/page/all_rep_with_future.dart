@@ -4,8 +4,8 @@ import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
-import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
-import 'package:domina_app/presentation/senior/future_rep/page/future_spec.dart';
+import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -19,6 +19,9 @@ class AllRepWithFuture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.microtask(() {
+      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
+    });
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
@@ -120,7 +123,13 @@ class AllRepWithFuture extends StatelessWidget {
                                   iniFutureModule();
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
-                                      return FutureSpecializationsPage(id: allRepresentative[index].id,repPlanId:allRepresentative[index].activePlan );
+                                      return FutureSpecializationsPage(
+                                          id: allRepresentative[index].id,
+                                          repPlanId:allRepresentative[index].activePlan
+                                          ,
+                                        flag: allRepresentative[index].flag,
+
+                                      );
                                     },
                                   ));
                                   BlocProvider.of<FutureRepBloc>(context)

@@ -125,6 +125,9 @@ class SpecPlanPage extends StatelessWidget {
                                                   .withOpacity(0.8),
                                               colorBlendMode:
                                                   BlendMode.modulate,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return SizedBox();
+                                              },
                                             ),
                                             SizedBox(height: 20),
                                             Text(

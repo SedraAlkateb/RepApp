@@ -20,7 +20,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
         (await allRepsFutureUsecase.execute(UserInfo.repId)).fold((failure) {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
-          data.sort((a, b) => b.flag.flag.compareTo(a.flag.flag));
+          data.sort((a, b) => a.flag.flag.compareTo(b.flag.flag));
           allRepresentative = data;
           emit(AllSeniorRepState(data));
         });

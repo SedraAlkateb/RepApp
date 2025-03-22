@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 class RepPlanBrandSpUsecase extends Equatable {
   final  Repository _repository;
   RepPlanBrandSpUsecase(this._repository);
-  Future<Either<Failure, PlanBrandSpecWithSamplesResponse>> execute(RepSp rep) async{
+  Future<Either<Failure, AllPlanBrandSp>> execute(RepSp rep) async{
     return await _repository.getRepPlanBrandSp(rep);
   }
 
