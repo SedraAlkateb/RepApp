@@ -1,6 +1,4 @@
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/responses/responses.dart';
-import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';

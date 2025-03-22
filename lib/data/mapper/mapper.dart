@@ -272,7 +272,6 @@ extension AllCityResponseMapper on AllCityBaseResponse? {
 extension LoginResponseMapper on LoginResponse? {
   LoginModel toDomain() {
     return LoginModel(
-   
       int.parse(this?.data?.samplesCount ?? "0"),
       this?.data?.token ?? Constants.empty,
       int.parse(this?.data?.repId ?? "0"),

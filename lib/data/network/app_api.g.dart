@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: unnecessary_null_comparison
-
 part of 'app_api.dart';
 
 // **************************************************************************
