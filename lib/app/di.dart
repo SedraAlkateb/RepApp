@@ -33,6 +33,7 @@ import 'package:domina_app/domain/usecase/all_other_brand_plan_sql_usecase.dart'
 import 'package:domina_app/domain/usecase/all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
+import 'package:domina_app/domain/usecase/all_plan_brands_type_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_read_sen_usecase.dart';
 import 'package:domina_app/domain/usecase/all_reps_future_usecase.dart';
@@ -603,6 +604,9 @@ Future<void> iniEditBrandPlanModule() async {
     instance.registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
   }
 
+  if (!GetIt.I.isRegistered<AllPlanBrandsTypeUsecase>()) {
+    instance.registerFactory<AllPlanBrandsTypeUsecase>(() => AllPlanBrandsTypeUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
     instance.registerFactory<ChangePlanBrandTypeUsecase>(
             () => ChangePlanBrandTypeUsecase(instance()));

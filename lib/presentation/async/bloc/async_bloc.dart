@@ -162,7 +162,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           {
             emit(LoadingState(3));
             final planBrandsResult = await allPlanBrandsUsecase.execute(Rep(
-                UserInfo.activePlanId,otherRepId:UserInfo.otherPlanId  )
+                UserInfo.activePlanId, 0,otherRepId:UserInfo.otherPlanId  )
             );
             final planBrandsFailureOrSuccess =
                 planBrandsResult.fold((failure) => failure, (data) => data);

@@ -22,6 +22,8 @@ abstract class RemoteDataSource {
   Future<AllBrandSpBaseResponse> getBrandsSp(int repDet);
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(int repPlanIdActive,
       {int? repPlanIdOther});
+        Future<AllPlanBrandsBaseResponse> getAllPlanBrandsType(int repPlanIdActive, int? flag,
+      {int? repPlanIdOther});
       Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(int repPlanId,
       int? spId,
       int? repId);
@@ -141,9 +143,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllPlanBrandsBaseResponse> getAllPlanBrands(int repPlanIdActive,
+  Future<AllPlanBrandsBaseResponse> getAllPlanBrands(int repPlanIdActive, 
       {int? repPlanIdOther}) async {
     return await _appServiceClient.getAllPlanBrands(repPlanIdActive,
+        repPlanIdOther: repPlanIdOther);
+  }
+    @override
+  Future<AllPlanBrandsBaseResponse> getAllPlanBrandsType(int repPlanIdActive, int? flag,
+      {int? repPlanIdOther}) async {
+    return await _appServiceClient.getAllPlanBrandsType(repPlanIdActive,flag,
         repPlanIdOther: repPlanIdOther);
   }
   @override

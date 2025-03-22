@@ -22,3 +22,10 @@ class FutureChangePlanBrandTypeEvent extends EditBrandPlanEvent {
   FutureChangePlanBrandTypeEvent(this.id, this.brandType);
   List<Object?> get props => [id, brandType];
 }
+class FutureChangeLoadingItemValueEvent extends EditBrandPlanEvent {
+  final int index;
+
+  @override
+  FutureChangeLoadingItemValueEvent(this.index);
+  List<Object?> get props => [index];
+}

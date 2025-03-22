@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/mapper/mapper.dart';
-import 'package:domina_app/data/responses/responses.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -1051,6 +1049,7 @@ class CityModel {
 
 class LoginModel {
   String token;
+  int cityId;
   int repId;
   int? otherPlanId = -1;
   int? activePlanId;
@@ -1082,14 +1081,16 @@ class LoginModel {
       this.flag,
       this.recipesCount,
       this.flag1,
+      this.cityId,
       this.repType,
       {this.otherStartDate,
-      this.otherEndDate});
+        this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
       'samplesCount': samplesCount,
       'token': token,
       'repId': repId,
+      'cityId': cityId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
       'activePlanId': activePlanId == null ? -5 : activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
@@ -1111,6 +1112,7 @@ class LoginModel {
     return LoginModel(
       map['samplesCount'] ?? 0,
       map['token'] ?? "",
+      map['cityId'] ?? 0,
       map['repId'] ?? 0,
       map['otherPlanId'] ?? 0,
       map['activePlanId'] ?? -5,
@@ -1172,7 +1174,8 @@ class BrandSpModel {
 class Rep {
   int activeRepId;
   int? otherRepId;
-  Rep(this.activeRepId, {this.otherRepId});
+  int? flag;
+  Rep(this.activeRepId,this.flag, {this.otherRepId});
 }
 
 class RepSp {
