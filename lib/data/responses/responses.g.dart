@@ -976,6 +976,42 @@ Map<String, dynamic> _$PlanBrandSpecResponseToJson(
       'totalAmount': instance.totalAmount,
     };
 
+SearchDoctorsJsonResponse _$SearchDoctorsJsonResponseFromJson(
+        Map<String, dynamic> json) =>
+    SearchDoctorsJsonResponse(
+      json['id'] as String?,
+      json['name'] as String?,
+      json['spTitle'] as String?,
+      json['placeTitle'] as String?,
+    );
+
+Map<String, dynamic> _$SearchDoctorsJsonResponseToJson(
+        SearchDoctorsJsonResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'spTitle': instance.spTitle,
+      'placeTitle': instance.placeTitle,
+    };
+
+DocDoctorsJsonResponse _$DocDoctorsJsonResponseFromJson(
+        Map<String, dynamic> json) =>
+    DocDoctorsJsonResponse(
+      json['repName'] as String?,
+      json['visitDate'] as String?,
+      json['issue'] as String?,
+      json['note'] as String?,
+    );
+
+Map<String, dynamic> _$DocDoctorsJsonResponseToJson(
+        DocDoctorsJsonResponse instance) =>
+    <String, dynamic>{
+      'repName': instance.repName,
+      'visitDate': instance.visitDate,
+      'issue': instance.issue,
+      'note': instance.note,
+    };
+
 BrandAmountResponse _$BrandAmountResponseFromJson(Map<String, dynamic> json) =>
     BrandAmountResponse(
       (json['totalSamplesDoctors'] as num?)?.toInt(),
@@ -1146,6 +1182,34 @@ Map<String, dynamic> _$RepPlanBrandSpResponseToJson(
       'Brands': instance.Brands,
     };
 
+SearchDoctorsResponse _$SearchDoctorsResponseFromJson(
+        Map<String, dynamic> json) =>
+    SearchDoctorsResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map((e) =>
+              SearchDoctorsJsonResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$SearchDoctorsResponseToJson(
+        SearchDoctorsResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.Representative,
+    };
+
+DocDoctorsResponse _$DocDoctorsResponseFromJson(Map<String, dynamic> json) =>
+    DocDoctorsResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map(
+              (e) => DocDoctorsJsonResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$DocDoctorsResponseToJson(DocDoctorsResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.Representative,
+    };
+
 AllPlanBrandsBaseResponse _$AllPlanBrandsBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllPlanBrandsBaseResponse(
@@ -1182,6 +1246,44 @@ Map<String, dynamic> _$PlanBrandsBaseSpResponseToJson(
       'status': instance.status,
       'message': instance.message,
       'PlanBrands': instance.data,
+    };
+
+SearchDoctorsBaseSpResponse _$SearchDoctorsBaseSpResponseFromJson(
+        Map<String, dynamic> json) =>
+    SearchDoctorsBaseSpResponse(
+      json['Doctors'] == null
+          ? null
+          : SearchDoctorsResponse.fromJson(
+              json['Doctors'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$SearchDoctorsBaseSpResponseToJson(
+        SearchDoctorsBaseSpResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Doctors': instance.data,
+    };
+
+DocDoctorsBaseResponse _$DocDoctorsBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    DocDoctorsBaseResponse(
+      json['Doctors'] == null
+          ? null
+          : DocDoctorsResponse.fromJson(
+              json['Doctors'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$DocDoctorsBaseResponseToJson(
+        DocDoctorsBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Doctors': instance.data,
     };
 
 VisitResponse _$VisitResponseFromJson(Map<String, dynamic> json) =>

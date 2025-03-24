@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/search_doctors/page/search_doctors.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -35,6 +36,7 @@ import '../Recipes/pages/Recipes.dart';
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
+    static const String searchdoctors = "/searchdoctors";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
   static const String hospital = "/hospital";
@@ -160,6 +162,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) {
           return EditingPlan(
             repPlan: 7,
+          );
+        });
+          case Routes.searchdoctors:
+        iniSearchDoctorsModule();
+        return MaterialPageRoute(builder: (_) {
+          return SearchDoctors(
           );
         });
       case Routes.RepPlanBrandSp:

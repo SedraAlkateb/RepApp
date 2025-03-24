@@ -110,14 +110,14 @@ class DrawerPage extends StatelessWidget {
               style: TextStyle(color: ColorManager.secondaryColor1),
             ),
             onTap: () {
-              // WidgetsBinding.instance.addPostFrameCallback((_) {
-              //   Navigator.pushNamedAndRemoveUntil(
-              //     context,
-              //     Routes.places,
-              //     (route) => false,
-              //   );
-              // }
-              // );
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.searchdoctors,
+                  (route) => false,
+                );
+              }
+              );
             },
           ),
           Padding(

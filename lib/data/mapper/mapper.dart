@@ -712,3 +712,45 @@ extension AllNoVisitDocMapper on AllNoVisitDoctorBaseResponse? {
     return visitNotes;
   }
 }
+extension SearchDocMapper on SearchDoctorsJsonResponse? {
+  doctorsModel toDomain() {
+    return doctorsModel(
+     int.parse(this?.id ?? "0"),
+      this?.name ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.placeTitle ?? Constants.empty,
+    );
+  }
+}
+
+extension SearchDoctorsMapper on SearchDoctorsBaseSpResponse? {
+  List<doctorsModel> toDomain() {
+    List<doctorsModel> doctors =
+        (this?.data?.Representative?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<doctorsModel>()
+            .toList();
+    return doctors;
+  }
+}
+extension DocDoctorsMapper on DocDoctorsJsonResponse? {
+  DocdoctorsModel toDomain() {
+    return DocdoctorsModel(
+      this?.repName ?? Constants.empty,
+      this?.visitDate ?? Constants.empty,
+      this?.issue ?? Constants.empty,
+      this?.note ?? Constants.empty,
+    );
+  }
+}
+
+extension DocDoctorBaseMapper on DocDoctorsBaseResponse? {
+  List<DocdoctorsModel> toDomain() {
+    List<DocdoctorsModel> doctors =
+        (this?.data?.Representative?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<DocdoctorsModel>()
+            .toList();
+    return doctors;
+  }
+}
