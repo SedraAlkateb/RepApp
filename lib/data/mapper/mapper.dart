@@ -402,7 +402,14 @@ extension BrandAmountMapper on BrandAmountResponse? {
 }
 extension RepPlanBrandSpMapper on PlanBrandsBaseSpResponse? {
   AllPlanBrandSp toDomain() {
-    List<PlanBrandSp> planBrands =
+    if(this?.data==null){
+      return  AllPlanBrandSp(
+          [],
+          0
+      );
+
+    }
+    List<PlanBrandSp>? planBrands =
         (this?.data?.PlanBrands?.map((response) => response.toDomain()) ??
                 const Iterable.empty())
             .cast<PlanBrandSp>()

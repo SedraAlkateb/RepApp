@@ -47,8 +47,8 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
         (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
           emit(FutureRepPlanBrandSpErrorState(failure: failure));
         }, (data) async {
-          planBrandSp=data;
-          if (data.planBrandSps.isEmpty) {
+          planBrandSp=data??AllPlanBrandSp([], 0);
+          if (data!.planBrandSps.isEmpty) {
             emit(FutureRepPlanBrandSpEmptyState(data));
           } else {
             sumBrandsAmount=0;

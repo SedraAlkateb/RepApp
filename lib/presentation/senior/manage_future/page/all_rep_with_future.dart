@@ -120,7 +120,6 @@ class AllRepWithFuture extends StatelessWidget {
                             children: [
                               ElevatedButton(
                                 onPressed: allRepresentative[index].flag.flag!=4?() {
-
                                   iniFutureModule();
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {

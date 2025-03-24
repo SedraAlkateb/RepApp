@@ -213,11 +213,8 @@ class CheckActiveResponse {
   @JsonKey(name: "otherstatus")
   String? otherstatus;
   CheckActiveResponse(this.activePlanId, this.otherPlanId, this.otherstatus);
-  // from json
   factory CheckActiveResponse.fromJson(Map<String, dynamic> json) =>
       _$CheckActiveResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$CheckActiveResponseToJson(this);
 }
 
@@ -228,11 +225,8 @@ class BrandRecipesResponse {
   @JsonKey(name: "title_en")
   String? title_en;
   BrandRecipesResponse(this.id, this.title_en);
-  // from json
   factory BrandRecipesResponse.fromJson(Map<String, dynamic> json) =>
       _$BrandRecipesResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$BrandRecipesResponseToJson(this);
 }
 
@@ -241,11 +235,8 @@ class CheckActiveBaseResponse extends BaseResponse {
   @JsonKey(name: "representativePlans")
   CheckActiveResponse data;
   CheckActiveBaseResponse(this.data);
-  // from json
   factory CheckActiveBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$CheckActiveBaseResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$CheckActiveBaseResponseToJson(this);
 }
 
@@ -310,13 +301,9 @@ class BrandSpResponse {
   String? brandId;
   @JsonKey(name: "brandType")
   String? brandType;
-
   BrandSpResponse(this.id, this.spId, this.brandId, this.brandType);
-
   factory BrandSpResponse.fromJson(Map<String, dynamic> json) =>
       _$BrandSpResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$BrandSpResponseToJson(this);
 }
 
@@ -325,10 +312,8 @@ class AllBrandSpResponse {
   @JsonKey(name: "brands_specializations")
   List<BrandSpResponse>? brandsSpecializations;
   AllBrandSpResponse(this.brandsSpecializations);
-  // from json
   factory AllBrandSpResponse.fromJson(Map<String, dynamic> json) =>
       _$AllBrandSpResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllBrandSpResponseToJson(this);
 }
 
@@ -337,10 +322,8 @@ class AllBrandSpBaseResponse extends BaseResponse {
   @JsonKey(name: "brands_specializations")
   AllBrandSpResponse? data;
   AllBrandSpBaseResponse(this.data);
-  // from json
   factory AllBrandSpBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$AllBrandSpBaseResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllBrandSpBaseResponseToJson(this);
 }
 
@@ -358,11 +341,8 @@ class NoVisitDoctorResponse {
   String? visits;
   NoVisitDoctorResponse(
       this.docTitle, this.spTitle, this.address, this.rate, this.visits);
-
   factory NoVisitDoctorResponse.fromJson(Map<String, dynamic> json) =>
       _$NoVisitDoctorResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$NoVisitDoctorResponseToJson(this);
 }
 
@@ -370,12 +350,9 @@ class NoVisitDoctorResponse {
 class AllNoVisitDoctorResponse {
   @JsonKey(name: "Representative")
   List<NoVisitDoctorResponse>? res;
-
   AllNoVisitDoctorResponse(this.res);
-  // from json
   factory AllNoVisitDoctorResponse.fromJson(Map<String, dynamic> json) =>
       _$AllNoVisitDoctorResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllNoVisitDoctorResponseToJson(this);
 }
 
@@ -384,10 +361,8 @@ class AllNoVisitDoctorBaseResponse extends BaseResponse {
   @JsonKey(name: "Representative")
   AllNoVisitDoctorResponse? data;
   AllNoVisitDoctorBaseResponse(this.data);
-  // from json
   factory AllNoVisitDoctorBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$AllNoVisitDoctorBaseResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllNoVisitDoctorBaseResponseToJson(this);
 }
 
@@ -406,11 +381,8 @@ class VisitIssueResponse {
   String? issue;
   VisitIssueResponse(
       this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
-
   factory VisitIssueResponse.fromJson(Map<String, dynamic> json) =>
       _$VisitIssueResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$VisitIssueResponseToJson(this);
 }
 
@@ -419,10 +391,8 @@ class AllVisitIssueResponse {
   @JsonKey(name: "Notes")
   List<VisitIssueResponse>? notes;
   AllVisitIssueResponse(this.notes);
-  // from json
   factory AllVisitIssueResponse.fromJson(Map<String, dynamic> json) =>
       _$AllVisitIssueResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllVisitIssueResponseToJson(this);
 }
 
@@ -431,14 +401,11 @@ class AllVisitIssueBaseResponse extends BaseResponse {
   @JsonKey(name: "Notes")
   AllVisitIssueResponse? data;
   AllVisitIssueBaseResponse(this.data);
-  // from json
   factory AllVisitIssueBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$AllVisitIssueBaseResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllVisitIssueBaseResponseToJson(this);
 }
 
-//
 @JsonSerializable()
 class VisitNotesResponse {
   @JsonKey(name: "docTitle")
@@ -453,11 +420,8 @@ class VisitNotesResponse {
   String? note;
   VisitNotesResponse(
       this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
-
   factory VisitNotesResponse.fromJson(Map<String, dynamic> json) =>
       _$VisitNotesResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$VisitNotesResponseToJson(this);
 }
 
@@ -466,10 +430,8 @@ class AllVisitNotesResponse {
   @JsonKey(name: "Notes")
   List<VisitNotesResponse>? notes;
   AllVisitNotesResponse(this.notes);
-  // from json
   factory AllVisitNotesResponse.fromJson(Map<String, dynamic> json) =>
       _$AllVisitNotesResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllVisitNotesResponseToJson(this);
 }
 
@@ -478,10 +440,8 @@ class AllVisitNotesBaseResponse extends BaseResponse {
   @JsonKey(name: "Notes")
   AllVisitNotesResponse? data;
   AllVisitNotesBaseResponse(this.data);
-  // from json
   factory AllVisitNotesBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$AllVisitNotesBaseResponseFromJson(json);
-  // to json
   Map<String, dynamic> toJson() => _$AllVisitNotesBaseResponseToJson(this);
 }
 
@@ -490,11 +450,8 @@ class LoginResponse extends BaseResponse {
   @JsonKey(name: "data")
   TokenResponse? data;
   LoginResponse(this.data);
-  // from json
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
       _$LoginResponseFromJson(json);
-
-  // to json
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 }
 
@@ -505,7 +462,6 @@ class PlaceResponse {
   @JsonKey(name: "title")
   String? title;
   PlaceResponse(this.id, this.title);
-  // from json
   factory PlaceResponse.fromJson(Map<String, dynamic> json) =>
       _$PlaceResponseFromJson(json);
 
