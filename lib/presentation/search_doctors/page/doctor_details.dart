@@ -24,12 +24,7 @@ class _DoctorDetailesState extends State<DoctorDetailes>
         appBar: null,
         body: SingleChildScrollView(
             child: BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
-                buildWhen: (previous, current) {
-          return current is FutureDocDoctorsLoadingState ||
-              current is FutureDocDoctorsState ||
-              current is FutureDocDoctorsErrorState  ||
-              current is FutureDocDoctorsEmptyState;
-        }, listener: (context, state) {
+             listener: (context, state) {
           if (state is FutureDocDoctorsErrorState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               error(context, state.failure.massage, state.failure.code);

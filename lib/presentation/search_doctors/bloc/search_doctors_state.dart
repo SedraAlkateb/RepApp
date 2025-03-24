@@ -50,3 +50,9 @@ final class FutureDocDoctorsEmptyState extends SearchDoctorsState {
   @override
   List<Object?> get props =>[];
 }
+
+final class FutureSearchDoctorsEmptyState extends SearchDoctorsState {
+  FutureSearchDoctorsEmptyState();
+  @override
+  List<Object?> get props =>[];
+}

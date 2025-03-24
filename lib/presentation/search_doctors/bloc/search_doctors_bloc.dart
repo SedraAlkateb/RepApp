@@ -28,7 +28,13 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
           emit(FutureFutureSearchDoctorsErrorState(failure: failure));
         }, (data) async {
           Representative = data;
-          emit(FutureSearchDoctorsState(data));
+          if(data.isEmpty){
+            emit(FutureSearchDoctorsEmptyState());
+
+          }else{
+            emit(FutureSearchDoctorsState(data));
+
+          }
         });
       } else if (event is FutureDocDoctorsEvent) {
         doctordetails = [];
