@@ -55,13 +55,6 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-        BlocProvider<SeniorRepsBloc>(
-          create: (context) {
-            final bloc = instance<SeniorRepsBloc>();
-            bloc.add(AllSeniorRepEvent());
-            return bloc;
-          },
-        ),
         BlocProvider<ManageFutureBloc>(
           create: (context) {
             final bloc = instance<ManageFutureBloc>();

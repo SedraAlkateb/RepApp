@@ -65,7 +65,6 @@ abstract class AppServiceClient {
       @POST("/admin/getRepPlanBrandSp.php")
   Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
       @Part(name: "repPlanId") int repPlanId,
-
       @Part(name: "spId") int? spId,
           @Part(name: "repId") int? repId);
         
