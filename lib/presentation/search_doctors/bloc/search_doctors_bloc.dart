@@ -4,6 +4,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
 import 'package:domina_app/domain/usecase/search_doctors_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'search_doctors_event.dart';
@@ -52,7 +53,17 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
             }
          }
          );
-      }
+      } else if  (event is FutureSearchEvent) {
+        List<DocdoctorsModel> rep;
+        String search = normalizeText(event.name);
+        rep = doctordetails.where((value) {
+          if (normalizeText(value.repName).contains(search)) {
+            return true;
+          }
+          return false;
+        }).toList();
+        emit(FutureDocDoctorsState(rep));
+      }   
     });
   }
 }

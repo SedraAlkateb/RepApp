@@ -8,6 +8,12 @@ class FutureSearchDocEvent extends SearchDoctorsEvent {
   @override
   List<Object?> get props => [name];
 }
+class FutureSearchEvent extends SearchDoctorsEvent {
+  final String name;
+  FutureSearchEvent(this.name);
+  @override
+  List<Object?> get props => [name];
+}
 class FutureDocDoctorsEvent extends SearchDoctorsEvent {
   final int docId;
   FutureDocDoctorsEvent(this.docId);

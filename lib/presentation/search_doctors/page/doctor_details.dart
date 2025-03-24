@@ -1,8 +1,10 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/search_doctors/bloc/search_doctors_bloc.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
+import 'package:domina_app/presentation/uniti/text2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/models.dart';
@@ -17,6 +19,7 @@ class DoctorDetailes extends StatefulWidget {
 
 class _DoctorDetailesState extends State<DoctorDetailes>
     with AutomaticKeepAliveClientMixin {
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -24,7 +27,7 @@ class _DoctorDetailesState extends State<DoctorDetailes>
         appBar: null,
         body: SingleChildScrollView(
             child: BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
-             listener: (context, state) {
+                listener: (context, state) {
           if (state is FutureDocDoctorsErrorState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               error(context, state.failure.massage, state.failure.code);
@@ -134,13 +137,23 @@ class _DoctorDetailesState extends State<DoctorDetailes>
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                SearchField(
+                  searchController: searchController,
+                  onPressed: (value) {
+                    BlocProvider.of<SearchDoctorsBloc>(context)
+                        .add(FutureSearchEvent(value));
+                  },
+                ),
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Padding(
                         padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 16),
                         child: Container(
                           margin: EdgeInsets.all(AppPadding.p8),
                           padding: EdgeInsets.all(AppPadding.p16),
@@ -152,16 +165,17 @@ class _DoctorDetailesState extends State<DoctorDetailes>
                           ),
                           child: Column(
                             children: [
-                              TextRach(
-                                  s1: "اسم المندوب: ",
-                                  s2: state.doctordetails[index].repName),
-                              TextRach(
+                              TextRach2(
+                                s1: "اسم المندوب: ",
+                                s2: state.doctordetails[index].repName,
+                              ),
+                              TextRach2(
                                   s1: "التاريخ: ",
                                   s2: state.doctordetails[index].visitDate),
-                              TextRach(
+                              TextRach2(
                                   s1: "ملاحظات مستودع قاسيون : ",
                                   s2: state.doctordetails[index].issue),
-                              TextRach(
+                              TextRach2(
                                   s1: "ملاحظات المستودع العلمي : ",
                                   s2: state.doctordetails[index].note
                                       .toString()),

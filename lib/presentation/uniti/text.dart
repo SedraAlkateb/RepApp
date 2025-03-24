@@ -31,6 +31,7 @@ class TextRach extends StatelessWidget {
               style: textStyle!=null?textStyle:Theme.of(context).textTheme.labelLarge,
               children: <TextSpan>[
                 TextSpan(
+                  
                   text: s2,
                   style: Theme.of(context)
                       .textTheme
