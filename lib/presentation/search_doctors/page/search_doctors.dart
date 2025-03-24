@@ -96,6 +96,11 @@ class _SearchDoctorsState extends State<SearchDoctors>
                   //  ,
                 ),
                 BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
+                  buildWhen: (previous, current) =>
+                      current is FutureFutureSearchDoctorsErrorState ||
+                      current is FutureSearchDoctorsLoadingState ||
+                      current is FutureSearchDoctorsState ||
+                      current is FutureSearchDoctorsEmptyState,
                   listener: (context, state) {
                     if (state is FutureFutureSearchDoctorsErrorState) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -107,6 +112,9 @@ class _SearchDoctorsState extends State<SearchDoctors>
                   builder: (context, state) {
                     if (state is FutureSearchDoctorsLoadingState) {
                       return loadingFullScreen(context);
+                    }
+                    if (state is FutureSearchDoctorsEmptyState) {
+                      return emptyFullScreen(context);
                     }
                     if (state is FutureSearchDoctorsState) {
                       return Column(
@@ -169,8 +177,7 @@ class _SearchDoctorsState extends State<SearchDoctors>
                         ],
                       );
                     }
-
-                    return SizedBox();
+                    return emptyFullScreen(context);
                   },
                 ),
               ],
