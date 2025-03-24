@@ -397,6 +397,7 @@ class ExceptionRequestBody {
     };
   }
 }
+
 class ExceptionRequestBody2 {
   ExceptionModel list1;
   ExceptionRequestBody2(this.list1);
@@ -406,6 +407,7 @@ class ExceptionRequestBody2 {
     };
   }
 }
+
 class VisitPharmacyAndPharmacy {
   PharmacyModel pharmacyModel;
   VisitPharmacyModel visitPharmacyModel;
@@ -1084,7 +1086,7 @@ class LoginModel {
       this.cityId,
       this.repType,
       {this.otherStartDate,
-        this.otherEndDate});
+      this.otherEndDate});
   Map<String, dynamic> toMap() {
     return {
       'samplesCount': samplesCount,
@@ -1175,7 +1177,7 @@ class Rep {
   int activeRepId;
   int? otherRepId;
   int? flag;
-  Rep(this.activeRepId,this.flag, {this.otherRepId});
+  Rep(this.activeRepId, this.flag, {this.otherRepId});
 }
 
 class RepSp {
@@ -1208,13 +1210,8 @@ class PlanBrandModel {
   }
 
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandModel(map['id'],
-        map['spId'],
-        map['brandId'],
-        map['repPlanId'],
-        map['brandType'],
-        "",
-        map['amount']);
+    return PlanBrandModel(map['id'], map['spId'], map['brandId'],
+        map['repPlanId'], map['brandType'], "", map['amount']);
   }
 }
 
@@ -1247,28 +1244,28 @@ class PlanBrandsSp {
         map['brandType'], map['titleAr'], map['phTitle'], map['totalAmount']);
   }
 }
+
 class BrandPlanBrandsSpWithSamples {
   int totalSamplesDoctors;
   int totalSamplesHospitals;
   int totalSamplesDepartments;
 
-
   // Constructor
-  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors, this.totalSamplesHospitals, this.totalSamplesDepartments);
+  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors,
+      this.totalSamplesHospitals, this.totalSamplesDepartments);
   Map<String, dynamic> toMap() {
     return {
       'totalSamplesDoctors': totalSamplesDoctors,
       'totalSamplesHospitals': totalSamplesHospitals,
       'totalSamplesDepartments': totalSamplesDepartments,
-     
     };
   }
 
   factory BrandPlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
-    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'], map['totalSamplesHospitals'], map['totalSamplesDepartments']);
+    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'],
+        map['totalSamplesHospitals'], map['totalSamplesDepartments']);
   }
 }
-
 
 class ExceptionModel {
   String exceptionModel;
@@ -1557,6 +1554,7 @@ class AllRepresentativeFuture {
   FlagModel flag;
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
 }
+
 class FlagModel {
   final int flag;
   final String name;
@@ -1580,7 +1578,6 @@ class FlagModel {
     }
   }
 }
-
 
 class InventoryModel {
   String title;
@@ -1635,16 +1632,15 @@ class VisitRepSen {
   int userId;
   VisitRepSen(this.repId, this.userId);
 }
+
 class ReadAll {
   int repPlanId;
   int userId;
   int type;
   int flag;
-  ReadAll(this.repPlanId,
-      this.userId,
-      this.type,
-      this.flag);
+  ReadAll(this.repPlanId, this.userId, this.type, this.flag);
 }
+
 class RepVisitsModel {
   String visitId;
   String visitDate;
@@ -1672,6 +1668,7 @@ class RepVisitsModel {
       this.flag,
       this.samples);
 }
+
 class RepVisitsModelSearch {
   int index;
   String visitId;
@@ -1715,7 +1712,8 @@ class NumVisit {
   int visitHospital;
   NumVisit(this.visitDoctor, this.visitHospital);
 }
-class PlanBrandSp{
+
+class PlanBrandSp {
   int id;
   int brandId;
   int brandType;
@@ -1726,16 +1724,31 @@ class PlanBrandSp{
 
   PlanBrandSp(this.id, this.brandId, this.brandType, this.titleAr, this.spId,
       this.phTitle, this.totalAmount);
-
 }
-class BrandAmountModel{
+class doctorsModel {
+  int id;
+  String name;
+  String spTitle;
+  String placeTitle;
+
+  doctorsModel(this.id, this.name, this.spTitle, this.placeTitle);
+}
+ class DocdoctorsModel {
+  String repName;
+  String visitDate;
+  String issue;
+   String note;
+
+  DocdoctorsModel(this.repName, this.visitDate, this.issue, this.note);
+}
+class BrandAmountModel {
   int numDoctor;
   int numHospital;
   int numDepartment;
   BrandAmountModel(this.numDoctor, this.numHospital, this.numDepartment);
-
 }
-class AllPlanBrandSp{
+
+class AllPlanBrandSp {
   List<PlanBrandSp> planBrandSps;
   int amount;
 

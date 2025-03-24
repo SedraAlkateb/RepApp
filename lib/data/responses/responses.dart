@@ -943,6 +943,42 @@ class PlanBrandSpecResponse {
       _$PlanBrandSpecResponseFromJson(json);
   // to json
   Map<String, dynamic> toJson() => _$PlanBrandSpecResponseToJson(this);
+}
+@JsonSerializable()
+class SearchDoctorsJsonResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "spTitle")
+  String? spTitle;
+  @JsonKey(name: "placeTitle")
+  String? placeTitle;
+
+  SearchDoctorsJsonResponse(this.id, this.name, this.spTitle, this.placeTitle);
+  // from json
+  factory SearchDoctorsJsonResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchDoctorsJsonResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$SearchDoctorsJsonResponseToJson(this);
+}  
+@JsonSerializable()
+class DocDoctorsJsonResponse {
+  @JsonKey(name: "repName")
+  String? repName;
+  @JsonKey(name: "visitDate")
+  String? visitDate;
+  @JsonKey(name: "issue")
+  String? issue;
+  @JsonKey(name: "note")
+  String? note;
+
+  DocDoctorsJsonResponse(this.repName, this.visitDate, this.issue, this.note);
+  // from json
+  factory DocDoctorsJsonResponse.fromJson(Map<String, dynamic> json) =>
+      _$DocDoctorsJsonResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$DocDoctorsJsonResponseToJson(this);
 } 
 @JsonSerializable()
 class BrandAmountResponse {
@@ -1105,18 +1141,28 @@ class RepPlanBrandSpResponse {
   // to json
   Map<String, dynamic> toJson() => _$RepPlanBrandSpResponseToJson(this);
 }
-
-// @JsonSerializable()
-// class PlanBrandsSpecResponse {
-//   @JsonKey(name: "PlanBrands")
-//   List<PlanBrandSpecResponse>? planBrand;
-//   PlanBrandsSpecResponse(this.planBrand);
-//   // from json
-//   factory PlanBrandsSpecResponse.fromJson(Map<String, dynamic> json) =>
-//       _$PlanBrandsSpecResponseFromJson(json);
-//   // to json
-//   Map<String, dynamic> toJson() => _$PlanBrandsSpecResponseToJson(this);
-// }
+@JsonSerializable()
+class SearchDoctorsResponse {
+  @JsonKey(name: 'Representative')
+  List<SearchDoctorsJsonResponse>? Representative;
+  SearchDoctorsResponse(this.Representative);
+  // from json
+  factory SearchDoctorsResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchDoctorsResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$SearchDoctorsResponseToJson(this);
+}
+ @JsonSerializable()
+class DocDoctorsResponse {
+  @JsonKey(name: 'Representative')
+  List<DocDoctorsJsonResponse>? Representative;
+  DocDoctorsResponse(this.Representative);
+  // from json
+  factory DocDoctorsResponse.fromJson(Map<String, dynamic> json) =>
+      _$DocDoctorsResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$DocDoctorsResponseToJson(this);
+}
 @JsonSerializable()
 class AllPlanBrandsBaseResponse extends BaseResponse {
   @JsonKey(name: "representativeActivePlan_brands")
@@ -1140,7 +1186,26 @@ class PlanBrandsBaseSpResponse extends BaseResponse {
   // to json
   Map<String, dynamic> toJson() => _$PlanBrandsBaseSpResponseToJson(this);
 }
-
+@JsonSerializable()
+class SearchDoctorsBaseSpResponse extends BaseResponse {
+  @JsonKey(name: "Doctors")
+  SearchDoctorsResponse? data;
+  SearchDoctorsBaseSpResponse(this.data);
+  // from json
+  factory SearchDoctorsBaseSpResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchDoctorsBaseSpResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$SearchDoctorsBaseSpResponseToJson(this);
+}
+@JsonSerializable()
+class DocDoctorsBaseResponse extends BaseResponse {
+  @JsonKey(name: "Doctors")
+  DocDoctorsResponse? data;
+  DocDoctorsBaseResponse(this.data);
+  factory DocDoctorsBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$DocDoctorsBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$DocDoctorsBaseResponseToJson(this);
+}
 @JsonSerializable()
 class VisitResponse {
   @JsonKey(name: "id")

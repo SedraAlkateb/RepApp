@@ -73,6 +73,8 @@ dependencies:
   timezone: ^0.10.0
   test: ^1.25.7
   font_awesome_flutter: ^10.8.0
+  avatar_glow: ^3.0.1
+  flutter_animated_button: ^2.0.4
 
 dev_dependencies:
   flutter_test:

@@ -557,6 +557,87 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
+  Future<SearchDoctorsBaseSpResponse> docSearch(
+    int cityId,
+    String name,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'cityId',
+      cityId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'name',
+      name,
+    ));
+    final _options = _setStreamType<SearchDoctorsBaseSpResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/admin/docSearch.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SearchDoctorsBaseSpResponse _value;
+    try {
+      _value = SearchDoctorsBaseSpResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<DocDoctorsBaseResponse> docReport(int docId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'docId',
+      docId.toString(),
+    ));
+    final _options = _setStreamType<DocDoctorsBaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/admin/docReport.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late DocDoctorsBaseResponse _value;
+    try {
+      _value = DocDoctorsBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<VisitHospitalBaseResponse> getHosVisit(
     int repPlanId,
     int representativeId,

@@ -60,15 +60,24 @@ abstract class AppServiceClient {
   @POST("/getAllPlanBrandsType.php")
   Future<AllPlanBrandsBaseResponse> getAllPlanBrandsType(
       @Part(name: "repPlanIdActive") int repPlanIdActive,
-        @Part(name: "flag") int? flag,
+      @Part(name: "flag") int? flag,
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
-      @POST("/admin/getRepPlanBrandSp.php")
+  @POST("/admin/getRepPlanBrandSp.php")
   Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
       @Part(name: "repPlanId") int repPlanId,
-
       @Part(name: "spId") int? spId,
-          @Part(name: "repId") int? repId);
-        
+      @Part(name: "repId") int? repId);
+
+  @POST("/admin/docSearch.php")
+  Future<SearchDoctorsBaseSpResponse> docSearch(
+    @Part(name: "cityId") int cityId,
+    @Part(name: "name") String name,
+  );
+
+   @POST("/admin/docReport.php")
+  Future<DocDoctorsBaseResponse> docReport(
+    @Part(name: "docId") int docId,
+  );
 
   @POST("/getHosVisit.php")
   Future<VisitHospitalBaseResponse> getHosVisit(
@@ -114,11 +123,7 @@ abstract class AppServiceClient {
     @Part(name: "brand_1") String brand_1,
     @Part(name: "address") String address,
     @Part(name: "phone") String phone,
-    @Part(name: "total") String total,
-      {
-
-
-
+    @Part(name: "total") String total, {
     @Part(name: "flagImage1") String? flagImage1,
     @Part(name: "flagImage2") String? flagImage2,
     @Part(name: "note1") String? note1,
@@ -146,8 +151,8 @@ abstract class AppServiceClient {
   );
   @POST("/admin/getRepsFuture.php")
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
-      @Part(name: "repDet") int id,
-      );
+    @Part(name: "repDet") int id,
+  );
   @POST("/admin/getVisitNotes.php")
   Future<AllVisitNotesBaseResponse> getVisitNotes(
     @Part(name: "repDet") int docId,
@@ -192,7 +197,7 @@ abstract class AppServiceClient {
   @POST("/admin/getRepVisitsHos.php")
   Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
       @Part(name: "repId") int repId, @Part(name: "userId") int userId);
-        @POST("/admin/changePlanBrandType.php")
+  @POST("/admin/changePlanBrandType.php")
   Future<Message1Response> changePlanBrandType(
       @Part(name: "id") int id, @Part(name: "brandType") int brandType);
 }

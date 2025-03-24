@@ -1071,7 +1071,33 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
-
+  @override
+  Future<Either<Failure,List<doctorsModel> >> docSearch(int cityId,
+      String name,) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.docSearch(cityId,name );
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "docSearch")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "docSearch")]));
+      return Left(failure);
+    }
+  }
   @override
   Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id)  async {
     try {
@@ -1150,6 +1176,33 @@ class RepositoryImp implements Repository {
       Failure failure = ErrorHandler.handle(error).failure;
       insertLog(ExceptionRequestBody(
           [ExceptionModel(failure.massage, "getAllPlanBrands")]));
+      return Left(failure);
+    }
+  }
+  
+  @override
+  Future<Either<Failure, List<DocdoctorsModel>>> docReport(int docId) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.docReport(docId );
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "docReport")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "docReport")]));
       return Left(failure);
     }
   }
