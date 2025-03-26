@@ -1,7 +1,6 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
-import 'package:domina_app/presentation/search_doctors/page/search_doctors.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -14,6 +13,7 @@ import 'package:domina_app/presentation/senior/representative/page/place_senior.
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
+import 'package:domina_app/presentation/senior/search_doctors/page/search_doctors.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
