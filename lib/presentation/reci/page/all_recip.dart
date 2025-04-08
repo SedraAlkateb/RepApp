@@ -1,8 +1,12 @@
 
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
+import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/reci/bloc/reci_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
@@ -65,7 +69,20 @@ buildWhen: (previous, current) => current is AllReciLoadingState||current is All
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          BlocProvider.of<ReciBloc>(context).add(GetReciEvent(recis[index].id??"0"));
+                          initBrandRecModule();
+                          BlocProvider.of<DoctorsBloc>(
+                              context)
+                              .add(CheckReciEvent(
+                              int.parse(recis[index].id??"0"), 1));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RecipesPage(
+                                docId: int.parse(recis[index].id??"0"),
+                                st: 0,
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           margin: EdgeInsets.all(AppPadding.p8),
