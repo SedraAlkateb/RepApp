@@ -1012,6 +1012,52 @@ Map<String, dynamic> _$DocDoctorsJsonResponseToJson(
       'note': instance.note,
     };
 
+ReciResponse _$ReciResponseFromJson(Map<String, dynamic> json) => ReciResponse(
+      json['id'] as String?,
+      json['docName'] as String?,
+      json['create_date'] as String?,
+      json['total'] as String?,
+      json['note_emp'] as String?,
+    );
+
+Map<String, dynamic> _$ReciResponseToJson(ReciResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'docName': instance.docName,
+      'create_date': instance.create_date,
+      'total': instance.total,
+      'note_emp': instance.note_emp,
+    };
+
+AllReciResponse _$AllReciResponseFromJson(Map<String, dynamic> json) =>
+    AllReciResponse(
+      reci: (json['Reci'] as List<dynamic>)
+          .map((e) => ReciResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllReciResponseToJson(AllReciResponse instance) =>
+    <String, dynamic>{
+      'Reci': instance.reci,
+    };
+
+AllReciBaseResponse _$AllReciBaseResponseFromJson(Map<String, dynamic> json) =>
+    AllReciBaseResponse(
+      json['Reci'] == null
+          ? null
+          : AllReciResponse.fromJson(json['Reci'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllReciBaseResponseToJson(
+        AllReciBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Reci': instance.data,
+    };
+
 BrandAmountResponse _$BrandAmountResponseFromJson(Map<String, dynamic> json) =>
     BrandAmountResponse(
       (json['totalSamplesDoctors'] as num?)?.toInt(),

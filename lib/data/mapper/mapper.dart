@@ -701,7 +701,27 @@ extension NoVisitDocMapper on NoVisitDoctorResponse? {
     );
   }
 }
-
+extension ReciMapper on ReciResponse? {
+  ReciModel toDomain() {
+    return ReciModel(
+      this?.id ?? Constants.empty,
+      this?.docName ?? Constants.empty,
+      this?.create_date ?? Constants.empty,
+      this?.total ?? Constants.empty,
+      this?.note_emp ?? Constants.empty,
+    );
+  }
+}
+extension AllReciMapper on AllReciBaseResponse? {
+  List<ReciModel> toDomain() {
+    List<ReciModel> visitNotes =
+    (this?.data?.reci.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<ReciModel>()
+        .toList();
+    return visitNotes;
+  }
+}
 extension AllNoVisitDocMapper on AllNoVisitDoctorBaseResponse? {
   List<NoVisitDocModel> toDomain() {
     List<NoVisitDocModel> visitNotes =

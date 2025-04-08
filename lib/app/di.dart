@@ -36,6 +36,7 @@ import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_type_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_read_sen_usecase.dart';
+import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_reps_future_usecase.dart';
 import 'package:domina_app/domain/usecase/all_seinor_reps_usecase.dart';
 import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
@@ -103,6 +104,7 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
+import 'package:domina_app/presentation/reci/bloc/reci_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
@@ -434,6 +436,15 @@ Future<void> initDoctorModule() async {
     }
     instance.registerFactory<DoctorsBloc>(
         () => DoctorsBloc(instance(), instance()));
+  }
+}
+Future<void> initReciModule() async {
+    if (!GetIt.I.isRegistered<AllReciUsecase>()) {
+      instance.registerFactory<AllReciUsecase>(
+              () => AllReciUsecase(instance()));
+
+    instance.registerFactory<ReciBloc>(
+            () => ReciBloc(instance()));
   }
 }
 

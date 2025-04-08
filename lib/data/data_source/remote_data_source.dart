@@ -71,6 +71,7 @@ abstract class RemoteDataSource {
        Future<Message1Response> changePlanBrandType(ChangePlanBrandType changePlanBrandType);
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id);
   Future<Message1Response> readAllVisits(ReadAll readAll);
+  Future<AllReciBaseResponse> getAllRepReci(int repDet);
 
 }
 
@@ -334,6 +335,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<DocDoctorsBaseResponse> docReport(int docId) async {
     return await _appServiceClient.docReport(docId
       );
+  }
+
+  @override
+  Future<AllReciBaseResponse> getAllRepReci(int repDet)async {
+    return await _appServiceClient.getAllRepReci(repDet
+    );
   }
 
 

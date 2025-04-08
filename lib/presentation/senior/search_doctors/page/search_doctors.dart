@@ -10,25 +10,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 
-class SearchDoctors extends StatefulWidget {
+class SearchDoctors extends StatelessWidget {
   SearchDoctors({
     super.key,
   });
 
-  @override
-  State<SearchDoctors> createState() => _SearchDoctorsState();
-}
-
-class _SearchDoctorsState extends State<SearchDoctors>
-    with AutomaticKeepAliveClientMixin {
   final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     // String name = context.watch<SearchDoctorsBloc>().name;
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return Center(
+              child: IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+                  Icons.menu,
+                  color: ColorManager.secondaryColor,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            );
+          },
+        ),
         title: Text(
           'البحث عن طبيب',
           style: TextStyle(),
@@ -129,7 +138,7 @@ class _SearchDoctorsState extends State<SearchDoctors>
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
-                                        return DoctorDetailes(
+                                        return DoctorDetails(
                                           doctorModel:
                                               state.Representative[index],
                                         );
@@ -187,7 +196,4 @@ class _SearchDoctorsState extends State<SearchDoctors>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
