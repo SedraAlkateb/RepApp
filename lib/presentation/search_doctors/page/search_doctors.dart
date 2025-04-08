@@ -93,7 +93,7 @@ class _SearchDoctorsState extends State<SearchDoctors>
                   //   BlocProvider.of<SearchDoctorsBloc>(context)
                   //       .add(FutureSaveValueSearchEvent(value));
                   // }
-                  //  ,
+                  //,
                 ),
                 BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
                   buildWhen: (previous, current) =>
