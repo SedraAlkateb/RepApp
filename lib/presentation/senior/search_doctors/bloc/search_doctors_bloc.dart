@@ -12,7 +12,7 @@ part 'search_doctors_state.dart';
 
 class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
   List<doctorsModel> Representative = [];
-  List<DocdoctorsModel> doctorDetails = [];
+  List<DocdoctorsModel> doctordetails = [];
   SearchDoctorsUsecase searchDoctorsUsecase;
   DocDoctorsUseCase docDoctorsUseCase;
   String name1 = ' ';
@@ -38,7 +38,7 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
           }
         });
       } else if (event is FutureDocDoctorsEvent) {
-        doctorDetails = [];
+        doctordetails = [];
         emit(FutureDocDoctorsLoadingState());
         (await docDoctorsUseCase.execute(event.docId)).fold((failure) {
           emit(FutureDocDoctorsErrorState(failure: failure));
@@ -48,7 +48,7 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
          if (data.isEmpty) {
               emit(FutureDocDoctorsEmptyState());
             } else {
-            doctorDetails = data;
+            doctordetails = data;
               emit(FutureDocDoctorsState(data));
             }
          }
@@ -64,11 +64,10 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
         }).toList();
         emit(FutureDocDoctorsState(rep));
       }
-      }
       else if (event is SearchNoteDoctorEvent) {
         List<DocdoctorsModel> doctorNote;
         String search = normalizeText(event.contant);
-        doctorNote = doctorDetails.where((value) {
+        doctorNote = doctordetails.where((value) {
           if (normalizeText(value.issue).contains(search)) {
             return true;
           }
