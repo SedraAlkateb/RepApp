@@ -53,6 +53,17 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
             }
          }
          );
+      } else if  (event is FutureSearchEvent) {
+        List<DocdoctorsModel> rep;
+        String search = normalizeText(event.name);
+        rep = doctordetails.where((value) {
+          if (normalizeText(value.repName).contains(search)) {
+            return true;
+          }
+          return false;
+        }).toList();
+        emit(FutureDocDoctorsState(rep));
+      }
       }
       else if (event is SearchNoteDoctorEvent) {
         List<DocdoctorsModel> doctorNote;

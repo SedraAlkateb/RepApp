@@ -102,7 +102,7 @@ class SearchDoctors extends StatelessWidget {
                   //   BlocProvider.of<SearchDoctorsBloc>(context)
                   //       .add(FutureSaveValueSearchEvent(value));
                   // }
-                  //  ,
+                  //,
                 ),
                 BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
                   buildWhen: (previous, current) =>
