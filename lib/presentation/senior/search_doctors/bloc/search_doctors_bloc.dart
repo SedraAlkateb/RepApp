@@ -4,6 +4,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
 import 'package:domina_app/domain/usecase/search_doctors_usecase.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'search_doctors_event.dart';
@@ -11,7 +12,7 @@ part 'search_doctors_state.dart';
 
 class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
   List<doctorsModel> Representative = [];
-  List<DocdoctorsModel> doctordetails = [];
+  List<DocdoctorsModel> doctorDetails = [];
   SearchDoctorsUsecase searchDoctorsUsecase;
   DocDoctorsUseCase docDoctorsUseCase;
   String name1 = ' ';
@@ -37,7 +38,7 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
           }
         });
       } else if (event is FutureDocDoctorsEvent) {
-        doctordetails = [];
+        doctorDetails = [];
         emit(FutureDocDoctorsLoadingState());
         (await docDoctorsUseCase.execute(event.docId)).fold((failure) {
           emit(FutureDocDoctorsErrorState(failure: failure));
@@ -47,11 +48,28 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
          if (data.isEmpty) {
               emit(FutureDocDoctorsEmptyState());
             } else {
-            doctordetails = data;
+            doctorDetails = data;
               emit(FutureDocDoctorsState(data));
             }
          }
          );
+      }
+      else if (event is SearchNoteDoctorEvent) {
+        List<DocdoctorsModel> doctorNote;
+        String search = normalizeText(event.contant);
+        doctorNote = doctorDetails.where((value) {
+          if (normalizeText(value.issue).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.note).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.repName).contains(search)) {
+            return true;
+          }
+          return false;
+        }).toList();
+        emit(FutureDocDoctorsState(doctorNote));
       }
     });
   }

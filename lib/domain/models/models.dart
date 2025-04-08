@@ -1712,7 +1712,14 @@ class NumVisit {
   int visitHospital;
   NumVisit(this.visitDoctor, this.visitHospital);
 }
-
+class ReciModel{
+  String? id;
+  String? docName;
+  String? create_date;
+  String? total;
+  String? note_emp;
+  ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp);
+}
 class PlanBrandSp {
   int id;
   int brandId;
