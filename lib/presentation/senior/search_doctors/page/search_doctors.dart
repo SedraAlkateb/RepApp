@@ -1,8 +1,8 @@
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/search_doctors/bloc/search_doctors_bloc.dart';
-import 'package:domina_app/presentation/search_doctors/page/doctor_details.dart';
+import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
+import 'package:domina_app/presentation/senior/search_doctors/page/doctor_details.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
@@ -10,25 +10,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 
-class SearchDoctors extends StatefulWidget {
+class SearchDoctors extends StatelessWidget {
   SearchDoctors({
     super.key,
   });
 
-  @override
-  State<SearchDoctors> createState() => _SearchDoctorsState();
-}
-
-class _SearchDoctorsState extends State<SearchDoctors>
-    with AutomaticKeepAliveClientMixin {
   final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     // String name = context.watch<SearchDoctorsBloc>().name;
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return Center(
+              child: IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+                  Icons.menu,
+                  color: ColorManager.secondaryColor,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            );
+          },
+        ),
         title: Text(
           'البحث عن طبيب',
           style: TextStyle(),
@@ -129,7 +138,7 @@ class _SearchDoctorsState extends State<SearchDoctors>
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
-                                        return DoctorDetailes(
+                                        return DoctorDetails(
                                           doctorModel:
                                               state.Representative[index],
                                         );
@@ -187,7 +196,4 @@ class _SearchDoctorsState extends State<SearchDoctors>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

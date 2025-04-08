@@ -11,6 +11,7 @@ class DrawerPage extends StatelessWidget {
   DrawerPage({super.key});
   @override
   Widget build(BuildContext context) {
+
     return Drawer(
       shape: Border.all(color: ColorManager.secondaryColor4),
       child: ListView(
@@ -93,7 +94,6 @@ class DrawerPage extends StatelessWidget {
               });
             },
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
@@ -101,6 +101,7 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
+
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
@@ -132,7 +133,7 @@ class DrawerPage extends StatelessWidget {
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
             leading:
-                Icon(Icons.search_rounded, color: ColorManager.secondaryColor4),
+            Icon(Icons.search_rounded, color: ColorManager.secondaryColor4),
             title: Text(
               'البحث عن طبيب',
               style: TextStyle(color: ColorManager.secondaryColor1),
@@ -142,9 +143,37 @@ class DrawerPage extends StatelessWidget {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.searchdoctors,
-                  (route) => false,
+                      (route) => false,
                 );
-              });
+              }
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
+            ),
+          ),
+          ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
+            leading:
+            Icon(Icons.search_rounded, color: ColorManager.secondaryColor4),
+            title: Text(
+              'عرض الوصفات',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.allRecip,
+                      (route) => false,
+                );
+              }
+              );
             },
           ),
           Padding(
