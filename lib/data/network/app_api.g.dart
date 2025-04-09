@@ -1898,6 +1898,184 @@ class _AppServiceClient implements AppServiceClient {
     return _value;
   }
 
+  @override
+  Future<Message1Response> updateReci({
+    String? recipeType,
+    String? repId,
+    String? type,
+    String? docId,
+    String? spName,
+    String? brand_1,
+    String? address,
+    String? phone,
+    String? total,
+    String? flagImage1,
+    String? flagImage2,
+    String? note1,
+    String? note2,
+    File? image1,
+    File? image2,
+    String? brand_2,
+    String? brand_3,
+    String? brand_4,
+    String? note_emp,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    if (recipeType != null) {
+      _data.fields.add(MapEntry(
+        'recipeType',
+        recipeType,
+      ));
+    }
+    if (repId != null) {
+      _data.fields.add(MapEntry(
+        'repId',
+        repId,
+      ));
+    }
+    if (type != null) {
+      _data.fields.add(MapEntry(
+        'type',
+        type,
+      ));
+    }
+    if (docId != null) {
+      _data.fields.add(MapEntry(
+        'docId',
+        docId,
+      ));
+    }
+    if (spName != null) {
+      _data.fields.add(MapEntry(
+        'spName',
+        spName,
+      ));
+    }
+    if (brand_1 != null) {
+      _data.fields.add(MapEntry(
+        'brand_1',
+        brand_1,
+      ));
+    }
+    if (address != null) {
+      _data.fields.add(MapEntry(
+        'address',
+        address,
+      ));
+    }
+    if (phone != null) {
+      _data.fields.add(MapEntry(
+        'phone',
+        phone,
+      ));
+    }
+    if (total != null) {
+      _data.fields.add(MapEntry(
+        'total',
+        total,
+      ));
+    }
+    if (flagImage1 != null) {
+      _data.fields.add(MapEntry(
+        'flagImage1',
+        flagImage1,
+      ));
+    }
+    if (flagImage2 != null) {
+      _data.fields.add(MapEntry(
+        'flagImage2',
+        flagImage2,
+      ));
+    }
+    if (note1 != null) {
+      _data.fields.add(MapEntry(
+        'note1',
+        note1,
+      ));
+    }
+    if (note2 != null) {
+      _data.fields.add(MapEntry(
+        'note2',
+        note2,
+      ));
+    }
+    if (image1 != null) {
+      if (image1 != null) {
+        _data.files.add(MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
+    }
+    if (image2 != null) {
+      if (image2 != null) {
+        _data.files.add(MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
+    }
+    if (brand_2 != null) {
+      _data.fields.add(MapEntry(
+        'brand_2',
+        brand_2,
+      ));
+    }
+    if (brand_3 != null) {
+      _data.fields.add(MapEntry(
+        'brand_3',
+        brand_3,
+      ));
+    }
+    if (brand_4 != null) {
+      _data.fields.add(MapEntry(
+        'brand_4',
+        brand_4,
+      ));
+    }
+    if (note_emp != null) {
+      _data.fields.add(MapEntry(
+        'note_emp',
+        note_emp,
+      ));
+    }
+    final _options = _setStreamType<Message1Response>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/reci/updateReci.php',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

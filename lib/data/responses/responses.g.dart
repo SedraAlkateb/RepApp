@@ -1018,6 +1018,8 @@ ReciResponse _$ReciResponseFromJson(Map<String, dynamic> json) => ReciResponse(
       json['create_date'] as String?,
       json['total'] as String?,
       json['note_emp'] as String?,
+      json['docId'] as String?,
+      json['recipeType'] as String?,
     );
 
 Map<String, dynamic> _$ReciResponseToJson(ReciResponse instance) =>
@@ -1027,6 +1029,8 @@ Map<String, dynamic> _$ReciResponseToJson(ReciResponse instance) =>
       'create_date': instance.create_date,
       'total': instance.total,
       'note_emp': instance.note_emp,
+      'docId': instance.docId,
+      'recipeType': instance.recipeType,
     };
 
 AllReciResponse _$AllReciResponseFromJson(Map<String, dynamic> json) =>

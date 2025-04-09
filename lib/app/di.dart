@@ -96,6 +96,7 @@ import 'package:domina_app/domain/usecase/update_flag_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_flag_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
+import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/update_save_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
@@ -325,6 +326,8 @@ Future<void> initBrandRecModule() async {
   if (!GetIt.I.isRegistered<AllBrandsResUsecase>()) {
     instance.registerFactory<InsertReciUsecase>(
         () => InsertReciUsecase(instance()));
+    instance.registerFactory<UpdateReciUsecase>(
+            () => UpdateReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
         () => AllBrandsResUsecase(instance()));
     instance
@@ -333,7 +336,7 @@ Future<void> initBrandRecModule() async {
 
     instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-        () => RecipesBrandBloc(instance(), instance(), instance(), instance()));
+        () => RecipesBrandBloc(instance(), instance(), instance(), instance(), instance()));
   }
 }
 

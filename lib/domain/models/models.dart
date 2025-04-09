@@ -1718,7 +1718,9 @@ class ReciModel{
   String? create_date;
   String? total;
   String? note_emp;
-  ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp);
+  String docId;
+  String recipeType;
+  ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp,this.docId,this.recipeType);
 }
 class PlanBrandSp {
   int id;

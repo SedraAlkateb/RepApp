@@ -908,32 +908,64 @@ class _RecipesPageState extends State<RecipesPage> {
                               state.failure.code);
                         }
                       },
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            BlocProvider.of<RecipesBrandBloc>(context).add(
-                                InsertReciEvent(
-                                    _doctorSpController.text,
-                                    firstNoteController.text,
-                                    _secondNoteController.text,
-                                    _addressController.text,
-                                    _connectController.text,
-                                    _specialNotesController.text,
-                                    widget.docId,
-                                    _connectController.text));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<RecipesBrandBloc>(context).add(
+                                    InsertReciEvent(
+                                        _doctorSpController.text,
+                                        firstNoteController.text,
+                                        _secondNoteController.text,
+                                        _addressController.text,
+                                        _connectController.text,
+                                        _specialNotesController.text,
+                                        widget.docId,
+                                        _connectController.text));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                    backgroundColor: ColorManager.secondaryColor,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              "إرسال",
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<RecipesBrandBloc>(context).add(
+                                    UpdateReciEvent(
+                                        _doctorSpController.text,
+                                        firstNoteController.text,
+                                        _secondNoteController.text,
+                                        _addressController.text,
+                                        _connectController.text,
+                                        _specialNotesController.text,
+                                        widget.docId,
+                                        _connectController.text));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
                                     Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                backgroundColor: ColorManager.secondaryColor,
-                              ),
-                            );
-                          }
-                        },
-                        child: Text(
-                          "إرسال",
-                        ),
+                                    backgroundColor: ColorManager.secondaryColor,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              "تعديل",
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

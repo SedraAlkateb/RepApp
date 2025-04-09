@@ -951,9 +951,12 @@ class ReciResponse {
   String? total;
   @JsonKey(name: "note_emp")
   String? note_emp;
-
+  @JsonKey(name: "docId")
+  String? docId;
+  @JsonKey(name: "recipeType")
+  String? recipeType;
   ReciResponse(this.id, this.docName, this.create_date, this.total,
-      this.note_emp); // from json
+      this.note_emp,this.docId,this.recipeType); // from json
   factory ReciResponse.fromJson(Map<String, dynamic> json) =>
       _$ReciResponseFromJson(json);
   // to json

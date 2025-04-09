@@ -1,12 +1,10 @@
-
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
-import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
+import 'package:domina_app/presentation/Recipes/pages/recipes_hospital.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/reci/bloc/reci_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
@@ -70,17 +68,18 @@ buildWhen: (previous, current) => current is AllReciLoadingState||current is All
                       return InkWell(
                         onTap: () {
                           initBrandRecModule();
-                          BlocProvider.of<DoctorsBloc>(
-                              context)
-                              .add(CheckReciEvent(
-                              int.parse(recis[index].id??"0"), 1));
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RecipesPage(
-                                docId: int.parse(recis[index].id??"0"),
-                                st: 0,
-                              ),
+                              builder: (context)=>
+                              recis[index].recipeType=="1"?
+                                RecipesPage(
+                                docId: int.parse(recis[index].docId),
+                                st:1,
+                              ): RecipesHospital(
+                                HospitalId: int.parse(recis[index].docId),
+                                st:1,
+                              )
                             ),
                           );
                         },
@@ -101,13 +100,10 @@ buildWhen: (previous, current) => current is AllReciLoadingState||current is All
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              TextRach(s1: "اسم الطبيب: ", s2:  recis[index].docName??"")
-                              ,
-                              TextRach(s1: "الملاحظة: ", s2:  recis[index].note_emp??"")
-                              ,
+                              TextRach(s1: "اسم الطبيب: ", s2:  recis[index].docName??""),
+                              TextRach(s1: "الملاحظة: ", s2:  recis[index].note_emp??""),
                               TextRach(s1: "المجموع: ", s2:  recis[index].total??""),
                               TextRach(s1: "التاريخ: ", s2:  recis[index].create_date??"")
-
                             ],
                           ),
                         ),
