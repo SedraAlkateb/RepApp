@@ -709,6 +709,8 @@ extension ReciMapper on ReciResponse? {
       this?.create_date ?? Constants.empty,
       this?.total ?? Constants.empty,
       this?.note_emp ?? Constants.empty,
+      this?.docId ?? Constants.empty,
+      this?.recipeType ?? Constants.empty
     );
   }
 }

@@ -845,32 +845,64 @@ class _RecipesPageState extends State<RecipesHospital> {
                               state.failure.code);
                         }
                       },
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            BlocProvider.of<RecipesBrandBloc>(context)
-                                .add(InsertReciHospitalEvent(
-                              widget.HospitalId,
-                              _doctorSpController.text,
-                              firstNoteController.text,
-                              _secondNoteController.text,
-                              _addressController.text,
-                              _connectController.text,
-                              _specialNotesController.text,
-                            ));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<RecipesBrandBloc>(context)
+                                    .add(UpdateReciHospitalEvent(
+                                  widget.HospitalId,
+                                  _doctorSpController.text,
+                                  firstNoteController.text,
+                                  _secondNoteController.text,
+                                  _addressController.text,
+                                  _connectController.text,
+                                  _specialNotesController.text,
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                    backgroundColor: ColorManager.secondaryColor,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              "إرسال",
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<RecipesBrandBloc>(context)
+                                    .add(InsertReciHospitalEvent(
+                                  widget.HospitalId,
+                                  _doctorSpController.text,
+                                  firstNoteController.text,
+                                  _secondNoteController.text,
+                                  _addressController.text,
+                                  _connectController.text,
+                                  _specialNotesController.text,
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
                                     Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                backgroundColor: ColorManager.secondaryColor,
-                              ),
-                            );
-                          }
-                        },
-                        child: Text(
-                          "إرسال",
-                        ),
+                                    backgroundColor: ColorManager.secondaryColor,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              "إرسال",
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

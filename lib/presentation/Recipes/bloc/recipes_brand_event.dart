@@ -44,6 +44,26 @@ class InsertReciEvent extends RecipesBrandEvent {
 
   List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
 }
+class UpdateReciEvent extends RecipesBrandEvent {
+  final int docId;
+  final String doctorSp ;
+
+  final String firstNote ;
+
+  final String secondNote ;
+
+  final String address ;
+
+  final String connect ;
+
+  final String specialNotes ;
+  final String phone ;
+
+  UpdateReciEvent(this.doctorSp, this.firstNote, this.secondNote, this.address,
+      this.connect, this.specialNotes,this.docId,this.phone);
+
+  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+}
 class InsertReciHospitalEvent extends RecipesBrandEvent {
   final int docId;
   final String doctorSp ;
@@ -59,6 +79,33 @@ class InsertReciHospitalEvent extends RecipesBrandEvent {
   final String specialNotes ;
 
   InsertReciHospitalEvent(
+      this.docId,
+      this.doctorSp,
+      this.firstNote,
+      this.secondNote,
+      this.address,
+      this.connect,
+      this.specialNotes,
+      );
+
+  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+}
+
+class UpdateReciHospitalEvent extends RecipesBrandEvent {
+  final int docId;
+  final String doctorSp ;
+
+  final String firstNote ;
+
+  final String secondNote ;
+
+  final String address ;
+
+  final String connect ;
+
+  final String specialNotes ;
+
+  UpdateReciHospitalEvent(
       this.docId,
       this.doctorSp,
       this.firstNote,

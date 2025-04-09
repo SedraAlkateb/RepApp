@@ -6,6 +6,7 @@ import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
+import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
 import 'package:domina_app/presentation/common/freezed_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -20,6 +21,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   InsertReciUsecase insertReciUsecase;
   ReciNumUsecase reciNumUsecase;
   CopyReciUsecase copyReciUsecase;
+  UpdateReciUsecase updateReciUsecase;
   int isChecked1 = 3;
   int isChecked2 = 3;
   final _picker = ImagePicker();
@@ -104,7 +106,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   }
 
   RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase, this.copyReciUsecase)
+      this.reciNumUsecase, this.copyReciUsecase,this.updateReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllRecipesEvent) {
@@ -192,6 +194,90 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);
         (await insertReciUsecase.execute(ReciRequest(
+          2,
+          insertRecipesObject.repId,
+          "3",
+          insertRecipesObject.docId,
+          insertRecipesObject.spName,
+          insertRecipesObject.brand_1.id.toString(),
+          insertRecipesObject.address,
+          insertRecipesObject.phone,
+          insertRecipesObject.total,
+          flagImage1: isChecked1.toString(),
+          flagImage2: isChecked2.toString(),
+          note_emp: insertRecipesObject.note_emp,
+          note2: insertRecipesObject.note2,
+          note1: insertRecipesObject.note1,
+          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+          brand_2: insertRecipesObject.brand_2?.id.toString(),
+          brand_3: insertRecipesObject.brand_3?.id.toString(),
+          brand_4: insertRecipesObject.brand_4?.id.toString(),
+          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+          //      flag1: isChecked1,
+          //    flag2: isChecked2
+        )))
+            .fold((failure) {
+          emit(InsertRecipesErrorState(failure: failure));
+        }, (data) async {
+          emit(InsertRecipesState());
+        });
+      }
+      if (event is UpdateReciEvent) {
+        emit(InsertRecipesLoadingState());
+        final updatedUser = insertRecipesObject.copyWith(
+            address: event.address,
+            docId: event.docId.toString(),
+            note1: event.firstNote,
+            note2: event.secondNote,
+            note_emp: event.specialNotes,
+            spName: event.doctorSp,
+            phone: event.phone);
+        insertRecipesObject = updatedUser;
+        print(insertRecipesObject.image1);
+        print(insertRecipesObject.image2);
+        (await updateReciUsecase.execute(ReciRequest(
+          1,
+          insertRecipesObject.repId,
+          insertRecipesObject.type,
+          insertRecipesObject.docId,
+          insertRecipesObject.spName,
+          insertRecipesObject.brand_1.id.toString(),
+          insertRecipesObject.address,
+          insertRecipesObject.phone,
+          insertRecipesObject.total,
+          flagImage1: isChecked1.toString(),
+          flagImage2: isChecked2.toString(),
+          note_emp: insertRecipesObject.note_emp,
+          note2: insertRecipesObject.note2,
+          note1: insertRecipesObject.note1,
+          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+          brand_2: insertRecipesObject.brand_2?.id.toString(),
+          brand_3: insertRecipesObject.brand_3?.id.toString(),
+          brand_4: insertRecipesObject.brand_4?.id.toString(),
+          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+          //      flag1: isChecked1,
+          //    flag2: isChecked2
+        )))
+            .fold((failure) {
+          emit(InsertRecipesErrorState(failure: failure));
+        }, (data) async {
+          emit(InsertRecipesState());
+        });
+      }
+      if (event is UpdateReciHospitalEvent) {
+        emit(InsertRecipesLoadingState());
+        final updatedUser = insertRecipesObject.copyWith(
+            address: event.address,
+            docId: event.docId.toString(),
+            note1: event.firstNote,
+            note2: event.secondNote,
+            note_emp: event.specialNotes,
+            spName: event.doctorSp,
+            phone: event.connect);
+        insertRecipesObject = updatedUser;
+        print(insertRecipesObject.image1);
+        print(insertRecipesObject.image2);
+        (await updateReciUsecase.execute(ReciRequest(
           2,
           insertRecipesObject.repId,
           "3",
