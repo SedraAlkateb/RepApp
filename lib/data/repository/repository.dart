@@ -1248,7 +1248,7 @@ class RepositoryImp implements Repository {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
           insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "insertReci")]));
+              [ExceptionModel(failure.massage, "updateReci")]));
           return Left(failure);
         }
       } else {
@@ -1257,7 +1257,7 @@ class RepositoryImp implements Repository {
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
       insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "insertReci")]));
+          [ExceptionModel(failure.massage, "updateReci")]));
       return Left(failure);
     }
   }

@@ -60,6 +60,9 @@ class _RecipesPageState extends State<RecipesPage> {
       ),
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
+          if(state is RecipesRecipesLoadingState){
+            return loadingFullScreen(context);
+          }
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             print("sddddddddddddddddddd");
             return Center(
