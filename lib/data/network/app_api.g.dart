@@ -1899,44 +1899,41 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> updateReci({
-    String? recipeType,
-    String? repId,
+  Future<Message1Response> updateReci(
+    String repId,
+    String recipeId, {
     String? type,
     String? docId,
     String? spName,
     String? brand_1,
-    String? address,
-    String? phone,
-    String? total,
-    String? flagImage1,
-    String? flagImage2,
-    String? note1,
-    String? note2,
-    File? image1,
-    File? image2,
     String? brand_2,
     String? brand_3,
     String? brand_4,
+    String? note1,
+    String? note2,
+    String? address,
+    String? phone,
+    String? total,
     String? note_emp,
+    String? recipeType,
+    String? flagImage1,
+    String? flagImage2,
+    File? image1,
+    File? image2,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    if (recipeType != null) {
-      _data.fields.add(MapEntry(
-        'recipeType',
-        recipeType,
-      ));
-    }
-    if (repId != null) {
-      _data.fields.add(MapEntry(
-        'repId',
-        repId,
-      ));
-    }
+    _data.fields.add(MapEntry(
+      'repId',
+      repId,
+    ));
+    _data.fields.add(MapEntry(
+      'recipeId',
+      recipeId,
+    ));
     if (type != null) {
       _data.fields.add(MapEntry(
         'type',
@@ -1961,6 +1958,36 @@ class _AppServiceClient implements AppServiceClient {
         brand_1,
       ));
     }
+    if (brand_2 != null) {
+      _data.fields.add(MapEntry(
+        'brand_2',
+        brand_2,
+      ));
+    }
+    if (brand_3 != null) {
+      _data.fields.add(MapEntry(
+        'brand_3',
+        brand_3,
+      ));
+    }
+    if (brand_4 != null) {
+      _data.fields.add(MapEntry(
+        'brand_4',
+        brand_4,
+      ));
+    }
+    if (note1 != null) {
+      _data.fields.add(MapEntry(
+        'note1',
+        note1,
+      ));
+    }
+    if (note2 != null) {
+      _data.fields.add(MapEntry(
+        'note2',
+        note2,
+      ));
+    }
     if (address != null) {
       _data.fields.add(MapEntry(
         'address',
@@ -1979,6 +2006,18 @@ class _AppServiceClient implements AppServiceClient {
         total,
       ));
     }
+    if (note_emp != null) {
+      _data.fields.add(MapEntry(
+        'note_emp',
+        note_emp,
+      ));
+    }
+    if (recipeType != null) {
+      _data.fields.add(MapEntry(
+        'recipeType',
+        recipeType,
+      ));
+    }
     if (flagImage1 != null) {
       _data.fields.add(MapEntry(
         'flagImage1',
@@ -1989,18 +2028,6 @@ class _AppServiceClient implements AppServiceClient {
       _data.fields.add(MapEntry(
         'flagImage2',
         flagImage2,
-      ));
-    }
-    if (note1 != null) {
-      _data.fields.add(MapEntry(
-        'note1',
-        note1,
-      ));
-    }
-    if (note2 != null) {
-      _data.fields.add(MapEntry(
-        'note2',
-        note2,
       ));
     }
     if (image1 != null) {
@@ -2024,30 +2051,6 @@ class _AppServiceClient implements AppServiceClient {
           ),
         ));
       }
-    }
-    if (brand_2 != null) {
-      _data.fields.add(MapEntry(
-        'brand_2',
-        brand_2,
-      ));
-    }
-    if (brand_3 != null) {
-      _data.fields.add(MapEntry(
-        'brand_3',
-        brand_3,
-      ));
-    }
-    if (brand_4 != null) {
-      _data.fields.add(MapEntry(
-        'brand_4',
-        brand_4,
-      ));
-    }
-    if (note_emp != null) {
-      _data.fields.add(MapEntry(
-        'note_emp',
-        note_emp,
-      ));
     }
     final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',

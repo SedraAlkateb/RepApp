@@ -48,7 +48,7 @@ abstract class RemoteDataSource {
   );
   Future<AllBrandResResponse> getBrandRes(int repDet);
   Future<Message1Response> insertReci(ReciRequest reciReq);
-  Future<Message1Response> updateReci(ReciRequest reciReq);
+  Future<Message1Response> updateReci(UpdateReciRequest reciReq);
 
   Future<CheckReResponse> checkRe(int repDet);
   Future<ReciNumResponse> reciNum();
@@ -343,26 +343,30 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<Message1Response> updateReci(ReciRequest reciReq) async {
+  Future<Message1Response> updateReci(UpdateReciRequest reciReq) async {
     return await _appServiceClient.updateReci(
-        recipeType: reciReq.recipeType.toString(),
-        repId: reciReq.repId,
+      reciReq.repId,
+      reciReq.recipeId.toString(),
         type: reciReq.type,
         docId: reciReq.docId,
         spName: reciReq.spName,
         brand_1: reciReq.brand_1,
-        address: reciReq.address,
-        phone: reciReq.phone,
-        total: reciReq.total,
-        flagImage1: reciReq.flagImage1,
-        flagImage2: reciReq.flagImage2,
-        note1: reciReq.note1,
-        note2: reciReq.note2,
-        image1: reciReq.image1,
-        image2: reciReq.image2,
         brand_2: reciReq.brand_2,
         brand_3: reciReq.brand_3,
         brand_4: reciReq.brand_4,
-        note_emp: reciReq.note_emp);
+        note1: reciReq.note1,
+        note2: reciReq.note2,
+        address: reciReq.address,
+        phone: reciReq.phone,
+        total: reciReq.total,
+      note_emp: reciReq.note_emp,
+      recipeType: reciReq.recipeType.toString(),
+        flagImage1: reciReq.flagImage1,
+        flagImage2: reciReq.flagImage2,
+
+        image1: reciReq.image1,
+        image2: reciReq.image2,
+
+        );
   }
 }

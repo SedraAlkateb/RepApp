@@ -1435,6 +1435,51 @@ class StatePlan {
   StatePlan(this.index, this.state);
 //state 0 true , state 1 more state 2 0
 }
+class UpdateReciRequest {
+  int recipeId;
+  int recipeType;
+  String repId;
+  String type;
+  String docId;
+  String spName;
+  String brand_1;
+  String address;
+  String phone;
+  String total;
+  String? flagImage1;
+  String? flagImage2;
+  String? note1;
+  String? note2;
+  String? note_emp;
+  File? image1;
+  File? image2;
+  String? brand_2;
+  String? brand_3;
+  String? brand_4;
+
+  UpdateReciRequest(
+      this.recipeId,
+      this.recipeType,
+      this.repId,
+      this.type,
+      this.docId,
+      this.spName,
+      this.brand_1,
+      this.address,
+      this.phone,
+      this.total, {
+        this.note1,
+        this.note2,
+        this.flagImage1,
+        this.flagImage2,
+        this.note_emp,
+        this.image1,
+        this.image2,
+        this.brand_2,
+        this.brand_3,
+        this.brand_4,
+      });
+}
 
 class ReciRequest {
   int recipeType;

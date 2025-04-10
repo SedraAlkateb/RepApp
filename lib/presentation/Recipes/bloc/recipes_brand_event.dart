@@ -174,3 +174,65 @@ class RestartEvent extends RecipesBrandEvent {
 
   List<Object?> get props => [];
 }
+class AllReciEvent extends RecipesBrandEvent{
+  @override
+  AllReciEvent();
+  List<Object?> get props => [];
+
+}
+class GetReciEvent extends RecipesBrandEvent{
+  final String id;
+  @override
+  GetReciEvent(this.id);
+  List<Object?> get props => [];
+
+}
+class UpdateReciSEvent extends RecipesBrandEvent {
+  final  int reciId;
+  final int docId;
+  final String doctorSp ;
+
+  final String firstNote ;
+
+  final String secondNote ;
+
+  final String address ;
+
+  final String connect ;
+
+  final String specialNotes ;
+  final String phone ;
+
+  UpdateReciSEvent(this.reciId,this.doctorSp, this.firstNote, this.secondNote, this.address,
+      this.connect, this.specialNotes,this.docId,this.phone);
+
+  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+}
+class UpdateReciSHospitalEvent extends RecipesBrandEvent {
+  final  int reciId;
+  final int docId;
+  final String doctorSp ;
+
+  final String firstNote ;
+
+  final String secondNote ;
+
+  final String address ;
+
+  final String connect ;
+
+  final String specialNotes ;
+
+  UpdateReciSHospitalEvent(
+      this.docId,
+      this.doctorSp,
+      this.firstNote,
+      this.secondNote,
+      this.address,
+      this.connect,
+      this.specialNotes,
+      this.reciId
+      );
+
+  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+}
