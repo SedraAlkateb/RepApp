@@ -3,6 +3,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
@@ -22,6 +23,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   ReciNumUsecase reciNumUsecase;
   CopyReciUsecase copyReciUsecase;
   UpdateReciUsecase updateReciUsecase;
+  AllReciUsecase allReciUsecase;
   int isChecked1 = 3;
   int isChecked2 = 3;
   final _picker = ImagePicker();
@@ -104,11 +106,23 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       insertRecipesObject = updatedUser;
     }
   }
-
   RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase, this.copyReciUsecase,this.updateReciUsecase)
+      this.reciNumUsecase, this.copyReciUsecase,this.updateReciUsecase,this.allReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
+      if (event is AllReciEvent) {
+        emit(AllReciLoadingState());
+        (await allReciUsecase.execute(UserInfo.repId)).fold((failure) {
+          emit(AllReciErrorState(failure: failure));
+        }, (data) async {
+          if(data.isEmpty){
+            emit(AllReciEmptyState());
+          }else{
+            emit(AllReciState(data));
+
+          }
+        });
+      }
       if (event is AllRecipesEvent) {
         emit(AllRecipesLoadingState());
         (await allBrandsResUsecase.execute(UserInfo.repId)).fold((failure) {
@@ -222,7 +236,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           emit(InsertRecipesState());
         });
       }
-      if (event is UpdateReciEvent) {
+      if (event is UpdateReciSEvent) {
         emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
@@ -235,7 +249,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         insertRecipesObject = updatedUser;
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);
-        (await updateReciUsecase.execute(ReciRequest(
+        (await updateReciUsecase.execute(UpdateReciRequest(
+          event.reciId,
           1,
           insertRecipesObject.repId,
           insertRecipesObject.type,
@@ -264,7 +279,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           emit(InsertRecipesState());
         });
       }
-      if (event is UpdateReciHospitalEvent) {
+      if (event is UpdateReciSHospitalEvent) {
         emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
@@ -277,7 +292,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         insertRecipesObject = updatedUser;
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);
-        (await updateReciUsecase.execute(ReciRequest(
+        (await updateReciUsecase.execute(UpdateReciRequest(
+          event.reciId,
           2,
           insertRecipesObject.repId,
           "3",

@@ -1236,7 +1236,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, Message1Response>> updateReci(ReciRequest reciReq) async {
+  Future<Either<Failure, Message1Response>> updateReci(UpdateReciRequest reciReq) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.updateReci(reciReq);

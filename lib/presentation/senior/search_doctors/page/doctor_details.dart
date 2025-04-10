@@ -27,16 +27,19 @@ class _DoctorDetailsState extends State<DoctorDetails>
     return Scaffold(
         appBar: null,
         body: SingleChildScrollView(
-            child: BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
-                listener: (context, state) {
-                  if (state is FutureDocDoctorsErrorState) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      error(context, state.failure.massage, state.failure.code);
-                    });
-                  }
-                }, builder: (context, state) {
+            child: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
+                 builder: (context, state) {
+              if (state is FutureDocDoctorsErrorState) {
+                 return Padding(
+                   padding: const EdgeInsets.only(top: 200),
+                   child: errorFullScreen(context,mes:  state.failure.massage,func: (){}),
+                 );
+              }
               if (state is FutureDocDoctorsLoadingState) {
-                return loadingFullScreen(context);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 200),
+                  child: loadingFullScreen(context),
+                );
               }
               if (state is FutureDocDoctorsEmptyState) {
                 return Padding(
@@ -150,7 +153,7 @@ class _DoctorDetailsState extends State<DoctorDetails>
                       itemBuilder: (context, index) {
                         return Padding(
                             padding:
-                            const EdgeInsets.symmetric( horizontal: 16),
+                            const EdgeInsets.only( bottom: 20, right: 16, left: 16),
                             child: Container(
                               margin: const EdgeInsets.all(2),
                               padding: const EdgeInsets.symmetric(vertical: AppPadding.p8),

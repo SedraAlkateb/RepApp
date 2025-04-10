@@ -105,7 +105,6 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
-import 'package:domina_app/presentation/reci/bloc/reci_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
@@ -333,10 +332,13 @@ Future<void> initBrandRecModule() async {
     instance
         .registerFactory<CopyReciUsecase>(() => CopyReciUsecase(instance()));
     /////////////
-
+    if (!GetIt.I.isRegistered<AllReciUsecase>()) {
+      instance.registerFactory<AllReciUsecase>(
+              () => AllReciUsecase(instance()));
+    }
     instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-        () => RecipesBrandBloc(instance(), instance(), instance(), instance(), instance()));
+        () => RecipesBrandBloc(instance(), instance(), instance(), instance(), instance(), instance()));
   }
 }
 
@@ -441,15 +443,7 @@ Future<void> initDoctorModule() async {
         () => DoctorsBloc(instance(), instance()));
   }
 }
-Future<void> initReciModule() async {
-    if (!GetIt.I.isRegistered<AllReciUsecase>()) {
-      instance.registerFactory<AllReciUsecase>(
-              () => AllReciUsecase(instance()));
 
-    instance.registerFactory<ReciBloc>(
-            () => ReciBloc(instance()));
-  }
-}
 
 Future<void> initHospitalModule() async {
   if (!GetIt.I.isRegistered<AllHospitalSpNSqlUsecase>()) {
