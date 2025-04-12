@@ -17,6 +17,13 @@ class CopyRecipesEvent extends RecipesBrandEvent {
 
   List<Object?> get props => [docId];
 }
+class GetRepReciEvent extends RecipesBrandEvent {
+  final int reciId;
+  GetRepReciEvent(this.reciId);
+  @override
+
+  List<Object?> get props => [reciId];
+}
 
 class BrandRecipesEvent extends RecipesBrandEvent {
   final BrandRes brandRes;

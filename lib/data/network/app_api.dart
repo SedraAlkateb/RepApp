@@ -145,6 +145,11 @@ abstract class AppServiceClient {
     @Part(name: "recipeType") String recipeType,
   );
 
+  @POST("/reci/getRepReci.php")
+  Future<CopyRecResponse> getRepReci(
+    @Part(name: "reciId") int reciId,
+  );
+
   @POST("/admin/getReps.php")
   Future<AllRepresentativeBaseResponse> getReps(
     @Part(name: "repDet") int id,

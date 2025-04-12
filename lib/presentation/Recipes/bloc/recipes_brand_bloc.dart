@@ -5,6 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
+import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
 import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
@@ -22,6 +23,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   InsertReciUsecase insertReciUsecase;
   ReciNumUsecase reciNumUsecase;
   CopyReciUsecase copyReciUsecase;
+   GetRepReciUsecase getRepReciUsecase;
   UpdateReciUsecase updateReciUsecase;
   AllReciUsecase allReciUsecase;
   int isChecked1 = 3;
@@ -107,7 +109,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
     }
   }
   RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase, this.copyReciUsecase,this.updateReciUsecase,this.allReciUsecase)
+      this.reciNumUsecase, this.copyReciUsecase,this.updateReciUsecase,this.allReciUsecase, this.getRepReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllReciEvent) {
@@ -135,6 +137,17 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       if (event is CopyRecipesEvent) {
         emit(RecipesRecipesLoadingState());
         (await copyReciUsecase.execute(event.docId, event.recipeType)).fold(
+            (failure) {
+          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+          emit(RecipesRecipesErrorState(failure: failure));
+        }, (data) async {
+          updateRecipes(data);
+          emit(RecipesRecipesState());
+        });
+      }
+          if (event is GetRepReciEvent) {
+        emit(RecipesRecipesLoadingState());
+        (await getRepReciUsecase.execute(event.reciId)).fold(
             (failure) {
           print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
           emit(RecipesRecipesErrorState(failure: failure));

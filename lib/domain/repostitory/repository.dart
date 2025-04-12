@@ -61,7 +61,7 @@ abstract class Repository {
 
   Future<Either<Failure, CopyReciRequest>> copyReci(int docId,
       String recipeType);
-
+  Future<Either<Failure, CopyReciRequest>> getRepReci(int reciId);
   Future<Either<Failure, CheckRepResponse>> checkRep(int depId);
 
   Future<Either<Failure, List<DoctorNoteModel>>> visitNotes(int depId);
