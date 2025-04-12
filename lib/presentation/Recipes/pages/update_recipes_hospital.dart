@@ -15,7 +15,11 @@ class UpdateRecipesHospital extends StatefulWidget {
   final int st;
   final int recipeId;
 
-  UpdateRecipesHospital({super.key, required this.HospitalId, required this.st, required this.recipeId});
+  UpdateRecipesHospital(
+      {super.key,
+      required this.HospitalId,
+      required this.st,
+      required this.recipeId});
   @override
   State<UpdateRecipesHospital> createState() => _UpdateRecipesHospitalState();
 }
@@ -37,8 +41,10 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
     BlocProvider.of<RecipesBrandBloc>(context).empty();
     if (widget.st == 1) {
       print("object");
+      // BlocProvider.of<RecipesBrandBloc>(context)
+      //     .add(CopyRecipesEvent(widget.HospitalId, 2));
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.HospitalId, 2));
+          .add(GetRepReciEvent(widget.recipeId));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -66,8 +72,8 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
         builder: (context, state) {
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             return Center(
-                child: emptyFullScreen(
-                    context,message:  " لم يتم ادخال وصفات لهذا المشفى من قبل"));
+                child: emptyFullScreen(context,
+                    message: " لم يتم ادخال وصفات لهذا المشفى من قبل"));
           }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =
@@ -853,23 +859,23 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
                           ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                BlocProvider.of<RecipesBrandBloc>(context)
-                                    .add(UpdateReciSHospitalEvent(
-                                  widget.HospitalId,
-                                  _doctorSpController.text,
-                                  firstNoteController.text,
-                                  _secondNoteController.text,
-                                  _addressController.text,
-                                  _connectController.text,
-                                  _specialNotesController.text,
-                                  widget.recipeId
-                                ));
+                                BlocProvider.of<RecipesBrandBloc>(context).add(
+                                    UpdateReciSHospitalEvent(
+                                        widget.HospitalId,
+                                        _doctorSpController.text,
+                                        firstNoteController.text,
+                                        _secondNoteController.text,
+                                        _addressController.text,
+                                        _connectController.text,
+                                        _specialNotesController.text,
+                                        widget.recipeId));
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content:
                                         Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                    backgroundColor: ColorManager.secondaryColor,
+                                    backgroundColor:
+                                        ColorManager.secondaryColor,
                                   ),
                                 );
                               }
@@ -895,8 +901,9 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content:
-                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                    backgroundColor: ColorManager.secondaryColor,
+                                        Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                    backgroundColor:
+                                        ColorManager.secondaryColor,
                                   ),
                                 );
                               }

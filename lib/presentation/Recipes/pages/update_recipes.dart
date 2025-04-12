@@ -14,7 +14,11 @@ class UpdateRecipesPage extends StatefulWidget {
   final int docId;
   final int st;
   final int recipeId;
-  UpdateRecipesPage({super.key, required this.docId, required this.st,required this.recipeId});
+  UpdateRecipesPage(
+      {super.key,
+      required this.docId,
+      required this.st,
+      required this.recipeId});
   @override
   State<UpdateRecipesPage> createState() => _UpdateRecipesHospitalState();
 }
@@ -35,7 +39,7 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
     if (widget.st == 1) {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.docId, 1));
+          .add(GetRepReciEvent(widget.recipeId));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -61,14 +65,14 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
       ),
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
-          if(state is RecipesRecipesLoadingState){
+          if (state is RecipesRecipesLoadingState) {
             return loadingFullScreen(context);
           }
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             print("sddddddddddddddddddd");
             return Center(
-                child: emptyFullScreen(
-                    context,message:  " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
+                child: emptyFullScreen(context,
+                    message: " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
           }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =
@@ -199,23 +203,28 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                                   .insertRecipesObject
                                   .brand_1,
                               hintText: (state is AllRecipesLoadingState ||
-                                  state is AllNumLoadingState)
+                                      state is AllNumLoadingState)
                                   ? 'loading'
                                   : widget.st == 1
-                                  ? context
-                                  .watch<RecipesBrandBloc>()
-                                  .insertRecipesObject
-                                  .brand_1
-                                  .title_en
-                                  : 'اختر المستحضر',
-                              items: context.watch<RecipesBrandBloc>().brandRecs,
+                                      ? context
+                                          .watch<RecipesBrandBloc>()
+                                          .insertRecipesObject
+                                          .brand_1
+                                          .title_en
+                                      : 'اختر المستحضر',
+                              items:
+                                  context.watch<RecipesBrandBloc>().brandRecs,
                               onChanged: (value) {
                                 BrandRes brand = value;
-                                state.didChange(brand); // لتحديث القيمة داخل النموذج
+                                state.didChange(
+                                    brand); // لتحديث القيمة داخل النموذج
                                 BlocProvider.of<RecipesBrandBloc>(context).add(
                                     SelectBrandEvent(
                                         brandRecipeModel: brand, index: 1));
-                              }, validator: (value) { return null; },
+                              },
+                              validator: (value) {
+                                return null;
+                              },
                             ),
                             if (state.hasError)
                               Padding(
@@ -229,7 +238,6 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                         );
                       },
                     ),
-
                     SizedBox(height: 5),
                     Text('المستحضر الثاني'),
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
@@ -933,7 +941,8 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                                   SnackBar(
                                     content:
                                         Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                    backgroundColor: ColorManager.secondaryColor,
+                                    backgroundColor:
+                                        ColorManager.secondaryColor,
                                   ),
                                 );
                               }
@@ -960,8 +969,9 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content:
-                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                    backgroundColor: ColorManager.secondaryColor,
+                                        Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                    backgroundColor:
+                                        ColorManager.secondaryColor,
                                   ),
                                 );
                               }
