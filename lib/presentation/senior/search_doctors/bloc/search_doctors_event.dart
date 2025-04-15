@@ -20,6 +20,12 @@ class FutureDocDoctorsEvent extends SearchDoctorsEvent {
   @override
   List<Object?> get props => [docId];
 }
+class DoctorInfoEvent extends SearchDoctorsEvent {
+  final int docId;
+  DoctorInfoEvent(this.docId);
+  @override
+  List<Object?> get props => [docId];
+}
 class SearchNoteDoctorEvent extends SearchDoctorsEvent {
   final String contant;
   SearchNoteDoctorEvent(this.contant);

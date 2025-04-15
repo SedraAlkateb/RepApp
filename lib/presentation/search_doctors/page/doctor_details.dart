@@ -23,6 +23,7 @@ class _DoctorDetailesState extends State<DoctorDetailes>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+        drawer: const Drawer(),
         appBar: null,
         body: SingleChildScrollView(
             child: BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(

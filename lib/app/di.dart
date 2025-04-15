@@ -57,6 +57,7 @@ import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
+import 'package:domina_app/domain/usecase/doctor_info_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
@@ -643,9 +644,13 @@ Future<void> iniSearchDoctorsModule() async {
     instance.registerFactory<DocDoctorsUseCase>(
             () => DocDoctorsUseCase(instance()));
   }
+  if (!GetIt.I.isRegistered<DoctorInfoUsecase>()) {
+    instance.registerFactory<DoctorInfoUsecase>(
+            () => DoctorInfoUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<SearchDoctorsBloc>()) {
     instance.registerFactory<SearchDoctorsBloc>(() => SearchDoctorsBloc(
-      instance(),   instance(),
+      instance(),   instance(),instance()
     ));
   }
 }

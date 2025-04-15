@@ -187,6 +187,8 @@ CopyRecipResponse _$CopyRecipResponseFromJson(Map<String, dynamic> json) =>
       json['note_emp'] as String?,
       json['image1'] as String?,
       json['image2'] as String?,
+      json['create_date'] as String?,
+      json['print_date'] as String?,
     );
 
 Map<String, dynamic> _$CopyRecipResponseToJson(CopyRecipResponse instance) =>
@@ -208,6 +210,8 @@ Map<String, dynamic> _$CopyRecipResponseToJson(CopyRecipResponse instance) =>
       'note_emp': instance.note_emp,
       'image1': instance.image1,
       'image2': instance.image2,
+      'print_date': instance.print_date,
+      'create_date': instance.create_date,
     };
 
 CheckActiveResponse _$CheckActiveResponseFromJson(Map<String, dynamic> json) =>
@@ -814,6 +818,24 @@ Map<String, dynamic> _$DoctorResponseToJson(DoctorResponse instance) =>
       'rate': instance.rate,
       'spTitle': instance.spTitle,
       'workHours': instance.workHours,
+    };
+
+InfoDoctorBaseResponse _$InfoDoctorBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    InfoDoctorBaseResponse(
+      json['Doctors'] == null
+          ? null
+          : DoctorResponse.fromJson(json['Doctors'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$InfoDoctorBaseResponseToJson(
+        InfoDoctorBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Doctors': instance.data,
     };
 
 AllDoctorResponse _$AllDoctorResponseFromJson(Map<String, dynamic> json) =>

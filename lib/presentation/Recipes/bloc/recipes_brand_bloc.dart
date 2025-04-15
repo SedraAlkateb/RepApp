@@ -43,6 +43,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "note1",
       'note2',
       "note_emp",
+      "",
+      "",
       null,
       null,
       null,
@@ -74,6 +76,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
 
   void updateRecipes(CopyReciRequest recipes) {
     final updatedUser = insertRecipesObject.copyWith(
+        create_date: recipes.create_date,
+        print_date: recipes.print_date,
+
         phone: recipes.phone,
         image2: (recipes.image2 != null) ? File(recipes.image2 ?? "") : null,
         image1: (recipes.image1 != null) ? File(recipes.image1 ?? "") : null,
@@ -260,8 +265,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             spName: event.doctorSp,
             phone: event.phone);
         insertRecipesObject = updatedUser;
-        print(insertRecipesObject.image1);
-        print(insertRecipesObject.image2);
         (await updateReciUsecase.execute(UpdateReciRequest(
           event.reciId,
           1,
@@ -273,6 +276,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
+          insertRecipesObject.create_date,
+          insertRecipesObject.print_date,
           flagImage1: isChecked1.toString(),
           flagImage2: isChecked2.toString(),
           note_emp: insertRecipesObject.note_emp,
@@ -305,7 +310,10 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         insertRecipesObject = updatedUser;
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);
-        (await updateReciUsecase.execute(UpdateReciRequest(
+        (
+            await updateReciUsecase.execute
+          (
+            UpdateReciRequest(
           event.reciId,
           2,
           insertRecipesObject.repId,
@@ -316,6 +324,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
+          insertRecipesObject.create_date,
+          insertRecipesObject.print_date,
           flagImage1: isChecked1.toString(),
           flagImage2: isChecked2.toString(),
           note_emp: insertRecipesObject.note_emp,

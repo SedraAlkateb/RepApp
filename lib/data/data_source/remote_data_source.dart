@@ -76,6 +76,7 @@ abstract class RemoteDataSource {
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id);
   Future<Message1Response> readAllVisits(ReadAll readAll);
   Future<AllReciBaseResponse> getAllRepReci(int repDet);
+  Future<InfoDoctorBaseResponse> getDocInfo(int docId);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -349,28 +350,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<Message1Response> updateReci(UpdateReciRequest reciReq) async {
     return await _appServiceClient.updateReci(
-      reciReq.repId,
-      reciReq.recipeId.toString(),
-        type: reciReq.type,
-        docId: reciReq.docId,
-        spName: reciReq.spName,
-        brand_1: reciReq.brand_1,
-        brand_2: reciReq.brand_2,
-        brand_3: reciReq.brand_3,
-        brand_4: reciReq.brand_4,
-        note1: reciReq.note1,
-        note2: reciReq.note2,
-        address: reciReq.address,
-        phone: reciReq.phone,
-        total: reciReq.total,
-      note_emp: reciReq.note_emp,
-      recipeType: reciReq.recipeType.toString(),
-        flagImage1: reciReq.flagImage1,
-        flagImage2: reciReq.flagImage2,
-
-        image1: reciReq.image1,
-        image2: reciReq.image2,
+        reciReq
 
         );
+  }
+
+  @override
+  Future<InfoDoctorBaseResponse> getDocInfo(int docId)async {
+    return await _appServiceClient.getDocInfo(
+        docId
+    );
   }
 }

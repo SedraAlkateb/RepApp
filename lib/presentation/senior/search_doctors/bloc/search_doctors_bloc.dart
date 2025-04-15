@@ -3,6 +3,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
+import 'package:domina_app/domain/usecase/doctor_info_usecase.dart';
 import 'package:domina_app/domain/usecase/search_doctors_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
@@ -15,10 +16,12 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
   List<DocdoctorsModel> doctordetails = [];
   SearchDoctorsUsecase searchDoctorsUsecase;
   DocDoctorsUseCase docDoctorsUseCase;
+  DoctorInfoUsecase doctorInfoUsecase;
   String name1 = ' ';
   SearchDoctorsBloc(
     this.searchDoctorsUsecase,
     this.docDoctorsUseCase,
+      this.doctorInfoUsecase
   ) : super(EditBrandPlanInitial()) {
     on<SearchDoctorsEvent>((event, emit) async {
       if (event is FutureSearchDocEvent) {
@@ -37,7 +40,17 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
 
           }
         });
-      } else if (event is FutureDocDoctorsEvent) {
+      }else if (event is DoctorInfoEvent) {
+
+        emit(DoctorInfoLoadingState());
+        (await doctorInfoUsecase.execute(event.docId)).fold((failure) {
+          emit(DoctorInfoErrorState(failure: failure));
+        }, (data) async {
+          emit(DoctorInfoState(data));
+        }
+        );
+      }
+      else if (event is FutureDocDoctorsEvent) {
         doctordetails = [];
         emit(FutureDocDoctorsLoadingState());
         (await docDoctorsUseCase.execute(event.docId)).fold((failure) {

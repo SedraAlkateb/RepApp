@@ -1266,7 +1266,7 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.updateReci(reciReq);
-        if (response.status == null ||
+        if (
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
           return Right(response);
@@ -1284,6 +1284,35 @@ class RepositoryImp implements Repository {
       Failure failure = ErrorHandler.handle(error).failure;
       insertLog(ExceptionRequestBody(
           [ExceptionModel(failure.massage, "updateReci")]));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, DoctorModel>> getDocInfo(int docId)  async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getDocInfo(docId);
+        if (
+
+        response.status == ApiInternalStatus.SUCCESS ||
+            response.message == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getDocInfo")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getDocInfo")]));
       return Left(failure);
     }
   }

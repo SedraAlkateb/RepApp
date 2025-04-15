@@ -1435,6 +1435,7 @@ class StatePlan {
   StatePlan(this.index, this.state);
 //state 0 true , state 1 more state 2 0
 }
+
 class UpdateReciRequest {
   int recipeId;
   int recipeType;
@@ -1456,29 +1457,60 @@ class UpdateReciRequest {
   String? brand_2;
   String? brand_3;
   String? brand_4;
+  String? create_date;
+  String? print_date;
 
   UpdateReciRequest(
-      this.recipeId,
-      this.recipeType,
-      this.repId,
-      this.type,
-      this.docId,
-      this.spName,
-      this.brand_1,
-      this.address,
-      this.phone,
-      this.total, {
-        this.note1,
-        this.note2,
-        this.flagImage1,
-        this.flagImage2,
-        this.note_emp,
-        this.image1,
-        this.image2,
-        this.brand_2,
-        this.brand_3,
-        this.brand_4,
-      });
+    this.recipeId,
+    this.recipeType,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total,
+    this.create_date,
+    this.print_date, {
+    this.note1,
+    this.note2,
+    this.flagImage1,
+    this.flagImage2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "recipeId": recipeId,
+      "recipeType": recipeType,
+      "repId": repId,
+      "type": type,
+      "docId": docId,
+      "spName": spName,
+      "brand_1": brand_1,
+      "address": address,
+      "phone": phone,
+      "total": total,
+      "create_date": create_date,
+      "print_date": print_date,
+      "note1": note1,
+      "note2": note2,
+      "flagImage1": flagImage1,
+      "flagImage2": flagImage2,
+      "note_emp": note_emp,
+      "image1": image1,
+      "image2": image2,
+      "brand_2": brand_2,
+      "brand_3": brand_3,
+      "brand_4": brand_4,
+    };
+  }
 }
 
 class ReciRequest {
@@ -1543,6 +1575,8 @@ class CopyReciRequest {
   String? note_emp;
   String? image1;
   String? image2;
+  String? create_date;
+  String? print_date;
 
   CopyReciRequest(
     this.id,
@@ -1553,7 +1587,9 @@ class CopyReciRequest {
     this.brand_1,
     this.address,
     this.phone,
-    this.total, {
+    this.total,
+    this.create_date,
+    this.print_date, {
     this.note1,
     this.note2,
     this.note_emp,
@@ -1757,7 +1793,8 @@ class NumVisit {
   int visitHospital;
   NumVisit(this.visitDoctor, this.visitHospital);
 }
-class ReciModel{
+
+class ReciModel {
   String? id;
   String? docName;
   String? create_date;
@@ -1765,8 +1802,10 @@ class ReciModel{
   String? note_emp;
   String docId;
   String recipeType;
-  ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp,this.docId,this.recipeType);
+  ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp,
+      this.docId, this.recipeType);
 }
+
 class PlanBrandSp {
   int id;
   int brandId;
@@ -1779,6 +1818,7 @@ class PlanBrandSp {
   PlanBrandSp(this.id, this.brandId, this.brandType, this.titleAr, this.spId,
       this.phTitle, this.totalAmount);
 }
+
 class doctorsModel {
   int id;
   String name;
@@ -1787,14 +1827,16 @@ class doctorsModel {
 
   doctorsModel(this.id, this.name, this.spTitle, this.placeTitle);
 }
- class DocdoctorsModel {
+
+class DocdoctorsModel {
   String repName;
   String visitDate;
   String issue;
-   String note;
+  String note;
 
   DocdoctorsModel(this.repName, this.visitDate, this.issue, this.note);
 }
+
 class BrandAmountModel {
   int numDoctor;
   int numHospital;
