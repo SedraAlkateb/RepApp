@@ -1,6 +1,5 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/Recipes/pages/Recipes.dart';
-import 'package:domina_app/presentation/Recipes/pages/update_recipes.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/doctors/widget/html_info.dart';
 import 'package:domina_app/presentation/doctors/widget/row_info.dart';
@@ -135,8 +134,8 @@ class DoctorDetails extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UpdateRecipesPage(
-                                    recipeId: 2,
+                                      builder: (context) => RecipesPage(
+
                                         docId: doctor.id,
                                         st: state.st,
                                       ),

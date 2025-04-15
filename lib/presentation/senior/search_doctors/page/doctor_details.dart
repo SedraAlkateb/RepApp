@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/senior/search_doctors/widgets/text__serach_doctor.dart';
@@ -90,6 +91,10 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   InkWell(
+                                    onTap: (){
+                                      BlocProvider.of<SearchDoctorsBloc>(context).add(DoctorInfoEvent(widget.doctorModel.id));
+                                      Navigator.pushNamed(context, Routes.doctorInfo);
+                                    },
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(

@@ -210,28 +210,10 @@ abstract class AppServiceClient {
   Future<AllReciBaseResponse> getAllRepReci(
     @Part(name: "repId") int repDet,
   );
+  @POST("/admin/getDocInfo.php")
+  Future<InfoDoctorBaseResponse> getDocInfo(
+      @Part(name: "docId") int docId,
+      );
   @POST("/reci/updateReci.php")
-  Future<Message1Response> updateReci(
-    @Part(name: "repId") String repId,
-    @Part(name: "recipeId") String recipeId
-      , {
-    @Part(name: "type") String? type,
-    @Part(name: "docId") String? docId,
-    @Part(name: "spName") String? spName,
-    @Part(name: "brand_1") String? brand_1,
-    @Part(name: "brand_2") String? brand_2,
-    @Part(name: "brand_3") String? brand_3,
-    @Part(name: "brand_4") String? brand_4,
-    @Part(name: "note1") String? note1,
-    @Part(name: "note2") String? note2,
-    @Part(name: "address") String? address,
-    @Part(name: "phone") String? phone,
-    @Part(name: "total") String? total,
-    @Part(name: "note_emp") String? note_emp,
-    @Part(name: "recipeType") String? recipeType,
-    @Part(name: "flagImage1") String? flagImage1,
-    @Part(name: "flagImage2") String? flagImage2,
-    @Part(name: "image1") File? image1,
-    @Part(name: "image2") File? image2,
-  });
+  Future<Message1Response> updateReci(@Body() UpdateReciRequest updateReq );
 }

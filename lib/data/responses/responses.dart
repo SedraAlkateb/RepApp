@@ -176,6 +176,10 @@ class CopyRecipResponse {
   String? image1;
   @JsonKey(name: "image2")
   String? image2;
+  @JsonKey(name: "print_date")
+  String? print_date;
+  @JsonKey(name: "create_date")
+  String? create_date;
 
   CopyRecipResponse(
       this.id,
@@ -194,7 +198,10 @@ class CopyRecipResponse {
       this.total,
       this.note_emp,
       this.image1,
-      this.image2);
+      this.image2,
+      this.create_date,
+      this.print_date,
+      );
 
   // from json
   factory CopyRecipResponse.fromJson(Map<String, dynamic> json) =>
@@ -752,7 +759,15 @@ class DoctorResponse {
   // to json
   Map<String, dynamic> toJson() => _$DoctorResponseToJson(this);
 }
-
+@JsonSerializable()
+class InfoDoctorBaseResponse extends BaseResponse {
+  @JsonKey(name: "Doctors")
+  DoctorResponse? data;
+  InfoDoctorBaseResponse(this.data);
+  factory InfoDoctorBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$InfoDoctorBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$InfoDoctorBaseResponseToJson(this);
+}
 @JsonSerializable()
 class AllDoctorResponse {
   @JsonKey(name: "Doctors")

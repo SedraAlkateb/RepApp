@@ -592,7 +592,23 @@ extension visitDoctorBrandResponseMapper on VisitDoctorBaseResponse? {
         this?.brandsVisit.toDomain() ?? [], this?.data.toDomain() ?? []);
   }
 }
-
+extension DoctorInfoResponseMapper on InfoDoctorBaseResponse? {
+  DoctorModel toDomain() {
+     return DoctorModel(
+      int.parse(this?.data?.id ?? "0"),
+      this?.data?.title ?? Constants.empty,
+      int.parse(this?.data?.placeId ?? "0"),
+      this?.data?.address ?? Constants.empty,
+      this?.data?.placeTitle ?? Constants.empty,
+      int.parse(this?.data?.visits ?? "0"),
+      this?.data?.note ?? Constants.empty,
+      this?.data?.rate ?? Constants.empty,
+      this?.data?.spTitle ?? Constants.empty,
+      int.parse(this?.data?.spId ?? "0"),
+      this?.data?.workHours ?? Constants.empty,
+    );
+  }
+}
 extension CopyRecResponseMapper on CopyRecResponse {
   CopyReciRequest toDomain() {
     return CopyReciRequest(
@@ -605,6 +621,8 @@ extension CopyRecResponseMapper on CopyRecResponse {
       this.recip?.address ?? Constants.empty,
       this.recip?.phone ?? Constants.empty,
       this.recip?.total ?? Constants.empty,
+      this.recip?.create_date ?? Constants.empty,
+      this.recip?.print_date ?? Constants.empty,
       note1: this.recip?.note1 ?? Constants.empty,
       note2: this.recip?.note2 ?? Constants.empty,
       note_emp: this.recip?.note_emp ?? Constants.empty,

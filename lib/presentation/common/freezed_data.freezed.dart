@@ -2818,6 +2818,8 @@ mixin _$InsertRecipesObject {
   String get address => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
   String get total => throw _privateConstructorUsedError;
+  String? get create_date => throw _privateConstructorUsedError;
+  String? get print_date => throw _privateConstructorUsedError;
   String get flagImage1 => throw _privateConstructorUsedError;
   String get flagImage2 => throw _privateConstructorUsedError;
   String? get note1 => throw _privateConstructorUsedError;
@@ -2851,6 +2853,8 @@ abstract class $InsertRecipesObjectCopyWith<$Res> {
       String address,
       String phone,
       String total,
+      String? create_date,
+      String? print_date,
       String flagImage1,
       String flagImage2,
       String? note1,
@@ -2886,6 +2890,8 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
     Object? address = null,
     Object? phone = null,
     Object? total = null,
+    Object? create_date = freezed,
+    Object? print_date = freezed,
     Object? flagImage1 = null,
     Object? flagImage2 = null,
     Object? note1 = freezed,
@@ -2930,6 +2936,14 @@ class _$InsertRecipesObjectCopyWithImpl<$Res, $Val extends InsertRecipesObject>
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
               as String,
+      create_date: freezed == create_date
+          ? _value.create_date
+          : create_date // ignore: cast_nullable_to_non_nullable
+              as String?,
+      print_date: freezed == print_date
+          ? _value.print_date
+          : print_date // ignore: cast_nullable_to_non_nullable
+              as String?,
       flagImage1: null == flagImage1
           ? _value.flagImage1
           : flagImage1 // ignore: cast_nullable_to_non_nullable
@@ -2991,6 +3005,8 @@ abstract class _$$InsertRecipesObjectImplCopyWith<$Res>
       String address,
       String phone,
       String total,
+      String? create_date,
+      String? print_date,
       String flagImage1,
       String flagImage2,
       String? note1,
@@ -3024,6 +3040,8 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
     Object? address = null,
     Object? phone = null,
     Object? total = null,
+    Object? create_date = freezed,
+    Object? print_date = freezed,
     Object? flagImage1 = null,
     Object? flagImage2 = null,
     Object? note1 = freezed,
@@ -3068,6 +3086,14 @@ class __$$InsertRecipesObjectImplCopyWithImpl<$Res>
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
               as String,
+      freezed == create_date
+          ? _value.create_date
+          : create_date // ignore: cast_nullable_to_non_nullable
+              as String?,
+      freezed == print_date
+          ? _value.print_date
+          : print_date // ignore: cast_nullable_to_non_nullable
+              as String?,
       null == flagImage1
           ? _value.flagImage1
           : flagImage1 // ignore: cast_nullable_to_non_nullable
@@ -3124,6 +3150,8 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
       this.address,
       this.phone,
       this.total,
+      this.create_date,
+      this.print_date,
       this.flagImage1,
       this.flagImage2,
       this.note1,
@@ -3152,6 +3180,10 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
   @override
   final String total;
   @override
+  final String? create_date;
+  @override
+  final String? print_date;
+  @override
   final String flagImage1;
   @override
   final String flagImage2;
@@ -3174,7 +3206,7 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
 
   @override
   String toString() {
-    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, flagImage1: $flagImage1, flagImage2: $flagImage2, note1: $note1, note2: $note2, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
+    return 'InsertRecipesObject(repId: $repId, type: $type, docId: $docId, spName: $spName, brand_1: $brand_1, address: $address, phone: $phone, total: $total, create_date: $create_date, print_date: $print_date, flagImage1: $flagImage1, flagImage2: $flagImage2, note1: $note1, note2: $note2, note_emp: $note_emp, image1: $image1, image2: $image2, brand_2: $brand_2, brand_3: $brand_3, brand_4: $brand_4)';
   }
 
   @override
@@ -3190,6 +3222,10 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
             (identical(other.address, address) || other.address == address) &&
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.total, total) || other.total == total) &&
+            (identical(other.create_date, create_date) ||
+                other.create_date == create_date) &&
+            (identical(other.print_date, print_date) ||
+                other.print_date == print_date) &&
             (identical(other.flagImage1, flagImage1) ||
                 other.flagImage1 == flagImage1) &&
             (identical(other.flagImage2, flagImage2) ||
@@ -3206,26 +3242,29 @@ class _$InsertRecipesObjectImpl implements _InsertRecipesObject {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      repId,
-      type,
-      docId,
-      spName,
-      brand_1,
-      address,
-      phone,
-      total,
-      flagImage1,
-      flagImage2,
-      note1,
-      note2,
-      note_emp,
-      image1,
-      image2,
-      brand_2,
-      brand_3,
-      brand_4);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        repId,
+        type,
+        docId,
+        spName,
+        brand_1,
+        address,
+        phone,
+        total,
+        create_date,
+        print_date,
+        flagImage1,
+        flagImage2,
+        note1,
+        note2,
+        note_emp,
+        image1,
+        image2,
+        brand_2,
+        brand_3,
+        brand_4
+      ]);
 
   /// Create a copy of InsertRecipesObject
   /// with the given fields replaced by the non-null parameter values.
@@ -3247,6 +3286,8 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
       final String address,
       final String phone,
       final String total,
+      final String? create_date,
+      final String? print_date,
       final String flagImage1,
       final String flagImage2,
       final String? note1,
@@ -3274,6 +3315,10 @@ abstract class _InsertRecipesObject implements InsertRecipesObject {
   String get phone;
   @override
   String get total;
+  @override
+  String? get create_date;
+  @override
+  String? get print_date;
   @override
   String get flagImage1;
   @override

@@ -9,10 +9,10 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
-import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
-import 'package:domina_app/presentation/senior/report_issue_note/page/note_issue_doctor.dart';
-import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
-import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
+// import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
+// import 'package:domina_app/presentation/senior/report_issue_note/page/note_issue_doctor.dart';
+// import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
+// import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_hospital.dart';
@@ -372,48 +372,48 @@ class RepProfile extends StatelessWidget {
                         thickness: 0.8,
                       ),
                     ),
-                    RowList(
-                      icon1: FontAwesomeIcons.solidNoteSticky,
-                      text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
-                      function: () {
-                        initSeniorReportScienceModule();
-                        BlocProvider.of<ReportScienceBloc>(context)
-                            .add(SenAllNoteDoctorEvent(id));
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return NoteScienceDoctor(id: id);
-                          },
-                        ));
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    RowList(
-                      icon1: FontAwesomeIcons.noteSticky,
-                      text: "قائمة بالملاحظات الخاصة بالوكيل",
-                      function: () {
-                        initSeniorReportIssueModule();
-                        BlocProvider.of<ReportIssueBloc>(context)
-                            .add(SenAllIssueDoctorEvent(id));
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return NoteIssueDoctor(id: id);
-                          },
-                        ));
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
+                    // RowList(
+                    //   icon1: FontAwesomeIcons.solidNoteSticky,
+                    //   text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
+                    //   function: () {
+                    //     initSeniorReportScienceModule();
+                    //     BlocProvider.of<ReportScienceBloc>(context)
+                    //         .add(SenAllNoteDoctorEvent(id));
+                    //     Navigator.push(context, MaterialPageRoute(
+                    //       builder: (context) {
+                    //         return NoteScienceDoctor(id: id);
+                    //       },
+                    //     ));
+                    //   },
+                    // ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                    //   child: Divider(
+                    //     color: ColorManager.secondaryColor6,
+                    //     thickness: 0.8,
+                    //   ),
+                    // ),
+                    // RowList(
+                    //   icon1: FontAwesomeIcons.noteSticky,
+                    //   text: "قائمة بالملاحظات الخاصة بالوكيل",
+                    //   function: () {
+                    //     initSeniorReportIssueModule();
+                    //     BlocProvider.of<ReportIssueBloc>(context)
+                    //         .add(SenAllIssueDoctorEvent(id));
+                    //     Navigator.push(context, MaterialPageRoute(
+                    //       builder: (context) {
+                    //         return NoteIssueDoctor(id: id);
+                    //       },
+                    //     ));
+                    //   },
+                    // ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                    //   child: Divider(
+                    //     color: ColorManager.secondaryColor6,
+                    //     thickness: 0.8,
+                    //   ),
+                    // ),
                     RowList(
                         function: () {
                           initSeniorReportInventoryModule();
