@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -21,6 +22,7 @@ class SearchDoctors extends StatelessWidget {
   Widget build(BuildContext context) {
     // String name = context.watch<SearchDoctorsBloc>().name;
     return Scaffold(
+      drawer: DrawerPage(),
       appBar: AppBar(
         leading: Builder(
           builder: (BuildContext context) {
