@@ -794,3 +794,35 @@ extension DocDoctorBaseMapper on DocDoctorsBaseResponse? {
     return doctors;
   }
 }
+extension PalnSpMapper on SpecializationPlanResponse? {
+  SpecPlan toDomain() {
+    return SpecPlan(
+      this?.name.toString() ?? Constants.empty,
+      this?.amount ?? Constants.empty,
+    );
+  }
+}
+extension ActivePlanBrandMapper on ActiveBrandPlanResponse? {
+  ActivePlanBrandModel toDomain() {
+    List<SpecPlan> specPlans =
+    (this?.specializations?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<SpecPlan>()
+        .toList();
+    return ActivePlanBrandModel(
+        specPlans,
+      this?.type.toString() ?? Constants.empty,
+      this?.title ?? Constants.empty,
+    );
+  }
+}
+extension ActivePlanBrandBaseMapper on ActiveBrandPlanBaseResponse? {
+  List<ActivePlanBrandModel> toDomain() {
+    List<ActivePlanBrandModel> activePlanBrands =
+    (this?.data?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<ActivePlanBrandModel>()
+        .toList();
+    return activePlanBrands;
+  }
+}

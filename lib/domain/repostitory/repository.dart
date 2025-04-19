@@ -99,5 +99,6 @@ abstract class Repository {
   Future<Either<Failure,List<ReciModel> >> getAllRepReci(int repDet);
   Future<Either<Failure, Message1Response>> updateReci(UpdateReciRequest reciReq);
   Future<Either<Failure, DoctorModel>> getDocInfo(int docId);
+    Future<Either<Failure,List<ActivePlanBrandModel> >> getInfoPlanBrandsType(int repPlan);
 
 }

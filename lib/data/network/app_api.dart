@@ -216,5 +216,9 @@ abstract class AppServiceClient {
       );
   @POST("/reci/updateReci.php")
   Future<Message1Response> updateReci(@Body() UpdateReciRequest updateReq );
-
+  
+    @POST("/getinfoPlanBrandsType.php")
+  Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
+      @Part(name: "repPlanId") int repPlanId,
+      );
 }

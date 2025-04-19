@@ -3,6 +3,8 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
+import 'package:domina_app/presentation/active_plan/pages/active_plan.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -306,6 +308,27 @@ class RepProfile extends StatelessWidget {
                         },
                         icon1: FontAwesomeIcons.table,
                         text: "تقرير الأطباء"),
+                                 Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppPadding.p14),
+                      child: Divider(
+                        color: ColorManager.secondaryColor6,
+                        thickness: 0.8,
+                      ),
+                    ),
+                    RowList(
+                        function: () {
+                          initActivePlanModule();
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return ActivePlanPage();
+                            },
+                          ));
+                          BlocProvider.of<ActivePlanBloc>(context)
+                              .add(GetActivePlanEvent(repPlan));
+                        },
+                        icon1: Icons.list_alt_outlined,
+                        text: "الخطة الفعالة"),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                       child: Divider(

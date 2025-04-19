@@ -1531,3 +1531,38 @@ class AllRepInfoResponseBaseResponse extends BaseResponse {
       _$AllRepInfoResponseBaseResponseFromJson(json);
   Map<String, dynamic> toJson() => _$AllRepInfoResponseBaseResponseToJson(this);
 }
+@JsonSerializable()
+class SpecializationPlanResponse {
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "amount")
+  String? amount;
+  SpecializationPlanResponse(this.name,this.amount);
+  factory SpecializationPlanResponse.fromJson(Map<String, dynamic> json) =>
+      _$SpecializationPlanResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$SpecializationPlanResponseToJson(this);
+}
+@JsonSerializable()
+class ActiveBrandPlanResponse {
+  @JsonKey(name: "specializations", defaultValue: [])
+  List<SpecializationPlanResponse>? specializations;
+  @JsonKey(name: "title")
+  String? title;
+  @JsonKey(name: "type")
+  String? type;
+
+  ActiveBrandPlanResponse(this.specializations, this.title, this.type);
+
+  factory ActiveBrandPlanResponse.fromJson(Map<String, dynamic> json) =>
+      _$ActiveBrandPlanResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ActiveBrandPlanResponseToJson(this);
+}
+@JsonSerializable()
+  class ActiveBrandPlanBaseResponse extends BaseResponse{
+  @JsonKey(name: "data", defaultValue: [])
+  List<ActiveBrandPlanResponse>? data;
+  ActiveBrandPlanBaseResponse(this.data);
+  factory ActiveBrandPlanBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$ActiveBrandPlanBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ActiveBrandPlanBaseResponseToJson(this);
+}

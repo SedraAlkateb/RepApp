@@ -1850,3 +1850,17 @@ class AllPlanBrandSp {
 
   AllPlanBrandSp(this.planBrandSps, this.amount);
 }
+class SpecPlan {
+  String name;
+  String amount;
+
+  SpecPlan(this.name, this.amount);
+}
+
+class ActivePlanBrandModel {
+  List<SpecPlan> spPlan;
+  String type;
+  String title;
+
+  ActivePlanBrandModel(this.spPlan, this.type, this.title);
+}
