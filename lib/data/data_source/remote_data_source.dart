@@ -77,6 +77,7 @@ abstract class RemoteDataSource {
   Future<Message1Response> readAllVisits(ReadAll readAll);
   Future<AllReciBaseResponse> getAllRepReci(int repDet);
   Future<InfoDoctorBaseResponse> getDocInfo(int docId);
+    Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType( int repPlanId,);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -360,5 +361,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return await _appServiceClient.getDocInfo(
         docId
     );
+  }
+    @override
+  Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(int repPlanId)async {
+    return await _appServiceClient.getinfoPlanBrandsType(repPlanId);
   }
 }

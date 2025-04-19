@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
+import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<AuthBloc>()),
         BlocProvider(create: (_) => instance<ReportVisitDoctorBloc>()),
         BlocProvider(create: (_) => instance<AsyncInBloc>()),
+        BlocProvider(create: (_) => instance<ActivePlanBloc>()),
         BlocProvider<PharmacyBloc>(
           create: (context) {
             final bloc = instance<PharmacyBloc>();
@@ -69,7 +71,7 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-           BlocProvider<SearchDoctorsBloc>(
+        BlocProvider<SearchDoctorsBloc>(
           create: (context) {
             final bloc = instance<SearchDoctorsBloc>();
             return bloc;

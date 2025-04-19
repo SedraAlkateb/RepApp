@@ -1685,3 +1685,57 @@ Map<String, dynamic> _$AllRepInfoResponseBaseResponseToJson(
       'message': instance.message,
       'Representative': instance.data,
     };
+
+SpecializationPlanResponse _$SpecializationPlanResponseFromJson(
+        Map<String, dynamic> json) =>
+    SpecializationPlanResponse(
+      json['name'] as String?,
+      json['amount'] as String?,
+    );
+
+Map<String, dynamic> _$SpecializationPlanResponseToJson(
+        SpecializationPlanResponse instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'amount': instance.amount,
+    };
+
+ActiveBrandPlanResponse _$ActiveBrandPlanResponseFromJson(
+        Map<String, dynamic> json) =>
+    ActiveBrandPlanResponse(
+      (json['specializations'] as List<dynamic>?)
+              ?.map((e) => SpecializationPlanResponse.fromJson(
+                  e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      json['title'] as String?,
+      json['type'] as String?,
+    );
+
+Map<String, dynamic> _$ActiveBrandPlanResponseToJson(
+        ActiveBrandPlanResponse instance) =>
+    <String, dynamic>{
+      'specializations': instance.specializations,
+      'title': instance.title,
+      'type': instance.type,
+    };
+
+ActiveBrandPlanBaseResponse _$ActiveBrandPlanBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    ActiveBrandPlanBaseResponse(
+      (json['data'] as List<dynamic>?)
+              ?.map((e) =>
+                  ActiveBrandPlanResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$ActiveBrandPlanBaseResponseToJson(
+        ActiveBrandPlanBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.data,
+    };
