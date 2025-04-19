@@ -216,4 +216,5 @@ abstract class AppServiceClient {
       );
   @POST("/reci/updateReci.php")
   Future<Message1Response> updateReci(@Body() UpdateReciRequest updateReq );
+
 }
