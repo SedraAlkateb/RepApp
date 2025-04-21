@@ -1293,7 +1293,7 @@ class RepositoryImp implements Repository {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.updateReci(reciReq);
         if (
-            response.status == ApiInternalStatus.SUCCESS ||
+            response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
           return Right(response);
         } else {
@@ -1301,6 +1301,8 @@ class RepositoryImp implements Repository {
               response.message ?? ResponseMassage.DEFAULT);
           insertLog(ExceptionRequestBody(
               [ExceptionModel(failure.massage, "updateReci")]));
+
+
           return Left(failure);
         }
       } else {

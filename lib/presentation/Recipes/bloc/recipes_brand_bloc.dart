@@ -10,6 +10,7 @@ import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
 import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
 import 'package:domina_app/presentation/common/freezed_data.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'dart:io';
@@ -255,6 +256,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         });
       }
       if (event is UpdateReciSEvent) {
+        print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+        print("DateFormat('yyyy-MM-dd').format(DateTime.now())");
         emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
@@ -276,8 +279,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
-          insertRecipesObject.create_date,
-          insertRecipesObject.print_date,
+            DateFormat('yyyy-MM-dd').format(DateTime.now()),
           flagImage1: isChecked1.toString(),
           flagImage2: isChecked2.toString(),
           note_emp: insertRecipesObject.note_emp,
@@ -298,6 +300,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         });
       }
       if (event is UpdateReciSHospitalEvent) {
+        print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+        print("DateFormat('yyyy-MM-dd').format(DateTime.now())");
         emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
@@ -324,8 +328,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
-          insertRecipesObject.create_date,
-          insertRecipesObject.print_date,
+              DateFormat('yyyy-MM-dd').format(DateTime.now()),
           flagImage1: isChecked1.toString(),
           flagImage2: isChecked2.toString(),
           note_emp: insertRecipesObject.note_emp,

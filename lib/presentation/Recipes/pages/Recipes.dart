@@ -942,33 +942,7 @@ class _RecipesPageState extends State<RecipesPage> {
                               "إرسال",
                             ),
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                BlocProvider.of<RecipesBrandBloc>(context).add(
-                                    UpdateReciEvent(
-                                        _doctorSpController.text,
-                                        firstNoteController.text,
-                                        _secondNoteController.text,
-                                        _addressController.text,
-                                        _connectController.text,
-                                        _specialNotesController.text,
-                                        widget.docId,
-                                        _connectController.text));
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                    backgroundColor: ColorManager.secondaryColor,
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text(
-                              "تعديل",
-                            ),
-                          ),
+
                         ],
                       ),
                     ),

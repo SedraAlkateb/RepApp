@@ -31,28 +31,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             .fold((failure) {
           emit(LoginErrorState(failure: failure));
         }, (data) async {
-          print(data.repType);
-          print("data.repType");
-          loginModel = data;
-          UserInfo.repId = loginModel!.repId;
-          UserInfo.otherPlanId = loginModel!.otherPlanId;
-          UserInfo.activePlanId = loginModel!.activePlanId ?? -5;
-          UserInfo.otherstatus = loginModel!.otherStatus;
-          UserInfo.percentage = loginModel!.percentage;
-          UserInfo.recipesCount = loginModel!.recipesCount;
-          UserInfo.token = loginModel!.token;
-          UserInfo.name = loginModel!.name;
-          UserInfo.cityId = loginModel!.cityId;
-          UserInfo.isLogging = 1;
-          UserInfo.startDate=data.startDate;
-          UserInfo.endDate=data.endDate;
-          UserInfo.otherStartDate=data.otherStartDate;
-          UserInfo.otherEndDate=data.otherEndDate;
-          UserInfo.cityId=data.cityId;
-          loginModel?.flag1=0;
-          UserInfo.flag1 =0;
-          UserInfo.repType=data.repType;
-          emit(LoginState());
+          // if (data.repType == "4" || data.repType == "5") {
+          //   emit(LoginErrorState(
+          //       failure: Failure(
+          //           0, "لا يسمح بتسجيل الدخول الا للمندوبين وال senior")));
+          // } else {
+            loginModel = data;
+            UserInfo.repId = loginModel!.repId;
+            UserInfo.otherPlanId = loginModel!.otherPlanId;
+            UserInfo.activePlanId = loginModel!.activePlanId ?? -5;
+            UserInfo.otherstatus = loginModel!.otherStatus;
+            UserInfo.percentage = loginModel!.percentage;
+            UserInfo.recipesCount = loginModel!.recipesCount;
+            UserInfo.token = loginModel!.token;
+            UserInfo.name = loginModel!.name;
+            UserInfo.cityId = loginModel!.cityId;
+            UserInfo.isLogging = 1;
+            UserInfo.startDate = data.startDate;
+            UserInfo.endDate = data.endDate;
+            UserInfo.otherStartDate = data.otherStartDate;
+            UserInfo.otherEndDate = data.otherEndDate;
+            UserInfo.cityId = data.cityId;
+            loginModel?.flag1 = 0;
+            UserInfo.flag1 = 0;
+            UserInfo.repType = data.repType;
+            emit(LoginState());
+      //    }
         });
       } else if (event is LoginInsertEvent) {
         (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
