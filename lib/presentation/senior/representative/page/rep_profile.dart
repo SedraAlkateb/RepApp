@@ -365,7 +365,7 @@ class RepProfile extends StatelessWidget {
                     ),
                     RowList(
                       icon1: FontAwesomeIcons.userDoctor,
-                      text: "الأطباء الذين تمت زيارتهم",
+                      text: 'عدد زيارات الأطباء الذين  تمت زيارتهم',
                       function: () {
                         BlocProvider.of<SeniorProfBloc>(context)
                             .add(VisitDocEvent(id));
@@ -381,11 +381,27 @@ class RepProfile extends StatelessWidget {
                     ),
                     RowList(
                       icon1: FontAwesomeIcons.userDoctor,
-                      text: "الأطباء الذين لم تتم زيارتهم",
+                      text: 'عدد زيارات الأطباء الذين لم تتم زيارتهم',
                       function: () {
                         BlocProvider.of<SeniorProfBloc>(context)
                             .add(NoVisitDocEvent(id));
                         Navigator.pushNamed(context, Routes.noVisitDoctor);
+                      },
+                    ),
+                          Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      child: Divider(
+                        color: ColorManager.secondaryColor6,
+                        thickness: 0.8,
+                      ),
+                    ),
+                    RowList(
+                      icon1: FontAwesomeIcons.userDoctor,
+                      text: "عدد زيارات الأطباء المتبقية",
+                      function: () {
+                        BlocProvider.of<SeniorProfBloc>(context)
+                            .add(RemainingVisitsDocEvent(id));
+                        Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
                       },
                     ),
                     Padding(

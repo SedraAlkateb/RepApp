@@ -8,15 +8,15 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SenVisitDoctor extends StatelessWidget {
-  SenVisitDoctor({super.key});
-  final TextEditingController searchteDoctorController =
+class RemainingVisits extends StatelessWidget {
+  RemainingVisits({super.key});
+  final TextEditingController searchNoteDoctorController =
       TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  title: Text( 'عدد زيارات الأطباء الذين  تمت زيارتهم'),
+      appBar: AppBar(  title: Text("عدد زيارات الأطباء المتبقية"),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -41,10 +41,10 @@ class SenVisitDoctor extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SearchField(
-                    searchController: searchteDoctorController,
+                    searchController: searchNoteDoctorController,
                     onPressed: (value) {
                       BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchVisitDoctorEvent(value));
+                          .add(SenSearchNoVisitDoctorEvent(value));
                     },
                   ),
                 ],
@@ -52,9 +52,9 @@ class SenVisitDoctor extends StatelessWidget {
             ),
             BlocBuilder<SeniorProfBloc, SeniorProfState>(
               builder: (context, state) {
-                List<NoVisitDocModel> visitDoc =
-                    context.watch<SeniorProfBloc>().visitDoc;
-                if (state is SenVisitDocEmptyState) {
+                List<NoVisitDocModel> noVisitDoc =
+                    context.watch<SeniorProfBloc>().noVisitDoc;
+                if (state is SenNoVisitDocEmptyState) {
                   return SliverList(
                       delegate: SliverChildListDelegate([
                     SizedBox(
@@ -63,21 +63,21 @@ class SenVisitDoctor extends StatelessWidget {
                     emptyFullScreen(context)
                   ]));
                 }
-                if (state is SenVisitDocsState) {
-                  visitDoc = state.visitDoc;
+                if (state is SenNoVisitDocsState) {
+                  noVisitDoc = state.noVisitDoc;
                 }
-                if (state is SenVisitDocLoadingState) {
+                if (state is SenNoVisitDocLoadingState) {
                   return SliverList(
                     delegate:
                         SliverChildListDelegate([loadingFullScreen(context)]),
                   );
                 }
-                if (state is SenVisitDocErrorState) {
+                if (state is SenNoVisitDocErrorState) {
                   return SliverList(
                     delegate: SliverChildListDelegate([
                       errorFullScreen(context, func: () {
                         BlocProvider.of<SeniorProfBloc>(context)
-                            .add(VisitDocEvent(156));
+                            .add(NoVisitDocEvent(156));
                       })
                     ]),
                   );
@@ -91,11 +91,11 @@ class SenVisitDoctor extends StatelessWidget {
                         children: [
                           Text("عدد الملاحظات: ",
                               style: Theme.of(context).textTheme.labelLarge),
-                          CircleNumberWidget(number: visitDoc.length),
+                          CircleNumberWidget(number: noVisitDoc.length),
                         ],
                       ),
                     ),
-                    ...visitDoc.map((visitDoc) {
+                    ...noVisitDoc.map((noVisitDoc) {
                       return Container(
                         margin: EdgeInsets.all(AppPadding.p8),
                         padding: EdgeInsets.all(AppPadding.p16),
@@ -107,45 +107,24 @@ class SenVisitDoctor extends StatelessWidget {
                             ],
                           ),
                           borderRadius:
-                              BorderRadius.all(Radius.circular(AppSize.s4)),
+                              BorderRadius.all(Radius.circular(AppSize.s8)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              " ${visitDoc.docTitle} ",
+                              " ${noVisitDoc.docTitle} ",
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
-                            Row(mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                "الإختصاص :",
-                                style:
-                                Theme.of(context).textTheme.bodySmall,
-                              ),
-                                Text(
-                                  " ${visitDoc.spTitle} ",
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),  Row(mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Text(
-                                " تاريخ الزيارة :",
-                                style:
-                                Theme.of(context).textTheme.bodySmall,
-                              ),
-                                Text(
-                                  " 2-20-2025 ",
-                                  style:
-                                  Theme.of(context).textTheme.titleSmall,
-                                ),
-                              ],
+                            Text(
+                              " ${noVisitDoc.spTitle} ",
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
                             ),
                             Text(
-                              " ${visitDoc.address} ",
+                              " ${noVisitDoc.address} ",
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
@@ -160,7 +139,7 @@ class SenVisitDoctor extends StatelessWidget {
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      " ${visitDoc.rate} ",
+                                      " ${noVisitDoc.rate} ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,
@@ -178,7 +157,7 @@ class SenVisitDoctor extends StatelessWidget {
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      " ${visitDoc.visits} ",
+                                      " ${noVisitDoc.remainingVisits.toString()} ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,

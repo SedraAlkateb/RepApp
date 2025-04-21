@@ -16,7 +16,7 @@ class NoVisitDoctor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  title: Text("الأطباء الذين لم يتم زيارتهم"),
+      appBar: AppBar(  title: Text('عدد زيارات الأطباء الذين لم تتم زيارتهم'),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -157,7 +157,7 @@ class NoVisitDoctor extends StatelessWidget {
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      " ${noVisitDoc.visits} ",
+                                      " ${noVisitDoc.visits.toString()} ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,
