@@ -106,21 +106,19 @@ class SearchDoctors extends StatelessWidget {
                   // }
                   //,
                 ),
-                BlocConsumer<SearchDoctorsBloc, SearchDoctorsState>(
+                BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
                   buildWhen: (previous, current) =>
                       current is FutureFutureSearchDoctorsErrorState ||
                       current is FutureSearchDoctorsLoadingState ||
                       current is FutureSearchDoctorsState ||
                       current is FutureSearchDoctorsEmptyState,
-                  listener: (context, state) {
-                    if (state is FutureFutureSearchDoctorsErrorState) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      });
-                    }
-                  },
                   builder: (context, state) {
+                    if (state is FutureFutureSearchDoctorsErrorState) {
+                      return   errorFullScreen(
+                          context,mes:  state.failure.massage,func:()  =>
+                      BlocProvider.of<SearchDoctorsBloc>(context).add(FutureSearchDocEvent(searchController.text))
+                      );
+                    }
                     if (state is FutureSearchDoctorsLoadingState) {
                       return loadingFullScreen(context);
                     }

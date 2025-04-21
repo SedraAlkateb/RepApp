@@ -29,6 +29,10 @@ class _DoctorDetailsState extends State<DoctorDetails>
         appBar: null,
         body: SingleChildScrollView(
             child: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
+              buildWhen: (previous, current) => current is FutureDocDoctorsState||
+                  current is FutureDocDoctorsErrorState||
+                  current is FutureDocDoctorsLoadingState||
+                  current is FutureDocDoctorsEmptyState,
                  builder: (context, state) {
               if (state is FutureDocDoctorsErrorState) {
                  return Padding(
@@ -168,22 +172,76 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                               ),
-                              child: Column(
-                                children: [
-                                  TextRach(
-                                      s1: "اسم المندوب: ",
-                                      s2: state.doctordetails[index].repName),
-                                  TextRach(
-                                      s1: "التاريخ: ",
-                                      s2: state.doctordetails[index].visitDate),
-                                  TextSerachDoctor(
-                                      s1: "ملاحظات مستودع قاسيون : ",
-                                      s2: state.doctordetails[index].issue),
-                                  TextSerachDoctor(
-                                      s1: "ملاحظات المستودع العلمي : ",
-                                      s2: state.doctordetails[index].note
-                                          .toString()),
-                                ],
+                              child:  GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => DraggableScrollableSheet(
+                                      expand: false,
+                                      // minChildSize: 100,
+                                      builder: (context, scrollController) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            child: ListView(
+                                              physics:
+                                              const NeverScrollableScrollPhysics(),
+                                              children: [
+
+                                                Padding(
+                                                  padding:  EdgeInsets.symmetric(vertical: AppPadding.p12),
+                                                  child: Column(
+                                                    children: List.generate(
+                                                      2,
+                                                          (index) => Container(
+                                                        width: 60,
+                                                        height: 3,
+                                                        margin: const EdgeInsets
+                                                            .symmetric(vertical: 3),
+                                                        decoration: BoxDecoration(
+                                                          color: ColorManager
+                                                              .secondaryColor1,
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              2),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                TextSerachDoctor(
+                                                    s1:
+                                                    "ملاحظات المكتب العلمي ",
+                                                    s2: state
+                                                        .doctordetails[index].note
+                                                        .toString())
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: AppPadding.p10),
+                                  child: Column(
+                                    children: [
+                                      TextRach(
+                                          s1: "اسم المندوب: ",
+                                          s2: state.doctordetails[index].repName),
+                                      TextRach(
+                                          s1: "التاريخ: ",
+                                          s2: state.doctordetails[index].visitDate),
+
+                                    ],
+                                  ),
+                                ),
                               ),
                             ));
                       },

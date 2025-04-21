@@ -1458,7 +1458,6 @@ class UpdateReciRequest {
   String? brand_3;
   String? brand_4;
   String? create_date;
-  String? print_date;
 
   UpdateReciRequest(
     this.recipeId,
@@ -1471,8 +1470,7 @@ class UpdateReciRequest {
     this.address,
     this.phone,
     this.total,
-    this.create_date,
-    this.print_date, {
+    this.create_date, {
     this.note1,
     this.note2,
     this.flagImage1,
@@ -1487,7 +1485,7 @@ class UpdateReciRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      "recipeId": recipeId,
+      "reciId": recipeId,
       "recipeType": recipeType,
       "repId": repId,
       "type": type,
@@ -1498,7 +1496,7 @@ class UpdateReciRequest {
       "phone": phone,
       "total": total,
       "create_date": create_date,
-      "print_date": print_date,
+      "print_date": "0000-00-00",
       "note1": note1,
       "note2": note2,
       "flagImage1": flagImage1,
@@ -1509,6 +1507,7 @@ class UpdateReciRequest {
       "brand_2": brand_2,
       "brand_3": brand_3,
       "brand_4": brand_4,
+      "active": "1"
     };
   }
 }
@@ -1850,6 +1849,7 @@ class AllPlanBrandSp {
 
   AllPlanBrandSp(this.planBrandSps, this.amount);
 }
+
 class SpecPlan {
   String name;
   String amount;

@@ -2,7 +2,6 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/active_plan/widget/dialog_plan.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SaveSendBottom extends StatelessWidget {
   const SaveSendBottom({super.key});

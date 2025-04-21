@@ -16,6 +16,9 @@ class DoctorInfo  extends StatelessWidget {
       appBar: AppBar(
         title: Text("معلومات الطبيب"),
         centerTitle: true,
+        leading: IconButton(onPressed: (){
+          Navigator.pop(context);
+        }, icon:Icon( Icons.arrow_back_ios_new)),
       ),
       body: Stack(
         children: [
