@@ -1,0 +1,2 @@
+C:/Users/sedraal/Desktop/New folder/domina/repapp/android/app/.cxx/RelWithDebInfo/3430713z/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/sedraal/Desktop/New folder/domina/repapp/android/app/.cxx/RelWithDebInfo/3430713z/arm64-v8a/CMakeFiles/rebuild_cache.dir
