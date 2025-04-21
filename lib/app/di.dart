@@ -89,6 +89,7 @@ import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
+import 'package:domina_app/domain/usecase/remaining_visits_use_case.dart';
 import 'package:domina_app/domain/usecase/rep_plan_brand_sp_usecase.dart';
 import 'package:domina_app/domain/usecase/search_doctors_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
@@ -518,6 +519,10 @@ Future<void> initSeniorProfModule() async {
     instance
         .registerFactory<AllDoctorUsecase>(() => AllDoctorUsecase(instance()));
   }
+  if (!GetIt.I.isRegistered<RemainingVisitsUsecase>()) {
+    instance
+        .registerFactory<RemainingVisitsUsecase>(() => RemainingVisitsUsecase(instance()));
+  }
 
   if (!GetIt.I.isRegistered<AllNoVisitDoctorUsecase>()) {
     instance.registerFactory<AllNoVisitDoctorUsecase>(
@@ -538,6 +543,7 @@ Future<void> initSeniorProfModule() async {
           instance(),
           instance(),
           instance(),
+                instance(),
           instance()));
     }
   }

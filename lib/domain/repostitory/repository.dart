@@ -71,7 +71,7 @@ abstract class Repository {
   Future<Either<Failure, List<AllRepresentative>>> getReps(int id);
 
   Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(int repDet);
-
+  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(int repDet);
   Future<Either<Failure, List<DoctorIssueModel>>> getVisitIssue(int repDet);
 
   Future<Either<Failure, Message1Response>> insertLog(

@@ -93,6 +93,13 @@ class NoVisitDocEvent extends SeniorProfEvent{
   List<Object?> get props => [id];
 
 }
+class RemainingVisitsDocEvent extends SeniorProfEvent{
+  final  int id;
+  @override
+  RemainingVisitsDocEvent(this.id);
+  List<Object?> get props => [id];
+
+}
 class VisitDocEvent extends SeniorProfEvent{
   final  int id;
   @override

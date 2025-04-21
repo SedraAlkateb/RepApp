@@ -11,6 +11,7 @@ import 'package:domina_app/presentation/senior/representative/page/doctor_senioi
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/remaining_visits.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
@@ -64,6 +65,7 @@ class Routes {
   static const String seniorDoc = "/seniorDoc";
   static const String allBrand = "/allBrand";
   static const String noVisitDoctor = "/noVisitDoctor";
+   static const String remainingVisitsDoctor = "/remainingVisitsDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String EditingPlan = "/EditingPlan";
   static const String RepPlanBrandSp = "/RepPlanBrandSp";
@@ -163,6 +165,8 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
         return MaterialPageRoute(builder: (_) => NoVisitDoctor());
+         case Routes.remainingVisitsDoctor:
+        return MaterialPageRoute(builder: (_) => RemainingVisits());
       case Routes.senVisitDoctor:
         return MaterialPageRoute(builder: (_) => SenVisitDoctor());
       case Routes.EditingPlan:
