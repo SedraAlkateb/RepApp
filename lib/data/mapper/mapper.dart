@@ -717,6 +717,7 @@ extension NoVisitDocMapper on NoVisitDoctorResponse? {
       this?.rate ?? Constants.empty,
       this?.visits ?? Constants.empty,
         this?.remainingVisits ?? Constants.zero,
+          this?.doneVisits ?? Constants.empty,
     );
   }
 }

@@ -16,7 +16,8 @@ class SenVisitDoctor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  title: Text( 'عدد زيارات الأطباء الذين  تمت زيارتهم'),
+      appBar: AppBar(
+        title: Text('عدد زيارات الأطباء الذين  تمت زيارتهم'),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -118,29 +119,30 @@ class SenVisitDoctor extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
-                            Row(mainAxisAlignment: MainAxisAlignment.center,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                "الإختصاص :",
-                                style:
-                                Theme.of(context).textTheme.bodySmall,
-                              ),
+                                  "الإختصاص :",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
                                 Text(
                                   " ${visitDoc.spTitle} ",
                                   style: Theme.of(context).textTheme.titleSmall,
                                   textAlign: TextAlign.center,
                                 ),
                               ],
-                            ),  Row(mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Text(
-                                " تاريخ الزيارة :",
-                                style:
-                                Theme.of(context).textTheme.bodySmall,
-                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  " تاريخ الزيارة :",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
                                 Text(
                                   " 2-20-2025 ",
-                                  style:
-                                  Theme.of(context).textTheme.titleSmall,
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 ),
                               ],
                             ),
@@ -178,7 +180,7 @@ class SenVisitDoctor extends StatelessWidget {
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      " ${visitDoc.visits} ",
+                                      " ${visitDoc.doneVisits} ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,

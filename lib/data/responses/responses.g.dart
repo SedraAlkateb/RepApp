@@ -354,6 +354,7 @@ NoVisitDoctorResponse _$NoVisitDoctorResponseFromJson(
       json['rate'] as String?,
       json['visits'] as String?,
       (json['remainingVisits'] as num?)?.toInt(),
+      json['doneVisits'] as String?,
     );
 
 Map<String, dynamic> _$NoVisitDoctorResponseToJson(
@@ -365,6 +366,7 @@ Map<String, dynamic> _$NoVisitDoctorResponseToJson(
       'rate': instance.rate,
       'visits': instance.visits,
       'remainingVisits': instance.remainingVisits,
+      'doneVisits': instance.doneVisits,
     };
 
 AllNoVisitDoctorResponse _$AllNoVisitDoctorResponseFromJson(
