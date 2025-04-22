@@ -1328,7 +1328,10 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllRepresentativeBaseResponse> getReps(int id) async {
+  Future<AllRepresentativeBaseResponse> getReps(
+    int id,
+    int cityId,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -1336,6 +1339,10 @@ class _AppServiceClient implements AppServiceClient {
     _data.fields.add(MapEntry(
       'repDet',
       id.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'cityId',
+      cityId.toString(),
     ));
     final _options = _setStreamType<AllRepresentativeBaseResponse>(Options(
       method: 'POST',

@@ -61,7 +61,7 @@ class AllCitySenior extends StatelessWidget {
                 onTap: () {
                   initSeniorProfModule();
                   BlocProvider.of<SeniorRepsBloc>(context).add(
-                      AllSeniorRepEvent());
+                      AllSeniorRepEvent(cities[index].id));
                   Navigator.of(context).pushNamed(Routes.AllRepSenior);
                 },
                 child: Container(

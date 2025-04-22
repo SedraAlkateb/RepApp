@@ -8,8 +8,8 @@ import 'package:equatable/equatable.dart';
 class AllSeinor_Rep_Usecase extends Equatable {
  final Repository _repository;
   AllSeinor_Rep_Usecase(this._repository);
-  Future<Either<Failure, List<AllRepresentative>>> execute(int id) async{
-    return await _repository.getReps(id);
+  Future<Either<Failure, List<AllRepresentative>>> execute(int id,int cityId) async{
+    return await _repository.getReps(id,cityId);
   }
 
   @override

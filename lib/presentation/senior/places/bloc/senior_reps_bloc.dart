@@ -15,17 +15,25 @@ class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
   AllCityUsecase  allCityUsecase;
   List<AllRepresentative> allRepresentative = [];
   List<CityModel> cities=[];
+  int cityId=0;
   SeniorRepsBloc(this.allSeinor_Rep_Usecase,this.allCityUsecase) : super(SeniorRepsInitial())
   {
     on<SeniorRepsEvent>((event, emit) async {
       if (event is AllSeniorRepEvent) {
+        cityId=event.cityId;
         emit(AllSeniorRepLoadingState());
-        (await allSeinor_Rep_Usecase.execute(UserInfo.repId)).fold((failure) {
+        (await allSeinor_Rep_Usecase.execute(UserInfo.repId,cityId)).fold((failure) {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
-         data.sort((a, b) => b.number.compareTo(a.number));
-          allRepresentative=data;
-          emit(AllSeniorRepState(data));
+          if(data.isEmpty){
+            emit(AllSeniorRepEmptyState());
+          }else{
+            data.sort((a, b) => b.number.compareTo(a.number));
+            allRepresentative=data;
+
+            emit(AllSeniorRepState(data));
+          }
+
         });
       }
       if (event is AllCityEvent) {

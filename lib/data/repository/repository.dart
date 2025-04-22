@@ -807,10 +807,10 @@ class RepositoryImp implements Repository {
 
   //
   @override
-  Future<Either<Failure, List<AllRepresentative>>> getReps(int id) async {
+  Future<Either<Failure, List<AllRepresentative>>> getReps(int id,int cityId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getReps(id);
+        final response = await _remoteDataSource.getReps(id,cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

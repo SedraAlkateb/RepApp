@@ -148,6 +148,7 @@ class RouteGenerator {
                   id: 3,
                   repPlanId: 3,
                   index: 3,
+              cityId: 1,
                 ));
       case Routes.AllRepSenior:
         return MaterialPageRoute(builder: (_) => AllRepSenior());

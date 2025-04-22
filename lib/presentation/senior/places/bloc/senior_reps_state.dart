@@ -31,7 +31,12 @@ final class AllSeniorRepLoadingState extends SeniorRepsState {
   @override
   List<Object?> get props =>[];
 }
-
+final class AllSeniorRepEmptyState extends SeniorRepsState {
+  @override
+  AllSeniorRepEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
 final class AllCityState extends SeniorRepsState {
   final List<CityModel> cities;
   AllCityState(this.cities);
