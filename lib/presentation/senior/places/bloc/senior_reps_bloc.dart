@@ -33,6 +33,7 @@ class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
         (await allCityUsecase.execute()).fold((failure) {
           emit(AllCityErrorState(failure: failure));
         }, (data) async {
+          cities=data;
           emit(AllCityState(cities));
         });
       }
