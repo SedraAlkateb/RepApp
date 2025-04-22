@@ -7,7 +7,10 @@ class AllSeniorRepEvent extends SeniorRepsEvent {
   @override
   List<Object?> get props => [];
 }
-
+class AllCityEvent extends SeniorRepsEvent {
+  @override
+  List<Object?> get props => [];
+}
 class SenSearchRepEvent extends SeniorRepsEvent{
   final String contant;
   SenSearchRepEvent(this.contant);

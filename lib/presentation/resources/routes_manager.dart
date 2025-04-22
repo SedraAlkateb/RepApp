@@ -2,6 +2,7 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/Recipes/pages/all_recip.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/senior/places/pages/all_city_senior.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -58,6 +59,8 @@ class Routes {
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String AllRepSenior = "/AllRepSenior";
+  static const String cities = "/cities";
+
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
   static const String seniorSpec = "/seniorSpec";
@@ -147,8 +150,10 @@ class RouteGenerator {
                   index: 3,
                 ));
       case Routes.AllRepSenior:
-        initSeniorModule();
         return MaterialPageRoute(builder: (_) => AllRepSenior());
+      case Routes.cities:
+        initSeniorModule();
+        return MaterialPageRoute(builder: (_) => AllCitySenior());
 
       case Routes.seniorPlaces:
         return MaterialPageRoute(builder: (_) => PlaceSenior());
