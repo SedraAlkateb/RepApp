@@ -16,6 +16,7 @@ import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_brands_sp_usecase.dart';
+import 'package:domina_app/domain/usecase/all_city_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sql_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
@@ -553,7 +554,10 @@ Future<void> initSeniorModule() async {
   if (!GetIt.I.isRegistered<AllSeinor_Rep_Usecase>()) {
     instance.registerFactory<AllSeinor_Rep_Usecase>(
         () => AllSeinor_Rep_Usecase(instance()));
-    instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(instance()));
+    instance.registerFactory<AllCityUsecase>(
+            () => AllCityUsecase(instance()));
+
+    instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(instance(),instance()));
   }
 }
 

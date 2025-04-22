@@ -153,7 +153,9 @@ abstract class AppServiceClient {
   @POST("/admin/getReps.php")
   Future<AllRepresentativeBaseResponse> getReps(
     @Part(name: "repDet") int id,
-  );
+      @Part(name: "cityId") int cityId,
+
+      );
   @POST("/admin/getRepsFuture.php")
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
     @Part(name: "repDet") int id,
