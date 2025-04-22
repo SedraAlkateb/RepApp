@@ -2011,12 +2011,162 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> updateReci(UpdateReciRequest updateReq) async {
+  Future<Message1Response> updateReci(
+    int reciId,
+    int recipeType,
+    String repId,
+    String type,
+    String docId,
+    String spName,
+    String brand_1,
+    String address,
+    String phone,
+    String total,
+    String create_date, {
+    String? note1,
+    String? note2,
+    String? flagImage1,
+    String? flagImage2,
+    String? note_emp,
+    File? image1,
+    File? image2,
+    String? brand_2,
+    String? brand_3,
+    String? brand_4,
+    String? print_date,
+    String? active,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(updateReq.toJson());
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'reciId',
+      reciId.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'recipeType',
+      recipeType.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'repId',
+      repId,
+    ));
+    _data.fields.add(MapEntry(
+      'type',
+      type,
+    ));
+    _data.fields.add(MapEntry(
+      'docId',
+      docId,
+    ));
+    _data.fields.add(MapEntry(
+      'spName',
+      spName,
+    ));
+    _data.fields.add(MapEntry(
+      'brand_1',
+      brand_1,
+    ));
+    _data.fields.add(MapEntry(
+      'address',
+      address,
+    ));
+    _data.fields.add(MapEntry(
+      'phone',
+      phone,
+    ));
+    _data.fields.add(MapEntry(
+      'total',
+      total,
+    ));
+    _data.fields.add(MapEntry(
+      'create_date',
+      create_date,
+    ));
+    if (note1 != null) {
+      _data.fields.add(MapEntry(
+        'note1',
+        note1,
+      ));
+    }
+    if (note2 != null) {
+      _data.fields.add(MapEntry(
+        'note2',
+        note2,
+      ));
+    }
+    if (flagImage1 != null) {
+      _data.fields.add(MapEntry(
+        'flagImage1',
+        flagImage1,
+      ));
+    }
+    if (flagImage2 != null) {
+      _data.fields.add(MapEntry(
+        'flagImage2',
+        flagImage2,
+      ));
+    }
+    if (note_emp != null) {
+      _data.fields.add(MapEntry(
+        'note_emp',
+        note_emp,
+      ));
+    }
+    if (image1 != null) {
+      if (image1 != null) {
+        _data.files.add(MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
+    }
+    if (image2 != null) {
+      if (image2 != null) {
+        _data.files.add(MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
+          ),
+        ));
+      }
+    }
+    if (brand_2 != null) {
+      _data.fields.add(MapEntry(
+        'brand_2',
+        brand_2,
+      ));
+    }
+    if (brand_3 != null) {
+      _data.fields.add(MapEntry(
+        'brand_3',
+        brand_3,
+      ));
+    }
+    if (brand_4 != null) {
+      _data.fields.add(MapEntry(
+        'brand_4',
+        brand_4,
+      ));
+    }
+    if (print_date != null) {
+      _data.fields.add(MapEntry(
+        'print_date',
+        print_date,
+      ));
+    }
+    if (active != null) {
+      _data.fields.add(MapEntry(
+        'active',
+        active,
+      ));
+    }
     final _options = _setStreamType<Message1Response>(Options(
       method: 'POST',
       headers: _headers,
