@@ -910,8 +910,9 @@ class NoVisitDocModel {
   String rate;
   String? visits;
   int? remainingVisits;
+  String? doneVisits;
   NoVisitDocModel(
-      this.docTitle, this.spTitle, this.address, this.rate, this.visits , this.remainingVisits);
+      this.docTitle, this.spTitle, this.address, this.rate, this.visits , this.remainingVisits,this.doneVisits );
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -919,7 +920,8 @@ class NoVisitDocModel {
       'address': address,
       'rate': rate,
       "visits": visits,
-       "remainingVisits": remainingVisits,
+      "remainingVisits": remainingVisits,
+       "doneVisits": doneVisits,
     };
   }
 
@@ -931,6 +933,7 @@ class NoVisitDocModel {
       map['rate'],
       map["visits"],
       map["remainingVisits"],
+       map["totVisit"],
     );
   }
 }

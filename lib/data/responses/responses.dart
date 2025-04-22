@@ -348,8 +348,10 @@ class NoVisitDoctorResponse {
   String? visits;
   @JsonKey(name: "remainingVisits")
   int? remainingVisits;
+    @JsonKey(name: "doneVisits")
+  String? doneVisits;
   NoVisitDoctorResponse(
-      this.docTitle, this.spTitle, this.address, this.rate, this.visits, this.remainingVisits);
+      this.docTitle, this.spTitle, this.address, this.rate, this.visits, this.remainingVisits, this.doneVisits);
   factory NoVisitDoctorResponse.fromJson(Map<String, dynamic> json) =>
       _$NoVisitDoctorResponseFromJson(json);
   Map<String, dynamic> toJson() => _$NoVisitDoctorResponseToJson(this);
