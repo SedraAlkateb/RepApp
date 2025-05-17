@@ -24,7 +24,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   InsertReciUsecase insertReciUsecase;
   ReciNumUsecase reciNumUsecase;
   CopyReciUsecase copyReciUsecase;
-   GetRepReciUsecase getRepReciUsecase;
+  GetRepReciUsecase getRepReciUsecase;
   UpdateReciUsecase updateReciUsecase;
   AllReciUsecase allReciUsecase;
   int isChecked1 = 3;
@@ -79,7 +79,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
     final updatedUser = insertRecipesObject.copyWith(
         create_date: recipes.create_date,
         print_date: recipes.print_date,
-
         phone: recipes.phone,
         image2: (recipes.image2 != null) ? File(recipes.image2 ?? "") : null,
         image1: (recipes.image1 != null) ? File(recipes.image1 ?? "") : null,
@@ -114,8 +113,15 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       insertRecipesObject = updatedUser;
     }
   }
-  RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase, this.copyReciUsecase,this.updateReciUsecase,this.allReciUsecase, this.getRepReciUsecase)
+
+  RecipesBrandBloc(
+      this.allBrandsResUsecase,
+      this.insertReciUsecase,
+      this.reciNumUsecase,
+      this.copyReciUsecase,
+      this.updateReciUsecase,
+      this.allReciUsecase,
+      this.getRepReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllReciEvent) {
@@ -123,11 +129,10 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         (await allReciUsecase.execute(UserInfo.repId)).fold((failure) {
           emit(AllReciErrorState(failure: failure));
         }, (data) async {
-          if(data.isEmpty){
+          if (data.isEmpty) {
             emit(AllReciEmptyState());
-          }else{
+          } else {
             emit(AllReciState(data));
-
           }
         });
       }
@@ -151,10 +156,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           emit(RecipesRecipesState());
         });
       }
-          if (event is GetRepReciEvent) {
+      if (event is GetRepReciEvent) {
         emit(RecipesRecipesLoadingState());
-        (await getRepReciUsecase.execute(event.reciId)).fold(
-            (failure) {
+        (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
           print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
           emit(RecipesRecipesErrorState(failure: failure));
         }, (data) async {
@@ -279,9 +283,13 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
-            DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          flagImage1: isChecked1.toString(),
-          flagImage2: isChecked2.toString(),
+          DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          flagImage1: ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+              ? "1"
+              : "3"),
+          flagImage2: ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+              ? "1"
+              : "3"),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,
@@ -314,10 +322,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         insertRecipesObject = updatedUser;
         print(insertRecipesObject.image1);
         print(insertRecipesObject.image2);
-        (
-            await updateReciUsecase.execute
-          (
-            UpdateReciRequest(
+        (await updateReciUsecase.execute(UpdateReciRequest(
           event.reciId,
           2,
           insertRecipesObject.repId,
@@ -328,9 +333,13 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.address,
           insertRecipesObject.phone,
           insertRecipesObject.total,
-              DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          flagImage1: isChecked1.toString(),
-          flagImage2: isChecked2.toString(),
+          DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          flagImage1: ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+              ? "1"
+              : "3"),
+          flagImage2: ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+              ? "1"
+              : "3"),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,

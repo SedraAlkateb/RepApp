@@ -1,10 +1,7 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
-
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
       List<BrandModel> brands,
@@ -18,7 +15,6 @@ abstract class AppSqlApiAbs {
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
       {List<PlanBrandModel>? planBrands});
-
   /////////////////////////////////////////////////////////////////////////////////
   insertBrands(List<BrandModel> brands);
   insertHospitalSp(List<HospitalSpModel> hospitalSps);
@@ -28,7 +24,6 @@ abstract class AppSqlApiAbs {
   insertLogin(LoginModel loginModel);
   inserthospital(List<HospitalModel> hospitals);
   insertdoctor(List<DoctorModel> doctors);
-
   //////////////////////////////////Visit/////////////insert
   Future<void> insertVisitHospital(
       VisitHospitalModel visitHospitalModel, int hos, int spec);
@@ -45,7 +40,6 @@ abstract class AppSqlApiAbs {
       List<VisitBrandPharmacyModel> visitBrandPharmacyModels);
   insertVisitDoctor(VisitDoctorModel visitDoctorModel);
   insertVisitPharmacy(VisitPharmacyModel visitPharmacyModel);
-
   ///////////////////////////get
   Future<List<SpecDModel>> getSpec();
   Future<List<PlaceModel>> getPlace();
@@ -103,9 +97,7 @@ abstract class AppSqlApiAbs {
   Future<void> exceptionApi(ExceptionModel exceptionModel);
   Future<List<ExceptionModel>> allException();
   Future<NumVisit> numVisit();
-
 }
-
 class AppSqlApi extends AppSqlApiAbs {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
@@ -251,8 +243,7 @@ class AppSqlApi extends AppSqlApiAbs {
         for (int i = 0; i < maps.length; i++) {
           int specializationId = maps[i]['specialization_id'] as int;
           int sumDoctor = (maps[i]['sumDoctor'] ?? 0) as int;
-          int sumBrandHospital =
-              (maps1[i]['sumBrandHospital'] ?? 0) as int;
+          int sumBrandHospital = (maps1[i]['sumBrandHospital'] ?? 0) as int;
           int sumHospital = (maps1[i]['sumHospital'] ?? 0) as int;
           await txn.update(
             'specialization',
@@ -265,7 +256,6 @@ class AppSqlApi extends AppSqlApiAbs {
             whereArgs: [specializationId],
           );
         }
-
       });
       return "";
     } catch (error) {
@@ -468,12 +458,9 @@ class AppSqlApi extends AppSqlApiAbs {
         UserInfo.flag1 = 0;
       }
       return LoginModel.fromMap(results[0]);
-    }
-
-    else {
+    } else {
       return null;
     }
-
   }
 
   // Future<Map<String, dynamic>> fetchTotalSums(Database db) async {
@@ -1022,13 +1009,12 @@ class AppSqlApi extends AppSqlApiAbs {
     }
   }
 
-  Future<void> updateVisitDoctorFields({
-    required int id,
-    String? kaswn,
-    String? science,
-    String? target,
-    List<PharmacyBrandModel>? selectBrand
-  }) async {
+  Future<void> updateVisitDoctorFields(
+      {required int id,
+      String? kaswn,
+      String? science,
+      String? target,
+      List<PharmacyBrandModel>? selectBrand}) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
     if (kaswn != null) {
@@ -1063,13 +1049,12 @@ class AppSqlApi extends AppSqlApiAbs {
     }
   }
 
-  Future<void> updateVisitHospitalFields({
-    required int id,
-    String? kaswn,
-    String? science,
-    String? target,
-    List<PharmacyBrandModel>? selectBrand
-  }) async {
+  Future<void> updateVisitHospitalFields(
+      {required int id,
+      String? kaswn,
+      String? science,
+      String? target,
+      List<PharmacyBrandModel>? selectBrand}) async {
     Database? mydb = await databaseHelper.database;
     Map<String, dynamic> updates = {};
     if (kaswn != null) {
@@ -1104,6 +1089,7 @@ class AppSqlApi extends AppSqlApiAbs {
       }
     }
   }
+
   getPharmaciesVisit() async {
     final db = await databaseHelper.database;
     await db.transaction((txn) async {
@@ -1354,24 +1340,24 @@ class AppSqlApi extends AppSqlApiAbs {
             ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
                 UserInfo.samplesCount),
             (((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                UserInfo.samplesCount) +
-                ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
-                    UserInfo.samplesCount /
-                    4))
+                        UserInfo.samplesCount) +
+                    ((spPlan.sumDoctor + spPlan.sumBrandHospital) *
+                        UserInfo.samplesCount /
+                        4))
                 .toInt());
       }
       if (!(row['sumDoctor'] == 0 && row['sumBrandHospital'] == 0)) {
         SpMap[specializationId]!.brands.add(
-          OtherBrandModel(
-              row['brand_id'],
-              row['brand_title'] as String,
-              row['brand_phTitle'] as String,
-              0,
-              row['brand_sampleCost'],
-              row['plan_id'],
-              int.parse(row['amount']),
-              row['brandType']),
-        );
+              OtherBrandModel(
+                  row['brand_id'],
+                  row['brand_title'] as String,
+                  row['brand_phTitle'] as String,
+                  0,
+                  row['brand_sampleCost'],
+                  row['plan_id'],
+                  int.parse(row['amount']),
+                  row['brandType']),
+            );
       }
     }
 
@@ -1533,16 +1519,14 @@ class AppSqlApi extends AppSqlApiAbs {
   Future<NumVisit> numVisit() async {
     Database? mydb = await databaseHelper.database;
 
-    final List<Map<String, dynamic>> hospitalResult = await mydb.rawQuery(
-        '''SELECT COUNT(*) as count FROM visit_hospital'''
-    );
-    final List<Map<String, dynamic>> doctorResult = await mydb.rawQuery(
-        '''SELECT COUNT(*) as count FROM visit_doctor'''
-    );
+    final List<Map<String, dynamic>> hospitalResult =
+        await mydb.rawQuery('''SELECT COUNT(*) as count FROM visit_hospital''');
+    final List<Map<String, dynamic>> doctorResult =
+        await mydb.rawQuery('''SELECT COUNT(*) as count FROM visit_doctor''');
     int visitHospital = hospitalResult.first['count'] ?? 0;
-    int visitDoctor = doctorResult.isNotEmpty ? doctorResult.first['count'] ?? 0 : 0;
+    int visitDoctor =
+        doctorResult.isNotEmpty ? doctorResult.first['count'] ?? 0 : 0;
 
     return NumVisit(visitDoctor, visitHospital);
   }
-
 }

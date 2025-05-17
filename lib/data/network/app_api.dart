@@ -149,7 +149,7 @@ abstract class AppServiceClient {
   Future<CopyRecResponse> getRepReci(
     @Part(name: "reciId") int reciId,
   );
-
+ // 3981
   @POST("/admin/getReps.php")
   Future<AllRepresentativeBaseResponse> getReps(
     @Part(name: "repDet") int id,
@@ -248,7 +248,7 @@ abstract class AppServiceClient {
   }
   );
   
-    @POST("/getinfoPlanBrandsType.php")
+    @POST("/admin/getinfoPlanBrandsType.php")
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
       @Part(name: "repPlanId") int repPlanId,
       );

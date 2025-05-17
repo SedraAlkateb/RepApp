@@ -36,7 +36,7 @@ class RepProfile extends StatelessWidget {
       required this.id,
       required this.repPlanId,
       required this.index,
-        required this.cityId});
+      required this.cityId});
 
   @override
   Widget build(BuildContext context) {
@@ -310,7 +310,7 @@ class RepProfile extends StatelessWidget {
                         },
                         icon1: FontAwesomeIcons.table,
                         text: "تقرير الأطباء"),
-                                 Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: AppPadding.p14),
                       child: Divider(
@@ -318,26 +318,7 @@ class RepProfile extends StatelessWidget {
                         thickness: 0.8,
                       ),
                     ),
-                    RowList(
-                        function: () {
-                          initActivePlanModule();
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ActivePlanPage();
-                            },
-                          ));
-                          BlocProvider.of<ActivePlanBloc>(context)
-                              .add(GetActivePlanEvent(repPlan));
-                        },
-                        icon1: Icons.list_alt_outlined,
-                        text: "الخطة الفعالة"),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
+
                     RowList(
                         function: () {
                           initReportVisitDoctorModule();
@@ -358,6 +339,26 @@ class RepProfile extends StatelessWidget {
                         },
                         icon1: FontAwesomeIcons.table,
                         text: "تقرير المشافي"),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      child: Divider(
+                        color: ColorManager.secondaryColor6,
+                        thickness: 0.8,
+                      ),
+                    ),
+                    RowList(
+                        function: () {
+                          initActivePlanModule();
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return ActivePlanPage();
+                            },
+                          ));
+                          BlocProvider.of<ActivePlanBloc>(context)
+                              .add(GetActivePlanEvent(repPlan));
+                        },
+                        icon1: Icons.list_alt_outlined,
+                        text: "الخطة الفعالة"),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                       child: Divider(
@@ -390,7 +391,7 @@ class RepProfile extends StatelessWidget {
                         Navigator.pushNamed(context, Routes.noVisitDoctor);
                       },
                     ),
-                          Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
@@ -403,7 +404,8 @@ class RepProfile extends StatelessWidget {
                       function: () {
                         BlocProvider.of<SeniorProfBloc>(context)
                             .add(RemainingVisitsDocEvent(id));
-                        Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
+                        Navigator.pushNamed(
+                            context, Routes.remainingVisitsDoctor);
                       },
                     ),
                     Padding(

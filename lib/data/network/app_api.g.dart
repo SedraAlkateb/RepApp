@@ -2219,7 +2219,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/getinfoPlanBrandsType.php',
+          '/admin/getinfoPlanBrandsType.php',
           queryParameters: queryParameters,
           data: _data,
         )
