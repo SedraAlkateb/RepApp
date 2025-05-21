@@ -201,6 +201,7 @@ abstract class AppServiceClient {
       @Part(name: "repPlanId") int repPlanId,
       @Part(name: "userId") int userId,
       @Part(name: "type") int type,
+
       @Part(name: "flag") int flag);
 
   @POST("/admin/getRepVisitsHos.php")
@@ -220,7 +221,7 @@ abstract class AppServiceClient {
       );
   @POST("/reci/updateReci.php")
   Future<Message1Response> updateReci(@Body() UpdateReciRequest updateReq );
-  
+
     @POST("/getinfoPlanBrandsType.php")
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
       @Part(name: "repPlanId") int repPlanId,
