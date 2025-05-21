@@ -1,6 +1,5 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';

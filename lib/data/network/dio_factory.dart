@@ -10,50 +10,49 @@ import 'package:domina_app/data/network/error_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-const String APPLICATION_JSON="application/json";
-const String MULTIPART="multipart/form-data";
-const String CONTENT_TYPE="contentType";
-const String ACCEPT="accept";
-const String AUTHORIZATION="authorization";
-const String DEFAULT_LANGUAGE="lang";
+const String APPLICATION_JSON = "application/json";
+const String MULTIPART = "multipart/form-data";
+const String CONTENT_TYPE = "contentType";
+const String ACCEPT = "accept";
+const String AUTHORIZATION = "authorization";
+const String DEFAULT_LANGUAGE = "lang";
 
-class DioFactory{
+class DioFactory {
   DioFactory();
 
   Future<Dio> getDio() async {
-    Dio dio= Dio();
+    Dio dio = Dio();
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
-    String  to=UserInfo.token??"";
-    String token ="Bearer " + to;
-    String language ="ar";
-    Map<String,String> headers={
-      CONTENT_TYPE:MULTIPART,
-      ACCEPT:APPLICATION_JSON,
-      "X-Requested-With":"XMLHttpRequest",
-      AUTHORIZATION:token,
-      DEFAULT_LANGUAGE:language,
+    String to = UserInfo.token ?? "";
+    String token = "Bearer " + to;
+    String language = "ar";
+    Map<String, String> headers = {
+      CONTENT_TYPE: MULTIPART,
+      ACCEPT: APPLICATION_JSON,
+      "X-Requested-With": "XMLHttpRequest",
+      AUTHORIZATION: token,
+      DEFAULT_LANGUAGE: language,
       "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
     };
-    dio.options=BaseOptions(
-        baseUrl: Constants.baseUrl,
-        headers: headers,
+    dio.options = BaseOptions(
+      baseUrl: Constants.baseUrl,
+      headers: headers,
       connectTimeout: Duration(seconds: 50),
       receiveTimeout: Duration(seconds: 50),
     );
-    dio.interceptors.add( MyApiInterceptor());
-    if(!kReleaseMode){
+    dio.interceptors.add(MyApiInterceptor());
+    if (!kReleaseMode) {
       dio.interceptors.add(PrettyDioLogger(
-        requestHeader : true,
-        requestBody : true,
-        responseHeader : true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
       ));
-
     }
     return dio;
   }
@@ -62,27 +61,28 @@ class DioFactory{
 class MyApiInterceptor extends Interceptor {
   @override
   Future<void> onRequest(
-      RequestOptions options,
-      RequestInterceptorHandler handler,
-      ) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Add the token to the request headers
 
-    String? authToken =UserInfo.token;
-    String lang ="en";
+    String? authToken = UserInfo.token;
+    String lang = "en";
 
     if (authToken != null) {
-      options.headers['Authorization'] ="Bearer ${authToken}" ;
-      options.headers['lang'] =lang;
+      options.headers['Authorization'] = "Bearer ${authToken}";
+      options.headers['lang'] = lang;
 
       print(authToken);
     }
     return handler.next(options);
   }
+
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     debugPrint(
         'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
-    if (err.response?.statusCode ==ResponseCode.UNAUTORISED ) {
+    if (err.response?.statusCode == ResponseCode.UNAUTORISED) {
       // UserModel? authenticatedUser =
       //     await authLocalDataSource.getSavedLoginCredentials();
       // if (authenticatedUser != null) {
@@ -95,7 +95,8 @@ class MyApiInterceptor extends Interceptor {
     }
     super.onError(err, handler);
   }
-  final Dio client =Dio();
+
+  final Dio client = Dio();
 
   // Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
   //   final options = Options(

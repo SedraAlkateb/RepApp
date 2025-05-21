@@ -520,6 +520,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                   doctorNoteModel.visitDate,
                                             ),
                                             TextInfo(
+                                              title: "الأهداف",
+                                              supTitle: doctorNoteModel.target,
+                                            ),
+                                            TextInfo(
                                               title: "ملاحظات المكتب العلمي",
                                               supTitle: doctorNoteModel.note,
                                             ),

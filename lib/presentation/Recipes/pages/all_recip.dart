@@ -126,12 +126,15 @@ class AllRecip extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    recis[index].recipeType=="2"?
                                     TextRach(
-                                        s1: "اسم الطبيب: ",
+                                        s1: "أسم المشفى : ",
+                                        s2: recis[index].docName ?? ""):TextRach(
+                                        s1: "أسم الطبيب : ",
                                         s2: recis[index].docName ?? ""),
-                                    TextRach(
-                                        s1: "الملاحظة: ",
-                                        s2: recis[index].note_emp ?? ""),
+                                    // TextRach(
+                                    //     s1: "الملاحظة: ",
+                                    //     s2: recis[index].note_emp ?? ""),
                                     TextRach(
                                         s1: "المجموع: ",
                                         s2: recis[index].total ?? ""),
