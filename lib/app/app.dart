@@ -104,7 +104,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SeniorRepsBloc>(
           create: (context) {
             final bloc = instance<SeniorRepsBloc>();
-            bloc.add(AllSeniorRepEvent());
+            bloc.add(AllCityEvent());
             //   bloc.add(AllNumEvent());
             return bloc;
           },

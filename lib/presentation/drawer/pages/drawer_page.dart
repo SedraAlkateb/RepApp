@@ -197,7 +197,7 @@ class DrawerPage extends StatelessWidget {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        Routes.AllRepSenior,
+                        Routes.cities,
                         (route) => false,
                       );
                     });

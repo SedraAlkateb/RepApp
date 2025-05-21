@@ -13,28 +13,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllRepSenior extends StatelessWidget {
   AllRepSenior({super.key});
-
   final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerPage(),
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.menu,
-                color: ColorManager.secondaryColor1,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
         title: Text('تقارير المندوبين'),
       ),
       body: bodyBuild(context),
@@ -58,10 +42,13 @@ class AllRepSenior extends StatelessWidget {
              if (state is AllSeniorRepLoadingState) {
             return loadingFullScreen(context);
             }
+            if (state is AllSeniorRepEmptyState) {
+              return emptyFullScreen(context);
+            }
             else if (state is AllSeniorRepErrorState) {
             return errorFullScreen(context,
             func: () => BlocProvider.of<SeniorRepsBloc>(context)
-                .add(AllSeniorRepEvent()));
+                .add(AllSeniorRepEvent(BlocProvider.of<SeniorRepsBloc>(context).cityId)));
             }
           else  if (state is AllSeniorRepState) {
               allRepresentative = state.representatives;
@@ -82,7 +69,8 @@ class AllRepSenior extends StatelessWidget {
                                 index: index,
                                   repPlanId:
                                       allRepresentative[index].activePlan,
-                                  id: allRepresentative[index].id);
+                                  id: allRepresentative[index].id,
+                              cityId: BlocProvider.of<SeniorRepsBloc>(context).cityId,);
                             },
                           ));
                         },

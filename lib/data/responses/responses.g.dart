@@ -607,13 +607,13 @@ Map<String, dynamic> _$AllSpcBaseResponseToJson(AllSpcBaseResponse instance) =>
 
 CityResponse _$CityResponseFromJson(Map<String, dynamic> json) => CityResponse(
       json['id'] as String?,
-      json['name'] as String?,
+      json['title'] as String?,
     );
 
 Map<String, dynamic> _$CityResponseToJson(CityResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
+      'title': instance.name,
     };
 
 AllCityResponse _$AllCityResponseFromJson(Map<String, dynamic> json) =>

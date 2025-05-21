@@ -153,7 +153,9 @@ abstract class AppServiceClient {
   @POST("/admin/getReps.php")
   Future<AllRepresentativeBaseResponse> getReps(
     @Part(name: "repDet") int id,
-  );
+      @Part(name: "cityId") int cityId,
+
+      );
   @POST("/admin/getRepsFuture.php")
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
     @Part(name: "repDet") int id,
@@ -220,8 +222,33 @@ abstract class AppServiceClient {
       @Part(name: "docId") int docId,
       );
   @POST("/reci/updateReci.php")
-  Future<Message1Response> updateReci(@Body() UpdateReciRequest updateReq );
-
+  Future<Message1Response> updateReci(
+  @Part(name: "reciId") int reciId,
+  @Part(name: "recipeType") int recipeType,
+  @Part(name: "repId") String repId,
+  @Part(name: "type") String type,
+  @Part(name: "docId") String docId,
+  @Part(name: "spName") String spName,
+  @Part(name: "brand_1") String brand_1,
+  @Part(name: "address") String address,
+  @Part(name: "phone") String phone,
+  @Part(name: "total") String total,
+  @Part(name: "create_date") String create_date,{
+  @Part(name: "note1") String? note1,
+  @Part(name: "note2") String? note2,
+  @Part(name: "flagImage1") String? flagImage1,
+  @Part(name: "flagImage2") String? flagImage2,
+  @Part(name: "note_emp") String? note_emp,
+  @Part(name: "image1") File? image1,
+  @Part(name: "image2") File? image2,
+  @Part(name: "brand_2") String? brand_2,
+  @Part(name: "brand_3") String? brand_3,
+  @Part(name: "brand_4") String? brand_4,
+  @Part(name: "print_date") String? print_date,
+  @Part(name: "active") String? active,
+  }
+  );
+  
     @POST("/getinfoPlanBrandsType.php")
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
       @Part(name: "repPlanId") int repPlanId,

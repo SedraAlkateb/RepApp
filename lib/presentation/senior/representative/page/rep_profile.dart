@@ -30,16 +30,18 @@ class RepProfile extends StatelessWidget {
   final int id;
   final int repPlanId;
   final int index;
+  final cityId;
   const RepProfile(
       {super.key,
       required this.id,
       required this.repPlanId,
-      required this.index});
+      required this.index,
+        required this.cityId});
 
   @override
   Widget build(BuildContext context) {
     Future<bool> _onWillPop() async {
-      BlocProvider.of<SeniorRepsBloc>(context).add(AllSeniorRepEvent());
+      BlocProvider.of<SeniorRepsBloc>(context).add(AllSeniorRepEvent(cityId));
       return true;
     }
 

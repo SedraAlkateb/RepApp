@@ -1463,7 +1463,7 @@ class UpdateReciRequest {
   String? brand_2;
   String? brand_3;
   String? brand_4;
-  String? create_date;
+  String create_date;
 
   UpdateReciRequest(
     this.recipeId,

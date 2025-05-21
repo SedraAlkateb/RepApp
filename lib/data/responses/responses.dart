@@ -550,7 +550,7 @@ class AllSpcBaseResponse extends BaseResponse {
 class CityResponse {
   @JsonKey(name: "id")
   String? id;
-  @JsonKey(name: "name")
+  @JsonKey(name: "title")
   String? name;
   CityResponse(this.id, this.name);
   // from json
