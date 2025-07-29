@@ -1,5 +1,6 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/main.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
@@ -196,6 +197,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<AsyncBloc>()),
       ],
       child: MaterialApp(
+          navigatorKey: navigatorKey,
         locale: Locale('ar'),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

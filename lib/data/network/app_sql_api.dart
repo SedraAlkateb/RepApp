@@ -109,7 +109,8 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var brand in brands) {
-      batch.insert('brand', brand.toMap());
+      batch.insert('brand', brand.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,);
     }
     await batch.commit(noResult: true);
   }
@@ -132,35 +133,39 @@ class AppSqlApi extends AppSqlApiAbs {
         Batch batch = txn.batch();
         await txn.execute("PRAGMA foreign_keys = OFF");
         for (var place in places) {
-          batch.insert('place', place.toMap());
+          batch.insert('place', place.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace, );
         }
         for (var doctor in doctors) {
-          batch.insert('doctor', doctor.toMap());
+          batch.insert('doctor', doctor.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
         }
         for (var hospital in hospitals) {
-          batch.insert('hospital', hospital.toMap());
+          batch.insert('hospital', hospital.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
         }
         for (var brand in brands) {
-          batch.insert('brand', brand.toMap());
+          batch.insert('brand', brand.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,);
         }
         // for (var pharmacy in pharmacies) {
         //   batch.insert('pharmacy', pharmacy.toMap());
         // }
         for (var spec in specs) {
-          batch.insert('specialization', spec.toMap());
+          batch.insert('specialization', spec.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
         }
         for (var hospitalSp in hospitalSps) {
-          batch.insert('hospitalSp', hospitalSp.toMap());
+          batch.insert('hospitalSp', hospitalSp.toMap(),
+  conflictAlgorithm: ConflictAlgorithm.replace,);
         }
         for (var brandSp in brandSps) {
-          batch.insert('brandSp', brandSp.toMap());
+          batch.insert('brandSp', brandSp.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,);
         }
         if (planBrands != null && planBrands.isNotEmpty) {
           for (var planBrand in planBrands) {
             batch.insert(
               'planBrand',
               planBrand.toMap(),
-              conflictAlgorithm: ConflictAlgorithm.abort,
+            
+  conflictAlgorithm: ConflictAlgorithm.replace,
             );
           }
         }
@@ -287,7 +292,12 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var place in places) {
-      batch.insert('place', place.toMap());
+  batch.insert(
+  'place',
+  place.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,
+);
+      
     }
     await batch.commit(noResult: true);
   }
@@ -296,7 +306,7 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var spec in specs) {
-      batch.insert('specialization', spec.toMap());
+      batch.insert('specialization', spec.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
     }
     await batch.commit(noResult: true);
   }
@@ -535,7 +545,7 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var doctor in doctors) {
-      batch.insert('doctor', doctor.toMap());
+      batch.insert('doctor', doctor.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
     }
     await batch.commit(noResult: true);
   }
@@ -554,7 +564,7 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var hospital in hospitals) {
-      batch.insert('hospital', hospital.toMap());
+      batch.insert('hospital', hospital.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
     }
     await batch.commit(noResult: true);
   }
@@ -1529,4 +1539,25 @@ class AppSqlApi extends AppSqlApiAbs {
 
     return NumVisit(visitDoctor, visitHospital);
   }
+
+    Future<List<String>> getAllTableNames() async {
+    Database? mydb = await databaseHelper.database;
+  final tables = await mydb.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+  return tables.map((t) => t['name'] as String).toList();
+}
+Future<void> printAllTables() async {
+    Database? mydb = await databaseHelper.database;
+  final tableNames = await getAllTableNames();
+  
+  for (final table in tableNames) {
+    final data = await mydb.query(table);
+    print("📌 محتوى جدول $table:");
+    for (final row in data) {
+      print(row);
+    }
+    print("──────────────────────────────");
+  }
+}
+
 }
