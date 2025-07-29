@@ -77,7 +77,7 @@ class AlarmAndNotifications {
     await flutterLocalNotificationsPlugin.show(
       1,
       '🔔 تذكير - شركة دومِنا',
-      'يرجى فتح التطبيق لمزامنة ورفع الزيارات والمعلومات .',
+      'يرجى  مزامنة ورفع الزيارات والمعلومات .',
       notificationDetails,
       payload: 'go_to_sync',
     );

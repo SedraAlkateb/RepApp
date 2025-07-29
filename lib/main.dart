@@ -3,8 +3,6 @@ import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/app_sql_api.dart';
-import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
@@ -34,7 +32,7 @@ Future<void> _showEndDateNotification() async {
   await flutterLocalNotificationsPlugin.show(
     2,
     'شركة دومِنا',
-    'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
+    'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ',
     platformChannelSpecifics,
     payload: 'end_date_notification',
   );
@@ -115,14 +113,14 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 @pragma('vm:entry-point')
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    final dbHelper = DatabaseHelper(); 
-  final appSqlApi = AppSqlApi(dbHelper);
-  await appSqlApi.printAllTables();
+  //   final dbHelper = DatabaseHelper();
+  // final appSqlApi = AppSqlApi(dbHelper);
+  // await appSqlApi.printAllTables();
   await initAppModule();
   await _initNotifications();
-  AlarmAndNotifications.showNotification();
-  await requestNotificationPermission();
   await sss();
+  await requestNotificationPermission();
+  AlarmAndNotifications.showNotification();
   //initializeTimeZones();
   runApp(Phoenix(child: const MyApp()));
 }
@@ -137,8 +135,8 @@ Future<void> _initNotifications() async {
     initializationSettings,
   );
   await AlarmAndNotifications.initialize();
- // await AlarmAndNotifications.schedulePeriodicNotification();
- await AlarmAndNotifications.scheduleOneShot();
+  // await AlarmAndNotifications.schedulePeriodicNotification();
+  await AlarmAndNotifications.scheduleOneShot();
 }
 
 class MyHttpOverrides extends HttpOverrides {
