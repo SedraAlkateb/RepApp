@@ -1,6 +1,5 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/main.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
@@ -197,7 +196,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<AsyncBloc>()),
       ],
       child: MaterialApp(
-          navigatorKey: navigatorKey,
+        //  navigatorKey: navigatorKey,
         locale: Locale('ar'),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -210,17 +209,30 @@ class _MyAppState extends State<MyApp> {
         },
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: UserInfo.isLogging == 0
-            ? Routes.login
-            : UserInfo.isLogging == 1
-                ? Routes.syncData
-                : UserInfo.isLogging == 4
-                    ? (Routes.syncData)
-                    : UserInfo.isLogging == 5
-                        ? Routes.asyncIn
-                        : Routes.places,
+        initialRoute: _getInitialRoute()
+
+        //  UserInfo.isLogging == 0
+        //     ? Routes.login
+        //     : UserInfo.isLogging == 1
+        //         ? Routes.syncData
+        //         : UserInfo.isLogging == 4
+        //             ? (Routes.syncData)
+        //             : UserInfo.isLogging == 5
+        //                 ? Routes.asyncIn
+        //                 : Routes.places,
+
+        ,
         theme: getApplicationTheme(),
       ),
     );
   }
+}
+
+String _getInitialRoute() {
+  if (UserInfo.isLogging == 0) return Routes.login;
+  if (UserInfo.isLogging == 1) return Routes.syncData;
+  if (UserInfo.isLogging == 4) return Routes.syncData;
+  if (UserInfo.isLogging == 5) return Routes.asyncIn;
+  if (UserInfo.isLogging == 2) return Routes.places;
+  return Routes.places;
 }

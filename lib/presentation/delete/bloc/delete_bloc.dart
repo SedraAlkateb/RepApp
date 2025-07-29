@@ -15,7 +15,8 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
   DeleteAllSqlUsecase deleteAllSqlUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
 
-  DeleteBloc(this.deleteAllSqlUsecase, this.deleteSqlUsecase,this.editIsLoginSqlUsecase)
+  DeleteBloc(this.deleteAllSqlUsecase, this.deleteSqlUsecase,
+      this.editIsLoginSqlUsecase)
       : super(DeleteInitial()) {
     on<DeleteEvent>((event, emit) async {
       if (event is DeleteBaseEvent) {
@@ -35,13 +36,12 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
           UserInfo.flag1 = 0;
           emit(DeleteAllState());
         });
-      }
-      else if (event is Edit1EventIn) {
+      } else if (event is Edit1EventIn) {
         (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
-                (failure) {
-              emit(Edit1StatusSErrorState(failure: failure));
-              return false;
-            }, (data) async {
+            (failure) {
+          emit(Edit1StatusSErrorState(failure: failure));
+          return false;
+        }, (data) async {
           UserInfo.isLogging = event.num;
           emit(Edit1StatusState());
         });
