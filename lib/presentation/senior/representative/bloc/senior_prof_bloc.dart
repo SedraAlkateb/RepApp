@@ -9,6 +9,7 @@ import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/info_rep_usecase.dart';
+import 'package:domina_app/domain/usecase/remaining_visits_use_case.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -25,11 +26,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   InfoRepUsecase infoRepUsecase;
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
+    RemainingVisitsUsecase remainingVisitsUsecase;
   List<SpecDModel> specialization = [];
   List<HospitalModel> hospital = [];
   List<BrandModel> brand = [];
 
   List<NoVisitDocModel> noVisitDoc = [];
+  
+  List<NoVisitDocModel> remainingVisits = [];
   List<NoVisitDocModel> visitDoc = [];
 
   List<DoctorModel> doctor = [];
@@ -39,6 +43,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       this.allDoctorUsecase,
       this.allHospitalUsecase,
       this.allNoVisitDoctorUsecase,
+      this.remainingVisitsUsecase, 
       this.allSenVisitDoctorUsecase,
       this.infoRepUsecase,this.allBrandsUsecase)
       : super(SeniorProfInitial()) {
@@ -195,6 +200,19 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           emit(SenNoVisitDocErrorState(failure: failure));
         }, (data) async {
           noVisitDoc = data;
+          if (data.isEmpty) {
+            emit(SenNoVisitDocEmptyState());
+          } else {
+            emit(SenNoVisitDocsState(data));
+          }
+        });
+      }
+      else if (event is RemainingVisitsDocEvent) {
+        emit(SenNoVisitDocLoadingState());
+        (await remainingVisitsUsecase.execute(event.id)).fold((failure) {
+          emit(SenNoVisitDocErrorState(failure: failure));
+        }, (data) async {
+          remainingVisits = data;
           if (data.isEmpty) {
             emit(SenNoVisitDocEmptyState());
           } else {

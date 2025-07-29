@@ -1,6 +1,5 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
@@ -14,25 +13,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AllRepSenior extends StatelessWidget {
   AllRepSenior({super.key});
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerPage(),
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.menu,
-                color: ColorManager.secondaryColor1,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
         title: Text('تقارير المندوبين'),
       ),
       body: bodyBuild(context),
@@ -53,9 +38,21 @@ class AllRepSenior extends StatelessWidget {
           builder: (context, state) {
             List<AllRepresentative> allRepresentative =
                 context.watch<SeniorRepsBloc>().allRepresentative;
-            if (state is AllSeniorRepState) {
+             if (state is AllSeniorRepLoadingState) {
+            return loadingFullScreen(context);
+            }
+            if (state is AllSeniorRepEmptyState) {
+              return emptyFullScreen(context);
+            }
+            else if (state is AllSeniorRepErrorState) {
+            return errorFullScreen(context,
+            func: () => BlocProvider.of<SeniorRepsBloc>(context)
+                .add(AllSeniorRepEvent(BlocProvider.of<SeniorRepsBloc>(context).cityId)));
+            }
+          else  if (state is AllSeniorRepState) {
               allRepresentative = state.representatives;
-              return Expanded(
+            }
+            return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ListView.builder(
@@ -68,7 +65,11 @@ class AllRepSenior extends StatelessWidget {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
                               return RepProfile(
-                                  id: allRepresentative[index].id);
+                                index: index,
+                                  repPlanId:
+                                      allRepresentative[index].activePlan,
+                                  id: allRepresentative[index].id,
+                              cityId: BlocProvider.of<SeniorRepsBloc>(context).cityId,);
                             },
                           ));
                         },
@@ -77,7 +78,7 @@ class AllRepSenior extends StatelessWidget {
                           padding: EdgeInsets.all(AppPadding.p16),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                            //  ColorManager.secondaryColor6,
+                              //  ColorManager.secondaryColor6,
                               ColorManager.secondaryColor7,
                               ColorManager.secondaryColor7,
                               ColorManager.secondaryColor7,
@@ -107,15 +108,7 @@ class AllRepSenior extends StatelessWidget {
                   ),
                 ),
               );
-            }
-            else if (state is AllSeniorRepLoadingState) {
-              return loadingFullScreen(context);
-            } else if (state is AllSeniorRepErrorState) {
-              return errorFullScreen(context,
-                  func: () => BlocProvider.of<SeniorRepsBloc>(context)
-                      .add(AllSeniorRepEvent()));
-            }
-            return SizedBox();
+
           },
         ),
       ],

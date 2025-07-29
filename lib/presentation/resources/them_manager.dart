@@ -7,8 +7,8 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 //presentation
 ThemeData getApplicationTheme() {
   return ThemeData(
-    fontFamily: 'Amiri',
-    tabBarTheme: TabBarTheme(
+    fontFamily: 'Almarai',
+    tabBarTheme: TabBarThemeData(
         labelColor: ColorManager.white,
         indicatorColor: ColorManager.secondaryColor1,
         unselectedLabelColor: ColorManager.secondaryColor1
@@ -21,7 +21,7 @@ ThemeData getApplicationTheme() {
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: ColorManager.primaryField,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       shadowColor: ColorManager.shadowCard,
       elevation: AppSize.s4,
       shape: RoundedRectangleBorder(
@@ -47,12 +47,12 @@ ThemeData getApplicationTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p28, vertical: AppPadding.p5),
+        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20, vertical: AppPadding.p5),
         textStyle: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s20),
         shadowColor: ColorManager.shadow1,
         backgroundColor: ColorManager.secondaryColor1,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSize.s20),
+          borderRadius: BorderRadius.circular(AppSize.s14),
         ),
       ),
     ),

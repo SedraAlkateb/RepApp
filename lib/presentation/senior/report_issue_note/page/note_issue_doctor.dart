@@ -9,9 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NoteIssueDoctor extends StatelessWidget {
-  NoteIssueDoctor({super.key,required this.id});
+  NoteIssueDoctor({super.key, required this.id});
   final int id;
-  final TextEditingController searchIssueDoctorController = TextEditingController();
+  final TextEditingController searchIssueDoctorController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,38 +58,33 @@ class NoteIssueDoctor extends StatelessWidget {
                 if (state is SenAllNoteDoctorEmptyState) {
                   return SliverList(
                       delegate: SliverChildListDelegate([
-                        SizedBox(
-                          height: 100,
-                        ),
-                        emptyFullScreen(context)
-                      ]));
+                    SizedBox(
+                      height: 100,
+                    ),
+                    emptyFullScreen(context)
+                  ]));
                 }
-                if(state is SenAsReadState){
-
+                if (state is SenAsReadState) {
                   doctorIssueModel = state.doctorIssueModel;
                 }
                 if (state is SenAllNoteDoctorsState) {
                   doctorIssueModel = state.doctorIssueModel;
                 }
-                if(state is SenAllNoteDoctorLoadingState){
-                  return
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        loadingFullScreen(context)
-                      ]),
-                    );
+                if (state is SenAllNoteDoctorLoadingState) {
+                  return SliverList(
+                    delegate:
+                        SliverChildListDelegate([loadingFullScreen(context)]),
+                  );
                 }
-                if(state is SenAllNoteDoctorErrorState){
-                  return
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        errorFullScreen(context,
-                            func: (){
-                              BlocProvider.of<ReportIssueBloc>(context).add(SenAllIssueDoctorEvent(id));
-                            }
-                        )
-                      ]),
-                    );
+                if (state is SenAllNoteDoctorErrorState) {
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      errorFullScreen(context, func: () {
+                        BlocProvider.of<ReportIssueBloc>(context)
+                            .add(SenAllIssueDoctorEvent(id));
+                      })
+                    ]),
+                  );
                 }
                 return SliverList(
                   delegate: SliverChildListDelegate([
@@ -105,53 +101,49 @@ class NoteIssueDoctor extends StatelessWidget {
                     ),
                     // القائمة
                     ...doctorIssueModel.asMap().entries.map((entry) {
-                      final index = entry.key;
                       final doctorNoteModel = entry.value;
-                      return  Container(
+                      return Container(
                         margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.symmetric(horizontal:  AppPadding.p8),
-                        decoration:
-                        doctorNoteModel.isRead?
-                        BoxDecoration(
-                          border: Border.all(color: ColorManager.secondaryColor18),
-
-                          color: ColorManager.secondaryColor7,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s14)),
-                        ):
-                        BoxDecoration(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: AppPadding.p8),
+                        decoration: BoxDecoration(
                           color: ColorManager.white,
                           border: Border.all(color: ColorManager.hintGrey),
                           borderRadius:
-                          BorderRadius.all(Radius.circular(AppSize.s14)),
+                              BorderRadius.all(Radius.circular(AppSize.s14)),
                         ),
                         child: Column(
                           children: [
                             InkWell(
-
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     doctorNoteModel.docTitle,
-                                    style:  doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
+                                    style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "${doctorNoteModel.address}",
-                                    style: doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
+                                    style:Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
                                           Text(
                                             " التاريخ :",
-                                            style:
-                                            Theme.of(context).textTheme.bodySmall,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
                                           ),
                                           Text(
                                             "${doctorNoteModel.visitDate}",
@@ -168,8 +160,9 @@ class NoteIssueDoctor extends StatelessWidget {
                                         children: [
                                           Text(
                                             "الإختصاص :",
-                                            style:
-                                            Theme.of(context).textTheme.bodySmall,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
                                           ),
                                           Text(
                                             "${doctorNoteModel.spTitle}",
@@ -179,37 +172,37 @@ class NoteIssueDoctor extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-
                                     ],
                                   ),
-                                  SizedBox(height:20,),
-                                  Row(mainAxisAlignment: MainAxisAlignment.center,
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                      "الملاحظات :",
-                                      style:
-                                      Theme.of(context).textTheme.bodySmall,
-                                    ),
+                                        "الملاحظات :",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
+                                      ),
                                       Expanded(
                                         child: Text(
-                                          "${doctorNoteModel.issue}",
-                                          style: doctorNoteModel.isRead? Theme.of(context).textTheme.titleSmall: Theme.of(context).textTheme.labelLarge,
-                                          textAlign: TextAlign.center,
+                                          textAlign: TextAlign.start,
+                                          " ${doctorNoteModel.issue} ",
+                                          style:
+                                          Theme.of(context)
+                                                  .textTheme
+
+                                                  .bodySmall
+                                          ,
+
                                         ),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-
-                            ),
-                            Align(
-                              child: IconButton(onPressed: (){
-                                BlocProvider.of<ReportIssueBloc>(context).
-                                add(ChangeReadIssueNoteEvent(index, !doctorNoteModel.isRead));
-                              }, icon: Icon(Icons.book_outlined)),
-                              alignment: Alignment.bottomLeft,
-
                             ),
                           ],
                         ),

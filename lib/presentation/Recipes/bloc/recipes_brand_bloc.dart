@@ -3,10 +3,14 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
+import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
+import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
 import 'package:domina_app/presentation/common/freezed_data.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'dart:io';
@@ -20,6 +24,9 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   InsertReciUsecase insertReciUsecase;
   ReciNumUsecase reciNumUsecase;
   CopyReciUsecase copyReciUsecase;
+  GetRepReciUsecase getRepReciUsecase;
+  UpdateReciUsecase updateReciUsecase;
+  AllReciUsecase allReciUsecase;
   int isChecked1 = 3;
   int isChecked2 = 3;
   final _picker = ImagePicker();
@@ -37,6 +44,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       "note1",
       'note2',
       "note_emp",
+      "",
+      "",
       null,
       null,
       null,
@@ -68,6 +77,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
 
   void updateRecipes(CopyReciRequest recipes) {
     final updatedUser = insertRecipesObject.copyWith(
+        create_date: recipes.create_date,
+        print_date: recipes.print_date,
         phone: recipes.phone,
         image2: (recipes.image2 != null) ? File(recipes.image2 ?? "") : null,
         image1: (recipes.image1 != null) ? File(recipes.image1 ?? "") : null,
@@ -103,10 +114,28 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
     }
   }
 
-  RecipesBrandBloc(this.allBrandsResUsecase, this.insertReciUsecase,
-      this.reciNumUsecase, this.copyReciUsecase)
+  RecipesBrandBloc(
+      this.allBrandsResUsecase,
+      this.insertReciUsecase,
+      this.reciNumUsecase,
+      this.copyReciUsecase,
+      this.updateReciUsecase,
+      this.allReciUsecase,
+      this.getRepReciUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
+      if (event is AllReciEvent) {
+        emit(AllReciLoadingState());
+        (await allReciUsecase.execute(UserInfo.repId)).fold((failure) {
+          emit(AllReciErrorState(failure: failure));
+        }, (data) async {
+          if (data.isEmpty) {
+            emit(AllReciEmptyState());
+          } else {
+            emit(AllReciState(data));
+          }
+        });
+      }
       if (event is AllRecipesEvent) {
         emit(AllRecipesLoadingState());
         (await allBrandsResUsecase.execute(UserInfo.repId)).fold((failure) {
@@ -120,6 +149,16 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         emit(RecipesRecipesLoadingState());
         (await copyReciUsecase.execute(event.docId, event.recipeType)).fold(
             (failure) {
+          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+          emit(RecipesRecipesErrorState(failure: failure));
+        }, (data) async {
+          updateRecipes(data);
+          emit(RecipesRecipesState());
+        });
+      }
+      if (event is GetRepReciEvent) {
+        emit(RecipesRecipesLoadingState());
+        (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
           print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
           emit(RecipesRecipesErrorState(failure: failure));
         }, (data) async {
@@ -203,6 +242,104 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.total,
           flagImage1: isChecked1.toString(),
           flagImage2: isChecked2.toString(),
+          note_emp: insertRecipesObject.note_emp,
+          note2: insertRecipesObject.note2,
+          note1: insertRecipesObject.note1,
+          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+          brand_2: insertRecipesObject.brand_2?.id.toString(),
+          brand_3: insertRecipesObject.brand_3?.id.toString(),
+          brand_4: insertRecipesObject.brand_4?.id.toString(),
+          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+          //      flag1: isChecked1,
+          //    flag2: isChecked2
+        )))
+            .fold((failure) {
+          emit(InsertRecipesErrorState(failure: failure));
+        }, (data) async {
+          emit(InsertRecipesState());
+        });
+      }
+      if (event is UpdateReciSEvent) {
+        print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+        print("DateFormat('yyyy-MM-dd').format(DateTime.now())");
+        emit(InsertRecipesLoadingState());
+        final updatedUser = insertRecipesObject.copyWith(
+            address: event.address,
+            docId: event.docId.toString(),
+            note1: event.firstNote,
+            note2: event.secondNote,
+            note_emp: event.specialNotes,
+            spName: event.doctorSp,
+            phone: event.phone);
+        insertRecipesObject = updatedUser;
+        (await updateReciUsecase.execute(UpdateReciRequest(
+          event.reciId,
+          1,
+          insertRecipesObject.repId,
+          insertRecipesObject.type,
+          insertRecipesObject.docId,
+          insertRecipesObject.spName,
+          insertRecipesObject.brand_1.id.toString(),
+          insertRecipesObject.address,
+          insertRecipesObject.phone,
+          insertRecipesObject.total,
+          DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          flagImage1: ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+              ? "1"
+              : "3"),
+          flagImage2: ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+              ? "1"
+              : "3"),
+          note_emp: insertRecipesObject.note_emp,
+          note2: insertRecipesObject.note2,
+          note1: insertRecipesObject.note1,
+          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+          brand_2: insertRecipesObject.brand_2?.id.toString(),
+          brand_3: insertRecipesObject.brand_3?.id.toString(),
+          brand_4: insertRecipesObject.brand_4?.id.toString(),
+          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+          //      flag1: isChecked1,
+          //    flag2: isChecked2
+        )))
+            .fold((failure) {
+          emit(InsertRecipesErrorState(failure: failure));
+        }, (data) async {
+          emit(InsertRecipesState());
+        });
+      }
+      if (event is UpdateReciSHospitalEvent) {
+        print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+        print("DateFormat('yyyy-MM-dd').format(DateTime.now())");
+        emit(InsertRecipesLoadingState());
+        final updatedUser = insertRecipesObject.copyWith(
+            address: event.address,
+            docId: event.docId.toString(),
+            note1: event.firstNote,
+            note2: event.secondNote,
+            note_emp: event.specialNotes,
+            spName: event.doctorSp,
+            phone: event.connect);
+        insertRecipesObject = updatedUser;
+        print(insertRecipesObject.image1);
+        print(insertRecipesObject.image2);
+        (await updateReciUsecase.execute(UpdateReciRequest(
+          event.reciId,
+          2,
+          insertRecipesObject.repId,
+          "3",
+          insertRecipesObject.docId,
+          insertRecipesObject.spName,
+          insertRecipesObject.brand_1.id.toString(),
+          insertRecipesObject.address,
+          insertRecipesObject.phone,
+          insertRecipesObject.total,
+          DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          flagImage1: ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+              ? "1"
+              : "3"),
+          flagImage2: ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+              ? "1"
+              : "3"),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,

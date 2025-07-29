@@ -4,6 +4,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
+import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:equatable/equatable.dart';
@@ -13,12 +14,13 @@ part 'place_state.dart';
 
 class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
+  NumVisitSqlUsecase numVisitSqlUsecase;
   CheckRepUsecase checkRepUsecase;
   List<PlaceModel> placeModel = [];
   List<PlaceModel> placeSearchModel = [];
   int k = 0;
   String data= formatDateTime(DateTime.now().toIso8601String());
-  PlaceBloc(this.allPlaceUsecase,this.checkRepUsecase) : super(PlaceInitial()) {
+  PlaceBloc(this.allPlaceUsecase,this.checkRepUsecase,this.numVisitSqlUsecase) : super(PlaceInitial()) {
     on<PlaceEvent>((event, emit) async {
       //  VisitPharmacyRequestBody  v=VisitPharmacyRequestBody(vi.toDomain(), list2);
       if (event is AllPlaceEvent) {
@@ -29,6 +31,16 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
           placeModel = data;
           placeSearchModel = data;
           emit(AllPlaceState(data));
+        });
+      }
+      if (event is NumVisitEvent) {
+        //   emit(AllPlaceLoadingState());
+        (await numVisitSqlUsecase.execute()).fold((failure) {
+          emit(NumVisitErrorState(failure: failure));
+        }, (data) async {
+          UserInfo.numOfHospitalVisit=data.visitHospital;
+          UserInfo.numOfDoctorVisit=data.visitDoctor;
+          emit(NumVisitState());
         });
       }
      else if (event is CheckRepEvent) {

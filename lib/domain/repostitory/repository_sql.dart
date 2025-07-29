@@ -84,12 +84,14 @@ abstract class RepositorySql {
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   });
   Future<Either<Failure, Null>> updateVisitHospitalFields({
     required int id,
     String? kaswn,
     String? science,
     String? target,
+    List<PharmacyBrandModel>? selectBrand
   });
 
   Future<Either<Failure, List<HospitalModel>>> getHospitalBySpec(int spId);
@@ -125,4 +127,6 @@ abstract class RepositorySql {
   Future<Either<Failure, Null>> updateSave(int repId, int flag1) ;
   Future<Either<Failure, Null>>exceptionApi(ExceptionModel exceptionModel);
   Future<Either<Failure, List<ExceptionModel>>> allException();
+  Future<Either<Failure, NumVisit>> numVisit();
+
 }

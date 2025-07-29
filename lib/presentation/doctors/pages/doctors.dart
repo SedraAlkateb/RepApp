@@ -53,17 +53,16 @@ class Doctors extends StatelessWidget {
                 ],
               ),
             ),
-            BlocConsumer<DoctorsBloc, DoctorsState>(
+            BlocBuilder<DoctorsBloc, DoctorsState>(
               buildWhen: (previous, current) => current is AllDoctorState||current is AllDoctorEmptyState,
-              listener: (context, state) {
-                if (state is AllDoctorErrorState) {
-                  error(context, state.failure.massage, state.failure.code);
-                }
-              },
+
               builder: (context, state) {
                 List<DoctorModel> doctorModel=context.watch<DoctorsBloc>().doctor;
                 if (state is AllDoctorState) {
                   doctorModel = state.doctor;
+                }
+                if (state is AllDoctorErrorState) {
+                 return errorFullScreen(context,mes:  state.failure.massage, func: (){});
                 }
                 if (state is AllDoctorEmptyState) {
                   return SliverList(

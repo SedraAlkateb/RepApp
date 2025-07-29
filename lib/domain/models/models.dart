@@ -44,56 +44,6 @@ class VisitPharmacyModel {
   }
 }
 
-class VisitBrandPharmacyModel {
-  int id;
-  int visitId;
-  int brandId;
-  int amount = 1;
-  int? flag = 0;
-  VisitBrandPharmacyModel(
-      this.id, this.visitId, this.brandId, this.amount, this.flag);
-  Map<String, dynamic> toJson() {
-    return {
-      'visitId': visitId,
-      'brandId': brandId,
-      'amount': amount == 0 ? 1 : amount,
-      //  'flag': flag
-    };
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'visitId': visitId,
-      'brandId': brandId,
-      'amount': amount == 0 ? 1 : amount,
-      'flag': 1
-    };
-  }
-
-  factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-        map['id'],
-        map['visitId'],
-        map['brandId'],
-        int.parse(
-          map['amount'],
-        ),
-        1);
-  }
-
-  factory VisitBrandPharmacyModel.fromJson1(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-        map['id'],
-        map['visitId'],
-        map['brandId'],
-        int.parse(
-          map['amount'],
-        ),
-        map['flag']);
-  }
-}
-
 class BrandSpPlanModel {
   BrandModel brandModel;
   List<SpPlan> spPlan = [];
@@ -183,17 +133,76 @@ class FutureBrandModel {
       this.brandType);
 }
 
+class VisitBrandPharmacyModel {
+  int id;
+  int visitId;
+  int brandId;
+  int amount = 1;
+  int? flag = 0;
+  VisitBrandPharmacyModel(
+      this.id, this.visitId, this.brandId, this.amount, this.flag);
+  Map<String, dynamic> toJson() {
+    return {
+      'visitId': visitId,
+      'brandId': brandId,
+      'amount': amount == 0 ? 1 : amount,
+      //  'flag': flag
+    };
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'visitId': visitId,
+      'brandId': brandId,
+      'amount': amount == 0 ? 1 : amount,
+      'flag': 1
+    };
+  }
+
+  factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+        map['id'],
+        map['visitId'],
+        map['brandId'],
+        int.parse(
+          map['amount'],
+        ),
+        1);
+  }
+
+  factory VisitBrandPharmacyModel.fromJson1(Map<String, dynamic> map) {
+    return VisitBrandPharmacyModel(
+        map['id'],
+        map['visitId'],
+        map['brandId'],
+        int.parse(
+          map['amount'],
+        ),
+        map['flag']);
+  }
+}
+
 class PharmacyBrandModel {
   int id;
   String title;
   String phTitle;
-  String? amount;
+  String amount;
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'phTitle': phTitle,
       'amount': amount,
+    };
+  }
+
+  Map<String, dynamic> toMapEditBrand(PharmacyBrandModel brand, int visitId) {
+    return {
+      'visitId': visitId,
+      'brandId': brand.id,
+      'amount': brand.amount == 0 ? 1 : brand.amount,
+      'flag': 0
     };
   }
 
@@ -385,6 +394,16 @@ class ExceptionRequestBody {
   Map<String, dynamic> toJson() {
     return {
       'list1': list1.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+class ExceptionRequestBody2 {
+  ExceptionModel list1;
+  ExceptionRequestBody2(this.list1);
+  Map<String, dynamic> toJson() {
+    return {
+      'list1': list1,
     };
   }
 }
@@ -812,9 +831,8 @@ class DoctorIssueModel {
   String address;
   String visitDate;
   String? issue;
-  bool isRead;
-  DoctorIssueModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.issue, this.isRead);
+  DoctorIssueModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -822,7 +840,6 @@ class DoctorIssueModel {
       'address': address,
       'visitDate': visitDate,
       "issue": issue,
-      "isRead": isRead
     };
   }
 
@@ -833,7 +850,6 @@ class DoctorIssueModel {
       map['address'],
       map['visitDate'],
       map["issue"],
-      map["isRead"],
     );
   }
   factory DoctorIssueModel.fromMap1(Map<String, dynamic> map) {
@@ -843,7 +859,6 @@ class DoctorIssueModel {
       map['address'],
       map['visitDate'],
       map['issue'],
-      map["isRead"],
     );
   }
 }
@@ -855,9 +870,9 @@ class DoctorNoteModel {
   String address;
   String visitDate;
   String? note;
-  bool isRead;
-  DoctorNoteModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.note, this.isRead);
+
+  DoctorNoteModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -865,7 +880,6 @@ class DoctorNoteModel {
       'address': address,
       'visitDate': visitDate,
       "note": note,
-      "isRead": isRead
     };
   }
 
@@ -876,7 +890,6 @@ class DoctorNoteModel {
       map['address'],
       map['visitDate'],
       map["note"],
-      map["isRead"],
     );
   }
   factory DoctorNoteModel.fromMap1(Map<String, dynamic> map) {
@@ -886,7 +899,6 @@ class DoctorNoteModel {
       map['address'],
       map['visitDate'],
       map['note'],
-      map["isRead"],
     );
   }
 }
@@ -897,8 +909,10 @@ class NoVisitDocModel {
   String address;
   String rate;
   String? visits;
+  int? remainingVisits;
+  String? doneVisits;
   NoVisitDocModel(
-      this.docTitle, this.spTitle, this.address, this.rate, this.visits);
+      this.docTitle, this.spTitle, this.address, this.rate, this.visits , this.remainingVisits,this.doneVisits );
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -906,6 +920,8 @@ class NoVisitDocModel {
       'address': address,
       'rate': rate,
       "visits": visits,
+      "remainingVisits": remainingVisits,
+       "doneVisits": doneVisits,
     };
   }
 
@@ -916,6 +932,8 @@ class NoVisitDocModel {
       map['address'],
       map['rate'],
       map["visits"],
+      map["remainingVisits"],
+       map["totVisit"],
     );
   }
 }
@@ -1039,6 +1057,7 @@ class CityModel {
 
 class LoginModel {
   String token;
+  int cityId;
   int repId;
   int? otherPlanId = -1;
   int? activePlanId;
@@ -1070,6 +1089,7 @@ class LoginModel {
       this.flag,
       this.recipesCount,
       this.flag1,
+      this.cityId,
       this.repType,
       {this.otherStartDate,
       this.otherEndDate});
@@ -1078,6 +1098,7 @@ class LoginModel {
       'samplesCount': samplesCount,
       'token': token,
       'repId': repId,
+      'cityId': cityId,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
       'activePlanId': activePlanId == null ? -5 : activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
@@ -1106,11 +1127,12 @@ class LoginModel {
       map['name'] ?? "",
       map['percentage'] ?? 0,
       map['isLogin'] ?? 0,
-      map['endDate'] ?? "",
       map['startDate'] ?? "",
+      map['endDate'] ?? "",
       map['flag'] ?? 0,
       map['recipesCount'] ?? 0,
       map['flag1'] ?? 0,
+      map['cityId'] ?? 0,
       map['repType'] ?? "0",
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
@@ -1128,6 +1150,11 @@ final List<Type> type = [
   Type(0, "دفاتر"),
   Type(1, "عينات"),
   Type(2, "لاشيء"),
+];
+final List<Type> brandType = [
+  Type(1, "هدف"),
+  Type(2, "مساعد"),
+  Type(3, "لاشيء"),
 ];
 
 class BrandSpModel {
@@ -1155,7 +1182,15 @@ class BrandSpModel {
 class Rep {
   int activeRepId;
   int? otherRepId;
-  Rep(this.activeRepId, {this.otherRepId});
+  int? flag;
+  Rep(this.activeRepId, this.flag, {this.otherRepId});
+}
+
+class RepSp {
+  int spId;
+  int repPlanId;
+  int repId;
+  RepSp(this.repPlanId, this.spId, this.repId);
 }
 
 class PlanBrandModel {
@@ -1164,9 +1199,10 @@ class PlanBrandModel {
   int brandId;
   int repPlanId;
   String brandType;
+  String title;
   String amount;
   PlanBrandModel(this.id, this.spId, this.brandId, this.repPlanId,
-      this.brandType, this.amount);
+      this.brandType, this.title, this.amount);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -1174,13 +1210,66 @@ class PlanBrandModel {
       'brandId': brandId,
       'repPlanId': repPlanId,
       'brandType': brandType,
+      //  'title': title,
       'amount': amount,
     };
   }
 
   factory PlanBrandModel.fromMap(Map<String, dynamic> map) {
     return PlanBrandModel(map['id'], map['spId'], map['brandId'],
-        map['repPlanId'], map['brandType'], map['amount']);
+        map['repPlanId'], map['brandType'], "", map['amount']);
+  }
+}
+
+class PlanBrandsSp {
+  int id;
+  int spId;
+  int brandId;
+  String brandType;
+  String titleAr;
+  String phTitle;
+  String totalAmount;
+
+  // Constructor
+  PlanBrandsSp(this.id, this.spId, this.brandId, this.brandType, this.titleAr,
+      this.phTitle, this.totalAmount);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'spId': spId,
+      'brandId': brandId,
+      'brandType': brandType,
+      'titleAr': titleAr,
+      'phTitle': phTitle,
+      'totalAmount': totalAmount,
+    };
+  }
+
+  factory PlanBrandsSp.fromMap(Map<String, dynamic> map) {
+    return PlanBrandsSp(map['id'], map['spId'], map['brandId'],
+        map['brandType'], map['titleAr'], map['phTitle'], map['totalAmount']);
+  }
+}
+
+class BrandPlanBrandsSpWithSamples {
+  int totalSamplesDoctors;
+  int totalSamplesHospitals;
+  int totalSamplesDepartments;
+
+  // Constructor
+  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors,
+      this.totalSamplesHospitals, this.totalSamplesDepartments);
+  Map<String, dynamic> toMap() {
+    return {
+      'totalSamplesDoctors': totalSamplesDoctors,
+      'totalSamplesHospitals': totalSamplesHospitals,
+      'totalSamplesDepartments': totalSamplesDepartments,
+    };
+  }
+
+  factory BrandPlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
+    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'],
+        map['totalSamplesHospitals'], map['totalSamplesDepartments']);
   }
 }
 
@@ -1353,6 +1442,82 @@ class StatePlan {
 //state 0 true , state 1 more state 2 0
 }
 
+class UpdateReciRequest {
+  int recipeId;
+  int recipeType;
+  String repId;
+  String type;
+  String docId;
+  String spName;
+  String brand_1;
+  String address;
+  String phone;
+  String total;
+  String? flagImage1;
+  String? flagImage2;
+  String? note1;
+  String? note2;
+  String? note_emp;
+  File? image1;
+  File? image2;
+  String? brand_2;
+  String? brand_3;
+  String? brand_4;
+  String create_date;
+
+  UpdateReciRequest(
+    this.recipeId,
+    this.recipeType,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total,
+    this.create_date, {
+    this.note1,
+    this.note2,
+    this.flagImage1,
+    this.flagImage2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "reciId": recipeId,
+      "recipeType": recipeType,
+      "repId": repId,
+      "type": type,
+      "docId": docId,
+      "spName": spName,
+      "brand_1": brand_1,
+      "address": address,
+      "phone": phone,
+      "total": total,
+      "create_date": create_date,
+      "print_date": "0000-00-00",
+      "note1": note1,
+      "note2": note2,
+      "flagImage1": flagImage1,
+      "flagImage2": flagImage2,
+      "note_emp": note_emp,
+      "image1": image1,
+      "image2": image2,
+      "brand_2": brand_2,
+      "brand_3": brand_3,
+      "brand_4": brand_4,
+      "active": "1"
+    };
+  }
+}
+
 class ReciRequest {
   int recipeType;
   String repId;
@@ -1415,6 +1580,8 @@ class CopyReciRequest {
   String? note_emp;
   String? image1;
   String? image2;
+  String? create_date;
+  String? print_date;
 
   CopyReciRequest(
     this.id,
@@ -1425,7 +1592,9 @@ class CopyReciRequest {
     this.brand_1,
     this.address,
     this.phone,
-    this.total, {
+    this.total,
+    this.create_date,
+    this.print_date, {
     this.note1,
     this.note2,
     this.note_emp,
@@ -1458,9 +1627,42 @@ class LoginRequest {
 
 class AllRepresentative {
   int id;
+  int activePlan;
   String name;
   int number;
-  AllRepresentative(this.id, this.name, this.number);
+  AllRepresentative(this.id, this.name, this.number, this.activePlan);
+}
+
+class AllRepresentativeFuture {
+  int id;
+  int activePlan;
+  String name;
+  FlagModel flag;
+  AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
+}
+
+class FlagModel {
+  final int flag;
+  final String name;
+
+  FlagModel(this.flag) : name = _getFlagName(flag);
+
+  static String _getFlagName(int flag) {
+    switch (flag) {
+      case 0:
+        return "بانتظار موافقة المندوب";
+      case 1:
+        return "بانتظار موافقة المشرف";
+      case 2:
+        return "فعالة";
+      case 3:
+        return "منتهية";
+      case 4:
+        return "بانتظار موافقة المستودع";
+      default:
+        return "خطأ";
+    }
+  }
 }
 
 class InventoryModel {
@@ -1470,6 +1672,7 @@ class InventoryModel {
   int rest;
   InventoryModel(this.title, this.used, this.total, this.rest);
 }
+
 class AsRead {
   int visitId;
   int userId;
@@ -1477,24 +1680,51 @@ class AsRead {
   int reqType;
   AsRead(this.visitId, this.userId, this.status, this.reqType);
 }
+
+class ChangePlanBrandType {
+  int id;
+  int brandType;
+
+  ChangePlanBrandType(this.id, this.brandType);
+}
+
 class InfoRep {
   int id;
   String name;
   String mobile;
   String address;
   String sampleCount;
+
   String recipesCount;
+  int repPlanId;
   int totalVisit;
   int visitDon;
   int visitNoteYet;
-  InfoRep(this.id, this.name, this.mobile, this.address, this.sampleCount,
-      this.recipesCount, this.totalVisit, this.visitDon, this.visitNoteYet);
+  InfoRep(
+      this.id,
+      this.name,
+      this.mobile,
+      this.address,
+      this.sampleCount,
+      this.recipesCount,
+      this.repPlanId,
+      this.totalVisit,
+      this.visitDon,
+      this.visitNoteYet);
 }
 
 class VisitRepSen {
   int repId;
   int userId;
   VisitRepSen(this.repId, this.userId);
+}
+
+class ReadAll {
+  int repPlanId;
+  int userId;
+  int type;
+  int flag;
+  ReadAll(this.repPlanId, this.userId, this.type, this.flag);
 }
 
 class RepVisitsModel {
@@ -1524,10 +1754,119 @@ class RepVisitsModel {
       this.flag,
       this.samples);
 }
-class BrandFlag{
+
+class RepVisitsModelSearch {
+  int index;
+  String visitId;
+  String visitDate;
+  String placeTitle;
+  String docTitle;
+  String rate;
+  String spTitle;
+  String note;
+  String issue;
+  String special;
+  String target;
+  bool flag;
+  List<String> samples;
+  RepVisitsModelSearch(
+      this.index,
+      this.visitId,
+      this.visitDate,
+      this.placeTitle,
+      this.docTitle,
+      this.rate,
+      this.spTitle,
+      this.note,
+      this.issue,
+      this.special,
+      this.target,
+      this.flag,
+      this.samples);
+}
+
+class BrandFlag {
   int id;
   String brand;
   int flag;
 
   BrandFlag(this.id, this.brand, this.flag);
+}
+
+class NumVisit {
+  int visitDoctor;
+  int visitHospital;
+  NumVisit(this.visitDoctor, this.visitHospital);
+}
+
+class ReciModel {
+  String? id;
+  String? docName;
+  String? create_date;
+  String? total;
+  String? note_emp;
+  String docId;
+  String recipeType;
+  ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp,
+      this.docId, this.recipeType);
+}
+
+class PlanBrandSp {
+  int id;
+  int brandId;
+  int brandType;
+  String titleAr;
+  int spId;
+  String phTitle;
+  int totalAmount;
+
+  PlanBrandSp(this.id, this.brandId, this.brandType, this.titleAr, this.spId,
+      this.phTitle, this.totalAmount);
+}
+
+class doctorsModel {
+  int id;
+  String name;
+  String spTitle;
+  String placeTitle;
+
+  doctorsModel(this.id, this.name, this.spTitle, this.placeTitle);
+}
+
+class DocdoctorsModel {
+  String repName;
+  String visitDate;
+  String issue;
+  String note;
+
+  DocdoctorsModel(this.repName, this.visitDate, this.issue, this.note);
+}
+
+class BrandAmountModel {
+  int numDoctor;
+  int numHospital;
+  int numDepartment;
+  BrandAmountModel(this.numDoctor, this.numHospital, this.numDepartment);
+}
+
+class AllPlanBrandSp {
+  List<PlanBrandSp> planBrandSps;
+  int amount;
+
+  AllPlanBrandSp(this.planBrandSps, this.amount);
+}
+
+class SpecPlan {
+  String name;
+  String amount;
+
+  SpecPlan(this.name, this.amount);
+}
+
+class ActivePlanBrandModel {
+  List<SpecPlan> spPlan;
+  String type;
+  String title;
+
+  ActivePlanBrandModel(this.spPlan, this.type, this.title);
 }

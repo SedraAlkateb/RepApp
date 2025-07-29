@@ -105,3 +105,28 @@ class CheckboxImage2State extends RecipesBrandState {
 
   List<Object?> get props => [isChecked];
 }
+final class AllReciState extends RecipesBrandState {
+  final List<ReciModel> reci;
+  AllReciState(this.reci);
+  @override
+  List<Object?> get props =>[reci];
+}
+final class AllReciErrorState extends RecipesBrandState {
+  final Failure failure;
+  AllReciErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllReciLoadingState extends RecipesBrandState {
+  @override
+  AllReciLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllReciEmptyState extends RecipesBrandState {
+  @override
+  AllReciEmptyState();
+  @override
+  List<Object?> get props =>[];
+}

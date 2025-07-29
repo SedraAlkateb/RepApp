@@ -5,7 +5,6 @@ abstract class PlaceState extends Equatable{}
 
 final class PlaceInitial extends PlaceState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 final class AllPlaceState extends PlaceState {
@@ -54,4 +53,15 @@ final class CheckRepLoadingState extends PlaceState {
   CheckRepLoadingState();
   @override
   List<Object?> get props =>[];
+}
+final class NumVisitState extends PlaceState {
+
+  List<Object?> get props =>[];
+}
+final class NumVisitErrorState extends PlaceState {
+  final Failure failure;
+  NumVisitErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
 }

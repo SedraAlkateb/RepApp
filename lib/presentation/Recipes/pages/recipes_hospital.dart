@@ -845,7 +845,7 @@ class _RecipesPageState extends State<RecipesHospital> {
                               state.failure.code);
                         }
                       },
-                      child: ElevatedButton(
+                      child:   ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<RecipesBrandBloc>(context)
@@ -862,7 +862,7 @@ class _RecipesPageState extends State<RecipesHospital> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
-                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                Text('يرجى تعبئة جميع الحقول المطلوبة'),
                                 backgroundColor: ColorManager.secondaryColor,
                               ),
                             );

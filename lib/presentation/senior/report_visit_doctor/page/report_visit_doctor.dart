@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -10,14 +11,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReportVisitDoctorPage extends StatelessWidget {
-  ReportVisitDoctorPage(
-      {super.key,
-      required this.userId,
-      required this.repId,
-      required this.repName});
+  ReportVisitDoctorPage({
+    super.key,
+    required this.userId,
+    required this.repId,
+    required this.repName,
+    required this.indexRep,
+    required this.repPlan,
+  });
   final int userId;
   final int repId;
   final String repName;
+  final int indexRep;
+  final int repPlan;
+
   final TextEditingController searchNoteDoctorController =
       TextEditingController();
   @override
@@ -72,7 +79,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   },
                   builder: (context, state) {
                     List<RepVisitsModel> doctorNoteModel =
-                        context.watch<ReportVisitDoctorBloc>().repVisits;
+                        context.watch<ReportVisitDoctorBloc>().repVisitsSearch;
                     if (state is AllReportVisitDoctorEmptyState) {
                       return SliverList(
                           delegate: SliverChildListDelegate([
@@ -94,8 +101,29 @@ class ReportVisitDoctorPage extends StatelessWidget {
                             [loadingFullScreen(context)]),
                       );
                     }
-
+                    if (state is AllReadLoadingState) {
+                      return SliverList(
+                        delegate: SliverChildListDelegate(
+                            [loadingFullScreen(context)]),
+                      );
+                    }
+                    if (state is AllReadSucState) {
+                      BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                          AllReportVisitDoctorEvent(
+                              VisitRepSen(repId, UserInfo.repId)));
+                    }
                     if (state is AllReportVisitDoctorErrorState) {
+                      return SliverList(
+                        delegate: SliverChildListDelegate([
+                          errorFullScreen(context, func: () {
+                            BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                                AllReportVisitDoctorEvent(
+                                    VisitRepSen(repId, userId)));
+                          })
+                        ]),
+                      );
+                    }
+                    if (state is AllReadErrorState) {
                       return SliverList(
                         delegate: SliverChildListDelegate([
                           errorFullScreen(context, func: () {
@@ -111,13 +139,41 @@ class ReportVisitDoctorPage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("عدد الملاحظات : ",
-                                  style:
-                                      Theme.of(context).textTheme.titleLarge),
-                              CircleNumberWidget(
-                                  number: doctorNoteModel.length),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("عدد الملاحظات : ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge),
+                                  CircleNumberWidget(
+                                      number: doctorNoteModel.length),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        BlocProvider.of<ReportVisitDoctorBloc>(
+                                                context)
+                                            .add(AllReadDocNoteEvent(
+                                                readAll: ReadAll(repPlan,
+                                                    UserInfo.repId, 1, 1)));
+                                      },
+                                      icon: Icon(Icons.bookmarks_rounded)),
+                                  IconButton(
+                                      onPressed: () {
+                                        BlocProvider.of<ReportVisitDoctorBloc>(
+                                            context)
+                                            .add(AllReadDocNoteEvent(
+                                            readAll: ReadAll(repPlan,
+                                                UserInfo.repId, 1, 0)));
+                                      },
+                                      icon: Icon(Icons.bookmarks_outlined)),
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -276,18 +332,22 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                       builder: (context, state) {
                                         return Align(
                                           child: IconButton(
-                                              onPressed:
-                                                  state is AsReadLoadingState
-                                                      ? null
-                                                      : () {
-                                                          BlocProvider.of<
-                                                                      ReportVisitDoctorBloc>(
-                                                                  context)
-                                                              .add(ChangeReadDocNoteEvent(
-                                                                  index,
-                                                                  !doctorNoteModel
-                                                                      .flag));
-                                                        },
+                                              onPressed: state
+                                                      is AsReadLoadingState
+                                                  ? null
+                                                  : () {
+                                                      print(
+                                                          doctorNoteModel.flag);
+
+                                                      BlocProvider.of<ReportVisitDoctorBloc>(
+                                                              context)
+                                                          .add(ChangeReadDocNoteEvent(
+                                                              repVisitsModel:
+                                                                  doctorNoteModel,
+                                                              index: indexRep,
+                                                              indexBook:
+                                                                  index));
+                                                    },
                                               icon: Icon(
                                                 Icons.book_outlined,
                                                 color: doctorNoteModel.flag
@@ -335,11 +395,8 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   if (isExpanded)
                     GestureDetector(
                       onTap: () {
-                        BlocProvider.of<
-                            ReportVisitDoctorBloc>(
-                            context)
-                            .add(
-                            DocNoIsExpandedNoteEvent());
+                        BlocProvider.of<ReportVisitDoctorBloc>(context)
+                            .add(DocNoIsExpandedNoteEvent());
                       },
                       child: ModalBarrier(
                         color: Colors.black.withOpacity(0.5),
@@ -366,12 +423,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                   BlocProvider.of<ReportVisitDoctorBloc>(
                                           context)
                                       .add(ExpandedBorder(false));
-                                }else if (notification.extent <= 0.1) {
-                                  BlocProvider.of<
-                                      ReportVisitDoctorBloc>(
-                                      context)
-                                      .add(
-                                      DocNoIsExpandedNoteEvent());
+                                } else if (notification.extent <= 0.1) {
+                                  BlocProvider.of<ReportVisitDoctorBloc>(
+                                          context)
+                                      .add(DocNoIsExpandedNoteEvent());
                                 }
                                 // else {
                                 //   BlocProvider.of<ReportVisitDoctorBloc>(context).add(ExpandedBorder(1));
@@ -465,6 +520,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                   doctorNoteModel.visitDate,
                                             ),
                                             TextInfo(
+                                              title: "الأهداف",
+                                              supTitle: doctorNoteModel.target,
+                                            ),
+                                            TextInfo(
                                               title: "ملاحظات المكتب العلمي",
                                               supTitle: doctorNoteModel.note,
                                             ),
@@ -544,21 +603,21 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                 : SizedBox(),
                                             Align(
                                               child: IconButton(
-                                                onPressed:
-                                                    state is AsReadLoadingState
-                                                        ? null
-                                                        : () {
-                                                            BlocProvider.of<
-                                                                        ReportVisitDoctorBloc>(
-                                                                    context)
-                                                                .add(
-                                                              ChangeReadDocNoteEvent(
-                                                                index,
-                                                                !doctorNoteModel
-                                                                    .flag,
-                                                              ),
-                                                            );
-                                                          },
+                                                onPressed: state
+                                                        is AsReadLoadingState
+                                                    ? null
+                                                    : () {
+                                                        BlocProvider.of<
+                                                                    ReportVisitDoctorBloc>(
+                                                                context)
+                                                            .add(
+                                                          ChangeReadDocNoteEvent(
+                                                              repVisitsModel:
+                                                                  doctorNoteModel,
+                                                              index: indexRep,
+                                                              indexBook: index),
+                                                        );
+                                                      },
                                                 icon: Icon(
                                                   size: 30,
                                                   Icons.book_outlined,

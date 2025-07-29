@@ -35,6 +35,7 @@ class _RecipesPageState extends State<RecipesPage> {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(CopyRecipesEvent(widget.docId, 1));
+    
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -60,6 +61,9 @@ class _RecipesPageState extends State<RecipesPage> {
       ),
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
+          if(state is RecipesRecipesLoadingState){
+            return loadingFullScreen(context);
+          }
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             print("sddddddddddddddddddd");
             return Center(
@@ -908,32 +912,38 @@ class _RecipesPageState extends State<RecipesPage> {
                               state.failure.code);
                         }
                       },
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            BlocProvider.of<RecipesBrandBloc>(context).add(
-                                InsertReciEvent(
-                                    _doctorSpController.text,
-                                    firstNoteController.text,
-                                    _secondNoteController.text,
-                                    _addressController.text,
-                                    _connectController.text,
-                                    _specialNotesController.text,
-                                    widget.docId,
-                                    _connectController.text));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                backgroundColor: ColorManager.secondaryColor,
-                              ),
-                            );
-                          }
-                        },
-                        child: Text(
-                          "إرسال",
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                BlocProvider.of<RecipesBrandBloc>(context).add(
+                                    InsertReciEvent(
+                                        _doctorSpController.text,
+                                        firstNoteController.text,
+                                        _secondNoteController.text,
+                                        _addressController.text,
+                                        _connectController.text,
+                                        _specialNotesController.text,
+                                        widget.docId,
+                                        _connectController.text));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                    backgroundColor: ColorManager.secondaryColor,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              "إرسال",
+                            ),
+                          ),
+
+                        ],
                       ),
                     ),
                   ],

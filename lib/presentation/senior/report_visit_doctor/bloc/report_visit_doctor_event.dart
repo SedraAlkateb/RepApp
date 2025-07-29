@@ -46,21 +46,26 @@ class DocNoIsExpandedNoteEvent extends ReportVisitDoctorEvent {
 }
 
 class ChangeReadDocNoteEvent extends ReportVisitDoctorEvent {
-  final int id;
-  final bool isRead;
-
+  final RepVisitsModel repVisitsModel;
+  final indexBook;
+  final int index;
   @override
-  ChangeReadDocNoteEvent(this.id, this.isRead);
-  List<Object?> get props => [id, isRead];
+  ChangeReadDocNoteEvent({required this.repVisitsModel,required this.index,required this.indexBook});
+  List<Object?> get props => [repVisitsModel, index];
 }
-
-class ChangeReadHosNoteEvent extends ReportVisitDoctorEvent {
-  final int id;
-  final bool isRead;
-
+class AllReadDocNoteEvent extends ReportVisitDoctorEvent {
+  final ReadAll readAll;
   @override
-  ChangeReadHosNoteEvent(this.id, this.isRead);
-  List<Object?> get props => [id, isRead];
+  AllReadDocNoteEvent({required this.readAll});
+  List<Object?> get props => [readAll];
+}
+class ChangeReadHosNoteEvent extends ReportVisitDoctorEvent {
+  final RepVisitsModel repVisitsModel;
+  final indexBook;
+  final int index;
+  @override
+  ChangeReadHosNoteEvent({required this.repVisitsModel,required this.index, required this.indexBook});
+  List<Object?> get props => [repVisitsModel, index,indexBook];
 }
 
 class ExpandedBorder extends ReportVisitDoctorEvent {

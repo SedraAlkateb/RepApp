@@ -1,5 +1,6 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/presentation/drawer/widget/text_drawer.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -10,6 +11,7 @@ class DrawerPage extends StatelessWidget {
   DrawerPage({super.key});
   @override
   Widget build(BuildContext context) {
+
     return Drawer(
       shape: Border.all(color: ColorManager.secondaryColor4),
       child: ListView(
@@ -28,7 +30,7 @@ class DrawerPage extends StatelessWidget {
             ),
             height: 150,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -48,6 +50,29 @@ class DrawerPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextDrawer(
+                  s1: "زيارات المشافي : ",
+                  s2: "${UserInfo.numOfHospitalVisit.toString()}",
+                ),
+                TextDrawer(
+                  s1: "زيارات الأطباء : ",
+                  s2: "${UserInfo.numOfDoctorVisit.toString()}",
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
             ),
           ),
           ListTile(
@@ -76,6 +101,7 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
+
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
@@ -103,7 +129,61 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
-          UserInfo.repType != "7"
+          ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
+            leading:
+            Icon(Icons.search_rounded, color: ColorManager.secondaryColor4),
+            title: Text(
+              'البحث عن طبيب',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.searchdoctors,
+                      (route) => false,
+                );
+              }
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
+            ),
+          ),
+          ListTile(
+            focusColor: ColorManager.secondaryColor,
+            minTileHeight: 10,
+            leading:
+            Icon(Icons.search_rounded, color: ColorManager.secondaryColor4),
+            title: Text(
+              'عرض الوصفات',
+              style: TextStyle(color: ColorManager.secondaryColor1),
+            ),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.allRecip,
+                      (route) => false,
+                );
+              }
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              thickness: 0.5,
+              color: ColorManager.hintGrey,
+            ),
+          ),
+          (UserInfo.repType != "7")
               ? ListTile(
                   focusColor: ColorManager.secondaryColor,
                   minTileHeight: 10,
@@ -117,14 +197,14 @@ class DrawerPage extends StatelessWidget {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        Routes.AllRepSenior,
+                        Routes.cities,
                         (route) => false,
                       );
                     });
                   },
                 )
               : SizedBox(),
-          UserInfo.repType != "7"
+          (UserInfo.repType != "7")
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Divider(
@@ -196,7 +276,7 @@ class DrawerPage extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.hospital,
-                    (route) => false,
+                (route) => false,
               );
             },
           ),

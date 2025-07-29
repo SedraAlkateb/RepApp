@@ -135,6 +135,7 @@ class DoctorDetails extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => RecipesPage(
+
                                         docId: doctor.id,
                                         st: state.st,
                                       ),

@@ -1,16 +1,23 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/presentation/Recipes/pages/all_recip.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/senior/places/pages/all_city_senior.dart';
+import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
+import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
-import 'package:domina_app/presentation/senior/future_rep/page/auditing_plan.dart';
+import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/remaining_visits.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
+import 'package:domina_app/presentation/senior/search_doctors/page/doctor_Info%20.dart';
+import 'package:domina_app/presentation/senior/search_doctors/page/search_doctors.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
@@ -28,12 +35,12 @@ import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
 import 'package:domina_app/presentation/visits/pages/visits_page.dart';
 import 'package:flutter/material.dart';
-
 import '../Recipes/pages/Recipes.dart';
 
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
+    static const String searchdoctors = "/searchdoctors";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
   static const String hospital = "/hospital";
@@ -52,15 +59,22 @@ class Routes {
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String AllRepSenior = "/AllRepSenior";
+  static const String cities = "/cities";
+
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
   static const String seniorSpec = "/seniorSpec";
   static const String seniorHos = "/seniorHos";
   static const String seniorDoc = "/seniorDoc";
- static const String allBrand = "/allBrand";
+  static const String allBrand = "/allBrand";
   static const String noVisitDoctor = "/noVisitDoctor";
+   static const String remainingVisitsDoctor = "/remainingVisitsDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
-  static const String AuditingPlan = "/AuditingPlan";
+  static const String EditingPlan = "/EditingPlan";
+  static const String RepPlanBrandSp = "/RepPlanBrandSp";
+  static const String manageFuture = "/manageFuture";
+  static const String allRecip = "/allRecip";
+  static const String doctorInfo = "/doctorInfo";
 
 }
 
@@ -71,7 +85,7 @@ class RouteGenerator {
         initLoginModule();
         return MaterialPageRoute(builder: (_) => const MyLogin());
       case Routes.allBrand:
-        return MaterialPageRoute(builder: (_) =>  AllBrand());
+        return MaterialPageRoute(builder: (_) => AllBrand());
       case Routes.fadeInWidget:
         return MaterialPageRoute(builder: (_) => FadeInWidget());
       case Routes.places:
@@ -93,8 +107,6 @@ class RouteGenerator {
       case Routes.pharmacy:
         initPharmacyModule();
         return MaterialPageRoute(builder: (_) => PharmacyPage());
-
-
 
       case Routes.syncData:
         initAsyncModule();
@@ -118,7 +130,10 @@ class RouteGenerator {
       case Routes.delete:
         initDeleteModule();
         return MaterialPageRoute(builder: (_) => DeletePage());
+      case Routes.allRecip:
 
+        initBrandRecModule();
+        return MaterialPageRoute(builder: (_) => AllRecip());
       case Routes.Recipes:
         initBrandRecModule();
         return MaterialPageRoute(
@@ -128,12 +143,18 @@ class RouteGenerator {
                 ));
       case Routes.repProfile:
         initSeniorProfModule();
-        return MaterialPageRoute(builder: (_) => RepProfile(id: 3));
+        return MaterialPageRoute(
+            builder: (_) => RepProfile(
+                  id: 3,
+                  repPlanId: 3,
+                  index: 3,
+              cityId: 1,
+                ));
       case Routes.AllRepSenior:
-        initSeniorModule();
         return MaterialPageRoute(builder: (_) => AllRepSenior());
-
-
+      case Routes.cities:
+        initSeniorModule();
+        return MaterialPageRoute(builder: (_) => AllCitySenior());
 
       case Routes.seniorPlaces:
         return MaterialPageRoute(builder: (_) => PlaceSenior());
@@ -141,20 +162,45 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SpecSeniorPage());
       case Routes.seniorHos:
         return MaterialPageRoute(builder: (_) => HospitalSenior());
+      case Routes.manageFuture:
+        initSeniorManageFutureModule();
+        return MaterialPageRoute(builder: (_) => AllRepWithFuture());
       case Routes.seniorDoc:
         return MaterialPageRoute(builder: (_) => DoctorSenior());
       // case Routes.seniorNoteDoc:
       //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
         return MaterialPageRoute(builder: (_) => NoVisitDoctor());
+         case Routes.remainingVisitsDoctor:
+        return MaterialPageRoute(builder: (_) => RemainingVisits());
       case Routes.senVisitDoctor:
         return MaterialPageRoute(builder: (_) => SenVisitDoctor());
-      case Routes.AuditingPlan:
+      case Routes.EditingPlan:
+        iniEditBrandPlanModule();
+        return MaterialPageRoute(builder: (_) {
+          return EditingPlan(
+            repPlan: 7,
+          );
+        });
+          case Routes.searchdoctors:
+        iniSearchDoctorsModule();
+        return MaterialPageRoute(builder: (_) {
+          return SearchDoctors(
+          );
+        });
+      case Routes.RepPlanBrandSp:
         iniFutureModule();
-        return MaterialPageRoute(builder: (_) => AuditingPlan());
+        final args = settings.arguments as Map<String, dynamic>?;
+        final title = args?['title'];
+        final flag = args?['flag'];
+        return MaterialPageRoute(builder: (_) {
+          return RepPlanBrandSpPage(title: title,flag: flag,);
+        });
       case Routes.deleteLogout:
         initDeleteModule();
         return MaterialPageRoute(builder: (_) => DeleteLogoutPage());
+      case Routes.doctorInfo:
+        return MaterialPageRoute(builder: (_) => DoctorInfo());
       default:
         return unDefinedRoute();
     }

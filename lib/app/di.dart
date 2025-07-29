@@ -16,6 +16,7 @@ import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_brands_sp_usecase.dart';
+import 'package:domina_app/domain/usecase/all_city_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sp_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sql_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
@@ -33,7 +34,11 @@ import 'package:domina_app/domain/usecase/all_other_brand_plan_sql_usecase.dart'
 import 'package:domina_app/domain/usecase/all_pharmacy_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
+import 'package:domina_app/domain/usecase/all_plan_brands_type_usecase.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
+import 'package:domina_app/domain/usecase/all_read_sen_usecase.dart';
+import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_reps_future_usecase.dart';
 import 'package:domina_app/domain/usecase/all_seinor_reps_usecase.dart';
 import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_sql_usecase.dart';
@@ -45,14 +50,19 @@ import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_issue_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/changePlanBrandType_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
 import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
+import 'package:domina_app/domain/usecase/doctor_info_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
+import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
@@ -76,9 +86,13 @@ import 'package:domina_app/domain/usecase/is_active_usecase.dart';
 import 'package:domina_app/domain/usecase/is_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
+import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
+import 'package:domina_app/domain/usecase/remaining_visits_use_case.dart';
+import 'package:domina_app/domain/usecase/rep_plan_brand_sp_usecase.dart';
+import 'package:domina_app/domain/usecase/search_doctors_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
@@ -87,20 +101,25 @@ import 'package:domina_app/domain/usecase/update_flag_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_flag_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/update_other_status_usecase.dart';
+import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/update_save_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
+import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
-import 'package:domina_app/presentation/senior/future_rep/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
@@ -114,7 +133,6 @@ import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
-
 GetIt instance = GetIt.instance;
 Future<void> initAppModule() async {
   instance.registerLazySingleton<NetworkInfo>(
@@ -137,7 +155,6 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<InsertExceptionSqlUsecase>(
       () => InsertExceptionSqlUsecase(instance()));
 }
-
 Future<void> initAsyncModule() async {
   if (!GetIt.I.isRegistered<AsyncBloc>()) {
     // instance.registerFactory<AllPharmacyUsecase>(
@@ -176,8 +193,9 @@ Future<void> initAsyncModule() async {
     }
     instance.registerFactory<AllBrandsSpUsecase>(
         () => AllBrandsSpUsecase(instance()));
-    instance.registerFactory<AllPlanBrandsUsecase>(
-        () => AllPlanBrandsUsecase(instance()));
+    if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+      instance.registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+    }
     instance.registerFactory<CheckActiveBrandPlanSqlUsecase>(
         () => CheckActiveBrandPlanSqlUsecase(instance()));
     instance.registerFactory<UpdateActiveSqlUsecase>(
@@ -258,15 +276,21 @@ Future<void> initPlacesModule() async {
   if (!GetIt.I.isRegistered<AllPlacesSqlUsecase>()) {
     instance.registerFactory<AllPlacesSqlUsecase>(
         () => AllPlacesSqlUsecase(instance()));
+    instance.registerFactory<NumVisitSqlUsecase>(
+        () => NumVisitSqlUsecase(instance()));
     instance
         .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
-    instance
-        .registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance()));
+    instance.registerFactory<PlaceBloc>(
+        () => PlaceBloc(instance(), instance(), instance()));
   }
 }
 
 Future<void> initVisitsModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorSqlUsecase>()) {
+    if (!GetIt.I.isRegistered<AllBrandsFlagSqlUsecase>()) {
+      instance.registerFactory<AllBrandsFlagSqlUsecase>(
+          () => AllBrandsFlagSqlUsecase(instance()));
+    }
     instance.registerFactory<UpdateHospitalUsecase>(
         () => UpdateHospitalUsecase(instance()));
     instance.registerFactory<UpdateDoctorUsecase>(
@@ -279,8 +303,8 @@ Future<void> initVisitsModule() async {
         () => AllBrandsHospitalVisitsSqlUsecase(instance()));
     instance.registerFactory<AllVisitHospitalSqlUsecase>(
         () => AllVisitHospitalSqlUsecase(instance()));
-    instance.registerFactory<VisitBloc>(() => VisitBloc(
-        instance(), instance(), instance(), instance(), instance(), instance()
+    instance.registerFactory<VisitBloc>(() => VisitBloc(instance(), instance(),
+        instance(), instance(), instance(), instance(), instance()
         //  ,instance(),instance(),instance()
         ));
   }
@@ -307,15 +331,24 @@ Future<void> initBrandRecModule() async {
   if (!GetIt.I.isRegistered<AllBrandsResUsecase>()) {
     instance.registerFactory<InsertReciUsecase>(
         () => InsertReciUsecase(instance()));
+    instance.registerFactory<UpdateReciUsecase>(
+            () => UpdateReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
         () => AllBrandsResUsecase(instance()));
     instance
         .registerFactory<CopyReciUsecase>(() => CopyReciUsecase(instance()));
     /////////////
-
+    if (!GetIt.I.isRegistered<AllReciUsecase>()) {
+      instance.registerFactory<AllReciUsecase>(
+              () => AllReciUsecase(instance()));
+    }
+      if (!GetIt.I.isRegistered<GetRepReciUsecase>()) {
+      instance.registerFactory<GetRepReciUsecase>(
+              () => GetRepReciUsecase(instance()));
+    }
     instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
     instance.registerFactory<RecipesBrandBloc>(
-        () => RecipesBrandBloc(instance(), instance(), instance(), instance()));
+        () => RecipesBrandBloc(instance(), instance(), instance(), instance(), instance(), instance(), instance()));
   }
 }
 
@@ -421,6 +454,7 @@ Future<void> initDoctorModule() async {
   }
 }
 
+
 Future<void> initHospitalModule() async {
   if (!GetIt.I.isRegistered<AllHospitalSpNSqlUsecase>()) {
     instance.registerFactory<AllHospitalSpNSqlUsecase>(
@@ -486,6 +520,10 @@ Future<void> initSeniorProfModule() async {
     instance
         .registerFactory<AllDoctorUsecase>(() => AllDoctorUsecase(instance()));
   }
+  if (!GetIt.I.isRegistered<RemainingVisitsUsecase>()) {
+    instance
+        .registerFactory<RemainingVisitsUsecase>(() => RemainingVisitsUsecase(instance()));
+  }
 
   if (!GetIt.I.isRegistered<AllNoVisitDoctorUsecase>()) {
     instance.registerFactory<AllNoVisitDoctorUsecase>(
@@ -506,6 +544,7 @@ Future<void> initSeniorProfModule() async {
           instance(),
           instance(),
           instance(),
+                instance(),
           instance()));
     }
   }
@@ -515,7 +554,10 @@ Future<void> initSeniorModule() async {
   if (!GetIt.I.isRegistered<AllSeinor_Rep_Usecase>()) {
     instance.registerFactory<AllSeinor_Rep_Usecase>(
         () => AllSeinor_Rep_Usecase(instance()));
-    instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(instance()));
+    instance.registerFactory<AllCityUsecase>(
+            () => AllCityUsecase(instance()));
+
+    instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(instance(),instance()));
   }
 }
 
@@ -545,13 +587,19 @@ Future<void> initSeniorReportInventoryModule() async {
         () => ReportInventoryBloc(instance()));
   }
 }
-
-Future<void> initFutureSpecializationsModule() async {
-  if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
-    instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
+Future<void> initSeniorManageFutureModule() async {
+  if (!GetIt.I.isRegistered<AllRepsFutureUsecase>()) {
+    instance.registerFactory<AllRepsFutureUsecase>(
+            () => AllRepsFutureUsecase(instance()));
+    instance.registerFactory<ManageFutureBloc>(
+            () => ManageFutureBloc(instance()));
   }
-  if (!GetIt.I.isRegistered<FutureRepBloc>()) {
-    instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(instance()));
+}
+Future<void> initActivePlanModule() async {
+  if (!GetIt.I.isRegistered<GetInfoPlanBrandsUsecase>()) {
+    instance.registerFactory<GetInfoPlanBrandsUsecase>(
+        () => GetInfoPlanBrandsUsecase(instance()));
+    instance.registerFactory<ActivePlanBloc>(() => ActivePlanBloc(instance()));
   }
 }
 
@@ -559,23 +607,68 @@ Future<void> initReportVisitDoctorModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorRepSenUsecase>()) {
     instance.registerFactory<AllVisitDoctorRepSenUsecase>(
         () => AllVisitDoctorRepSenUsecase(instance()));
+    instance.registerFactory<AllReadSenUsecase>(
+            () => AllReadSenUsecase(instance()));
     instance
         .registerFactory<ReadVisitUsecase>(() => ReadVisitUsecase(instance()));
     instance.registerFactory<AllVisitHospitalRepSenUsecase>(
-            () => AllVisitHospitalRepSenUsecase(instance()));
+        () => AllVisitHospitalRepSenUsecase(instance()));
     instance.registerFactory<ReportVisitDoctorBloc>(
-        () => ReportVisitDoctorBloc(instance(), instance(), instance()));
+        () => ReportVisitDoctorBloc(instance(), instance(), instance(), instance()));
   }
 }
+
 Future<void> iniFutureModule() async {
   if (!GetIt.I.isRegistered<AllSpeUsecase>()) {
     instance.registerFactory<AllSpeUsecase>(() => AllSpeUsecase(instance()));
   }
-  if (!GetIt.I.isRegistered<FutureRepBloc>()) {
-   // instance.registerFactory<LoginUsecase>(() => LoginUsecase(instance()));
-   // instance.registerFactory<LoginSqlUsecase>(() => LoginSqlUsecase(instance()));
-    //  instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
 
-    instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(instance()));
+  if (!GetIt.I.isRegistered<RepPlanBrandSpUsecase>()) {
+    instance.registerFactory<RepPlanBrandSpUsecase>(
+        () => RepPlanBrandSpUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<FutureRepBloc>()) {
+    instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(
+          instance(),
+          instance(),
+        ));
+  }
+}
+Future<void> iniEditBrandPlanModule() async {
+  if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+    instance.registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+  }
+
+  if (!GetIt.I.isRegistered<AllPlanBrandsTypeUsecase>()) {
+    instance.registerFactory<AllPlanBrandsTypeUsecase>(() => AllPlanBrandsTypeUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
+    instance.registerFactory<ChangePlanBrandTypeUsecase>(
+            () => ChangePlanBrandTypeUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<EditBrandPlanBloc>()) {
+    instance.registerFactory<EditBrandPlanBloc>(() => EditBrandPlanBloc(
+      instance(),
+      instance(),
+    ));
+  }
+}
+Future<void> iniSearchDoctorsModule() async {
+  if (!GetIt.I.isRegistered<SearchDoctorsUsecase>()) {
+    instance.registerFactory<SearchDoctorsUsecase>(
+            () => SearchDoctorsUsecase(instance()));
+  }
+   if (!GetIt.I.isRegistered<DocDoctorsUseCase>()) {
+    instance.registerFactory<DocDoctorsUseCase>(
+            () => DocDoctorsUseCase(instance()));
+  }
+  if (!GetIt.I.isRegistered<DoctorInfoUsecase>()) {
+    instance.registerFactory<DoctorInfoUsecase>(
+            () => DoctorInfoUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<SearchDoctorsBloc>()) {
+    instance.registerFactory<SearchDoctorsBloc>(() => SearchDoctorsBloc(
+      instance(),   instance(),instance()
+    ));
   }
 }

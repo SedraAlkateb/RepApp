@@ -15,7 +15,9 @@ abstract class AppServiceClient {
   Future<LoginResponse> login(
     @Part(name: "userName") String userName,
     @Part(name: "password") String password,
-    @Part(name: "ver") int ver,
+    @Part(name: "ver") int ver
+    ,
+    
   );
   @POST("/getAllPlace.php")
   Future<AllPlaceBaseResponse> allPlace(
@@ -25,10 +27,7 @@ abstract class AppServiceClient {
   Future<AllSpcBaseResponse> allSpecializations(
     @Part(name: "repDet") int repDet,
   );
-  @POST("/getVisitDoc.php")
-  Future<AllMedicalVisitBaseResponse> allVisitDoctor(
-    @Part(name: "repDet") int repDet,
-  );
+
   @POST("/getCity.php")
   Future<AllCityBaseResponse> allCity();
 
@@ -60,6 +59,28 @@ abstract class AppServiceClient {
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
       @Part(name: "repPlanIdActive") int repPlanIdActive,
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
+  @POST("/getAllPlanBrandsType.php")
+  Future<AllPlanBrandsBaseResponse> getAllPlanBrandsType(
+      @Part(name: "repPlanIdActive") int repPlanIdActive,
+      @Part(name: "flag") int? flag,
+      {@Part(name: "repPlanIdOther") int? repPlanIdOther});
+  @POST("/admin/getRepPlanBrandSp.php")
+  Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "spId") int? spId,
+      @Part(name: "repId") int? repId);
+
+  @POST("/admin/docSearch.php")
+  Future<SearchDoctorsBaseSpResponse> docSearch(
+    @Part(name: "cityId") int cityId,
+    @Part(name: "name") String name,
+  );
+
+  @POST("/admin/docReport.php")
+  Future<DocDoctorsBaseResponse> docReport(
+    @Part(name: "docId") int docId,
+  );
+
   @POST("/getHosVisit.php")
   Future<VisitHospitalBaseResponse> getHosVisit(
     @Part(name: "repPlanId") int repPlanId,
@@ -126,8 +147,19 @@ abstract class AppServiceClient {
     @Part(name: "recipeType") String recipeType,
   );
 
+  @POST("/reci/getRepReci.php")
+  Future<CopyRecResponse> getRepReci(
+    @Part(name: "reciId") int reciId,
+  );
+ // 3981
   @POST("/admin/getReps.php")
   Future<AllRepresentativeBaseResponse> getReps(
+    @Part(name: "repDet") int id,
+      @Part(name: "cityId") int cityId,
+
+      );
+  @POST("/admin/getRepsFuture.php")
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
     @Part(name: "repDet") int id,
   );
   @POST("/admin/getVisitNotes.php")
@@ -136,6 +168,10 @@ abstract class AppServiceClient {
   );
   @POST("/admin/noVisitDoc.php")
   Future<AllNoVisitDoctorBaseResponse> noVisitDoc(
+    @Part(name: "repDet") int docId,
+  );
+    @POST("/admin/getUnfinishedDoctorVisits.php")
+  Future<AllNoVisitDoctorBaseResponse> getUnfinishedDoctorVisits(
     @Part(name: "repDet") int docId,
   );
   @POST("/admin/visitDoc.php")
@@ -164,7 +200,59 @@ abstract class AppServiceClient {
       @Part(name: "userId") int userId,
       @Part(name: "status") int status,
       @Part(name: "reqType") int reqType);
+  @POST("/admin/readAllVisits.php")
+  Future<Message1Response> readAllVisits(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "userId") int userId,
+      @Part(name: "type") int type,
+
+      @Part(name: "flag") int flag);
+
   @POST("/admin/getRepVisitsHos.php")
   Future<AllRepVisitsResponseBaseResponse> getRepVisitsHos(
       @Part(name: "repId") int repId, @Part(name: "userId") int userId);
+  @POST("/admin/changePlanBrandType.php")
+  Future<Message1Response> changePlanBrandType(
+      @Part(name: "id") int id, @Part(name: "brandType") int brandType);
+
+  @POST("/reci/getAllRepReci.php")
+  Future<AllReciBaseResponse> getAllRepReci(
+    @Part(name: "repId") int repDet,
+  );
+  @POST("/admin/getDocInfo.php")
+  Future<InfoDoctorBaseResponse> getDocInfo(
+      @Part(name: "docId") int docId,
+      );
+  @POST("/reci/updateReci.php")
+  Future<Message1Response> updateReci(
+  @Part(name: "reciId") int reciId,
+  @Part(name: "recipeType") int recipeType,
+  @Part(name: "repId") String repId,
+  @Part(name: "type") String type,
+  @Part(name: "docId") String docId,
+  @Part(name: "spName") String spName,
+  @Part(name: "brand_1") String brand_1,
+  @Part(name: "address") String address,
+  @Part(name: "phone") String phone,
+  @Part(name: "total") String total,
+  @Part(name: "create_date") String create_date,{
+  @Part(name: "note1") String? note1,
+  @Part(name: "note2") String? note2,
+  @Part(name: "flagImage1") String? flagImage1,
+  @Part(name: "flagImage2") String? flagImage2,
+  @Part(name: "note_emp") String? note_emp,
+  @Part(name: "image1") File? image1,
+  @Part(name: "image2") File? image2,
+  @Part(name: "brand_2") String? brand_2,
+  @Part(name: "brand_3") String? brand_3,
+  @Part(name: "brand_4") String? brand_4,
+  @Part(name: "print_date") String? print_date,
+  @Part(name: "active") String? active,
+  }
+  );
+  
+    @POST("/admin/getinfoPlanBrandsType.php")
+  Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
+      @Part(name: "repPlanId") int repPlanId,
+      );
 }

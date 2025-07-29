@@ -1,6 +1,7 @@
 class UserInfo{
   static int percentage = 0;
   static int repId = 0;
+   static int cityId = 0;
   static int ?otherPlanId = 0;
   static int activePlanId = 0;
   static int ? otherstatus = 0;
@@ -20,4 +21,6 @@ class UserInfo{
   static int flag1 = 0;
   static int version = 4;
   static String repType="0";
+  static int numOfDoctorVisit = -1;
+  static int numOfHospitalVisit = -1;
 }

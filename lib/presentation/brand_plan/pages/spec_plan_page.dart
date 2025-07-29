@@ -1,8 +1,9 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
-import 'package:domina_app/presentation/brand_plan/widget/brand_plan_other_page.dart';
-import 'package:domina_app/presentation/brand_plan/widget/dialog_plan.dart';
+import 'package:domina_app/presentation/brand_plan/pages/brand_plan_other_page.dart';
+import 'package:domina_app/presentation/brand_plan/widget/data_plan.dart';
+import 'package:domina_app/presentation/brand_plan/widget/save_send_bottom.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -24,22 +25,7 @@ class SpecPlanPage extends StatelessWidget {
                 SizedBox(
                   height: 14,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Card(
-                    shadowColor: ColorManager.secondaryColor7,
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: ColorManager.secondaryColor7,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      "\nتاريخ الخطة : ${UserInfo.otherStartDate ?? 'غير متاح'} >>> ${UserInfo.otherEndDate ?? 'غير متاح'} \n ",
-                    ),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                  ),
-                ),
+                dataPlan(UserInfo.otherStartDate,UserInfo.otherEndDate ),
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -139,6 +125,9 @@ class SpecPlanPage extends StatelessWidget {
                                                   .withOpacity(0.8),
                                               colorBlendMode:
                                                   BlendMode.modulate,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return SizedBox();
+                                              },
                                             ),
                                             SizedBox(height: 20),
                                             Text(
@@ -203,98 +192,15 @@ class SpecPlanPage extends StatelessWidget {
                     if (state is UpdateAmountState) {
                       BlocProvider.of<BrandPlanBloc>(context)
                           .add(UpdateSaveEvent());
+                      Navigator.pop(context);
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                     if (state is UpdateAmountSendState) {
+                      Navigator.pop(context);
                       successWithMessage(context, "تم حفظ التغيرات");
                     }
                   },
-                  child: Positioned(
-                      bottom: 20,
-                      left: 10,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              UserInfo.otherstatus == 0
-                                  ? showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return dialogPlan(
-                                            context,
-                                            fun: () => BlocProvider.of<
-                                                    BrandPlanBloc>(context)
-                                                .add(UpdateAmountSucEvent()),
-                                            "هل أنت متأكد من حفظ التغيرات");
-                                      },
-                                    )
-                                  : null;
-                            },
-                            child: SizedBox(
-                              height: 80,
-                              width: 100,
-                              child: Stack(
-                                //    alignment: Alignment.bottomCenter,
-                                children: [
-                                  Image.asset(
-                                    ImageAssets.top,
-                                  ),
-                                  Positioned(
-                                    bottom: 20,
-                                    left: 35,
-                                    child: Text(
-                                      "حفظ",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              UserInfo.otherstatus == 0
-                                  ? showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return dialogPlan(
-                                            context,
-                                            fun: () =>
-                                                BlocProvider.of<BrandPlanBloc>(
-                                                        context)
-                                                    .add(SendToS()),
-                                            "هل أنت متأكد من إرسال التغيرات");
-                                      },
-                                    )
-                                  : null;
-                            },
-                            child: SizedBox(
-                              height: 80,
-                              width: 100,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    ImageAssets.bottom,
-                                  ),
-                                  Positioned(
-                                    bottom: 50,
-                                    left: 35,
-                                    child: Text(
-                                      "إرسال",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
+                  child: SaveSendBottom(),
                 )
               : SizedBox(),
         ],

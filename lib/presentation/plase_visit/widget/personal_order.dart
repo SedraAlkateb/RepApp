@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -30,8 +32,8 @@ class PersonalOrder extends StatelessWidget {
           prefixIcon: null,
           onChanged: (value) {
             noteeController.text = "";
-            BlocProvider.of<VisitPlaceBloc>(context).br="";
-            BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand=[];
+            BlocProvider.of<VisitPlaceBloc>(context).br = "";
+            BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
             BlocProvider.of<VisitPlaceBloc>(context)
                 .add(TypeAdditionEvent(value));
           },
@@ -40,13 +42,16 @@ class PersonalOrder extends StatelessWidget {
             //   return "اختر نوع الطلب";
             // }
             return null;
-          }, errorText: '',
+          },
+          errorText: '',
         ),
         Padding(
           padding: const EdgeInsets.only(top: AppPadding.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
-              return current is BoxState || current is DropDownState ||current is NothingState;
+              return current is BoxState ||
+                  current is DropDownState ||
+                  current is NothingState;
             },
             builder: (context, state) {
               if (state is BoxState) {
@@ -180,9 +185,13 @@ class PersonalOrder extends StatelessWidget {
                       listener: (context, state) {
                         if (state is SelectBrandAddState) {
                           showDialog(
+                              barrierDismissible: false,
                               context: context,
-                              builder: (context) => DialogFilter(
-                                    text: "اختر عدد العينات",
+                              builder: (context) => WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: DialogFilter(
+                                      text: "اختر عدد العينات",
+                                    ),
                                   ));
                         }
                       },
@@ -190,11 +199,8 @@ class PersonalOrder extends StatelessWidget {
                         List<BrandAddition> selectBrand =
                             context.watch<VisitPlaceBloc>().selectAddBrand;
                         if (state is SelectBrandAddNumState) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            selectBrand = state.brands;
-                          });
+                          selectBrand = state.brands;
                         }
-
                         return selectBrand.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -376,7 +382,9 @@ class PersonalOrder extends StatelessWidget {
                   ],
                 );
               }
-              if (state is NothingState){return SizedBox();}
+              if (state is NothingState) {
+                return SizedBox();
+              }
               return SizedBox();
             },
           ),

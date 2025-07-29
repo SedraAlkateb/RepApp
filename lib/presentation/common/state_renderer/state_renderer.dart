@@ -40,12 +40,11 @@ class StateRenderer extends StatelessWidget {
   }
   Widget _getStateWidget(BuildContext context){
     switch(stateRendererType){
-
       case StateRendererType.popupLoadingState:
         return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading1)]);
       case StateRendererType.popupSuccess:
         return _getPopupDialog(context,[
-          _getAnimatedImage(JsonAssets.loading1),
+          _getAnimatedImage(JsonAssets.suc2),
           _getMessage(message),
           _getRetryButton("موافق",context)
         ]);
@@ -72,8 +71,6 @@ class StateRenderer extends StatelessWidget {
         ]);
       case StateRendererType.contentState:
       return Container();
-      default:
-        return Container();
     }
   }
 Widget _getItemsColumn(List<Widget>children){
