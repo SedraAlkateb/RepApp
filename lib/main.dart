@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/network/app_sql_api.dart';
+import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
@@ -11,6 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> _showEndDateNotification() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -27,7 +32,7 @@ Future<void> _showEndDateNotification() async {
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
   await flutterLocalNotificationsPlugin.show(
-    0,
+    2,
     'شركة دومِنا',
     'لقد وصلت إلى نهاية الخطة الحالية, يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات ', // نص الإشعار
     platformChannelSpecifics,
@@ -107,10 +112,15 @@ Future<int?> sss() async {
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+@pragma('vm:entry-point')
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    final dbHelper = DatabaseHelper(); 
+  final appSqlApi = AppSqlApi(dbHelper);
+  await appSqlApi.printAllTables();
   await initAppModule();
   await _initNotifications();
+  AlarmAndNotifications.showNotification();
   await requestNotificationPermission();
   await sss();
   //initializeTimeZones();
@@ -126,6 +136,9 @@ Future<void> _initNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
   );
+  await AlarmAndNotifications.initialize();
+ // await AlarmAndNotifications.schedulePeriodicNotification();
+ await AlarmAndNotifications.scheduleOneShot();
 }
 
 class MyHttpOverrides extends HttpOverrides {
