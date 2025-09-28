@@ -129,6 +129,8 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
+          (UserInfo.repType != "7")
+              ?
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
@@ -148,14 +150,16 @@ class DrawerPage extends StatelessWidget {
               }
               );
             },
-          ),
+          ):SizedBox(),
+          (UserInfo.repType != "7")
+              ?
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
               thickness: 0.5,
               color: ColorManager.hintGrey,
             ),
-          ),
+          ):SizedBox(),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
