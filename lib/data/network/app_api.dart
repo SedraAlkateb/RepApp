@@ -217,9 +217,7 @@ abstract class AppServiceClient {
     @Part(name: "repId") int repDet,
   );
   @POST("/admin/getDocInfo.php")
-  Future<InfoDoctorBaseResponse> getDocInfo(
-      @Part(name: "docId") int docId,
-      );
+  Future<InfoDoctorBaseResponse> getDocInfo(@Part(name: "docId") int docId,);
   @POST("/reci/updateReci.php")
   Future<Message1Response> updateReci(
   @Part(name: "reciId") int reciId,
