@@ -50,14 +50,17 @@ class Places extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
+                                padding:
+                                    const EdgeInsets.only(bottom: 20, top: 30),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  "اختر أحد المناطق لإِظهار(الأطباء,المشافي)في المنطقة المختارة",
+                                  "اختر إحدى المناطق لإظهار (الأطباء، المشافي) في المنطقة المختارة",
                                   style: TextStyle(
+                                      fontFamily: 'Tajawal',
                                       fontSize: 22,
+                                      fontWeight: FontWeight.w500, 
                                       color: ColorManager.secondaryColor1,
-                                      fontWeight: FontWeight.bold,
+                                     // fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.none),
                                 ),
                               ),

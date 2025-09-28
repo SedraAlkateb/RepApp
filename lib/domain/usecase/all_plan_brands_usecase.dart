@@ -9,12 +9,7 @@ class AllPlanBrandsUsecase extends Equatable {
   Future<Either<Failure, List<PlanBrandModel>>> execute( Rep rep) async{
     return await _repository.getAllPlanBrands(rep);
   }
-
   @override
   List<Object?> get props => [_repository];
 
 }
-
-
-
-

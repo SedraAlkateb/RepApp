@@ -3,6 +3,8 @@ import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/network/app_sql_api.dart';
+import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
@@ -113,14 +115,15 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 @pragma('vm:entry-point')
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //   final dbHelper = DatabaseHelper();
-  // final appSqlApi = AppSqlApi(dbHelper);
-  // await appSqlApi.printAllTables();
+  final dbHelper = DatabaseHelper();
+  final appSqlApi = AppSqlApi(dbHelper);
+  await appSqlApi.debugOtherPlanBrandByRepPlanId(UserInfo.activePlanId);
   await initAppModule();
   await _initNotifications();
-  await sss();
+
   await requestNotificationPermission();
   AlarmAndNotifications.showNotification();
+  await sss();
   //initializeTimeZones();
   runApp(Phoenix(child: const MyApp()));
 }

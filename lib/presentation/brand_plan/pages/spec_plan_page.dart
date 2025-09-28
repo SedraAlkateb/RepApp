@@ -25,7 +25,7 @@ class SpecPlanPage extends StatelessWidget {
                 SizedBox(
                   height: 14,
                 ),
-                dataPlan(UserInfo.otherStartDate,UserInfo.otherEndDate ),
+                dataPlan(UserInfo.otherStartDate, UserInfo.otherEndDate),
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -125,7 +125,8 @@ class SpecPlanPage extends StatelessWidget {
                                                   .withOpacity(0.8),
                                               colorBlendMode:
                                                   BlendMode.modulate,
-                                              errorBuilder: (context, error, stackTrace) {
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
                                                 return SizedBox();
                                               },
                                             ),
@@ -159,8 +160,6 @@ class SpecPlanPage extends StatelessWidget {
                                             Text(
                                               textAlign: TextAlign.center,
                                               "عدد العينات المتاحة: ${(planBrandModel[index].brandk / UserInfo.samplesCount)}",
-
-
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
@@ -197,8 +196,8 @@ class SpecPlanPage extends StatelessWidget {
                     }
                     if (state is UpdateAmountSendState) {
                       Navigator.pop(context);
-                      successWithMessage(context, "تم حفظ التغيرات");
-                    }
+                      successWithMessage(context, "تم الارسال يرجى المزامنة ");
+                    }//240
                   },
                   child: SaveSendBottom(),
                 )
