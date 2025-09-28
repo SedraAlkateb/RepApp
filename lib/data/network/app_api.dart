@@ -15,7 +15,9 @@ abstract class AppServiceClient {
   Future<LoginResponse> login(
     @Part(name: "userName") String userName,
     @Part(name: "password") String password,
-    @Part(name: "ver") int ver,
+    @Part(name: "ver") int ver
+    ,
+    
   );
   @POST("/getAllPlace.php")
   Future<AllPlaceBaseResponse> allPlace(
@@ -203,6 +205,7 @@ abstract class AppServiceClient {
       @Part(name: "repPlanId") int repPlanId,
       @Part(name: "userId") int userId,
       @Part(name: "type") int type,
+
       @Part(name: "flag") int flag);
 
   @POST("/admin/getRepVisitsHos.php")

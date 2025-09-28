@@ -113,7 +113,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       }
 
       Future<bool> getData() async {
-
         try {
           brands = [];
           places = [];
@@ -162,8 +161,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           {
             emit(LoadingState(3));
             final planBrandsResult = await allPlanBrandsUsecase.execute(Rep(
-                UserInfo.activePlanId, 0,otherRepId:UserInfo.otherPlanId  )
-            );
+                UserInfo.activePlanId, 0,
+                otherRepId: UserInfo.otherPlanId));
             final planBrandsFailureOrSuccess =
                 planBrandsResult.fold((failure) => failure, (data) => data);
             if (planBrandsFailureOrSuccess is Failure) {
@@ -184,7 +183,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
               return false;
             }
             doctors = doctorsFailureOrSuccess as List<DoctorModel>;
-           // emit(LoadingState(5));
+            // emit(LoadingState(5));
           } catch (e) {
             emit(SyncDataErrorState(failure: Failure(2, e.toString())));
           }
@@ -284,8 +283,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         }, (data) async {
           emit(DeleteAllState());
         });
-      }
-      else if (event is EditEvent) {
+      } else if (event is EditEvent) {
         (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
             (failure) {
           emit(EditStatusDErrorState(failure: failure));
@@ -302,7 +300,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           emit(IsActiveErrorState(failure: failure));
         }, (data) async {
           checkActiveModel = data;
-          UserInfo.activePlanId = data.activePlanId??-5;
+          UserInfo.activePlanId = data.activePlanId ?? -5;
           UserInfo.otherPlanId = data.otherPlanId ?? 0;
           UserInfo.otherstatus = data.otherStatus ?? -1;
           UserInfo.percentage = data.percentage;
@@ -321,10 +319,10 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         (await updateActiveSqlUsecase.execute(
                 UserInfo.repId,
                 checkActiveModel!.otherPlanId ?? 9,
-                checkActiveModel!.activePlanId??-5,
+                checkActiveModel!.activePlanId ?? -5,
                 checkActiveModel!.otherStatus ?? 9,
-                checkActiveModel!.startDate??"",
-                checkActiveModel!.endDate??"",
+                checkActiveModel!.startDate ?? "",
+                checkActiveModel!.endDate ?? "",
                 checkActiveModel!.otherStartDate ?? "",
                 checkActiveModel!.otherEndDate ?? ""))
             .fold((failure) {

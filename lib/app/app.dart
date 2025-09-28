@@ -196,6 +196,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<AsyncBloc>()),
       ],
       child: MaterialApp(
+        //  navigatorKey: navigatorKey,
         locale: Locale('ar'),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -208,17 +209,30 @@ class _MyAppState extends State<MyApp> {
         },
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: UserInfo.isLogging == 0
-            ? Routes.login
-            : UserInfo.isLogging == 1
-                ? Routes.syncData
-                : UserInfo.isLogging == 4
-                    ? (Routes.syncData)
-                    : UserInfo.isLogging == 5
-                        ? Routes.asyncIn
-                        : Routes.places,
+        initialRoute: _getInitialRoute()
+
+        //  UserInfo.isLogging == 0
+        //     ? Routes.login
+        //     : UserInfo.isLogging == 1
+        //         ? Routes.syncData
+        //         : UserInfo.isLogging == 4
+        //             ? (Routes.syncData)
+        //             : UserInfo.isLogging == 5
+        //                 ? Routes.asyncIn
+        //                 : Routes.places,
+
+        ,
         theme: getApplicationTheme(),
       ),
     );
   }
+}
+
+String _getInitialRoute() {
+  if (UserInfo.isLogging == 0) return Routes.login;
+  if (UserInfo.isLogging == 1) return Routes.syncData;
+  if (UserInfo.isLogging == 4) return Routes.syncData;
+  if (UserInfo.isLogging == 5) return Routes.asyncIn;
+  if (UserInfo.isLogging == 2) return Routes.places;
+  return Routes.places;
 }
