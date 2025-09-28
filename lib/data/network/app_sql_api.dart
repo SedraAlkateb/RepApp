@@ -2,6 +2,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
+
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
       List<BrandModel> brands,
@@ -98,6 +99,7 @@ abstract class AppSqlApiAbs {
   Future<List<ExceptionModel>> allException();
   Future<NumVisit> numVisit();
 }
+
 class AppSqlApi extends AppSqlApiAbs {
   DatabaseHelper databaseHelper;
   AppSqlApi(this.databaseHelper);
@@ -109,8 +111,10 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var brand in brands) {
-      batch.insert('brand', brand.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,);
+      batch.insert(
+        'brand',
+        brand.toMap(),
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -133,39 +137,52 @@ class AppSqlApi extends AppSqlApiAbs {
         Batch batch = txn.batch();
         await txn.execute("PRAGMA foreign_keys = OFF");
         for (var place in places) {
-          batch.insert('place', place.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace, );
+          batch.insert(
+            'place',
+            place.toMap(),
+          );
         }
         for (var doctor in doctors) {
-          batch.insert('doctor', doctor.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
+          batch.insert(
+            'doctor',
+            doctor.toMap(),
+          );
         }
         for (var hospital in hospitals) {
-          batch.insert('hospital', hospital.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
+          batch.insert(
+            'hospital',
+            hospital.toMap(),
+          );
         }
         for (var brand in brands) {
-          batch.insert('brand', brand.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,);
+          batch.insert(
+            'brand',
+            brand.toMap(),
+          );
         }
         // for (var pharmacy in pharmacies) {
         //   batch.insert('pharmacy', pharmacy.toMap());
         // }
         for (var spec in specs) {
-          batch.insert('specialization', spec.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
+          batch.insert('specialization', spec.toMap());
         }
         for (var hospitalSp in hospitalSps) {
-          batch.insert('hospitalSp', hospitalSp.toMap(),
-  conflictAlgorithm: ConflictAlgorithm.replace,);
+          batch.insert(
+            'hospitalSp',
+            hospitalSp.toMap(),
+          );
         }
         for (var brandSp in brandSps) {
-          batch.insert('brandSp', brandSp.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,);
+          batch.insert(
+            'brandSp',
+            brandSp.toMap(),
+          );
         }
         if (planBrands != null && planBrands.isNotEmpty) {
           for (var planBrand in planBrands) {
             batch.insert(
               'planBrand',
               planBrand.toMap(),
-            
-  conflictAlgorithm: ConflictAlgorithm.replace,
             );
           }
         }
@@ -292,12 +309,10 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var place in places) {
-  batch.insert(
-  'place',
-  place.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-);
-      
+      batch.insert(
+        'place',
+        place.toMap(),
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -306,7 +321,10 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var spec in specs) {
-      batch.insert('specialization', spec.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
+      batch.insert(
+        'specialization',
+        spec.toMap(),
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -473,15 +491,6 @@ class AppSqlApi extends AppSqlApiAbs {
     }
   }
 
-  // Future<Map<String, dynamic>> fetchTotalSums(Database db) async {
-  //   final List<Map<String, dynamic>> result = await db.rawQuery('''
-  //   SELECT
-  //       SUM(sumDoctor + sumHospital) AS grandTotal
-  //   FROM specialization;
-  // ''');
-  //   return result.first; // لأننا نتوقع صفًا واحدًا فقط
-  // }
-
   Future<List<BrandModel>> getBrandsWithFlag() async {
     final db = await databaseHelper.database;
     List<Map<String, dynamic>> brands = await db.query(
@@ -545,7 +554,10 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var doctor in doctors) {
-      batch.insert('doctor', doctor.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
+      batch.insert(
+        'doctor',
+        doctor.toMap(),
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -564,7 +576,10 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
     for (var hospital in hospitals) {
-      batch.insert('hospital', hospital.toMap(),  conflictAlgorithm: ConflictAlgorithm.replace,);
+      batch.insert(
+        'hospital',
+        hospital.toMap(),
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -651,7 +666,6 @@ class AppSqlApi extends AppSqlApiAbs {
     batch.insert(
       'visit_pharmacy',
       visitPharmacyModel.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     await batch.commit(noResult: true);
   }
@@ -750,7 +764,6 @@ class AppSqlApi extends AppSqlApiAbs {
         await txn.insert(
           'visit_doctor',
           visitDoctorModel.toMap1(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
         );
       });
     } else {
@@ -767,14 +780,12 @@ class AppSqlApi extends AppSqlApiAbs {
         int visitId = await txn.insert(
           'visit_pharmacy',
           visitPharmacyModel.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
         );
         for (var visitBrand in visitBrandPharmacyModels) {
           visitBrand.visitId = visitId;
           await txn.insert(
             'visit_brand_pharmacy',
             visitBrand.toJson(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
           );
         }
       } catch (e) {
@@ -809,14 +820,12 @@ class AppSqlApi extends AppSqlApiAbs {
           int visitId = await txn.insert(
             'visit_doctor',
             visitDoctorModel.toMap1(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
           );
           for (var visitBrand in visitBrandPharmacyModels) {
             visitBrand.visitId = visitId;
             await txn.insert(
               'visit_brand_doctor',
               visitBrand.toJson(),
-              conflictAlgorithm: ConflictAlgorithm.replace,
             );
           }
         } else {
@@ -861,7 +870,6 @@ class AppSqlApi extends AppSqlApiAbs {
           int visitId = await txn.insert(
             'visit_hospital',
             visitHospitalModel.toMap1(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
           for (var visitBrand in visitBrandPharmacyModels) {
@@ -869,7 +877,6 @@ class AppSqlApi extends AppSqlApiAbs {
             await txn.insert(
               'visit_brand_hospital',
               visitBrand.toJson(),
-              conflictAlgorithm: ConflictAlgorithm.replace,
             );
           }
         } else {
@@ -913,7 +920,6 @@ class AppSqlApi extends AppSqlApiAbs {
           await txn.insert(
             'visit_hospital',
             visitHospitalModel.toMap1(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
           );
         } else {
           // إذا كانت هناك زيارة سابقة، ارمي خطأ
@@ -1194,8 +1200,8 @@ class AppSqlApi extends AppSqlApiAbs {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'hospitalSp',
-      where: 'flag = ?', // Add the WHERE clause
-      whereArgs: [0], // Pass the value for flag (0 in this case)
+      where: 'flag = ?',
+      whereArgs: [0],
     );
     return List.generate(maps.length, (i) {
       return HospitalSpModel.fromMap(maps[i]);
@@ -1207,8 +1213,8 @@ class AppSqlApi extends AppSqlApiAbs {
     final db = await databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'visit_pharmacy',
-      where: 'flag = ?', // Add the WHERE clause
-      whereArgs: [0], // Pass the value for flag (0 in this case)
+      where: 'flag = ?',
+      whereArgs: [0],
     );
     return List.generate(maps.length, (i) {
       return VisitPharmacyModel.fromMap(maps[i]);
@@ -1528,7 +1534,6 @@ class AppSqlApi extends AppSqlApiAbs {
   @override
   Future<NumVisit> numVisit() async {
     Database? mydb = await databaseHelper.database;
-
     final List<Map<String, dynamic>> hospitalResult =
         await mydb.rawQuery('''SELECT COUNT(*) as count FROM visit_hospital''');
     final List<Map<String, dynamic>> doctorResult =
@@ -1536,28 +1541,79 @@ class AppSqlApi extends AppSqlApiAbs {
     int visitHospital = hospitalResult.first['count'] ?? 0;
     int visitDoctor =
         doctorResult.isNotEmpty ? doctorResult.first['count'] ?? 0 : 0;
-
     return NumVisit(visitDoctor, visitHospital);
   }
 
-    Future<List<String>> getAllTableNames() async {
+  Future<List<String>> getAllTableNames() async {
     Database? mydb = await databaseHelper.database;
-  final tables = await mydb.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
-  return tables.map((t) => t['name'] as String).toList();
-}
-Future<void> printAllTables() async {
+    final tables = await mydb.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+    return tables.map((t) => t['name'] as String).toList();
+  }
+
+  Future<void> debugOtherPlanBrandByRepPlanId(int repPlanId) async {
     Database? mydb = await databaseHelper.database;
-  final tableNames = await getAllTableNames();
-  
-  for (final table in tableNames) {
-    final data = await mydb.query(table);
-    print("📌 محتوى جدول $table:");
-    for (final row in data) {
+
+    // ---- الاستعلام الأصلي ----
+    const query = '''
+  SELECT  
+    planBrand.id AS plan_id,
+    planBrand.repPlanId,
+    planBrand.brandType,
+    planBrand.amount,
+    brand.id AS brand_id,
+    brand.title AS brand_title,
+    brand.phTitle AS brand_phTitle,
+    brand.sampleCoast AS brand_sampleCost,
+    specialization.id AS specialization_id,
+    specialization.title AS specialization_title,
+    specialization.flag AS specialization_flag,
+    specialization.sumDoctor AS sumDoctor,
+    specialization.sumHospital AS sumHospital,
+    specialization.sumBrandHospital AS sumBrandHospital
+  FROM 
+    planBrand
+  JOIN  
+    brand ON planBrand.brandId = brand.id
+  JOIN 
+    specialization ON planBrand.spId = specialization.id
+  WHERE 
+    planBrand.repPlanId = ?;
+  ''';
+
+    print("🚀 Running SQL query:\n$query");
+    print("With repPlanId = $repPlanId");
+
+    final List<Map<String, dynamic>> maps =
+        await mydb.rawQuery(query, [repPlanId]);
+
+    print("📊 Query returned ${maps.length} rows:");
+    for (var row in maps) {
       print(row);
     }
-    print("──────────────────────────────");
-  }
-}
 
+    // ---- محتويات الجداول ----
+    print("\n==============================");
+    print("📌 Table: planBrand");
+    var planBrands = await mydb.rawQuery("SELECT * FROM planBrand");
+    for (var row in planBrands) {
+      print(row);
+    }
+
+    // print("\n==============================");
+    // print("📌 Table: brand");
+    // var brands = await mydb.rawQuery("SELECT * FROM brand");
+    // for (var row in brands) {
+    //   print(row);
+    // }
+
+    print("\n==============================");
+    print("📌 Table: specialization");
+    var specs = await mydb.rawQuery("SELECT * FROM specialization");
+    for (var row in specs) {
+      print(row);
+    }
+
+    print("==============================\n");
+  }
 }

@@ -303,19 +303,31 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         }
         not = event.type.name;
         br = "";
-      }
-      else if (event is SearchDoctorVisitEvent)
-      {
-        String search = normalizeText(event.value);
-        doctorSearchModel = doctors.where((doctorValue) {
-          if (normalizeText(doctorValue.title).contains(search)) {
-            return true;
-          } else {
-            return false;
-          }
-        }).toList();
-        emit(SearchVisitDoctorState(doctorSearchModel));
-      }
+      }else if (event is SearchDoctorVisitEvent) {
+  String search = normalizeText(event.value);
+
+  doctorSearchModel = doctors.where((doctorValue) {
+    final nameMatch = normalizeText(doctorValue.title).contains(search);
+    final specialtyMatch = normalizeText(doctorValue.spTitle).contains(search);
+
+    return nameMatch || specialtyMatch;
+  }).toList();
+
+  emit(SearchVisitDoctorState(doctorSearchModel));
+}
+
+      // else if (event is SearchDoctorVisitEvent)
+      // {
+      //   String search = normalizeText(event.value);
+      //   doctorSearchModel = doctors.where((doctorValue) {
+      //     if (normalizeText(doctorValue.title).contains(search)) {
+      //       return true;
+      //     } else {
+      //       return false;
+      //     }
+      //   }).toList();
+      //   emit(SearchVisitDoctorState(doctorSearchModel));
+      // }
       else if (event is SearchHospitalVisitEvent) {
         String search = normalizeText(event.value);
         hospitalSearchModel = hospitals.where((hospital) {
