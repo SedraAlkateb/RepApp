@@ -8,6 +8,7 @@ import 'package:domina_app/presentation/uniti/custom-wavy-background.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -23,8 +24,6 @@ class _MyLoginState extends State<MyLogin> {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.sizeOf(context).height);
-    print(MediaQuery.sizeOf(context).width);
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
@@ -47,11 +46,11 @@ class _MyLoginState extends State<MyLogin> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 120),
-                      Image.asset(ImageAssets.domina, scale: 5),
-                      SizedBox(height: 8),
+                      SizedBox(height: 120.h),
+                      Image.asset(ImageAssets.domina, scale: 5.r ),
+                      SizedBox(height: 8.h),
                       Container(
-                        margin: EdgeInsets.only(left: 35, right: 35),
+                        margin: EdgeInsets.only(left: 35.w, right: 35.w),
                         child: Column(
                           children: [
                             TextFormField(
@@ -68,7 +67,7 @@ class _MyLoginState extends State<MyLogin> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 30),
+                            SizedBox(height: 30.h),
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
                                 bool isObscured = true;
@@ -99,20 +98,20 @@ class _MyLoginState extends State<MyLogin> {
                                       },
                                     ),
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10.r),
                                     ),
                                   ),
                                 );
                               },
                             ),
-                            SizedBox(height: 40),
+                            SizedBox(height: 40.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'تسجيل الدخول',
                                   style: TextStyle(
-                                      fontSize: 27,
+                                      fontSize: 27.sp,
                                       fontWeight: FontWeight.w700),
                                 ),
                                 BlocListener<AuthBloc, AuthState>(
@@ -139,7 +138,7 @@ class _MyLoginState extends State<MyLogin> {
                                     }
                                   },
                                   child: CircleAvatar(
-                                    radius: 30,
+                                    radius: 30.r,
                                     backgroundColor:
                                         ColorManager.secondaryColor1,
                                     child: IconButton(

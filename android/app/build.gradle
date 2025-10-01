@@ -3,27 +3,30 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
+
 android {
     namespace "com.example.domina_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35 // تحديث إلى SDK 35
+
     ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
-    }
 
     defaultConfig {
         applicationId "com.example.domina_app"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        minSdk = 21 // مطلوب للـ desugaring
+        targetSdk = 35 // تحديث إلى SDK 35
+        versionCode 1
+        versionName "1.0"
+    }
 
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
+            coreLibraryDesugaringEnabled true // تفعيل desugaring
+        }
+
+
+    kotlinOptions {
+        jvmTarget = "17" // مطابقة مع Kotlin 2.2.0
     }
 
     buildTypes {
@@ -33,9 +36,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
 }
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.0"
+
+    // Core library desugaring
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
+
+    // Flutter plugins dependencies
+    implementation "androidx.core:core-ktx:1.10.1"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+
+    // أضف أي مكتبات أخرى حسب مشروعك
+}
+
 flutter {
     source '../..'
 }
-
