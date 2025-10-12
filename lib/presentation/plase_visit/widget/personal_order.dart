@@ -46,7 +46,7 @@ class PersonalOrder extends StatelessWidget {
           errorText: '',
         ),
         Padding(
-          padding: const EdgeInsets.only(top: AppPadding.p12),
+          padding:  EdgeInsets.only(top: AppPaddingH.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
               return current is BoxState ||

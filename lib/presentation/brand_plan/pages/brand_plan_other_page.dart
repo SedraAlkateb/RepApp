@@ -60,8 +60,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                             BlocBuilder<BrandPlanBloc, BrandPlanState>(
                           builder: (context, state) {
                             return Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p16),
+                              margin: EdgeInsets.all(AppPaddingH.p8),
+                              padding: EdgeInsets.all(AppPaddingH.p16),
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(color: ColorManager.secondaryColor),
@@ -69,7 +69,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                 color: ColorManager.white,
                                 border: Border.all(
                                     color: ColorManager.secondaryColor7),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius:  BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                               ),
                               child: Column(
@@ -106,8 +106,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                         ),
                                         Container(
                                           padding: EdgeInsets.symmetric(
-                                            vertical: AppPadding.p8,
-                                            horizontal: AppPadding.p14,
+                                            vertical: AppPaddingH.p8,
+                                            horizontal: AppPaddingW.p14,
                                           ),
                                           decoration: BoxDecoration(
                                             color: int.parse(widget
@@ -118,7 +118,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                                 ? ColorManager.secondaryColor1
                                                 : ColorManager.secondaryColor2,
                                             borderRadius:
-                                                const BorderRadius.all(
+                                                 BorderRadius.all(
                                               Radius.circular(AppSize.s8),
                                             ),
                                           ),

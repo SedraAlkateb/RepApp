@@ -14,7 +14,7 @@ class TextFieldWidget extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     return   Padding(
-      padding: const EdgeInsets.only(top: AppPadding.p12,right: AppPadding.p8,left: AppPadding.p8),
+      padding:  EdgeInsets.only(top: AppPaddingH.p12,right: AppPaddingW.p8,left: AppPaddingW.p8),
       child: TextFormField(
 
      onChanged:onTap ,

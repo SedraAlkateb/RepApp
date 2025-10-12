@@ -68,8 +68,8 @@ class PharmacyPage extends StatelessWidget {
                       return ListView.builder(
                           itemBuilder: (context, index) {
                             return Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p16),
+                              margin: EdgeInsets.all(AppPaddingH.p8),
+                              padding: EdgeInsets.all(AppPaddingH.p16),
                               //    height: AppSize.s150,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(colors: [
@@ -79,7 +79,7 @@ class PharmacyPage extends StatelessWidget {
                                 ]),
                                 color: ColorManager.white,
 
-                                borderRadius: const BorderRadius.all(
+                                borderRadius:  BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                                 //        color: ColorManager.card,
                               ),

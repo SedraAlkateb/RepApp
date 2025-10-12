@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/decoration.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTime extends StatelessWidget {
    CustomTime({Key? key,required this.timeInput,required this.width,required this.onTap,this.hint='HH/MM'}) : super(key: key);
@@ -19,7 +20,7 @@ String? hint;
       child: TextFormField(
          controller: timeInput,
         style:  TextStyle(
-            color: ColorManager.secondaryColor, fontSize: 14),
+            color: ColorManager.secondaryColor, fontSize: 14.sp),
         cursorColor:ColorManager.secondaryColor,
         keyboardType: TextInputType.none,
         textAlign: TextAlign.start,
@@ -40,8 +41,8 @@ String? hint;
             color: ColorManager.secondaryColor,
             size: 17,
           ),
-          hintStyle: const TextStyle(
-            fontSize: 14,
+          hintStyle:  TextStyle(
+            fontSize: 14.sp,
             color: Color(0xFFD2D1D1),
             fontFamily: 'Manrope',
             fontWeight: FontWeight.w400,

@@ -1,5 +1,6 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CircleNumberWidget extends StatelessWidget {
   final int number;
@@ -20,7 +21,7 @@ class CircleNumberWidget extends StatelessWidget {
         '$number',
         style: TextStyle(
           color: Colors.white,
-          fontSize: 20,
+          fontSize: 20.sp,
           fontWeight: FontWeight.bold,
         ),
       ),

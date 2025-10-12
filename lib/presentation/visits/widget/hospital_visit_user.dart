@@ -77,8 +77,8 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                           }));
                         },
                         child: Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p8),
+                          margin: EdgeInsets.all(AppPaddingH.p8),
+                          padding: EdgeInsets.all(AppPaddingH.p8),
                           //    height: AppSize.s150,
                           decoration: BoxDecoration(
                             boxShadow: [
@@ -86,7 +86,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                             ],
                             color: ColorManager.white,
                             border: Border.all(color: ColorManager.hintGrey),
-                            borderRadius: const BorderRadius.all(
+                            borderRadius:  BorderRadius.all(
                                 Radius.circular(AppSize.s8)),
                             //        color: ColorManager.card,
                           ),

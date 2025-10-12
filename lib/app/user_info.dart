@@ -23,4 +23,6 @@ class UserInfo{
   static String repType="0";
   static int numOfDoctorVisit = -1;
   static int numOfHospitalVisit = -1;
+  static bool isScreenWidth = false;
+
 }

@@ -1,5 +1,6 @@
 import 'package:custom_dropdown_search/custom_dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomDropDownSearchNot extends StatelessWidget {
   const CustomDropDownSearchNot({
@@ -58,7 +59,7 @@ class CustomDropDownSearchNot extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               hintText: 'ابحث هنا',
               hintStyle: TextStyle(
-                fontSize: tablet ? 17 : 12,
+                fontSize: tablet ? 17.sp : 12.sp,
                 overflow: TextOverflow.fade,
               ),
               prefixIcon: Icon(Icons.search, size: 12),
@@ -68,18 +69,18 @@ class CustomDropDownSearchNot extends StatelessWidget {
         items: items,
         dropdownDecoratorProps: DropDownDecoratorProps(
           baseStyle: TextStyle(
-            fontSize: tablet ? 19 : 14,
+            fontSize: tablet ? 19.sp : 14.sp,
             overflow: TextOverflow.fade,
           ),
           dropdownSearchDecoration: InputDecoration(
             icon: icon,
             labelStyle: TextStyle(
-              fontSize: tablet ? 19 : 14,
+              fontSize: tablet ? 19.sp : 14.sp,
               overflow: TextOverflow.fade,
             ),
             hintText: hintText,
             hintStyle: TextStyle(
-              fontSize: tablet ? 17 : 12,
+              fontSize: tablet ? 17.sp : 12.sp,
               overflow: TextOverflow.fade,
             ),
           ),

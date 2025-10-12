@@ -72,7 +72,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) => Container(
-                              margin: const EdgeInsets.all(AppPadding.p8),
+                              margin:  EdgeInsets.all(AppPaddingH.p8),
                               //  padding: EdgeInsets.all(AppPadding.p16),
                               decoration: BoxDecoration(
                                 boxShadow: [
@@ -82,7 +82,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                                 color: ColorManager.white,
                                 border: Border.all(
                                     color: ColorManager.secondaryColor7),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius:  BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                               ),
                               child: Column(
@@ -97,7 +97,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                                           vertical: BorderSide(
                                               color: ColorManager
                                                   .secondaryColor7)),
-                                      borderRadius: const BorderRadius.all(
+                                      borderRadius:  BorderRadius.all(
                                           Radius.circular(AppSize.s8)),
                                     ),
                                     child: Column(
@@ -121,13 +121,13 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                                               ),
                                               Container(
                                                 margin:
-                                                    const EdgeInsets.symmetric(
+                                                     EdgeInsets.symmetric(
                                                         horizontal:
-                                                            AppPadding.p8),
+                                                            AppPaddingW.p8),
                                                 padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: AppPadding.p8,
-                                                  horizontal: AppPadding.p14,
+                                                     EdgeInsets.symmetric(
+                                                  vertical: AppPaddingH.p8,
+                                                  horizontal: AppPaddingW.p14,
                                                 ),
                                                 decoration: BoxDecoration(
                                                   color: planBrandModel[index]
@@ -138,7 +138,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                                                       : ColorManager
                                                           .secondaryColor2,
                                                   borderRadius:
-                                                      const BorderRadius.all(
+                                                       BorderRadius.all(
                                                     Radius.circular(AppSize.s8),
                                                   ),
                                                 ),

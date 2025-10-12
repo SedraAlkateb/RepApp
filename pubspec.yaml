@@ -48,7 +48,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   dartz: ^0.10.1
   retrofit: ^4.1.0
-  analyzer: ^6.4.1
+  analyzer: ^7.7.1
   freezed: ^2.3.2
   equatable: ^2.0.5
   shimmer: ^3.0.0
@@ -76,6 +76,8 @@ dependencies:
   avatar_glow: ^3.0.1
   flutter_animated_button: ^2.0.4
   android_alarm_manager_plus: ^4.0.7
+  dynamic_color: ^1.8.1
+  responsive_framework: ^1.5.1
 
 dev_dependencies:
   flutter_test:

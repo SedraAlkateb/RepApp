@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
 
 class HospitalViewDetails extends StatelessWidget {
   final List<SpecHospitalSp> hospitalsp;
@@ -176,7 +177,7 @@ class HospitalViewDetails extends StatelessWidget {
                                                   style: TextStyle(
                                                       color: ColorManager
                                                           .secondaryColor4,
-                                                      fontSize: 16,
+                                                      fontSize: 16.sp,
                                                       fontStyle:
                                                           FontStyle.normal),
                                                 ),

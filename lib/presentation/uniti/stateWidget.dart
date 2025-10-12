@@ -29,8 +29,8 @@ Widget loadingShimmer(BuildContext context, int count, double? width,
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: Container(
-          margin: const EdgeInsets.all(AppPadding.p8),
-          padding: const EdgeInsets.all(AppPadding.p16),
+          margin:  EdgeInsets.all(AppPaddingH.p8),
+          padding:  EdgeInsets.all(AppPaddingH.p16),
           decoration: BoxDecoration(
             border: Border.all(color: ColorManager.secondaryColor22),
             color: const Color.fromARGB(255, 250, 254, 255),

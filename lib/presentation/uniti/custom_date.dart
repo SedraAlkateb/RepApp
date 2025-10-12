@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/decoration.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class CustomDate extends StatelessWidget {
@@ -22,7 +23,7 @@ class CustomDate extends StatelessWidget {
         style:  TextStyle(
             color: ColorManager.secondaryColor,
 
-            fontSize: 18),
+            fontSize: 18.sp),
         cursorColor: ColorManager.secondaryColor,
         textAlign: TextAlign.start,
         validator:validator==null ? (value) {
@@ -42,10 +43,10 @@ class CustomDate extends StatelessWidget {
           prefixIcon:  Icon(
             Icons.calendar_today,
             color: ColorManager.secondaryColor,
-            size: 17,
+            size: 17.r,
           ),
-          hintStyle: const TextStyle(
-            fontSize: 15,
+          hintStyle:  TextStyle(
+            fontSize: 15.sp,
             color: Color(0xFFD2D1D1),
             fontFamily: 'Manrope',
             fontWeight: FontWeight.w400,

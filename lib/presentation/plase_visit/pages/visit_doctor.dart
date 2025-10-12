@@ -58,7 +58,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                       BorderRadius.vertical(bottom: Radius.circular(50)),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                  padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p18),
                   child: Stack(
                     children: [
                       Align(

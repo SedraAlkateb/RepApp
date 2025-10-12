@@ -1,5 +1,6 @@
 import 'package:custom_dropdown_search/custom_dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class Customdropdownsearchspec extends StatelessWidget {
@@ -55,7 +56,7 @@ class Customdropdownsearchspec extends StatelessWidget {
           errorBuilder: (context, searchEntry, exception) =>
               Container(
              //   height: MediaQuery.of(context).size.height /17,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             color: Colors.red.withOpacity(0.2),
             child: Text(
               searchEntry.toString(),
@@ -83,9 +84,9 @@ class Customdropdownsearchspec extends StatelessWidget {
           baseStyle: TextStyle(fontSize:tablet?19: 14,overflow: TextOverflow.fade,),
           dropdownSearchDecoration: InputDecoration(
             icon:icon,
-           labelStyle: TextStyle(fontSize:tablet?19:  14,overflow: TextOverflow.fade,),
+           labelStyle: TextStyle(fontSize:tablet?19.sp:  14.sp,overflow: TextOverflow.fade,),
             hintText:hintText ,
-            hintStyle: TextStyle(fontSize:tablet?17:  12,overflow: TextOverflow.fade,)
+            hintStyle: TextStyle(fontSize:tablet?17.sp:  12.sp,overflow: TextOverflow.fade,)
 
           ),
 

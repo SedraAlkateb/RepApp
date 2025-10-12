@@ -8,7 +8,7 @@ final String? supTitle;
   @override
   Widget build(BuildContext context) {
     return  ( supTitle!=null&&  supTitle!=""&&  supTitle!=".")? Padding(
-      padding:  EdgeInsets.only(bottom:AppPadding.p8 ),
+      padding:  EdgeInsets.only(bottom:AppPaddingH.p8 ),
       child: Column(
         children: [
           Row(

@@ -24,6 +24,7 @@ import 'package:domina_app/presentation/senior/representative/widget/row_list_in
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RepProfile extends StatelessWidget {
@@ -66,9 +67,9 @@ class RepProfile extends StatelessWidget {
                     ),
                   ),
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.all(40),
+                    padding: EdgeInsets.all(40.h),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -99,7 +100,7 @@ class RepProfile extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(
-                                height: 5,
+                                height: 5.h,
                               ),
                               Text(
                                 "العنوان : ${state.infoRep.address}",
@@ -107,7 +108,7 @@ class RepProfile extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(
-                                height: 5,
+                                height: 5.h,
                               ),
                               Text(
                                 "الجوال : ${state.infoRep.mobile}",
@@ -134,10 +135,10 @@ class RepProfile extends StatelessWidget {
                     ),
                   )),
               SizedBox(
-                height: 20,
+                height: 20.h,
               ),
               Container(
-                margin: EdgeInsets.all(15),
+                margin: EdgeInsets.all(15.h),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: ColorManager.white,
@@ -145,7 +146,7 @@ class RepProfile extends StatelessWidget {
                       top: Radius.circular(20), bottom: Radius.circular(20)),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding:  EdgeInsets.all(10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -158,7 +159,7 @@ class RepProfile extends StatelessWidget {
                               Navigator.pushNamed(context, Routes.seniorSpec);
                             },
                             child: CircleAvatar(
-                              maxRadius: 25,
+                              maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor11,
                               child: Icon(
                                 FontAwesomeIcons.tag,
@@ -179,7 +180,7 @@ class RepProfile extends StatelessWidget {
                               Navigator.pushNamed(context, Routes.seniorPlaces);
                             },
                             child: CircleAvatar(
-                              maxRadius: 25,
+                              maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor13,
                               child: Icon(
                                 FontAwesomeIcons.locationDot,
@@ -194,7 +195,7 @@ class RepProfile extends StatelessWidget {
                         children: [
                           InkWell(
                             child: CircleAvatar(
-                              maxRadius: 25,
+                              maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor16,
                               child: Icon(FontAwesomeIcons.userDoctor,
                                   color: ColorManager.secondaryColor14),
@@ -217,7 +218,7 @@ class RepProfile extends StatelessWidget {
                               Navigator.pushNamed(context, Routes.seniorHos);
                             },
                             child: CircleAvatar(
-                              maxRadius: 25,
+                              maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor17,
                               child: Icon(FontAwesomeIcons.hospital,
                                   color: ColorManager.secondaryColor15),
@@ -249,7 +250,7 @@ class RepProfile extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 20.h,
               ),
               Container(
                 padding: EdgeInsets.all(20),
@@ -265,7 +266,7 @@ class RepProfile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 40,
+                      height: 40.h,
                     ),
                     Row(
                       children: [
@@ -273,18 +274,18 @@ class RepProfile extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                                   EdgeInsets.symmetric(horizontal: 8.w),
                               child: Text(
                                 "تفاصيل المندوب",
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                             )),
                         SizedBox(
-                          width: 10,
+                          width: 10.w,
                         ),
                         Expanded(
                           child: Container(
-                            height: 0.5,
+                            height: 0.5.h,
                             color: ColorManager.secondaryColor1,
                           ),
                         ),
@@ -311,8 +312,8 @@ class RepProfile extends StatelessWidget {
                         icon1: FontAwesomeIcons.table,
                         text: "تقرير الأطباء"),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: AppPadding.p14),
+                      padding:  EdgeInsets.symmetric(
+                          horizontal: AppPaddingW.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
                         thickness: 0.8,
@@ -340,7 +341,7 @@ class RepProfile extends StatelessWidget {
                         icon1: FontAwesomeIcons.table,
                         text: "تقرير المشافي"),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
                         thickness: 0.8,
@@ -360,7 +361,7 @@ class RepProfile extends StatelessWidget {
                         icon1: Icons.list_alt_outlined,
                         text: "الخطة الفعالة"),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
                         thickness: 0.8,
@@ -376,7 +377,7 @@ class RepProfile extends StatelessWidget {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
                         thickness: 0.8,
@@ -392,7 +393,7 @@ class RepProfile extends StatelessWidget {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
                         thickness: 0.8,
@@ -409,7 +410,7 @@ class RepProfile extends StatelessWidget {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
+                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
                       child: Divider(
                         color: ColorManager.secondaryColor6,
                         thickness: 0.8,
