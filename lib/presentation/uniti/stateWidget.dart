@@ -2,7 +2,6 @@ import 'package:domina_app/presentation/common/state_renderer/state_renderer.dar
 import 'package:domina_app/presentation/common/state_renderer/state_renderer_imp.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 Widget loadingFullScreen(BuildContext context) {
