@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DialogFilter extends StatelessWidget {
   DialogFilter({super.key, required this.text});
@@ -47,9 +48,9 @@ class DialogFilter extends StatelessWidget {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(right: AppPadding.p8),
+                                 EdgeInsets.only(right: AppPaddingW.p8),
                             child: Text(text,
-                                style: const TextStyle(fontSize: 20)),
+                                style:  TextStyle(fontSize: 20.sp)),
                           ),
                           TextFormField(
                             keyboardType: TextInputType.number,

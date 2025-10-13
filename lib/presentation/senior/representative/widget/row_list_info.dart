@@ -1,6 +1,7 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RowListInfo extends StatelessWidget {
   const RowListInfo({super.key, required this.text1, required this.text2});
@@ -10,7 +11,7 @@ class RowListInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding:  EdgeInsets.symmetric(vertical: AppPadding.p8),
+        padding:  EdgeInsets.symmetric(vertical: AppPaddingH.p8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,7 +23,7 @@ class RowListInfo extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
               decoration: BoxDecoration(
                 color: ColorManager.white,
                 borderRadius: BorderRadius.vertical(

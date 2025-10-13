@@ -74,8 +74,8 @@ class AllRepSenior extends StatelessWidget {
                           ));
                         },
                         child: Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p16),
+                          margin: EdgeInsets.all(AppPaddingH.p8),
+                          padding: EdgeInsets.all(AppPaddingH.p16),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
                               //  ColorManager.secondaryColor6,
@@ -84,7 +84,7 @@ class AllRepSenior extends StatelessWidget {
                               ColorManager.secondaryColor7,
                             ]),
                             color: ColorManager.white,
-                            borderRadius: const BorderRadius.all(
+                            borderRadius:  BorderRadius.all(
                                 Radius.circular(AppSize.s8)),
                           ),
                           child: Row(

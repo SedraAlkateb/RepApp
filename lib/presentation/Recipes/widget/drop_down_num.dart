@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DropDownNum extends StatelessWidget {
   const DropDownNum(
@@ -29,7 +30,7 @@ class DropDownNum extends StatelessWidget {
       validator: validator,
       hint: Text(
         hintText,
-        style: TextStyle(fontSize: tablet ? 17 : 12, color: Colors.black),
+        style: TextStyle(fontSize: tablet ? 17.sp : 12.sp, color: Colors.black),
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
@@ -51,7 +52,7 @@ class DropDownNum extends StatelessWidget {
           child:  Text(
             "${ val}",
             style: TextStyle(
-              fontSize: tablet ? 19 : 14,
+              fontSize: tablet ? 19.sp : 14.sp,
               color: Colors.black,
             ),
             softWrap: false,
@@ -65,7 +66,7 @@ class DropDownNum extends StatelessWidget {
         //Navigator.pushNamed(context, workshopProfile,arguments:workshop.id );
       },
 
-      value: value,
+      initialValue: value,
     );
   }
 }

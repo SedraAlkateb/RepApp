@@ -53,7 +53,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                 BorderRadius.vertical(bottom: Radius.circular(50)),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                padding: EdgeInsets.symmetric(horizontal: AppPaddingH.p18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

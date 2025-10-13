@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class BoxTextField extends StatelessWidget {
@@ -46,7 +47,7 @@ class BoxTextField extends StatelessWidget {
                 border: const OutlineInputBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20) )),
                 focusedBorder:   OutlineInputBorder(borderRadius: const BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.secondaryColor)),
                 enabledBorder: OutlineInputBorder(borderRadius: const BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.secondaryColor)) ,
-                hintStyle:hintStyle?? const TextStyle(fontSize: 14)
+                hintStyle:hintStyle??  TextStyle(fontSize: 14.sp)
             ),
           ),
         );

@@ -2,7 +2,6 @@ import 'package:domina_app/presentation/common/state_renderer/state_renderer.dar
 import 'package:domina_app/presentation/common/state_renderer/state_renderer_imp.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 Widget loadingFullScreen(BuildContext context) {
@@ -29,8 +28,8 @@ Widget loadingShimmer(BuildContext context, int count, double? width,
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: Container(
-          margin: const EdgeInsets.all(AppPadding.p8),
-          padding: const EdgeInsets.all(AppPadding.p16),
+          margin:  EdgeInsets.all(AppPaddingH.p8),
+          padding:  EdgeInsets.all(AppPaddingH.p16),
           decoration: BoxDecoration(
             border: Border.all(color: ColorManager.secondaryColor22),
             color: const Color.fromARGB(255, 250, 254, 255),

@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorDetails extends StatefulWidget {
   final doctorsModel doctorModel;
@@ -65,7 +66,7 @@ class _DoctorDetailsState extends State<DoctorDetails>
                         const BorderRadius.vertical(bottom: Radius.circular(50)),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                        padding:  EdgeInsets.symmetric(horizontal: AppPaddingW.p18),
                         child: Stack(
                           children: [
                             Align(
@@ -162,14 +163,14 @@ class _DoctorDetailsState extends State<DoctorDetails>
                       itemBuilder: (context, index) {
                         return Padding(
                             padding:
-                            const EdgeInsets.only( bottom: 20, right: 16, left: 16),
+                             EdgeInsets.only( bottom: 20.h, right: 16.w, left: 16.w),
                             child: Container(
-                              margin: const EdgeInsets.all(2),
-                              padding: const EdgeInsets.symmetric(vertical: AppPadding.p8),
+                              margin:  EdgeInsets.all(2.w),
+                              padding:  EdgeInsets.symmetric(vertical: AppPaddingH.p8),
                               decoration: BoxDecoration(
                                 color: ColorManager.white,
                                 border: Border.all(color: ColorManager.hintGrey),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius:  BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                               ),
                               child:  GestureDetector(
@@ -194,7 +195,7 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                               children: [
 
                                                 Padding(
-                                                  padding:  EdgeInsets.symmetric(vertical: AppPadding.p12),
+                                                  padding:  EdgeInsets.symmetric(vertical: AppPaddingH.p12),
                                                   child: Column(
                                                     children: List.generate(
                                                       2,
@@ -229,7 +230,7 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                   );
                                 },
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: AppPadding.p10),
+                                  padding: EdgeInsets.symmetric(vertical: AppPaddingH.p10),
                                   child: Column(
                                     children: [
                                       TextRach(

@@ -75,8 +75,8 @@ class AllRepWithFuture extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: EdgeInsets.all(AppPadding.p8),
-                      padding: EdgeInsets.all(AppPadding.p16),
+                      margin: EdgeInsets.all(AppPaddingH.p8),
+                      padding: EdgeInsets.all(AppPaddingH.p16),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(colors: [
                           //  ColorManager.secondaryColor6,
@@ -86,7 +86,7 @@ class AllRepWithFuture extends StatelessWidget {
                         ]),
                         color: ColorManager.white,
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(AppSize.s8)),
+                             BorderRadius.all(Radius.circular(AppSize.s8)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,

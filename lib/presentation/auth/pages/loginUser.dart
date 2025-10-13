@@ -63,7 +63,7 @@ class _MyLoginState extends State<MyLogin> {
                                 filled: true,
                                 hintText: "الإسم",
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
                               ),
                             ),

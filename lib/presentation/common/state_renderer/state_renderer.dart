@@ -92,7 +92,7 @@ Widget _getAnimatedImage(String animationName){
 Widget _getMessage(String? message){
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppPadding.p8),
+        padding:  EdgeInsets.all(AppPaddingH.p8),
         child: Text(
           message??"",
           style: getRegularStyle(
@@ -107,7 +107,7 @@ Widget _getMessage(String? message){
 Widget _getRetryButton(String buttonTitle,BuildContext context){
 
   return Padding(
-    padding: const EdgeInsets.all(AppPadding.p18),
+    padding:  EdgeInsets.all(AppPaddingH.p18),
     child: SizedBox(
       width: double.infinity,
 
