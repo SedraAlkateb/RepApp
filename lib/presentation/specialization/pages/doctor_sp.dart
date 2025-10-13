@@ -49,12 +49,12 @@ class _DoctorSpState extends State<DoctorSp> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return Container(
-                              margin: EdgeInsets.all(AppPadding.p8),
-                              padding: EdgeInsets.all(AppPadding.p16),
+                              margin: EdgeInsets.all(AppPaddingH.p8),
+                              padding: EdgeInsets.all(AppPaddingH.p16),
                               decoration: BoxDecoration(
                                 color: ColorManager.white,
                                 border: Border.all(color: ColorManager.hintGrey),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius:  BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                               ),
                               child: Column(

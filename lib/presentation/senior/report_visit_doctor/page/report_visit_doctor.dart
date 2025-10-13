@@ -182,10 +182,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                           final index = entry.key;
                           final doctorNoteModel = entry.value;
                           return Container(
-                            margin: EdgeInsets.all(AppPadding.p8),
+                            margin: EdgeInsets.all(AppPaddingH.p8),
                             padding: EdgeInsets.symmetric(
-                                horizontal: AppPadding.p8,
-                                vertical: AppPadding.p12),
+                                horizontal: AppPaddingW.p8,
+                                vertical: AppPaddingH.p12),
                             decoration: doctorNoteModel.flag
                                 ? BoxDecoration(
                                     border:
@@ -464,7 +464,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                                 child: Container(
                                                   margin: EdgeInsets.all(16),
                                                   padding: EdgeInsets.symmetric(
-                                                      vertical: AppPadding.p8),
+                                                      vertical: AppPaddingH.p8),
                                                   child: Column(
                                                     children: List.generate(
                                                       2,
@@ -490,7 +490,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                             )
                                           : SizedBox(),
                                       Padding(
-                                        padding: EdgeInsets.all(AppPadding.p20),
+                                        padding: EdgeInsets.all(AppPaddingH.p20),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,

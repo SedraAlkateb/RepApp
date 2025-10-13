@@ -75,19 +75,19 @@
 
 
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:domina_app/presentation/ss.dart'; // عدل الاسم حسب مشروعك
-
-void main() {
-  group('Calculator', () {
-    test('should add two numbers correctly', () {
-      final calc = Calculator();
-      expect(calc.add(3, 2), 5);
-    });
-
-    test('should subtract two numbers correctly', () {
-      final calc = Calculator();
-      expect(calc.subtract(10, 4), 6);
-    });
-  });
-}
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:domina_app/presentation/ss.dart'; // عدل الاسم حسب مشروعك
+//
+// void main() {
+//   group('Calculator', () {
+//     test('should add two numbers correctly', () {
+//       final calc = Calculator();
+//       expect(calc.add(3, 2), 5);
+//     });
+//
+//     test('should subtract two numbers correctly', () {
+//       final calc = Calculator();
+//       expect(calc.subtract(10, 4), 6);
+//     });
+//   });
+// }

@@ -10,6 +10,7 @@ import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchDoctors extends StatelessWidget {
   SearchDoctors({
@@ -61,7 +62,7 @@ class SearchDoctors extends StatelessWidget {
         selectedTextColor: ColorManager.secondaryColor1,
         transitionType: TransitionType.RIGHT_BOTTOM_ROUNDER,
         textStyle: TextStyle(
-            fontSize: 20,
+            fontSize: 20.sp,
             color: ColorManager.white,
             fontWeight: FontWeight.w300),
       )
@@ -149,13 +150,13 @@ class SearchDoctors extends StatelessWidget {
                                             state.Representative[index].id));
                                   },
                                   child: Container(
-                                    margin: EdgeInsets.all(AppPadding.p8),
-                                    padding: EdgeInsets.all(AppPadding.p16),
+                                    margin: EdgeInsets.all(AppPaddingH.p8),
+                                    padding: EdgeInsets.all(AppPaddingH.p16),
                                     decoration: BoxDecoration(
                                       color: ColorManager.white,
                                       border: Border.all(
                                           color: ColorManager.hintGrey),
-                                      borderRadius: const BorderRadius.all(
+                                      borderRadius:  BorderRadius.all(
                                           Radius.circular(AppSize.s8)),
                                     ),
                                     child: Column(

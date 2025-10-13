@@ -3,6 +3,8 @@ import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/network/app_sql_api.dart';
+import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
@@ -12,8 +14,40 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+@pragma('vm:entry-point')
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final dbHelper = DatabaseHelper();
+  final appSqlApi = AppSqlApi(dbHelper);
+  await appSqlApi.debugOtherPlanBrandByRepPlanId(UserInfo.activePlanId);
+  await initAppModule();
+  await _initNotifications();
+
+  await requestNotificationPermission();
+  AlarmAndNotifications.showNotification();
+  await sss();
+
+  runApp(Phoenix(child: const MyResponsiveApp()));
+}
+
+Future<void> _initNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+  const InitializationSettings initializationSettings =
+  InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await AlarmAndNotifications.initialize();
+  await AlarmAndNotifications.scheduleOneShot();
+}
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -79,6 +113,7 @@ Future<int?> sss() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
+
   IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   (await isLoginSqlUsecase.execute()).fold((failure) {
     return 0;
@@ -109,6 +144,7 @@ Future<int?> sss() async {
         if (UserInfo.endDate != null && now == formatDateTime(endDate)) {
           _showEndDateNotification();
         }
+
         String? nextDay = UserInfo.endDate != null
             ? DateFormat("dd-MM-yyyy").format(
             formatStringToDataTime(UserInfo.endDate!)

@@ -63,9 +63,9 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   flutter_svg: ^2.0.4
   flutter_phoenix: ^1.1.1
-  connectivity_plus: ^6.0.5 
+  connectivity_plus: ^6.1.4 
   permission_handler: ^11.3.1
-  intl: ^0.20.2
+
   image_picker: ^1.1.2
   html: ^0.15.4
   flutter_local_notifications: ^18.0.1
@@ -75,6 +75,8 @@ dependencies:
   avatar_glow: ^3.0.1
   flutter_animated_button: ^2.0.4
   android_alarm_manager_plus: ^4.0.7
+  dynamic_color: ^1.8.1
+  responsive_framework: ^1.5.1
 
 dev_dependencies:
   flutter_test:
@@ -140,4 +142,14 @@ flutter:
         - asset: assets/fonts/Almarai/Almarai-ExtraBold.ttf
           weight: 200
         - asset: assets/fonts/Almarai/Almarai-Light.ttf
+          weight: 300
+    - family: Tajawal
+      fonts:
+        - asset: assets/fonts/Tajawal/Tajawal-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Tajawal/Tajawal-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Tajawal/Tajawal-ExtraBold.ttf
+          weight: 200
+        - asset: assets/fonts/Tajawal/Tajawal-Light.ttf
           weight: 300

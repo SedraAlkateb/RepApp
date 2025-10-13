@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget buildHtmlDetailRow(
       BuildContext context, IconData icon, String title, String value) {
@@ -26,7 +27,7 @@ Widget buildHtmlDetailRow(
               style: {
                     "body": Style(
 
-                      fontSize: FontSize(18),
+                      fontSize: FontSize(18.sp),
 
                     textAlign: TextAlign.start
                     ),

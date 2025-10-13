@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FutureSpecializationsPage extends StatelessWidget {
   FutureSpecializationsPage({super.key, required this.id,
@@ -110,8 +111,8 @@ class FutureSpecializationsPage extends StatelessWidget {
                                     );
                                   },
                             child: Container(
-                              margin: EdgeInsets.all(AppPadding.p10),
-                              padding: EdgeInsets.all(AppPadding.p5),
+                              margin: EdgeInsets.all(AppPaddingH.p10),
+                              padding: EdgeInsets.all(AppPaddingH.p5),
                               width: 6,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(colors: [
@@ -119,7 +120,7 @@ class FutureSpecializationsPage extends StatelessWidget {
                                   ColorManager.secondaryColor7,
                                 ]),
                                 color: ColorManager.white,
-                                borderRadius: const BorderRadius.all(
+                                borderRadius:  BorderRadius.all(
                                   Radius.circular(AppSize.s25),
                                 ),
                               ),
@@ -145,7 +146,7 @@ class FutureSpecializationsPage extends StatelessWidget {
                                       style: TextStyle(
                                           color: ColorManager.white,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 20),
+                                          fontSize: 20.sp),
                                     ),
                                   ],
                                 ),

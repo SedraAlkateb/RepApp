@@ -1,6 +1,7 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class RowList extends StatelessWidget {
   const RowList({super.key,required this.text,required this.icon1,this.function});
 final
@@ -15,10 +16,10 @@ final IconData icon1;
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding:  EdgeInsets.symmetric(horizontal:  AppPadding.p18,vertical: AppPadding.p12),
+            padding:  EdgeInsets.symmetric(horizontal:  AppPaddingW.p18,vertical: AppPaddingH.p12),
             child: Container(
-                margin: EdgeInsets.only(left: 10, bottom: 5),
-                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(left: 10.w, bottom: 5.h),
+                padding: EdgeInsets.all(10.h),
                 decoration: BoxDecoration(
                   border: Border.all(color:ColorManager.secondaryColor9 ),
                   // color: ColorManager.secondaryColor9,
@@ -38,7 +39,7 @@ final IconData icon1;
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ),
-          SizedBox(width: 10,)
+          SizedBox(width: 10.w,)
         ],
       ),
     );

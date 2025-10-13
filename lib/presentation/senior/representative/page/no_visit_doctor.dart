@@ -97,8 +97,8 @@ class NoVisitDoctor extends StatelessWidget {
                     ),
                     ...noVisitDoc.map((noVisitDoc) {
                       return Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.all(AppPadding.p16),
+                        margin: EdgeInsets.all(AppPaddingH.p8),
+                        padding: EdgeInsets.all(AppPaddingH.p16),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [

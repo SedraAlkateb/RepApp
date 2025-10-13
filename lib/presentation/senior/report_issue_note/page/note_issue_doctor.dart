@@ -103,9 +103,9 @@ class NoteIssueDoctor extends StatelessWidget {
                     ...doctorIssueModel.asMap().entries.map((entry) {
                       final doctorNoteModel = entry.value;
                       return Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
+                        margin: EdgeInsets.all(AppPaddingH.p8),
                         padding:
-                            EdgeInsets.symmetric(horizontal: AppPadding.p8),
+                            EdgeInsets.symmetric(horizontal: AppPaddingW.p8),
                         decoration: BoxDecoration(
                           color: ColorManager.white,
                           border: Border.all(color: ColorManager.hintGrey),

@@ -54,8 +54,8 @@ class ReportInventory extends StatelessWidget {
                       return Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.all(AppPadding.p8),
-                            padding: EdgeInsets.all(AppPadding.p16),
+                            margin: EdgeInsets.all(AppPaddingH.p8),
+                            padding: EdgeInsets.all(AppPaddingH.p16),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(colors: [
                                 ColorManager.secondaryColor6,
@@ -64,7 +64,7 @@ class ReportInventory extends StatelessWidget {
                               ]),
                               color: ColorManager.white,
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(AppSize.s8)),
+                                   BorderRadius.all(Radius.circular(AppSize.s8)),
                             ),
                             child: Center(
                               child: Column(

@@ -10,6 +10,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SpecPlanPage extends StatelessWidget {
   SpecPlanPage({super.key});
@@ -25,7 +26,7 @@ class SpecPlanPage extends StatelessWidget {
                 SizedBox(
                   height: 14,
                 ),
-                dataPlan(UserInfo.otherStartDate,UserInfo.otherEndDate ),
+                dataPlan(UserInfo.otherStartDate, UserInfo.otherEndDate),
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -96,8 +97,8 @@ class SpecPlanPage extends StatelessWidget {
                                       );
                                     },
                                     child: Container(
-                                      margin: EdgeInsets.all(AppPadding.p10),
-                                      padding: EdgeInsets.all(AppPadding.p5),
+                                      margin: EdgeInsets.all(AppPaddingH.p10),
+                                      padding: EdgeInsets.all(AppPaddingH.p5),
                                       width: 6,
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(colors: [
@@ -105,7 +106,7 @@ class SpecPlanPage extends StatelessWidget {
                                           ColorManager.secondaryColor7,
                                         ]),
                                         color: ColorManager.white,
-                                        borderRadius: const BorderRadius.all(
+                                        borderRadius:  BorderRadius.all(
                                           Radius.circular(AppSize.s25),
                                         ),
                                       ),
@@ -125,7 +126,8 @@ class SpecPlanPage extends StatelessWidget {
                                                   .withOpacity(0.8),
                                               colorBlendMode:
                                                   BlendMode.modulate,
-                                              errorBuilder: (context, error, stackTrace) {
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
                                                 return SizedBox();
                                               },
                                             ),
@@ -138,7 +140,7 @@ class SpecPlanPage extends StatelessWidget {
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20),
+                                                  fontSize: 20.sp),
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
@@ -146,7 +148,7 @@ class SpecPlanPage extends StatelessWidget {
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 10),
+                                                  fontSize: 10.sp),
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
@@ -154,17 +156,15 @@ class SpecPlanPage extends StatelessWidget {
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 10),
+                                                  fontSize: 10.sp),
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
                                               "عدد العينات المتاحة: ${(planBrandModel[index].brandk / UserInfo.samplesCount)}",
-
-
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 10),
+                                                  fontSize: 10.sp),
                                             ),
                                           ],
                                         ),
@@ -197,8 +197,8 @@ class SpecPlanPage extends StatelessWidget {
                     }
                     if (state is UpdateAmountSendState) {
                       Navigator.pop(context);
-                      successWithMessage(context, "تم حفظ التغيرات");
-                    }
+                      successWithMessage(context, "تم الارسال يرجى المزامنة ");
+                    }//240
                   },
                   child: SaveSendBottom(),
                 )

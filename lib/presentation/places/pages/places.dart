@@ -14,6 +14,7 @@ import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Places extends StatelessWidget {
   Places({super.key});
@@ -50,14 +51,17 @@ class Places extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
+                                padding:
+                                    const EdgeInsets.only(bottom: 20, top: 30),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  "اختر أحد المناطق لإِظهار(الأطباء,المشافي)في المنطقة المختارة",
+                                  "اختر إحدى المناطق لإظهار (الأطباء، المشافي) في المنطقة المختارة",
                                   style: TextStyle(
-                                      fontSize: 22,
+                                      fontFamily: 'Tajawal',
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w500, 
                                       color: ColorManager.secondaryColor1,
-                                      fontWeight: FontWeight.bold,
+                                     // fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.none),
                                 ),
                               ),
@@ -158,7 +162,7 @@ class Places extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                          fontSize: 15.sp,
                         ),
                         textAlign: TextAlign.start,
                       ),
@@ -222,8 +226,8 @@ class Places extends StatelessWidget {
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.all(AppPadding.p8),
-                        padding: EdgeInsets.all(AppPadding.p16),
+                        margin: EdgeInsets.all(AppPaddingH.p8),
+                        padding: EdgeInsets.all(AppPaddingH.p16),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [
                             ColorManager.secondaryColor6,
@@ -231,7 +235,7 @@ class Places extends StatelessWidget {
                             ColorManager.secondaryColor7,
                           ]),
                           color: ColorManager.white,
-                          borderRadius: const BorderRadius.all(
+                          borderRadius:  BorderRadius.all(
                               Radius.circular(AppSize.s8)),
                         ),
                         child: Row(

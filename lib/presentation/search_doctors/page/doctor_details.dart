@@ -56,7 +56,7 @@ class _DoctorDetailesState extends State<DoctorDetailes>
                         BorderRadius.vertical(bottom: Radius.circular(50)),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                    padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p18),
                     child: Stack(
                       children: [
                         Align(
@@ -155,12 +155,12 @@ class _DoctorDetailesState extends State<DoctorDetailes>
                         padding:
                             EdgeInsets.symmetric(vertical: 1, horizontal: 16),
                         child: Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p16),
+                          margin: EdgeInsets.all(AppPaddingH.p8),
+                          padding: EdgeInsets.all(AppPaddingH.p16),
                           decoration: BoxDecoration(
                             color: ColorManager.white,
                             border: Border.all(color: ColorManager.hintGrey),
-                            borderRadius: const BorderRadius.all(
+                            borderRadius:  BorderRadius.all(
                                 Radius.circular(AppSize.s8)),
                           ),
                           child: Column(

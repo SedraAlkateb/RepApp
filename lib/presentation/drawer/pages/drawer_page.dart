@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DrawerPage extends StatelessWidget {
   DrawerPage({super.key});
@@ -40,13 +41,13 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: ColorManager.secondaryColor5,
                     child: Text(
                       UserInfo.name![0],
-                      style: TextStyle(fontSize: 30.0, color: Colors.blue),
+                      style: TextStyle(fontSize: 30.sp, color: Colors.blue),
                     ),
                   ),
                   SizedBox(width: 10),
                   Text(
                     UserInfo.name ?? "",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18.sp),
                   ),
                 ],
               ),
@@ -129,6 +130,8 @@ class DrawerPage extends StatelessWidget {
               color: ColorManager.hintGrey,
             ),
           ),
+          (UserInfo.repType != "7")
+              ?
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,
@@ -148,14 +151,16 @@ class DrawerPage extends StatelessWidget {
               }
               );
             },
-          ),
+          ):SizedBox(),
+          (UserInfo.repType != "7")
+              ?
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
               thickness: 0.5,
               color: ColorManager.hintGrey,
             ),
-          ),
+          ):SizedBox(),
           ListTile(
             focusColor: ColorManager.secondaryColor,
             minTileHeight: 10,

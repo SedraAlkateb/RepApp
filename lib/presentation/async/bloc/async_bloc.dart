@@ -289,8 +289,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           emit(EditStatusDErrorState(failure: failure));
           return false;
         }, (data) async {
-         UserInfo.isLogging =
-          event.num;
+          UserInfo.isLogging = event.num;
           emit(EditStatusDState());
         });
       }

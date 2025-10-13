@@ -59,7 +59,7 @@ class _VisitHospitalState extends State<VisitHospital>
                       BorderRadius.vertical(bottom: Radius.circular(50)),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppPadding.p18),
+                  padding: EdgeInsets.symmetric(horizontal: AppPaddingH.p18),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -172,8 +172,8 @@ class _VisitHospitalState extends State<VisitHospital>
                         if (state is SpecState) {
                           return Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: AppPadding.p8,
-                                horizontal: AppPadding.p8),
+                                vertical: AppPaddingH.p8,
+                                horizontal: AppPaddingW.p8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

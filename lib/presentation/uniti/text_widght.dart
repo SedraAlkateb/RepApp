@@ -14,7 +14,8 @@ class TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppPadding.p20),
+      padding:
+      EdgeInsets.all(AppPaddingH.p20),
       child: TextFormField(
         keyboardType: TextInputType.none,
         controller: controller,

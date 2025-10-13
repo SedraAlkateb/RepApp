@@ -47,7 +47,7 @@ ThemeData getApplicationTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20, vertical: AppPadding.p5),
+        padding:  EdgeInsets.symmetric(horizontal: AppPaddingW.p20, vertical: AppPaddingH.p5),
         textStyle: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s20),
         shadowColor: ColorManager.shadow1,
         backgroundColor: ColorManager.secondaryColor1,
@@ -73,26 +73,26 @@ ThemeData getApplicationTheme() {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      contentPadding: const EdgeInsets.all(AppPadding.p12),
+      contentPadding:  EdgeInsets.all(AppPaddingH.p12),
       hintStyle: getRegularStyle(color: ColorManager.hintGrey, fontSize: FontSize.s20),
       labelStyle: getMediumStyle(color: ColorManager.secondaryColor, fontSize: FontSize.s22),
 
       errorStyle: getRegularStyle(color: ColorManager.error),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: ColorManager.secondaryColor3, width: AppSize.s1_5),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s16)),
+        borderRadius:  BorderRadius.all(Radius.circular(AppSize.s16)),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: ColorManager.primaryField, width: AppSize.s1_5),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s16)),
+        borderRadius:  BorderRadius.all(Radius.circular(AppSize.s16)),
       ),
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(color: ColorManager.error, width: AppSize.s0_5),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s16)),
+        borderRadius:  BorderRadius.all(Radius.circular(AppSize.s16)),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderSide: BorderSide(color: ColorManager.primaryField, width: AppSize.s1_5),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s16)),
+        borderRadius:  BorderRadius.all(Radius.circular(AppSize.s16)),
       ),
       fillColor: ColorManager.grey,
       filled: true

@@ -27,8 +27,8 @@ class EditFutureRep extends StatelessWidget {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) => Container(
-                          margin: EdgeInsets.all(AppPadding.p8),
-                          padding: EdgeInsets.all(AppPadding.p16),
+                          margin: EdgeInsets.all(AppPaddingH.p8),
+                          padding: EdgeInsets.all(AppPaddingH.p16),
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(color: ColorManager.secondaryColor),
@@ -36,7 +36,7 @@ class EditFutureRep extends StatelessWidget {
                             color: ColorManager.white,
                             border:
                                 Border.all(color: ColorManager.secondaryColor7),
-                            borderRadius: const BorderRadius.all(
+                            borderRadius:  BorderRadius.all(
                                 Radius.circular(AppSize.s8)),
                           ),
                           child: Column(
@@ -69,8 +69,8 @@ class EditFutureRep extends StatelessWidget {
                                     ),
                                     Container(
                                       padding: EdgeInsets.symmetric(
-                                        vertical: AppPadding.p8,
-                                        horizontal: AppPadding.p14,
+                                        vertical: AppPaddingH.p8,
+                                        horizontal: AppPaddingW.p14,
                                       ),
                                       decoration: BoxDecoration(
                                         color: int.parse(futureBrandModel[index]
@@ -78,7 +78,7 @@ class EditFutureRep extends StatelessWidget {
                                                 1
                                             ? ColorManager.secondaryColor1
                                             : ColorManager.secondaryColor2,
-                                        borderRadius: const BorderRadius.all(
+                                        borderRadius:  BorderRadius.all(
                                           Radius.circular(AppSize.s8),
                                         ),
                                       ),
