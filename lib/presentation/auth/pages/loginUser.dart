@@ -47,10 +47,10 @@ class _MyLoginState extends State<MyLogin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 120.h),
-                      Image.asset(ImageAssets.domina, scale: 5.r ),
+                      Image.asset(ImageAssets.domina, scale: 5 ),
                       SizedBox(height: 8.h),
                       Container(
-                        margin: EdgeInsets.only(left: 35.w, right: 35.w),
+                        margin: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
                             TextFormField(
@@ -151,7 +151,7 @@ class _MyLoginState extends State<MyLogin> {
                                           formKey.currentState!.save();
                                         }
                                       },
-                                      icon: Icon(Icons.arrow_forward),
+                                      icon: Icon(Icons.arrow_forward,size: 30.r,),
                                     ),
                                   ),
                                 ),
