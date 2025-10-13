@@ -49,29 +49,64 @@ Future<void> _initNotifications() async {
   await AlarmAndNotifications.scheduleOneShot();
 }
 
-Future<void> _showEndDateNotification() async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
-    'your_channel_id',
-    'التنبيهات',
-    channelDescription: 'تنبيهات خاصة بالوقت',
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'ticker',
-    enableVibration: true,
-    playSound: true,
-  );
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
-  const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
+@pragma('vm:entry-point')
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initAppModule();
+  await _initNotifications();
+  await sss();
+  await requestNotificationPermission();
+  AlarmAndNotifications.showNotification();
+  runApp(Phoenix(child: const MyApp()));
+}
 
-  await flutterLocalNotificationsPlugin.show(
-    2,
-    'شركة دومِنا',
-    'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.',
-    platformChannelSpecifics,
-    payload: 'end_date_notification',
+Future<void> _initNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const DarwinInitializationSettings initializationSettingsIOS =
+  DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
   );
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
+  await AlarmAndNotifications.initialize();
+  await AlarmAndNotifications.scheduleOneShot();
+  await requestNotificationPermission();
+}
+
+Future<void> requestNotificationPermission() async {
+  if (Platform.isAndroid) {
+    PermissionStatus status = await Permission.notification.request();
+    if (status.isGranted) {
+      print("✅ تم منح إذن الإشعارات على Android.");
+    } else if (status.isDenied) {
+      print("⚠️ تم رفض إذن الإشعارات مؤقتًا.");
+      openAppSettings();
+    } else if (status.isPermanentlyDenied) {
+      print("🚫 تم رفض الإذن نهائيًا. يمكنك تفعيله من إعدادات النظام.");
+    }
+  } else if (Platform.isIOS) {
+    final iosPlugin = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>();
+    await iosPlugin?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    print("✅ تم طلب صلاحيات الإشعارات على iOS.");
+  }
 }
 
 Future<int?> sss() async {
@@ -116,15 +151,24 @@ Future<int?> sss() async {
                 .add(const Duration(days: 1)))
             : "";
 
-        if (UserInfo.isLogging != 5 && now == nextDay) {
-          EditIsLoginSqlUsecase editIsLoginSqlUsecase =
-          EditIsLoginSqlUsecase(instance());
-          (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
-                  (failure) {
-                return 0;
-              }, (data) async {
-            UserInfo.isLogging = 5;
-          });
+        print(UserInfo.isLogging);
+        if (UserInfo.isLogging != 5) {
+          print("now");
+          print(now);
+          print("nextDay");
+          print(nextDay);
+          if (now == nextDay) {
+            print(now);
+            print(nextDay);
+            EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+            EditIsLoginSqlUsecase(instance());
+            (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
+                    (failure) {
+                  return 0;
+                }, (data) async {
+              UserInfo.isLogging = 5;
+            });
+          }
         }
       }
     } else {
@@ -136,44 +180,29 @@ Future<int?> sss() async {
   return null;
 }
 
-class MyResponsiveApp extends StatelessWidget {
-  const MyResponsiveApp({super.key});
+Future<void> _showEndDateNotification() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'your_channel_id',
+    'التنبيهات',
+    channelDescription: 'تنبيهات خاصة بالوقت',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+    enableVibration: true,
+    playSound: true,
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return ResponsiveBreakpoints.builder(
-      breakpoints: const [
-        Breakpoint(start: 0, end: 450, name: MOBILE),
-        Breakpoint(start: 451, end: 1023, name: TABLET),
-        Breakpoint(start: 1024, end: double.infinity, name: DESKTOP),
-      ],
-      child: Builder(
-        builder: (context) {
-          final breakPoint = ResponsiveBreakpoints.of(context).breakpoint;
-          final designSize = getDesignSizeByBreakpoint(breakPoint);
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
 
-          return ScreenUtilInit(
-            designSize: designSize,
-            minTextAdapt: true,
-            splitScreenMode: true,
-            builder: (context, child) => const MyApp(),
-          );
-        },
-      ),
-    );
-  }
-}
-
-Size getDesignSizeByBreakpoint(Breakpoint breakPoint) {
-  if (breakPoint.name == MOBILE) {
-    UserInfo.isScreenWidth = false;
-    return const Size(360, 690);
-  } else if (breakPoint.name == TABLET) {
-    UserInfo.isScreenWidth = true;
-    return const Size(768, 1024);
-  } else {
-    return const Size(1024, 768);
-  }
+  await flutterLocalNotificationsPlugin.show(
+    2,
+    'شركة دومِنا',
+    'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.',
+    platformChannelSpecifics,
+    payload: 'end_date_notification',
+  );
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -182,18 +211,5 @@ class MyHttpOverrides extends HttpOverrides {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-  }
-}
-
-Future<void> requestNotificationPermission() async {
-  if (Platform.isAndroid) {
-    PermissionStatus status = await Permission.notification.request();
-    if (status.isGranted) {
-      print("تم منح إذن الإشعارات.");
-    } else if (status.isDenied) {
-      openAppSettings();
-    } else if (status.isPermanentlyDenied) {
-      print("تم رفض الإذن نهائيًا. يمكنك طلبه من إعدادات النظام.");
-    }
   }
 }

@@ -66,7 +66,7 @@ class DropDownNum extends StatelessWidget {
         //Navigator.pushNamed(context, workshopProfile,arguments:workshop.id );
       },
 
-      value: value,
+      initialValue: value,
     );
   }
 }
