@@ -47,7 +47,7 @@ class _MyLoginState extends State<MyLogin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 120.h),
-                      Image.asset(ImageAssets.domina, scale: 5),
+                      Image.asset(ImageAssets.domina, scale: 5.r ),
                       SizedBox(height: 8.h),
                       Container(
                         margin: EdgeInsets.only(left: 35.w, right: 35.w),
@@ -98,7 +98,7 @@ class _MyLoginState extends State<MyLogin> {
                                       },
                                     ),
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10.r),
                                     ),
                                   ),
                                 );

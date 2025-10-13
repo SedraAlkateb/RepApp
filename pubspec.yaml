@@ -74,9 +74,7 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   avatar_glow: ^3.0.1
   flutter_animated_button: ^2.0.4
-  android_alarm_manager_plus: ^4.0.7
-  dynamic_color: ^1.8.1
-  responsive_framework: ^1.5.1
+  android_alarm_manager_plus: ^5.0.0
 
 dev_dependencies:
   flutter_test:
