@@ -75,6 +75,7 @@ dependencies:
   avatar_glow: ^3.0.1
   flutter_animated_button: ^2.0.4
   android_alarm_manager_plus: ^5.0.0
+  responsive_framework: ^1.5.1
 
 dev_dependencies:
   flutter_test:
