@@ -6,14 +6,10 @@ part of 'app_api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
 class _AppServiceClient implements AppServiceClient {
-  _AppServiceClient(
-    this._dio, {
-    this.baseUrl,
-    this.errorLogger,
-  }) {
+  _AppServiceClient(this._dio, {this.baseUrl, this.errorLogger}) {
     baseUrl ??= 'https://heaven-web.net/domina/AppAdmin/api';
   }
 
@@ -24,43 +20,24 @@ class _AppServiceClient implements AppServiceClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<LoginResponse> login(
-    String userName,
-    String password,
-    int ver,
-  ) async {
+  Future<LoginResponse> login(String userName, String password, int ver) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'userName',
-      userName,
-    ));
-    _data.fields.add(MapEntry(
-      'password',
-      password,
-    ));
-    _data.fields.add(MapEntry(
-      'ver',
-      ver.toString(),
-    ));
-    final _options = _setStreamType<LoginResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/loginU.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('userName', userName));
+    _data.fields.add(MapEntry('password', password));
+    _data.fields.add(MapEntry('ver', ver.toString()));
+    final _options = _setStreamType<LoginResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/loginU.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late LoginResponse _value;
     try {
@@ -78,26 +55,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllPlaceBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllPlace.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllPlaceBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllPlace.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllPlaceBaseResponse _value;
     try {
@@ -115,26 +83,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllSpcBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllSp.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllSpcBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllSp.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllSpcBaseResponse _value;
     try {
@@ -152,22 +111,16 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<AllCityBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getCity.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<AllCityBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getCity.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllCityBaseResponse _value;
     try {
@@ -185,26 +138,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
-    ));
-    final _options = _setStreamType<AllBrandBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllBrand.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    final _options = _setStreamType<AllBrandBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllBrand.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllBrandBaseResponse _value;
     try {
@@ -222,26 +166,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllPharmacyBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllPharmacy.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllPharmacyBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllPharmacy.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllPharmacyBaseResponse _value;
     try {
@@ -259,26 +194,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllDoctorsBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllDoctor.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllDoctorsBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllDoctor.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllDoctorsBaseResponse _value;
     try {
@@ -296,26 +222,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllHospitalBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllHospital.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllHospitalBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllHospital.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllHospitalBaseResponse _value;
     try {
@@ -333,26 +250,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllHospitalSpBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllHospitalSp.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllHospitalSpBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllHospitalSp.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllHospitalSpBaseResponse _value;
     try {
@@ -370,26 +278,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllBrandSpBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getBrandsSp.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllBrandSpBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getBrandsSp.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllBrandSpBaseResponse _value;
     try {
@@ -411,32 +310,20 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanIdActive',
-      repPlanIdActive.toString(),
-    ));
+    _data.fields.add(MapEntry('repPlanIdActive', repPlanIdActive.toString()));
     if (repPlanIdOther != null) {
-      _data.fields.add(MapEntry(
-        'repPlanIdOther',
-        repPlanIdOther.toString(),
-      ));
+      _data.fields.add(MapEntry('repPlanIdOther', repPlanIdOther.toString()));
     }
-    final _options = _setStreamType<AllPlanBrandsBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllPlanBrands.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<AllPlanBrandsBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllPlanBrands.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllPlanBrandsBaseResponse _value;
     try {
@@ -459,38 +346,23 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanIdActive',
-      repPlanIdActive.toString(),
-    ));
+    _data.fields.add(MapEntry('repPlanIdActive', repPlanIdActive.toString()));
     if (flag != null) {
-      _data.fields.add(MapEntry(
-        'flag',
-        flag.toString(),
-      ));
+      _data.fields.add(MapEntry('flag', flag.toString()));
     }
     if (repPlanIdOther != null) {
-      _data.fields.add(MapEntry(
-        'repPlanIdOther',
-        repPlanIdOther.toString(),
-      ));
+      _data.fields.add(MapEntry('repPlanIdOther', repPlanIdOther.toString()));
     }
-    final _options = _setStreamType<AllPlanBrandsBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getAllPlanBrandsType.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<AllPlanBrandsBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getAllPlanBrandsType.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllPlanBrandsBaseResponse _value;
     try {
@@ -513,38 +385,23 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
-    ));
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
     if (spId != null) {
-      _data.fields.add(MapEntry(
-        'spId',
-        spId.toString(),
-      ));
+      _data.fields.add(MapEntry('spId', spId.toString()));
     }
     if (repId != null) {
-      _data.fields.add(MapEntry(
-        'repId',
-        repId.toString(),
-      ));
+      _data.fields.add(MapEntry('repId', repId.toString()));
     }
-    final _options = _setStreamType<PlanBrandsBaseSpResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getRepPlanBrandSp.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<PlanBrandsBaseSpResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getRepPlanBrandSp.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late PlanBrandsBaseSpResponse _value;
     try {
@@ -557,38 +414,23 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<SearchDoctorsBaseSpResponse> docSearch(
-    int cityId,
-    String name,
-  ) async {
+  Future<SearchDoctorsBaseSpResponse> docSearch(int cityId, String name) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'cityId',
-      cityId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'name',
-      name,
-    ));
-    final _options = _setStreamType<SearchDoctorsBaseSpResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/docSearch.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('cityId', cityId.toString()));
+    _data.fields.add(MapEntry('name', name));
+    final _options = _setStreamType<SearchDoctorsBaseSpResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/docSearch.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late SearchDoctorsBaseSpResponse _value;
     try {
@@ -606,26 +448,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'docId',
-      docId.toString(),
-    ));
-    final _options = _setStreamType<DocDoctorsBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/docReport.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('docId', docId.toString()));
+    final _options = _setStreamType<DocDoctorsBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/docReport.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late DocDoctorsBaseResponse _value;
     try {
@@ -646,30 +479,18 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'representativeId',
-      representativeId.toString(),
-    ));
-    final _options = _setStreamType<VisitHospitalBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getHosVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    _data.fields.add(MapEntry('representativeId', representativeId.toString()));
+    final _options = _setStreamType<VisitHospitalBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getHosVisit.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late VisitHospitalBaseResponse _value;
     try {
@@ -690,30 +511,18 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId,
-    ));
-    _data.fields.add(MapEntry(
-      'representativeId',
-      representativeId,
-    ));
-    final _options = _setStreamType<VisitDoctorBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getDocVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repPlanId', repPlanId));
+    _data.fields.add(MapEntry('representativeId', representativeId));
+    final _options = _setStreamType<VisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getDocVisit.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late VisitDoctorBaseResponse _value;
     try {
@@ -732,22 +541,16 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(list.toJson());
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/insertPlanBrands.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/insertPlanBrands.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -766,22 +569,16 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(list.toJson());
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/pharmacyVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/pharmacyVisit.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -800,22 +597,16 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(list.toJson());
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/docVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/docVisit.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -834,22 +625,16 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(list.toJson());
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/hosVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/hosVisit.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -867,26 +652,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
-    ));
-    final _options = _setStreamType<CheckBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/checkPlanStatus.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    final _options = _setStreamType<CheckBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/checkPlanStatus.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late CheckBaseResponse _value;
     try {
@@ -899,38 +675,23 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<LoginResponse> checkActivePlanBrand(
-    int repDet,
-    int ver,
-  ) async {
+  Future<LoginResponse> checkActivePlanBrand(int repDet, int ver) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'ver',
-      ver.toString(),
-    ));
-    final _options = _setStreamType<LoginResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/getPlans.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    _data.fields.add(MapEntry('ver', ver.toString()));
+    final _options = _setStreamType<LoginResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/getPlans.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late LoginResponse _value;
     try {
@@ -948,26 +709,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllBrandResResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/getBrands.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<AllBrandResResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/getBrands.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllBrandResResponse _value;
     try {
@@ -985,26 +737,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<CheckReResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/checkRe.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<CheckReResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/checkRe.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late CheckReResponse _value;
     try {
@@ -1022,26 +765,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<CheckRepResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/checkRep.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    final _options = _setStreamType<CheckRepResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/checkRep.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late CheckRepResponse _value;
     try {
@@ -1080,128 +814,75 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'recipeType',
-      recipeType,
-    ));
-    _data.fields.add(MapEntry(
-      'repId',
-      repId,
-    ));
-    _data.fields.add(MapEntry(
-      'type',
-      type,
-    ));
-    _data.fields.add(MapEntry(
-      'docId',
-      docId,
-    ));
-    _data.fields.add(MapEntry(
-      'spName',
-      spName,
-    ));
-    _data.fields.add(MapEntry(
-      'brand_1',
-      brand_1,
-    ));
-    _data.fields.add(MapEntry(
-      'address',
-      address,
-    ));
-    _data.fields.add(MapEntry(
-      'phone',
-      phone,
-    ));
-    _data.fields.add(MapEntry(
-      'total',
-      total,
-    ));
+    _data.fields.add(MapEntry('recipeType', recipeType));
+    _data.fields.add(MapEntry('repId', repId));
+    _data.fields.add(MapEntry('type', type));
+    _data.fields.add(MapEntry('docId', docId));
+    _data.fields.add(MapEntry('spName', spName));
+    _data.fields.add(MapEntry('brand_1', brand_1));
+    _data.fields.add(MapEntry('address', address));
+    _data.fields.add(MapEntry('phone', phone));
+    _data.fields.add(MapEntry('total', total));
     if (flagImage1 != null) {
-      _data.fields.add(MapEntry(
-        'flagImage1',
-        flagImage1,
-      ));
+      _data.fields.add(MapEntry('flagImage1', flagImage1));
     }
     if (flagImage2 != null) {
-      _data.fields.add(MapEntry(
-        'flagImage2',
-        flagImage2,
-      ));
+      _data.fields.add(MapEntry('flagImage2', flagImage2));
     }
     if (note1 != null) {
-      _data.fields.add(MapEntry(
-        'note1',
-        note1,
-      ));
+      _data.fields.add(MapEntry('note1', note1));
     }
     if (note2 != null) {
-      _data.fields.add(MapEntry(
-        'note2',
-        note2,
-      ));
+      _data.fields.add(MapEntry('note2', note2));
     }
     if (image1 != null) {
       if (image1 != null) {
-        _data.files.add(MapEntry(
-          'image1',
-          MultipartFile.fromFileSync(
-            image1.path,
-            filename: image1.path.split(Platform.pathSeparator).last,
+        _data.files.add(
+          MapEntry(
+            'image1',
+            MultipartFile.fromFileSync(
+              image1.path,
+              filename: image1.path.split(Platform.pathSeparator).last,
+            ),
           ),
-        ));
+        );
       }
     }
     if (image2 != null) {
       if (image2 != null) {
-        _data.files.add(MapEntry(
-          'image2',
-          MultipartFile.fromFileSync(
-            image2.path,
-            filename: image2.path.split(Platform.pathSeparator).last,
+        _data.files.add(
+          MapEntry(
+            'image2',
+            MultipartFile.fromFileSync(
+              image2.path,
+              filename: image2.path.split(Platform.pathSeparator).last,
+            ),
           ),
-        ));
+        );
       }
     }
     if (brand_2 != null) {
-      _data.fields.add(MapEntry(
-        'brand_2',
-        brand_2,
-      ));
+      _data.fields.add(MapEntry('brand_2', brand_2));
     }
     if (brand_3 != null) {
-      _data.fields.add(MapEntry(
-        'brand_3',
-        brand_3,
-      ));
+      _data.fields.add(MapEntry('brand_3', brand_3));
     }
     if (brand_4 != null) {
-      _data.fields.add(MapEntry(
-        'brand_4',
-        brand_4,
-      ));
+      _data.fields.add(MapEntry('brand_4', brand_4));
     }
     if (note_emp != null) {
-      _data.fields.add(MapEntry(
-        'note_emp',
-        note_emp,
-      ));
+      _data.fields.add(MapEntry('note_emp', note_emp));
     }
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/insertReci.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/insertReci.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -1219,22 +900,16 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ReciNumResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/reciNum.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<ReciNumResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/reciNum.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late ReciNumResponse _value;
     try {
@@ -1247,38 +922,23 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<CopyRecResponse> copyReci(
-    int docId,
-    String recipeType,
-  ) async {
+  Future<CopyRecResponse> copyReci(int docId, String recipeType) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'docId',
-      docId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'recipeType',
-      recipeType,
-    ));
-    final _options = _setStreamType<CopyRecResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/copyRe.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('docId', docId.toString()));
+    _data.fields.add(MapEntry('recipeType', recipeType));
+    final _options = _setStreamType<CopyRecResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/copyRe.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late CopyRecResponse _value;
     try {
@@ -1296,26 +956,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'reciId',
-      reciId.toString(),
-    ));
-    final _options = _setStreamType<CopyRecResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/getRepReci.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('reciId', reciId.toString()));
+    final _options = _setStreamType<CopyRecResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/getRepReci.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late CopyRecResponse _value;
     try {
@@ -1328,38 +979,23 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllRepresentativeBaseResponse> getReps(
-    int id,
-    int cityId,
-  ) async {
+  Future<AllRepresentativeBaseResponse> getReps(int id, int cityId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      id.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'cityId',
-      cityId.toString(),
-    ));
-    final _options = _setStreamType<AllRepresentativeBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getReps.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', id.toString()));
+    _data.fields.add(MapEntry('cityId', cityId.toString()));
+    final _options = _setStreamType<AllRepresentativeBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getReps.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllRepresentativeBaseResponse _value;
     try {
@@ -1377,27 +1013,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      id.toString(),
-    ));
-    final _options =
-        _setStreamType<AllRepresentativeFutureBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/admin/getRepsFuture.php',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            )));
+    _data.fields.add(MapEntry('repDet', id.toString()));
+    final _options = _setStreamType<AllRepresentativeFutureBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getRepsFuture.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllRepresentativeFutureBaseResponse _value;
     try {
@@ -1415,26 +1041,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      docId.toString(),
-    ));
-    final _options = _setStreamType<AllVisitNotesBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getVisitNotes.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', docId.toString()));
+    final _options = _setStreamType<AllVisitNotesBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getVisitNotes.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllVisitNotesBaseResponse _value;
     try {
@@ -1452,26 +1069,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      docId.toString(),
-    ));
-    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/noVisitDoc.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', docId.toString()));
+    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/noVisitDoc.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllNoVisitDoctorBaseResponse _value;
     try {
@@ -1485,31 +1093,23 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<AllNoVisitDoctorBaseResponse> getUnfinishedDoctorVisits(
-      int docId) async {
+    int docId,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      docId.toString(),
-    ));
-    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getUnfinishedDoctorVisits.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', docId.toString()));
+    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getUnfinishedDoctorVisits.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllNoVisitDoctorBaseResponse _value;
     try {
@@ -1527,26 +1127,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      docId.toString(),
-    ));
-    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/visitDoc.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', docId.toString()));
+    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/visitDoc.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllNoVisitDoctorBaseResponse _value;
     try {
@@ -1564,26 +1155,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      id.toString(),
-    ));
-    final _options = _setStreamType<AllVisitIssueBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getVisitIssue.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', id.toString()));
+    final _options = _setStreamType<AllVisitIssueBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getVisitIssue.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllVisitIssueBaseResponse _value;
     try {
@@ -1602,22 +1184,16 @@ class _AppServiceClient implements AppServiceClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(list.toJson());
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/insertLog.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/insertLog.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -1635,26 +1211,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      id.toString(),
-    ));
-    final _options = _setStreamType<InventoryResponseBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/inventory.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', id.toString()));
+    final _options = _setStreamType<InventoryResponseBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/inventory.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late InventoryResponseBaseResponse _value;
     try {
@@ -1672,26 +1239,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repDet',
-      id.toString(),
-    ));
-    final _options = _setStreamType<AllRepInfoResponseBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getRepInfo.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repDet', id.toString()));
+    final _options = _setStreamType<AllRepInfoResponseBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getRepInfo.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllRepInfoResponseBaseResponse _value;
     try {
@@ -1712,30 +1270,18 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repId',
-      repId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'userId',
-      userId.toString(),
-    ));
-    final _options = _setStreamType<AllRepVisitsResponseBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getRepVisits.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repId', repId.toString()));
+    _data.fields.add(MapEntry('userId', userId.toString()));
+    final _options = _setStreamType<AllRepVisitsResponseBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getRepVisits.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllRepVisitsResponseBaseResponse _value;
     try {
@@ -1758,38 +1304,20 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'visitId',
-      visitId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'userId',
-      userId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'status',
-      status.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'reqType',
-      reqType.toString(),
-    ));
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/readVisit.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('visitId', visitId.toString()));
+    _data.fields.add(MapEntry('userId', userId.toString()));
+    _data.fields.add(MapEntry('status', status.toString()));
+    _data.fields.add(MapEntry('reqType', reqType.toString()));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/readVisit.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -1812,38 +1340,20 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'userId',
-      userId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'type',
-      type.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'flag',
-      flag.toString(),
-    ));
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/readAllVisits.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    _data.fields.add(MapEntry('userId', userId.toString()));
+    _data.fields.add(MapEntry('type', type.toString()));
+    _data.fields.add(MapEntry('flag', flag.toString()));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/readAllVisits.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -1864,30 +1374,18 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repId',
-      repId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'userId',
-      userId.toString(),
-    ));
-    final _options = _setStreamType<AllRepVisitsResponseBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getRepVisitsHos.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repId', repId.toString()));
+    _data.fields.add(MapEntry('userId', userId.toString()));
+    final _options = _setStreamType<AllRepVisitsResponseBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getRepVisitsHos.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllRepVisitsResponseBaseResponse _value;
     try {
@@ -1900,38 +1398,23 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> changePlanBrandType(
-    int id,
-    int brandType,
-  ) async {
+  Future<Message1Response> changePlanBrandType(int id, int brandType) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'id',
-      id.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'brandType',
-      brandType.toString(),
-    ));
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/changePlanBrandType.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('id', id.toString()));
+    _data.fields.add(MapEntry('brandType', brandType.toString()));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/changePlanBrandType.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -1949,26 +1432,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repId',
-      repDet.toString(),
-    ));
-    final _options = _setStreamType<AllReciBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/getAllRepReci.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repId', repDet.toString()));
+    final _options = _setStreamType<AllReciBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/getAllRepReci.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AllReciBaseResponse _value;
     try {
@@ -1986,26 +1460,17 @@ class _AppServiceClient implements AppServiceClient {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'docId',
-      docId.toString(),
-    ));
-    final _options = _setStreamType<InfoDoctorBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getDocInfo.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('docId', docId.toString()));
+    final _options = _setStreamType<InfoDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getDocInfo.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late InfoDoctorBaseResponse _value;
     try {
@@ -2048,148 +1513,83 @@ class _AppServiceClient implements AppServiceClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'reciId',
-      reciId.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'recipeType',
-      recipeType.toString(),
-    ));
-    _data.fields.add(MapEntry(
-      'repId',
-      repId,
-    ));
-    _data.fields.add(MapEntry(
-      'type',
-      type,
-    ));
-    _data.fields.add(MapEntry(
-      'docId',
-      docId,
-    ));
-    _data.fields.add(MapEntry(
-      'spName',
-      spName,
-    ));
-    _data.fields.add(MapEntry(
-      'brand_1',
-      brand_1,
-    ));
-    _data.fields.add(MapEntry(
-      'address',
-      address,
-    ));
-    _data.fields.add(MapEntry(
-      'phone',
-      phone,
-    ));
-    _data.fields.add(MapEntry(
-      'total',
-      total,
-    ));
-    _data.fields.add(MapEntry(
-      'create_date',
-      create_date,
-    ));
+    _data.fields.add(MapEntry('reciId', reciId.toString()));
+    _data.fields.add(MapEntry('recipeType', recipeType.toString()));
+    _data.fields.add(MapEntry('repId', repId));
+    _data.fields.add(MapEntry('type', type));
+    _data.fields.add(MapEntry('docId', docId));
+    _data.fields.add(MapEntry('spName', spName));
+    _data.fields.add(MapEntry('brand_1', brand_1));
+    _data.fields.add(MapEntry('address', address));
+    _data.fields.add(MapEntry('phone', phone));
+    _data.fields.add(MapEntry('total', total));
+    _data.fields.add(MapEntry('create_date', create_date));
     if (note1 != null) {
-      _data.fields.add(MapEntry(
-        'note1',
-        note1,
-      ));
+      _data.fields.add(MapEntry('note1', note1));
     }
     if (note2 != null) {
-      _data.fields.add(MapEntry(
-        'note2',
-        note2,
-      ));
+      _data.fields.add(MapEntry('note2', note2));
     }
     if (flagImage1 != null) {
-      _data.fields.add(MapEntry(
-        'flagImage1',
-        flagImage1,
-      ));
+      _data.fields.add(MapEntry('flagImage1', flagImage1));
     }
     if (flagImage2 != null) {
-      _data.fields.add(MapEntry(
-        'flagImage2',
-        flagImage2,
-      ));
+      _data.fields.add(MapEntry('flagImage2', flagImage2));
     }
     if (note_emp != null) {
-      _data.fields.add(MapEntry(
-        'note_emp',
-        note_emp,
-      ));
+      _data.fields.add(MapEntry('note_emp', note_emp));
     }
     if (image1 != null) {
       if (image1 != null) {
-        _data.files.add(MapEntry(
-          'image1',
-          MultipartFile.fromFileSync(
-            image1.path,
-            filename: image1.path.split(Platform.pathSeparator).last,
+        _data.files.add(
+          MapEntry(
+            'image1',
+            MultipartFile.fromFileSync(
+              image1.path,
+              filename: image1.path.split(Platform.pathSeparator).last,
+            ),
           ),
-        ));
+        );
       }
     }
     if (image2 != null) {
       if (image2 != null) {
-        _data.files.add(MapEntry(
-          'image2',
-          MultipartFile.fromFileSync(
-            image2.path,
-            filename: image2.path.split(Platform.pathSeparator).last,
+        _data.files.add(
+          MapEntry(
+            'image2',
+            MultipartFile.fromFileSync(
+              image2.path,
+              filename: image2.path.split(Platform.pathSeparator).last,
+            ),
           ),
-        ));
+        );
       }
     }
     if (brand_2 != null) {
-      _data.fields.add(MapEntry(
-        'brand_2',
-        brand_2,
-      ));
+      _data.fields.add(MapEntry('brand_2', brand_2));
     }
     if (brand_3 != null) {
-      _data.fields.add(MapEntry(
-        'brand_3',
-        brand_3,
-      ));
+      _data.fields.add(MapEntry('brand_3', brand_3));
     }
     if (brand_4 != null) {
-      _data.fields.add(MapEntry(
-        'brand_4',
-        brand_4,
-      ));
+      _data.fields.add(MapEntry('brand_4', brand_4));
     }
     if (print_date != null) {
-      _data.fields.add(MapEntry(
-        'print_date',
-        print_date,
-      ));
+      _data.fields.add(MapEntry('print_date', print_date));
     }
     if (active != null) {
-      _data.fields.add(MapEntry(
-        'active',
-        active,
-      ));
+      _data.fields.add(MapEntry('active', active));
     }
-    final _options = _setStreamType<Message1Response>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/reci/updateReci.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reci/updateReci.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Message1Response _value;
     try {
@@ -2203,31 +1603,23 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
-      int repPlanId) async {
+    int repPlanId,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry(
-      'repPlanId',
-      repPlanId.toString(),
-    ));
-    final _options = _setStreamType<ActiveBrandPlanBaseResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/admin/getinfoPlanBrandsType.php',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    final _options = _setStreamType<ActiveBrandPlanBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getinfoPlanBrandsType.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late ActiveBrandPlanBaseResponse _value;
     try {
@@ -2252,10 +1644,7 @@ class _AppServiceClient implements AppServiceClient {
     return requestOptions;
   }
 
-  String _combineBaseUrls(
-    String dioBaseUrl,
-    String? baseUrl,
-  ) {
+  String _combineBaseUrls(String dioBaseUrl, String? baseUrl) {
     if (baseUrl == null || baseUrl.trim().isEmpty) {
       return dioBaseUrl;
     }

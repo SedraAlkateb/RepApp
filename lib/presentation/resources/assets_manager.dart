@@ -10,8 +10,6 @@ class ImageAssets{
   static const String d = "$imagePath/d.png";
   static const String domina = "$imagePath/domina.png";
   static const String login = "$imagePath/login.png";
-  static const String blue = "$imagePath/blue.jpg";
-  static const String doctor = "$imagePath/doctor.png";
   static const String hospital = "$imagePath/hospital.png";
   static const String top = "$imagePath/top.png";
   static const String bottom = "$imagePath/bottom.png";
@@ -33,8 +31,5 @@ class JsonAssets{
   static const String loading1 = "$jsonPath/loading1.json";
   static const String loading2 = "$jsonPath/loading2.json";
   static const String suc2 = "$jsonPath/suc2.json";
-  static const String suc = "$jsonPath/suc.json";
-  static const String suc1 = "$jsonPath/suc1.json";
-  static const String earth = "$jsonPath/earth.json";
 
 }
