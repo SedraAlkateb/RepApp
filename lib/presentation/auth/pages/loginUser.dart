@@ -46,7 +46,7 @@ class _MyLoginState extends State<MyLogin> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 120.h),
+                      SizedBox(height: 140.h),
                       Image.asset(ImageAssets.domina, scale: 5 ),
                       SizedBox(height: 8.h),
                       Container(
