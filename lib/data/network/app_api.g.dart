@@ -106,11 +106,12 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllCityBaseResponse> allCity() async {
+  Future<AllCityBaseResponse> allCity(int repId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = FormData();
+    _data.fields.add(MapEntry('repId', repId.toString()));
     final _options = _setStreamType<AllCityBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
