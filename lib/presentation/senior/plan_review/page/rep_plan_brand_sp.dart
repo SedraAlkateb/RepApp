@@ -1,6 +1,7 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -219,7 +220,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                                                 BlocProvider.of<FutureRepBloc>(
                                                         context)
                                                     .add(ChangeFieldEvent(
-                                                        int.parse(value),
+                                                    int.parse(convertArabicNumberToEnglish(value)),
                                                    index,
                                                       ));
                                               }

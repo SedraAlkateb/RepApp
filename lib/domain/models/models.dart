@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -165,9 +166,7 @@ class VisitBrandPharmacyModel {
         map['id'],
         map['visitId'],
         map['brandId'],
-        int.parse(
-          map['amount'],
-        ),
+        int.parse(convertArabicNumberToEnglish(map['amount'])),
         1);
   }
 
@@ -176,9 +175,7 @@ class VisitBrandPharmacyModel {
         map['id'],
         map['visitId'],
         map['brandId'],
-        int.parse(
-          map['amount'],
-        ),
+        int.parse(convertArabicNumberToEnglish( map['amount'])),
         map['flag']);
   }
 }
@@ -1343,7 +1340,7 @@ class PlanBrandSqlModel {
         map['id'],
         map['repPlanId'],
         map['brandType'],
-        int.parse(map['amount']),
+        int.parse(convertArabicNumberToEnglish(map['amount'])),
         map['phTitle'],
         map['brandTitle'],
         map['sampleCoast'],

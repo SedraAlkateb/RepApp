@@ -1,6 +1,7 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class AppSqlApiAbs {
@@ -1295,7 +1296,7 @@ class AppSqlApi extends AppSqlApiAbs {
       brandMap[brandId]!.spPlan.add(
             SpPlan(
                 row['plan_id'],
-                int.parse(row['amount']),
+                int.parse(convertArabicNumberToEnglish(row['amount'])),
                 row['specialization_title'] as String,
                 row['brandType'],
                 row['specialization_id'],
@@ -1371,7 +1372,7 @@ class AppSqlApi extends AppSqlApiAbs {
                   0,
                   row['brand_sampleCost'],
                   row['plan_id'],
-                  int.parse(row['amount']),
+                  int.parse(convertArabicNumberToEnglish(row['amount'])),
                   row['brandType']),
             );
       }

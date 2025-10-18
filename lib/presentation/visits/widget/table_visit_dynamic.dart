@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
@@ -115,8 +116,8 @@ final  List<PharmacyBrandModel> selectBrand;
                             .add(
                             EditAmountBrandEvent(
                                 index,
-                                int.parse(
-                                    value)));
+                                int.parse(convertArabicNumberToEnglish(value))
+                              ));
                       }
                     },
                     keyboardType:

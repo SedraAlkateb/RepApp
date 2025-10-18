@@ -10,6 +10,7 @@ import 'package:domina_app/domain/usecase/insert_visit_brand_hospital_sql_usecas
 import 'package:domina_app/domain/usecase/insert_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -159,7 +160,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       }
       if (event is SelectNumBrandAddEvent) {
         List<BrandAddition> updatedList = List.from(selectAddBrand);
-        updatedList.last.amount = int.parse(event.num);
+        updatedList.last.amount =
+            int.parse(convertArabicNumberToEnglish(event.num));
         selectAddBrand = updatedList;
         emit(SelectBrandAddNumState(updatedList));
       }

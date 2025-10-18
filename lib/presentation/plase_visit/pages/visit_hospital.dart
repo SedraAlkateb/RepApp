@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/hospitals/page/hospital_view_details.dar
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearch.dart';
 import 'package:domina_app/presentation/uniti/CustomDropDownSearchSpec.dart';
@@ -431,8 +432,9 @@ class _VisitHospitalState extends State<VisitHospital>
                                                         .add(
                                                             EditAmountBrandEvent(
                                                                 index,
-                                                                int.parse(
-                                                                    value)));
+                                                                int.parse(convertArabicNumberToEnglish(value))
+
+                                                            ));
                                                   }
                                                 },
                                                 keyboardType:

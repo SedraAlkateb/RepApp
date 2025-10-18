@@ -113,7 +113,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<AllCityBaseResponse> allCity() async {
-    return await _appServiceClient.allCity();
+    return await _appServiceClient.allCity(UserInfo.repId);
   }
 
   @override

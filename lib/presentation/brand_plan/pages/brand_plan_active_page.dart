@@ -112,7 +112,10 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                                               horizontal: AppPaddingW.p14,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: int.parse(
+                                              color:
+
+                                              int.parse(
+
                                                           planBrandModel[index]
                                                               .spPlan[0]
                                                               .brandType) ==

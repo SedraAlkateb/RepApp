@@ -2,6 +2,7 @@
 
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
@@ -78,7 +79,8 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      int brandTypeId = int.parse(widget.planBrand[index].brandType);
+                      int brandTypeId = int.parse(convertArabicNumberToEnglish(widget.planBrand[index].brandType));
+
 
                       String brandTypeHintText = "لاشيء";
                       for (var type in brandType) {

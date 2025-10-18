@@ -2,6 +2,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -221,7 +222,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                                 BlocProvider.of<BrandPlanBloc>(
                                                         context)
                                                     .add(ChangeFieldEvent(
-                                                        int.parse(value),
+                                                    int.parse(convertArabicNumberToEnglish(value)),
                                                         widget.index1,
                                                         index,
                                                         widget
