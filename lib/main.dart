@@ -28,9 +28,9 @@ void main() async {
   final dbHelper = DatabaseHelper();
   final appSqlApi = AppSqlApi(dbHelper);
   await appSqlApi.debugOtherPlanBrandByRepPlanId(UserInfo.activePlanId);
+
   await initAppModule();
   await _initNotifications();
-
   await requestNotificationPermission();
   AlarmAndNotifications.showNotification();
   await sss();
@@ -39,50 +39,21 @@ void main() async {
 }
 
 Future<void> _initNotifications() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await AlarmAndNotifications.initialize();
-  await AlarmAndNotifications.scheduleOneShot();
-}
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
-@pragma('vm:entry-point')
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await initAppModule();
-  await _initNotifications();
-  await sss();
-  await requestNotificationPermission();
-  AlarmAndNotifications.showNotification();
-  runApp(Phoenix(child: const MyApp()));
-}
-
-Future<void> _initNotifications() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
+  const AndroidInitializationSettings androidSettings =
   AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  const DarwinInitializationSettings initializationSettingsIOS =
-  DarwinInitializationSettings(
+  const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
     requestAlertPermission: true,
     requestBadgePermission: true,
     requestSoundPermission: true,
   );
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-  );
+
+  const InitializationSettings initSettings =
+  InitializationSettings(android: androidSettings, iOS: iosSettings);
+
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
   await AlarmAndNotifications.initialize();
   await AlarmAndNotifications.scheduleOneShot();
-  await requestNotificationPermission();
 }
 
 Future<void> requestNotificationPermission() async {
@@ -98,13 +69,8 @@ Future<void> requestNotificationPermission() async {
     }
   } else if (Platform.isIOS) {
     final iosPlugin = flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
-    await iosPlugin?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+    await iosPlugin?.requestPermissions(alert: true, badge: true, sound: true);
     print("✅ تم طلب صلاحيات الإشعارات على iOS.");
   }
 }
@@ -140,35 +106,22 @@ Future<int?> sss() async {
 
       if (UserInfo.isLogging != 0 && UserInfo.endDate != null) {
         final now = formatDateTimeFromDataTime(DateTime.now());
-        final String endDate = UserInfo.endDate ?? "";
-        if (UserInfo.endDate != null && now == formatDateTime(endDate)) {
+        if (now == formatDateTime(UserInfo.endDate!)) {
           _showEndDateNotification();
         }
 
         String? nextDay = UserInfo.endDate != null
-            ? DateFormat("dd-MM-yyyy").format(
-            formatStringToDataTime(UserInfo.endDate!)
-                .add(const Duration(days: 1)))
+            ? DateFormat("dd-MM-yyyy")
+            .format(formatStringToDataTime(UserInfo.endDate!).add(const Duration(days: 1)))
             : "";
 
-        print(UserInfo.isLogging);
-        if (UserInfo.isLogging != 5) {
-          print("now");
-          print(now);
-          print("nextDay");
-          print(nextDay);
-          if (now == nextDay) {
-            print(now);
-            print(nextDay);
-            EditIsLoginSqlUsecase editIsLoginSqlUsecase =
-            EditIsLoginSqlUsecase(instance());
-            (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
-                    (failure) {
-                  return 0;
-                }, (data) async {
-              UserInfo.isLogging = 5;
-            });
-          }
+        if (UserInfo.isLogging != 5 && now == nextDay) {
+          EditIsLoginSqlUsecase editIsLoginSqlUsecase = EditIsLoginSqlUsecase(instance());
+          (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+            return 0;
+          }, (data) async {
+            UserInfo.isLogging = 5;
+          });
         }
       }
     } else {
@@ -181,8 +134,7 @@ Future<int?> sss() async {
 }
 
 Future<void> _showEndDateNotification() async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
+  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
     'your_channel_id',
     'التنبيهات',
     channelDescription: 'تنبيهات خاصة بالوقت',
@@ -193,23 +145,61 @@ Future<void> _showEndDateNotification() async {
     playSound: true,
   );
 
-  const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
+  const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
 
   await flutterLocalNotificationsPlugin.show(
     2,
     'شركة دومِنا',
     'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.',
-    platformChannelSpecifics,
+    platformDetails,
     payload: 'end_date_notification',
   );
+}
+
+class MyResponsiveApp extends StatelessWidget {
+  const MyResponsiveApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBreakpoints.builder(
+      breakpoints: const [
+        Breakpoint(start: 0, end: 450, name: MOBILE),
+        Breakpoint(start: 451, end: 1023, name: TABLET),
+        Breakpoint(start: 1024, end: double.infinity, name: DESKTOP),
+      ],
+      child: Builder(
+        builder: (context) {
+          final breakPoint = ResponsiveBreakpoints.of(context).breakpoint;
+          final designSize = getDesignSizeByBreakpoint(breakPoint);
+
+          return ScreenUtilInit(
+            designSize: designSize,
+            minTextAdapt: true,
+            splitScreenMode: true,
+            builder: (context, child) => const MyApp(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+Size getDesignSizeByBreakpoint(Breakpoint breakPoint) {
+  if (breakPoint.name == MOBILE) {
+    UserInfo.isScreenWidth = false;
+    return const Size(360, 690);
+  } else if (breakPoint.name == TABLET) {
+    UserInfo.isScreenWidth = true;
+    return const Size(768, 1024);
+  } else {
+    return const Size(1024, 768);
+  }
 }
 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

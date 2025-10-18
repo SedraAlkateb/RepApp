@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
+@pragma('vm:entry-point') // 👈 مهم جدًا للوصول من native code
 class AlarmAndNotifications {
   /// تهيئة الإشعارات
   static Future<void> initialize() async {
@@ -104,7 +105,7 @@ class AlarmAndNotifications {
   }
 
   /// عرض الإشعار
-  @pragma('vm:entry-point')
+  @pragma('vm:entry-point') // 👈 ضروري لأنها تُستدعى من النظام
   static Future<void> showNotification() async {
     const androidDetails = AndroidNotificationDetails(
       'reminder_channel',
