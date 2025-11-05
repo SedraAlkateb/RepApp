@@ -1,0 +1,252 @@
+openapi: 3.0.3
+info:
+  title: Domina API
+  description: >
+    RESTful API documentation for **Domina App** – Medical Representative Management System.
+    This specification is based on the Retrofit interface used in the Flutter app.
+  version: 1.0.0
+  contact:
+    name: Domina IT Team
+    email: support@dominapharm.com
+servers:
+  - url: https://heaven-web.net/domina
+    description: Production Server
+
+tags:
+  - name: Authentication
+  - name: Representatives
+  - name: Doctors
+  - name: Pharmacies
+  - name: Hospitals
+  - name: Recipes
+  - name: Administration
+
+paths:
+  /loginU.php:
+    post:
+      tags: [Authentication]
+      summary: Login user
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                password:
+                  type: string
+                ver:
+                  type: integer
+      responses:
+        "200":
+          description: Login response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+
+  /getAllPlace.php:
+    post:
+      tags: [General]
+      summary: Get all places
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                repDet:
+                  type: integer
+      responses:
+        "200":
+          description: All place data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllPlaceBaseResponse'
+
+  /getAllDoctor.php:
+    post:
+      tags: [Doctors]
+      summary: Get all doctors
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                repDet:
+                  type: integer
+      responses:
+        "200":
+          description: Doctors list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllDoctorsBaseResponse'
+
+  /reci/insertReci.php:
+    post:
+      tags: [Recipes]
+      summary: Insert a new recipe
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - recipeType
+                - repId
+                - type
+                - docId
+                - spName
+                - brand_1
+                - address
+                - phone
+                - total
+              properties:
+                recipeType:
+                  type: string
+                repId:
+                  type: string
+                type:
+                  type: string
+                docId:
+                  type: string
+                spName:
+                  type: string
+                brand_1:
+                  type: string
+                brand_2:
+                  type: string
+                  nullable: true
+                brand_3:
+                  type: string
+                  nullable: true
+                brand_4:
+                  type: string
+                  nullable: true
+                address:
+                  type: string
+                phone:
+                  type: string
+                total:
+                  type: string
+                image1:
+                  type: string
+                  format: binary
+                image2:
+                  type: string
+                  format: binary
+                note1:
+                  type: string
+                  nullable: true
+                note2:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Message response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message1Response'
+
+  /admin/getReps.php:
+    post:
+      tags: [Administration]
+      summary: Get representatives by city
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                repDet:
+                  type: integer
+                cityId:
+                  type: integer
+      responses:
+        "200":
+          description: Representatives list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllRepresentativeBaseResponse'
+
+components:
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            userId:
+              type: integer
+            userName:
+              type: string
+            token:
+              type: string
+
+    AllPlaceBaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+
+    AllDoctorsBaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        doctors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              specialization:
+                type: string
+
+    Message1Response:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+    AllRepresentativeBaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        representatives:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              city:
+                type: string
