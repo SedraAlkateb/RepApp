@@ -125,7 +125,6 @@ flutter:
     - assets/images/
     - assets/json/
     - assets/fonts/
-    - assets/images/svg/
     - assets/images/spec/
     - assets/images/async/
   fonts:

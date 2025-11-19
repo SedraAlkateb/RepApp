@@ -213,7 +213,8 @@ abstract class AppServiceClient {
       );
   @POST("/admin/changePlanBrandType.php")//*
   Future<Message1Response> changePlanBrandType(
-      @Part(name: "id") int id, @Part(name: "brandType") int brandType
+      @Part(name: "id") int id,
+      @Part(name: "brandType") int brandType
       );
 
   @POST("/reci/getAllRepReci.php")//
