@@ -349,6 +349,34 @@ class RepProfile extends StatelessWidget {
                     ),
                     RowList(
                         function: () {
+                          Navigator.pushNamed(context, Routes.allRecipe);
+                          // initReportVisitDoctorModule();
+                          // Navigator.push(context, MaterialPageRoute(
+                          //   builder: (context) {
+                          //     return ReportVisitHospital(
+                          //       iscanedite: true,
+                          //       repId: id,
+                          //       userId: UserInfo.repId,
+                          //       repName: name,
+                          //       indexRep: index,
+                          //       repPlan: repPlan,
+                          //     );
+                          //   },
+                          // ));
+                          BlocProvider.of<SeniorProfBloc>(context).add(AllReciEvent(id));
+                        },
+                        icon1: FontAwesomeIcons.table,
+                        text: "عرض الوصفات"),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(
+                          horizontal: AppPaddingH.p14),
+                      child: Divider(
+                        color: ColorManager.secondaryColor6,
+                        thickness: 0.8,
+                      ),
+                    ),
+                    RowList(
+                        function: () {
                           initActivePlanModule();
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {

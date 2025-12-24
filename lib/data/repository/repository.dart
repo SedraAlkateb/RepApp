@@ -441,32 +441,6 @@ class RepositoryImp implements Repository {
     }
   }
 
-  @override
-  Future<Either<Failure, ActiveModel>> isActive(int repPlaneId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.checkPlanBrand(repPlaneId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "isActive")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "isActive")]));
-      return Left(failure);
-    }
-  }
 
   @override
   Future<Either<Failure, LoginModel>> checkActivePlanBrand(int repDe) async {
@@ -1148,32 +1122,6 @@ class RepositoryImp implements Repository {
       Failure failure = ErrorHandler.handle(error).failure;
       insertLog(
           ExceptionRequestBody([ExceptionModel(failure.massage, "docSearch")]));
-      return Left(failure);
-    }
-  }
-  @override
-  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id)  async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepsFuture(id);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getRepsFuture")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepsFuture")]));
       return Left(failure);
     }
   }

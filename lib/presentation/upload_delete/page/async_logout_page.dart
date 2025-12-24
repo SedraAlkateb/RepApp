@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/upload_delete/widget/dialog_change_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,6 +48,13 @@ class AsyncLogoutPage extends StatelessWidget {
                       Navigator.pushReplacementNamed(
                         context,
                         Routes.deleteLogout,
+                      );
+                    }
+                    if (state is IsActiveState) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) => dialogChangePlan(context,true),
                       );
                     }
                     if (state is GetState) {

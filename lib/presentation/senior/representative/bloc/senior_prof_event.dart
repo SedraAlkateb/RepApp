@@ -107,3 +107,20 @@ class VisitDocEvent extends SeniorProfEvent{
   List<Object?> get props => [id];
 
 }
+
+class AllReciEvent extends SeniorProfEvent{
+  final int id;
+  @override
+  AllReciEvent(this.id);
+  List<Object?> get props => [id];
+
+}
+class GetRepReciEvent extends SeniorProfEvent {
+  final int reciId;
+  final bool isDoctor;//1 doctor /// 2 hospital
+  final String name;
+  GetRepReciEvent(this.reciId,this.isDoctor,this.name);
+  @override
+
+  List<Object?> get props => [reciId,isDoctor,name];
+}

@@ -1630,13 +1630,6 @@ class AllRepresentative {
   AllRepresentative(this.id, this.name, this.number, this.activePlan);
 }
 
-class AllRepresentativeFuture {
-  int id;
-  int activePlan;
-  String name;
-  FlagModel flag;
-  AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan);
-}
 
 class FlagModel {
   final int flag;

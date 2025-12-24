@@ -6,8 +6,10 @@ import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_no_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
+import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
+import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/info_rep_usecase.dart';
 import 'package:domina_app/domain/usecase/remaining_visits_use_case.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -27,6 +29,8 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
     RemainingVisitsUsecase remainingVisitsUsecase;
+  AllReciUsecase allReciUsecase;
+  GetRepReciUsecase getRepReciUsecase;
   List<SpecDModel> specialization = [];
   List<HospitalModel> hospital = [];
   List<BrandModel> brand = [];
@@ -45,7 +49,9 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       this.allNoVisitDoctorUsecase,
       this.remainingVisitsUsecase, 
       this.allSenVisitDoctorUsecase,
-      this.infoRepUsecase,this.allBrandsUsecase)
+      this.infoRepUsecase,this.allBrandsUsecase,
+      this.allReciUsecase,this.getRepReciUsecase
+      )
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -231,6 +237,26 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           } else {
             emit(SenVisitDocsState(data));
           }
+        });
+      }
+      if (event is AllReciEvent) {
+        emit(AllReciLoadingState());
+        (await allReciUsecase.execute(event.id)).fold((failure) {
+          emit(AllReciErrorState(failure: failure));
+        }, (data) async {
+          if (data.isEmpty) {
+            emit(AllReciEmptyState());
+          } else {
+            emit(AllReciState(data));
+          }
+        });
+      }
+      if (event is GetRepReciEvent) {
+        emit(ViewRecipeLoadingState());
+        (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
+          emit(ViewRecipeErrorState(failure: failure));
+        }, (data) async {
+          emit(ViewRecipeState(data,event.isDoctor,event.name));
         });
       }
     });

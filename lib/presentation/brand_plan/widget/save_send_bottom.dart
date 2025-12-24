@@ -17,6 +17,7 @@ class SaveSendBottom extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
+                print( UserInfo.otherstatus);
                 UserInfo.otherstatus == 0
                     ? showDialog(
                   context: context,
@@ -56,6 +57,9 @@ class SaveSendBottom extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
+                print("UserInfo.otherstatus ${UserInfo.otherstatus}");
+                print("UserInfo.flag ${UserInfo.flag}");
+                print("UserInfo.flag1${UserInfo.flag1}");
                 UserInfo.otherstatus == 0
                     ? showDialog(
                   context: context,

@@ -24,5 +24,6 @@ class UserInfo{
   static int numOfDoctorVisit = -1;
   static int numOfHospitalVisit = -1;
   static bool isScreenWidth = false;
+  static bool isChange = false;
 
 }

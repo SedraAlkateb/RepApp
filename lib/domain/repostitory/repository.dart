@@ -41,8 +41,6 @@ abstract class Repository {
   Future<Either<Failure, Message1Response>> repPlanBrand(
       RepPlanBrandBody list1);
 
-  Future<Either<Failure, ActiveModel>> isActive(int repPlaneId);
-
   Future<Either<Failure, LoginModel>> checkActivePlanBrand(int repDe);
 
   Future<Either<Failure, VisitHospitalBase>> getHosVisit(int repPlanId,
@@ -92,7 +90,6 @@ abstract class Repository {
   Future<Either<Failure, Message1Response>> changePlanBrandType(
       ChangePlanBrandType changePlanBrandType);
 
-  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id);
   Future<Either<Failure, Message1Response>> readAllVisits(ReadAll readAll);
   Future<Either<Failure, List<DocdoctorsModel>>> docReport(int docId);
   Future<Either<Failure,List<doctorsModel> >> docSearch(int cityId, String name,);

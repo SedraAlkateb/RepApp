@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:domina_app/presentation/upload_delete/widget/dialog_change_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,6 +53,14 @@ class AsyncPage extends StatelessWidget {
                         Routes.delete,
                       );
                     }
+                    if (state is IsActiveState) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) => dialogChangePlan(context,false),
+                      );
+                    }
+
                     if (state is GetState) {
                       BlocProvider.of<AsyncInBloc>(context).add(GetEvent());
                     }
