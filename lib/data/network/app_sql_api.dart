@@ -1052,14 +1052,14 @@ class AppSqlApi extends AppSqlApiAbs {
       );
     }
     await mydb.delete(
-      'visit_brand_hospital',
+      'visit_brand_doctor',
       where: 'visitId = ?',
       whereArgs: [id],
     );
     if (selectBrand != null && selectBrand.isNotEmpty) {
       for (var selectBrandDoctor in selectBrand) {
         mydb.insert(
-          'visit_brand_hospital',
+          'visit_brand_doctor',
           selectBrandDoctor.toMapEditBrand(selectBrandDoctor, id),
         );
       }
@@ -1404,8 +1404,7 @@ class AppSqlApi extends AppSqlApiAbs {
       String endDate,
       String otherStartDate,
       String otherEndDate) async {
-    print(UserInfo.flag1);
-    print("UserInfo.flag1");
+
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',

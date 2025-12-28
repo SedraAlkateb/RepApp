@@ -1649,6 +1649,8 @@ class FlagModel {
         return "منتهية";
       case 4:
         return "بانتظار موافقة المستودع";
+      case 5:
+        return "بانتظار TeamLeader";
       default:
         return "خطأ";
     }

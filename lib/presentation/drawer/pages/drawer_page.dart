@@ -250,7 +250,7 @@ class DrawerPage extends StatelessWidget {
             leading:
                 Icon(Icons.group_outlined, color: ColorManager.secondaryColor4),
             title: Text(
-              'الأطباء ',
+              'وصفة طبيب ',
               style: TextStyle(color: ColorManager.secondaryColor1),
             ),
             onTap: () {
@@ -274,7 +274,7 @@ class DrawerPage extends StatelessWidget {
             leading: Icon(Icons.local_hospital_outlined,
                 color: ColorManager.secondaryColor4),
             title: Text(
-              'المشافي ',
+              'وصفة مشفى ',
               style: TextStyle(color: ColorManager.secondaryColor1),
             ),
             onTap: () {

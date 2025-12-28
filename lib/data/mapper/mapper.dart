@@ -78,7 +78,7 @@ extension CheckActiveResposeMapper on CheckActiveBaseResponse? {
     return CheckActiveModel(
         int.parse(this?.data.activePlanId ?? "0"),
         int.parse(this?.data.otherPlanId ?? "0"),
-        int.parse(this?.data.otherstatus ?? "4"));
+        int.parse(this?.data.otherstatus ?? "-1"));
   }
 }
 
@@ -258,7 +258,7 @@ extension LoginResponseMapper on LoginResponse? {
       int.parse(this?.data?.repId ?? "0"),
       int.parse(this?.data?.otherPlanId ?? "0"),
       int.parse(this?.data?.activePlanId ?? "0"),
-      int.parse(this?.data?.otherStatus ?? "0"),
+      int.parse(this?.data?.otherStatus ?? "-1"),
       this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1,

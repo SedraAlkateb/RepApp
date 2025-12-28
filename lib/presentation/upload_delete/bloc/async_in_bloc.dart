@@ -183,7 +183,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       visitHospitals = hospitalsFailureOrSuccess as List<VisitHospitalModel>;
 
       ///////////////////////////////////////////////////
-      if (UserInfo.otherstatus == 1 && UserInfo.flag == 0) {
+      if (UserInfo.otherstatus ==5 && UserInfo.flag == 0) {
         final planBrandsResult = await getPlanBrandSqlUsecase.execute();
         final planBrandsFailureOrSuccess =
             planBrandsResult.fold((failure) => failure, (data) => data);
@@ -275,7 +275,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }
       }
-      if (UserInfo.otherstatus == 1 && UserInfo.flag == 0) {
+      if (UserInfo.otherstatus == 5 && UserInfo.flag == 0) {
         final isPlan =
             await checkActiveBrandPlanUsecase.execute(UserInfo.repId);
         final checkActiveBrandPlanFailureOrSuccess =

@@ -125,7 +125,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           emit(UpdateAmountErrorState(
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
         } else if (x.state == 0) {
-          UserInfo.otherstatus = 1;
+          UserInfo.otherstatus = 5;
           (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
               .fold((failure) {
             emit(UpdateAmountErrorState(failure: failure));

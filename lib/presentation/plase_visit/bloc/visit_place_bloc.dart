@@ -260,7 +260,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         if (isBrand == true) {
           selectBrand = [];
           visitBrandPharmacys = [];
-          selectAddBrand = [];
         }
         emit(IsBrandState(isBrand));
       }

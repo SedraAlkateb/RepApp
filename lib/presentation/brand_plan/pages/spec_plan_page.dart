@@ -16,7 +16,6 @@ class SpecPlanPage extends StatelessWidget {
   SpecPlanPage({super.key});
   @override
   Widget build(BuildContext context) {
-    print(UserInfo.flag1);
     return Scaffold(
       body: Stack(
         children: [

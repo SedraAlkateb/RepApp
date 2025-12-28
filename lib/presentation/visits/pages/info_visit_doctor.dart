@@ -244,11 +244,15 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                               current is EditAmountBrandState;
                         },
                         builder: (context, state) {
+
                           List<PharmacyBrandModel> selectBrand =
                               context.watch<VisitBloc>().brands;
                           if (state
                           is BrandPharmacyVisitState) {
                             selectBrand = state.brands;
+                          }
+                          if(state is DeleteBrandState){
+                            selectBrand=state.brands;
                           }
                           return TableVisitStatic(selectBrand: selectBrand);
 
