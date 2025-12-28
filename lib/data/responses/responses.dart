@@ -1095,53 +1095,6 @@ class AllRepresentativeBaseResponse extends BaseResponse {
   Map<String, dynamic> toJson() => _$AllRepresentativeBaseResponseToJson(this);
 }
 
-//
-
-@JsonSerializable()
-class RepresentativeFutureResponse {
-  @JsonKey(name: "repId")
-  String? id;
-  @JsonKey(name: "name")
-  String? name;
-  @JsonKey(name: "flag")
-  String? flag;
-  @JsonKey(name: "futurePlan")
-  String? activePlan;
-
-  RepresentativeFutureResponse(this.id, this.name, this.flag, this.activePlan);
-  // from json
-  factory RepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>
-      _$RepresentativeFutureResponseFromJson(json);
-  // to json
-  Map<String, dynamic> toJson() => _$RepresentativeFutureResponseToJson(this);
-}
-
-@JsonSerializable()
-class AllRepresentativeFutureResponse {
-  @JsonKey(name: "Representative")
-  List<RepresentativeFutureResponse>? data;
-  AllRepresentativeFutureResponse(this.data);
-  // from json
-  factory AllRepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>
-      _$AllRepresentativeFutureResponseFromJson(json);
-  // to json
-  Map<String, dynamic> toJson() =>
-      _$AllRepresentativeFutureResponseToJson(this);
-}
-
-@JsonSerializable()
-class AllRepresentativeFutureBaseResponse extends BaseResponse {
-  @JsonKey(name: "Representative")
-  AllRepresentativeFutureResponse? data;
-  AllRepresentativeFutureBaseResponse(this.data);
-  // from json
-  factory AllRepresentativeFutureBaseResponse.fromJson(
-          Map<String, dynamic> json) =>
-      _$AllRepresentativeFutureBaseResponseFromJson(json);
-  // to json
-  Map<String, dynamic> toJson() =>
-      _$AllRepresentativeFutureBaseResponseToJson(this);
-}
 
 //
 @JsonSerializable()

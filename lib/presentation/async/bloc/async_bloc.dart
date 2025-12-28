@@ -36,7 +36,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllBrandsSpUsecase allBrandsSpUsecase;
   AllPlanBrandsUsecase allPlanBrandsUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
-  CheckActiveBrandPlanSqlUsecase checkActiveBrandPlanSqlUsecase;
+  CheckActiveBrandPlanUsecase checkActiveBrandPlanUsecase;
   UpdateActiveSqlUsecase updateActiveSqlUsecase;
   GetVisitDoctorUsecase getVisitDoctorUsecase;
   GetVisitHospitalUsecase getVisitHospitalUsecase;
@@ -68,7 +68,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       this.editIsLoginSqlUsecase,
       this.allBrandsSpUsecase,
       this.allPlanBrandsUsecase,
-      this.checkActiveBrandPlanSqlUsecase,
+      this.checkActiveBrandPlanUsecase,
       this.updateActiveSqlUsecase,
       this.getVisitDoctorUsecase,
       this.getVisitHospitalUsecase,
@@ -295,7 +295,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       }
       if (event is PlanIsActiveEvent) {
         emit(SyncDataLoadingState(0));
-        (await checkActiveBrandPlanSqlUsecase.execute(UserInfo.repId)).fold(
+        (await checkActiveBrandPlanUsecase.execute(UserInfo.repId)).fold(
             (failure) {
           emit(IsActiveErrorState(failure: failure));
         }, (data) async {

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
@@ -14,7 +15,6 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
   DeleteSqlUsecase deleteSqlUsecase;
   DeleteAllSqlUsecase deleteAllSqlUsecase;
   EditIsLoginSqlUsecase editIsLoginSqlUsecase;
-
   DeleteBloc(this.deleteAllSqlUsecase, this.deleteSqlUsecase,
       this.editIsLoginSqlUsecase)
       : super(DeleteInitial()) {

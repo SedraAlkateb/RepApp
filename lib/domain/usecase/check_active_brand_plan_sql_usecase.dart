@@ -4,9 +4,9 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:equatable/equatable.dart';
-class CheckActiveBrandPlanSqlUsecase extends Equatable {
+class CheckActiveBrandPlanUsecase extends Equatable {
   final Repository _repository;
-  CheckActiveBrandPlanSqlUsecase(this._repository);
+  CheckActiveBrandPlanUsecase(this._repository);
   Future<Either<Failure, LoginModel>> execute(int repId) async{
     return await _repository.checkActivePlanBrand(repId);
   }

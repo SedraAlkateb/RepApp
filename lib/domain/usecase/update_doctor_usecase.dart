@@ -8,7 +8,8 @@ class UpdateDoctorUsecase extends Equatable {
   final RepositorySql _repositorySql;
   UpdateDoctorUsecase(this._repositorySql);
   Future<Either<Failure, Null>> execute(int visitId,String? science,String ?kaswn  ,String? target, List<PharmacyBrandModel>? selectBrand) async{
-    return await _repositorySql.updateVisitDoctorFields(id: visitId,science:science,kaswn:kaswn ,target:target,selectBrand:selectBrand  );
+    return await _repositorySql.updateVisitDoctorFields(
+        id: visitId,science:science,kaswn:kaswn ,target:target,selectBrand:selectBrand  );
   }
 
   @override

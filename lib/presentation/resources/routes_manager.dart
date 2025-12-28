@@ -4,10 +4,10 @@ import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_city_senior.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
-import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
+import 'package:domina_app/presentation/senior/representative/page/all_recip.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
 import 'package:domina_app/presentation/senior/representative/page/hos_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
@@ -16,6 +16,7 @@ import 'package:domina_app/presentation/senior/representative/page/remaining_vis
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
+import 'package:domina_app/presentation/senior/representative/page/view_recipe.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/doctor_Info%20.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/search_doctors.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
@@ -72,10 +73,10 @@ class Routes {
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String EditingPlan = "/EditingPlan";
   static const String RepPlanBrandSp = "/RepPlanBrandSp";
-  static const String manageFuture = "/manageFuture";
   static const String allRecip = "/allRecip";
   static const String doctorInfo = "/doctorInfo";
-
+  static const String allRecipe = "/allRecipe";
+  static const String viewRecipe = "/viewRecipe";
 }
 
 class RouteGenerator {
@@ -162,9 +163,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SpecSeniorPage());
       case Routes.seniorHos:
         return MaterialPageRoute(builder: (_) => HospitalSenior());
-      case Routes.manageFuture:
-        initSeniorManageFutureModule();
-        return MaterialPageRoute(builder: (_) => AllRepWithFuture());
       case Routes.seniorDoc:
         return MaterialPageRoute(builder: (_) => DoctorSenior());
       // case Routes.seniorNoteDoc:
@@ -201,6 +199,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => DeleteLogoutPage());
       case Routes.doctorInfo:
         return MaterialPageRoute(builder: (_) => DoctorInfo());
+      case Routes.allRecipe:
+        return MaterialPageRoute(builder: (_) => AllRecipesForView());
+      case Routes.viewRecipe:
+        return MaterialPageRoute(builder: (_) => ViewRecipePage());
+
       default:
         return unDefinedRoute();
     }

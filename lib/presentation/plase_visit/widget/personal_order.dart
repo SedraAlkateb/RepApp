@@ -180,7 +180,7 @@ class PersonalOrder extends StatelessWidget {
                         return current is SelectBrandAddState;
                       },
                       buildWhen: (previous, current) {
-                        return current is SelectBrandAddNumState;
+                        return current is SelectBrandAddNumState|| current is DeleteBrandAddState;
                       },
                       listener: (context, state) {
                         if (state is SelectBrandAddState) {
@@ -199,6 +199,9 @@ class PersonalOrder extends StatelessWidget {
                         List<BrandAddition> selectBrand =
                             context.watch<VisitPlaceBloc>().selectAddBrand;
                         if (state is SelectBrandAddNumState) {
+                          selectBrand = state.brands;
+                        }
+                        if(state is DeleteBrandAddState){
                           selectBrand = state.brands;
                         }
                         return selectBrand.isNotEmpty

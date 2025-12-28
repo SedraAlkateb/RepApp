@@ -201,3 +201,47 @@ final class  SenAllBrandEmptyState extends SeniorProfState {
   @override
   List<Object?> get props =>[];
 }
+
+final class AllReciState extends SeniorProfState {
+  final List<ReciModel> reci;
+  AllReciState(this.reci);
+  @override
+  List<Object?> get props =>[reci];
+}
+final class AllReciErrorState extends SeniorProfState {
+  final Failure failure;
+  AllReciErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllReciLoadingState extends SeniorProfState {
+  @override
+  AllReciLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllReciEmptyState extends SeniorProfState {
+  @override
+  AllReciEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+final class ViewRecipeState extends SeniorProfState {
+  final CopyReciRequest copyRecipeRequest;
+  final bool isDoctor;
+  final String name;
+  ViewRecipeState(this.copyRecipeRequest,this.isDoctor,this.name);
+  List<Object?> get props => [copyRecipeRequest,isDoctor,name];
+}
+final class ViewRecipeErrorState extends SeniorProfState {
+  final Failure failure;
+  ViewRecipeErrorState({required this.failure});
+  @override
+  List<Object?> get props =>[failure];
+}
+final class ViewRecipeLoadingState extends SeniorProfState {
+  @override
+  List<Object?> get props => [];
+}
+//

@@ -22,6 +22,11 @@ final class SyncData1State extends AsyncInState {
   @override
   List<Object?> get props =>[];
 }
+final class IsActiveState extends AsyncInState {
+  IsActiveState();
+  @override
+  List<Object?> get props =>[];
+}
 final class SyncData1ErrorState extends AsyncInState {
   final Failure failure;
   SyncData1ErrorState({required this.failure});

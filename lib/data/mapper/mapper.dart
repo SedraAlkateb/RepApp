@@ -78,7 +78,7 @@ extension CheckActiveResposeMapper on CheckActiveBaseResponse? {
     return CheckActiveModel(
         int.parse(this?.data.activePlanId ?? "0"),
         int.parse(this?.data.otherPlanId ?? "0"),
-        int.parse(this?.data.otherstatus ?? "4"));
+        int.parse(this?.data.otherstatus ?? "-1"));
   }
 }
 
@@ -147,16 +147,7 @@ extension AllRepresentativeMapper on AllRepresentativeBaseResponse? {
     return allRepresentative;
   }
 }
-extension AllRepresentativeFutureMapper on AllRepresentativeFutureBaseResponse? {
-  List<AllRepresentativeFuture> toDomain() {
-    List<AllRepresentativeFuture> allRepresentative =
-    (this?.data?.data?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<AllRepresentativeFuture>()
-        .toList();
-    return allRepresentative;
-  }
-}
+
 
 extension RepresentativeMapper on RepresentativeResponse? {
   AllRepresentative toDomain() {
@@ -164,16 +155,6 @@ extension RepresentativeMapper on RepresentativeResponse? {
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
       this?.unRead ?? Constants.zero,
-      int.parse(this?.activePlan ?? "0"),
-    );
-  }
-}
-extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
-  AllRepresentativeFuture toDomain() {
-    return AllRepresentativeFuture(
-      int.parse(this?.id ?? "0"),
-      this?.name ?? Constants.empty,
-      FlagModel(int.parse(this?.flag ?? "0")),
       int.parse(this?.activePlan ?? "0"),
     );
   }
@@ -277,7 +258,7 @@ extension LoginResponseMapper on LoginResponse? {
       int.parse(this?.data?.repId ?? "0"),
       int.parse(this?.data?.otherPlanId ?? "0"),
       int.parse(this?.data?.activePlanId ?? "0"),
-      int.parse(this?.data?.otherStatus ?? "0"),
+      int.parse(this?.data?.otherStatus ?? "-1"),
       this?.data?.name ?? Constants.empty,
       this?.data?.percentage ?? Constants.zero,
       1,

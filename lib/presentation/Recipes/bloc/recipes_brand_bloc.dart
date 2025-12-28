@@ -159,7 +159,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       if (event is GetRepReciEvent) {
         emit(RecipesRecipesLoadingState());
         (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
-          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
           emit(RecipesRecipesErrorState(failure: failure));
         }, (data) async {
           updateRecipes(data);
@@ -208,8 +207,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-          //      flag1: isChecked1,
-          //    flag2: isChecked2
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
@@ -250,8 +247,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-          //      flag1: isChecked1,
-          //    flag2: isChecked2
+
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
@@ -298,8 +294,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-          //      flag1: isChecked1,
-          //    flag2: isChecked2
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
@@ -348,8 +342,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-          //      flag1: isChecked1,
-          //    flag2: isChecked2
+
+
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));

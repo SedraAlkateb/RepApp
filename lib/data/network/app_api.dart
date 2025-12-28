@@ -97,11 +97,7 @@ abstract class AppServiceClient {
   Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
   @POST("/docVisit.php")//
   Future<Message1Response> visitDoctor(@Body() VisitDoctorRequestBody list);
-  @POST("/checkPlanStatus.php")//
-  Future<CheckBaseResponse> checkPlanBrand(
-    @Part(name: "repPlanId") int repPlanId,
-  );
-  @POST("/getPlans.php")//
+  @POST("/getPlans.php")
   Future<LoginResponse> checkActivePlanBrand(
       @Part(name: "repDet") int repDet, @Part(name: "ver") int ver);
   @POST("/reci/getBrands.php")//
@@ -154,10 +150,7 @@ abstract class AppServiceClient {
     @Part(name: "repDet") int id,
     @Part(name: "cityId") int cityId,
   );
-  @POST("/admin/getRepsFuture.php")//\
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
-    @Part(name: "repDet") int id,
-  );
+
   @POST("/admin/getVisitNotes.php")//\
   Future<AllVisitNotesBaseResponse> getVisitNotes(
     @Part(name: "repDet") int docId,
@@ -213,7 +206,8 @@ abstract class AppServiceClient {
       );
   @POST("/admin/changePlanBrandType.php")//*
   Future<Message1Response> changePlanBrandType(
-      @Part(name: "id") int id, @Part(name: "brandType") int brandType
+      @Part(name: "id") int id,
+      @Part(name: "brandType") int brandType
       );
 
   @POST("/reci/getAllRepReci.php")//

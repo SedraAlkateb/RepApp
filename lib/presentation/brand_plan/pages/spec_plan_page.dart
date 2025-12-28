@@ -16,7 +16,6 @@ class SpecPlanPage extends StatelessWidget {
   SpecPlanPage({super.key});
   @override
   Widget build(BuildContext context) {
-    print(UserInfo.flag1);
     return Scaffold(
       body: Stack(
         children: [
@@ -120,8 +119,8 @@ class SpecPlanPage extends StatelessWidget {
                                                   planBrandModel[index]
                                                       .specModel
                                                       .id),
-                                              width: 50,
-                                              height: 50,
+                                              width: 40.w,
+                                              height: 40.h,
                                               color: ColorManager.white
                                                   .withOpacity(0.8),
                                               colorBlendMode:
@@ -140,7 +139,7 @@ class SpecPlanPage extends StatelessWidget {
                                               style: TextStyle(
                                                   color: ColorManager.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20.sp),
+                                                  fontSize: 16.sp),
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
