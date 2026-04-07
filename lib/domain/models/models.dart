@@ -1862,3 +1862,22 @@ class ActivePlanBrandModel {
 
   ActivePlanBrandModel(this.spPlan, this.type, this.title);
 }
+class Orders {
+  final String pharmacyName;
+  final List<OrderItem> items;
+
+  Orders({
+    required this.pharmacyName,
+    required this.items,
+  });
+}
+
+class OrderItem {
+  final int id;
+  final String name;
+
+  OrderItem({
+    required this.id,
+    required this.name,
+  });
+}

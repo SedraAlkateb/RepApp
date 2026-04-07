@@ -41,7 +41,7 @@ import '../Recipes/pages/Recipes.dart';
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
-    static const String searchdoctors = "/searchdoctors";
+  static const String searchdoctors = "/searchdoctors";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
   static const String hospital = "/hospital";
@@ -69,7 +69,7 @@ class Routes {
   static const String seniorDoc = "/seniorDoc";
   static const String allBrand = "/allBrand";
   static const String noVisitDoctor = "/noVisitDoctor";
-   static const String remainingVisitsDoctor = "/remainingVisitsDoctor";
+  static const String remainingVisitsDoctor = "/remainingVisitsDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
   static const String EditingPlan = "/EditingPlan";
   static const String RepPlanBrandSp = "/RepPlanBrandSp";
@@ -77,6 +77,7 @@ class Routes {
   static const String doctorInfo = "/doctorInfo";
   static const String allRecipe = "/allRecipe";
   static const String viewRecipe = "/viewRecipe";
+  static const String placeVisitPage = "/placeVisitPage";
 }
 
 class RouteGenerator {
@@ -84,125 +85,147 @@ class RouteGenerator {
     switch (settings.name) {
       case Routes.login:
         initLoginModule();
-        return MaterialPageRoute(builder: (_) => const MyLogin());
+        return _animatedRoute(const MyLogin());
       case Routes.allBrand:
-        return MaterialPageRoute(builder: (_) => AllBrand());
+        return _animatedRoute(AllBrand());
+      case Routes.placeVisitPage:
+        final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
+
+        return _animatedRoute(
+          PlaceVisitPage(placeId: args),
+        );
+
       case Routes.fadeInWidget:
-        return MaterialPageRoute(builder: (_) => FadeInWidget());
+        return _animatedRoute(FadeInWidget());
+
       case Routes.places:
         initPlacesModule();
         initPlaceVisitModule();
-        return MaterialPageRoute(builder: (_) => Places());
+        return _animatedRoute(Places());
       case Routes.spec:
         initSpecModule();
-        return MaterialPageRoute(builder: (_) => SpecializationsPage());
+        return _animatedRoute(SpecializationsPage());
+
       case Routes.doctors:
         initDoctorModule();
-        return MaterialPageRoute(builder: (_) => Doctors());
+        return _animatedRoute(Doctors());
+
       case Routes.hospital:
         initHospitalModule();
-        return MaterialPageRoute(builder: (_) => Hospital());
+        return _animatedRoute(Hospital());
+
       case Routes.brand:
         initBrandModule();
-        return MaterialPageRoute(builder: (_) => BrandPage());
+        return _animatedRoute(BrandPage());
+
       case Routes.pharmacy:
         initPharmacyModule();
-        return MaterialPageRoute(builder: (_) => PharmacyPage());
+        return _animatedRoute(PharmacyPage());
 
       case Routes.syncData:
         initAsyncModule();
-        return MaterialPageRoute(builder: (_) => AsyncLoginPage());
+        return _animatedRoute(AsyncLoginPage());
+
       case Routes.visits:
         initVisitsModule();
-        return MaterialPageRoute(builder: (_) => VisitsPage());
+        return _animatedRoute(VisitsPage());
+
       case Routes.asyncIn:
         initAsyncInModule();
-        return MaterialPageRoute(builder: (_) => AsyncPage());
+        return _animatedRoute(AsyncPage());
+
       case Routes.logout:
         initAsyncInModule();
-        return MaterialPageRoute(builder: (_) => AsyncLogoutPage());
+        return _animatedRoute(AsyncLogoutPage());
+
       case Routes.placeVisit:
-        return MaterialPageRoute(builder: (_) => PlaceVisitPage(placeId: 2));
+        return _animatedRoute(PlaceVisitPage(placeId: 2));
+
       case Routes.specDH:
-        return MaterialPageRoute(builder: (_) => SpecDH(spId: 0));
+        return _animatedRoute(SpecDH(spId: 0));
+
       case Routes.brandPlan:
         initBrandPlanModule();
-        return MaterialPageRoute(builder: (_) => BrandPlanPage());
+        return _animatedRoute(BrandPlanPage());
+
       case Routes.delete:
         initDeleteModule();
-        return MaterialPageRoute(builder: (_) => DeletePage());
-      case Routes.allRecip:
+        return _animatedRoute(DeletePage());
 
+      case Routes.allRecip:
         initBrandRecModule();
-        return MaterialPageRoute(builder: (_) => AllRecip());
-      case Routes.Recipes:
+        return _animatedRoute(AllRecip());
+
+        case Routes.Recipes:
         initBrandRecModule();
-        return MaterialPageRoute(
-            builder: (_) => RecipesPage(
+        return _animatedRoute(
+            RecipesPage(
                   docId: 0,
                   st: 433,
                 ));
       case Routes.repProfile:
         initSeniorProfModule();
-        return MaterialPageRoute(
-            builder: (_) => RepProfile(
+        return _animatedRoute(
+           RepProfile(
                   id: 3,
                   repPlanId: 3,
                   index: 3,
-              cityId: 1,
+                  cityId: 1,
                 ));
       case Routes.AllRepSenior:
-        return MaterialPageRoute(builder: (_) => AllRepSenior());
+        return _animatedRoute( AllRepSenior());
       case Routes.cities:
         initSeniorModule();
-        return MaterialPageRoute(builder: (_) => AllCitySenior());
+        return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
-        return MaterialPageRoute(builder: (_) => PlaceSenior());
+        return _animatedRoute( PlaceSenior());
       case Routes.seniorSpec:
-        return MaterialPageRoute(builder: (_) => SpecSeniorPage());
+        return _animatedRoute( SpecSeniorPage());
       case Routes.seniorHos:
-        return MaterialPageRoute(builder: (_) => HospitalSenior());
+        return _animatedRoute( HospitalSenior());
       case Routes.seniorDoc:
-        return MaterialPageRoute(builder: (_) => DoctorSenior());
+        return _animatedRoute( DoctorSenior());
       // case Routes.seniorNoteDoc:
       //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
-        return MaterialPageRoute(builder: (_) => NoVisitDoctor());
-         case Routes.remainingVisitsDoctor:
-        return MaterialPageRoute(builder: (_) => RemainingVisits());
+        return _animatedRoute(NoVisitDoctor());
+      case Routes.remainingVisitsDoctor:
+        return _animatedRoute( RemainingVisits());
       case Routes.senVisitDoctor:
-        return MaterialPageRoute(builder: (_) => SenVisitDoctor());
+        return _animatedRoute( SenVisitDoctor());
       case Routes.EditingPlan:
         iniEditBrandPlanModule();
-        return MaterialPageRoute(builder: (_) {
-          return EditingPlan(
+        return _animatedRoute(
+           EditingPlan(
             repPlan: 7,
-          );
-        });
-          case Routes.searchdoctors:
+          )
+        );
+      case Routes.searchdoctors:
         iniSearchDoctorsModule();
-        return MaterialPageRoute(builder: (_) {
-          return SearchDoctors(
-          );
-        });
+        return _animatedRoute(
+           SearchDoctors()
+        );
       case Routes.RepPlanBrandSp:
         iniFutureModule();
         final args = settings.arguments as Map<String, dynamic>?;
         final title = args?['title'];
         final flag = args?['flag'];
-        return MaterialPageRoute(builder: (_) {
-          return RepPlanBrandSpPage(title: title,flag: flag,);
-        });
+        return _animatedRoute(
+           RepPlanBrandSpPage(
+            title: title,
+            flag: flag,
+          )
+        );
       case Routes.deleteLogout:
         initDeleteModule();
-        return MaterialPageRoute(builder: (_) => DeleteLogoutPage());
+        return _animatedRoute(DeleteLogoutPage());
       case Routes.doctorInfo:
-        return MaterialPageRoute(builder: (_) => DoctorInfo());
+        return _animatedRoute( DoctorInfo());
       case Routes.allRecipe:
-        return MaterialPageRoute(builder: (_) => AllRecipesForView());
+        return _animatedRoute( AllRecipesForView());
       case Routes.viewRecipe:
-        return MaterialPageRoute(builder: (_) => ViewRecipePage());
+        return _animatedRoute( ViewRecipePage());
 
       default:
         return unDefinedRoute();
@@ -210,15 +233,39 @@ class RouteGenerator {
   }
 
   static Route<dynamic> unDefinedRoute() {
-    return MaterialPageRoute(
-        builder: (_) => Scaffold(
-              appBar: AppBar(
-                title: const Text(
-                    StringsManager.noRouteFound), // string to strings manager
-              ),
-              body: const Center(
-                  child: Text(
-                      StringsManager.noRouteFound)), //string to strings manager
-            ));
+    return _animatedRoute(
+      Scaffold(
+        appBar: AppBar(title: const Text(StringsManager.noRouteFound)),
+        body: const Center(child: Text(StringsManager.noRouteFound)),
+      ),
+    );
+  }
+
+  static Route<dynamic> _animatedRoute(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 600),
+      pageBuilder: (_, __, ___) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final begin = const Offset(1.0, 0.0); // تغيير الاتجاه إلى اليمين لليسار
+        final end = Offset.zero;
+        final curve = Curves.easeInOut;
+        final tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: FadeTransition(opacity: animation, child: child),
+        );
+      },
+    );
+  }
+
+  // ignore: unused_element
+  static Route<dynamic> _Route(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+    );
   }
 }

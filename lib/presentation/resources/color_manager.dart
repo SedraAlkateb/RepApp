@@ -40,4 +40,17 @@ class ColorManager {
   static Color secondaryColor19=const   Color(0xffc358c1);
   static Color secondaryColor20=const   Color(0x69c7adc7);
   static Color secondaryColor22 = const Color.fromARGB(255, 25, 51, 87);
+//////////////////////////////
+
+
+  static const Color medicalPrimary   = Color(0xff0F4C81); // Classic Blue
+  static const Color medicalSecondary = Color(0xff3B82F6);
+  static const Color medicalAccent    = Color(0xff10B981); // Emerald
+  static const Color medicalSurface   = Color(0xffFFFFFF);
+  static const Color medicalBg        = Color(0xffF8FAFC);
+  static const Color medicalBorder    = Color(0xffE2E8F0);
+  static const Color medicalText      = Color(0xff1E293B);
+  static const Color medicalMuted     = Color(0xff64748B);
+
+
 }
