@@ -274,8 +274,8 @@ class orderModel{
 class OrderDetails{
   int brandId;
   int quantity;
-
-  OrderDetails(this.brandId, this.quantity);
+  final String brandName; // أضف هذا لتسهيل العرض في القائمة
+  OrderDetails(this.brandId, this.quantity,this.brandName);
   Map<String, dynamic> toMap() {
     return {
       'brandId': brandId,
@@ -287,6 +287,7 @@ class OrderDetails{
     return OrderDetails(
       map['brandId'],
       map['quantity'],
+      map['brandName']
     );
   }
 

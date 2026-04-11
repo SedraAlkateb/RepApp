@@ -11,29 +11,55 @@ part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  PharmacyOrderUsecase pharmacyOrderUsecase;
-  AllBrandsSqlUsecase allBrandsSqlUsecase;
+  final PharmacyOrderUsecase pharmacyOrderUsecase;
+  final AllBrandsSqlUsecase allBrandsSqlUsecase;
+
   OrderBloc(this.pharmacyOrderUsecase, this.allBrandsSqlUsecase)
       : super(OrderInitial()) {
-    on<OrderEvent>((event, emit) async{
-      if (event is PharmacyOrderEvent) {
-        emit(PharmacyOrderLoadingState());
-      await  pharmacyOrderUsecase.execute(event.order).then((value) {
-          value.fold((failure) {
-            emit(PharmacyOrderErrorState(failure: failure));
-          }, (data) async {
-            emit(PharmacyOrderState(data));
-          });
-        });
-      } else if (event is BrandOrderEvent) {
-        emit(BrandOrderLoadingState());
-        await    allBrandsSqlUsecase.execute().then((value) {
-          value.fold((failure) {
-            emit(BrandOrderErrorState(failure: failure));
-          }, (data) async {
-            emit(BrandOrderState(data));
-          });
-        });
+
+    // 1. معالجة إرسال الطلبية النهائية
+    on<PharmacyOrderEvent>((event, emit) async {
+      emit(PharmacyOrderLoadingState());
+      final result = await pharmacyOrderUsecase.execute(event.order);
+      result.fold(
+            (failure) => emit(PharmacyOrderErrorState(failure: failure)),
+            (data) => emit(PharmacyOrderState(data)),
+      );
+    });
+
+    // 2. معالجة جلب البراندات عند فتح الصفحة
+    on<BrandOrderEvent>((event, emit) async {
+      emit(BrandOrderLoadingState());
+      final result = await allBrandsSqlUsecase.execute();
+      result.fold(
+            (failure) => emit(BrandOrderErrorState(failure: failure)),
+            (data) => emit(BrandOrderState(data, selectedItems: const [])),
+      );
+    });
+
+    // 3. معالجة إضافة عنصر للقائمة (محلياً)
+    on<AddItemToOrderEvent>((event, emit) {
+      if (state is BrandOrderState) {
+        final currentState = state as BrandOrderState;
+
+        // إنشاء نسخة جديدة من القائمة وإضافة العنصر
+        // ملاحظة: يمكنك هنا إضافة منطق للتحقق إذا كان المنتج مضافاً مسبقاً لزيادة الكمية فقط
+        final List<OrderDetails> updatedList = List.from(currentState.selectedItems)
+          ..add(event.item);
+
+        emit(BrandOrderState(currentState.brands, selectedItems: updatedList));
+      }
+    });
+
+    // 4. معالجة حذف عنصر من القائمة (محلياً)
+    on<RemoveItemFromOrderEvent>((event, emit) {
+      if (state is BrandOrderState) {
+        final currentState = state as BrandOrderState;
+
+        final List<OrderDetails> updatedList = List.from(currentState.selectedItems)
+          ..removeAt(event.index);
+
+        emit(BrandOrderState(currentState.brands, selectedItems: updatedList));
       }
     });
   }
