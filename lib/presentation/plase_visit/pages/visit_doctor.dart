@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/presentation/doctors/pages/doctor_details%20.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/plase_visit/visit_widget.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
@@ -11,6 +12,7 @@ import 'package:domina_app/presentation/uniti/snack_bar_message.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../domain/models/models.dart';
 
 class VisitDoctor extends StatefulWidget {
@@ -43,133 +45,30 @@ class _VisitDoctorState extends State<VisitDoctor>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "إجراء زيارة",
+          style: TextStyle(
+            color: const Color(0xFF0D47A1),
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 250,
-                decoration: BoxDecoration(
-                  color: ColorManager.secondaryColor1,
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(50)),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p18),
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 22),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      iconSize: 30,
-                                      padding: EdgeInsets.only(right: 15),
-                                      icon: Icon(Icons.arrow_back_sharp,
-                                          color: ColorManager.white))),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                print("Navigating to Doctor Details...");
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    initDoctorModule();
-                                    return DoctorDetails(
-                                        doctor: widget.doctorModel);
-                                  },
-                                ));
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  shape: BoxShape.rectangle,
-                                  border: Border.all(
-                                    color: ColorManager.secondaryColor2,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [],
-                                ),
-                                child: Text(
-                                  widget.doctorModel.title,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              textAlign: TextAlign.center,
-                              "العنوان: ${widget.doctorModel.address}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              textAlign: TextAlign.center,
-                              " الإختصاص ${(widget.doctorModel.spTitle)}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "إجمالي الزيارات: ${widget.doctorModel.visits} ",
-                                  style:
-                                      Theme.of(context).textTheme.headlineLarge,
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "  تمت الزياراة: ${(widget.doctorModel.visited ?? 0)}",
-                                  style:
-                                      Theme.of(context).textTheme.headlineLarge,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              _buildFullHeader(),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Column(
@@ -255,8 +154,11 @@ class _VisitDoctorState extends State<VisitDoctor>
                     BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
                       builder: (context, state) {
                         return Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            Text('لم يتم توزيع العينات',style: TextStyle(fontWeight: FontWeight.bold),),
                             Checkbox(
+
                               focusColor: ColorManager.secondaryColor,
                               activeColor: ColorManager.secondaryColor2,
                               value: context.read<VisitPlaceBloc>().isBrand,
@@ -265,7 +167,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                     .add(IsBrandEvent());
                               },
                             ),
-                            Text('لم يتم توزيع العينات'),
+
                           ],
                         );
                       },
@@ -515,36 +417,55 @@ class _VisitDoctorState extends State<VisitDoctor>
                           Navigator.pop(context);
                         }
                       },
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              //      error(context, "يرجى إدخال الملاحظات", 1);
-                              DateTime now = DateTime.now();
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:2, vertical: 8.h
+                        ), // مسافة عن حواف الشاشة
+                        child: SizedBox(
+                          width: double.infinity, // لجعل الزر يأخذ عرض الصفحة بالكامل
+                          height: 50.h, // التحكم بطول (ارتفاع) الزر
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:  ColorManager.medicalPrimary, // نفس اللون الأزرق في صورك
+                              foregroundColor: Colors.white, // لون النص
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r), // زوايا منحنية لتناسب بقية الواجهة
+                              ),
+                              elevation: 2, // ظل خفيف للزر
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                DateTime now = DateTime.now();
 
-                              VisitDoctorModel visitDoctorModel =
-                                  VisitDoctorModel(
-                                      0,
-                                      now.toIso8601String(),
-                                      _issueController.text,
-                                      _noteController.text,
-                                      _noteeController.text,
-                                      widget.doctorModel.id,
-                                      0,
-                                      _targetController.text);
-                              if (context
-                                  .read<VisitPlaceBloc>()
-                                  .selectBrand
-                                  .isNotEmpty) {
-                                BlocProvider.of<VisitPlaceBloc>(context).add(
-                                    InsertBrandVisitDoctorEvent(
-                                        visitDoctorModel));
-                              } else {
-                                BlocProvider.of<VisitPlaceBloc>(context).add(
-                                    InsertVisitDoctorEvent(visitDoctorModel));
+                                VisitDoctorModel visitDoctorModel = VisitDoctorModel(
+                                    0,
+                                    now.toIso8601String(),
+                                    _issueController.text,
+                                    _noteController.text,
+                                    _noteeController.text,
+                                    widget.doctorModel.id,
+                                    0,
+                                    _targetController.text);
+
+                                if (context.read<VisitPlaceBloc>().selectBrand.isNotEmpty) {
+                                  BlocProvider.of<VisitPlaceBloc>(context)
+                                      .add(InsertBrandVisitDoctorEvent(visitDoctorModel));
+                                } else {
+                                  BlocProvider.of<VisitPlaceBloc>(context)
+                                      .add(InsertVisitDoctorEvent(visitDoctorModel));
+                                }
                               }
-                            }
-                          },
-                          child: Text("تمت الزيارة")),
+                            },
+                            child: Text(
+                              "تمت الزيارة",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -554,7 +475,122 @@ class _VisitDoctorState extends State<VisitDoctor>
         ),
       ),
     );
+
   }
+Widget _buildFullHeader(){
+    return    Container(
+      margin: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          // الهيدر الأزرق داخل الكرت
+          _buildBlueHeader(),
+
+          SizedBox(height: 20.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Row(
+              children: [
+
+                buildStatBox(" تمت الزياراة", widget.doctorModel.visited.toString() , const Color(0xFF0D47A1)),
+                SizedBox(width: 12.w),
+                buildStatBox("إجمالي الزيارات", widget.doctorModel.visits.toString(), Colors.black),
+              ],
+            ),
+          ),
+
+          SizedBox(height: 20.h),
+
+          // قائمة المعلومات
+          buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.doctorModel.placeTitle),
+          buildDivider(),
+          buildDetailRow(Icons.business_outlined, "العنوان:", widget.doctorModel.address),
+          buildDivider(),
+          buildDetailRow(Icons.access_time, "أوقات العمل:", widget.doctorModel.workHours.toString()),
+          buildDivider(),
+          buildDetailRow(Icons.assignment_outlined, "ملاحظات:",
+              widget.doctorModel.note),
+          buildDivider(),
+          buildDetailRow(Icons.star_rate_outlined, "التقيم:",
+              widget.doctorModel.rate),
+
+          SizedBox(height: 20.h),
+        ],
+      ),
+    );
+
+}
+  // الهيدر الأزرق المنحني
+  Widget _buildBlueHeader() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 25.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A4B8F),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25.r),
+          topLeft: Radius.circular(25.r),
+          bottomRight: Radius.circular(5.r),
+          bottomLeft: Radius.circular(5.r),
+        ),
+      ),
+      child: Column(
+        children: [
+          // الحاوية الزجاجية للحرف
+          InkWell(
+            onTap: () {
+              print("Navigating to Doctor Details...");
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  initDoctorModule();
+                  return DoctorDetails(
+                      doctor: widget.doctorModel);
+                },
+              ));
+            },
+            child: Container(
+              padding: EdgeInsets.all(15.w),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(15.r),
+                border: Border.all(color: Colors.white.withOpacity(0.3)),
+              ),
+              child: Text( widget.doctorModel.title.substring(0, 1), style: TextStyle(color: Colors.white, fontSize: 30.sp, fontWeight: FontWeight.bold)),
+            ),
+          ),
+          SizedBox(height: 12.h),
+          Text( widget.doctorModel.title, style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+          SizedBox(height: 8.h),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.business_center_outlined, color: Colors.white, size: 14.sp),
+                SizedBox(width: 6.w),
+                Text(widget.doctorModel.spTitle, style: TextStyle(color: Colors.white, fontSize: 13.sp)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   @override
   bool get wantKeepAlive => true;

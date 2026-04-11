@@ -1,15 +1,12 @@
-import 'package:domina_app/app/di.dart';
-import 'package:domina_app/presentation/Recipes/pages/recipes_hospital.dart';
-import 'package:domina_app/presentation/doctors/widget/html_info.dart';
-import 'package:domina_app/presentation/doctors/widget/row_info.dart';
-import 'package:domina_app/presentation/hospitals/bloc/hospitals_bloc.dart';
-import 'package:domina_app/presentation/resources/assets_manager.dart';
-import 'package:domina_app/presentation/uniti/stateWidget.dart';
+
+import 'package:domina_app/presentation/hospitals/widget/header.dart';
+import 'package:domina_app/presentation/hospitals/widget/bottom.dart';
+import 'package:domina_app/presentation/hospitals/widget/card.dart';
+import 'package:domina_app/presentation/hospitals/widget/note.dart';
+import 'package:domina_app/presentation/hospitals/widget/start_card.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../resources/color_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HospitalDetails extends StatelessWidget {
   final HospitalSpAllModel hospital;
@@ -18,161 +15,73 @@ class HospitalDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   print( hospital.hospitalId);
     return Scaffold(
       appBar: AppBar(
         title: Text("معلومات المشفى"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                         elevation: 20,
-              shadowColor:ColorManager.secondaryColor4.withOpacity(0.5),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                hospital.title!,
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,),
-                              ),
-                              SizedBox(height: 10)
-                            ],
-                          ),
-                        ),
-                      ),
-            SizedBox(height: 20),
-            Stack(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                buildHeader(hospital.title),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Image.asset(
-                      ImageAssets. hospital,
-                      fit: BoxFit.cover,
-                      
-                      color: Colors.white.withOpacity(0.07),
-                      colorBlendMode: BlendMode.modulate,
-                    ),
-                ),
-            
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-            
-                    
-                      ListView(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children: [   buildDetailRow(context, Icons.place, 'المنطقة',
-                            hospital.placeTitle!),
-                          Divider(thickness: 0.4,),
-                          buildDetailRow(
-                              context, Icons.location_city_outlined, 'العنوان', hospital.address!),
-                          Divider(thickness: 0.4,),
-                          buildDetailRow(context, Icons.visibility, 'عدد الزيارات',
-                              '${hospital.visit}'),
-                          Divider(thickness: 0.4,),
-                          buildDetailRow(context, Icons.star, 'التصنيف',
-                              '${hospital.rate}'),
-                          Divider(thickness: 0.4,),
-                          buildDetailRow(
-                              context, Icons.group, 'عدد الأطباء', hospital.totalDocs.toString()),
-                          Divider(thickness: 0.4,),
-                          buildDetailRow(
-                              context, Icons.medical_services, 'الإختصاص', hospital.titleSp.toString()),
-                          Divider(thickness: 0.4,),
-                          if (hospital.note != null && hospital.note!.isNotEmpty && hospital.note!=" " )
-                            buildHtmlDetailRow(context, Icons.note, 'ملاحظات',
-                                hospital.note ?? ''),
-                          BlocListener<HospitalsBloc, HospitalsState>(
-                            listener: (context, state) {
-                              if (state is CheckRecipesState) {
-                                print(state.st);
-                                print("state.st");
-                                print(hospital.hospitalId);
-                                print("hospital.id");
-                                if (state.isCheck == true) {
-                                  initBrandRecModule();
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RecipesHospital(
-                                        HospitalId: hospital.hospitalId??0,
-                                      //  docId: doctor.id,
-                                        st: state.st,
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
-                                  );
-                                }
-                              }
-                              if (state is CheckRecipesErrorState) {
-                                error(context, state.failure.massage,
-                                    state.failure.code);
-                              }
-                            },
-                            child: BlocBuilder<HospitalsBloc, HospitalsState>(
-                              builder: (context, state) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed:state is CheckRecipesLoadingState?null: () {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          BlocProvider.of<HospitalsBloc>(context)
-                                              .add(CheckReciEvent(hospital.hospitalId??0,0));
-                                        });
-                                      },
-                                      child: Text('إنشاء وصفة'),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed:state is CheckRecipesLoadingState?null: () {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          BlocProvider.of<HospitalsBloc>(context)
-                                              .add(CheckReciEvent(hospital.hospitalId??0,1));
-                                        });
-                                      },
-                                      child: Text('تكرار وصفة'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          )
-                        ],
-
-                      ),
+                      buildStatCard("الزيارات", hospital.visit.toString(), Icons.visibility_outlined,
+                          Colors.blue),
+                      buildStatCard(
+                          "التصنيف", hospital.rate??"", Icons.star_border, Colors.orange),
+                      buildStatCard(
+                          "الأطباء", hospital.totalDocs.toString(), Icons.group_outlined, Colors.green),
                     ],
                   ),
                 ),
+
+                SizedBox(height: 20.h),
+                _buildDetailsCard(),
+
+                SizedBox(height: 15.h),
+                buildNotesCard(hospital.note),
+                SizedBox(
+                  height: 150,
+                ),
+
               ],
             ),
-          ],
-        ),
+          ),
+          buildBottomButtons(hospital.hospitalId??0),
+        ],
       ),
     );
   }
- 
+  Widget _buildDetailsCard() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(25.r)),
+      child: Column(
+        children: [
+          buildInfoRow(Icons.location_on_outlined, "المنطقة", hospital.placeTitle??""),
+          const Divider(height: 30,thickness: 0.1,),
+          buildInfoRow(Icons.business_outlined, "العنوان", hospital.address??""),
+          const Divider(height: 30,thickness: 0.1,),
+          buildInfoRow(Icons.medical_services_outlined, "الإختصاص", hospital.titleSp??""),
+        ],
+      ),
+    );
   }
+
+
+
+
+
+
+
+}

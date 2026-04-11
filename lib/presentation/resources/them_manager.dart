@@ -7,16 +7,18 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 //presentation
 ThemeData getApplicationTheme() {
   return ThemeData(
+    scaffoldBackgroundColor: ColorManager.background,
     fontFamily: FontConstants.fontFamily1,
     tabBarTheme: TabBarThemeData(
         labelColor: ColorManager.white,
         indicatorColor: ColorManager.secondaryColor1,
         unselectedLabelColor: ColorManager.secondaryColor1),
-    primaryColor: ColorManager.medicalBg,
+    primaryColor: ColorManager.background,
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(
-      primary: ColorManager.primary,
+      primary: ColorManager.background,
     ),
+
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: ColorManager.primaryField,
     ),
@@ -67,14 +69,14 @@ ThemeData getApplicationTheme() {
       headlineMedium:
           getSemiBoldStyle(color: ColorManager.black, fontSize: FontSize.s16),
       titleMedium:
-          getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s18),
+          getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s20),
       bodySmall: getSemiBoldStyle(
           color: ColorManager.secondaryColor1, fontSize: FontSize.s16),
       bodyLarge: getRegularStyle(color: Colors.black, fontSize: FontSize.s18),
       titleLarge: getBoldStyle(
           color: ColorManager.secondaryColor1, fontSize: FontSize.s25),
       labelLarge: getBoldStyle(
-          color: ColorManager.secondaryColor1, fontSize: AppSize.s20),
+          color: ColorManager.secondaryColor1, fontSize: AppSize.s18),
       labelMedium: getBoldStyle(
           color: ColorManager.secondaryColor1, fontSize: FontSize.s17),
       labelSmall:
@@ -95,6 +97,7 @@ ThemeData getApplicationTheme() {
               color: ColorManager.medicalBorder, width: AppSize.s1_5),
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
         ),
+
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
               color: ColorManager.medicalSecondary, width: AppSize.s1_5),
@@ -110,10 +113,10 @@ ThemeData getApplicationTheme() {
               BorderSide(color: ColorManager.primaryField, width: AppSize.s1_5),
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
         ),
-        fillColor: ColorManager.grey,
+    fillColor:ColorManager.medicalBorder.withOpacity(0.3),
         filled: true),
     textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: Colors.black, // تعيين لون المؤشر هنا
+      cursorColor: Colors.black,
     ),
   );
 }

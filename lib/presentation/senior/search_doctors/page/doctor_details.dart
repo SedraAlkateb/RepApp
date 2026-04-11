@@ -129,7 +129,7 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                   ),
                                   Text(
                                     textAlign: TextAlign.center,
-                                    "العنوان: ${widget.doctorModel.placeTitle}",
+                                    "العنgghgوان: ${widget.doctorModel.placeTitle}",
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const SizedBox(

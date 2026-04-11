@@ -51,6 +51,7 @@ class ColorManager {
   static const Color medicalBorder    = Color(0xffE2E8F0);
   static const Color medicalText      = Color(0xff1E293B);
   static const Color medicalMuted     = Color(0xff64748B);
-
+  static const Color background     = Color(0xFFF8FAFC);
+  static const Color inputBorder     = Color(0xFFF1F5F9);
 
 }

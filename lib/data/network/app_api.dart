@@ -249,4 +249,7 @@ abstract class AppServiceClient {
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     @Part(name: "repPlanId") int repPlanId,
   );
+  @POST("/pharmacyOrder.php")
+  Future<Message1Response> pharmacyOrder(@Body() PharmacyOrderRequestBody list);
+
 }

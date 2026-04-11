@@ -51,7 +51,7 @@ Future<void> _initNotifications() async {
   const InitializationSettings initSettings =
   InitializationSettings(android: androidSettings, iOS: iosSettings);
 
-  await flutterLocalNotificationsPlugin.initialize(initSettings);
+  await flutterLocalNotificationsPlugin.initialize(settings: initSettings);
   await AlarmAndNotifications.initialize();
   await AlarmAndNotifications.scheduleOneShot();
 }
@@ -148,10 +148,10 @@ Future<void> _showEndDateNotification() async {
   const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
 
   await flutterLocalNotificationsPlugin.show(
-    2,
-    'شركة دومِنا',
-    'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.',
-    platformDetails,
+    id: 2, // يجب إضافة id: هنا
+    title: 'شركة دومِنا', // يجب إضافة title: هنا
+    body: 'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.', // يجب إضافة body: هنا
+    notificationDetails: platformDetails, // يجب إضافة notificationDetails: هنا
     payload: 'end_date_notification',
   );
 }

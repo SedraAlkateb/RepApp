@@ -802,7 +802,7 @@ extension ActivePlanBrandMapper on ActiveBrandPlanResponse? {
 extension ActivePlanBrandBaseMapper on ActiveBrandPlanBaseResponse? {
   List<ActivePlanBrandModel> toDomain() {
     List<ActivePlanBrandModel> activePlanBrands =
-    (this?.data?.map((response) => response.toDomain()) ??
+    (this?.data.map((response) => response.toDomain()) ??
         const Iterable.empty())
         .cast<ActivePlanBrandModel>()
         .toList();

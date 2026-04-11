@@ -700,6 +700,7 @@ class AppSqlApi extends AppSqlApiAbs {
     return List.generate(maps.length, (i) {
       VisitDoctorModel visitDoctorModel = VisitDoctorModel.fromMap1(maps[i]);
       DoctorModel doctorModel = DoctorModel.fromMap1(maps[i]);
+      visitDoctorModel.data= visitDoctorModel.data.toString().split('T')[0];
       VisitDoctorAndDoctor visitDoctorAndDoctor =
           VisitDoctorAndDoctor(doctorModel, visitDoctorModel);
       return visitDoctorAndDoctor;
@@ -738,6 +739,7 @@ class AppSqlApi extends AppSqlApiAbs {
       VisitHospitalModel visitHospitalModel =
           VisitHospitalModel.fromMap1(maps[i]);
       HospitalModel hospitalModel = HospitalModel.fromMap1(maps[i]);
+      visitHospitalModel.data= visitHospitalModel.data.toString().split('T')[0];
       SpecDModel specModel = SpecDModel.fromMap2(maps[i]);
       VisitHospitalAndHospital visitHospitalAndHospital =
           VisitHospitalAndHospital(

@@ -243,12 +243,7 @@ class NothingState extends VisitPlaceState{
 @override
 List<Object?> get props =>[];
 }
-class IsScienceState extends VisitPlaceState {
-  final  int isScience;
-  IsScienceState(this.isScience);
-  @override
-  List<Object?> get props => [isScience];
-}
+
 class IsBrandState extends VisitPlaceState {
   final  bool isBrand;
   IsBrandState(this.isBrand);

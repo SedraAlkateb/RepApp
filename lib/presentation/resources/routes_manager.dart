@@ -1,7 +1,13 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/pages/all_recip.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_details%20.dart';
+import 'package:domina_app/presentation/hospitals/page/hospital_details.dart';
+import 'package:domina_app/presentation/order/page/add_order_page.dart';
+import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
+import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_city_senior.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -34,6 +40,8 @@ import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart'
 import 'package:domina_app/presentation/resources/strings_manager.dart';
 import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
+import 'package:domina_app/presentation/visits/pages/info_visit_doctor.dart';
+import 'package:domina_app/presentation/visits/pages/info_visit_hospital.dart';
 import 'package:domina_app/presentation/visits/pages/visits_page.dart';
 import 'package:flutter/material.dart';
 import '../Recipes/pages/Recipes.dart';
@@ -48,7 +56,6 @@ class Routes {
   static const String brand = "/brand";
   static const String pharmacy = "/pharmacy";
   static const String syncData = "/syncData";
-  static const String placeVisit = "/placeVisit";
   static const String visitPharmacy = "/visitPharmacy";
   static const String visits = "/visits";
   static const String asyncIn = "/asyncIn";
@@ -78,6 +85,19 @@ class Routes {
   static const String allRecipe = "/allRecipe";
   static const String viewRecipe = "/viewRecipe";
   static const String placeVisitPage = "/placeVisitPage";
+  static const String visitDoctor = "/VisitDoctor";
+  static const String visitHospital = "/visitHospital";
+  static const String hospitalDetails = "/hospitalDetails";
+  static const String doctorDetails = "/doctorDetails";
+
+  static const String infoVisitHospital = "/infoVisitHospital";
+  static const String infoVisitDoctor= "/infoVisitDoctor";
+  static const String recipesHospital = "/recipesHospital";
+  static const String recipesDoctor= "/recipesDoctor";
+
+  static const String createOrder = "/createOrder";
+
+
 }
 
 class RouteGenerator {
@@ -88,13 +108,53 @@ class RouteGenerator {
         return _animatedRoute(const MyLogin());
       case Routes.allBrand:
         return _animatedRoute(AllBrand());
+      case Routes.createOrder:
+        initOrderBradModule();
+        return _animatedRoute(CreateOrderPage());
       case Routes.placeVisitPage:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
         return _animatedRoute(
           PlaceVisitPage(placeId: args),
         );
+      case Routes.visitDoctor:
+        final args = settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ Integer
+        return _animatedRoute(
+          VisitDoctor(doctorModel: args),
+        );
+      case Routes.hospitalDetails:
+        final args = settings.arguments as HospitalSpAllModel; // ننتظر الـ ID هنا كـ
+        return _animatedRoute(
+          HospitalDetails(
 
+              hospital: args),
+        );
+      case Routes.doctorDetails:
+        final args = settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ
+        return _animatedRoute(
+          DoctorDetails(
+
+              doctor: args),
+        );
+      case Routes.infoVisitHospital:
+        final args = settings.arguments as VisitHospitalAndHospital; // ننتظر الـ ID هنا كـ Integer
+        return _animatedRoute(
+          InfoVisitHospital(
+
+              hospitalModel: args),
+        );
+      case Routes.infoVisitDoctor:
+        final args = settings.arguments as VisitDoctorAndDoctor; // ننتظر الـ ID هنا كـ Integer
+        return _animatedRoute(
+          InfoVisitDoctor(
+
+              doctorModel: args),
+        );
+      case Routes.visitHospital:
+        final args = settings.arguments as HospitalModel; // ننتظر الـ ID هنا كـ Integer
+        return _animatedRoute(
+          VisitHospital(hospitalModel: args),
+        );
       case Routes.fadeInWidget:
         return _animatedRoute(FadeInWidget());
 
@@ -137,9 +197,6 @@ class RouteGenerator {
       case Routes.logout:
         initAsyncInModule();
         return _animatedRoute(AsyncLogoutPage());
-
-      case Routes.placeVisit:
-        return _animatedRoute(PlaceVisitPage(placeId: 2));
 
       case Routes.specDH:
         return _animatedRoute(SpecDH(spId: 0));

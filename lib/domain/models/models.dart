@@ -246,6 +246,63 @@ class VisitPharmacyRequest {
     );
   }
 }
+class orderModel{
+   int repId;
+   String pharmacy;
+   String createDate;
+   int status;
+   orderModel(this.repId, this.pharmacy, this.createDate, this.status);
+   Map<String, dynamic> toMap() {
+     return {
+       'repId': repId,
+       'pharmacy': pharmacy,
+       'createDate': createDate,
+       'status': status,
+     };
+   }
+
+   factory orderModel.fromMap(Map<String, dynamic> map) {
+     return orderModel(
+       map['repId'],
+       map['pharmacy'],
+       map['createDate'],
+       map['status'],
+     );
+   }
+
+}
+class OrderDetails{
+  int brandId;
+  int quantity;
+
+  OrderDetails(this.brandId, this.quantity);
+  Map<String, dynamic> toMap() {
+    return {
+      'brandId': brandId,
+      'quantity': quantity,
+    };
+  }
+
+  factory OrderDetails.fromMap(Map<String, dynamic> map) {
+    return OrderDetails(
+      map['brandId'],
+      map['quantity'],
+    );
+  }
+
+}
+class PharmacyOrderRequestBody {
+
+  orderModel order;
+  List<OrderDetails> orderDetails;
+  PharmacyOrderRequestBody(this.order, this.orderDetails);
+  Map<String, dynamic> toJson() {
+    return {
+      'order': order.toMap(),
+      'orderDetails': orderDetails.map((e) => e.toMap()).toList(),
+    };
+  }
+}
 
 class VisitPharmacyRequestBody {
   List<VisitPharmacyModel> list1;
@@ -259,6 +316,7 @@ class VisitPharmacyRequestBody {
     };
   }
 }
+
 
 class RepPlanBrandBody {
   List<PlanBrandModel> planBrand;
@@ -992,8 +1050,9 @@ class HospitalSpModel {
 
 class HospitalModel {
   int id;
-  String title;
   int placeId;
+  String title;
+
   String address;
   String? note;
   String placeTitle;

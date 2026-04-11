@@ -4,73 +4,114 @@ import 'package:domina_app/presentation/plase_visit/widget/hospital_visit.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PlaceVisitPage extends StatelessWidget {
   const PlaceVisitPage({super.key, required this.placeId});
   final int placeId;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length:2,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: ColorManager.secondaryColor7,
-            bottom: TabBar(
-                labelPadding: EdgeInsets.all(0.9),
-                onTap: (value) {
-                  // if (value == 0) {
-                  //   BlocProvider.of<VisitPlaceBloc>(context)
-                  //       .add(PharmacyByPlace(placeId, value));
-                  //   BlocProvider.of<VisitPlaceBloc>(context)
-                  //       .add(BrandAnyFlagEvent());
-                  // } else
-                  if (value == 0) {
-                    BlocProvider.of<VisitPlaceBloc>(context)
-                        .add(DoctorByPlace(placeId, 0));
-          //          BlocProvider.of<VisitPlaceBloc>(context)
-             //           .add(BrandFlagEvent());
-                  } else {
-                    BlocProvider.of<VisitPlaceBloc>(context)
-                        .add(HospitalByPlace(placeId, 1));
-            //        BlocProvider.of<VisitPlaceBloc>(context)
-              //          .add(BrandFlagEvent());
-                  }
-                },
-                tabs: [
-                  // Tab(
-                  //   icon: context.watch<VisitPlaceBloc>().current == 0
-                  //       ? Icon(Icons.local_pharmacy_sharp,
-                  //           color: ColorManager.secondaryColor1)
-                  //       : Icon(Icons.local_pharmacy_sharp),
-                  //   text: 'الصيدليات',
-                  // ),
-                  Tab(
-                    icon: context.watch<VisitPlaceBloc>().current == 0
-                        ? Icon(
-                            Icons.groups,
-                            color: ColorManager.secondaryColor1,
-                          )
-                        : Icon(Icons.groups),
-                    text: 'الأطباء',
+      length: 2,
+      child: Scaffold(
+
+        body: NestedScrollView(
+          // هذا الجزء يسمح للـ Header (الـ AppBar والـ TabBar) بالتحرك مع السكرول
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+
+                elevation: 0,
+                pinned: false, // اجعله false ليختفي الـ AppBar عند السكرول
+                floating: true, // يظهر بمجرد السحب لأسفل قليلاً
+                snap: true, // يكمل الظهور تلقائياً
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                title: Text(
+                  "قائمة الزيارات",
+                  style: TextStyle(
+                    color: const Color(0xFF0D47A1),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.sp,
                   ),
-                  Tab(
-                    icon: context.watch<VisitPlaceBloc>().current == 1
-                        ? Icon(
-                            Icons.local_hospital,
-                            color: ColorManager.secondaryColor1,
-                          )
-                        : Icon(Icons.local_hospital),
-                    text: 'المشافي',
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                  child: Container(
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15.r),
+                      border: Border.all(color: Colors.grey.shade200),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TabBar(
+                      padding: const EdgeInsets.all(3),
+                      dividerColor: Colors.transparent,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.grey,
+                      labelStyle: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14.sp),
+                      labelPadding: EdgeInsets.zero,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicator: BoxDecoration(
+                        color: ColorManager.medicalPrimary,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      onTap: (value) {
+                        if (value == 0) {
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(DoctorByPlace(placeId, 0));
+                        } else {
+                          BlocProvider.of<VisitPlaceBloc>(context)
+                              .add(HospitalByPlace(placeId, 1));
+                        }
+                      },
+                      tabs: [
+                        Tab(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.groups_outlined),
+                                  SizedBox(width: 8.w),
+                                  const Text('الأطباء'),
+                                ])),
+                        Tab(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.local_hospital_outlined),
+                                  SizedBox(width: 8.w),
+                                  const Text('المشافي'),
+                                ])),
+                      ],
+                    ),
                   ),
-                ]),
-          ),
+                ),
+              ),
+            ];
+          },
+          // محتوى الصفحات تحت الـ TabBar
           body: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-          //  PharmacyVisit(),
-            DoctorVisit(),
-            HospitalVisit(),
-          ]),
-        ));
+            physics: const BouncingScrollPhysics(),
+            children: [
+              DoctorVisit(),
+              HospitalVisit(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -273,8 +273,8 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['startDate'] as String?,
       json['endDate'] as String?,
       json['recipesCount'] as String?,
-      json['otherStartDate'] as String?,
-      json['otherEndDate'] as String?,
+      json['otherStartDate'] as String? ?? '-9',
+      json['otherEndDate'] as String? ?? '-9',
     )
       ..samplesCount = json['samplesCount'] as String?
       ..repType = json['repType'] as String?;
@@ -294,8 +294,8 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'endDate': instance.endDate,
       'startDate': instance.startDate,
       'recipesCount': instance.recipesCount,
-      if (instance.otherStartDate case final value?) 'otherStartDate': value,
-      if (instance.otherEndDate case final value?) 'otherEndDate': value,
+      'otherStartDate': instance.otherStartDate,
+      'otherEndDate': instance.otherEndDate,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>

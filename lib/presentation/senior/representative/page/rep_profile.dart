@@ -161,7 +161,7 @@ class RepProfile extends StatelessWidget {
                             child: CircleAvatar(
                               maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor11,
-                              child: Icon(
+                              child: FaIcon(
                                 FontAwesomeIcons.tag,
                                 color: ColorManager.secondaryColor2,
                               ),
@@ -182,7 +182,7 @@ class RepProfile extends StatelessWidget {
                             child: CircleAvatar(
                               maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor13,
-                              child: Icon(
+                              child: FaIcon(
                                 FontAwesomeIcons.locationDot,
                                 color: ColorManager.secondaryColor4,
                               ),
@@ -197,7 +197,7 @@ class RepProfile extends StatelessWidget {
                             child: CircleAvatar(
                               maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor16,
-                              child: Icon(FontAwesomeIcons.userDoctor,
+                              child: FaIcon(FontAwesomeIcons.userDoctor,
                                   color: ColorManager.secondaryColor14),
                             ),
                             onTap: () {
@@ -220,7 +220,7 @@ class RepProfile extends StatelessWidget {
                             child: CircleAvatar(
                               maxRadius: 25.r,
                               backgroundColor: ColorManager.secondaryColor17,
-                              child: Icon(FontAwesomeIcons.hospital,
+                              child: FaIcon(FontAwesomeIcons.hospital,
                                   color: ColorManager.secondaryColor15),
                             ),
                           ),
@@ -238,7 +238,7 @@ class RepProfile extends StatelessWidget {
                             child: CircleAvatar(
                               maxRadius: 25,
                               backgroundColor: ColorManager.secondaryColor20,
-                              child: Icon(FontAwesomeIcons.hospital,
+                              child: FaIcon(FontAwesomeIcons.hospital,
                                   color: ColorManager.secondaryColor19),
                             ),
                           ),
@@ -386,7 +386,7 @@ class RepProfile extends StatelessWidget {
                           BlocProvider.of<ActivePlanBloc>(context)
                               .add(GetActivePlanEvent(repPlan));
                         },
-                        icon1: Icons.list_alt_outlined,
+                        icon1: FontAwesomeIcons.listCheck,
                         text: "الخطة الفعالة"),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
@@ -497,7 +497,8 @@ class RepProfile extends StatelessWidget {
                             },
                           ));
                         },
-                        icon1: FontAwesomeIcons.clipboard,
+                        icon1:
+                        FontAwesomeIcons.clipboard,
                         text: "تقرير توزيع العينات (الجرد)"),
                   ],
                 ),

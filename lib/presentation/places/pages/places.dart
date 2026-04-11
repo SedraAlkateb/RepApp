@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use
 
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
@@ -6,7 +5,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart';
 import 'package:domina_app/presentation/plase_visit/widget/animation_press.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -230,9 +228,10 @@ class Places extends StatelessWidget {
                     return AnimatedPlaceCard(
                       place: placeModel[index],
                       onTap: () {
+                        print(placeModel[index].placeId);
                         Navigator.pushNamed(
                           context,
-                          Routes.placeVisit,
+                          Routes.placeVisitPage,
                           arguments: placeModel[index].placeId, // نرسل الـ ID هنا
                         );
                         BlocProvider.of<VisitPlaceBloc>(context).add(

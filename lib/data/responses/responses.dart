@@ -275,9 +275,9 @@ class TokenResponse {
   String? startDate;
   @JsonKey(name: "recipesCount")
   String? recipesCount;
-  @JsonKey(name: "otherStartDate", includeIfNull: false)
+  @JsonKey(name: "otherStartDate", defaultValue: "-9")
   String? otherStartDate;
-  @JsonKey(name: "otherEndDate", includeIfNull: false)
+  @JsonKey(name: "otherEndDate", defaultValue: "-9")
   String? otherEndDate;
   TokenResponse(
       this.token,
@@ -1517,7 +1517,7 @@ class ActiveBrandPlanResponse {
 @JsonSerializable()
   class ActiveBrandPlanBaseResponse extends BaseResponse{
   @JsonKey(name: "data", defaultValue: [])
-  List<ActiveBrandPlanResponse>? data;
+  List<ActiveBrandPlanResponse> data;
   ActiveBrandPlanBaseResponse(this.data);
   factory ActiveBrandPlanBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$ActiveBrandPlanBaseResponseFromJson(json);

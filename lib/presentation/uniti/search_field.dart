@@ -10,15 +10,16 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      padding: const EdgeInsets.symmetric( horizontal: 16),
       child: Row(
         children: [
           Expanded(
             child: TextFormField(
+
               controller: searchController,
               onChanged: onPressed,
-              decoration: InputDecoration(
 
+              decoration: InputDecoration(
                 fillColor: ColorManager.white,
                 border: InputBorder.none,
                 isDense: true,
@@ -34,11 +35,8 @@ class SearchField extends StatelessWidget {
                   borderSide: BorderSide(color: ColorManager.medicalBorder),
                     borderRadius:
                         BorderRadius.all(
-
                             Radius.circular(AppSize.s12))),
-                focusedBorder: const OutlineInputBorder(
 
-                    borderRadius: BorderRadius.all(Radius.circular(15))),
                 hintText: 'ابحث هنا',
                 hintStyle: TextStyle(
                     fontSize: AppSize.s16, overflow: TextOverflow.fade),

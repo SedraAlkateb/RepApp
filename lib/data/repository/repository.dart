@@ -1323,31 +1323,33 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<void> addOrder(order)  async {
-    // try {
-    //   if (await _networkInfo.isConnected) {
-    //   //  final response = await _remoteDataSource.getinfoPlanBrandsType(repPlan);
-    //     if (
-    //
-    //     response.status == ApiInternalStatus.SUCCESS ||
-    //         response.message == ApiInternalStatus.SUCCESS ||
-    //         response.status == "200") {
-    //       return Right(response.toDomain());
-    //     } else {
-    //       Failure failure = Failure(ApiInternalStatus.FAILURE,
-    //           response.message ?? ResponseMassage.DEFAULT);
-    //       insertLog(ExceptionRequestBody(
-    //           [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
-    //       return Left(failure);
-    //     }
-    //   } else {
-    //     return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-    //   }
-    // } catch (error) {
-    //   Failure failure = ErrorHandler.handle(error).failure;
-    //   insertLog(ExceptionRequestBody(
-    //       [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
-    //   return Left(failure);
-    // }
+  Future<Either<Failure, Message1Response>> pharmacyOrder(PharmacyOrderRequestBody order)  async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.pharmacyOrder(order);
+        if (
+
+        response.status == ApiInternalStatus.SUCCESS ||
+            response.message == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response);
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
+      return Left(failure);
+    }
   }
+
+
 }

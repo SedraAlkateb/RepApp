@@ -85,6 +85,7 @@ import 'package:domina_app/domain/usecase/is_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/pharmacy_order_usecase%20.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
@@ -109,6 +110,7 @@ import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.d
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
+import 'package:domina_app/presentation/order/bloc/order_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
@@ -675,5 +677,17 @@ Future<void> iniSearchDoctorsModule() async {
     instance.registerFactory<SearchDoctorsBloc>(() => SearchDoctorsBloc(
       instance(),   instance(),instance()
     ));
+  }
+}
+Future<void> initOrderBradModule() async {
+  if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
+    instance.registerFactory<AllBrandsSqlUsecase>(
+            () => AllBrandsSqlUsecase(instance()));}
+  if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
+    instance.registerFactory<PharmacyOrderUsecase>(
+            () => PharmacyOrderUsecase(instance()));
+
+    instance.registerFactory<OrderBloc>(
+            () => OrderBloc(instance(), instance()));
   }
 }
