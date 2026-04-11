@@ -195,12 +195,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             child: DropdownButton<int>(
               isExpanded: true,
               hint: Text(hint,
-                  style: TextStyle(fontSize: 13.sp, color: Colors.grey)),
+                  style: TextStyle(fontSize: 13.sp, color: Colors.black)),
               icon: const Icon(Icons.keyboard_arrow_down),
               items: brands.map((brand) {
                 return DropdownMenuItem<int>(
                   value: brand.id,
-                  child: Text(brand.title, textAlign: TextAlign.right),
+                  child: Text(
+                    brand.title,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 );
               }).toList(),
               onChanged: (selectedId) {
@@ -262,11 +266,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         if (state is PharmacyOrderLoadingState) {
           loading(context);
         } else if (state is PharmacyOrderErrorState) {
-          error(context,state.failure.massage,state.failure.code);
+          error(context, state.failure.massage, state.failure.code);
         } else if (state is PharmacyOrderState) {
           success(context);
-         successWithMessage(context,
-             state.message.message??"تم ارسال الطلب بنجاح");
+         Navigator.pop(context);
         }
       },
       builder: (context, state) {
