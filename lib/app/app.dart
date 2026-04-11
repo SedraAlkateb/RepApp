@@ -197,6 +197,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<AsyncBloc>()),
       ],
       child: MaterialApp(
+
           navigatorKey: navigatorKey,
         locale: Locale('ar'),
         localizationsDelegates: [

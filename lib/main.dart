@@ -8,11 +8,11 @@ import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -115,31 +115,31 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 @pragma('vm:entry-point')
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    final dbHelper = DatabaseHelper(); 
-  final appSqlApi = AppSqlApi(dbHelper);
-  await appSqlApi.printAllTables();
+
+   // final dbHelper = DatabaseHelper();
+ // final appSqlApi = AppSqlApi(dbHelper);
+ // await appSqlApi.printAllTables();
   await initAppModule();
-  await _initNotifications();
-  AlarmAndNotifications.showNotification();
-  await requestNotificationPermission();
+  //await _initNotifications();
+// await requestNotificationPermission();
   await sss();
   //initializeTimeZones();
   runApp(Phoenix(child: const MyApp()));
 }
-
-Future<void> _initNotifications() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-  );
-  await AlarmAndNotifications.initialize();
- // await AlarmAndNotifications.schedulePeriodicNotification();
- await AlarmAndNotifications.scheduleOneShot();
-}
+//
+// Future<void> _initNotifications() async {
+//   const AndroidInitializationSettings initializationSettingsAndroid =
+//       AndroidInitializationSettings('@mipmap/ic_launcher');
+//   const InitializationSettings initializationSettings = InitializationSettings(
+//     android: initializationSettingsAndroid,
+//   );
+//   await flutterLocalNotificationsPlugin.initialize(
+//     initializationSettings,
+//   );
+//   await AlarmAndNotifications.initialize();
+//  // await AlarmAndNotifications.schedulePeriodicNotification();
+//  await AlarmAndNotifications.scheduleOneShot();
+// }
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -150,15 +150,15 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-Future<void> requestNotificationPermission() async {
-  if (Platform.isAndroid) {
-    PermissionStatus status = await Permission.notification.request();
-    if (status.isGranted) {
-      print("تم منح إذن الإشعارات.");
-    } else if (status.isDenied) {
-      openAppSettings();
-    } else if (status.isPermanentlyDenied) {
-      print("تم رفض الإذن نهائيًا. يمكنك طلبه من إعدادات النظام.");
-    }
-  }
-}
+// Future<void> requestNotificationPermission() async {
+//   if (Platform.isAndroid) {
+//     PermissionStatus status = await Permission.notification.request();
+//     if (status.isGranted) {
+//       print("تم منح إذن الإشعارات.");
+//     } else if (status.isDenied) {
+//       openAppSettings();
+//     } else if (status.isPermanentlyDenied) {
+//       print("تم رفض الإذن نهائيًا. يمكنك طلبه من إعدادات النظام.");
+//     }
+//   }
+// }
