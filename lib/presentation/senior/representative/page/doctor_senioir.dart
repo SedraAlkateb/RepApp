@@ -1,14 +1,10 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DoctorSenior extends StatelessWidget {
   DoctorSenior({super.key});
   final TextEditingController searchDocController = TextEditingController();
@@ -16,156 +12,211 @@ class DoctorSenior extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.arrow_forward,
-                color: ColorManager.secondaryColor1,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
-        title: Text('الأطباء'),
+        title: const Text('الأطباء'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SearchField(
-                    searchController: searchDocController,
-                    onPressed: (value) {
-                      BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchDoctorEvent(value));
-                    },
-                  ),
-                ],
-              ),
+      // استخدم Column مع Expanded بدلاً من SingleChildScrollView
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            child: SearchField(
+              searchController: searchDocController,
+              onPressed: (value) {
+                BlocProvider.of<SeniorProfBloc>(context)
+                    .add(SenSearchDoctorEvent(value));
+              },
             ),
-            BlocBuilder<SeniorProfBloc, SeniorProfState>(
+          ),
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              // أضفنا الحالات التي يجب أن يحدث فيها إعادة بناء للواجهة
               buildWhen: (previous, current) =>
-                  current is SenAllDoctorsState ||
-                  current is SenAllDoctorEmptyState,
+              current is SenAllDoctorsState ||
+                  current is SenAllDoctorEmptyState ||
+                  current is SenAllDoctorLoadingState ||
+                  current is SenAllDoctorErrorState,
               builder: (context, state) {
-                List<DoctorModel> doctorModel =
-                    context.watch<SeniorProfBloc>().doctor;
+
+                // 1. تحديد أي قائمة سنعرض (المفلترة من السيرش أم الكاملة)
+                List<DoctorModel> doctorsList = [];
+
                 if (state is SenAllDoctorsState) {
-                  doctorModel = state.doctor;
+                  doctorsList = state.doctor; // القائمة المفلترة القادمة من البحث
+                } else {
+                  // القائمة الكاملة الموجودة في الـ Bloc (نستخدم read وليس watch هنا)
+                  doctorsList = context.read<SeniorProfBloc>().doctor;
                 }
-                if (state is SenAllDoctorEmptyState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
-                    SizedBox(
-                      height: 100,
-                    ),
-                    emptyFullScreen(context)
-                  ]));
-                }
-                if (state is SenAllDoctorErrorState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
-                    SizedBox(
-                      height: 100,
-                    ),
-                    errorFullScreen(context, func: () {
-                      BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenAllDoctorEvent(203));
-                    })
-                  ]));
-                }
-                if (state is SenAllDoctorLoadingState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
-                    SizedBox(
-                      height: 100,
-                    ),
-                    loadingFullScreen(context)
-                  ]));
-                }
-                return SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "عدد الأطباء: ",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          CircleNumberWidget(number: doctorModel.length),
-                        ],
-                      ),
-                    ),
-                    ...doctorModel.map((doctor) {
-                      return Container(
-                        margin: EdgeInsets.all(AppPaddingH.p8),
-                        padding: EdgeInsets.all(AppPaddingH.p16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorManager.secondaryColor6,
-                              ColorManager.secondaryColor7,
-                            ],
-                          ),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(AppSize.s8)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
 
-                            Text(
-                              doctor.title,
-                              style: Theme.of(context).textTheme.labelLarge,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              doctor.spTitle,
-                              style: Theme.of(context).textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ),
-                            TextRach(
-                              s1: "التقيم : ",
-                              s2: doctor.rate.toString(),
-                            ),
-                            Text(
-                              "${doctor.address}_${doctor.placeTitle}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ),
+                // 2. حالات الواجهة
+                if (state is SenAllDoctorLoadingState) return loadingFullScreen(context);
+                if (state is SenAllDoctorEmptyState || doctorsList.isEmpty) return emptyFullScreen(context);
+                if (state is SenAllDoctorErrorState) return errorFullScreen(context);
 
-                            doctor.workHours!=null&& doctor.workHours!=""?
-                            Text(
-                              "أوقات العمل${doctor.workHours}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ):SizedBox(),
-                            doctor.note!=null&& doctor.note!=""?
-                            TextRach(
-                              s1: "ملاحظة : ",
-                              s2: doctor.note.toString(),
-                            ):SizedBox(),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ]),
+                // 3. عرض النتائج
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  itemCount: doctorsList.length,
+                  itemBuilder: (context, index) {
+                    return AdminRepDoctorCard(doctor: doctorsList[index]);
+                  },
                 );
               },
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}class AdminRepDoctorCard extends StatelessWidget {
+  final DoctorModel doctor;
+
+  const AdminRepDoctorCard({super.key, required this.doctor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 4.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25.r),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header: الاسم، التخصص، والأيقونة
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  doctor.title,
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF0D47A1),
+                                  ),
+                                ),
+                                Text(
+                                  doctor.spTitle,
+                                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          ),
+                          _buildRatingBadge(doctor.rate),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+
+                      // شبكة المعلومات: المكان والزيارات
+                      Row(
+                        children: [
+                          _buildInfoBox("المكان", doctor.placeTitle, Icons.location_on_outlined),
+                          SizedBox(width: 10.w),
+                          _buildInfoBox("الزيارات", "${doctor.visits ?? 0} زيارة", Icons.calendar_month_outlined),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+
+                      // تفاصيل العنوان والوقت
+                      _buildDetailRow(Icons.map_outlined, doctor.address),
+                      if (doctor.workHours != null && doctor.workHours!.isNotEmpty)
+                        _buildDetailRow(Icons.access_time, doctor.workHours!),
+
+                      SizedBox(height: 15.h),
+
+                      // ملاحظات المدير (صندوق ملون)
+                      if (doctor.note != null && doctor.note!.isNotEmpty)
+                        Container(
+                          padding: EdgeInsets.all(12.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE3F2FD),
+                            borderRadius: BorderRadius.circular(15.r),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.info_outline, color: Color(0xFF1976D2), size: 20),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text("ملاحظات المدير", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1976D2))),
+                                    Text(doctor.note!, style: TextStyle(fontSize: 12.sp, color: Colors.blueGrey[800])),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRatingBadge(String? rate) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      decoration: BoxDecoration(color: const Color(0xFFFFECB3), borderRadius: BorderRadius.circular(8.r)),
+      child: Text(rate ?? "A", style: const TextStyle(color: Color(0xFFFFA000), fontWeight: FontWeight.bold)),
+    );
+  }
+
+
+
+  Widget _buildInfoBox(String label, String value, IconData icon) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(10.w),
+        decoration: BoxDecoration(color: const Color(0xFFF5F7FA), borderRadius: BorderRadius.circular(12.r)),
+        child: Column(
+          children: [
+            Text(label, style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+            Text(value, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF263238)), textAlign: TextAlign.center),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 4.h),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: Colors.blue[300]),
+          SizedBox(width: 8.w),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 12.sp, color: Colors.grey[700]))),
+        ],
       ),
     );
   }

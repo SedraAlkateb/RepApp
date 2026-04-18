@@ -9,13 +9,18 @@ class FutureSpEvent extends FutureRepEvent {
   @override
   List<Object?> get props => [];
 }
-
+class UpdateAmountEvent extends FutureRepEvent {
+  UpdateAmountEvent();
+  @override
+  List<Object?> get props => [];
+}
 
 
 
 class FutureRepPlanBrandSpEvent extends FutureRepEvent {
   final RepSp rep;
-  FutureRepPlanBrandSpEvent(this.rep);
+  final  int sampleCount;
+  FutureRepPlanBrandSpEvent(this.rep,this.sampleCount);
   @override
   List<Object?> get props => [rep];
 }
@@ -32,4 +37,17 @@ class ChangeFieldEvent extends FutureRepEvent{
   ChangeFieldEvent(this.number,this.index);
   @override
   List<Object?> get props => [number,index];
+}
+class EditePlanStatusEvent extends FutureRepEvent {
+  final int id;
+  final int status ;
+  EditePlanStatusEvent(this.id,this.status);
+  @override
+  List<Object?> get props => [];
+}
+class SearchPlanBrandsEvent extends FutureRepEvent{
+  final String contant;
+  SearchPlanBrandsEvent(this.contant);
+  @override
+  List<Object?> get props => [contant];
 }

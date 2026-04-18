@@ -129,12 +129,7 @@ class RemoveBrandAdditionEvent extends VisitPlaceEvent {
   @override
   List<Object?> get props => [brandAddition];
 }
-class IsScienceEvent extends VisitPlaceEvent {
-  final  int isScience;
-  IsScienceEvent(this.isScience);
-  @override
-  List<Object?> get props => [isScience];
-}
+
 class IsBrandEvent extends VisitPlaceEvent {
 
   @override

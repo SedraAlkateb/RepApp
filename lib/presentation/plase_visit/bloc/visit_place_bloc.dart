@@ -46,7 +46,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   int current = 0;
   String not = "";
   String br = "";
-  int isScience = 0;
   bool isBrand = false;
   Type type = Type(2, "لا شيئ");
   VisitPlaceBloc(
@@ -165,16 +164,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
         selectAddBrand = updatedList;
         emit(SelectBrandAddNumState(updatedList));
       }
-      // if (event is InsertVisitPharmacyEvent) {
-      //   emit(InsertVisitPharmacyLoadingState());
-      //   (await insertVisitPharmacySqlUsecase.execute(event.visitPharmacyModel))
-      //       .fold((failure) {
-      //     print(failure.massage);
-      //     emit(InsertVisitPharmacyErrorState(failure: failure));
-      //   }, (data) async {
-      //     emit(InsertVisitPharmacyState());
-      //   });
-      // }
       else if (event is InsertVisitDoctorEvent) {
         event.visitDoctorModel.additaion = type.i == 2
             ? null
@@ -189,18 +178,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
           emit(InsertVisitDoctorState());
         });
       }
-      // if (event is InsertBrandVisitEvent) {
-      //   emit(AllVisitBrandPharmacyLoadingState());
-      //   (await insertVisitBrandPharmacySqlUsecase.execute(
-      //           visitBrandPharmacys, event.visitPharmacyModel))
-      //       .fold((failure) {
-      //     selectBrand = [];
-      //     emit(AllVisitBrandPharmacyErrorState(failure: failure));
-      //   }, (data) async {
-      //     selectBrand = [];
-      //     emit(AllVisitBrandPharmacyState());
-      //   });
-      // }
+
       else if (event is InsertBrandVisitDoctorEvent) {
         event.visitDoctorModel.additaion = type.i == 2
             ? null
@@ -250,10 +228,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       else if (event is EditAmountBrandEvent) {
         visitBrandPharmacys[event.index].amount = event.brand;
       }
-      else if (event is IsScienceEvent) {
-        isScience = event.isScience;
-        emit(IsScienceState(isScience));
-      }
+
       else if (event is IsBrandEvent) {
         isBrand = !isBrand;
         print(isBrand);
@@ -317,18 +292,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   emit(SearchVisitDoctorState(doctorSearchModel));
 }
 
-      // else if (event is SearchDoctorVisitEvent)
-      // {
-      //   String search = normalizeText(event.value);
-      //   doctorSearchModel = doctors.where((doctorValue) {
-      //     if (normalizeText(doctorValue.title).contains(search)) {
-      //       return true;
-      //     } else {
-      //       return false;
-      //     }
-      //   }).toList();
-      //   emit(SearchVisitDoctorState(doctorSearchModel));
-      // }
       else if (event is SearchHospitalVisitEvent) {
         String search = normalizeText(event.value);
         hospitalSearchModel = hospitals.where((hospital) {
@@ -369,7 +332,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       brand = "${br}\n";
     }
     String add =
-        "${not} \n ${brand} ${isScience == 0 ? " مكتب علمي " : isScience == 1 ? "مع الخطة " : "مع الموزع "}";
+        "${not} \n ${brand}";
     return add;
   }
 }

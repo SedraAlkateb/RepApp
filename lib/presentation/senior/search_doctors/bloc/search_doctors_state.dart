@@ -9,39 +9,14 @@ final class EditBrandPlanInitial extends SearchDoctorsState {
   List<Object?> get props => [];
 }
 final class FutureSearchDoctorsState extends SearchDoctorsState {
-  final List<doctorsModel> Representative;
-  FutureSearchDoctorsState(this.Representative);
+  final List<doctorsModel> representative;
+  FutureSearchDoctorsState(this.representative);
   @override
-  List<Object?> get props => [Representative];
+  List<Object?> get props => [representative];
 }
-
-final class FutureDocDoctorsState extends SearchDoctorsState {
-  final List<DocdoctorsModel> doctordetails;
-  FutureDocDoctorsState(this.doctordetails);
-  @override
-  List<Object?> get props => [doctordetails];
-}
-final class FutureDocDoctorsEmptyState extends SearchDoctorsState {
-  FutureDocDoctorsEmptyState();
-  @override
-  List<Object?> get props =>[];
-}
-final class FutureDocDoctorsLoadingState extends SearchDoctorsState {
-  @override
-  FutureDocDoctorsLoadingState();
-  @override
-  List<Object?> get props => [];
-}
-final class FutureDocDoctorsErrorState extends SearchDoctorsState {
+final class FutureSearchDoctorsErrorState extends SearchDoctorsState {
   final Failure failure;
-  FutureDocDoctorsErrorState({required this.failure});
-  @override
-  List<Object?> get props => [failure];
-}
-
-final class FutureFutureSearchDoctorsErrorState extends SearchDoctorsState {
-  final Failure failure;
-  FutureFutureSearchDoctorsErrorState({required this.failure});
+  FutureSearchDoctorsErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }
@@ -51,14 +26,50 @@ final class FutureSearchDoctorsLoadingState extends SearchDoctorsState {
   @override
   List<Object?> get props => [];
 }
-
 final class FutureSearchDoctorsEmptyState extends SearchDoctorsState {
   FutureSearchDoctorsEmptyState();
   @override
   List<Object?> get props =>[];
 }
+
+final class FutureDocDoctorsLoadingState extends SearchDoctorsState {
+  @override
+  FutureDocDoctorsLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class FutureDocDoctorsEmptyState extends SearchDoctorsState {
+  FutureDocDoctorsEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+final class FutureDocDoctorsErrorState extends SearchDoctorsState {
+  final Failure
+  failure;
+  FutureDocDoctorsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class FutureDocDoctorsState extends SearchDoctorsState {
+  final List<DocdoctorsModel> doctordetails;
+  FutureDocDoctorsState(this.doctordetails);
+  @override
+  List<Object?> get props => [doctordetails];
+}
+
+class DocIsExpandedNoteState extends SearchDoctorsState {
+  final int index;
+
+  DocIsExpandedNoteState({required this.index});
+   @override
+  List<Object?> get props =>[];
+}
+class DocNoIsExpandedNoteState extends SearchDoctorsState {
+    @override
+  List<Object?> get props =>[]; 
+}
 final class DoctorInfoState extends SearchDoctorsState {
-final DoctorModel doctor;
+  final DoctorModel doctor;
   DoctorInfoState(this.doctor);
   @override
   List<Object?> get props => [doctor];
@@ -74,4 +85,54 @@ final class DoctorInfoLoadingState extends SearchDoctorsState {
   DoctorInfoLoadingState();
   @override
   List<Object?> get props => [];
+}
+
+
+
+final class FutureSearchHospitalsState extends SearchDoctorsState {
+  final List<SearchHospitalModel> allSearch;
+  FutureSearchHospitalsState(this.allSearch);
+  @override
+  List<Object?> get props => [allSearch];
+}
+final class FutureSearchHospitalsErrorState extends SearchDoctorsState {
+  final Failure failure;
+  FutureSearchHospitalsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class FutureSearchHospitalsLoadingState extends SearchDoctorsState {
+  @override
+  FutureSearchHospitalsLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class FutureSearchHospitalsEmptyState extends SearchDoctorsState {
+  FutureSearchHospitalsEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+
+final class FutureDocHospitalsLoadingState extends SearchDoctorsState {
+  @override
+  FutureDocHospitalsLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class FutureDocHospitalsEmptyState extends SearchDoctorsState {
+  FutureDocHospitalsEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+final class FutureDocHospitalsErrorState extends SearchDoctorsState {
+  final Failure failure;
+  FutureDocHospitalsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class FutureDocHospitalsState extends SearchDoctorsState {
+  final List<SearchHospitalNoteModel> allNote;
+  FutureDocHospitalsState(this.allNote);
+  @override
+  List<Object?> get props => [allNote];
 }

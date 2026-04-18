@@ -900,4 +900,16 @@ class RepositroySqlImp extends RepositorySql {
       return Left(failure);
     }
   }
+
+  @override
+  Future<Either<Failure, void>> numDocAndHos()  async {
+    try {
+      final response = await _databaseHelper.numDocAndHos();
+      return Right(response);
+    } catch (e) {
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "numDocAndHos"));
+      return Left(failure);
+    }
+  }
 }

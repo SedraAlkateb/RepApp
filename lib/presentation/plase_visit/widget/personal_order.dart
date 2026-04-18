@@ -62,6 +62,7 @@ class PersonalOrder extends StatelessWidget {
                       "اكتب ملاحظاتك:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
+                    SizedBox(height: 8,),
                     BoxTextField(
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
@@ -79,73 +80,6 @@ class PersonalOrder extends StatelessWidget {
                       function: (p0) {
                         BlocProvider.of<VisitPlaceBloc>(context)
                             .add(BoxAddEvent(p0));
-                      },
-                    ),
-                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                              .read<VisitPlaceBloc>()
-                                              .isScience ==
-                                          0
-                                      ? true
-                                      : false,
-                                  splashRadius: 30,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(0));
-                                  },
-                                ),
-                                Text('مكتب علمي'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                              .read<VisitPlaceBloc>()
-                                              .isScience ==
-                                          1
-                                      ? true
-                                      : false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(1));
-                                  },
-                                ),
-                                Text('مع الخطة'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                              .read<VisitPlaceBloc>()
-                                              .isScience ==
-                                          2
-                                      ? true
-                                      : false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(2));
-                                  },
-                                ),
-                                Text('مع الموزع'),
-                              ],
-                            ),
-                          ],
-                        );
                       },
                     ),
                   ],
@@ -313,73 +247,6 @@ class PersonalOrder extends StatelessWidget {
                                 ),
                               )
                             : SizedBox();
-                      },
-                    ),
-                    BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                              .read<VisitPlaceBloc>()
-                                              .isScience ==
-                                          0
-                                      ? true
-                                      : false,
-                                  splashRadius: 30,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(0));
-                                  },
-                                ),
-                                Text('مكتب علمي'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                              .read<VisitPlaceBloc>()
-                                              .isScience ==
-                                          1
-                                      ? true
-                                      : false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(1));
-                                  },
-                                ),
-                                Text('مع الخطة'),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context
-                                              .read<VisitPlaceBloc>()
-                                              .isScience ==
-                                          2
-                                      ? true
-                                      : false,
-                                  onChanged: (value) {
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsScienceEvent(2));
-                                  },
-                                ),
-                                Text('مع الموزع'),
-                              ],
-                            ),
-                          ],
-                        );
                       },
                     ),
                   ],

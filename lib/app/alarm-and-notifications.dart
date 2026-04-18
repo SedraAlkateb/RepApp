@@ -42,7 +42,7 @@ class AlarmAndNotifications {
     );
 
     // تهيئة البلجن
-    await flutterLocalNotificationsPlugin.initialize(
+    await flutterLocalNotificationsPlugin.initialize(settings:
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         _onNotificationTap(response);
@@ -124,10 +124,10 @@ class AlarmAndNotifications {
     );
 
     await flutterLocalNotificationsPlugin.show(
-      1,
-      '🔔 تذكير - شركة دومِنا',
-      'يرجى مزامنة ورفع الزيارات والمعلومات.',
-      notificationDetails,
+    id:   1,
+    title:   '🔔 تذكير - شركة دومِنا',
+    body:   'يرجى مزامنة ورفع الزيارات والمعلومات.',
+    notificationDetails:   notificationDetails,
       payload: 'go_to_sync',
     );
   }

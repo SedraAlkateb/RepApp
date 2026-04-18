@@ -1,17 +1,16 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
-import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
-import 'package:domina_app/presentation/visits/pages/info_visit_doctor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorVisitUser extends StatefulWidget {
-   DoctorVisitUser({super.key});
+  DoctorVisitUser({super.key});
 
   @override
   State<DoctorVisitUser> createState() => _DoctorVisitUserState();
@@ -59,56 +58,109 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                   if(state is EmptyVisitHospitalState){
                     return emptyFullScreen(context);
                   }
+
                   return ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                                  return InfoVisitDoctor(
-                                    doctorModel: doctors[index],
-                                  );
-                                }));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(AppPaddingH.p8),
-                            padding: EdgeInsets.all(AppPaddingH.p8),
-                            //    height: AppSize.s150,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(color: ColorManager.secondaryColor4)
-                              ],
-                              color: ColorManager.white,
-                              border: Border.all(color: ColorManager.hintGrey),
-                              borderRadius:  BorderRadius.all(
-                                  Radius.circular(AppSize.s8)),
-                              //        color: ColorManager.card,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  doctors[index]
-                                      .doctorModel
-                                      .title,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                TextRach(
-                                    s1: "العنوان : ",
-                                    s2: doctors[index]
+                        return Container(
+                          margin: EdgeInsets.only(
+                              bottom: 16.h, right: 8.w, left: 8.w),
+                          padding: EdgeInsets.all(16.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black
+                                    .withOpacity(0.08), // درجة غمق الظل
+                                blurRadius: 15, // مدى نعومة الظل
+                                spreadRadius: 0, // مدى انتشار الظل
+                                offset: const Offset(0,
+                                    6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.shade50,
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Text(doctors[index]
                                         .doctorModel
-                                        .address),
-                                TextRach(
-                                    s1: "التاريخ الزيارة: ",
-                                    s2: formatDateTime(doctors[index]
-                                        .visitDoctorModel.data)),
+                                        .spTitle , style
+                                        : TextStyle(color: Colors.blue, fontSize: 12.sp)),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                        textAlign: TextAlign.end,
+                                        doctors[index]
+                                            .doctorModel
+                                            .title,
+                                        style: TextStyle(
+                                            fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
+                                  ),
 
-                              ],
-                            ),
+                                ],
+                              ),
+                              SizedBox(height: 16.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
+                                  SizedBox(width: 8.w,),
+                                  Expanded(
+                                    child: Text(
+
+                                        "${doctors[index]
+                                            .doctorModel.placeTitle} - ${doctors[index]
+                                            .doctorModel.address}",
+                                        style: TextStyle
+                                          (color: Colors.grey,
+                                            fontSize: 15.sp)),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16.h),
+                              Divider(color:  Colors.grey,thickness: 0.1,),
+                              SizedBox(height: 8.h),
+                              // أزرار الأكشن
+                              Row(
+                                children: [
+                                  Icon(Icons.access_time,size: 18.sp,color: Colors.grey,  fontWeight: FontWeight.bold),
+                                  SizedBox(width: 4.w,),
+                                  Text(doctors[index]
+                                      .visitDoctorModel.data,
+                                      style: TextStyle
+                                        (color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.sp)),
+
+                                  const Spacer(),
+                                  InkWell
+                                    (
+                                    onTap: () {
+                                      Navigator.pushNamed(context,Routes.infoVisitDoctor,
+                                        arguments: doctors[index],
+                                      );
+                                    },
+                                    child: buildCardButton("عرض التفاصيل",
+                                        ColorManager.medicalPrimary,
+                                        Colors.white, Icons.directions_run),
+                                  ),
+
+                                ],
+                              ),
+                            ],
                           ),
                         );
                       },

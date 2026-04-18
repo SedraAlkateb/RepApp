@@ -16,6 +16,7 @@ class SpecializationBloc
   AllSpecsSqlUsecase allSpeUsecase;
   AllDoctorSpSqlUsecase allDoctorSpSqlUsecase;
   AllHospitalSpSqlUsecase allHospitalsSpSqlUsecase;
+
   List<SpecDModel> specialization = [];
   int current = 0;
 

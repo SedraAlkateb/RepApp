@@ -249,4 +249,51 @@ abstract class AppServiceClient {
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     @Part(name: "repPlanId") int repPlanId,
   );
+  @POST("/pharmacyOrder.php")
+  Future<Message1Response> pharmacyOrder(@Body() PharmacyOrderRequestBody list);
+
+  @POST("/checkPlanStatus.php")
+  Future<CheckBaseResponse> checkPlanBrand(
+      @Part(name: "repPlanId") int repPlanId,
+      );
+
+  @POST("/admin/getRepsFuture.php")
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
+      @Part(name: "repDet") int id,
+      );
+
+
+  @POST("/admin/changeRepPlanStatus.php")
+  Future<Message1Response> changeRepPlanStatus(
+      @Part(name: "id") int id,
+      @Part(name: "status") int status,
+      );
+
+
+  @POST("/admin/getVisitReadStatus.php")
+  Future<AllReadResponse> getVisitReadStatus(
+      @Part(name: "VisitId") String visitId,
+      @Part(name: "visitType") String visitType,
+      );
+  @POST("/admin/getSeniorByCityid.php")
+  Future<SeniorByCityidBaseResponse> getSeniorByCityid(
+      @Part(name: "cityId") int cityId,
+      );
+  @POST("/admin/getCityAndTeamleader.php")
+  Future<SeniorByCityidBaseResponse> getCityAndTeamleader();
+
+
+
+  @POST("/admin/getHospitalsNotes.php")
+  Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(
+      @Part(name: "hosId") int hosId,
+      @Part(name: "spId") int spId,
+      );
+  @POST("/admin/getHospitals.php")
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(
+      @Part(name: "name") String name,
+      );
+  @POST("/admin/updateRepPlanBrandAmount.php")
+  Future<Message1Response> updateRepPlanBrandAmount(
+      @Body() BrandAmountRequestBody list);
 }

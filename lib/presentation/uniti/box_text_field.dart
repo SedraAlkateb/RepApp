@@ -40,13 +40,16 @@ class BoxTextField extends StatelessWidget {
             readOnly: enabled??false,
             decoration: InputDecoration(
               filled: true,
-                fillColor:ColorManager.grey,
+                fillColor:ColorManager.inputBorder,
                 focusColor: ColorManager.secondaryColor,
                 hoverColor: ColorManager.secondaryColor,
                 suffixIcon:suffixIcon ,
                 border: const OutlineInputBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20) )),
-                focusedBorder:   OutlineInputBorder(borderRadius: const BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.secondaryColor)),
-                enabledBorder: OutlineInputBorder(borderRadius: const BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.secondaryColor)) ,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                  borderSide: const BorderSide(color: Color(0xFF0D47A1), width: 1), // حدود زرقاء عند التركيز
+                ),
+                enabledBorder: OutlineInputBorder(borderRadius: const BorderRadius.horizontal(left: Radius.circular(20),right:Radius.circular(20)),borderSide: BorderSide(color: ColorManager.inputBorder)) ,
                 hintStyle:hintStyle??  TextStyle(fontSize: 14.sp)
             ),
           ),

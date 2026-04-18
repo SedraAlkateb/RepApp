@@ -25,8 +25,33 @@ final class  AllReportVisitDoctorLoadingState extends ReportVisitDoctorState {
   @override
   List<Object?> get props =>[];
 }
+
 final class  AllReportVisitDoctorEmptyState extends ReportVisitDoctorState {
   AllReportVisitDoctorEmptyState();
+  @override
+  List<Object?> get props =>[];
+}
+final class AllWhoAllReadsState extends ReportVisitDoctorState {
+  final List<WhoReadModel> whoReadModel;
+  AllWhoAllReadsState(this.whoReadModel);
+  @override
+  List<Object?> get props =>[whoReadModel];
+}
+final class  AllWhoAllReadErrorState extends ReportVisitDoctorState {
+  final Failure failure;
+  AllWhoAllReadErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  AllWhoAllReadLoadingState extends ReportVisitDoctorState {
+  AllWhoAllReadLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+
+final class  AllWhoAllReadEmptyState extends ReportVisitDoctorState {
+  AllWhoAllReadEmptyState();
   @override
   List<Object?> get props =>[];
 }

@@ -48,6 +48,7 @@ class DatabaseHelper {
     token  TEXT NOT NULL,
     repId INTEGER NOT NULL,
     cityId INTEGER NOT NULL,
+    cityTitle TEXT ,
     otherPlanId INTEGER ,
     activePlanId INTEGER ,
     otherStatus INTEGER NOT NULL,

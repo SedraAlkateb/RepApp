@@ -29,3 +29,11 @@ class SearchPlaceEvent extends PlaceEvent{
   List<Object?> get props => [];
 
 }
+class NumEvent extends PlaceEvent{
+
+  NumEvent();
+  @override
+
+  List<Object?> get props => [];
+
+}

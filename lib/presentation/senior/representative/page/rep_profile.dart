@@ -1,509 +1,458 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/active_plan/pages/active_plan.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
-// import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
-// import 'package:domina_app/presentation/senior/report_issue_note/page/note_issue_doctor.dart';
-// import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
-// import 'package:domina_app/presentation/senior/report_sience_note/page/note_science_doctor.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_hospital.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/senior/representative/widget/row_list.dart';
-import 'package:domina_app/presentation/senior/representative/widget/row_list_info.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class RepProfile extends StatelessWidget {
   final int id;
   final int repPlanId;
   final int index;
-  final cityId;
-  const RepProfile(
-      {super.key,
-      required this.id,
-      required this.repPlanId,
-      required this.index,
-      required this.cityId});
+
+  const RepProfile({
+    super.key,
+    required this.id,
+    required this.repPlanId,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Future<bool> _onWillPop() async {
-      BlocProvider.of<SeniorRepsBloc>(context).add(AllSeniorRepEvent(cityId));
-      return true;
-    }
+    String currentRepName = "";
+    int currentRepPlan = 0;
 
-    String name = "";
-    int repPlan = 0;
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          context.read<SeniorRepsBloc>().add(AllSeniorRepEvent());
+        }
+      },
       child: Scaffold(
-        backgroundColor: ColorManager.secondaryColor9,
         appBar: AppBar(
-          shadowColor: null,
-          title: Text("معلومات شخصية"),
+          title: Text("ملف المندوب", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp, color: const Color(0xFF1F4E79))),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF1F4E79)),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                  decoration: BoxDecoration(
-                    color: ColorManager.white,
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(40),
-                    ),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.all(40.h),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          ColorManager.secondaryColor4,
-                          ColorManager.secondaryColor6,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.vertical(
-                        bottom: Radius.circular(20),
-                        top: Radius.circular(20),
-                      ),
-                    ),
-                    child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-                      buildWhen: (previous, current) => current is RepInfoState,
-                      builder: (context, state) {
-                        if (state is RepInfoLoadingState) {
-                          return loadingFullScreen(context);
-                        } else if (state is RepInfoErrorState) {
-                          return errorFullScreen(context);
-                        } else if (state is RepInfoState) {
-                          name = state.infoRep.name;
-                          repPlan = state.infoRep.repPlanId;
-                          return Column(
-                            children: [
-                              Text(
-                                "الإسم :${state.infoRep.name}",
-                                style: Theme.of(context).textTheme.labelMedium,
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Text(
-                                "العنوان : ${state.infoRep.address}",
-                                style: Theme.of(context).textTheme.labelMedium,
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Text(
-                                "الجوال : ${state.infoRep.mobile}",
-                                style: Theme.of(context).textTheme.labelMedium,
-                                textAlign: TextAlign.center,
-                              ),
-                              RowListInfo(
-                                  text1: "عدد الزيارات الكلي:",
-                                  text2: "${state.infoRep.totalVisit}"),
-                              RowListInfo(
-                                  text1: "عدد الزيارات المحققة :",
-                                  text2: "${state.infoRep.visitDon}"),
-                              RowListInfo(
-                                  text1: "عدد الزيارات المتبقية :",
-                                  text2: "${state.infoRep.visitNoteYet}"),
-                              RowListInfo(
-                                  text1: "عدد الوصفات  :",
-                                  text2: "${state.infoRep.recipesCount}"),
-                            ],
-                          );
-                        }
-                        return SizedBox();
-                      },
-                    ),
-                  )),
-              SizedBox(
-                height: 20.h,
-              ),
-              Container(
-                margin: EdgeInsets.all(15.h),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: ColorManager.white,
-                  borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20), bottom: Radius.circular(20)),
-                ),
-                child: Padding(
-                  padding:  EdgeInsets.all(10.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              BlocProvider.of<SeniorProfBloc>(context)
-                                  .add(SenAllSpecEvent(id));
-                              Navigator.pushNamed(context, Routes.seniorSpec);
-                            },
-                            child: CircleAvatar(
-                              maxRadius: 25.r,
-                              backgroundColor: ColorManager.secondaryColor11,
-                              child: Icon(
-                                FontAwesomeIcons.tag,
-                                color: ColorManager.secondaryColor2,
-                              ),
-                            ),
-                          ),
-                          Text("الإختصاص")
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              BlocProvider.of<SeniorProfBloc>(context)
-                                  .add(SenAllPlaceEvent(id));
+        body: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+          buildWhen: (previous, current) => current is RepInfoState || current is RepInfoLoadingState,
+          builder: (context, state) {
+            if (state is RepInfoLoadingState) return loadingFullScreen(context);
+            if (state is RepInfoErrorState) return errorFullScreen(context);
 
-                              Navigator.pushNamed(context, Routes.seniorPlaces);
-                            },
-                            child: CircleAvatar(
-                              maxRadius: 25.r,
-                              backgroundColor: ColorManager.secondaryColor13,
-                              child: Icon(
-                                FontAwesomeIcons.locationDot,
-                                color: ColorManager.secondaryColor4,
-                              ),
-                            ),
-                          ),
-                          Text("المناطق")
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            child: CircleAvatar(
-                              maxRadius: 25.r,
-                              backgroundColor: ColorManager.secondaryColor16,
-                              child: Icon(FontAwesomeIcons.userDoctor,
-                                  color: ColorManager.secondaryColor14),
-                            ),
-                            onTap: () {
-                              BlocProvider.of<SeniorProfBloc>(context)
-                                  .add(SenAllDoctorEvent(id));
-                              Navigator.pushNamed(context, Routes.seniorDoc);
-                            },
-                          ),
-                          Text("الأطباء"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              BlocProvider.of<SeniorProfBloc>(context)
-                                  .add(SenAllHospitalEvent(id));
-                              Navigator.pushNamed(context, Routes.seniorHos);
-                            },
-                            child: CircleAvatar(
-                              maxRadius: 25.r,
-                              backgroundColor: ColorManager.secondaryColor17,
-                              child: Icon(FontAwesomeIcons.hospital,
-                                  color: ColorManager.secondaryColor15),
-                            ),
-                          ),
-                          Text("المشافي")
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              BlocProvider.of<SeniorProfBloc>(context)
-                                  .add(SenAllBrandEvent(repPlanId));
-                              Navigator.pushNamed(context, Routes.allBrand);
-                            },
-                            child: CircleAvatar(
-                              maxRadius: 25,
-                              backgroundColor: ColorManager.secondaryColor20,
-                              child: Icon(FontAwesomeIcons.hospital,
-                                  color: ColorManager.secondaryColor19),
-                            ),
-                          ),
-                          Text("الاصناف")
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Container(
-                padding: EdgeInsets.all(20),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: ColorManager.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(40),
-                  ),
-                ),
+            if (state is RepInfoState) {
+              final rep = state.infoRep;
+              currentRepName = rep.name;
+              currentRepPlan = rep.repPlanId;
+
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    Row(
-                      children: [
-                        Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding:
-                                   EdgeInsets.symmetric(horizontal: 8.w),
-                              child: Text(
-                                "تفاصيل المندوب",
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            )),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 0.5.h,
-                            color: ColorManager.secondaryColor1,
+                    SizedBox(height: 25.h),
+                    _buildHeroHeader(rep),
+                    AnimationLimiter(
+                      child: Column(
+                        children: AnimationConfiguration.toStaggeredList(
+                          duration: const Duration(milliseconds: 500),
+                          childAnimationBuilder: (widget) => SlideAnimation(
+                            verticalOffset: 40.0,
+                            child: FadeInAnimation(child: widget),
                           ),
+                          children: [
+                            SizedBox(height: 25.h),
+                            _buildStatsGrid(rep),
+                            SizedBox(height: 25.h),
+                            _buildQuickActions(context),
+                            SizedBox(height: 30.h),
+                            _buildDetailsList(context, rep, currentRepName, currentRepPlan),
+                            SizedBox(height: 25.h),
+                            _buildCoverageSection(context),
+                            SizedBox(height: 50.h),
+                          ],
                         ),
-                      ],
-                    ),
-                    RowList(
-                        function: () {
-                          initReportVisitDoctorModule();
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ReportVisitDoctorPage(
-                                repId: id,
-                                userId: UserInfo.repId,
-                                repName: name,
-                                indexRep: index,
-                                repPlan: repPlan,
-                              );
-                            },
-                          ));
-                          BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                              AllReportVisitDoctorEvent(
-                                  VisitRepSen(id, UserInfo.repId)));
-                        },
-                        icon1: FontAwesomeIcons.table,
-                        text: "تقرير الأطباء"),
-                    Padding(
-                      padding:  EdgeInsets.symmetric(
-                          horizontal: AppPaddingW.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
                       ),
                     ),
-
-                    RowList(
-                        function: () {
-                          initReportVisitDoctorModule();
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ReportVisitHospital(
-                                repId: id,
-                                userId: UserInfo.repId,
-                                repName: name,
-                                indexRep: index,
-                                repPlan: repPlan,
-                              );
-                            },
-                          ));
-                          BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                              AllReportVisitHospitalEvent(
-                                  VisitRepSen(id, UserInfo.repId)));
-                        },
-                        icon1: FontAwesomeIcons.table,
-                        text: "تقرير المشافي"),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    RowList(
-                        function: () {
-                          Navigator.pushNamed(context, Routes.allRecipe);
-                          // initReportVisitDoctorModule();
-                          // Navigator.push(context, MaterialPageRoute(
-                          //   builder: (context) {
-                          //     return ReportVisitHospital(
-                          //       iscanedite: true,
-                          //       repId: id,
-                          //       userId: UserInfo.repId,
-                          //       repName: name,
-                          //       indexRep: index,
-                          //       repPlan: repPlan,
-                          //     );
-                          //   },
-                          // ));
-                          BlocProvider.of<SeniorProfBloc>(context).add(AllReciEvent(id));
-                        },
-                        icon1: FontAwesomeIcons.table,
-                        text: "عرض الوصفات"),
-                    Padding(
-                      padding:  EdgeInsets.symmetric(
-                          horizontal: AppPaddingH.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    RowList(
-                        function: () {
-                          initActivePlanModule();
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ActivePlanPage();
-                            },
-                          ));
-                          BlocProvider.of<ActivePlanBloc>(context)
-                              .add(GetActivePlanEvent(repPlan));
-                        },
-                        icon1: Icons.list_alt_outlined,
-                        text: "الخطة الفعالة"),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    RowList(
-                      icon1: FontAwesomeIcons.userDoctor,
-                      text: 'عدد زيارات الأطباء الذين  تمت زيارتهم',
-                      function: () {
-                        BlocProvider.of<SeniorProfBloc>(context)
-                            .add(VisitDocEvent(id));
-                        Navigator.pushNamed(context, Routes.senVisitDoctor);
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    RowList(
-                      icon1: FontAwesomeIcons.userDoctor,
-                      text: 'عدد زيارات الأطباء الذين لم تتم زيارتهم',
-                      function: () {
-                        BlocProvider.of<SeniorProfBloc>(context)
-                            .add(NoVisitDocEvent(id));
-                        Navigator.pushNamed(context, Routes.noVisitDoctor);
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    RowList(
-                      icon1: FontAwesomeIcons.userDoctor,
-                      text: "عدد زيارات الأطباء المتبقية",
-                      function: () {
-                        BlocProvider.of<SeniorProfBloc>(context)
-                            .add(RemainingVisitsDocEvent(id));
-                        Navigator.pushNamed(
-                            context, Routes.remainingVisitsDoctor);
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: AppPaddingW.p14),
-                      child: Divider(
-                        color: ColorManager.secondaryColor6,
-                        thickness: 0.8,
-                      ),
-                    ),
-                    // RowList(
-                    //   icon1: FontAwesomeIcons.solidNoteSticky,
-                    //   text: "قائمة بالملاحظات الخاصة للمكتب العلمي",
-                    //   function: () {
-                    //     initSeniorReportScienceModule();
-                    //     BlocProvider.of<ReportScienceBloc>(context)
-                    //         .add(SenAllNoteDoctorEvent(id));
-                    //     Navigator.push(context, MaterialPageRoute(
-                    //       builder: (context) {
-                    //         return NoteScienceDoctor(id: id);
-                    //       },
-                    //     ));
-                    //   },
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                    //   child: Divider(
-                    //     color: ColorManager.secondaryColor6,
-                    //     thickness: 0.8,
-                    //   ),
-                    // ),
-                    // RowList(
-                    //   icon1: FontAwesomeIcons.noteSticky,
-                    //   text: "قائمة بالملاحظات الخاصة بالوكيل",
-                    //   function: () {
-                    //     initSeniorReportIssueModule();
-                    //     BlocProvider.of<ReportIssueBloc>(context)
-                    //         .add(SenAllIssueDoctorEvent(id));
-                    //     Navigator.push(context, MaterialPageRoute(
-                    //       builder: (context) {
-                    //         return NoteIssueDoctor(id: id);
-                    //       },
-                    //     ));
-                    //   },
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: AppPadding.p14),
-                    //   child: Divider(
-                    //     color: ColorManager.secondaryColor6,
-                    //     thickness: 0.8,
-                    //   ),
-                    // ),
-                    RowList(
-                        function: () {
-                          initSeniorReportInventoryModule();
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              BlocProvider.of<ReportInventoryBloc>(context)
-                                  .add(SenAllInventoryEvent(id));
-                              return ReportInventory();
-                            },
-                          ));
-                        },
-                        icon1: FontAwesomeIcons.clipboard,
-                        text: "تقرير توزيع العينات (الجرد)"),
                   ],
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeroHeader(dynamic rep) {
+    return Hero(
+      tag: 'rep_card_${rep.id}',
+      child: Container(
+        width: double.infinity,
+        // تقليل الهوامش الجانبية ليلتصق بالأعلى بشكل أفضل مثل الصور
+        margin: EdgeInsets.symmetric(horizontal: 15.w),
+        padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
+        decoration: BoxDecoration(
+          // gradient: const LinearGradient(
+          //   colors: [ Color(0xFF3B7DBF)],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
+          color:  Color(0xFF164683),
+
+          // تعديل الحواف لتكون دائرية من الأسفل فقط لتعطي طابع الـ Header الحديث
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(50.r),
+            bottomRight: Radius.circular(50.r),
+            topLeft: Radius.circular(35.r),
+            topRight: Radius.circular(35.r),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF1F4E79).withOpacity(0.3),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            )
+          ],
+        ),
+        child: Column(
+          children: [
+            // الدائرة التي تحتوي على الحرف الأول (تصميم زجاجي شفاف)
+            Container(
+              width: 100.r,
+              height: 100.r,
+              decoration: BoxDecoration(
+              //  shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.2),
+
+                border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
+              borderRadius: BorderRadius.all(Radius.circular(45))
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
+                style: TextStyle(
+                  fontSize: 36.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            // اسم المندوب
+            Text(
+              rep.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+            ),
+            // العنوان أو النص الفرعي
+            if (rep.address != null && rep.address.isNotEmpty) ...[
+              SizedBox(height: 8.h),
+              Text(
+                rep.address,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.white.withOpacity(0.9),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatsGrid(dynamic rep) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: GridView.count(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        mainAxisSpacing: 15.h,
+        crossAxisSpacing: 15.w,
+        childAspectRatio: 1.5,
+        children: [
+          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(), const Color(0xFF1F4E79)),
+          _buildStatCard("المحققة", rep.visitDon.toString(), const Color(0xFF2D947A)),
+          _buildStatCard("المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
+          _buildStatCard("الوصفات", rep.recipesCount.toString(), const Color(0xFF8E44AD)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String title, String val, Color color) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25.r),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 15, offset: const Offset(0, 8))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title, style: TextStyle(fontSize: 11.sp, color: Colors.grey[500], fontWeight: FontWeight.bold)),
+          SizedBox(height: 6.h),
+          Text(val, style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w900, color: color)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickActions(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(vertical: 20.h),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30.r),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20)]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildIconBtn(context, FontAwesomeIcons.tag, "الإختصاص", const Color(0xFFFF9F43), () {
+            context.read<SeniorProfBloc>().add(SenAllSpecEvent(id));
+            Navigator.pushNamed(context, Routes.seniorSpec);
+          }),
+          _buildIconBtn(context, FontAwesomeIcons.locationDot, "المناطق", const Color(0xFF45AAF2), () {
+            context.read<SeniorProfBloc>().add(SenAllPlaceEvent(id));
+            Navigator.pushNamed(context, Routes.seniorPlaces);
+          }),
+          _buildIconBtn(context, FontAwesomeIcons.userDoctor, "الأطباء", const Color(0xFFEB4D4B), () {
+            context.read<SeniorProfBloc>().add(SenAllDoctorEvent(id));
+            Navigator.pushNamed(context, Routes.seniorDoc);
+          }),
+
+          _buildIconBtn(context, FontAwesomeIcons.hospitalUser, "المشافي", const Color(
+              0xFFE3D909), () {
+            context.read<SeniorProfBloc>().add(SenAllHospitalEvent(id));
+            Navigator.pushNamed(context, Routes.seniorHos);
+          }),
+          _buildIconBtn(context, FontAwesomeIcons.hospital, "الأصناف", const Color(0xFF26DE81), () {
+            context.read<SeniorProfBloc>().add(SenAllBrandEvent(repPlanId));
+            Navigator.pushNamed(context, Routes.allBrand);
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconBtn(BuildContext context, FaIconData icon, String label, Color color, VoidCallback tap) {
+    return InkWell(
+      onTap: tap,
+      borderRadius: BorderRadius.circular(20.r),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(14.r),
+            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
+            child: FaIcon(icon, color: color, size: 20.sp),
           ),
+          SizedBox(height: 8.h),
+          Text(label, style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.bold, color: const Color(0xFF4B6584))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCoverageSection(BuildContext context) {
+    return _buildSectionLayout("إحصائيات التغطية", [
+      InteractiveActionTile(
+          title: "الأطباء الذين تمت زيارتهم",
+          icon: Icons.check_circle_outline,
+          color: const Color(0xFF2D947A),
+          onTap: () {
+            context.read<SeniorProfBloc>().add(VisitDocEvent(id));
+            Navigator.pushNamed(context, Routes.senVisitDoctor);
+          }
+      ),
+      InteractiveActionTile(
+          title: "الأطباء الذين لم تتم زيارتهم",
+          icon: Icons.cancel_outlined,
+          color: const Color(0xFFE74C3C),
+          onTap: () {
+            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id));
+            Navigator.pushNamed(context, Routes.noVisitDoctor);
+          }
+      ),
+      InteractiveActionTile(
+          title: "زيارات الأطباء المتبقية",
+          icon: Icons.hourglass_empty_rounded,
+          color: const Color(0xFFF39C12),
+          onTap: () {
+            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id));
+            Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
+          }
+      ),
+      InteractiveActionTile(
+          title: "تقرير توزيع العينات (الجرد)",
+          icon: FontAwesomeIcons.clipboardList,
+          color: const Color(0xFF1F4E79),
+          onTap: () {
+            initSeniorReportInventoryModule();
+            Navigator.push(context, MaterialPageRoute(builder: (c) {
+              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id));
+              return  ReportInventory();
+            }));
+          }
+      ),
+    ]);
+  }
+
+  Widget _buildDetailsList(BuildContext context, dynamic rep, String name, int plan) {
+    return _buildSectionLayout("التقارير التفصيلية", [
+      InteractiveActionTile(
+          title: "تقرير زيارات الأطباء",
+          icon: FontAwesomeIcons.fileMedical,
+          color: const Color(0xFF1F4E79),
+          onTap: () {
+            initReportVisitDoctorModule();
+            Navigator.push(context, MaterialPageRoute(builder: (c) => ReportVisitDoctorPage(iscanedite: true, repId: id, userId: UserInfo.repId, repName: name, indexRep: index, repPlan: plan)));
+            context.read<ReportVisitDoctorBloc>().add(AllReportVisitDoctorEvent(VisitRepSen(id, UserInfo.repId), false));
+          }
+      ),
+      InteractiveActionTile(
+          title: "تقرير زيارات المشافي",
+          icon: FontAwesomeIcons.hospitalUser,
+          color: const Color(0xFF1F4E79),
+          onTap: () {
+            initReportVisitDoctorModule();
+            Navigator.push(context, MaterialPageRoute(builder: (c) => ReportVisitHospital(iscanedite: true, repId: id, userId: UserInfo.repId, repName: name, indexRep: index, repPlan: plan)));
+            context.read<ReportVisitDoctorBloc>().add(AllReportVisitHospitalEvent(VisitRepSen(id, UserInfo.repId), false));
+          }
+      ),
+      InteractiveActionTile(
+          title: "سجل الوصفات الطبية",
+          icon: FontAwesomeIcons.receipt,
+          color: const Color(0xFF1F4E79),
+          onTap: () {
+            Navigator.pushNamed(context, Routes.allRecipe);
+            context.read<SeniorProfBloc>().add(AllReciEvent(id));
+          }
+      ),
+      InteractiveActionTile(
+          title: "الخطة الشهرية الفعالة",
+          icon: FontAwesomeIcons.calendarCheck,
+          color: const Color(0xFF1F4E79),
+          onTap: () {
+            initActivePlanModule();
+            Navigator.push(context, MaterialPageRoute(builder: (c) =>  ActivePlanPage()));
+            context.read<ActivePlanBloc>().add(GetActivePlanEvent(plan));
+          }
+      ),
+    ]);
+  }
+
+  Widget _buildSectionLayout(String title, List<Widget> items) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 5.w, bottom: 15.h),
+            child: Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w800, color: const Color(0xFF2C3E50))),
+          ),
+          ...items,
+        ],
+      ),
+    );
+  }
+}
+
+class InteractiveActionTile extends StatefulWidget {
+  final String title;
+  final dynamic icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const InteractiveActionTile({super.key, required this.title, required this.icon, required this.color, required this.onTap});
+
+  @override
+  State<InteractiveActionTile> createState() => _InteractiveActionTileState();
+}
+
+class _InteractiveActionTileState extends State<InteractiveActionTile> {
+  bool isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => isPressed = true),
+      onTapUp: (_) => setState(() => isPressed = false),
+      onTapCancel: () => setState(() => isPressed = false),
+      onTap: widget.onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        decoration: BoxDecoration(
+          color: isPressed ? widget.color.withOpacity(0.02) : Colors.white,
+          borderRadius: BorderRadius.circular(22.r),
+          border: Border.all(color: isPressed ? widget.color.withOpacity(0.3) : Colors.black.withOpacity(0.04), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: isPressed ? widget.color.withOpacity(0.1) : Colors.black.withOpacity(0.02),
+              blurRadius: isPressed ? 10 : 15,
+              offset: const Offset(0, 5),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.all(10.r),
+              decoration: BoxDecoration(
+                color: isPressed ? widget.color : widget.color.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(15.r),
+              ),
+              child: widget.icon is IconData
+                  ? Icon(widget.icon, color: isPressed ? Colors.white : widget.color, size: 18.sp)
+                  : FaIcon(widget.icon as FaIconData, color: isPressed ? Colors.white : widget.color, size: 16.sp),
+            ),
+            SizedBox(width: 15.w),
+            Text(widget.title, style: TextStyle(fontSize: 13.5.sp, fontWeight: FontWeight.bold, color: const Color(0xFF34495E))),
+            const Spacer(),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              style: TextStyle(color: isPressed ? widget.color : Colors.grey[300]),
+              child: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp),
+            ),
+          ],
         ),
       ),
     );

@@ -1,10 +1,8 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
-
 import 'package:domina_app/presentation/Recipes/pages/update_recipes.dart';
 import 'package:domina_app/presentation/Recipes/pages/update_recipes_hospital.dart';
-import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
@@ -21,24 +19,8 @@ class AllRecip extends StatelessWidget {
       BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
     });
     return Scaffold(
-      drawer: DrawerPage(),
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return Center(
-              child: IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-                  Icons.menu,
-                  color: ColorManager.secondaryColor,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-            );
-          },
-        ),
+
         title: Text('الوصفات'),
       ),
       body: bodyBuild(context),

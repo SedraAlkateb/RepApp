@@ -98,4 +98,21 @@ abstract class Repository {
   Future<Either<Failure, DoctorModel>> getDocInfo(int docId);
     Future<Either<Failure,List<ActivePlanBrandModel> >> getInfoPlanBrandsType(int repPlan);
 
+  Future<Either<Failure,Message1Response >> pharmacyOrder(PharmacyOrderRequestBody order);
+
+  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id);
+
+  Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(
+      BrandAmountRequestBody list);
+  Future<Either<Failure, Message1Response>> changeRepPlanStatus(
+      int id, int status);
+
+
+  Future<Either<Failure, List<WhoReadModel>>> getVisitReadStatus(
+      String visitId, String visitType);
+  Future<Either<Failure, List<SeniorCityModel>>> getSeniorByCityid(int cityId);
+  Future<Either<Failure, List<SeniorCityModel>>> getCityAndTeamleader();
+  Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(String name);
+  Future<Either<Failure, List<SearchHospitalNoteModel>>> getSearchHospitalsNotes(int hosId, int spId);
+
 }

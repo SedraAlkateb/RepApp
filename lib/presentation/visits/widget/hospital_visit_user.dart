@@ -1,14 +1,13 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
-import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
-import 'package:domina_app/presentation/visits/pages/info_visit_hospital.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HospitalVisitUser extends StatefulWidget {
   const HospitalVisitUser({super.key});
@@ -29,6 +28,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 12.h,),
           SearchField(
             searchController: searchController,
             onPressed: (value) {
@@ -36,6 +36,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                   .add(SearchHospitalVisitEvent(value: value));
             },
           ),
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -67,48 +68,97 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                 }
                 return ListView.builder(
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return InfoVisitHospital(
-                              hospitalModel: hospitals[index],
-                            );
-                          }));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(AppPaddingH.p8),
-                          padding: EdgeInsets.all(AppPaddingH.p8),
-                          //    height: AppSize.s150,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(color: ColorManager.secondaryColor4)
-                            ],
-                            color: ColorManager.white,
-                            border: Border.all(color: ColorManager.hintGrey),
-                            borderRadius:  BorderRadius.all(
-                                Radius.circular(AppSize.s8)),
-                            //        color: ColorManager.card,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                textAlign: TextAlign.center,
-                                hospitals[index].hospitalModel.title,
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
+                      return Container(
+                        margin: EdgeInsets.only(
+                            bottom: 16.h, right: 8.w, left: 8.w),
+                        padding: EdgeInsets.all(16.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black
+                                  .withOpacity(0.08), // درجة غمق الظل
+                              blurRadius: 15, // مدى نعومة الظل
+                              spreadRadius: 0, // مدى انتشار الظل
+                              offset: const Offset(0,
+                                  6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.shade50,
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  child: Text(hospitals[index].specModel.title ?? "", style
+                                      : TextStyle(color: Colors.blue, fontSize: 12.sp)),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                      textAlign: TextAlign.end,
+                                      hospitals[index].hospitalModel.title ,
+                                      style: TextStyle(
+                                          fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
+                                ),
 
-                              TextRach(
-                                  s1: "العنوان : ",
-                                  s2: hospitals[index].hospitalModel.address),
-                              TextRach(
-                                  s1: "التاريخ الزيار: ",
-                                  s2: formatDateTime(
-                                      hospitals[index].visitHospitalModel.data)),
-                            ],
-                          ),
+                              ],
+                            ),
+                            SizedBox(height: 16.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
+                                SizedBox(width: 8.w,),
+                                Expanded(
+                                  child: Text(
+
+                                      "${hospitals[index].hospitalModel.placeTitle} - ${hospitals[index].hospitalModel.address}",
+                                      style: TextStyle
+                                        (color: Colors.grey,
+                                          fontSize: 15.sp)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16.h),
+                            Divider(color:  Colors.grey,thickness: 0.1,),
+                            SizedBox(height: 8.h),
+                            // أزرار الأكشن
+                            Row(
+                              children: [
+                                Icon(Icons.access_time,size: 18.sp,color: Colors.grey,  fontWeight: FontWeight.bold),
+                                SizedBox(width: 4.w,),
+                                Text(hospitals[index].visitHospitalModel.data,
+                                    style: TextStyle
+                                      (color: Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14.sp)),
+
+                                const Spacer(),
+                                InkWell
+                                  (
+                                  onTap: () {
+                                    Navigator.pushNamed(context,Routes.infoVisitHospital,
+                                      arguments: hospitals[index],
+                                    );
+                                  },
+                                  child: buildCardButton("عرض التفاصيل",
+                                      ColorManager.medicalPrimary,
+                                      Colors.white, Icons.directions_run),
+                                ),
+
+                              ],
+                            ),
+                          ],
                         ),
                       );
                     },

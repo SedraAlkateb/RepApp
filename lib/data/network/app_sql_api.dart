@@ -99,6 +99,8 @@ abstract class AppSqlApiAbs {
   Future<void> exceptionApi(ExceptionModel exceptionModel);
   Future<List<ExceptionModel>> allException();
   Future<NumVisit> numVisit();
+  Future<void> numDocAndHos();
+
 }
 
 class AppSqlApi extends AppSqlApiAbs {
@@ -700,6 +702,7 @@ class AppSqlApi extends AppSqlApiAbs {
     return List.generate(maps.length, (i) {
       VisitDoctorModel visitDoctorModel = VisitDoctorModel.fromMap1(maps[i]);
       DoctorModel doctorModel = DoctorModel.fromMap1(maps[i]);
+      visitDoctorModel.data= visitDoctorModel.data.toString().split('T')[0];
       VisitDoctorAndDoctor visitDoctorAndDoctor =
           VisitDoctorAndDoctor(doctorModel, visitDoctorModel);
       return visitDoctorAndDoctor;
@@ -738,6 +741,7 @@ class AppSqlApi extends AppSqlApiAbs {
       VisitHospitalModel visitHospitalModel =
           VisitHospitalModel.fromMap1(maps[i]);
       HospitalModel hospitalModel = HospitalModel.fromMap1(maps[i]);
+      visitHospitalModel.data= visitHospitalModel.data.toString().split('T')[0];
       SpecDModel specModel = SpecDModel.fromMap2(maps[i]);
       VisitHospitalAndHospital visitHospitalAndHospital =
           VisitHospitalAndHospital(
@@ -1616,4 +1620,22 @@ class AppSqlApi extends AppSqlApiAbs {
 
     print("==============================\n");
   }
+
+  @override
+  Future<void> numDocAndHos() async {
+    Database? mydb = await databaseHelper.database;
+    // استعلام لجلب عدد السجلات من جدول الأطباء
+    final List<Map<String, dynamic>> doctorCountResult =
+    await mydb.rawQuery('SELECT COUNT(*) as total FROM doctor');
+
+    // استعلام لجلب عدد السجلات من جدول المستشفيات
+    final List<Map<String, dynamic>> hospitalCountResult =
+    await mydb.rawQuery('SELECT COUNT(*) as total FROM hospital');
+
+    // استخراج الأرقام من النتائج (الافتراضي 0 في حال كانت القائمة فارغة)
+     UserInfo.numDoctor = Sqflite.firstIntValue(doctorCountResult) ?? 0;
+    UserInfo.numHospital = Sqflite.firstIntValue(hospitalCountResult) ?? 0;
+     // initDoctorModule();
+  }
+
 }

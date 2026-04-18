@@ -25,6 +25,7 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
     return DropdownButtonFormField<dynamic>(
+
       elevation: 3,
       validator: validator,
       hint: Text(
@@ -34,7 +35,7 @@ class CustomDropDown extends StatelessWidget {
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: ColorManager.secondaryColor3,
+        fillColor:  ColorManager.inputBorder,
         prefixIcon: prefixIcon,
         //  focusedBorder:InputBorder.none,
         border: InputBorder.none,
