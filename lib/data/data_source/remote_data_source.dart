@@ -81,6 +81,29 @@ abstract class RemoteDataSource {
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     int repPlanId,
   );
+  Future<Message1Response> pharmacyOrder(
+  PharmacyOrderRequestBody list);
+
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id);
+
+  Future<Message1Response> updateRepPlanBrandAmount(
+      BrandAmountRequestBody list);
+
+  Future<Message1Response> changeRepPlanStatus(int id, int status);
+
+  Future<AllReadResponse> getVisitReadStatus(
+      String visitId,
+      String visitType,
+      );
+  Future<SeniorByCityidBaseResponse> getSeniorByCityid(int cityId);
+  Future<SeniorByCityidBaseResponse> getCityAndTeamleader();
+  Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(
+      int hosId,
+      int spId,
+      );
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(
+      String name,
+      );
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -388,5 +411,51 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
       int repPlanId) async {
     return await _appServiceClient.getinfoPlanBrandsType(repPlanId);
+  }
+
+  @override
+  Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list)async {
+    return await _appServiceClient.pharmacyOrder(list);
+  }
+
+  @override
+  Future<Message1Response> changeRepPlanStatus(int id, int status) async {
+    return await _appServiceClient.changeRepPlanStatus(id, status);
+  }
+
+  @override
+  Future<SeniorByCityidBaseResponse> getCityAndTeamleader() async {
+    return await _appServiceClient.getCityAndTeamleader();
+  }
+
+  @override
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id) async {
+    return await _appServiceClient.getRepsFuture(id);
+  }
+
+  @override
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(String name)async {
+    return await _appServiceClient.getSearchHospitals(name);
+  }
+  @override
+  Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(int hosId, int spId)async {
+    return await _appServiceClient.getSearchHospitalsNotes(hosId,spId);
+  }
+  @override
+  Future<SeniorByCityidBaseResponse> getSeniorByCityid(int cityId) async {
+    return await _appServiceClient.getSeniorByCityid(cityId);
+  }
+
+
+  @override
+  Future<AllReadResponse> getVisitReadStatus(
+      String visitId, String visitType) async {
+    return await _appServiceClient.getVisitReadStatus(visitId, visitType);
+  }
+
+  @override
+  Future<Message1Response> updateRepPlanBrandAmount(
+      BrandAmountRequestBody list) async {
+    return await _appServiceClient.updateRepPlanBrandAmount(list);
   }
 }

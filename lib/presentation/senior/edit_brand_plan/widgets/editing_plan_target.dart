@@ -1,8 +1,6 @@
-// ignore_for_file: must_be_immutable
 
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
@@ -13,9 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EditingPlanTarget extends StatefulWidget {
-  EditingPlanTarget({super.key, required this.repPlan, required this.planBrand});
+  const EditingPlanTarget({super.key, required this.repPlan});
   final int repPlan;
- List<PlanBrandModel> planBrand;
+ 
 
   @override
   State<EditingPlanTarget> createState() => _EditingPlanTargetState();
@@ -30,17 +28,31 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
     // List<PlanBrandModel> planBrand =
     //     context.watch<EditBrandPlanBloc>().planBrands;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: BlocListener<EditBrandPlanBloc, EditBrandPlanState>(
+  listener: (context, state) {
+   if(state is EditeStatusLoadingState){
+     loading(context);
+   }
+   else if(state is EditeStatusFailureState){
+     error(context,state.failure.massage,state.failure.code);
+   }else if(state is EditeStatusState){
+     success(context);
+   }
+  },
+  child: FloatingActionButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        onPressed: () {},
+        onPressed: () {
+          BlocProvider.of<EditBrandPlanBloc>(context).add(EditePlanStatusEvent(widget.repPlan, 0));
+        },
         backgroundColor: ColorManager.secondaryColor1,
         child: Icon(
           Icons.edit_note_outlined,
           color: ColorManager.white,
         ),
       ),
+),
       // appBar: AppBar(
       //   title: Text("تعديل أصناف الخطة"),
       // )
@@ -58,10 +70,10 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
           ),
           BlocBuilder<EditBrandPlanBloc, EditBrandPlanState>(
             builder: (context, state) {
-              // List<PlanBrandModel> planBrand =
-              //     context.watch<EditBrandPlanBloc>().planBrands;
+              List<PlanBrandModel> planBrand =
+                  context.watch<EditBrandPlanBloc>().planBrands;
               if (state is FuturePlanBrandState) {
-                widget.planBrand = state.planbrand;
+                planBrand = state.planbrand;
               }
 
               if (state is FutureSpRepLoadingState) {
@@ -76,11 +88,10 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                   child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      int brandTypeId = int.parse(convertArabicNumberToEnglish(widget.planBrand[index].brandType));
-
+                      int brandTypeId = int.parse(planBrand[index].brandType);
 
                       String brandTypeHintText = "لاشيء";
                       for (var type in brandType) {
@@ -91,8 +102,8 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                       }
 
                       return Container(
-                        margin: EdgeInsets.all(AppPaddingH.p8),
-                        padding: EdgeInsets.all(AppPaddingH.p16),
+                        margin:  EdgeInsets.all(AppPaddingH.p8),
+                        padding:  EdgeInsets.all(AppPaddingH.p16),
                         decoration: BoxDecoration(
                           color: ColorManager.white,
                           border: Border.all(color: ColorManager.hintGrey),
@@ -102,10 +113,15 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                         child: Column(
                           children: [
                             Text(
-                              widget.planBrand[index].title,
+                              planBrand[index].title,
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
-                            SizedBox(
+                            SizedBox(height: 10,),
+                            Text(
+                              planBrand[index].pharmaceuticalForm,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                             SizedBox(
                               height: AppSize.s8,
                             ),
                             BlocConsumer<EditBrandPlanBloc, EditBrandPlanState>(
@@ -128,11 +144,11 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                                     BlocProvider.of<EditBrandPlanBloc>(context)
                                         .add(
                                       FutureChangePlanBrandTypeEvent(
-                                        widget.planBrand[index].id,
+                                        planBrand[index].id,
                                         value.i,
                                       ),
                                     );
-                                    widget.planBrand[index].brandType =
+                                    planBrand[index].brandType =
                                         value.i.toString();
                                     BlocProvider.of<EditBrandPlanBloc>(context)
                                         .add(
@@ -161,7 +177,7 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                         ),
                       );
                     },
-                    itemCount: widget.planBrand.length),
+                    itemCount: planBrand.length),
               ));
             },
           ),

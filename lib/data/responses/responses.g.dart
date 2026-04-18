@@ -264,6 +264,7 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
     TokenResponse(
       json['token'] as String?,
       json['cityId'] as String?,
+      json['cityTitle'] as String?,
       json['repId'] as String?,
       json['otherPlanId'] as String?,
       json['activePlanId'] as String?,
@@ -273,8 +274,8 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['startDate'] as String?,
       json['endDate'] as String?,
       json['recipesCount'] as String?,
-      json['otherStartDate'] as String?,
-      json['otherEndDate'] as String?,
+      json['otherStartDate'] as String? ?? '-9',
+      json['otherEndDate'] as String? ?? '-9',
     )
       ..samplesCount = json['samplesCount'] as String?
       ..repType = json['repType'] as String?;
@@ -283,6 +284,7 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
       'token': instance.token,
       'cityId': instance.cityId,
+      'cityTitle': instance.cityTitle,
       'repId': instance.repId,
       'otherPlanId': instance.otherPlanId,
       'samplesCount': instance.samplesCount,
@@ -294,8 +296,8 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'endDate': instance.endDate,
       'startDate': instance.startDate,
       'recipesCount': instance.recipesCount,
-      if (instance.otherStartDate case final value?) 'otherStartDate': value,
-      if (instance.otherEndDate case final value?) 'otherEndDate': value,
+      'otherStartDate': instance.otherStartDate,
+      'otherEndDate': instance.otherEndDate,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
@@ -965,6 +967,7 @@ PlanBrandResponse _$PlanBrandResponseFromJson(Map<String, dynamic> json) =>
       json['brandType'] as String?,
       json['spId'] as String?,
       json['amount'] as String?,
+      json['pharmaceuticalForm'] as String?,
     )..title = json['title'] as String?;
 
 Map<String, dynamic> _$PlanBrandResponseToJson(PlanBrandResponse instance) =>
@@ -976,6 +979,7 @@ Map<String, dynamic> _$PlanBrandResponseToJson(PlanBrandResponse instance) =>
       'title': instance.title,
       'spId': instance.spId,
       'amount': instance.amount,
+      'pharmaceuticalForm': instance.pharmaceuticalForm,
     };
 
 PlanBrandSpecResponse _$PlanBrandSpecResponseFromJson(
@@ -1690,4 +1694,229 @@ Map<String, dynamic> _$ActiveBrandPlanBaseResponseToJson(
       'status': instance.status,
       'message': instance.message,
       'data': instance.data,
+    };
+
+AllSearchHospitalBaseResponse _$AllSearchHospitalBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllSearchHospitalBaseResponse(
+      allSearchHospitalResponse: AllSearchHospitalResponse.fromJson(
+          json['Hospitals'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllSearchHospitalBaseResponseToJson(
+        AllSearchHospitalBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Hospitals': instance.allSearchHospitalResponse,
+    };
+
+AllSearchHospitalResponse _$AllSearchHospitalResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllSearchHospitalResponse(
+      searchHospital: (json['Hospitals'] as List<dynamic>)
+          .map(
+              (e) => SearchHospitalResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllSearchHospitalResponseToJson(
+        AllSearchHospitalResponse instance) =>
+    <String, dynamic>{
+      'Hospitals': instance.searchHospital,
+    };
+
+SearchHospitalResponse _$SearchHospitalResponseFromJson(
+        Map<String, dynamic> json) =>
+    SearchHospitalResponse(
+      json['hosId'] as String?,
+      json['name'] as String?,
+      json['spId'] as String?,
+    );
+
+Map<String, dynamic> _$SearchHospitalResponseToJson(
+        SearchHospitalResponse instance) =>
+    <String, dynamic>{
+      'hosId': instance.hosId,
+      'name': instance.name,
+      'spId': instance.spId,
+    };
+
+AllSearchHospitalNoteBaseResponse _$AllSearchHospitalNoteBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllSearchHospitalNoteBaseResponse(
+      allSearchHospitalNoteResponse: AllSearchHospitalNoteResponse.fromJson(
+          json['Hospitals'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllSearchHospitalNoteBaseResponseToJson(
+        AllSearchHospitalNoteBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Hospitals': instance.allSearchHospitalNoteResponse,
+    };
+
+AllSearchHospitalNoteResponse _$AllSearchHospitalNoteResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllSearchHospitalNoteResponse(
+      searchHospitalNote: (json['Representative'] as List<dynamic>)
+          .map((e) =>
+              SearchHospitalNoteResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllSearchHospitalNoteResponseToJson(
+        AllSearchHospitalNoteResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.searchHospitalNote,
+    };
+
+SearchHospitalNoteResponse _$SearchHospitalNoteResponseFromJson(
+        Map<String, dynamic> json) =>
+    SearchHospitalNoteResponse(
+      json['hosId'] as String?,
+      json['name'] as String?,
+      json['spId'] as String?,
+      json['note'] as String?,
+      json['issue'] as String?,
+      json['visitDate'] as String?,
+    );
+
+Map<String, dynamic> _$SearchHospitalNoteResponseToJson(
+        SearchHospitalNoteResponse instance) =>
+    <String, dynamic>{
+      'hosId': instance.hosId,
+      'name': instance.name,
+      'spId': instance.spId,
+      'note': instance.note,
+      'issue': instance.issue,
+      'visitDate': instance.visitDate,
+    };
+
+SeniorByCityidBaseResponse _$SeniorByCityidBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    SeniorByCityidBaseResponse(
+      (json['data'] as List<dynamic>?)
+          ?.map(
+              (e) => SeniorByCityidResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$SeniorByCityidBaseResponseToJson(
+        SeniorByCityidBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+SeniorByCityidResponse _$SeniorByCityidResponseFromJson(
+        Map<String, dynamic> json) =>
+    SeniorByCityidResponse(
+      json['rep_id'] as String?,
+      json['rep_name'] as String?,
+      json['city_id'] as String?,
+      json['city_name'] as String?,
+    );
+
+Map<String, dynamic> _$SeniorByCityidResponseToJson(
+        SeniorByCityidResponse instance) =>
+    <String, dynamic>{
+      'rep_id': instance.rep_id,
+      'rep_name': instance.rep_name,
+      'city_id': instance.city_id,
+      'city_name': instance.city_name,
+    };
+
+AllReadResponse _$AllReadResponseFromJson(Map<String, dynamic> json) =>
+    AllReadResponse(
+      (json['data'] as List<dynamic>?)
+              ?.map((e) => ReadResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllReadResponseToJson(AllReadResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.readResponse,
+    };
+
+ReadResponse _$ReadResponseFromJson(Map<String, dynamic> json) => ReadResponse(
+      json['userId'] as String?,
+      json['name'] as String?,
+      json['repType'] as String?,
+      json['role'] as String?,
+    );
+
+Map<String, dynamic> _$ReadResponseToJson(ReadResponse instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'name': instance.name,
+      'repType': instance.repType,
+      'role': instance.role,
+    };
+
+AllRepresentativeFutureBaseResponse
+    _$AllRepresentativeFutureBaseResponseFromJson(Map<String, dynamic> json) =>
+        AllRepresentativeFutureBaseResponse(
+          json['Representative'] == null
+              ? null
+              : AllRepresentativeFutureResponse.fromJson(
+                  json['Representative'] as Map<String, dynamic>),
+        )
+          ..status = json['status'] as String?
+          ..message = json['message'] as String?;
+
+Map<String, dynamic> _$AllRepresentativeFutureBaseResponseToJson(
+        AllRepresentativeFutureBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Representative': instance.data,
+    };
+
+AllRepresentativeFutureResponse _$AllRepresentativeFutureResponseFromJson(
+        Map<String, dynamic> json) =>
+    AllRepresentativeFutureResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map((e) =>
+              RepresentativeFutureResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AllRepresentativeFutureResponseToJson(
+        AllRepresentativeFutureResponse instance) =>
+    <String, dynamic>{
+      'Representative': instance.data,
+    };
+
+RepresentativeFutureResponse _$RepresentativeFutureResponseFromJson(
+        Map<String, dynamic> json) =>
+    RepresentativeFutureResponse(
+      json['repId'] as String?,
+      json['name'] as String?,
+      json['flag'] as String?,
+      json['futurePlan'] as String?,
+      json['samplesCount'] as String?,
+    );
+
+Map<String, dynamic> _$RepresentativeFutureResponseToJson(
+        RepresentativeFutureResponse instance) =>
+    <String, dynamic>{
+      'repId': instance.id,
+      'name': instance.name,
+      'flag': instance.flag,
+      'futurePlan': instance.futurePlan,
+      'samplesCount': instance.samplesCount,
     };

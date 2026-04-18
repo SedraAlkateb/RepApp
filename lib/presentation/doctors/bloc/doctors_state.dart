@@ -39,16 +39,46 @@ final class AllDoctorEmptyState extends DoctorsState{
 final class CheckRecipesState extends DoctorsState {
   final bool isCheck;
   final int st;
-  CheckRecipesState(this.isCheck,this.st);
+  final  int docId;
+  CheckRecipesState(this.isCheck,this.st,this.docId);
   List<Object?> get props => [isCheck];
 }
 final class CheckRecipesErrorState extends DoctorsState {
   final Failure failure;
-  CheckRecipesErrorState({required this.failure});
+  final  int docId;
+  CheckRecipesErrorState(this.docId,{required this.failure});
   @override
   List<Object?> get props =>[failure];
 }
 final class CheckRecipesLoadingState extends DoctorsState {
+ final  int docId;
+  CheckRecipesLoadingState(this.docId);
   @override
   List<Object?> get props => [];
+}
+
+final class AllHospitalsState extends DoctorsState {
+  final List<HospitalSpAllModel> hospital;
+  AllHospitalsState(this.hospital);
+  @override
+  List<Object?> get props =>[hospital];
+}
+final class  AllHospitalErrorState extends DoctorsState {
+  final Failure failure;
+  AllHospitalErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class  AllHospitalLoadingState extends DoctorsState {
+  @override
+  AllHospitalLoadingState();
+  @override
+  List<Object?> get props =>[];
+}
+final class  AllHospitalEmptyState extends DoctorsState {
+  @override
+  AllHospitalEmptyState();
+  @override
+  List<Object?> get props =>[];
 }

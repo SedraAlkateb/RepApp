@@ -2,11 +2,13 @@
 
 part of 'app_api.dart';
 
+// dart format off
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main
 
 class _AppServiceClient implements AppServiceClient {
   _AppServiceClient(this._dio, {this.baseUrl, this.errorLogger}) {
@@ -43,7 +45,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = LoginResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -71,7 +73,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllPlaceBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -99,7 +101,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllSpcBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -127,7 +129,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllCityBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -155,7 +157,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllBrandBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -183,7 +185,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllPharmacyBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -211,7 +213,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllDoctorsBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -239,7 +241,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllHospitalBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -267,7 +269,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllHospitalSpBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -295,7 +297,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllBrandSpBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -330,7 +332,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllPlanBrandsBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -359,7 +361,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = SearchDoctorsBaseSpResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -387,7 +389,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = DocDoctorsBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -419,7 +421,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = VisitHospitalBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -451,7 +453,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = VisitDoctorBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -479,7 +481,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -507,7 +509,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -546,7 +548,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllPlanBrandsBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -585,7 +587,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = PlanBrandsBaseSpResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -613,7 +615,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -641,7 +643,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -670,7 +672,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = LoginResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -698,7 +700,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllBrandResResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -726,7 +728,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = CheckReResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -754,7 +756,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = CheckRepResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -809,30 +811,26 @@ class _AppServiceClient implements AppServiceClient {
       _data.fields.add(MapEntry('note2', note2));
     }
     if (image1 != null) {
-      if (image1 != null) {
-        _data.files.add(
-          MapEntry(
-            'image1',
-            MultipartFile.fromFileSync(
-              image1.path,
-              filename: image1.path.split(Platform.pathSeparator).last,
-            ),
+      _data.files.add(
+        MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
           ),
-        );
-      }
+        ),
+      );
     }
     if (image2 != null) {
-      if (image2 != null) {
-        _data.files.add(
-          MapEntry(
-            'image2',
-            MultipartFile.fromFileSync(
-              image2.path,
-              filename: image2.path.split(Platform.pathSeparator).last,
-            ),
+      _data.files.add(
+        MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
           ),
-        );
-      }
+        ),
+      );
     }
     if (brand_2 != null) {
       _data.fields.add(MapEntry('brand_2', brand_2));
@@ -861,7 +859,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -888,7 +886,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = ReciNumResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -917,7 +915,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = CopyRecResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -945,7 +943,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = CopyRecResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -974,7 +972,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllRepresentativeBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1002,7 +1000,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllVisitNotesBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1030,7 +1028,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllNoVisitDoctorBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1060,7 +1058,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllNoVisitDoctorBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1088,7 +1086,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllNoVisitDoctorBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1116,7 +1114,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllVisitIssueBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1144,7 +1142,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1172,7 +1170,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = InventoryResponseBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1200,7 +1198,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllRepInfoResponseBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1232,7 +1230,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllRepVisitsResponseBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1268,7 +1266,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1304,7 +1302,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1336,7 +1334,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllRepVisitsResponseBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1365,7 +1363,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1393,7 +1391,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = AllReciBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1421,7 +1419,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = InfoDoctorBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1485,30 +1483,26 @@ class _AppServiceClient implements AppServiceClient {
       _data.fields.add(MapEntry('note_emp', note_emp));
     }
     if (image1 != null) {
-      if (image1 != null) {
-        _data.files.add(
-          MapEntry(
-            'image1',
-            MultipartFile.fromFileSync(
-              image1.path,
-              filename: image1.path.split(Platform.pathSeparator).last,
-            ),
+      _data.files.add(
+        MapEntry(
+          'image1',
+          MultipartFile.fromFileSync(
+            image1.path,
+            filename: image1.path.split(Platform.pathSeparator).last,
           ),
-        );
-      }
+        ),
+      );
     }
     if (image2 != null) {
-      if (image2 != null) {
-        _data.files.add(
-          MapEntry(
-            'image2',
-            MultipartFile.fromFileSync(
-              image2.path,
-              filename: image2.path.split(Platform.pathSeparator).last,
-            ),
+      _data.files.add(
+        MapEntry(
+          'image2',
+          MultipartFile.fromFileSync(
+            image2.path,
+            filename: image2.path.split(Platform.pathSeparator).last,
           ),
-        );
-      }
+        ),
+      );
     }
     if (brand_2 != null) {
       _data.fields.add(MapEntry('brand_2', brand_2));
@@ -1540,7 +1534,7 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = Message1Response.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1570,7 +1564,297 @@ class _AppServiceClient implements AppServiceClient {
     try {
       _value = ActiveBrandPlanBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(list.toJson());
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/pharmacyOrder.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<CheckBaseResponse> checkPlanBrand(int repPlanId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    final _options = _setStreamType<CheckBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/checkPlanStatus.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CheckBaseResponse _value;
+    try {
+      _value = CheckBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repDet', id.toString()));
+    final _options = _setStreamType<AllRepresentativeFutureBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getRepsFuture.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllRepresentativeFutureBaseResponse _value;
+    try {
+      _value = AllRepresentativeFutureBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> changeRepPlanStatus(int id, int status) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('id', id.toString()));
+    _data.fields.add(MapEntry('status', status.toString()));
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/changeRepPlanStatus.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllReadResponse> getVisitReadStatus(
+    String visitId,
+    String visitType,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('VisitId', visitId));
+    _data.fields.add(MapEntry('visitType', visitType));
+    final _options = _setStreamType<AllReadResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getVisitReadStatus.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllReadResponse _value;
+    try {
+      _value = AllReadResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<SeniorByCityidBaseResponse> getSeniorByCityid(int cityId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('cityId', cityId.toString()));
+    final _options = _setStreamType<SeniorByCityidBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getSeniorByCityid.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SeniorByCityidBaseResponse _value;
+    try {
+      _value = SeniorByCityidBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<SeniorByCityidBaseResponse> getCityAndTeamleader() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<SeniorByCityidBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getCityAndTeamleader.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SeniorByCityidBaseResponse _value;
+    try {
+      _value = SeniorByCityidBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(
+    int hosId,
+    int spId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('hosId', hosId.toString()));
+    _data.fields.add(MapEntry('spId', spId.toString()));
+    final _options = _setStreamType<AllSearchHospitalNoteBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getHospitalsNotes.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllSearchHospitalNoteBaseResponse _value;
+    try {
+      _value = AllSearchHospitalNoteBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(String name) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('name', name));
+    final _options = _setStreamType<AllSearchHospitalBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getHospitals.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllSearchHospitalBaseResponse _value;
+    try {
+      _value = AllSearchHospitalBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<Message1Response> updateRepPlanBrandAmount(
+    BrandAmountRequestBody list,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(list.toJson());
+    final _options = _setStreamType<Message1Response>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/updateRepPlanBrandAmount.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Message1Response _value;
+    try {
+      _value = Message1Response.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1603,3 +1887,5 @@ class _AppServiceClient implements AppServiceClient {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
+
+// dart format on

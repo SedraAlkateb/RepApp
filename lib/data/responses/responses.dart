@@ -253,6 +253,8 @@ class TokenResponse {
   String? token;
   @JsonKey(name: "cityId")
   String? cityId;
+  @JsonKey(name: "cityTitle")
+  String? cityTitle;
   @JsonKey(name: "repId")
   String? repId;
   @JsonKey(name: "otherPlanId")
@@ -275,13 +277,14 @@ class TokenResponse {
   String? startDate;
   @JsonKey(name: "recipesCount")
   String? recipesCount;
-  @JsonKey(name: "otherStartDate", includeIfNull: false)
+  @JsonKey(name: "otherStartDate", defaultValue: "-9")
   String? otherStartDate;
-  @JsonKey(name: "otherEndDate", includeIfNull: false)
+  @JsonKey(name: "otherEndDate", defaultValue: "-9")
   String? otherEndDate;
   TokenResponse(
       this.token,
       this.cityId,
+      this.cityTitle,
       this.repId,
       this.otherPlanId,
       this.activePlanId,
@@ -884,9 +887,11 @@ class PlanBrandResponse {
   String? spId;
   @JsonKey(name: "amount")
   String? amount;
+  @JsonKey(name: "pharmaceuticalForm")
+  String? pharmaceuticalForm;
 
   PlanBrandResponse(this.id, this.repPlanId, this.brandId, this.brandType,
-      this.spId, this.amount);
+      this.spId, this.amount, this.pharmaceuticalForm);
   // from json
   factory PlanBrandResponse.fromJson(Map<String, dynamic> json) =>
       _$PlanBrandResponseFromJson(json);
@@ -1517,9 +1522,215 @@ class ActiveBrandPlanResponse {
 @JsonSerializable()
   class ActiveBrandPlanBaseResponse extends BaseResponse{
   @JsonKey(name: "data", defaultValue: [])
-  List<ActiveBrandPlanResponse>? data;
+  List<ActiveBrandPlanResponse> data;
   ActiveBrandPlanBaseResponse(this.data);
   factory ActiveBrandPlanBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$ActiveBrandPlanBaseResponseFromJson(json);
   Map<String, dynamic> toJson() => _$ActiveBrandPlanBaseResponseToJson(this);
+}
+@JsonSerializable()
+class AllSearchHospitalBaseResponse extends BaseResponse {
+  @JsonKey(name: 'Hospitals')
+  AllSearchHospitalResponse allSearchHospitalResponse;
+
+  AllSearchHospitalBaseResponse({
+    required this.allSearchHospitalResponse,
+  });
+
+  // from json
+  factory AllSearchHospitalBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllSearchHospitalBaseResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() => _$AllSearchHospitalBaseResponseToJson(this);
+}
+@JsonSerializable()
+class AllSearchHospitalResponse {
+  @JsonKey(name: 'Hospitals')
+  List<SearchHospitalResponse> searchHospital;
+
+  AllSearchHospitalResponse({
+    required this.searchHospital,
+  });
+
+  // from json
+  factory AllSearchHospitalResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllSearchHospitalResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() => _$AllSearchHospitalResponseToJson(this);
+}
+@JsonSerializable()
+class SearchHospitalResponse {
+  @JsonKey(name: "hosId")
+  String? hosId;
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "spId")
+  String? spId;
+
+  SearchHospitalResponse(this.hosId, this.name, this.spId); // from json
+  factory SearchHospitalResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchHospitalResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() => _$SearchHospitalResponseToJson(this);
+}
+@JsonSerializable()
+class AllSearchHospitalNoteBaseResponse extends BaseResponse {
+  @JsonKey(name: 'Hospitals')
+  AllSearchHospitalNoteResponse allSearchHospitalNoteResponse;
+
+  AllSearchHospitalNoteBaseResponse({
+    required this.allSearchHospitalNoteResponse,
+  });
+
+  // from json
+  factory AllSearchHospitalNoteBaseResponse.fromJson(
+      Map<String, dynamic> json) =>
+      _$AllSearchHospitalNoteBaseResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() =>
+      _$AllSearchHospitalNoteBaseResponseToJson(this);
+}
+@JsonSerializable()
+class AllSearchHospitalNoteResponse {
+  @JsonKey(name: 'Representative')
+  List<SearchHospitalNoteResponse> searchHospitalNote;
+
+  AllSearchHospitalNoteResponse({
+    required this.searchHospitalNote,
+  });
+
+  // from json
+  factory AllSearchHospitalNoteResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllSearchHospitalNoteResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() => _$AllSearchHospitalNoteResponseToJson(this);
+}
+@JsonSerializable()
+class SearchHospitalNoteResponse {
+  @JsonKey(name: "hosId")
+  String? hosId;
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "note")
+  String? note;
+  @JsonKey(name: "issue")
+  String? issue;
+  @JsonKey(name: "visitDate")
+  String? visitDate;
+
+  SearchHospitalNoteResponse(
+      this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);
+
+  factory SearchHospitalNoteResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchHospitalNoteResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() => _$SearchHospitalNoteResponseToJson(this);
+}
+
+@JsonSerializable()
+class SeniorByCityidBaseResponse extends BaseResponse {
+  List<SeniorByCityidResponse>? data;
+  SeniorByCityidBaseResponse(this.data);
+  factory SeniorByCityidBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$SeniorByCityidBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$SeniorByCityidBaseResponseToJson(this);
+}
+@JsonSerializable()
+class SeniorByCityidResponse {
+  @JsonKey(name: "rep_id")
+  String? rep_id;
+  @JsonKey(name: "rep_name")
+  String? rep_name;
+  @JsonKey(name: "city_id")
+  String? city_id;
+  @JsonKey(name: "city_name")
+  String? city_name;
+  SeniorByCityidResponse(
+      this.rep_id, this.rep_name, this.city_id, this.city_name);
+  factory SeniorByCityidResponse.fromJson(Map<String, dynamic> json) =>
+      _$SeniorByCityidResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$SeniorByCityidResponseToJson(this);
+}
+
+@JsonSerializable()
+class AllReadResponse extends BaseResponse {
+  @JsonKey(name: "data", defaultValue: [])
+  List<ReadResponse>? readResponse;
+  AllReadResponse(this.readResponse);
+  factory AllReadResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllReadResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$AllReadResponseToJson(this);
+}
+@JsonSerializable()
+class ReadResponse {
+  @JsonKey(name: "userId")
+  String? userId;
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "repType")
+  String? repType;
+  @JsonKey(name: "role")
+  String? role;
+
+  ReadResponse(this.userId, this.name, this.repType, this.role); // from json
+  factory ReadResponse.fromJson(Map<String, dynamic> json) =>
+      _$ReadResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$ReadResponseToJson(this);
+}
+
+@JsonSerializable()
+class AllRepresentativeFutureBaseResponse extends BaseResponse {
+  @JsonKey(name: "Representative")
+  AllRepresentativeFutureResponse? data;
+  AllRepresentativeFutureBaseResponse(this.data);
+  // from json
+  factory AllRepresentativeFutureBaseResponse.fromJson(
+      Map<String, dynamic> json) =>
+      _$AllRepresentativeFutureBaseResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() =>
+      _$AllRepresentativeFutureBaseResponseToJson(this);
+}
+@JsonSerializable()
+class AllRepresentativeFutureResponse {
+  @JsonKey(name: "Representative")
+  List<RepresentativeFutureResponse>? data;
+  AllRepresentativeFutureResponse(this.data);
+  // from json
+  factory AllRepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>
+      _$AllRepresentativeFutureResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() =>
+      _$AllRepresentativeFutureResponseToJson(this);
+}
+@JsonSerializable()
+class RepresentativeFutureResponse {
+  @JsonKey(name: "repId")
+  String? id;
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "flag")
+  String? flag;
+  @JsonKey(name: "futurePlan")
+  String? futurePlan;
+  @JsonKey(name: "samplesCount")
+  String? samplesCount;
+
+  RepresentativeFutureResponse(
+      this.id, this.name, this.flag, this.futurePlan, this.samplesCount);
+
+  // from json
+  factory RepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>
+      _$RepresentativeFutureResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$RepresentativeFutureResponseToJson(this);
 }

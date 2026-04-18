@@ -1,12 +1,11 @@
-// ignore_for_file: deprecated_member_use
 
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
+import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart';
+import 'package:domina_app/presentation/plase_visit/widget/animation_press.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -16,11 +15,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Places extends StatelessWidget {
+class Places extends StatefulWidget {
   Places({super.key});
+
+  @override
+  State<Places> createState() => _PlacesState();
+}
+
+class _PlacesState extends State<Places> {
+  @override
+  void initState() {
+  BlocProvider.of<PlaceBloc>(context).add(NumEvent());
+    super.initState();
+  }
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
@@ -59,9 +71,9 @@ class Places extends StatelessWidget {
                                   style: TextStyle(
                                       fontFamily: 'Tajawal',
                                       fontSize: 22.sp,
-                                      fontWeight: FontWeight.w500, 
+                                      fontWeight: FontWeight.w500,
                                       color: ColorManager.secondaryColor1,
-                                     // fontWeight: FontWeight.bold,
+                                      // fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.none),
                                 ),
                               ),
@@ -89,7 +101,17 @@ class Places extends StatelessWidget {
     });
     return Scaffold(
       drawer: DrawerPage(),
+      backgroundColor: ColorManager.medicalBg,
       appBar: AppBar(
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize:
+              const Size.fromHeight(1.0), // هنا نحدد الارتفاع (سماكة الخط)
+          child: Container(
+            color: ColorManager.medicalBorder, // لون الخط
+            height: 1.0, // ارتفاع الحاوية التي تمثل الخط
+          ),
+        ),
         leading: Builder(
           builder: (BuildContext context) {
             return Center(
@@ -170,15 +192,17 @@ class Places extends StatelessWidget {
                   ],
                 ))
             : SizedBox(),
-        SizedBox(
-          height: 10,
-        ),
-        SearchField(
-          searchController: searchController,
-          onPressed: (value) {
-            BlocProvider.of<PlaceBloc>(context)
-                .add(SearchPlaceEvent(value: value));
-          },
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 15),
+          child: SearchField(
+            //
+            searchController: searchController,
+            onPressed: (value) {
+              BlocProvider.of<PlaceBloc>(context)
+                  .add(SearchPlaceEvent(value: value));
+            },
+          ),
         ),
         Expanded(
           child: BlocConsumer<PlaceBloc, PlaceState>(
@@ -210,50 +234,28 @@ class Places extends StatelessWidget {
                 placeModel = state.places;
               }
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.builder(
+                  itemCount: placeModel.length,
                   itemBuilder: (context, index) {
-                    return InkWell(
+                    return AnimatedPlaceCard(
+                      place: placeModel[index],
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return PlaceVisitPage(
-                                placeId: placeModel[index].placeId);
-                          },
-                        ));
+                        print(placeModel[index].placeId);
+                        Navigator.pushNamed(
+                          context,
+                          Routes.placeVisitPage,
+                          arguments: placeModel[index].placeId, // نرسل الـ ID هنا
+                        );
                         BlocProvider.of<VisitPlaceBloc>(context).add(
                           DoctorByPlace(placeModel[index].placeId, 0),
                         );
                       },
-                      child: Container(
-                        margin: EdgeInsets.all(AppPaddingH.p8),
-                        padding: EdgeInsets.all(AppPaddingH.p16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            ColorManager.secondaryColor6,
-                            ColorManager.secondaryColor7,
-                            ColorManager.secondaryColor7,
-                          ]),
-                          color: ColorManager.white,
-                          borderRadius:  BorderRadius.all(
-                              Radius.circular(AppSize.s8)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              placeModel[index].title,
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ],
-                        ),
-                      ),
                     );
                   },
-                  itemCount: placeModel.length,
                 ),
               );
+
             },
           ),
         ),

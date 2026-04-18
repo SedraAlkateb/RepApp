@@ -1,2 +1,0 @@
-C:/Users/amenama/Desktop/repapp/android/app/.cxx/Debug/4u2xk711/x86/CMakeFiles/edit_cache.dir
-C:/Users/amenama/Desktop/repapp/android/app/.cxx/Debug/4u2xk711/x86/CMakeFiles/rebuild_cache.dir

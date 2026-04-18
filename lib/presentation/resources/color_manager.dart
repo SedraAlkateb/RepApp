@@ -40,4 +40,25 @@ class ColorManager {
   static Color secondaryColor19=const   Color(0xffc358c1);
   static Color secondaryColor20=const   Color(0x69c7adc7);
   static Color secondaryColor22 = const Color.fromARGB(255, 25, 51, 87);
+//////////////////////////////
+
+
+  static const Color medicalPrimary   = Color(0xff0F4C81); // Classic Blue
+  static const Color medicalSecondary = Color(0xff3B82F6);
+  static const Color medicalAccent    = Color(0xff10B981); // Emerald
+  static const Color medicalSurface   = Color(0xffFFFFFF);
+  static const Color medicalBg        = Color(0xffF8FAFC);
+  static const Color medicalBorder    = Color(0xffE2E8F0);
+  static const Color medicalText      = Color(0xff1E293B);
+  static const Color medicalMuted     = Color(0xff64748B);
+  static const Color background     = Color(0xFFF8FAFC);
+  static const Color inputBorder     = Color(0xFFF1F5F9);
+
+  ///////////Admin page
+  static const Color primaryBlue = Color(0xFF3498DB);
+  static const Color primaryText = Color(0xFF2C3E50);
+  static const Color darkBlueCard = Color(0xFF1F4E79);
+  static const Color lightPurple = Color(0xFFF4ECF7);
+  static const Color bgGrey = Color(0xFFF8F9FD);
+
 }

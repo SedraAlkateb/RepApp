@@ -50,3 +50,21 @@ final class FutureChangePlanBrandTypeErrorState extends EditBrandPlanState {
   @override
   List<Object?> get props => [failure];
 }
+final class EditeStatusLoadingState extends EditBrandPlanState {
+  @override
+  EditeStatusLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class EditeStatusFailureState extends EditBrandPlanState {
+  final Failure failure;
+  EditeStatusFailureState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class EditeStatusState extends EditBrandPlanState {
+  @override
+  EditeStatusState();
+  @override
+  List<Object?> get props => [];
+}

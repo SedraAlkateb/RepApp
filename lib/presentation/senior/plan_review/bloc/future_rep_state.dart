@@ -57,3 +57,32 @@ final class SumErrorState extends FutureRepState {
   @override
   List<Object?> get props => [failure];
 }
+final class UpdateAmountLoadingState extends FutureRepState {
+  @override
+  UpdateAmountLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class UpdateAmountState extends FutureRepState {
+  UpdateAmountState();
+  @override
+  List<Object?> get props => [];
+}
+final class EditeStatusLoadingState extends FutureRepState {
+  @override
+  EditeStatusLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class EditeStatusFailureState extends FutureRepState {
+  final Failure failure;
+  EditeStatusFailureState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class EditeStatusState extends FutureRepState {
+  @override
+  EditeStatusState();
+  @override
+  List<Object?> get props => [];
+}

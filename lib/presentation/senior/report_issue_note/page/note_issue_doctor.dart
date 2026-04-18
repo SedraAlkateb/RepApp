@@ -31,7 +31,7 @@ class NoteIssueDoctor extends StatelessWidget {
             );
           },
         ),
-        title: Text('ملاحظات مستودع قاسيون'),
+        title: Text('ملاحظة صيدلية مجاورة'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),

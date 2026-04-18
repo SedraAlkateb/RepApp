@@ -8,7 +8,7 @@ part 'freezed_data.freezed.dart';
 
 
 @freezed
-class DailyReservationObject with _$DailyReservationObject {
+abstract class DailyReservationObject with _$DailyReservationObject {
   factory DailyReservationObject(
       int tripId,
       String name,
@@ -23,7 +23,7 @@ class DailyReservationObject with _$DailyReservationObject {
 
 
 @freezed
-class InsertRecipesObject with _$InsertRecipesObject {
+abstract class InsertRecipesObject with _$InsertRecipesObject {
   factory InsertRecipesObject(
     String repId,
     String type,

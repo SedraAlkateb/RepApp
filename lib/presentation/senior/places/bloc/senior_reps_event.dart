@@ -4,15 +4,14 @@ part of 'senior_reps_bloc.dart';
 abstract class SeniorRepsEvent  extends Equatable{
 }
 class AllSeniorRepEvent extends SeniorRepsEvent {
-  final int cityId;
-  AllSeniorRepEvent(this.cityId);
-  @override
-  List<Object?> get props => [cityId];
-}
-class AllCityEvent extends SeniorRepsEvent {
+  AllSeniorRepEvent();
   @override
   List<Object?> get props => [];
 }
+// class AllCityEvent extends SeniorRepsEvent {
+//   @override
+//   List<Object?> get props => [];
+// }
 class SenSearchRepEvent extends SeniorRepsEvent{
   final String contant;
   SenSearchRepEvent(this.contant);

@@ -2,11 +2,12 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class RowList extends StatelessWidget {
   const RowList({super.key,required this.text,required this.icon1,this.function});
 final
 String text;
-final IconData icon1;
+final FaIconData icon1;
   final VoidCallback ?function;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,8 @@ final IconData icon1;
                       top: Radius.circular(10),
                       bottom: Radius.circular(10)),
                 ),
-                child: Icon(
+                child: FaIcon(
+
                   icon1,
                   color: ColorManager.secondaryColor2,
                 )),

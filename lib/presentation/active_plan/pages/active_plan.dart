@@ -1,12 +1,11 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
-
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ActivePlanPage extends StatefulWidget {
   @override
@@ -15,257 +14,176 @@ class ActivePlanPage extends StatefulWidget {
 
 class _BrandPlanActivePageState extends State<ActivePlanPage>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-                  Icons.arrow_back,
-                  color: ColorManager.secondaryColor1,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              );
-            },
+      appBar: AppBar(
+        title: const Text('الخطة الفعالة'),
+      ),
+      body: BlocConsumer<ActivePlanBloc, ActivePlanState>(
+        listener: (context, state) {
+          if (state is AllActivePlanErrorState) {
+            error(context, state.failure.massage, state.failure.code);
+          }
+        },
+        builder: (context, state) {
+          List<ActivePlanBrandModel> planBrandModel =
+              context.watch<ActivePlanBloc>().activePlan;
+
+          if (state is AllActivePlanLoadingState) {
+            return loadingShimmer(context, 20, 25, 150, BorderRadius.circular(20));
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+            itemCount: planBrandModel.length,
+            itemBuilder: (context, index) => BrandPlanCard(model: planBrandModel[index]),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+// ويدجيت الـ Card المطور بناءً على التصميم
+class BrandPlanCard extends StatelessWidget {
+  final ActivePlanBrandModel model;
+
+  const BrandPlanCard({super.key, required this.model});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
-          title: const Text('الخطة الفعالة'),
-        ),
-        backgroundColor: ColorManager.white,
-        //  drawer: DrawerPage(),
-        body: MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: SingleChildScrollView(
-            child: Column(
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // الجزء العلوي الملون (Header)
+          Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              // تلوين الخلفية بلون أزرق فاتح جداً أو شفافية من اللون الأساسي
+              color: ColorManager.secondaryColor3,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.r),
+                topRight: Radius.circular(25.r),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // const SizedBox(
-                //   height: 50,
-                // ),
-                //  dataPlan(UserInfo.startDate, UserInfo.endDate),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10),
-                  child: BlocConsumer<ActivePlanBloc, ActivePlanState>(
-                    listener: (context, state) {
-                      if (state is AllActivePlanErrorState) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                      }
-                    },
-                    builder: (context, state) {
-                      List<ActivePlanBrandModel> planBrandModel =
-                          context.watch<ActivePlanBloc>().activePlan;
-                      if (state is AllActivePlanLoadingState) {
-                        return loadingShimmer(
-                            context, 20, 25, 150, BorderRadius.circular(20));
-                      }
-                      return Column(
-                        children: [
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) => Container(
-                              margin:  EdgeInsets.all(AppPaddingH.p8),
-                              //  padding: EdgeInsets.all(AppPadding.p16),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: ColorManager.secondaryColor3),
-                                ],
-                                color: ColorManager.white,
-                                border: Border.all(
-                                    color: ColorManager.secondaryColor7),
-                                borderRadius:  BorderRadius.all(
-                                    Radius.circular(AppSize.s8)),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: ColorManager.secondaryColor7,
-                                      border: Border.symmetric(
-                                          vertical: BorderSide(
-                                              color: ColorManager
-                                                  .secondaryColor7)),
-                                      borderRadius:  BorderRadius.all(
-                                          Radius.circular(AppSize.s8)),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 8,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                //  '22'
-                                                planBrandModel[index].title,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium,
-                                              ),
-                                              Container(
-                                                margin:
-                                                     EdgeInsets.symmetric(
-                                                        horizontal:
-                                                            AppPaddingW.p8),
-                                                padding:
-                                                     EdgeInsets.symmetric(
-                                                  vertical: AppPaddingH.p8,
-                                                  horizontal: AppPaddingW.p14,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: planBrandModel[index]
-                                                              .type ==
-                                                          "هدف"
-                                                      ? ColorManager
-                                                          .secondaryColor1
-                                                      : ColorManager
-                                                          .secondaryColor2,
-                                                  borderRadius:
-                                                       BorderRadius.all(
-                                                    Radius.circular(AppSize.s8),
-                                                  ),
-                                                ),
-                                                child: Text(
-                                                  planBrandModel[index].type,
-                                                  style: TextStyle(
-                                                    color: ColorManager.white,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "النوع : ${planBrandModel[index].title}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Divider(color: ColorManager.secondaryColor7),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Icon(
-                                            Icons.medical_services_outlined,
-                                            color: ColorManager.secondaryColor4,
-                                          ),
-                                        ),
-                                        Text(
-                                          'الاختصاص ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Divider(
-                                    thickness: 0.5,
-                                    color: ColorManager.secondaryColor7,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: ListView.separated(
-                                      separatorBuilder: (context, index) =>
-                                          Divider(
-                                        thickness: 0.5,
-                                        color: ColorManager.secondaryColor7,
-                                      ),
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          planBrandModel[index].spPlan.length,
-                                      itemBuilder: (context, index1) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${planBrandModel[index].spPlan[index1].name} :',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineMedium,
-                                              ),
-                                              Text(
-                                                ' ${planBrandModel[index].spPlan[index1].amount}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineMedium,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            itemCount: planBrandModel.length,
-                          ),
-                        ],
-                      );
-                    },
+                Text(
+                  model.title,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0D47A1),
+                  ),
+                ),
+                // شارة "هدف"
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // جعل الشارة بيضاء لتبرز فوق الخلفية الملونة
+                    borderRadius: BorderRadius.circular(10.r),
+                    border: Border.all(color: const Color(0xFFE3F2FD)),
+                  ),
+                  child: Text(
+                    model.type,
+                    style: TextStyle(
+                      color: const Color(0xFF2196F3),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ));
-  }
 
-  @override
-  bool get wantKeepAlive => true;
+          // إزالة الـ Divider لأنه تم تمييز الجزء العلوي باللون
+          // const Divider(height: 1),
+
+          // قسم "توزيع الأهداف حسب الاختصاص"
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 16.sp, color: Colors.grey),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "توزيع الأهداف حسب الاختصاص",
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: Colors.blueGrey[700],
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+
+                // قائمة الاختصاصات داخل مربعات
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: model.spPlan.length,
+                  itemBuilder: (context, i) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(15.r),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            model.spPlan[i].name,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: const Color(0xFF334155),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            model.spPlan[i].amount,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF0D47A1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
