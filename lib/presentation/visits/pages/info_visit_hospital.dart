@@ -78,9 +78,9 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                   ),
 
                   SizedBox(height: 15.h),
-                  // القسم الثالث: ملاحظات المكتب العلمي
+                  // القسم الثالث: ملاحظة المكتب العلمي
                   buildEditableSection(
-                    title: "ملاحظات للمكتب العلمي",
+                    title: "ملاحظة للمكتب العلمي",
                     controller: _noteController,
                     icon: Icons.note_alt_outlined,
                     isEditable: isEditable,
@@ -93,7 +93,7 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                   if (_issueController.text.isNotEmpty || isEditable) ...[
                     SizedBox(height: 15.h),
                     buildEditableSection(
-                      title: "ملاحظات لمستودع قاسيون",
+                      title: "ملاحظة صيدلية مجاورة",
                       controller: _issueController,
                       icon: Icons.warehouse_outlined,
                       isEditable: isEditable,

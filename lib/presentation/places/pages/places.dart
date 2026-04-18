@@ -2,7 +2,7 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/drawer/pages/drawer_page.dart';
+import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/widget/animation_press.dart';
@@ -15,11 +15,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Places extends StatelessWidget {
+class Places extends StatefulWidget {
   Places({super.key});
+
+  @override
+  State<Places> createState() => _PlacesState();
+}
+
+class _PlacesState extends State<Places> {
+  @override
+  void initState() {
+  BlocProvider.of<PlaceBloc>(context).add(NumEvent());
+    super.initState();
+  }
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.read<PlaceBloc>().k == 0) {
@@ -242,7 +255,7 @@ class Places extends StatelessWidget {
                   },
                 ),
               );
-              ;
+
             },
           ),
         ),

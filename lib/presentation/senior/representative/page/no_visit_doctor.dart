@@ -8,175 +8,211 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class NoVisitDoctor extends StatelessWidget {
   NoVisitDoctor({super.key});
-  final TextEditingController searchNoteDoctorController =
-      TextEditingController();
+  final TextEditingController searchNoteDoctorController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  title: Text('عدد زيارات الأطباء الذين لم تتم زيارتهم'),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.arrow_back_sharp,
-                color: ColorManager.secondaryColor1,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        title: const Text('أطباء لم يتم زيارتهم'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SearchField(
-                    searchController: searchNoteDoctorController,
-                    onPressed: (value) {
-                      BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchNoVisitDoctorEvent(value));
-                    },
-                  ),
-                ],
-              ),
+      body: Column(
+        children: [
+          // حقل البحث
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: SearchField(
+              searchController: searchNoteDoctorController,
+              onPressed: (value) {
+                BlocProvider.of<SeniorProfBloc>(context).add(SenSearchNoVisitDoctorEvent(value));
+              },
             ),
-            BlocBuilder<SeniorProfBloc, SeniorProfState>(
+          ),
+
+          // القائمة
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
               builder: (context, state) {
-                List<NoVisitDocModel> noVisitDoc =
-                    context.watch<SeniorProfBloc>().noVisitDoc;
-                if (state is SenNoVisitDocEmptyState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
-                    SizedBox(
-                      height: 100,
-                    ),
-                    emptyFullScreen(context)
-                  ]));
-                }
-                if (state is SenNoVisitDocsState) {
-                  noVisitDoc = state.noVisitDoc;
-                }
-                if (state is SenNoVisitDocLoadingState) {
-                  return SliverList(
-                    delegate:
-                        SliverChildListDelegate([loadingFullScreen(context)]),
-                  );
-                }
-                if (state is SenNoVisitDocErrorState) {
-                  return SliverList(
-                    delegate: SliverChildListDelegate([
-                      errorFullScreen(context, func: () {
-                        BlocProvider.of<SeniorProfBloc>(context)
-                            .add(NoVisitDocEvent(156));
-                      })
-                    ]),
-                  );
-                }
-                return SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("عدد الملاحظات: ",
-                              style: Theme.of(context).textTheme.labelLarge),
-                          CircleNumberWidget(number: noVisitDoc.length),
-                        ],
-                      ),
-                    ),
-                    ...noVisitDoc.map((noVisitDoc) {
-                      return Container(
-                        margin: EdgeInsets.all(AppPaddingH.p8),
-                        padding: EdgeInsets.all(AppPaddingH.p16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorManager.secondaryColor6,
-                              ColorManager.secondaryColor7,
-                            ],
-                          ),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(AppSize.s8)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                List<NoVisitDocModel> noVisitDoc = context.watch<SeniorProfBloc>().noVisitDoc;
+
+                if (state is SenNoVisitDocLoadingState) return loadingFullScreen(context);
+                if (state is SenNoVisitDocEmptyState || noVisitDoc.isEmpty) return emptyFullScreen(context);
+                if (state is SenNoVisitDocErrorState) return errorFullScreen(context, func: () {
+                  BlocProvider.of<SeniorProfBloc>(context).add(NoVisitDocEvent(156));
+                });
+
+                return ListView.builder(
+                  padding: EdgeInsets.only(bottom: 20.h),
+                  itemCount: noVisitDoc.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 12.h),
+                        child: Row(
                           children: [
-                            Text(
-                              " ${noVisitDoc.docTitle} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
+                            Text("عدد الأطباء:", style: TextStyle(fontSize: 14.sp, color: Colors.blueGrey)),
+                            SizedBox(width: 8.w),
+                            CircleNumberWidget(number: noVisitDoc.length),
+                          ],
+                        ),
+                      );
+                    }
+                    return NoVisitDoctorCard(data: noVisitDoc[index - 1]);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class NoVisitDoctorCard extends StatelessWidget {
+  final NoVisitDocModel data;
+
+  const NoVisitDoctorCard({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // إجمالي الزيارات المطلوبة
+    final String totalRequired = data.visits ?? '0';
+
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.r),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                // شريط جانبي بلون مختلف (مثلاً رمادي أو أزرق خفيف) ليدل على "لم يبدأ"
+                Container(
+                  width: 5.w,
+                  color: Colors.blueGrey[200],
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // أيقونة المستخدم يمين
+                            _buildProfileIcon(),
+                            SizedBox(width: 12.w),
+                            // بيانات الطبيب
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.docTitle,
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF0D47A1),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(data.spTitle, style: TextStyle(fontSize: 12.sp, color: Colors.grey[600])),
+                                      SizedBox(width: 8.w),
+                                      _buildRateBadge(data.rate),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            Text(
-                              " ${noVisitDoc.spTitle} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              " ${noVisitDoc.address} ",
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            // عداد الزيارات المطلوبة (يسار)
+                            Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      " التقيم :",
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                    Text(
-                                      " ${noVisitDoc.rate} ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "عدد الزيارات :",
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                    Text(
-                                      " ${noVisitDoc.visits.toString()} ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall,
-                                    ),
-                                  ],
+                                Text("المطلوب", style: TextStyle(fontSize: 9.sp, color: Colors.grey)),
+                                Text(
+                                  totalRequired,
+                                  style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: Colors.blueGrey[700]),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                      );
-                    }).toList(),
-                  ]),
-                );
-              },
+                        SizedBox(height: 12.h),
+                        // العنوان
+                        _buildAddressRow(),
+                        SizedBox(height: 10.h),
+                        // شريط حالة (فارغ ليدل على عدم البدء)
+                        _buildEmptyProgress(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
+
+  Widget _buildEmptyProgress() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("لم يتم البدء بالزيارات بعد", style: TextStyle(fontSize: 10.sp, color: Colors.orange[700])),
+        SizedBox(height: 4.h),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10.r),
+          child: LinearProgressIndicator(
+            value: 0, // 0 يعني لم يتم إنجاز شيء
+            backgroundColor: const Color(0xFFF1F4F8),
+            minHeight: 6.h,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileIcon() {
+    return Container(
+      padding: EdgeInsets.all(8.w),
+      decoration: BoxDecoration(color: const Color(0xFFF0F4F8), shape: BoxShape.circle),
+      child: Icon(Icons.person_pin_rounded, color: const Color(0xFF90A4AE), size: 24.sp),
+    );
+  }
+
+  Widget _buildRateBadge(String rate) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+      decoration: BoxDecoration(color: const Color(0xFFE8F5E9), borderRadius: BorderRadius.circular(5.r)),
+      child: Text(rate, style: TextStyle(fontSize: 10.sp, color: Colors.green[700], fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _buildAddressRow() {
+    return Row(
+      children: [
+        Icon(Icons.map_outlined, size: 14.sp, color: Colors.blue[300]),
+        SizedBox(width: 6.w),
+        Expanded(child: Text(data.address, style: TextStyle(fontSize: 12.sp, color: Colors.grey[600]))),
+      ],
+    );
+  }
 }
+

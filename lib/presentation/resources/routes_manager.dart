@@ -1,14 +1,20 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/pages/all_recip.dart';
+import 'package:domina_app/presentation/Recipes/pages/recipe_d_h.dart';
 import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
-import 'package:domina_app/presentation/doctors/pages/doctor_details%20.dart';
-import 'package:domina_app/presentation/hospitals/page/hospital_details.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_page/doctor_details%20.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_page/doctors.dart';
+import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital.dart';
+import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital_details.dart';
 import 'package:domina_app/presentation/order/page/add_order_page.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
-import 'package:domina_app/presentation/senior/places/pages/all_city_senior.dart';
+import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/general_reports.dart';
+import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
@@ -23,16 +29,14 @@ import 'package:domina_app/presentation/senior/representative/page/rep_profile.d
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/view_recipe.dart';
-import 'package:domina_app/presentation/senior/search_doctors/page/doctor_Info%20.dart';
-import 'package:domina_app/presentation/senior/search_doctors/page/search_doctors.dart';
+import 'package:domina_app/presentation/senior/search_doctors/page/doctor_info.dart';
+import 'package:domina_app/presentation/senior/search_doctors/page/main_search.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
 import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
 import 'package:domina_app/presentation/delete/page/delete_logout_page.dart';
 import 'package:domina_app/presentation/delete/page/delete_page.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
-import 'package:domina_app/presentation/doctors/pages/doctors.dart';
-import 'package:domina_app/presentation/hospitals/page/hospital.dart';
 import 'package:domina_app/presentation/brand/pages/brand_page.dart';
 import 'package:domina_app/presentation/pharmacy/pages/pharmacy_page.dart';
 import 'package:domina_app/presentation/places/pages/places.dart';
@@ -67,7 +71,7 @@ class Routes {
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String AllRepSenior = "/AllRepSenior";
-  static const String cities = "/cities";
+ // static const String cities = "/cities";
 
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
@@ -96,6 +100,11 @@ class Routes {
   static const String recipesDoctor= "/recipesDoctor";
 
   static const String createOrder = "/createOrder";
+  static const String recipeDH = "/recipeDH";
+  static const String generalReports = "/generalReports";
+  static const String allRepWithFuture = "/allRepWithFuture";
+  static const String seniorByCityId = "/seniorByCityId";
+  static const String adminControl = "/adminControl";
 
 
 }
@@ -161,17 +170,16 @@ class RouteGenerator {
       case Routes.places:
         initPlacesModule();
         initPlaceVisitModule();
+        initDoctorAndHospitalModule();
         return _animatedRoute(Places());
       case Routes.spec:
         initSpecModule();
         return _animatedRoute(SpecializationsPage());
 
       case Routes.doctors:
-        initDoctorModule();
         return _animatedRoute(Doctors());
 
       case Routes.hospital:
-        initHospitalModule();
         return _animatedRoute(Hospital());
 
       case Routes.brand:
@@ -227,13 +235,18 @@ class RouteGenerator {
                   id: 3,
                   repPlanId: 3,
                   index: 3,
-                  cityId: 1,
+            //      cityId: 1,
                 ));
       case Routes.AllRepSenior:
-        return _animatedRoute( AllRepSenior());
-      case Routes.cities:
         initSeniorModule();
-        return _animatedRoute( AllCitySenior());
+        return _animatedRoute( AllRepSenior(
+          cityId: UserInfo.cityId,
+          cityname: UserInfo.cityTitle,
+          repId: UserInfo.repId,
+        ));
+      // case Routes.cities:
+      //
+      //   return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
         return _animatedRoute( PlaceSenior());
@@ -261,7 +274,7 @@ class RouteGenerator {
       case Routes.searchdoctors:
         iniSearchDoctorsModule();
         return _animatedRoute(
-           SearchDoctors()
+           MainSearchPage()
         );
       case Routes.RepPlanBrandSp:
         iniFutureModule();
@@ -280,10 +293,26 @@ class RouteGenerator {
       case Routes.doctorInfo:
         return _animatedRoute( DoctorInfo());
       case Routes.allRecipe:
+        initBrandRecModule();
+
         return _animatedRoute( AllRecipesForView());
       case Routes.viewRecipe:
         return _animatedRoute( ViewRecipePage());
+      case Routes.recipeDH:
 
+        return _animatedRoute( RecipeDH());
+      case Routes.generalReports:
+        iniAllCityModule();
+        initGeneralReportsModule();
+        return _animatedRoute( GeneralReports());
+      case Routes.allRepWithFuture:
+        initSeniorManageFutureModule();
+        return _animatedRoute( AllRepWithFuture());
+      case Routes.seniorByCityId:
+        initGeneralReportsModule();
+        return _animatedRoute( AllRepWithFuture());
+      case Routes.adminControl:
+        return _animatedRoute( AdminDashboardPage());
       default:
         return unDefinedRoute();
     }

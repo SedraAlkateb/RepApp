@@ -128,5 +128,6 @@ abstract class RepositorySql {
   Future<Either<Failure, Null>>exceptionApi(ExceptionModel exceptionModel);
   Future<Either<Failure, List<ExceptionModel>>> allException();
   Future<Either<Failure, NumVisit>> numVisit();
+  Future<Either<Failure, void>> numDocAndHos();
 
 }

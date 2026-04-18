@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/Recipes/widget/hospital_recipe.dart';
 import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -147,7 +148,7 @@ class _HospitalSpState extends State<HospitalSp> {
                                     // أزرار الأكشن
                                     Row(
                                       children: [
-                                        buildCardActionText("إنشاء وصفة", Icons.assignment_outlined),
+                                        PrescriptionHospitalMenuWidget(hospitalId: state.hospitals[index].id),
                                         const Spacer(),
                                         InkWell(
                                           onTap: () {

@@ -30,3 +30,18 @@ class CheckReciEvent extends DoctorsEvent {
   CheckReciEvent(this.docId,this.st);
   List<Object?> get props => [docId];
 }
+class AllHospitalEvent extends DoctorsEvent {
+
+  AllHospitalEvent();
+
+  @override
+
+  List<Object?> get props => [];
+}
+class SearchhosEvent extends DoctorsEvent {
+  final String contant;
+  SearchhosEvent(this.contant);
+  @override
+  List<Object?> get props => [contant];
+
+}

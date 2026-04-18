@@ -1,12 +1,11 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
+import 'package:domina_app/presentation/uniti/basic/brand.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AllBrand extends StatelessWidget {
   AllBrand({super.key});
@@ -16,20 +15,6 @@ class AllBrand extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(
-                size: AppSize.s30,
-                Icons.arrow_forward,
-                color: ColorManager.secondaryColor1,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
         title: Text('الاصناف'),
       ),
       body: Padding(
@@ -40,6 +25,7 @@ class AllBrand extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 12.h,),
                   SearchField(
                     searchController: searchDocController,
                     onPressed: (value) {
@@ -92,52 +78,7 @@ class AllBrand extends StatelessWidget {
                 }
                 return SliverList(
                   delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "عدد الاصناف: ",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          CircleNumberWidget(number: brandModel.length),
-                        ],
-                      ),
-                    ),
-                    ...brandModel.map((brand) {
-                      return Container(
-                        margin: EdgeInsets.all(AppPaddingH.p8),
-                        padding: EdgeInsets.all(AppPaddingH.p16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorManager.secondaryColor6,
-                              ColorManager.secondaryColor7,
-                            ],
-                          ),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(AppSize.s8)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-
-                            Text(
-                              brand.title,
-                              style: Theme.of(context).textTheme.labelLarge,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              brand.phTitle,
-                              style: Theme.of(context).textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                    BrandListWidget(brands: brandModel,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),
                   ]),
                 );
               },

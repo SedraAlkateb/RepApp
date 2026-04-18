@@ -90,8 +90,6 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                             ? CircleNumberWidget(number: state.loading)
                             : SizedBox(height: 60.h), // مسافة ثابتة للمحافظة على التوازن
                       ),
-
-                      // الرسم التوضيحي (الأنيميشن)
                       Container(
                         width: 250.w,
                         height: 250.w,

@@ -1,5 +1,4 @@
-import 'package:domina_app/app/di.dart';
-import 'package:domina_app/presentation/doctors/pages/doctor_details%20.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_page/doctor_details%20.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/visit_widget.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
@@ -97,7 +96,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                       inputFormatters: [],
                     ),
                     Text(
-                      " ملاحظات للمكتب العلمي:",
+                      " ملاحظة للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(
@@ -119,7 +118,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                       inputFormatters: [],
                     ),
                     Text(
-                      "ملاحظات لمستودع قاسيون:",
+                      "ملاحظة صيدلية مجاورة:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(
@@ -512,14 +511,14 @@ Widget _buildFullHeader(){
           SizedBox(height: 20.h),
 
           // قائمة المعلومات
-          buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.doctorModel.placeTitle),
-          buildDivider(),
+       //   buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.doctorModel.placeTitle),
+        //  buildDivider(),
           buildDetailRow(Icons.business_outlined, "العنوان:", widget.doctorModel.address),
-          buildDivider(),
-          buildDetailRow(Icons.access_time, "أوقات العمل:", widget.doctorModel.workHours.toString()),
-          buildDivider(),
-          buildDetailRow(Icons.assignment_outlined, "ملاحظات:",
-              widget.doctorModel.note),
+      //    buildDivider(),
+       //   buildDetailRow(Icons.access_time, "أوقات العمل:", widget.doctorModel.workHours.toString()),
+      //    buildDivider(),
+      //    buildDetailRow(Icons.assignment_outlined, "ملاحظة:",
+     //         widget.doctorModel.note),
           buildDivider(),
           buildDetailRow(Icons.star_rate_outlined, "التقيم:",
               widget.doctorModel.rate),
@@ -552,7 +551,6 @@ Widget _buildFullHeader(){
               print("Navigating to Doctor Details...");
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  initDoctorModule();
                   return DoctorDetails(
                       doctor: widget.doctorModel);
                 },

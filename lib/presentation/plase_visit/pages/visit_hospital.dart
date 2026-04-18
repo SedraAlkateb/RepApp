@@ -1,5 +1,4 @@
-import 'package:domina_app/app/di.dart';
-import 'package:domina_app/presentation/hospitals/page/hospital_view_details.dart';
+import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital_view_details.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/visit_widget.dart';
 import 'package:domina_app/presentation/plase_visit/widget/personal_order.dart';
@@ -171,7 +170,7 @@ class _VisitHospitalState extends State<VisitHospital>
                       inputFormatters: [],
                     ),
                     Text(
-                      " ملاحظات للمكتب العلمي:",
+                      " ملاحظة للمكتب العلمي:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
@@ -190,7 +189,7 @@ class _VisitHospitalState extends State<VisitHospital>
                       inputFormatters: [],
                     ),
                     Text(
-                      "ملاحظات لمستودع قاسيون:",
+                      "ملاحظة صيدلية مجاورة:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
@@ -545,12 +544,12 @@ class _VisitHospitalState extends State<VisitHospital>
           SizedBox(height: 20.h),
 
           // قائمة المعلومات
-          buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.hospitalModel.placeTitle),
-          buildDivider(),
+        //  buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.hospitalModel.placeTitle),
+        //  buildDivider(),
           buildDetailRow(Icons.business_outlined, "العنوان:", widget.hospitalModel.address),
-          buildDivider(),
-          buildDetailRow(Icons.assignment_outlined, "ملاحظات:",
-              widget.hospitalModel.note),
+         // buildDivider(),
+        //  buildDetailRow(Icons.assignment_outlined, "ملاحظة:",
+       //       widget.hospitalModel.note),
           SizedBox(height: 20.h),
         ],
       ),
@@ -576,7 +575,6 @@ class _VisitHospitalState extends State<VisitHospital>
           // الحاوية الزجاجية للحرف
           InkWell(
             onTap: () {
-              initHospitalModule();
               Navigator.push(
                   context,
                   MaterialPageRoute(

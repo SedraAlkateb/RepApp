@@ -18,42 +18,39 @@ Widget emptyFullScreen(BuildContext context,{String ? message}) {
 }
 Widget loadingShimmer(BuildContext context, int count, double? width,
     double? height, BorderRadiusGeometry? borderRadius) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-    child: ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: count,
-      itemBuilder: (context, index) => Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: Container(
-          margin:  EdgeInsets.all(AppPaddingH.p8),
-          padding:  EdgeInsets.all(AppPaddingH.p16),
-          decoration: BoxDecoration(
-            border: Border.all(color: ColorManager.secondaryColor22),
-            color: const Color.fromARGB(255, 250, 254, 255),
-            borderRadius: borderRadius,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: width,
-                height: height,
+  return ListView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    itemCount: count,
+    itemBuilder: (context, index) => Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin:  EdgeInsets.all(AppPaddingH.p8),
+        padding:  EdgeInsets.all(AppPaddingH.p16),
+        decoration: BoxDecoration(
+          border: Border.all(color: ColorManager.secondaryColor22),
+          color: const Color.fromARGB(255, 250, 254, 255),
+          borderRadius: borderRadius,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: width,
+              height: height,
+              color: Colors.grey[300],
+            ),
+            Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
                 color: Colors.grey[300],
               ),
-              Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  borderRadius: borderRadius,
-                  color: Colors.grey[300],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ),

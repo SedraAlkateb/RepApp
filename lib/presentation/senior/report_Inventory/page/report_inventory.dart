@@ -6,31 +6,157 @@ import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+class InventoryCard extends StatelessWidget {
+  final InventoryModel data;
+
+  const InventoryCard({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // الحسابات
+    final int total = int.parse(data.total);
+    final int used =  int.parse(data.used);
+    final int rest =  data.rest;
+
+    // نسبة التوزيع
+    double usePercent = total == 0 ? 0 : used / total;
+
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // الجزء العلوي: اسم المستحضر
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+              decoration: BoxDecoration(
+                color: ColorManager.medicalSecondary.withOpacity(0.1),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.r),
+                  topRight: Radius.circular(20.r),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.medication_liquid, color: ColorManager.medicalSecondary, size: 22.sp),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Text(
+                      data.title,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF0D47A1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // الجزء الأوسط: الأرقام (توزيع المربعات)
+            Padding(
+              padding: EdgeInsets.all(16.w),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildInfoItem("الكل", total.toString(), Colors.blueGrey),
+                      _buildInfoItem("الموزع", used.toString(), Colors.green),
+                      _buildInfoItem("المتبقي", rest.toString(), Colors.orange),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+
+                  // شريط التقدم (Inventory Progress)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.r),
+                          child: LinearProgressIndicator(
+                            value: usePercent,
+                            minHeight: 8.h,
+                            backgroundColor: Colors.grey[200],
+                            valueColor: AlwaysStoppedAnimation<Color>(ColorManager.medicalSecondary),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        "${(usePercent * 100).toInt()}%",
+                        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4.h),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "نسبة توزيع العينات من المخزون",
+                      style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoItem(String label, String value, Color color) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 11.sp, color: Colors.grey[600]),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+}
 class ReportInventory extends StatelessWidget {
-   ReportInventory({super.key});
+  ReportInventory({super.key});
   final TextEditingController searchInventoryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-                  Icons.arrow_back_sharp,
-                  color: ColorManager.secondaryColor1,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
-          title: Text('تقرير توزيع العينات (الجرد)'),
-        ),
-        body: bodyBuild(context));
+      backgroundColor: const Color(0xFFF8FAFC), // خلفية هادئة
+      appBar: AppBar(
+        title: const Text('تقرير توزيع العينات (الجرد)'),
+      ),
+      body: bodyBuild(context),
+    );
   }
 
   Widget bodyBuild(BuildContext context) {
@@ -38,73 +164,42 @@ class ReportInventory extends StatelessWidget {
       builder: (context, state) {
         if (state is SenAllInventoryState) {
           final List<InventoryModel> inventoryModel = state.inventoryModel;
-          return Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [ SearchField(
-                searchController: searchInventoryController,
-                onPressed: (value) {
-                  BlocProvider.of<ReportInventoryBloc>(context)
-                      .add(SenSearchInventoryEvent(value));
-                },
-              ),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(AppPaddingH.p8),
-                            padding: EdgeInsets.all(AppPaddingH.p16),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                ColorManager.secondaryColor6,
-                                ColorManager.secondaryColor7,
-                                ColorManager.secondaryColor7,
-                              ]),
-                              color: ColorManager.white,
-                              borderRadius:
-                                   BorderRadius.all(Radius.circular(AppSize.s8)),
-                            ),
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Text(
-                                      " اسم المستحضر : ${inventoryModel[index].title}",
-                                    style: Theme.of(context).textTheme.labelMedium,textAlign: TextAlign.center,),
-                                  Text(
-                                      "  العدد الكلي : ${inventoryModel[index].total}",
-                                    style: Theme.of(context).textTheme.titleSmall,textAlign: TextAlign.center,),
-                                  Text(
-                                    " المتبقي : ${inventoryModel[index].rest.toString()}",
-                                    style: Theme.of(context).textTheme.titleSmall,textAlign: TextAlign.center,
-                                  ),
-                                  Text("عدد العينات الموزعة : ${inventoryModel[index].used}",
-                                    style: Theme.of(context).textTheme.titleSmall,textAlign: TextAlign.center,),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                    itemCount: inventoryModel.length,
-                  ),
+          return Column(
+            children: [
+              // حقل البحث
+              Padding(
+                padding: EdgeInsets.all(16.w),
+                child: SearchField(
+                  searchController: searchInventoryController,
+                  onPressed: (value) {
+                    BlocProvider.of<ReportInventoryBloc>(context)
+                        .add(SenSearchInventoryEvent(value));
+                  },
                 ),
-              ],
-            ),
+              ),
+
+              // القائمة باستخدام البطاقات الجديدة
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: 20.h),
+                  itemCount: inventoryModel.length,
+                  itemBuilder: (context, index) {
+                    return InventoryCard(data: inventoryModel[index]);
+                  },
+                ),
+              ),
+            ],
           );
         }
-        if (state is SenAllInventoryLoadingState) {
 
-          return loadingFullScreen(context);
-        }
+        if (state is SenAllInventoryLoadingState) return loadingFullScreen(context);
+
         if (state is SenAllInventoryErrorState) {
-          return errorFullScreen(context,
-              func: () => BlocProvider.of<ReportInventoryBloc>(context)
-                  .add(SenAllInventoryEvent(203)));
+          return errorFullScreen(context, func: () =>
+              BlocProvider.of<ReportInventoryBloc>(context).add(SenAllInventoryEvent(203)));
         }
-        return SizedBox();
+
+        return const SizedBox();
       },
     );
   }

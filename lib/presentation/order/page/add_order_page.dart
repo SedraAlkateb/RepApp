@@ -19,7 +19,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   @override
   void initState() {
     super.initState();
-    // جلب البراندات عند تشغيل الواجهة
     context.read<OrderBloc>().add(BrandOrderEvent());
   }
 

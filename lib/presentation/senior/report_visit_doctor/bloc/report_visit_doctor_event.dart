@@ -5,16 +5,24 @@ sealed class ReportVisitDoctorEvent extends Equatable {}
 
 class AllReportVisitDoctorEvent extends ReportVisitDoctorEvent {
   final VisitRepSen visitRepSen;
+  final bool isSen;//true genReport // false myReport
   @override
-  AllReportVisitDoctorEvent(this.visitRepSen);
-  List<Object?> get props => [visitRepSen];
+  AllReportVisitDoctorEvent(this.visitRepSen,this.isSen);
+  List<Object?> get props => [visitRepSen,isSen];
 }
-
+class WhoAllReadEvent extends ReportVisitDoctorEvent {
+  final String visitId;
+  final String visitType;
+  @override
+  WhoAllReadEvent(this.visitId,this.visitType);
+  List<Object?> get props => [visitId,visitType];
+}
 class AllReportVisitHospitalEvent extends ReportVisitDoctorEvent {
   final VisitRepSen visitRepSen;
+  final bool isSen;//true genReport // false myReport
   @override
-  AllReportVisitHospitalEvent(this.visitRepSen);
-  List<Object?> get props => [visitRepSen];
+  AllReportVisitHospitalEvent(this.visitRepSen,this.isSen);
+  List<Object?> get props => [visitRepSen,isSen];
 }
 
 class SenSearchNoteVisitDoctorEvent extends ReportVisitDoctorEvent {

@@ -54,4 +54,11 @@ class ColorManager {
   static const Color background     = Color(0xFFF8FAFC);
   static const Color inputBorder     = Color(0xFFF1F5F9);
 
+  ///////////Admin page
+  static const Color primaryBlue = Color(0xFF3498DB);
+  static const Color primaryText = Color(0xFF2C3E50);
+  static const Color darkBlueCard = Color(0xFF1F4E79);
+  static const Color lightPurple = Color(0xFFF4ECF7);
+  static const Color bgGrey = Color(0xFFF8F9FD);
+
 }

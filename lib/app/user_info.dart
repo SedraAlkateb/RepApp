@@ -2,6 +2,7 @@ class UserInfo {
   static int percentage = 0;
   static int repId = 0;
   static int cityId = 0;
+  static String cityTitle = "";
   static int? otherPlanId = 0;
   static int activePlanId = 0;
   static int? otherstatus = 0;
@@ -21,9 +22,13 @@ class UserInfo {
   static int visited = -1;
   static int flag1 = 0;
   static int version = 4;
-  static String repType = "0";
+  static String repType = "0";///Senior 7
   static int numOfDoctorVisit = -1;
   static int numOfHospitalVisit = -1;
   static bool isScreenWidth = false;
   static bool isChange = false;
+  static int numDoctor = 0;
+  static int numHospital = 0;
+  static int statusPlan=UserInfo.repType=="5"?5:1;// 5= teamleader , 1 = supervisor
+
 }

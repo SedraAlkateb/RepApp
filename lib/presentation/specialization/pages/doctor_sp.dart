@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/Recipes/widget/doctor_recipe.dart';
 import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -142,7 +143,7 @@ class _DoctorSpState extends State<DoctorSp> {
                                   // أزرار الأكشن
                                   Row(
                                     children: [
-                                      buildCardActionText("إنشاء وصفة", Icons.assignment_outlined),
+                                    PrescriptionMenuWidget(doctorId:   state.doctors[index].id),
                                       const Spacer(),
                                       InkWell(
                                         onTap: () {

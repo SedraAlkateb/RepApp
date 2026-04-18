@@ -24,7 +24,7 @@ FlutterLocalNotificationsPlugin();
 @pragma('vm:entry-point')
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await ScreenUtil.ensureScreenSize();
   final dbHelper = DatabaseHelper();
   final appSqlApi = AppSqlApi(dbHelper);
   await appSqlApi.debugOtherPlanBrandByRepPlanId(UserInfo.activePlanId);
@@ -80,14 +80,18 @@ Future<int?> sss() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
 
-  IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
-  (await isLoginSqlUsecase.execute()).fold((failure) {
+  IsLoginSqlUsecase isLoginSqlUsecase =  IsLoginSqlUsecase(instance());
+
+  final result = await isLoginSqlUsecase.execute();
+  await
+  result.fold((failure) {
     return 0;
   }, (data) async {
     if (data != null && (data.isLogin > 0)) {
       UserInfo.name = data.name;
       UserInfo.isLogging = data.isLogin;
       UserInfo.cityId = data.cityId;
+      UserInfo.cityTitle = data.cityTitle;
       UserInfo.activePlanId = data.activePlanId ?? -5;
       UserInfo.otherPlanId = data.otherPlanId;
       UserInfo.otherstatus = data.otherStatus;
@@ -104,8 +108,9 @@ Future<int?> sss() async {
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
 
-      if (UserInfo.isLogging != 0 && UserInfo.endDate != null) {
+      if ((UserInfo.isLogging != 0 )&&( UserInfo.endDate != null)&&(UserInfo.endDate!="0")&&(UserInfo.endDate!="")) {
         final now = formatDateTimeFromDataTime(DateTime.now());
+        print("UserInfo.endDate = ${UserInfo.endDate}");
         if (now == formatDateTime(UserInfo.endDate!)) {
           _showEndDateNotification();
         }
@@ -169,11 +174,9 @@ class MyResponsiveApp extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
-          final breakPoint = ResponsiveBreakpoints.of(context).breakpoint;
-          final designSize = getDesignSizeByBreakpoint(breakPoint);
 
           return ScreenUtilInit(
-            designSize: designSize,
+            designSize: const Size(360, 690),
             minTextAdapt: true,
             splitScreenMode: true,
             builder: (context, child) => const MyApp(),

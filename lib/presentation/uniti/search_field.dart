@@ -1,6 +1,7 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField(
@@ -10,7 +11,7 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric( horizontal: 16),
+      padding:  EdgeInsets.symmetric( horizontal: 8.w),
       child: Row(
         children: [
           Expanded(

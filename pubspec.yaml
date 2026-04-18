@@ -74,6 +74,8 @@ dependencies:
   flutter_zoom_drawer: ^3.2.0
   lucide_icons_flutter: ^3.1.12
   lucide_icons: ^0.257.0
+  pull_to_refresh: ^2.0.0
+  flutter_staggered_animations: ^1.1.1
 
 
 dev_dependencies:

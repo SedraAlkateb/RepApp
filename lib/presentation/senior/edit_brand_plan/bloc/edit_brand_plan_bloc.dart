@@ -3,9 +3,10 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_plan_brands_type_usecase.dart';
 import 'package:domina_app/domain/usecase/changePlanBrandType_usecase.dart';
+import 'package:domina_app/domain/usecase/change_rep_plan_status.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/cupertino.dart';
 part 'edit_brand_plan_event.dart';
 part 'edit_brand_plan_state.dart';
 
@@ -15,7 +16,8 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
   AllPlanBrandsTypeUsecase allPlanBrandsUsecase;
   int loadingItemId = -1;
   int current = 0;
-  EditBrandPlanBloc(this.changePlanBrandTypeUsecase, this.allPlanBrandsUsecase)
+  ChangeRepPlanStatus changeRepPlanStatus;
+  EditBrandPlanBloc(this.changePlanBrandTypeUsecase, this.allPlanBrandsUsecase,this.changeRepPlanStatus)
       : super(EditBrandPlanInitial()) {
     on<EditBrandPlanEvent>((event, emit) async {
       if (event is FutureSearchSpecEvent) {
@@ -53,6 +55,14 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
       } else if (event is FutureChangeLoadingItemValueEvent) {
         loadingItemId = event.index;
         emit(FutureChangeLoadingItemValueState(loadingItemId));
+      }
+      if (event is EditePlanStatusEvent) {
+        emit(EditeStatusLoadingState());
+        (await changeRepPlanStatus.execute(event.id,0)).fold((failure) {
+          emit(EditeStatusFailureState(failure: failure));
+        }, (data) async {
+          emit(EditeStatusState());
+        });
       }
     });
   }

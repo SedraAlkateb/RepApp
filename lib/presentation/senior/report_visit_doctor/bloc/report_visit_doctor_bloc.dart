@@ -6,18 +6,19 @@ import 'package:domina_app/domain/usecase/all_read_sen_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_doctor_rep_sen_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_rep_sen_usecase.dart';
 import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
+import 'package:domina_app/domain/usecase/visit_read_status.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'report_visit_doctor_event.dart';
 part 'report_visit_doctor_state.dart';
-
 class ReportVisitDoctorBloc
     extends Bloc<ReportVisitDoctorEvent, ReportVisitDoctorState> {
   AllVisitDoctorRepSenUsecase allVisitDoctorRepSenUsecase;
   ReadVisitUsecase readVisitUsecase;
   AllReadSenUsecase allReadSenUsecase;
   AllVisitHospitalRepSenUsecase allVisitHospitalRepSenUsecase;
+  VisitReadStatus visitReadStatus;
   List<RepVisitsModel> repVisits = [];
   List<RepVisitsModel> repVisitsSearch = [];
 
@@ -32,18 +33,32 @@ class ReportVisitDoctorBloc
   }
 
   RepVisitsModel doctorNoteModel =
-      RepVisitsModel("", "", "", "", "", "", "", "", "", "", false, []);
+  RepVisitsModel("", "", "", "", "", "", "", "", "", "", false, []);
   ReportVisitDoctorBloc(this.allVisitDoctorRepSenUsecase, this.readVisitUsecase,
-      this.allVisitHospitalRepSenUsecase,this.allReadSenUsecase)
+      this.allVisitHospitalRepSenUsecase,this.allReadSenUsecase,this.visitReadStatus)
       : super(ReportVisitDoctorInitial()) {
     on<ReportVisitDoctorEvent>((event, emit) async {
       if (event is AllReportVisitDoctorEvent) {
         emit(AllReportVisitDoctorLoadingState());
         (await allVisitDoctorRepSenUsecase.execute(event.visitRepSen)).fold(
-            (failure) {
-          emit(AllReportVisitDoctorErrorState(failure: failure));
-        }, (data) async {
+                (failure) {
+              emit(AllReportVisitDoctorErrorState(failure: failure));
+            }, (data) async {
           repVisits = data;
+          if(event.isSen==true){
+            repVisits.sort((a, b) {
+              if (a.flag && !b.flag) return -1; // a=true يجي قبل
+              if (!a.flag && b.flag) return 1;  // b=true يجي قبل
+              return 0;
+            });
+          }else{
+            repVisits.sort((a, b) {
+              if (!a.flag && b.flag) return -1; // a=false يجي قبل
+              if (a.flag && !b.flag) return 1;  // b=false يجي قبل
+              return 0;
+            });
+
+          }
           repVisitsSearch = data;
           if (data.isEmpty) {
             emit(AllReportVisitDoctorEmptyState());
@@ -52,13 +67,44 @@ class ReportVisitDoctorBloc
           }
         });
       }
+      if (event is WhoAllReadEvent) {
+        emit(AllWhoAllReadLoadingState());
+        (await visitReadStatus.execute(event.visitId,event.visitType))
+            .fold(
+                (failure) {
+              emit(AllWhoAllReadErrorState(failure: failure));
+            }, (data) async {
+          if (data.isEmpty) {
+            emit(AllWhoAllReadEmptyState());
+          } else {
+            emit(AllWhoAllReadsState(data));
+          }
+        });
+      }
+      /////
       if (event is AllReportVisitHospitalEvent) {
         emit(AllReportVisitHospitalLoadingState());
         (await allVisitHospitalRepSenUsecase.execute(event.visitRepSen)).fold(
-            (failure) {
-          emit(AllReportVisitHospitalErrorState(failure: failure));
-        }, (data) async {
+                (failure) {
+              emit(AllReportVisitHospitalErrorState(failure: failure));
+            }, (data) async {
           repVisitHospital = data;
+          if(event.isSen==true){
+            repVisitHospital.sort((a, b) {
+              if (a.flag && !b.flag) return -1; // a=true يجي قبل
+              if (!a.flag && b.flag) return 1;  // b=true يجي قبل
+              return 0;
+            });
+          }else{
+            repVisitHospital.sort((a, b) {
+              if (!a.flag && b.flag) return -1; // a=false يجي قبل
+              if (a.flag && !b.flag) return 1;  // b=false يجي قبل
+              return 0;
+            });
+
+          }
+
+
           repVisitsSearch = data;
           if (data.isEmpty) {
             emit(AllReportVisitHospitalEmptyState());
@@ -123,16 +169,16 @@ class ReportVisitDoctorBloc
       else if (event is ChangeReadDocNoteEvent) {
         emit(AsReadLoadingState());
         (await readVisitUsecase.execute(AsRead(
-                int.parse(event.repVisitsModel.visitId),
-                UserInfo.repId,
-                !event.repVisitsModel.flag == true ? 1 : 0,
-                1)))
+            int.parse(event.repVisitsModel.visitId),
+            UserInfo.repId,
+            !event.repVisitsModel.flag == true ? 1 : 0,
+            1)))
             .fold((failure) {
           emit(AsReadErrorState(failure: failure));
         }, (data) async {
           List<RepVisitsModel> doctorNote = List.from(repVisits);
           index = repVisits.indexWhere(
-              (repVisit) => repVisit.visitId == event.repVisitsModel.visitId);
+                  (repVisit) => repVisit.visitId == event.repVisitsModel.visitId);
           RepVisitsModel doctorNote1 = RepVisitsModel(
             event.repVisitsModel.visitId,
             event.repVisitsModel.visitDate,
@@ -155,7 +201,7 @@ class ReportVisitDoctorBloc
         });
       }
       else if (event is AllReadDocNoteEvent) {
-      //  emit(AllReadLoadingState());
+        //  emit(AllReadLoadingState());
         (await allReadSenUsecase.execute(event.readAll))
             .fold((failure) {
           emit(AllReadErrorState(failure: failure));
@@ -167,16 +213,16 @@ class ReportVisitDoctorBloc
       else if (event is ChangeReadHosNoteEvent) {
         emit(AsReadLoadingState());
         (await readVisitUsecase.execute(AsRead(
-                int.parse(event.repVisitsModel.visitId),
-                UserInfo.repId,
-                !event.repVisitsModel.flag == true ? 1 : 0,
-                0)))
+            int.parse(event.repVisitsModel.visitId),
+            UserInfo.repId,
+            !event.repVisitsModel.flag == true ? 1 : 0,
+            0)))
             .fold((failure) {
           emit(AsReadErrorState(failure: failure));
         }, (data) async {
           List<RepVisitsModel> doctorNote = List.from(repVisitHospital);
           index = repVisitHospital.indexWhere(
-              (repVisit) => repVisit.visitId == event.repVisitsModel.visitId);
+                  (repVisit) => repVisit.visitId == event.repVisitsModel.visitId);
           RepVisitsModel doctorNote1 = RepVisitsModel(
             event.repVisitsModel.visitId,
             event.repVisitsModel.visitDate,

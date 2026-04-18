@@ -26,10 +26,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             (data) => emit(PharmacyOrderState(data)),
       );
     });
-
     // 2. معالجة جلب البراندات عند فتح الصفحة
     on<BrandOrderEvent>((event, emit) async {
-      emit(BrandOrderLoadingState());
       final result = await allBrandsSqlUsecase.execute();
       result.fold(
             (failure) => emit(BrandOrderErrorState(failure: failure)),
