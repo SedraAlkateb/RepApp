@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/general_reports.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -54,18 +55,18 @@ class _TeamLeaderState extends State<TeamLeader>
                           initSeniorModule();
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
-                              return AllRepSeniorGenerlReports(
-                                cityname:  seniors[index].city_name,
-                     cityId:int.parse(seniors[index].city_id)  ,
-                                repId:int.parse(seniors[index].rep_id)  ,
+                              return GeneralReports(
+                     //            cityname:  seniors[index].city_name,
+                     // cityId:int.parse(seniors[index].city_id)  ,
+                     //            repId:int.parse(seniors[index].rep_id)  ,
                               );
                             },
                           ));
                           BlocProvider.of<SeniorRepsBloc>(context).add(
                               AllSeniorRepEvent(
-                            //  int.parse(seniors[index].city_id
-                          //    ),
-                               //   int.parse(seniors[index].rep_id)
+                            int.parse(seniors[index].city_id
+                           ),
+                               int.parse(seniors[index].rep_id)
                           ));
                         },
                         child: Container(

@@ -1,7 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,13 +86,26 @@ class BrandPlanCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  model.title,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0D47A1),
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      model.title,
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF0D47A1),
+                      ),
+                    ),
+                    Text(
+                      model.pharmaceuticalFormTitle,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
                 // شارة "هدف"
                 Container(

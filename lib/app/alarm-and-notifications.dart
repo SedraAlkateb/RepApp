@@ -1,134 +1,114 @@
 import 'dart:io';
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/main.dart';
+import 'package:domina_app/presentation/uniti/time.dart';
 import 'package:domina_app/presentation/upload_delete/page/async_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
-@pragma('vm:entry-point') // 👈 مهم جدًا للوصول من native code
 class AlarmAndNotifications {
-  /// تهيئة الإشعارات
   static Future<void> initialize() async {
-    // طلب الإذن أولاً على iOS
-    if (Platform.isIOS) {
-      final iosPlugin = flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
-      await iosPlugin?.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-      print("✅ صلاحيات الإشعارات منحت على iOS");
-    }
+    tz.initializeTimeZones(); // ضروري جداً لتفادي خطأ tz
 
-    // إعدادات Android
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    // إعدادات iOS
     const iosInit = DarwinInitializationSettings(
-      requestAlertPermission: false, // false لأننا طلبنا الإذن قبل
-      requestBadgePermission: false,
-      requestSoundPermission: false,
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
     );
 
-    // إعدادات مشتركة بين النظامين
-    const initSettings = InitializationSettings(
-      android: androidInit,
-      iOS: iosInit,
-    );
+    const initSettings = InitializationSettings(android: androidInit, iOS: iosInit);
 
-    // تهيئة البلجن
-    await flutterLocalNotificationsPlugin.initialize(settings:
-      initSettings,
+    await flutterLocalNotificationsPlugin.initialize(
+   settings:   initSettings, // تم تصحيح استدعاء الباراميتر هنا
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         _onNotificationTap(response);
       },
     );
 
-    // تهيئة AlarmManager فقط على Android
     if (Platform.isAndroid) {
       await AndroidAlarmManager.initialize();
-      print("✅ AlarmManager initialized on Android");
-    } else {
-      print("⚠️ AlarmManager skipped on iOS Simulator / unsupported device");
     }
-
-    print("✅ AlarmAndNotifications initialized successfully");
   }
 
-  /// عند الضغط على الإشعار
   static void _onNotificationTap(NotificationResponse response) {
     initAsyncInModule();
     navigatorKey.currentState?.push(
-      MaterialPageRoute(
-        builder: (_) => const AsyncPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const AsyncPage()),
     );
   }
 
-  /// جدولة إشعار دوري
-  static Future<void> schedulePeriodicNotification({
-    Duration duration = const Duration(minutes: 1),
-  }) async {
-    if (Platform.isAndroid) {
-      print("تم استدعاء schedulePeriodicNotification على Android");
-      await AndroidAlarmManager.periodic(
-        duration,
-        1,
-        showNotification,
-        exact: true,
-        wakeup: true,
-        rescheduleOnReboot: true,
-      );
-    } else {
-      print("⚠️ schedulePeriodicNotification غير مدعوم على iOS Simulator");
+  /// دالة جدولة إشعار يوم الخطة (الساعة 9 صباحاً)
+  static Future<void> scheduleExpirationNotification() async {
+    if (UserInfo.endDate != null && UserInfo.endDate != "" && UserInfo.endDate != "0") {
+      try {
+        // تحويل تاريخ النهاية (dd-MM-yyyy)
+        DateTime endDay = formatStringToDataTime(UserInfo.endDate!);
+
+        // ضبط الوقت ليوم انتهاء الخطة - الساعة 9 صباحاً
+        DateTime scheduledTime = DateTime(endDay.year, endDay.month, endDay.day, 9, 0);
+
+        // التحقق من أن الوقت المجدول في المستقبل
+        if (scheduledTime.isAfter(DateTime.now())) {
+          await flutterLocalNotificationsPlugin.zonedSchedule(
+            id: 1001,
+            title: '🔔 شركة دومِنا - تذكير هام',
+            body: 'اليوم هو اليوم الأخير في خطتك الحالية، يرجى مزامنة البيانات قبل نهاية اليوم.',
+            payload: 'go_to_sync',
+            scheduledDate: tz.TZDateTime.from(scheduledTime, tz.local),
+            notificationDetails: const NotificationDetails(
+              android: AndroidNotificationDetails(
+                'expiry_channel',
+                'تنبيهات الخطة',
+                importance: Importance.max,
+                priority: Priority.high,
+                playSound: true,
+              ),
+            ),
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          );
+          print("✅ تم جدولة الإشعار ليوم الانتهاء: $scheduledTime");
+        }
+      } catch (e) {
+        print("❌ فشل جدولة الإشعار: $e");
+      }
     }
   }
+  @pragma('vm:entry-point')
+  static Future<void> showNotification() async {
+    const androidDetails = AndroidNotificationDetails(
+      'reminder_channel',
+      'Reminder Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const notificationDetails = NotificationDetails(android: androidDetails);
 
-  /// جدولة إشعار لمرة واحدة
+    await flutterLocalNotificationsPlugin.show(
+      id: 1,
+      title: '🔔 تذكير - شركة دومِنا',
+      body: 'يرجى مزامنة ورفع الزيارات والمعلومات.',
+      notificationDetails: notificationDetails,
+      payload: 'go_to_sync',
+    );
+  }
+
   static Future<void> scheduleOneShot() async {
     if (Platform.isAndroid) {
       await AndroidAlarmManager.oneShot(
         const Duration(seconds: 10),
         123,
-        AlarmAndNotifications.showNotification,
+        showNotification,
         exact: true,
         wakeup: true,
       );
-    } else {
-      print("⚠️ scheduleOneShot غير مدعوم على iOS Simulator");
     }
-  }
-
-  /// عرض الإشعار
-  @pragma('vm:entry-point') // 👈 ضروري لأنها تُستدعى من النظام
-  static Future<void> showNotification() async {
-    const androidDetails = AndroidNotificationDetails(
-      'reminder_channel',
-      'Reminder Notifications',
-      channelDescription: 'Channel for daily reminders',
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
-    );
-
-    const iosDetails = DarwinNotificationDetails();
-
-    const notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-    id:   1,
-    title:   '🔔 تذكير - شركة دومِنا',
-    body:   'يرجى مزامنة ورفع الزيارات والمعلومات.',
-    notificationDetails:   notificationDetails,
-      payload: 'go_to_sync',
-    );
   }
 }

@@ -115,7 +115,7 @@ import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_read_status.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
-import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';

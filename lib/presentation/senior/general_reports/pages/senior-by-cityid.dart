@@ -1,11 +1,11 @@
 // ignore_for_file: must_be_immutable, file_names
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,8 +66,8 @@ class _SeniorByCityIdState extends State<SeniorByCityId>
                       ));
                       BlocProvider.of<SeniorRepsBloc>(context).add(
                           AllSeniorRepEvent(
-                              // int.parse(seniors[index].city_id),
-                              // int.parse(seniors[index].rep_id)
+                              int.parse(seniors[index].city_id),
+                              int.parse(seniors[index].rep_id)
                           ));
                     },
                     child: Container(

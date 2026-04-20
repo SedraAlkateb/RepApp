@@ -1512,8 +1512,10 @@ class ActiveBrandPlanResponse {
   String? title;
   @JsonKey(name: "type")
   String? type;
+  @JsonKey(name: "pharmaceuticalFormTitle")
+  String? pharmaceuticalFormTitle;
 
-  ActiveBrandPlanResponse(this.specializations, this.title, this.type);
+  ActiveBrandPlanResponse(this.specializations, this.title, this.type,this.pharmaceuticalFormTitle);
 
   factory ActiveBrandPlanResponse.fromJson(Map<String, dynamic> json) =>
       _$ActiveBrandPlanResponseFromJson(json);
