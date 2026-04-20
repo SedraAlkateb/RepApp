@@ -9,7 +9,7 @@ import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
 import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
-import 'package:domina_app/presentation/common/freezed_data.dart';
+import 'package:domina_app/presentation/uniti/common/freezed_data.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';

@@ -41,7 +41,10 @@ class _AllRepSeniorState extends State<AllRepSenior> {
   // --- Logic Functions ---
 
   void _onRefresh() {
-    context.read<SeniorRepsBloc>().add(AllSeniorRepEvent());
+    context.read<SeniorRepsBloc>().add(AllSeniorRepEvent(
+      widget.cityId,
+      widget.repId
+    ));
     _refreshController.refreshCompleted();
   }
 

@@ -13,7 +13,10 @@ import 'package:domina_app/presentation/order/page/add_order_page.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/general_reports.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -106,6 +109,8 @@ class Routes {
   static const String seniorByCityId = "/seniorByCityId";
   static const String adminControl = "/adminControl";
 
+  static const String allCitySeniors = "/allCitySeniors";
+  static const String teamLeader = "/teamLeader";
 
 }
 
@@ -302,9 +307,11 @@ class RouteGenerator {
 
         return _animatedRoute( RecipeDH());
       case Routes.generalReports:
-        iniAllCityModule();
-        initGeneralReportsModule();
-        return _animatedRoute( GeneralReports());
+
+        return _animatedRoute( GeneralReports(
+       //     cityId: cityId, cityname: cityname, repId: repId
+        )
+        );
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
         return _animatedRoute( AllRepWithFuture());
@@ -313,6 +320,12 @@ class RouteGenerator {
         return _animatedRoute( AllRepWithFuture());
       case Routes.adminControl:
         return _animatedRoute( AdminDashboardPage());
+      case Routes.teamLeader:
+        initGeneralReportsModule();
+        return _animatedRoute( TeamLeader());
+      case Routes.allCitySeniors:
+        iniAllCityModule();
+        return _animatedRoute( AllCitySeniors());
       default:
         return unDefinedRoute();
     }

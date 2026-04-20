@@ -1,10 +1,10 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/all_city/widget/customcard.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,18 +50,18 @@ class _AllCityState extends State<AllCitySeniors> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                      initGeneralReportsModule();
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return SeniorByCityId(
-                              cityname:cities[index].title ,
-                   cityid:cities[index].id ,
-                            );
-                          },
-                        ));
-                        BlocProvider.of<GeneralReportsBloc>(context).add(
-                            GetSeniorByCityIdEvent(
-                              cities[index].id   ));
+                  initGeneralReportsModule();
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return SeniorByCityId(
+                        cityname:cities[index].title ,
+                        cityid:cities[index].id ,
+                      );
+                    },
+                  ));
+                  BlocProvider.of<GeneralReportsBloc>(context).add(
+                      GetSeniorByCityIdEvent(
+                          cities[index].id   ));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),

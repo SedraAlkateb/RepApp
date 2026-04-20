@@ -1,9 +1,9 @@
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/active_plan/bloc/bloc/active_plan_bloc.dart';
-import 'package:domina_app/presentation/active_plan/pages/active_plan.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/active_plan/pages/active_plan.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
@@ -38,20 +38,28 @@ class RepProfile extends StatelessWidget {
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
-        if (didPop) {
-          context.read<SeniorRepsBloc>().add(AllSeniorRepEvent());
-        }
+        // if (didPop) {
+        //   context.read<SeniorRepsBloc>().add(AllSeniorRepEvent(
+        //
+        //   ));
+        // }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("ملف المندوب", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp, color: const Color(0xFF1F4E79))),
+          title: Text("ملف المندوب",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
+                  color: const Color(0xFF1F4E79))),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF1F4E79)),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: Color(0xFF1F4E79)),
             onPressed: () => Navigator.pop(context),
           ),
         ),
         body: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-          buildWhen: (previous, current) => current is RepInfoState || current is RepInfoLoadingState,
+          buildWhen: (previous, current) =>
+              current is RepInfoState || current is RepInfoLoadingState,
           builder: (context, state) {
             if (state is RepInfoLoadingState) return loadingFullScreen(context);
             if (state is RepInfoErrorState) return errorFullScreen(context);
@@ -81,7 +89,8 @@ class RepProfile extends StatelessWidget {
                             SizedBox(height: 25.h),
                             _buildQuickActions(context),
                             SizedBox(height: 30.h),
-                            _buildDetailsList(context, rep, currentRepName, currentRepPlan),
+                            _buildDetailsList(
+                                context, rep, currentRepName, currentRepPlan),
                             SizedBox(height: 25.h),
                             _buildCoverageSection(context),
                             SizedBox(height: 50.h),
@@ -114,7 +123,7 @@ class RepProfile extends StatelessWidget {
           //   begin: Alignment.topLeft,
           //   end: Alignment.bottomRight,
           // ),
-          color:  Color(0xFF164683),
+          color: Color(0xFF164683),
 
           // تعديل الحواف لتكون دائرية من الأسفل فقط لتعطي طابع الـ Header الحديث
           borderRadius: BorderRadius.only(
@@ -138,12 +147,11 @@ class RepProfile extends StatelessWidget {
               width: 100.r,
               height: 100.r,
               decoration: BoxDecoration(
-              //  shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.2),
-
-                border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
-              borderRadius: BorderRadius.all(Radius.circular(45))
-              ),
+                  //  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.2),
+                  border: Border.all(
+                      color: Colors.white.withOpacity(0.3), width: 1.5),
+                  borderRadius: BorderRadius.all(Radius.circular(45))),
               alignment: Alignment.center,
               child: Text(
                 rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
@@ -203,10 +211,14 @@ class RepProfile extends StatelessWidget {
         crossAxisSpacing: 15.w,
         childAspectRatio: 1.5,
         children: [
-          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(), const Color(0xFF1F4E79)),
-          _buildStatCard("المحققة", rep.visitDon.toString(), const Color(0xFF2D947A)),
-          _buildStatCard("المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
-          _buildStatCard("الوصفات", rep.recipesCount.toString(), const Color(0xFF8E44AD)),
+          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
+              const Color(0xFF1F4E79)),
+          _buildStatCard(
+              "المحققة", rep.visitDon.toString(), const Color(0xFF2D947A)),
+          _buildStatCard(
+              "المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
+          _buildStatCard(
+              "الوصفات", rep.recipesCount.toString(), const Color(0xFF8E44AD)),
         ],
       ),
     );
@@ -218,15 +230,26 @@ class RepProfile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25.r),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 15, offset: const Offset(0, 8))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 15,
+              offset: const Offset(0, 8))
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(title, style: TextStyle(fontSize: 11.sp, color: Colors.grey[500], fontWeight: FontWeight.bold)),
+          Text(title,
+              style: TextStyle(
+                  fontSize: 11.sp,
+                  color: Colors.grey[500],
+                  fontWeight: FontWeight.bold)),
           SizedBox(height: 6.h),
-          Text(val, style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w900, color: color)),
+          Text(val,
+              style: TextStyle(
+                  fontSize: 22.sp, fontWeight: FontWeight.w900, color: color)),
         ],
       ),
     );
@@ -239,29 +262,34 @@ class RepProfile extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30.r),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20)]),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20)
+          ]),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildIconBtn(context, FontAwesomeIcons.tag, "الإختصاص", const Color(0xFFFF9F43), () {
+          _buildIconBtn(context, FontAwesomeIcons.tag, "الإختصاص",
+              const Color(0xFFFF9F43), () {
             context.read<SeniorProfBloc>().add(SenAllSpecEvent(id));
             Navigator.pushNamed(context, Routes.seniorSpec);
           }),
-          _buildIconBtn(context, FontAwesomeIcons.locationDot, "المناطق", const Color(0xFF45AAF2), () {
+          _buildIconBtn(context, FontAwesomeIcons.locationDot, "المناطق",
+              const Color(0xFF45AAF2), () {
             context.read<SeniorProfBloc>().add(SenAllPlaceEvent(id));
             Navigator.pushNamed(context, Routes.seniorPlaces);
           }),
-          _buildIconBtn(context, FontAwesomeIcons.userDoctor, "الأطباء", const Color(0xFFEB4D4B), () {
+          _buildIconBtn(context, FontAwesomeIcons.userDoctor, "الأطباء",
+              const Color(0xFFEB4D4B), () {
             context.read<SeniorProfBloc>().add(SenAllDoctorEvent(id));
             Navigator.pushNamed(context, Routes.seniorDoc);
           }),
-
-          _buildIconBtn(context, FontAwesomeIcons.hospitalUser, "المشافي", const Color(
-              0xFFE3D909), () {
+          _buildIconBtn(context, FontAwesomeIcons.hospitalUser, "المشافي",
+              const Color(0xFFE3D909), () {
             context.read<SeniorProfBloc>().add(SenAllHospitalEvent(id));
             Navigator.pushNamed(context, Routes.seniorHos);
           }),
-          _buildIconBtn(context, FontAwesomeIcons.hospital, "الأصناف", const Color(0xFF26DE81), () {
+          _buildIconBtn(context, FontAwesomeIcons.hospital, "الأصناف",
+              const Color(0xFF26DE81), () {
             context.read<SeniorProfBloc>().add(SenAllBrandEvent(repPlanId));
             Navigator.pushNamed(context, Routes.allBrand);
           }),
@@ -270,7 +298,8 @@ class RepProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildIconBtn(BuildContext context, FaIconData icon, String label, Color color, VoidCallback tap) {
+  Widget _buildIconBtn(BuildContext context, FaIconData icon, String label,
+      Color color, VoidCallback tap) {
     return InkWell(
       onTap: tap,
       borderRadius: BorderRadius.circular(20.r),
@@ -278,11 +307,17 @@ class RepProfile extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(14.r),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(20.r)),
+            decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20.r)),
             child: FaIcon(icon, color: color, size: 20.sp),
           ),
           SizedBox(height: 8.h),
-          Text(label, style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.bold, color: const Color(0xFF4B6584))),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF4B6584))),
         ],
       ),
     );
@@ -297,8 +332,7 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             context.read<SeniorProfBloc>().add(VisitDocEvent(id));
             Navigator.pushNamed(context, Routes.senVisitDoctor);
-          }
-      ),
+          }),
       InteractiveActionTile(
           title: "الأطباء الذين لم تتم زيارتهم",
           icon: Icons.cancel_outlined,
@@ -306,8 +340,7 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             context.read<SeniorProfBloc>().add(NoVisitDocEvent(id));
             Navigator.pushNamed(context, Routes.noVisitDoctor);
-          }
-      ),
+          }),
       InteractiveActionTile(
           title: "زيارات الأطباء المتبقية",
           icon: Icons.hourglass_empty_rounded,
@@ -315,8 +348,7 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id));
             Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
-          }
-      ),
+          }),
       InteractiveActionTile(
           title: "تقرير توزيع العينات (الجرد)",
           icon: FontAwesomeIcons.clipboardList,
@@ -325,14 +357,14 @@ class RepProfile extends StatelessWidget {
             initSeniorReportInventoryModule();
             Navigator.push(context, MaterialPageRoute(builder: (c) {
               context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id));
-              return  ReportInventory();
+              return ReportInventory();
             }));
-          }
-      ),
+          }),
     ]);
   }
 
-  Widget _buildDetailsList(BuildContext context, dynamic rep, String name, int plan) {
+  Widget _buildDetailsList(
+      BuildContext context, dynamic rep, String name, int plan) {
     return _buildSectionLayout("التقارير التفصيلية", [
       InteractiveActionTile(
           title: "تقرير زيارات الأطباء",
@@ -340,20 +372,39 @@ class RepProfile extends StatelessWidget {
           color: const Color(0xFF1F4E79),
           onTap: () {
             initReportVisitDoctorModule();
-            Navigator.push(context, MaterialPageRoute(builder: (c) => ReportVisitDoctorPage(iscanedite: true, repId: id, userId: UserInfo.repId, repName: name, indexRep: index, repPlan: plan)));
-            context.read<ReportVisitDoctorBloc>().add(AllReportVisitDoctorEvent(VisitRepSen(id, UserInfo.repId), false));
-          }
-      ),
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (c) => ReportVisitDoctorPage(
+                        iscanedite: true,
+                        repId: id,
+                        userId: UserInfo.repId,
+                        repName: name,
+                        indexRep: index,
+                        repPlan: plan)));
+            context.read<ReportVisitDoctorBloc>().add(AllReportVisitDoctorEvent(
+                VisitRepSen(id, UserInfo.repId), false));
+          }),
       InteractiveActionTile(
           title: "تقرير زيارات المشافي",
           icon: FontAwesomeIcons.hospitalUser,
           color: const Color(0xFF1F4E79),
           onTap: () {
             initReportVisitDoctorModule();
-            Navigator.push(context, MaterialPageRoute(builder: (c) => ReportVisitHospital(iscanedite: true, repId: id, userId: UserInfo.repId, repName: name, indexRep: index, repPlan: plan)));
-            context.read<ReportVisitDoctorBloc>().add(AllReportVisitHospitalEvent(VisitRepSen(id, UserInfo.repId), false));
-          }
-      ),
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (c) => ReportVisitHospital(
+                        iscanedite: true,
+                        repId: id,
+                        userId: UserInfo.repId,
+                        repName: name,
+                        indexRep: index,
+                        repPlan: plan)));
+            context.read<ReportVisitDoctorBloc>().add(
+                AllReportVisitHospitalEvent(
+                    VisitRepSen(id, UserInfo.repId), false));
+          }),
       InteractiveActionTile(
           title: "سجل الوصفات الطبية",
           icon: FontAwesomeIcons.receipt,
@@ -361,18 +412,17 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, Routes.allRecipe);
             context.read<SeniorProfBloc>().add(AllReciEvent(id));
-          }
-      ),
+          }),
       InteractiveActionTile(
           title: "الخطة الشهرية الفعالة",
           icon: FontAwesomeIcons.calendarCheck,
           color: const Color(0xFF1F4E79),
           onTap: () {
             initActivePlanModule();
-            Navigator.push(context, MaterialPageRoute(builder: (c) =>  ActivePlanPage()));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (c) => ActivePlanPage()));
             context.read<ActivePlanBloc>().add(GetActivePlanEvent(plan));
-          }
-      ),
+          }),
     ]);
   }
 
@@ -384,7 +434,11 @@ class RepProfile extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(right: 5.w, bottom: 15.h),
-            child: Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w800, color: const Color(0xFF2C3E50))),
+            child: Text(title,
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF2C3E50))),
           ),
           ...items,
         ],
@@ -399,7 +453,12 @@ class InteractiveActionTile extends StatefulWidget {
   final Color color;
   final VoidCallback onTap;
 
-  const InteractiveActionTile({super.key, required this.title, required this.icon, required this.color, required this.onTap});
+  const InteractiveActionTile(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.color,
+      required this.onTap});
 
   @override
   State<InteractiveActionTile> createState() => _InteractiveActionTileState();
@@ -422,10 +481,16 @@ class _InteractiveActionTileState extends State<InteractiveActionTile> {
         decoration: BoxDecoration(
           color: isPressed ? widget.color.withOpacity(0.02) : Colors.white,
           borderRadius: BorderRadius.circular(22.r),
-          border: Border.all(color: isPressed ? widget.color.withOpacity(0.3) : Colors.black.withOpacity(0.04), width: 1.2),
+          border: Border.all(
+              color: isPressed
+                  ? widget.color.withOpacity(0.3)
+                  : Colors.black.withOpacity(0.04),
+              width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: isPressed ? widget.color.withOpacity(0.1) : Colors.black.withOpacity(0.02),
+              color: isPressed
+                  ? widget.color.withOpacity(0.1)
+                  : Colors.black.withOpacity(0.02),
               blurRadius: isPressed ? 10 : 15,
               offset: const Offset(0, 5),
             )
@@ -437,19 +502,29 @@ class _InteractiveActionTileState extends State<InteractiveActionTile> {
               duration: const Duration(milliseconds: 200),
               padding: EdgeInsets.all(10.r),
               decoration: BoxDecoration(
-                color: isPressed ? widget.color : widget.color.withOpacity(0.08),
+                color:
+                    isPressed ? widget.color : widget.color.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(15.r),
               ),
               child: widget.icon is IconData
-                  ? Icon(widget.icon, color: isPressed ? Colors.white : widget.color, size: 18.sp)
-                  : FaIcon(widget.icon as FaIconData, color: isPressed ? Colors.white : widget.color, size: 16.sp),
+                  ? Icon(widget.icon,
+                      color: isPressed ? Colors.white : widget.color,
+                      size: 18.sp)
+                  : FaIcon(widget.icon as FaIconData,
+                      color: isPressed ? Colors.white : widget.color,
+                      size: 16.sp),
             ),
             SizedBox(width: 15.w),
-            Text(widget.title, style: TextStyle(fontSize: 13.5.sp, fontWeight: FontWeight.bold, color: const Color(0xFF34495E))),
+            Text(widget.title,
+                style: TextStyle(
+                    fontSize: 13.5.sp,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF34495E))),
             const Spacer(),
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              style: TextStyle(color: isPressed ? widget.color : Colors.grey[300]),
+              style:
+                  TextStyle(color: isPressed ? widget.color : Colors.grey[300]),
               child: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp),
             ),
           ],

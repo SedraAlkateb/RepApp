@@ -1666,6 +1666,7 @@ ActiveBrandPlanResponse _$ActiveBrandPlanResponseFromJson(
           [],
       json['title'] as String?,
       json['type'] as String?,
+      json['pharmaceuticalFormTitle'] as String?,
     );
 
 Map<String, dynamic> _$ActiveBrandPlanResponseToJson(
@@ -1674,6 +1675,7 @@ Map<String, dynamic> _$ActiveBrandPlanResponseToJson(
       'specializations': instance.specializations,
       'title': instance.title,
       'type': instance.type,
+      'pharmaceuticalFormTitle': instance.pharmaceuticalFormTitle,
     };
 
 ActiveBrandPlanBaseResponse _$ActiveBrandPlanBaseResponseFromJson(

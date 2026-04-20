@@ -1932,8 +1932,8 @@ class ActivePlanBrandModel {
   List<SpecPlan> spPlan;
   String type;
   String title;
-
-  ActivePlanBrandModel(this.spPlan, this.type, this.title);
+String pharmaceuticalFormTitle;
+  ActivePlanBrandModel(this.spPlan, this.type, this.title,this.pharmaceuticalFormTitle);
 }
 class Orders {
   final String pharmacyName;

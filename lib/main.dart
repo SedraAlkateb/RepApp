@@ -23,20 +23,82 @@ FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 void main() async {
+  // 1. التأكد من تهيئة الروابط قبل أي كود برمجـي
   WidgetsFlutterBinding.ensureInitialized();
-  await ScreenUtil.ensureScreenSize();
-  final dbHelper = DatabaseHelper();
-  final appSqlApi = AppSqlApi(dbHelper);
-  await appSqlApi.debugOtherPlanBrandByRepPlanId(UserInfo.activePlanId);
 
-  await initAppModule();
-  await _initNotifications();
-  await requestNotificationPermission();
-  AlarmAndNotifications.showNotification();
-  await sss();
+  // 2. تهيئة الإعدادات الأساسية
+  await _setupAppRequirements();
 
+  // 3. تهيئة البيانات والمستخدم
+  await _prepareUserData();
+
+  // 4. التشغيل
   runApp(Phoenix(child: const MyResponsiveApp()));
 }
+
+/// تجميع كل إعدادات التهيئة التقنية في دالة واحدة
+Future<void> _setupAppRequirements() async {
+  await ScreenUtil.ensureScreenSize();
+  await initAppModule(); // الـ DI
+  HttpOverrides.global = MyHttpOverrides();
+
+  // تهيئة الإشعارات
+  await _initNotifications();
+  await requestNotificationPermission();
+
+  // قفل الاتجاه الرأسـي
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+}
+Future<void> _prepareUserData() async {
+  final isLoginSqlUsecase = IsLoginSqlUsecase(instance());
+  final result = await isLoginSqlUsecase.execute();
+
+  await result.fold(
+          (failure) => UserInfo.isLogging = 0,
+          (data) async {
+        if (data != null && data.isLogin > 0) {
+          // 1. تعبئة البيانات
+          UserInfo.fillFromModel(data);
+
+          // 2. الفحص الفوري (لو المندوب فتح التطبيق في يوم الانتهاء أو بعده)
+          await _checkPlanExpiration();
+
+          // 3. جدولة الإشعار (ليعمل تلقائياً الساعة 9 صباحاً في يوم الانتهاء)
+          await AlarmAndNotifications.scheduleExpirationNotification();
+        } else {
+          UserInfo.isLogging = 0;
+        }
+      }
+  );
+}
+
+// دالة فحص انتهاء الصلاحية الفوري
+Future<void> _checkPlanExpiration() async {
+  if (UserInfo.isLogging != 0 && UserInfo.endDate != null && UserInfo.endDate != "") {
+    try {
+      final String today = DateFormat("dd-MM-yyyy").format(DateTime.now());
+      DateTime endDateTime = formatStringToDataTime(UserInfo.endDate!);
+
+      // اليوم التالي للانقضاء (يوم المزامنة الإجباري)
+      String nextDay = DateFormat("dd-MM-yyyy").format(
+          endDateTime.add(const Duration(days: 1))
+      );
+
+      // حالة قفل التطبيق إذا تجاوزنا التاريخ
+      if (UserInfo.isLogging != 5 && today == nextDay) {
+        EditIsLoginSqlUsecase editIsLoginSqlUsecase = EditIsLoginSqlUsecase(instance());
+        await editIsLoginSqlUsecase.execute(UserInfo.repId, 5);
+        UserInfo.isLogging = 5;
+      }
+    } catch (e) {
+      debugPrint("Error in _checkPlanExpiration: $e");
+    }
+  }
+}
+
 
 Future<void> _initNotifications() async {
   const AndroidInitializationSettings androidSettings =
@@ -206,3 +268,4 @@ class MyHttpOverrides extends HttpOverrides {
       ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
+

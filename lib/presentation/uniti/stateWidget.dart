@@ -1,5 +1,5 @@
-import 'package:domina_app/presentation/common/state_renderer/state_renderer.dart';
-import 'package:domina_app/presentation/common/state_renderer/state_renderer_imp.dart';
+import 'package:domina_app/presentation/uniti/common/state_renderer/state_renderer.dart';
+import 'package:domina_app/presentation/uniti/common/state_renderer/state_renderer_imp.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';

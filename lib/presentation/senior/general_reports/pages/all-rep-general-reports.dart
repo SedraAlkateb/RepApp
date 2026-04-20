@@ -1,5 +1,4 @@
 import 'package:domina_app/presentation/senior/general_reports/pages/doctors-hospitals-reports.dart';
-import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/font_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -16,9 +16,9 @@ class AllRepSeniorGenerlReports extends StatefulWidget {
   final int repId;
   const AllRepSeniorGenerlReports(
       {super.key,
-      required this.cityId,
-      required this.cityname,
-      required this.repId});
+        required this.cityId,
+        required this.cityname,
+        required this.repId});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -30,7 +30,7 @@ class _AllRepSeniorState extends State<AllRepSeniorGenerlReports> {
   double screenHeight = 0;
   double screenWidth = 0;
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(initialRefresh: false);
   bool startAnimation = false;
   @override
   void initState() {
@@ -44,10 +44,7 @@ class _AllRepSeniorState extends State<AllRepSeniorGenerlReports> {
 
   void onRefresh() {
     BlocProvider.of<SeniorRepsBloc>(context)
-        .add(AllSeniorRepEvent(
-    //    widget.cityId,
-     //   widget.repId
-    ));
+        .add(AllSeniorRepEvent(widget.cityId, widget.repId));
     _refreshController.refreshCompleted();
   }
 
@@ -58,8 +55,8 @@ class _AllRepSeniorState extends State<AllRepSeniorGenerlReports> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 254, 255),
       appBar:
-          //    CustomWaveAppBar()
-          AppBar(
+      //    CustomWaveAppBar()
+      AppBar(
         title: Text(
           'تقارير المندوبين (${widget.cityname})',
           textDirection: TextDirection.rtl,
@@ -97,9 +94,7 @@ class _AllRepSeniorState extends State<AllRepSeniorGenerlReports> {
                 } else if (state is AllSeniorRepErrorState) {
                   return errorFullScreen(context,
                       func: () => BlocProvider.of<SeniorRepsBloc>(context)
-                          .add(AllSeniorRepEvent(
-                    //      widget.cityId, widget.repId
-                      )));
+                          .add(AllSeniorRepEvent(widget.cityId, widget.repId)));
                 } else if (state is AllSeniorRepState) {
                   allRepresentative = state.representatives;
                 }
@@ -135,7 +130,7 @@ class _AllRepSeniorState extends State<AllRepSeniorGenerlReports> {
                               startAnimation ? 0 : screenWidth, 0, 0),
                           margin:  EdgeInsets.all(AppPaddingH.p8),
                           padding:  EdgeInsets.symmetric(
-                              horizontal: AppPaddingH.p16),
+                              horizontal: AppPaddingW.p16),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             border: Border.all(

@@ -69,7 +69,7 @@ class _AllCityState extends State<AllCity> {
                         ));
                         BlocProvider.of<SeniorRepsBloc>(context)
                             .add(AllSeniorRepEvent(
-                          //  cities[index].id,UserInfo.repId
+                          cities[index].id,UserInfo.repId
                         ));
                       },
                       child: Padding(

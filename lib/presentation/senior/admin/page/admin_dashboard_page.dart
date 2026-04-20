@@ -1,10 +1,14 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/admin/widget/interactive_admin_card.dart';
 import 'package:domina_app/presentation/senior/admin/widget/square_interactive_card.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
+import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdminDashboardPage extends StatelessWidget {
@@ -81,16 +85,39 @@ class AdminDashboardPage extends StatelessWidget {
                   ),
                   InteractiveAdminCard(
                     icon: Icons.assignment_outlined,
-                    title: 'إدارة التقارير العامة',
+                    title: 'إدارة التقارير العامة الخاصة بالسينيور',
                     subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
                     iconColor: Colors.purple,
                     onTap: () {
+
+
                       Navigator.pushNamed(
                         context,
-                        Routes.generalReports,
+                        Routes.allCitySeniors,
+
                       );
+
+                      BlocProvider.of<AllCityBloc>(context)
+                          .add(const GetAllCityEvent());
                     },
                   ),
+                  UserInfo.repType == "5"?
+                  InteractiveAdminCard(
+                    icon: Icons.assignment_outlined,
+                    title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
+                    subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                    iconColor: Colors.purple,
+                    onTap: () {
+
+                      Navigator.pushNamed(
+                        context,
+                        Routes.teamLeader,
+
+                      );
+                      BlocProvider.of<GeneralReportsBloc>(context)
+                          .add(const TeamLeaderAndCityEvent());
+                    },
+                  ):SizedBox(),
                   SizedBox(height: 10.h),
                   Row(
                     children: [

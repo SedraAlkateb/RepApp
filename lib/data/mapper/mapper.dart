@@ -803,6 +803,7 @@ extension ActivePlanBrandMapper on ActiveBrandPlanResponse? {
       specPlans,
       this?.type.toString() ?? Constants.empty,
       this?.title ?? Constants.empty,
+        this?.pharmaceuticalFormTitle ?? Constants.empty,
     );
   }
 }
