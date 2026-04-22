@@ -1,175 +1,261 @@
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/doctors-hospitals-reports.dart';
+import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/font_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
-import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
-import 'package:domina_app/domain/models/models.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class AllRepSeniorGenerlReports extends StatefulWidget {
   final int cityId;
   final String cityname;
   final int repId;
-  const AllRepSeniorGenerlReports(
-      {super.key,
-        required this.cityId,
-        required this.cityname,
-        required this.repId});
+
+  const AllRepSeniorGenerlReports({
+    super.key,
+    required this.cityId,
+    required this.cityname,
+    required this.repId,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AllRepSeniorState createState() => _AllRepSeniorState();
+  State<AllRepSeniorGenerlReports> createState() => _AllRepSeniorGenerlReportsState();
 }
 
-class _AllRepSeniorState extends State<AllRepSeniorGenerlReports> {
-  final TextEditingController searchController = TextEditingController();
-  double screenHeight = 0;
-  double screenWidth = 0;
-  final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
-  bool startAnimation = false;
+class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
+  final TextEditingController _searchController = TextEditingController();
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        startAnimation = true;
-      });
-    });
+  void dispose() {
+    _searchController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 
-  void onRefresh() {
-    BlocProvider.of<SeniorRepsBloc>(context)
-        .add(AllSeniorRepEvent(widget.cityId, widget.repId));
+  // --- منطق التحديث ---
+  void _onRefresh() {
+    BlocProvider.of<SeniorRepsBloc>(context).add(
+      AllSeniorRepEvent(widget.cityId, widget.repId),
+    );
     _refreshController.refreshCompleted();
   }
 
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 250, 254, 255),
-      appBar:
-      //    CustomWaveAppBar()
-      AppBar(
-        title: Text(
-          'تقارير المندوبين (${widget.cityname})',
-          textDirection: TextDirection.rtl,
+      appBar: AppBar(
+        title: Text('تقارير المندوبين (${widget.cityname})'),
+      ),
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          enablePullDown: true,
+          header: const WaterDropHeader(),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              // 1. قسم العنوان الفرعي (Header)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(25.w, 20.h, 25.w, 0),
+                  child: _buildHeader(),
+                ),
+              ),
+
+              // 2. حقل البحث
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                  child: SearchField(
+                    searchController: _searchController,
+                    onPressed: (value) {
+                      context.read<SeniorRepsBloc>().add(SenSearchRepEvent(value));
+                    },
+                  ),
+                ),
+              ),
+
+              // 3. قائمة المناديب
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                sliver: _buildRepsList(),
+              ),
+
+              // مسافة أمان سفلية
+              SliverToBoxAdapter(child: SizedBox(height: 50.h)),
+            ],
+          ),
         ),
       ),
-      body: bodyBuild(context),
     );
   }
 
-  Widget bodyBuild(BuildContext context) {
-    ScrollController? controller;
-    return SmartRefresher(
-      controller: _refreshController,
-      onRefresh: onRefresh,
-      enablePullDown: true,
-      child: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        controller: controller,
-        child: Column(
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SearchField(
-              searchController: searchController,
-              onPressed: (value) {
-                BlocProvider.of<SeniorRepsBloc>(context)
-                    .add(SenSearchRepEvent(value));
-              },
+            Text(
+              'إدارة التقارير',
+              style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+                color: ColorManager.medicalPrimary,
+              ),
             ),
-            BlocBuilder<SeniorRepsBloc, SeniorRepsState>(
-              builder: (context, state) {
-                List<AllRepresentative> allRepresentative =
-                    context.watch<SeniorRepsBloc>().allRepresentative;
-                if (state is AllSeniorRepLoadingState) {
-                  return loadingShimmer(
-                      context, 20, 100, 20, BorderRadius.circular(50));
-                } else if (state is AllSeniorRepErrorState) {
-                  return errorFullScreen(context,
-                      func: () => BlocProvider.of<SeniorRepsBloc>(context)
-                          .add(AllSeniorRepEvent(widget.cityId, widget.repId)));
-                } else if (state is AllSeniorRepState) {
-                  allRepresentative = state.representatives;
-                }
-                if (state is AllSeniorRepEmptyState) {
-                  return emptyFullScreen(context);
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: allRepresentative.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) {
-                              return DoctorsHospitalsReports(
-                                repName: allRepresentative[index].name,
-                                indexRep: index,
-                                senId: widget.repId,
-                                //    repPlanId: allRepresentative[index].activePlan,
-                                repId: allRepresentative[index].id,
-                              );
-                            },
-                          ));
-                        },
-                        child: AnimatedContainer(
-                          height: 60,
-                          curve: Curves.easeInOut,
-                          duration: Duration(milliseconds: 300 + (index * 200)),
-                          transform: Matrix4.translationValues(
-                              startAnimation ? 0 : screenWidth, 0, 0),
-                          margin:  EdgeInsets.all(AppPaddingH.p8),
-                          padding:  EdgeInsets.symmetric(
-                              horizontal: AppPaddingW.p16),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: ColorManager.secondaryColor1, width: 2),
-                            borderRadius:  BorderRadius.all(
-                                Radius.circular(AppSize.s8)),
-                            color: ColorManager.white,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                allRepresentative[index].name,
-                                style: TextStyle(
-                                  color: ColorManager.secondaryColor1,
-                                  fontSize: FontSize.s20,
-                                ),
-                              ),
-                              Text(
-                                "${allRepresentative[index].number}",
-                                style: TextStyle(
-                                  color: ColorManager.secondaryColor1,
-                                  fontSize: FontSize.s20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        //     );
-                        //   },
-                        // ),
-                      );
-                    },
+            Container(
+              height: 4, width: 35,
+              decoration: BoxDecoration(
+                color: const Color(0xFF42A5F5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          'استعراض تقارير المندوبين ومراقبة السينيور',
+          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRepsList() {
+    return BlocBuilder<SeniorRepsBloc, SeniorRepsState>(
+      builder: (context, state) {
+        List<AllRepresentative> list = context.watch<SeniorRepsBloc>().allRepresentative;
+
+        if (state is AllSeniorRepLoadingState) {
+          return SliverToBoxAdapter(
+            child: Center(child: loadingShimmer(context, 5, 100, 20, BorderRadius.circular(20))),
+          );
+        }
+
+        if (state is AllSeniorRepErrorState) {
+          return SliverToBoxAdapter(
+            child: errorFullScreen(context, func: _onRefresh),
+          );
+        }
+
+        if (state is AllSeniorRepState) {
+          list = state.representatives;
+        }
+
+        if (list.isEmpty) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: emptyFullScreen(context),
+          );
+        }
+
+        return AnimationLimiter(
+          child: SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                final rep = list[index];
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 500),
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 15.h),
+                        child: _buildRepReportCard(rep, index),
+                      ),
+                    ),
                   ),
                 );
               },
+              childCount: list.length,
             ),
-          ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildRepReportCard(AllRepresentative rep, int index) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15.r),
+          onTap: () {
+            // الحفاظ على نفس الـ onTap الأصلي
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) {
+                return DoctorsHospitalsReports(
+                  repName: rep.name,
+                  indexRep: index,
+                  senId: widget.repId,
+                  repId: rep.id,
+                );
+              },
+            ));
+          },
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Row(
+              children: [
+                // أيقونة دائرية باسم المندوب أو رمز
+                Container(
+                  width: 50.w,
+                  height: 50.w,
+                  decoration: BoxDecoration(
+                    color: ColorManager.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.assessment_outlined, color: ColorManager.primary),
+                ),
+                SizedBox(width: 15.w),
+                // بيانات المندوب
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        rep.name,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                          color: ColorManager.secondaryColor1,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        "عدد الزيارات غير المقروءة: ${rep.number}",
+                        style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+                // أيقونة السهم
+                Icon(Icons.arrow_forward_ios_rounded, size: 18.sp, color: Colors.grey.shade400),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -135,7 +135,7 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
                     duration: const Duration(milliseconds: 200),
                     padding: EdgeInsets.only(left: _isPressed ? 5.w : 0),
                     child: Icon(
-                        Icons.arrow_back_ios_new_rounded,
+                        Icons.arrow_forward_ios,
                         color: _isPressed ? widget.iconColor : Colors.grey[300],
                         size: 16.sp
                     ),
