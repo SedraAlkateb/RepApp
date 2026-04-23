@@ -224,10 +224,10 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                   width: 50.w,
                   height: 50.w,
                   decoration: BoxDecoration(
-                    color: ColorManager.primary.withOpacity(0.1),
+                    color: ColorManager.medicalPrimary.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.assessment_outlined, color: ColorManager.primary),
+                  child: Icon(Icons.assessment_outlined, color: ColorManager.medicalPrimary),
                 ),
                 SizedBox(width: 15.w),
                 // بيانات المندوب

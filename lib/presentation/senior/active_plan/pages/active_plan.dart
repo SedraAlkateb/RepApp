@@ -35,7 +35,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
           }
 
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             itemCount: planBrandModel.length,
             itemBuilder: (context, index) => BrandPlanCard(model: planBrandModel[index]),
           );
@@ -48,7 +48,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
   bool get wantKeepAlive => true;
 }
 
-// ويدجيت الـ Card المطور بناءً على التصميم
+// ويدجيت الـ Card المطور ليطابق التصميم المرفق تماماً
 class BrandPlanCard extends StatelessWidget {
   final ActivePlanBrandModel model;
 
@@ -57,27 +57,27 @@ class BrandPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
+      margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25.r),
+        border: BoxBorder.all(color:  ColorManager.black.withValues(alpha: 0.1,blue: 0.1,green: 0.1)),//اطار خفيف جدا,
+        borderRadius: BorderRadius.circular(25.r), // حواف دائرية كبيرة للكارد
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            color: Colors.black.withOpacity(0.03), // ظل ناعم جداً فاتح
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // الجزء العلوي الملون (Header)
+          // الجزء العلوي (Header) - بخلفية رمادية فاتحة جداً
           Container(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             decoration: BoxDecoration(
-              // تلوين الخلفية بلون أزرق فاتح جداً أو شفافية من اللون الأساسي
-              color: ColorManager.secondaryColor3,
+              color: const Color(0xFFE9ECF0), // لون خلفية الهيدر الرمادي الفاتح
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25.r),
                 topRight: Radius.circular(25.r),
@@ -86,8 +86,8 @@ class BrandPlanCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // اسم الدواء والنوع (تحت بعض)
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -95,32 +95,34 @@ class BrandPlanCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF0D47A1),
+                        color: const Color(0xFF1E3A8A), // أزرق داكن للنص الأساسي
                       ),
                     ),
+                    SizedBox(height: 2.h),
                     Text(
                       model.pharmaceuticalFormTitle,
                       style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF64748B), // رمادي للنص الفرعي
                       ),
                     ),
                   ],
                 ),
-                // شارة "هدف"
+                // شارة "هدف" البيضاء
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                   decoration: BoxDecoration(
-                    color: Colors.white, // جعل الشارة بيضاء لتبرز فوق الخلفية الملونة
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: const Color(0xFFE3F2FD)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.r), // حواف دائرية صغيرة للشارة
+                    border: Border.all(color: const Color(0xFFE2E8F0)), // إطار رمادي خفيف جداً
                   ),
                   child: Text(
                     model.type,
                     style: TextStyle(
-                      color: const Color(0xFF2196F3),
+                      color: const Color(0xFF3B82F6), // أزرق فاتح لنص الشارة
                       fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
+                      fontSize: 13.sp,
                     ),
                   ),
                 ),
@@ -128,10 +130,7 @@ class BrandPlanCard extends StatelessWidget {
             ),
           ),
 
-          // إزالة الـ Divider لأنه تم تمييز الجزء العلوي باللون
-          // const Divider(height: 1),
-
-          // قسم "توزيع الأهداف حسب الاختصاص"
+          // قسم "توزيع الأهداف حسب الاختصاص" - الخلفية بيضاء تلقائياً
           Padding(
             padding: EdgeInsets.all(16.w),
             child: Column(
@@ -139,51 +138,51 @@ class BrandPlanCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.info_outline, size: 16.sp, color: Colors.grey),
+                    Icon(Icons.info_outline, size: 16.sp, color: const Color(0xFF94A3B8)),
                     SizedBox(width: 8.w),
                     Text(
                       "توزيع الأهداف حسب الاختصاص",
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: Colors.blueGrey[700],
+                        color: const Color(0xFF64748B), // رمادي للنص الوصفي
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 16.h),
 
-                // قائمة الاختصاصات داخل مربعات
+                // قائمة الاختصاصات داخل مربعات بيضاء بإطار رمادي
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: model.spPlan.length,
                   itemBuilder: (context, i) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                      margin: EdgeInsets.only(bottom: 12.h),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF8FAFC),
+                        color: Colors.white, // مربعات الاختصاصات بيضاء
                         borderRadius: BorderRadius.circular(15.r),
-                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                        border: Border.all(color: const Color(0xFFE2E8F0)), // إطار رمادي خفيف
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // توزيع على الأطراف
                         children: [
                           Text(
                             model.spPlan[i].name,
                             style: TextStyle(
-                              fontSize: 14.sp,
-                              color: const Color(0xFF334155),
-                              fontWeight: FontWeight.w500,
+                              fontSize: 15.sp,
+                              color: const Color(0xFF1E293B), // أسود/أزرق داكن لاسم الاختصاص
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
                             model.spPlan[i].amount,
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
-                              color: const Color(0xFF0D47A1),
+                              color: const Color(0xFF1E3A8A), // أزرق داكن للرقم
                             ),
                           ),
                         ],

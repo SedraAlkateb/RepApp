@@ -3,14 +3,13 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
-import 'package:domina_app/presentation/senior/report_visit_doctor/widget/text_info.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/widget/visit_detail_card.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/who_read_dialog.dart';
-import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
-import 'package:domina_app/presentation/uniti/color_container.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReportVisitHospital extends StatelessWidget {
   ReportVisitHospital({
@@ -22,6 +21,7 @@ class ReportVisitHospital extends StatelessWidget {
     required this.repPlan,
     required this.iscanedite,
   });
+
   final int userId;
   final int repId;
   final String repName;
@@ -29,8 +29,8 @@ class ReportVisitHospital extends StatelessWidget {
   final int repPlan;
   final bool iscanedite;
 
-  final TextEditingController searchNoteDoctorController =
-  TextEditingController();
+  final TextEditingController searchNoteDoctorController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<ReportVisitDoctorBloc>(context).clear();
@@ -46,8 +46,7 @@ class ReportVisitHospital extends StatelessWidget {
                 color: ColorManager.secondaryColor1,
               ),
               onPressed: () {
-                BlocProvider.of<ReportVisitDoctorBloc>(context)
-                    .add(DocNoIsExpandedNoteEvent());
+                BlocProvider.of<ReportVisitDoctorBloc>(context).add(DocNoIsExpandedNoteEvent());
                 Navigator.pop(context);
               },
             );
@@ -64,17 +63,30 @@ class ReportVisitHospital extends StatelessWidget {
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SearchField(
-                        searchController: searchNoteDoctorController,
-                        onPressed: (value) {
-                          BlocProvider.of<ReportVisitDoctorBloc>(context)
-                              .add(SenSearchNoteVisitHospitalEvent(value));
-                        },
-                      ),
-                    ],
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20.h),
+                        // أنيميشن للهيدر
+                        animatedEntry(
+                          delay: 0,
+                          child: const Text(
+                            'تقارير الزيارات للمشافي',
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                          ),
+                        ),
+                        animatedEntry(
+                          delay: 100,
+                          child: const Text(
+                            'مراجعة تفاصيل الزيارات للمشافي الميدانية للمندوب',
+                            style: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
+                    ),
                   ),
                 ),
                 BlocConsumer<ReportVisitDoctorBloc, ReportVisitDoctorState>(
@@ -84,397 +96,89 @@ class ReportVisitHospital extends StatelessWidget {
                     }
                   },
                   builder: (context, state) {
-                    List<RepVisitsModel> doctorNoteModel =
-                        context.watch<ReportVisitDoctorBloc>().repVisitsSearch;
+                    List<RepVisitsModel> doctorNoteModel = context.watch<ReportVisitDoctorBloc>().repVisitsSearch;
+
                     if (state is AllReportVisitHospitalEmptyState) {
-                      return SliverList(
-                          delegate: SliverChildListDelegate([
-                            const SizedBox(
-                              height: 100,
-                            ),
-                            emptyFullScreen(context)
-                          ]));
+                      return SliverList(delegate: SliverChildListDelegate([const SizedBox(height: 100), emptyFullScreen(context)]));
                     }
-                    if (state is SenVisitDoctorAsReadState) {
-                      doctorNoteModel = state.doctorNoteModel;
+                    if (state is SenVisitDoctorAsReadState) doctorNoteModel = state.doctorNoteModel;
+                    if (state is AllReportVisitHospitalsState) doctorNoteModel = state.repVisitsModel;
+
+                    // حالات التحميل والخطأ بقيت كما هي
+                    if (state is AllReportVisitHospitalLoadingState || state is AllReadLoadingState) {
+                      return SliverList(delegate: SliverChildListDelegate([loadingFullScreen(context)]));
                     }
-                    if (state is AllReportVisitHospitalsState) {
-                      doctorNoteModel = state.repVisitsModel;
-                    }
-                    if (state is AllReadErrorState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate([
-                          errorFullScreen(context, func: () {
-                            BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                AllReportVisitHospitalEvent(
-                                    VisitRepSen(repId, userId), iscanedite));
-                          })
-                        ]),
-                      );
-                    }
-                    if (state is AllReportVisitHospitalLoadingState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate(
-                            [loadingFullScreen(context)]),
-                      );
-                    }
-                    if (state is AllReportVisitHospitalErrorState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate([
-                          errorFullScreen(context, func: () {
-                            BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                AllReportVisitHospitalEvent(
-                                    VisitRepSen(repId, userId), iscanedite));
-                          })
-                        ]),
-                      );
-                    }
-                    if (state is AllReadLoadingState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate(
-                            [loadingFullScreen(context)]),
-                      );
+                    if (state is AllReportVisitHospitalErrorState || state is AllReadErrorState) {
+                      return SliverList(delegate: SliverChildListDelegate([errorFullScreen(context, func: () {
+                        BlocProvider.of<ReportVisitDoctorBloc>(context).add(AllReportVisitHospitalEvent(VisitRepSen(repId, userId), iscanedite));
+                      })]));
                     }
                     if (state is AllReadSucState) {
-                      BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                          AllReportVisitHospitalEvent(
-                              VisitRepSen(repId, userId), iscanedite));
+                      BlocProvider.of<ReportVisitDoctorBloc>(context).add(AllReportVisitHospitalEvent(VisitRepSen(repId, userId), iscanedite));
                     }
+
                     return SliverList(
                       delegate: SliverChildListDelegate([
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("عدد الملاحظات : ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge),
-                                  CircleNumberWidget(
-                                      number: doctorNoteModel.length),
-                                ],
-                              ),
-                              if (iscanedite) ...[
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          BlocProvider.of<
-                                              ReportVisitDoctorBloc>(
-                                              context)
-                                              .add(AllReadDocNoteEvent(
-                                              readAll: ReadAll(repPlan,
-                                                  UserInfo.repId, 2, 1)));
-                                        },
-                                        icon: const Icon(
-                                            Icons.bookmarks_rounded)),
-                                    IconButton(
-                                        onPressed: () {
-                                          BlocProvider.of<
-                                              ReportVisitDoctorBloc>(
-                                              context)
-                                              .add(AllReadDocNoteEvent(
-                                              readAll: ReadAll(repPlan,
-                                                  UserInfo.repId, 2, 0)));
-                                        },
-                                        icon: const Icon(
-                                            Icons.bookmarks_outlined)),
-                                  ],
-                                )
-                              ]
-                            ],
+                        animatedEntry(
+                          delay: 200,
+                          child: SearchField(
+                            searchController: searchNoteDoctorController,
+                            onPressed: (value) {
+                              BlocProvider.of<ReportVisitDoctorBloc>(context).add(SenSearchNoteVisitHospitalEvent(value));
+                            },
                           ),
                         ),
-                        // القائمة
+                        animatedEntry(delay: 300, child: buildTotalReportsCard(doctorNoteModel.length)),
+
+                        animatedEntry(
+                          delay: 400,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                            child: Row(
+                              children: [
+                                if (iscanedite) ...[
+                                  buildActionBtn(
+                                    context: context,
+                                    label: 'حجز الكل',
+                                    icon: Icons.bookmarks_rounded,
+                                    color: const Color(0xFF1E3A8A),
+                                    onTap: () {
+                                      BlocProvider.of<ReportVisitDoctorBloc>(context).add(AllReadDocNoteEvent(readAll: ReadAll(repPlan, UserInfo.repId, 2, 1)));
+                                    },
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  buildActionBtn(
+                                    context: context,
+                                    label: 'إلغاء حجز الكل',
+                                    icon: Icons.bookmark_remove_outlined,
+                                    color: const Color(0xFFEF4444),
+                                    onTap: () {
+                                      BlocProvider.of<ReportVisitDoctorBloc>(context).add(AllReadDocNoteEvent(readAll: ReadAll(repPlan, UserInfo.repId, 2, 0)));
+                                    },
+                                  ),
+                                ]
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // قائمة البطاقات مع أنيميشن متدرج
                         ...doctorNoteModel.asMap().entries.map((entry) {
                           final index = entry.key;
-                          final doctorNoteModel = entry.value;
-                          return Container(
-                            margin:  EdgeInsets.all(AppPaddingH.p8),
-                            padding:  EdgeInsets.symmetric(
-                                horizontal: AppPaddingW.p8,
-                                vertical: AppPaddingH.p12),
-                            decoration: doctorNoteModel.flag
-                                ? BoxDecoration(
-                              border:
-                              Border.all(color: ColorManager.primary),
-                              color: ColorManager.secondaryColor8,
-                              borderRadius:  BorderRadius.all(
-                                  Radius.circular(AppSize.s14)),
-                            )
-                                : BoxDecoration(
-                              color: ColorManager.white,
-                              border: Border.all(
-                                  color: ColorManager.hintGrey),
-                              borderRadius:  BorderRadius.all(
-                                  Radius.circular(AppSize.s14)),
-                            ),
-                            child: Column(
-                              children: [
-                                InkWell(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        doctorNoteModel.docTitle,
-                                        style: doctorNoteModel.flag
-                                            ? Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            : Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
+                          final model = entry.value;
 
-                                          Flexible(
-                                            child: Text(
-                                              doctorNoteModel.placeTitle,
-                                              style: doctorNoteModel.flag
-                                                  ? Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall
-                                                  : Theme.of(context)
-                                                  .textTheme
-                                                  .headlineMedium,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.location_on,
-                                            size: 15,
-                                            color: ColorManager.primaryField,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "ملاحظة المكتب العلمي :",
-                                            style: doctorNoteModel.flag
-                                                ? Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                : Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
-                                          ),
-                                          SizedBox(
-                                            height: 8,
-                                          ),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 10),
-                                            decoration: BoxDecoration(
-                                              color:
-                                              ColorManager.secondaryColor3,
-                                              borderRadius:
-                                              BorderRadius.circular(14),
-                                            ),
-                                            child: Text(
-                                              doctorNoteModel.note,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall
-                                                  ?.copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 8,
-                                          ),
-                                          if (doctorNoteModel
-                                              .samples.isNotEmpty) ...[
-                                            Text(
-                                              "المستحضرات:",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelLarge
-                                                  ?.copyWith(
-                                                //          fontWeight: FontWeight.w900,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            const SizedBox(height: 10),
-
-                                            // Chips مثل الصورة (ألوان خفيفة)
-                                            Wrap(
-                                              alignment: WrapAlignment.start,
-                                              spacing: 5, // مسافة أفقية
-                                              runSpacing: 8, // مسافة بين الأسطر
-                                              children: List.generate(
-                                                  doctorNoteModel
-                                                      .samples.length, (i) {
-                                                final bg = chipBg(i);
-                                                return Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 10),
-                                                  decoration: BoxDecoration(
-                                                    color: bg,
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        14),
-                                                  ),
-                                                  child: Text(
-                                                    doctorNoteModel.samples[i],
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall
-                                                        ?.copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      color: Colors.black87,
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                            ),
-
-                                            const SizedBox(height: 14),
-                                          ],
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      " التاريخ :",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        " ${doctorNoteModel.visitDate} ",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "الإختصاص :",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        " ${doctorNoteModel.spTitle} ",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          if (iscanedite) ...[
-                                            BlocBuilder<ReportVisitDoctorBloc,
-                                                ReportVisitDoctorState>(
-                                              builder: (context, state) {
-                                                return Align(
-                                                  alignment: Alignment.bottomLeft,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            whoReadDialog(context);
-                                                            BlocProvider.of<
-                                                                ReportVisitDoctorBloc>(
-                                                                context)
-                                                                .add(WhoAllReadEvent(
-                                                                doctorNoteModel
-                                                                    .visitId,
-                                                                "2"));
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.visibility,
-                                                            color: doctorNoteModel.flag
-                                                                ? ColorManager.white
-                                                                : ColorManager
-                                                                .secondaryColor,
-                                                          )),
-                                                      IconButton(
-                                                          onPressed:
-                                                          state is AsReadLoadingState
-                                                              ? null
-                                                              : () {
-                                                            BlocProvider.of<
-                                                                ReportVisitDoctorBloc>(
-                                                                context)
-                                                                .add(
-                                                                ChangeReadHosNoteEvent(
-                                                                  index: indexRep,
-                                                                  indexBook: index,
-                                                                  repVisitsModel:
-                                                                  doctorNoteModel,
-                                                                ));
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.book_outlined,
-                                                            color: doctorNoteModel.flag
-                                                                ? ColorManager.white
-                                                                : ColorManager
-                                                                .secondaryColor,
-                                                          )),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ]
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  onTap: () {
-                                    BlocProvider.of<ReportVisitDoctorBloc>(
-                                        context)
-                                        .add(DocIsExpandedNoteEvent(
-                                        doctorNoteModel, index));
-                                  },
-                                ),
-
-                              ],
+                          return animatedEntry(
+                            delay: 500 + (index * 100), // كل عنصر يتأخر 100 ملي ثانية عن الذي قبله
+                            child: _buildHospitalVisitCard(
+                              doctorNoteModel: model,
+                              index: index,
+                              indexRep: indexRep,
+                              iscanedite: iscanedite,
+                              context: context,
                             ),
                           );
                         }),
+                        SizedBox(height: 100.h),
                       ]),
                     );
                   },
@@ -482,278 +186,135 @@ class ReportVisitHospital extends StatelessWidget {
               ],
             ),
           ),
-          BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
-            builder: (context, state) {
-              bool num = BlocProvider.of<ReportVisitDoctorBloc>(context).num;
-              bool isExpanded =
-                  BlocProvider.of<ReportVisitDoctorBloc>(context).isExpanded;
-              RepVisitsModel doctorNoteModel =
-                  BlocProvider.of<ReportVisitDoctorBloc>(context)
-                      .doctorNoteModel;
-              int index = BlocProvider.of<ReportVisitDoctorBloc>(context).index;
+          stackInputHospital(indexRep: indexRep, iscanedite: iscanedite)
+        ],
+      ),
+    );
+  }
 
-              if (state is DocIsExpandedNoteState) {
-                isExpanded = true;
-                index = state.index;
-                doctorNoteModel = state.doctorNoteModel;
-              }
-              if (state is DocNoIsExpandedNoteState) {
-                isExpanded = false;
-              }
-              return Stack(
-                children: [
-                  if (isExpanded)
-                    GestureDetector(
-                      onTap: () {
-                        BlocProvider.of<ReportVisitDoctorBloc>(context)
-                            .add(DocNoIsExpandedNoteEvent());
-                      },
-                      child: ModalBarrier(
-                        color: Colors.black.withOpacity(0.5),
-                        dismissible: true,
-                      ),
+  // دالة البطاقة الأصلية بقيت كما هي
+  Widget _buildHospitalVisitCard({
+    required dynamic doctorNoteModel,
+    required int index,
+    required int indexRep,
+    required bool iscanedite,
+    required BuildContext context,
+  }) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<ReportVisitDoctorBloc>(context).add(DocIsExpandedNoteEvent(doctorNoteModel, index));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(35.r),
+          border: Border(
+            right: BorderSide(
+              color: doctorNoteModel.flag ? ColorManager.secondaryColor2 : const Color(0xFF1E3A8A),
+              width: 8.w,
+            ),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            )
+          ],
+        ),
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    doctorNoteModel.docTitle,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1E3A8A),
                     ),
-                  isExpanded
-                      ? DraggableScrollableSheet(
-                    initialChildSize: 0.4,
-                    minChildSize: 0.1,
-                    maxChildSize: 1,
-                    builder: (context, scrollController) {
-                      return NotificationListener<
-                          DraggableScrollableNotification>(
-                        onNotification: (notification) {
-                          if (notification.extent == 1) {
-                            BlocProvider.of<ReportVisitDoctorBloc>(
-                                context)
-                                .add(ExpandedBorder(true));
-                          } else if (BlocProvider.of<
-                              ReportVisitDoctorBloc>(context)
-                              .num ==
-                              true) {
-                            BlocProvider.of<ReportVisitDoctorBloc>(
-                                context)
-                                .add(ExpandedBorder(false));
-                          } else if (notification.extent <= 0.1) {
-                            BlocProvider.of<ReportVisitDoctorBloc>(
-                                context)
-                                .add(DocNoIsExpandedNoteEvent());
-                          }
-                          // else {
-                          //   BlocProvider.of<ReportVisitDoctorBloc>(context).add(ExpandedBorder(1));
-                          // }
-                          return true;
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: ColorManager.secondaryColor3),
-                            color: ColorManager.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(
-                                  ((num == true)) ? 0 : AppSize.s40),
-                              topRight: Radius.circular(
-                                  ((num == true)) ? 0 : AppSize.s40),
-                            ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(doctorNoteModel.visitDate, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                    SizedBox(width: 5.w),
+                    const Icon(Icons.calendar_month_outlined, size: 16, color: Colors.grey),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(doctorNoteModel.spTitle, style: const TextStyle(color: Color(0xFF3B82F6), fontWeight: FontWeight.bold)),
+                    SizedBox(width: 5.w),
+                    const Icon(Icons.local_offer_outlined, size: 16, color: Color(0xFF3B82F6)),
+                  ],
+                ),
+                if (iscanedite)
+                  BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
+                    builder: (context, state) {
+                      return Row(
+                        children: [
+                          buildIconButton(
+                            icon: Icons.visibility,
+                            onPressed: () {
+                              whoReadDialog(context);
+                              BlocProvider.of<ReportVisitDoctorBloc>(context).add(WhoAllReadEvent(doctorNoteModel.visitId, "2"));
+                            },
                           ),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                num == false
-                                    ? Center(
-                                  child: InkWell(
-                                    onTap: () {
-                                      BlocProvider.of<
-                                          ReportVisitDoctorBloc>(
-                                          context)
-                                          .add(
-                                          DocNoIsExpandedNoteEvent());
-                                    },
-                                    child: Container(
-                                      margin:
-                                      const EdgeInsets.all(16),
-                                      padding:  EdgeInsets
-                                          .symmetric(
-                                          vertical: AppPaddingH.p8),
-                                      child: Column(
-                                        children: List.generate(
-                                          2,
-                                              (index) => Container(
-                                            width: 60,
-                                            height: 3,
-                                            margin: const EdgeInsets
-                                                .symmetric(
-                                                vertical: 3),
-                                            decoration:
-                                            BoxDecoration(
-                                              color: ColorManager
-                                                  .secondaryColor1,
-                                              borderRadius:
-                                              BorderRadius
-                                                  .circular(2),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                    : const SizedBox(),
-                                Padding(
-                                  padding:  EdgeInsets.all(
-                                      AppPaddingH.p20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(height: 20),
-                                      TextInfo(
-                                        title: "اسم المشفى",
-                                        supTitle:
-                                        doctorNoteModel.docTitle,
-                                      ),
-                                      TextInfo(
-                                        title: "العنوان",
-                                        supTitle:
-                                        doctorNoteModel.placeTitle,
-                                      ),
-                                      TextInfo(
-                                        title: "الاختصاص",
-                                        supTitle: doctorNoteModel.spTitle,
-                                      ),
-                                      TextInfo(
-                                        title: "التاريخ",
-                                        supTitle:
-                                        doctorNoteModel.visitDate,
-                                      ),
-                                      TextInfo(
-                                        title: "ملاحظات المكتب العلمي",
-                                        supTitle: doctorNoteModel.note,
-                                      ),
-                                      TextInfo(
-                                        title: "ملاحظات إضافية",
-                                        supTitle: doctorNoteModel.special,
-                                      ),
-                                      TextInfo(
-                                        title: "ملاحظات مستودع قاسيون",
-                                        supTitle: doctorNoteModel.issue,
-                                      ),
-                                      doctorNoteModel.samples.isNotEmpty
-                                          ? Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .start,
-                                        children: [
-                                          Text(
-                                            "المستحضرات: ",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
-                                            textAlign:
-                                            TextAlign.center,
-                                          ),
-                                          const SizedBox(height: 8),
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                            const NeverScrollableScrollPhysics(),
-                                            itemCount:
-                                            doctorNoteModel
-                                                .samples.length,
-                                            itemBuilder:
-                                                (context, index) {
-                                              return Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .symmetric(
-                                                    vertical: 5,
-                                                    horizontal:
-                                                    5),
-                                                child: Container(
-                                                  alignment: Alignment
-                                                      .bottomRight,
-                                                  padding:
-                                                  const EdgeInsets
-                                                      .all(10),
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    border: Border.all(
-                                                        color: ColorManager
-                                                            .secondaryColor7),
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        8),
-                                                  ),
-                                                  child: Text(
-                                                    doctorNoteModel
-                                                        .samples[
-                                                    index],
-                                                    style: Theme.of(
-                                                        context)
-                                                        .textTheme
-                                                        .bodySmall,
-                                                    textAlign:
-                                                    TextAlign
-                                                        .center,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      )
-                                          : const SizedBox(),
-                                      if (iscanedite) ...[
-                                        Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: IconButton(
-                                            onPressed: state
-                                            is AsReadLoadingState
-                                                ? null
-                                                : () {
-                                              BlocProvider.of<
-                                                  ReportVisitDoctorBloc>(
-                                                  context)
-                                                  .add(
-                                                ChangeReadHosNoteEvent(
-                                                  index: indexRep,
-                                                  indexBook: index,
-                                                  repVisitsModel:
-                                                  doctorNoteModel,
-                                                ),
-                                              );
-                                            },
-                                            icon: Icon(
-                                              size: 30,
-                                              Icons.book_outlined,
-                                              color: doctorNoteModel.flag
-                                                  ? ColorManager
-                                                  .secondaryColor4
-                                                  : ColorManager
-                                                  .secondaryColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ]
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          SizedBox(width: 8.w),
+                          buildIconButton(
+                            icon: Icons.book_outlined,
+                            isLoading: state is AsReadLoadingState,
+                            onPressed: () {
+                              BlocProvider.of<ReportVisitDoctorBloc>(context).add(ChangeReadHosNoteEvent(index: indexRep, indexBook: index, repVisitsModel: doctorNoteModel));
+                            },
                           ),
-                        ),
+                        ],
                       );
                     },
                   )
-                      : const SizedBox(),
-                ],
-              );
-            },
-          ),
-        ],
+              ],
+            ),
+            SizedBox(height: 15.h),
+            Row(
+              children: [
+                buildSmallInfoBox('الموقع', doctorNoteModel.placeTitle, Icons.location_on_outlined),
+                SizedBox(width: 10.w),
+                buildSmallInfoBox('التقييم', doctorNoteModel.rate ?? "0.0", Icons.star, isStar: true),
+              ],
+            ),
+            SizedBox(height: 15.h),
+            buildDetailBox(
+              'ملاحظة المكتب العلمي',
+              Text(
+                doctorNoteModel.note.isEmpty ? "لا توجد ملاحظات" : doctorNoteModel.note,
+                textAlign: TextAlign.right,
+                style: const TextStyle(color: Color(0xFF1E3A8A), fontSize: 13),
+              ),
+            ),
+            if (doctorNoteModel.samples.isNotEmpty) ...[
+              SizedBox(height: 15.h),
+              buildDetailBox(
+                'المستحضرات الموزعة',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: doctorNoteModel.samples.map<Widget>((sample) {
+                    return buildBulletItem(sample);
+                  }).toList(),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
