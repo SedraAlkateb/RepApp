@@ -1274,7 +1274,7 @@ class PlanBrandModel {
       'brandType': brandType,
       //  'title': title,
       'amount': amount,
-      'pharmaceuticalForm': pharmaceuticalForm,
+     // 'pharmaceuticalForm': pharmaceuticalForm,
     };
   }
 

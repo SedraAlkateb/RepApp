@@ -11,3 +11,10 @@ class GetActivePlanEvent extends ActivePlanEvent{
  List<Object?> get props => [];
 
 }
+class SearchActivePlanEvent extends ActivePlanEvent{
+ final String search;
+ SearchActivePlanEvent(this.search);
+ @override
+ List<Object?> get props => [search];
+
+}

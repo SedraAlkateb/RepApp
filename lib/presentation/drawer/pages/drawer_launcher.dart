@@ -6,7 +6,6 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// استيراد الـ CustomAppDrawer و DrawerMenuItem
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key});
@@ -154,10 +153,9 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamedAndRemoveUntil(
+                Navigator.pushNamed(
                   context,
-                  Routes.places,
-                  (route) => false,
+                  Routes.placesArchive,
                 );
               })),
       DrawerMenuItem(

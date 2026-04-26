@@ -25,30 +25,36 @@ class SeniorByCityId extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. الهيدر المودرن (بدون سيرش)
+          // 1. الهيدر يظهر فوراً خارج الـ BlocBuilder لضمان عدم التأخر
           _buildHeader(context),
 
-          // 2. قائمة المناديب مع الأنيميشن
-          Expanded(
-            child: BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
-              builder: (context, state) {
-                List<SeniorCityModel> seniors =
-                    context.watch<GeneralReportsBloc>().dataseniorsbycityid;
+          // 2. قائمة المناديب أو اللودينج
+          BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
+            builder: (context, state) {
+              List<SeniorCityModel> seniors =
+                  context.watch<GeneralReportsBloc>().dataseniorsbycityid;
 
-                if (state is SeniorByCityIdState) {
-                  seniors = state.data;
-                }
-                if (state is SeniorByCityIdLoadingState) {
-                  return loadingShimmer(context, 10, 20, 20, BorderRadius.circular(20));
-                }
-                if (state is SeniorByCityIdErrorState) {
-                  return errorFullScreen(context, func: () {});
-                }
-                if (state is SeniorByCityIdEmptyState) {
-                  return emptyFullScreen(context);
-                }
+              if (state is SeniorByCityIdState) {
+                seniors = state.data;
+              }
 
-                return AnimationLimiter(
+              // حل مشكلة الـ Overflow أثناء التحميل بوضع الشيمر داخل Expanded
+              if (state is SeniorByCityIdLoadingState) {
+                return Expanded(
+                  child: loadingShimmer(context, 10, 20, 20, BorderRadius.circular(20)),
+                );
+              }
+
+              if (state is SeniorByCityIdErrorState) {
+                return Expanded(child: errorFullScreen(context, func: () {}));
+              }
+
+              if (state is SeniorByCityIdEmptyState || seniors.isEmpty) {
+                return Expanded(child: emptyFullScreen(context));
+              }
+
+              return Expanded(
+                child: AnimationLimiter(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     physics: const BouncingScrollPhysics(),
@@ -67,16 +73,15 @@ class SeniorByCityId extends StatelessWidget {
                       );
                     },
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  // الهيدر الخاص بالعنوان فقط
   Widget _buildHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 25, 20, 15),
@@ -96,7 +101,6 @@ class SeniorByCityId extends StatelessWidget {
                   style: TextStyle(color: Colors.grey.shade500, fontSize: 13.sp)),
             ],
           ),
-          // الخط الجمالي الأزرق لضمان تناسق التصميم
           Container(
             height: 5, width: 45,
             decoration: BoxDecoration(
@@ -109,7 +113,6 @@ class SeniorByCityId extends StatelessWidget {
     );
   }
 
-  // البطاقة الذكية للمندوب (Smart Rep Card)
   Widget _buildRepSmartCard(BuildContext context, SeniorCityModel senior) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -149,7 +152,6 @@ class SeniorByCityId extends StatelessWidget {
             padding: const EdgeInsets.all(18.0),
             child: Row(
               children: [
-                // أيقونة المندوب الشخصية بتصميم دائري ناعم
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -159,8 +161,6 @@ class SeniorByCityId extends StatelessWidget {
                   child: Icon(Icons.person_pin_rounded, color: ColorManager.secondaryColor1),
                 ),
                 const SizedBox(width: 16),
-
-                // اسم المندوب
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,8 +181,6 @@ class SeniorByCityId extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // سهم الانتقال
                 Icon(Icons.arrow_forward_ios_rounded,
                     size: 18, color: Colors.grey.shade300),
               ],

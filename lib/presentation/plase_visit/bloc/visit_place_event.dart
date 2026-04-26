@@ -146,6 +146,7 @@ class SearchDoctorVisitEvent extends VisitPlaceEvent{
 class SearchHospitalVisitEvent extends VisitPlaceEvent{
 
   final String value;
+
   SearchHospitalVisitEvent({required this.value});
   @override
 

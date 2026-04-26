@@ -1,3 +1,4 @@
+// ignore_for_file: must_be_immutable
 import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
@@ -25,294 +26,336 @@ class AllRepWithFuture extends StatefulWidget {
   State<AllRepWithFuture> createState() => _AllRepWithFutureState();
 }
 
-class _AllRepWithFutureState extends State<AllRepWithFuture> {
+class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProviderStateMixin {
   final TextEditingController searchController = TextEditingController();
-  double screenHeight = 0;
-  double screenWidth = 0;
-  int index = -1;
-  bool startAnimation = false;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-  @override
-  void initState() {
-    super.initState();
-print("object");
-print(UserInfo.statusPlan);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        startAnimation = true;
-      });
-    });
-  }
-
-  void onRefresh() {
-    BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
-
-    _refreshController.refreshCompleted();
-  }
+  int selectedIndex = -1;
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.width;
-    screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: AppBar(title: Text("إدارة الخطة الفعالة")),
-      body: bodyBuild(context),
+      backgroundColor: const Color(0xFFF4F7FA),
+      appBar: AppBar(title: const Text("إدارة الخطة الفعالة")),
+      body: Column(
+        children: [
+          SizedBox(height: 12.h),
+          SearchField(
+            searchController: searchController,
+            onPressed: (value) {
+              BlocProvider.of<ManageFutureBloc>(context).add(SenSearchRepFutureEvent(value));
+            },
+          ),
+          Expanded(
+            child: BlocBuilder<ManageFutureBloc, ManageFutureState>(
+              builder: (context, state) {
+                List<AllRepresentativeFuture> allRepresentative = context.watch<ManageFutureBloc>().allRepresentative;
+
+                if (state is AllSeniorRepLoadingState) return _buildLoadingShimmer();
+                if (state is AllSeniorRepErrorState) {
+                  return errorFullScreen(context, func: () => BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent()));
+                }
+
+                return SmartRefresher(
+                  controller: _refreshController,
+                  onRefresh: () {
+                    BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
+                    _refreshController.refreshCompleted();
+                  },
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                    itemCount: allRepresentative.length,
+                    itemBuilder: (context, index) {
+                      // 1. Staggered Entrance Animation
+                      return _buildRepItem(allRepresentative[index], index);
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget bodyBuild(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 12.h,
-        ),
-        SearchField(
-          searchController: searchController,
-          onPressed: (value) {
-            BlocProvider.of<ManageFutureBloc>(context)
-                .add(SenSearchRepFutureEvent(value));
-          },
-        ),
-        BlocBuilder<ManageFutureBloc, ManageFutureState>(
-          builder: (context, state) {
-            List<AllRepresentativeFuture> allRepresentative =
-                context.watch<ManageFutureBloc>().allRepresentative;
+  Widget _buildRepItem(AllRepresentativeFuture rep, int index) {
+    bool isSelected = selectedIndex == index;
+    // تحديد لون الثيم بناءً على حالة المندوب لإضافة حياة للتصميم
+    Color statusColor = rep.flag.flag == 0 ? Colors.green : (rep.flag.flag == 1 ? Colors.orange : Colors.red);
 
-            if (state is AllSeniorRepLoadingState) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 8,
-                  itemBuilder: (context, index) => Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: AnimatedContainer(
-                      height: 60,
-                      curve: Curves.easeInOut,
-                      duration: Duration(milliseconds: 300 + (index * 200)),
-                      transform: Matrix4.translationValues(
-                          startAnimation ? 0 : screenWidth, 0, 0),
-                      margin:  EdgeInsets.all(AppPaddingH.p8),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth / 20,
-                      ),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(color: ColorManager.secondaryColor22),
-                        color: const Color.fromARGB(255, 250, 254, 255),
-                        borderRadius:
-                             BorderRadius.all(Radius.circular(AppSize.s8)),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            color: Colors.grey[300],
-                          ),
-                          Container(
-                            width: 50,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius:  BorderRadius.all(
-                                  Radius.circular(AppSize.s8)),
-                              color: Colors.grey[300],
-                            ),
-                          ),
-                        ],
-                      ),
+    return GestureDetector(
+      onTap: () => setState(() => selectedIndex = isSelected ? -1 : index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOutQuart,
+        margin: EdgeInsets.only(bottom: 16.h, left: 4.w, right: 4.w),
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22.r),
+          // إضافة ظل ناعم جداً ملون عند الاختيار
+          boxShadow: [
+            BoxShadow(
+              color: isSelected
+                  ? ColorManager.secondaryColor1.withOpacity(0.15)
+                  : Colors.black.withOpacity(0.05),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
+          border: Border.all(
+              color: isSelected ? ColorManager.secondaryColor1 : Colors.transparent,
+              width: 1.8
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. زر السهم بتصميم دائري أكثر بروزاً
+                AnimatedRotation(
+                  turns: isSelected ? 0.0 : 0.5,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeOutBack,
+                  child: Container(
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? ColorManager.secondaryColor1
+                          : ColorManager.secondaryColor1.withOpacity(0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.keyboard_arrow_up_rounded,
+                      color: isSelected ? Colors.white : ColorManager.secondaryColor1,
+                      size: 22.sp,
                     ),
                   ),
                 ),
-              );
-            } else if (state is AllSeniorRepErrorState) {
-              return errorFullScreen(context,
-                  func: () => BlocProvider.of<ManageFutureBloc>(context)
-                      .add(AllSeniorRepFutureEvent()));
-            } else if (state is AllSeniorRepState) {
-              allRepresentative = state.representatives;
-            }
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: SmartRefresher(
-                  controller: _refreshController,
-                  onRefresh: onRefresh,
-                  enablePullDown: true,
-                  child: ListView.builder(
-                    itemCount: allRepresentative.length,
-                    itemBuilder: (context, index) {
-                      final isSelected = index == this.index;
-                      return AnimatedSize(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              this.index = isSelected
-                                  ? -1
-                                  : index; // للإلغاء في حال تم الضغط مرتين
-                            });
-                          },
-                          child: Container(
-                            margin:  EdgeInsets.all(AppPaddingH.p8),
-                            padding:  EdgeInsets.symmetric(
-                                vertical: AppPaddingH.p16),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: ColorManager.secondaryColor1,
-                                  width: 2),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(AppSize.s8)),
-                              color: ColorManager.white,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        allRepresentative[index].name,
-                                        style: TextStyle(
-                                          color: ColorManager.secondaryColor1,
-                                          fontSize: FontSize.s20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4),
-                                      DropDownChangePlan(
-                                          hintText:
-                                          allRepresentative[index].flag.name,
-                                          items: allFlags,
-                                          onChanged: (x){
-                                            FlagModel flagModel =x;
-                                            BlocProvider.of
-                                            <ManageFutureBloc>(context)
-                                                .add(ChangPlanStatusEvent
-                                              (allRepresentative[index].activePlan,
-                                                flagModel.flag,index));
-                                          },
-                                          errorText:""),
-                                      // Text(
-                                      //   allRepresentative[index].flag.name,
-                                      //   style: TextStyle(
-                                      //     color: ColorManager.secondaryColor1,
-                                      //     fontSize: FontSize.s17,
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                ),
+                SizedBox(width: 14.w),
 
-                                if (isSelected) ...[
-                                  const SizedBox(height: 16),
-                                  Divider(color: ColorManager.secondaryColor),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      CustomButtonFuture(
-                                        isactive: allRepresentative[index]
-                                                .flag
-                                                .flag ==
-                                            UserInfo.statusPlan,
-                                        icon: Icons.arrow_back_ios_sharp,
-                                        text: "تدقيق الخطة",
-                                        onPressed: allRepresentative[index]
-                                                    .flag
-                                                    .flag ==
-                                                UserInfo.statusPlan
-                                            ? () {
-
-                                                iniFutureModule();
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return FutureSpecializationsPage(
-                                                        id: allRepresentative[
-                                                                index]
-                                                            .id,
-                                                        repPlanId:
-                                                            allRepresentative[
-                                                                    index]
-                                                                .activePlan,
-                                                        flag: allRepresentative[
-                                                                index]
-                                                            .flag,
-                                                        sampleCount:
-                                                            allRepresentative[
-                                                                    index]
-                                                                .samplesCount,
-                                                      );
-                                                    },
-                                                  ),
-                                                );
-                                              }
-                                            : () {},
-                                      ),
-                                      CustomButtonFuture(
-                                        isactive: true,
-                                        icon: Icons.edit,
-                                        text: "تعديل الأصناف",
-                                        onPressed: () {
-                                          print(allRepresentative[index]
-                                              .flag//
-                                              .flag);
-                                          print("allRepresentative[index]"
-                                          );
-                                          iniEditBrandPlanModule();
-                                          BlocProvider.of<EditBrandPlanBloc>(
-                                                  context)
-                                              .add(
-                                            FutureGetPlanBrandEvent(
-                                              Rep(
-                                                allRepresentative[index]
-                                                    .activePlan,
-                                                1,
-                                              ),
-                                            ),
-                                          );
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => EditingPlan(
-                                                repPlan:
-                                                    allRepresentative[index]
-                                                        .activePlan,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ]
-                              ],
+                // 2. المحتوى النصي بتنسيق أفضل
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              rep.name,
+                              style: TextStyle(
+                                color: const Color(0xFF1A237E), // كحلي عميق للفخامة
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          // نقطة الحالة تنبض باللون الخاص بها
+                          _buildPulseDot(rep.flag.flag),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+
+                      // الدرو داون مغلف بكونتينر رمادي فاتح لتمييزه كحقل إدخال
+                      DropDownChangePlan(
+                          hintText: rep.flag.name,
+                          items: allFlags,
+                          statusColor: rep.flag.flag == 3
+                              ? Colors.green
+                              : (rep.flag.flag == 2 ? Colors.orange : Colors.red),
+                          onChanged: (x) {
+
+                            BlocProvider.of<ManageFutureBloc>(context).add(
+
+                              ChangPlanStatusEvent(rep.activePlan, x.flag, index),
+                            );
+                          },
+                          errorText: "",
                         ),
-                      );
-                    },
+
+                    ],
                   ),
                 ),
-              ),
-            );
-          },
+              ],
+            ),
+
+            // 3. قسم الأزرار مع حركة انزلاق (Slide)
+            AnimatedSize(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.fastOutSlowIn,
+              child: isSelected
+                  ? Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: Divider(color: Colors.grey.shade100, thickness: 1.5),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildMicroActionButton(
+                          title: "تدقيق الخطة",
+                          subtitle: "مراجعة شاملة",
+                          icon: Icons.fact_check_rounded,
+                          isActive: rep.flag.flag == UserInfo.statusPlan,
+                          color: ColorManager.secondaryColor1,
+                          onTap: () => _handleAuditing(rep),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: _buildMicroActionButton(
+                          title: "الأصناف",
+                          subtitle: "تعديل القائمة",
+                          icon: Icons.auto_awesome_motion_rounded,
+                          isActive: true,
+                          color: const Color(0xFF448AFF), // أزرق حيوي
+                          onTap: () => _handleEditBrands(rep),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+                  : const SizedBox.shrink(),
+            ),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+
+  // تطوير زر الأكشن ليكون أكثر حيوية (Micro-interactions)
+  Widget _buildMicroActionButton({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required bool isActive,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return StatefulBuilder(
+      builder: (context, setBtnState) {
+        bool isPressed = false;
+        return GestureDetector(
+          onTapDown: (_) => setBtnState(() => isPressed = true),
+          onTapUp: (_) => setBtnState(() => isPressed = false),
+          onTapCancel: () => setBtnState(() => isPressed = false),
+          onTap: isActive ? onTap : null,
+          child: AnimatedScale(
+            scale: isPressed ? 0.96 : 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
+              decoration: BoxDecoration(
+                // لون خلفية خفيف جداً من نفس لون الزر يعطي طابعاً احترافياً
+                color: isActive ? color.withOpacity(0.05) : Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(18.r),
+                border: Border.all(
+                    color: isActive ? color.withOpacity(0.3) : Colors.transparent,
+                    width: 1.5
+                ),
+              ),
+              child: Column(
+                children: [
+                  Icon(icon, color: isActive ? color : Colors.grey, size: 22.sp),
+                  SizedBox(height: 6.h),
+                  FittedBox(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        color: isActive ? color : Colors.grey,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(color: Colors.grey.shade500, fontSize: 9.sp),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 4. Pulsing Dot Animation logic
+  Widget _buildPulseDot(int flag) {
+    Color color = flag == 0 ? Colors.green : (flag == 1 ? Colors.orange : Colors.red);
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.4, end: 1.0),
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+      builder: (context, value, child) {
+        return Container(
+          width: 10.w,
+          height: 10.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+            boxShadow: [
+              BoxShadow(color: color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
+            ],
+          ),
+        );
+      },
+      onEnd: () => {}, // Loop handled by the builder naturally
+    );
+  }
+
+  // Navigation Handlers with Animation logic
+  void _handleAuditing(AllRepresentativeFuture rep) {
+    iniFutureModule();
+    Navigator.push(context, _createRoute(FutureSpecializationsPage(
+      id: rep.id,
+      repPlanId: rep.activePlan,
+      flag: rep.flag,
+      sampleCount: rep.samplesCount,
+    )));
+  }
+
+  void _handleEditBrands(AllRepresentativeFuture rep) {
+    iniEditBrandPlanModule();
+    BlocProvider.of<EditBrandPlanBloc>(context).add(FutureGetPlanBrandEvent(Rep(rep.activePlan, 1)));
+    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan)));
+  }
+
+  Route _createRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = const Offset(1.0, 0.0);
+        var end = Offset.zero;
+        var curve = Curves.easeOutQuart;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(position: animation.drive(tween), child: child);
+      },
+    );
+  }
+
+  Widget _buildLoadingShimmer() {
+    return ListView.builder(
+      itemCount: 5,
+      padding: EdgeInsets.all(16.w),
+      itemBuilder: (context, index) => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 100.h,
+          margin: EdgeInsets.only(bottom: 15.h),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(25.r)),
+        ),
+      ),
     );
   }
 }

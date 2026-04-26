@@ -1,5 +1,9 @@
 import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/places/widget/rep_card_widget.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
@@ -29,7 +33,8 @@ class AllRepSenior extends StatefulWidget {
 
 class _AllRepSeniorState extends State<AllRepSenior> {
   final TextEditingController _searchController = TextEditingController();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void dispose() {
@@ -41,14 +46,14 @@ class _AllRepSeniorState extends State<AllRepSenior> {
   // --- Logic Functions ---
 
   void _onRefresh() {
-    context.read<SeniorRepsBloc>().add(AllSeniorRepEvent(
-      widget.cityId,
-      widget.repId
-    ));
+    context
+        .read<SeniorRepsBloc>()
+        .add(AllSeniorRepEvent(widget.cityId, widget.repId));
     _refreshController.refreshCompleted();
   }
 
-  void _navigateToProfile(BuildContext context, AllRepresentative rep, int index) {
+  void _navigateToProfile(
+      BuildContext context, AllRepresentative rep, int index) {
     initSeniorProfModule();
     context.read<SeniorProfBloc>().add(getInfoRepEvent(rep.id));
 
@@ -68,8 +73,39 @@ class _AllRepSeniorState extends State<AllRepSenior> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: UserInfo.repType == "6" ? DrawerPage() : null,
       appBar: AppBar(
         title: Text('تقارير المندوبين (${widget.cityname})'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return Center(
+              child:
+              UserInfo.repType == "6"?
+              IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+
+                  Icons.menu,
+                  color: ColorManager.secondaryColor,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ):
+              IconButton(
+                icon: Icon(
+                  size: AppSize.s30,
+                  
+                  Icons.arrow_back_ios_new,
+                  color: ColorManager.secondaryColor,
+                ),
+                onPressed: () {
+                 Navigator.pop(context);
+                },
+              ),
+            );
+          },
+        ),
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -92,11 +128,14 @@ class _AllRepSeniorState extends State<AllRepSenior> {
               // 2. Search Field Section
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
                   child: SearchField(
                     searchController: _searchController,
                     onPressed: (value) {
-                      context.read<SeniorRepsBloc>().add(SenSearchRepEvent(value));
+                      context
+                          .read<SeniorRepsBloc>()
+                          .add(SenSearchRepEvent(value));
                     },
                   ),
                 ),
@@ -142,13 +181,15 @@ class _AllRepSeniorState extends State<AllRepSenior> {
       builder: (context, state) {
         // هنا نقوم بجلب القائمة الحالية من الـ Bloc
         // تأكد أن الـ Bloc الخاص بك يقوم بتحديث قائمة allRepresentative عند البحث
-        List<AllRepresentative> list = context.read<SeniorRepsBloc>().allRepresentative;
+        List<AllRepresentative> list =
+            context.read<SeniorRepsBloc>().allRepresentative;
 
         if (state is AllSeniorRepLoadingState) {
           return SliverToBoxAdapter(
-       //     hasScrollBody: false,
-            child: Center(child:
-            loadingShimmer(context, 5, 100, 20, BorderRadius.circular(20))),
+            //     hasScrollBody: false,
+            child: Center(
+                child: loadingShimmer(
+                    context, 5, 100, 20, BorderRadius.circular(20))),
           );
         }
 
@@ -172,19 +213,20 @@ class _AllRepSeniorState extends State<AllRepSenior> {
 
         return SliverList(
           delegate: SliverChildBuilderDelegate(
-                (context, index) {
+            (context, index) {
               final rep = list[index];
               return Padding(
                 padding: EdgeInsets.only(bottom: 15.h),
-                child: RepresentativeCard(allRepresentative: rep,
+                child: RepresentativeCard(
+                  allRepresentative: rep,
                   onTap: () {
                     // 1. تهيئة موديل البروفايل
                     initSeniorProfModule();
 
                     // 2. إرسال حدث جلب بيانات المندوب المحدد
                     context.read<SeniorProfBloc>().add(
-                      getInfoRepEvent(rep.id),
-                    );
+                          getInfoRepEvent(rep.id),
+                        );
 
                     // 3. الانتقال لصفحة البروفايل مع تمرير البيانات المطلوبة
                     Navigator.of(context).push(

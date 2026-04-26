@@ -10,12 +10,12 @@ import 'package:domina_app/presentation/doctors/pages/doctor_page/doctors.dart';
 import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital.dart';
 import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital_details.dart';
 import 'package:domina_app/presentation/order/page/add_order_page.dart';
+import 'package:domina_app/presentation/places/pages/place_visit_archive_page.dart';
+import 'package:domina_app/presentation/places/pages/places_archive.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
-import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
-import 'package:domina_app/presentation/senior/general_reports/pages/general_reports.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
@@ -56,6 +56,8 @@ import '../Recipes/pages/Recipes.dart';
 class Routes {
   static const String login = "/login";
   static const String places = "/Places";
+  static const String placesArchive = "/placesArchive";
+
   static const String searchdoctors = "/searchdoctors";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
@@ -104,13 +106,13 @@ class Routes {
 
   static const String createOrder = "/createOrder";
   static const String recipeDH = "/recipeDH";
-  static const String generalReports = "/generalReports";
   static const String allRepWithFuture = "/allRepWithFuture";
   static const String seniorByCityId = "/seniorByCityId";
   static const String adminControl = "/adminControl";
 
   static const String allCitySeniors = "/allCitySeniors";
   static const String teamLeader = "/teamLeader";
+  static const String doctorAndHospitalArchive = "/doctorAndHospitalArchive";
 
 }
 
@@ -177,6 +179,11 @@ class RouteGenerator {
         initPlaceVisitModule();
         initDoctorAndHospitalModule();
         return _animatedRoute(Places());
+      case Routes.placesArchive:
+        initPlacesModule();
+       // initPlaceVisitModule();
+        initDoctorAndHospitalModule();
+        return _animatedRoute(PlacesArchive());
       case Routes.spec:
         initSpecModule();
         return _animatedRoute(SpecializationsPage());
@@ -306,12 +313,6 @@ class RouteGenerator {
       case Routes.recipeDH:
 
         return _animatedRoute( RecipeDH());
-      case Routes.generalReports:
-
-        return _animatedRoute( GeneralReports(
-       //     cityId: cityId, cityname: cityname, repId: repId
-        )
-        );
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
         return _animatedRoute( AllRepWithFuture());
@@ -320,6 +321,10 @@ class RouteGenerator {
         return _animatedRoute( AllRepWithFuture());
       case Routes.adminControl:
         return _animatedRoute( AdminDashboardPage());
+      case Routes.doctorAndHospitalArchive:
+        final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
+
+        return _animatedRoute( PlaceVisitArchivePage(placeId: args));
       case Routes.teamLeader:
         initGeneralReportsModule();
         return _animatedRoute( TeamLeader());

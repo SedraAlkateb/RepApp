@@ -1,24 +1,32 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ActivePlanPage extends StatefulWidget {
+  const ActivePlanPage({super.key});
+
   @override
   State<ActivePlanPage> createState() => _BrandPlanActivePageState();
 }
 
 class _BrandPlanActivePageState extends State<ActivePlanPage>
     with AutomaticKeepAliveClientMixin {
+
+  final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC), // خلفية الصفحة رمادي فاتح جداً هادئ
       appBar: AppBar(
         title: const Text('الخطة الفعالة'),
+        elevation: 0,
       ),
       body: BlocConsumer<ActivePlanBloc, ActivePlanState>(
         listener: (context, state) {
@@ -27,20 +35,115 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
           }
         },
         builder: (context, state) {
+          // جلب القائمة المفلترة من الـ Bloc
           List<ActivePlanBrandModel> planBrandModel =
-              context.watch<ActivePlanBloc>().activePlan;
+              context.watch<ActivePlanBloc>().activePlanSearch;
 
           if (state is AllActivePlanLoadingState) {
             return loadingShimmer(context, 20, 25, 150, BorderRadius.circular(20));
           }
 
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-            itemCount: planBrandModel.length,
-            itemBuilder: (context, index) => BrandPlanCard(model: planBrandModel[index]),
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              // --- قسم العنوان والبحث ---
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20.h),
+                      _buildFluidAnimation(
+                        index: 0,
+                        child: Text(
+                          'منتجات الخطة الفعالة',
+                          style: TextStyle(
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF0F172A),
+                          ),
+                        ),
+                      ),
+                      _buildFluidAnimation(
+                        index: 1,
+                        child: Text(
+                          'عرض جميع المنتجات المدرجة في الخطة الحالية مع امكانية البحث عن منتج معين',
+                          style: TextStyle(fontSize: 14.sp, color: const Color(0xFF64748B)),
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+
+                      // حقل البحث
+                      _buildFluidAnimation(
+                        index: 2,
+                        child: SearchField(
+                          searchController: searchController,
+                          onPressed: (value) {
+                            BlocProvider.of<ActivePlanBloc>(context)
+                                .add(SearchActivePlanEvent(value));
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 15.h),
+                    ],
+                  ),
+                ),
+              ),
+
+              // --- قائمة الكروت ---
+              planBrandModel.isEmpty
+                  ? SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(child: emptyFullScreen(context)),
+              )
+                  : SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                      return _buildFluidAnimation(
+                        index: index + 3,
+                        child: BrandPlanCard(model: planBrandModel[index]),
+                      );
+                    },
+                    childCount: planBrandModel.length,
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+            ],
           );
         },
       ),
+    );
+  }
+
+  // ويدجيت الأنيميشن الانسيابي مع إصلاح مشكلة الـ Opacity
+  Widget _buildFluidAnimation({required Widget child, required int index}) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 800),
+      curve: Interval(
+        (index * 0.06).clamp(0.0, 0.5),
+        1.0,
+        curve: Curves.easeOutBack, // التأثير المرتد الاحترافي
+      ),
+      builder: (context, value, child) {
+        return Opacity(
+          // تم إضافة clamp هنا لمنع الخطأ البرمجي (Assertion Error)
+          opacity: value.clamp(0.0, 1.0),
+          child: Transform.translate(
+            offset: Offset(0, 50 * (1 - value)),
+            child: Transform.scale(
+              scale: 0.9 + (0.1 * value),
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: child,
     );
   }
 
@@ -48,7 +151,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
   bool get wantKeepAlive => true;
 }
 
-// ويدجيت الـ Card المطور ليطابق التصميم المرفق تماماً
+// ويدجيت الـ Card المطور
 class BrandPlanCard extends StatelessWidget {
   final ActivePlanBrandModel model;
 
@@ -60,24 +163,24 @@ class BrandPlanCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: BoxBorder.all(color:  ColorManager.black.withValues(alpha: 0.1,blue: 0.1,green: 0.1)),//اطار خفيف جدا,
-        borderRadius: BorderRadius.circular(25.r), // حواف دائرية كبيرة للكارد
+        borderRadius: BorderRadius.circular(25.r),
+        border: Border.all(color: ColorManager.black.withValues(alpha: 0.05)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03), // ظل ناعم جداً فاتح
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // الجزء العلوي (Header) - بخلفية رمادية فاتحة جداً
+          // Header
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             decoration: BoxDecoration(
-              color: const Color(0xFFE9ECF0), // لون خلفية الهيدر الرمادي الفاتح
+              color: const Color(0xFFF1F5F9), // خلفية فاتحة جداً للهيدر
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25.r),
                 topRight: Radius.circular(25.r),
@@ -86,43 +189,42 @@ class BrandPlanCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // اسم الدواء والنوع (تحت بعض)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      model.title,
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF1E3A8A), // أزرق داكن للنص الأساسي
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        model.title,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF1E3A8A),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      model.pharmaceuticalFormTitle,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF64748B), // رمادي للنص الفرعي
+                      SizedBox(height: 4.h),
+                      Text(
+                        model.pharmaceuticalFormTitle,
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: const Color(0xFF64748B),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                // شارة "هدف" البيضاء
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.r), // حواف دائرية صغيرة للشارة
-                    border: Border.all(color: const Color(0xFFE2E8F0)), // إطار رمادي خفيف جداً
+                    borderRadius: BorderRadius.circular(10.r),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
                   ),
                   child: Text(
                     model.type,
                     style: TextStyle(
-                      color: const Color(0xFF3B82F6), // أزرق فاتح لنص الشارة
+                      color: const Color(0xFF3B82F6),
                       fontWeight: FontWeight.bold,
-                      fontSize: 13.sp,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ),
@@ -130,7 +232,7 @@ class BrandPlanCard extends StatelessWidget {
             ),
           ),
 
-          // قسم "توزيع الأهداف حسب الاختصاص" - الخلفية بيضاء تلقائياً
+          // Content
           Padding(
             padding: EdgeInsets.all(16.w),
             child: Column(
@@ -138,51 +240,52 @@ class BrandPlanCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.info_outline, size: 16.sp, color: const Color(0xFF94A3B8)),
+                    Icon(Icons.bar_chart_rounded, size: 16.sp, color: const Color(0xFF94A3B8)),
                     SizedBox(width: 8.w),
                     Text(
                       "توزيع الأهداف حسب الاختصاص",
                       style: TextStyle(
-                        fontSize: 13.sp,
-                        color: const Color(0xFF64748B), // رمادي للنص الوصفي
+                        fontSize: 12.sp,
+                        color: const Color(0xFF64748B),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 12.h),
 
-                // قائمة الاختصاصات داخل مربعات بيضاء بإطار رمادي
+                // Specialty List
                 ListView.builder(
                   shrinkWrap: true,
+                  padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: model.spPlan.length,
                   itemBuilder: (context, i) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 12.h),
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                      margin: EdgeInsets.only(bottom: 8.h),
+                      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
                       decoration: BoxDecoration(
-                        color: Colors.white, // مربعات الاختصاصات بيضاء
-                        borderRadius: BorderRadius.circular(15.r),
-                        border: Border.all(color: const Color(0xFFE2E8F0)), // إطار رمادي خفيف
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: const Color(0xFFF1F5F9)),
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // توزيع على الأطراف
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             model.spPlan[i].name,
                             style: TextStyle(
-                              fontSize: 15.sp,
-                              color: const Color(0xFF1E293B), // أسود/أزرق داكن لاسم الاختصاص
-                              fontWeight: FontWeight.w600,
+                              fontSize: 14.sp,
+                              color: const Color(0xFF334155),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
                             model.spPlan[i].amount,
                             style: TextStyle(
-                              fontSize: 18.sp,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
-                              color: const Color(0xFF1E3A8A), // أزرق داكن للرقم
+                              color: const Color(0xFF1E3A8A),
                             ),
                           ),
                         ],

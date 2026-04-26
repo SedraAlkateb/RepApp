@@ -16,7 +16,6 @@ class HospitalViewDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print( hospital.id);
     return Scaffold(
       //    backgroundColor: ColorManager.secondaryColor8,
       appBar: AppBar(

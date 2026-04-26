@@ -37,3 +37,31 @@ class NumEvent extends PlaceEvent{
   List<Object?> get props => [];
 
 }
+class DoctorArchiveByPlace extends PlaceEvent{
+  final  int placeId;
+  final current;
+  DoctorArchiveByPlace(this.placeId,this.current);
+  @override
+  List<Object?> get props => [placeId,current];
+}
+class HospitalArchiveByPlace extends PlaceEvent{
+  final  int placeId;
+  final current;
+  HospitalArchiveByPlace(this.placeId,this.current);
+  @override
+  List<Object?> get props => [placeId,current];
+}
+class SearchDoctorArchive extends PlaceEvent{
+  final  String search;
+  final List<DoctorModel> doctors;
+  SearchDoctorArchive(this.search,this.doctors);
+  @override
+  List<Object?> get props => [search,doctors];
+}
+class SearchHospitalArchive extends PlaceEvent{
+  final  String search;
+  final List<HospitalModel> hospital;
+  SearchHospitalArchive(this.search,this.hospital);
+  @override
+  List<Object?> get props => [search,hospital];
+}

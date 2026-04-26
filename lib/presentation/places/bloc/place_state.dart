@@ -65,3 +65,37 @@ final class NumVisitErrorState extends PlaceState {
 
   List<Object?> get props =>[failure];
 }
+
+final class AllDoctorArchiveByPlaceErrorState extends PlaceState {
+  final Failure failure;
+  AllDoctorArchiveByPlaceErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllDoctorArchiveByPlaceState extends PlaceState {
+  final List<DoctorModel> data;
+  @override
+  AllDoctorArchiveByPlaceState(this.data);
+  @override
+  List<Object?> get props =>[data];
+}
+final class AllHospitalArchiveByPlaceErrorState extends PlaceState {
+  final Failure failure;
+  AllHospitalArchiveByPlaceErrorState({required this.failure});
+  @override
+
+  List<Object?> get props =>[failure];
+}
+final class AllHospitalArchiveByPlaceState extends PlaceState {
+  final List<HospitalModel> data;
+  @override
+  AllHospitalArchiveByPlaceState(this.data);
+  @override
+  List<Object?> get props =>[data];
+}
+final class EmptyArchiveState extends PlaceState {
+
+  @override
+  List<Object?> get props =>[];
+}

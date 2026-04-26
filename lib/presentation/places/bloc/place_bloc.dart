@@ -4,6 +4,8 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
+import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
+import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/num_doc_has_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -17,13 +19,15 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   AllPlacesSqlUsecase allPlaceUsecase;
   NumVisitSqlUsecase numVisitSqlUsecase;
   NumDocHasSqlUsecase numDocHasSqlUsecase;
+  DoctorsByPlaceUsecase doctorsByPlaceUsecase;
+  HospitalsByPlaceUsecase hospitalsByPlaceUsecase;
   CheckRepUsecase checkRepUsecase;
   List<PlaceModel> placeModel = [];
   List<PlaceModel> placeSearchModel = [];
   int k = 0;
   bool isOpen=false;
   String data= formatDateTime(DateTime.now().toIso8601String());
-  PlaceBloc(this.allPlaceUsecase,this.checkRepUsecase,this.numVisitSqlUsecase,this.numDocHasSqlUsecase) : super(PlaceInitial()) {
+  PlaceBloc(this.doctorsByPlaceUsecase,this.hospitalsByPlaceUsecase,this.allPlaceUsecase,this.checkRepUsecase,this.numVisitSqlUsecase,this.numDocHasSqlUsecase) : super(PlaceInitial()) {
     on<PlaceEvent>((event, emit) async {
       //  VisitPharmacyRequestBody  v=VisitPharmacyRequestBody(vi.toDomain(), list2);
       if (event is AllPlaceEvent) {
@@ -73,6 +77,28 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
           }
         }).toList();
         emit(SearchPlaceState(placeSearchModel));
+      }
+      if (event is HospitalArchiveByPlace) {
+        (await hospitalsByPlaceUsecase.execute(event.placeId)).fold((failure) {
+          emit(AllHospitalArchiveByPlaceErrorState(failure: failure));
+        }, (data) async {
+          if (data.isNotEmpty) {
+            emit(AllHospitalArchiveByPlaceState(data));
+          } else {
+            emit(EmptyArchiveState());
+          }
+        });
+      }
+      else if (event is DoctorArchiveByPlace) {
+        (await doctorsByPlaceUsecase.execute(event.placeId)).fold((failure) {
+          emit(AllDoctorArchiveByPlaceErrorState(failure: failure));
+        }, (data) async {
+          if (data.isNotEmpty) {
+            emit(AllDoctorArchiveByPlaceState(data));
+          } else {
+            emit(EmptyArchiveState());
+          }
+        });
       }
     });
   }

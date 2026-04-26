@@ -240,6 +240,15 @@ String _getInitialRoute() {
   if (UserInfo.isLogging == 1) return Routes.syncData;
   if (UserInfo.isLogging == 4) return Routes.syncData;
   if (UserInfo.isLogging == 5) return Routes.asyncIn;
-  if (UserInfo.isLogging == 2) return Routes.places;
+  if (UserInfo.isLogging == 2) {
+    if(UserInfo.repType=="7"){
+      return Routes.places;
+
+    }else if( UserInfo.repType=="6"){
+      return Routes.AllRepSenior;
+    }else{
+      return Routes.adminControl;
+    }
+  };
   return Routes.places;
 }
