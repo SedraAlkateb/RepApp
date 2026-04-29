@@ -296,4 +296,9 @@ abstract class AppServiceClient {
   @POST("/admin/updateRepPlanBrandAmount.php")
   Future<Message1Response> updateRepPlanBrandAmount(
       @Body() BrandAmountRequestBody list);
+
+  @POST("/admin/getFinishedPlans.php")
+  Future<FinishedPlansBaseResponse> getFinishedPlans(
+      @Part(name: "cityId") int cityId,
+      );
 }

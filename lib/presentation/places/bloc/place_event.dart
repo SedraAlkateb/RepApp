@@ -56,12 +56,13 @@ class SearchDoctorArchive extends PlaceEvent{
   final List<DoctorModel> doctors;
   SearchDoctorArchive(this.search,this.doctors);
   @override
-  List<Object?> get props => [search,doctors];
+  List<Object?> get props => [search,];
 }
 class SearchHospitalArchive extends PlaceEvent{
   final  String search;
   final List<HospitalModel> hospital;
+
   SearchHospitalArchive(this.search,this.hospital);
   @override
-  List<Object?> get props => [search,hospital];
+  List<Object?> get props => [search];
 }

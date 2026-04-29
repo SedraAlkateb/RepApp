@@ -81,31 +81,6 @@ class AllRecip extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: 140.0,
-      pinned: true,
-      elevation: 0,
-      backgroundColor: ColorManager.primary,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: const Text("سجل الوصفات",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                const Color(0xFF0A2E5E), // أزرق طبي غامق
-                ColorManager.primary,    // أزرق ملكي
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildTitleSection(BuildContext context) {
     return Padding(

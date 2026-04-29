@@ -135,13 +135,29 @@ class _HospitalSpState extends State<HospitalSp> {
                                         Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
                                         SizedBox(width: 8.w,),
                                         Expanded(
-                                          child: Text(state.hospitals[index].address,
+                                          child: Text(state.hospitals[index].placeTitle,
                                               style: TextStyle
                                                 (color: Colors.grey,
                                                   fontSize: 15.sp)),
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 10.h),
+                                    state.hospitals[index].note!=null?
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.note_alt_sharp,size: 22.sp,color: Colors.grey),
+                                        SizedBox(width: 8.w,),
+                                        Expanded(
+                                          child: Text(state.hospitals[index].note??"",
+                                              style: TextStyle
+                                                (color: Colors.grey,
+                                                  fontSize: 15.sp)),
+                                        ),
+                                      ],
+                                    ):SizedBox(),
                                     SizedBox(height: 16.h),
                                     Divider(color:  Colors.grey,thickness: 0.1,),
                                     SizedBox(height: 8.h),
@@ -150,19 +166,16 @@ class _HospitalSpState extends State<HospitalSp> {
                                       children: [
                                         PrescriptionHospitalMenuWidget(hospitalId: state.hospitals[index].id),
                                         const Spacer(),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              Routes.visitHospital,
-                                              arguments:state.hospitals[index], // نرسل الـ ID هنا
-                                            );
-
-                                          },
-                                          child: buildCardButton("بدء زيارة",
-                                              ColorManager.medicalPrimary,
-                                              Colors.white, Icons.directions_run),
-                                        ),
+                                        // InkWell(
+                                        //   onTap: () => Navigator.pushNamed(
+                                        //       context, Routes.hospitalDetails,
+                                        //       arguments:  state.hospitals[index]),
+                                        //   child: buildCardButton(
+                                        //       "عرض التفاصيل",
+                                        //       ColorManager.medicalPrimary,
+                                        //       Colors.white,
+                                        //       Icons.directions_run),
+                                        // ),
 
                                       ],
                                     ),

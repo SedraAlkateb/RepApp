@@ -124,8 +124,7 @@ class EditingPlan extends StatelessWidget {
             },
             // المحتوى الذي يتغير بناءً على الـ Tabs
             body: TabBarView(
-              physics: const BouncingScrollPhysics(),
-              children: [
+              physics: const NeverScrollableScrollPhysics(),              children: [
                 EditingPlanTarget(repPlan: repPlan),
                 EditingPlanAssistant(repPlan: repPlan),
               ],

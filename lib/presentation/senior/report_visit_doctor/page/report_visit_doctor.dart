@@ -166,10 +166,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
 
 
 
-                                // زر حجز الكل
+                                // زر قراءة الكل
                                 buildActionBtn(
                                   context: context,
-                                  label: 'حجز الكل',
+                                  label: 'قراءة الكل',
                                   icon: Icons.bookmarks_rounded,
                                   color: const Color(0xFF1E3A8A), // اللون الأزرق الأساسي
                                   onTap: () {
@@ -179,10 +179,10 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                   },
                                 ),
                                 SizedBox(width: 12.w),
-                                // زر إلغاء حجز الكل
+                                // زر إلغاء قراءة الكل
                                 buildActionBtn(
                                   context: context,
-                                  label: 'إلغاء حجز الكل',
+                                  label: 'إلغاء قراءة الكل',
                                   icon: Icons.bookmark_remove_outlined,
                                   color: const Color(0xFFEF4444), // لون أحمر هادئ للإلغاء
                                   onTap: () {

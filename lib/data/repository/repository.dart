@@ -1573,4 +1573,30 @@ class RepositoryImp implements Repository {
     }
   }
 
+  @override
+  Future<Either<Failure, List<FinishedPlanModel>>> getFinishedPlans(int cityId) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getFinishedPlans(cityId );
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "docReport")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(
+          ExceptionRequestBody([ExceptionModel(failure.massage, "docReport")]));
+      return Left(failure);
+    }
+  }
 }

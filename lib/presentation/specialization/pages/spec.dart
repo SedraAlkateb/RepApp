@@ -1,3 +1,4 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
@@ -70,6 +71,7 @@ class SpecializationsPage extends StatelessWidget {
                       return Padding(
                         padding:  EdgeInsets.symmetric(vertical: 12,horizontal: 8),
                         child: SpecGridWidget(items: placeModel, crossAxisCount: crossAxisCount,      onTap: (model) {
+                          initDoctorAndHospitalModule();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

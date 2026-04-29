@@ -104,6 +104,8 @@ abstract class RemoteDataSource {
   Future<AllSearchHospitalBaseResponse> getSearchHospitals(
       String name,
       );
+  Future<FinishedPlansBaseResponse> getFinishedPlans(int cityId,
+      );
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -457,5 +459,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<Message1Response> updateRepPlanBrandAmount(
       BrandAmountRequestBody list) async {
     return await _appServiceClient.updateRepPlanBrandAmount(list);
+  }
+
+  @override
+  Future<FinishedPlansBaseResponse> getFinishedPlans(int cityId) async {
+    return await _appServiceClient.getFinishedPlans(cityId);
   }
 }

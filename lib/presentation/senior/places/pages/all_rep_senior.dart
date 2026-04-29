@@ -51,21 +51,12 @@ class _AllRepSeniorState extends State<AllRepSenior> {
         .add(AllSeniorRepEvent(widget.cityId, widget.repId));
     _refreshController.refreshCompleted();
   }
-
-  void _navigateToProfile(
-      BuildContext context, AllRepresentative rep, int index) {
-    initSeniorProfModule();
-    context.read<SeniorProfBloc>().add(getInfoRepEvent(rep.id));
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => RepProfile(
-          index: index,
-          repPlanId: rep.activePlan,
-          id: rep.id,
-        ),
-      ),
-    );
+  @override
+  void initState() {
+    context
+        .read<SeniorRepsBloc>()
+        .add(AllSeniorRepEvent(widget.cityId, widget.repId));
+    super.initState();
   }
 
   // --- UI Components ---

@@ -103,7 +103,7 @@ class PlaceVisitArchivePage extends StatelessWidget {
           },
           // محتوى الصفحات تحت الـ TabBar
           body: TabBarView(
-            physics: const BouncingScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               DoctorArchive(),
               HospitalArchive(),

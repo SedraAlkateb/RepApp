@@ -17,6 +17,7 @@ import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_iss
 import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
@@ -174,6 +175,8 @@ class _MyAppState extends State<MyApp> {
           },
         ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
+        BlocProvider(create: (_) => instance<SearchDoctorsBloc>()),
+
         BlocProvider<ManageFutureBloc>(
           create: (context) {
             final bloc = instance<ManageFutureBloc>();

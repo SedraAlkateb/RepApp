@@ -108,8 +108,7 @@ class RecipeDH extends StatelessWidget {
           },
           // محتوى الصفحات
           body: TabBarView(
-            physics: const BouncingScrollPhysics(),
-            children: [
+            physics: const NeverScrollableScrollPhysics(),            children: [
               Doctors(),
               Hospital(),
             ],

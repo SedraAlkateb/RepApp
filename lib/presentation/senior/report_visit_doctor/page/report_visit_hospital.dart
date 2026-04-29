@@ -139,7 +139,7 @@ class ReportVisitHospital extends StatelessWidget {
                                 if (iscanedite) ...[
                                   buildActionBtn(
                                     context: context,
-                                    label: 'حجز الكل',
+                                    label: 'قراءة الكل',
                                     icon: Icons.bookmarks_rounded,
                                     color: const Color(0xFF1E3A8A),
                                     onTap: () {
@@ -149,7 +149,7 @@ class ReportVisitHospital extends StatelessWidget {
                                   SizedBox(width: 12.w),
                                   buildActionBtn(
                                     context: context,
-                                    label: 'إلغاء حجز الكل',
+                                    label: 'إلغاء قراءة الكل',
                                     icon: Icons.bookmark_remove_outlined,
                                     color: const Color(0xFFEF4444),
                                     onTap: () {

@@ -152,12 +152,11 @@ class DrawerPage extends StatelessWidget {
       DrawerMenuItem(
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
-          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
-                  context,
-                  Routes.placesArchive,
-                );
-              })),
+          onTap: () => Navigator.pushNamed(
+            context,
+            Routes.placesArchive,
+
+          )),
       DrawerMenuItem(
           icon: Icons.edit_note_sharp,
           title: "إنشاء وصفة",
@@ -278,13 +277,11 @@ class DrawerPage extends StatelessWidget {
       DrawerMenuItem(
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
-          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.places,
-                  (route) => false,
-                );
-              })),
+          onTap: () => Navigator.pushNamed(
+            context,
+            Routes.placesArchive,
+
+          )),
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
         title: "إنشاء خطة",
@@ -368,13 +365,11 @@ class DrawerPage extends StatelessWidget {
       DrawerMenuItem(
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
-          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.places,
-                  (route) => false,
-                );
-              })),
+          onTap: () => Navigator.pushNamed(
+            context,
+            Routes.placesArchive,
+
+          )),
       DrawerMenuItem(
         icon: Icons.person_search_outlined,
         title: "البحث عن طبيب او مشفى",
@@ -413,7 +408,9 @@ class DrawerPage extends StatelessWidget {
 }
 
 List<DrawerMenuItem> getLogoutItem(BuildContext context) {
-  return [
+  return
+    UserInfo.repType=="7"?
+    [
     DrawerMenuItem(
         icon: Icons.sync_outlined,
         title: "مزامنة البيانات",
@@ -421,7 +418,8 @@ List<DrawerMenuItem> getLogoutItem(BuildContext context) {
         onTap: () {
           initAsyncInModule();
           WidgetsBinding.instance.addPostFrameCallback(
-            (_) {
+                (_) {
+
               Navigator.pushNamed(
                 context,
                 Routes.asyncIn,
@@ -438,5 +436,31 @@ List<DrawerMenuItem> getLogoutItem(BuildContext context) {
             Navigator.pushNamed(context, Routes.logout);
           });
         }),
-  ];
+  ]:[
+      DrawerMenuItem(
+          icon: Icons.sync_outlined,
+          title: "مزامنة البيانات",
+          color: Colors.red,
+          onTap: () {
+            initAsyncInModule();
+            WidgetsBinding.instance.addPostFrameCallback(
+                  (_) {
+
+                Navigator.pushNamed(
+                  context,
+                  Routes.delete,
+                );
+              },
+            );
+          }),
+      DrawerMenuItem(
+          icon: Icons.logout_outlined,
+          title: "تسجيل خروج",
+          color: Colors.red,
+          onTap: () {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushNamed(context, Routes.deleteLogout);
+            });
+          }),
+    ];
 }

@@ -1922,3 +1922,41 @@ Map<String, dynamic> _$RepresentativeFutureResponseToJson(
       'futurePlan': instance.futurePlan,
       'samplesCount': instance.samplesCount,
     };
+
+FinishedPlanResponse _$FinishedPlanResponseFromJson(
+        Map<String, dynamic> json) =>
+    FinishedPlanResponse(
+      json['id'] as String?,
+      json['cityId'] as String?,
+      json['startDate'] as String?,
+      json['endDate'] as String?,
+      json['active'] as String?,
+    );
+
+Map<String, dynamic> _$FinishedPlanResponseToJson(
+        FinishedPlanResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'cityId': instance.cityId,
+      'startDate': instance.startDate,
+      'endDate': instance.endDate,
+      'active': instance.active,
+    };
+
+FinishedPlansBaseResponse _$FinishedPlansBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    FinishedPlansBaseResponse(
+      (json['Plans'] as List<dynamic>?)
+          ?.map((e) => FinishedPlanResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$FinishedPlansBaseResponseToJson(
+        FinishedPlansBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Plans': instance.plans,
+    };

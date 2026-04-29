@@ -21,18 +21,18 @@ class CustomAppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-      child: Stack(
-        children: [
-          // الخلفية الزجاجية
-          ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: Colors.white.withOpacity(0.1)),
-            ),
+    return Stack(
+      children: [
+        // الخلفية الزجاجية
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Container(color: Colors.white.withOpacity(0.1)),
           ),
-          Column(
+        ),
+        Drawer(
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          child: Column(
             children: [
               _buildHeader(),
               Expanded(
@@ -42,6 +42,7 @@ class CustomAppDrawer extends StatelessWidget {
 
                     ...menuItems.map((item) => _buildListTile(context, item)),
                     const Divider(color: Colors.black12, thickness: 0.5),
+
                     ...getLogoutItem(context).map((item) => _buildListTile(context, item)),
 
                     _buildVersionInfo(), // إضافة معلومات الإصدار هنا
@@ -50,8 +51,8 @@ class CustomAppDrawer extends StatelessWidget {
               ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

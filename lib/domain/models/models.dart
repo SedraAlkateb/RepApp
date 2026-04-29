@@ -162,21 +162,13 @@ class VisitBrandPharmacyModel {
   }
 
   factory VisitBrandPharmacyModel.fromJson(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-        map['id'],
-        map['visitId'],
-        map['brandId'],
-        int.parse(convertArabicNumberToEnglish(map['amount'])),
-        1);
+    return VisitBrandPharmacyModel(map['id'], map['visitId'], map['brandId'],
+        int.parse(convertArabicNumberToEnglish(map['amount'])), 1);
   }
 
   factory VisitBrandPharmacyModel.fromJson1(Map<String, dynamic> map) {
-    return VisitBrandPharmacyModel(
-        map['id'],
-        map['visitId'],
-        map['brandId'],
-        int.parse(convertArabicNumberToEnglish( map['amount'])),
-        map['flag']);
+    return VisitBrandPharmacyModel(map['id'], map['visitId'], map['brandId'],
+        int.parse(convertArabicNumberToEnglish(map['amount'])), map['flag']);
   }
 }
 
@@ -246,36 +238,37 @@ class VisitPharmacyRequest {
     );
   }
 }
-class orderModel{
-   int repId;
-   String pharmacy;
-   String createDate;
-   int status;
-   orderModel(this.repId, this.pharmacy, this.createDate, this.status);
-   Map<String, dynamic> toMap() {
-     return {
-       'repId': repId,
-       'pharmacy': pharmacy,
-       'createDate': createDate,
-       'status': status,
-     };
-   }
 
-   factory orderModel.fromMap(Map<String, dynamic> map) {
-     return orderModel(
-       map['repId'],
-       map['pharmacy'],
-       map['createDate'],
-       map['status'],
-     );
-   }
+class orderModel {
+  int repId;
+  String pharmacy;
+  String createDate;
+  int status;
+  orderModel(this.repId, this.pharmacy, this.createDate, this.status);
+  Map<String, dynamic> toMap() {
+    return {
+      'repId': repId,
+      'pharmacy': pharmacy,
+      'createDate': createDate,
+      'status': status,
+    };
+  }
 
+  factory orderModel.fromMap(Map<String, dynamic> map) {
+    return orderModel(
+      map['repId'],
+      map['pharmacy'],
+      map['createDate'],
+      map['status'],
+    );
+  }
 }
-class OrderDetails{
+
+class OrderDetails {
   int brandId;
   int quantity;
   final String brandName; // أضف هذا لتسهيل العرض في القائمة
-  OrderDetails(this.brandId, this.quantity,this.brandName);
+  OrderDetails(this.brandId, this.quantity, this.brandName);
   Map<String, dynamic> toMap() {
     return {
       'brandId': brandId,
@@ -284,16 +277,11 @@ class OrderDetails{
   }
 
   factory OrderDetails.fromMap(Map<String, dynamic> map) {
-    return OrderDetails(
-      map['brandId'],
-      map['quantity'],
-      map['brandName']
-    );
+    return OrderDetails(map['brandId'], map['quantity'], map['brandName']);
   }
-
 }
-class PharmacyOrderRequestBody {
 
+class PharmacyOrderRequestBody {
   orderModel order;
   List<OrderDetails> orderDetails;
   PharmacyOrderRequestBody(this.order, this.orderDetails);
@@ -317,7 +305,6 @@ class VisitPharmacyRequestBody {
     };
   }
 }
-
 
 class RepPlanBrandBody {
   List<PlanBrandModel> planBrand;
@@ -967,8 +954,8 @@ class NoVisitDocModel {
   String? visits;
   int? remainingVisits;
   String? doneVisits;
-  NoVisitDocModel(
-      this.docTitle, this.spTitle, this.address, this.rate, this.visits , this.remainingVisits,this.doneVisits );
+  NoVisitDocModel(this.docTitle, this.spTitle, this.address, this.rate,
+      this.visits, this.remainingVisits, this.doneVisits);
   Map<String, dynamic> toMap() {
     return {
       'docTitle': docTitle,
@@ -977,7 +964,7 @@ class NoVisitDocModel {
       'rate': rate,
       "visits": visits,
       "remainingVisits": remainingVisits,
-       "doneVisits": doneVisits,
+      "doneVisits": doneVisits,
     };
   }
 
@@ -989,7 +976,7 @@ class NoVisitDocModel {
       map['rate'],
       map["visits"],
       map["remainingVisits"],
-       map["totVisit"],
+      map["totVisit"],
     );
   }
 }
@@ -1111,6 +1098,7 @@ class CityModel {
     );
   }
 }
+
 class LoginModel {
   String token;
   int cityId;
@@ -1157,7 +1145,7 @@ class LoginModel {
       'token': token,
       'repId': repId,
       'cityId': cityId,
-      'cityTitle':cityTitle,
+      'cityTitle': cityTitle,
       'otherPlanId': otherPlanId == null ? -5 : otherStatus,
       'activePlanId': activePlanId == null ? -5 : activePlanId,
       'otherStatus': otherStatus == null ? -5 : otherStatus,
@@ -1246,7 +1234,6 @@ class Rep {
   Rep(this.activeRepId, this.flag, {this.otherRepId});
 }
 
-
 class RepSp {
   int spId;
   int repPlanId;
@@ -1274,7 +1261,7 @@ class PlanBrandModel {
       'brandType': brandType,
       //  'title': title,
       'amount': amount,
-     // 'pharmaceuticalForm': pharmaceuticalForm,
+      // 'pharmaceuticalForm': pharmaceuticalForm,
     };
   }
 
@@ -1703,7 +1690,6 @@ class AllRepresentative {
   AllRepresentative(this.id, this.name, this.number, this.activePlan);
 }
 
-
 class FlagModel {
   final int flag;
   final String name;
@@ -1932,9 +1918,11 @@ class ActivePlanBrandModel {
   List<SpecPlan> spPlan;
   String type;
   String title;
-String pharmaceuticalFormTitle;
-  ActivePlanBrandModel(this.spPlan, this.type, this.title,this.pharmaceuticalFormTitle);
+  String pharmaceuticalFormTitle;
+  ActivePlanBrandModel(
+      this.spPlan, this.type, this.title, this.pharmaceuticalFormTitle);
 }
+
 class Orders {
   final String pharmacyName;
   final List<OrderItem> items;
@@ -1954,6 +1942,7 @@ class OrderItem {
     required this.name,
   });
 }
+
 class BrandAmountRequestBody {
   List<BrandAmountRequestModel> list1;
   BrandAmountRequestBody(this.list1);
@@ -1962,7 +1951,9 @@ class BrandAmountRequestBody {
       'data': list1.map((e) => e.toJson()).toList(),
     };
   }
-}class BrandAmountRequestModel {
+}
+
+class BrandAmountRequestModel {
   int id;
   int amount;
   BrandAmountRequestModel(this.id, this.amount);
@@ -1971,6 +1962,7 @@ class BrandAmountRequestBody {
     return {'id': id, 'amount': amount};
   }
 }
+
 class AllRepresentativeFuture {
   int id;
   int activePlan;
@@ -1980,6 +1972,7 @@ class AllRepresentativeFuture {
   AllRepresentativeFuture(
       this.id, this.name, this.flag, this.activePlan, this.samplesCount);
 }
+
 class WhoReadModel {
   String userId;
   String name;
@@ -1988,6 +1981,7 @@ class WhoReadModel {
 
   WhoReadModel(this.userId, this.name, this.repType, this.role);
 }
+
 class SeniorCityModel {
   String rep_id;
   String rep_name;
@@ -1995,11 +1989,11 @@ class SeniorCityModel {
   String city_name;
 
   SeniorCityModel(
-      this.rep_id,
-      this.rep_name,
-      this.city_id,
-      this.city_name,
-      );
+    this.rep_id,
+    this.rep_name,
+    this.city_id,
+    this.city_name,
+  );
   Map<String, dynamic> toMap() {
     return {
       'rep_id': rep_id,
@@ -2018,6 +2012,7 @@ class SeniorCityModel {
     );
   }
 }
+
 class SearchHospitalModel {
   String hosId;
   String name;
@@ -2025,6 +2020,7 @@ class SearchHospitalModel {
 
   SearchHospitalModel(this.hosId, this.name, this.spId);
 }
+
 class SearchHospitalNoteModel {
   String hosId;
   String name;
@@ -2036,6 +2032,7 @@ class SearchHospitalNoteModel {
   SearchHospitalNoteModel(
       this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);
 }
+
 List<FlagModel> allFlags = [
   FlagModel(0),
   FlagModel(1),
@@ -2060,3 +2057,14 @@ List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
   StatusPlanModel(1, "بانتظار موافقة المشرف"),
 ];
+
+class FinishedPlanModel {
+  String id;
+  String cityId;
+  String startDate;
+  String endDate;
+  String active;
+
+  FinishedPlanModel(
+      this.id, this.cityId, this.startDate, this.endDate, this.active);
+}

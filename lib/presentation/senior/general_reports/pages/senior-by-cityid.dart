@@ -142,6 +142,7 @@ class SeniorByCityId extends StatelessWidget {
                 );
               },
             ));
+            print("rep_id:${senior.rep_id}");
             BlocProvider.of<SeniorRepsBloc>(context).add(
                 AllSeniorRepEvent(
                     int.parse(senior.city_id),

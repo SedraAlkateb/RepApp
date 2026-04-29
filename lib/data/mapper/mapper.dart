@@ -930,3 +930,24 @@ extension WhoReadMapper on ReadResponse? {
     );
   }
 }
+extension FinishedPlansMapper on FinishedPlansBaseResponse? {
+  List<FinishedPlanModel> toDomain() {
+    List<FinishedPlanModel> plans =
+    (this?.plans?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<FinishedPlanModel>()
+        .toList();
+    return plans;
+  }
+}
+extension FinishedPlanMapper on FinishedPlanResponse? {
+  FinishedPlanModel toDomain() {
+    return FinishedPlanModel(
+      this?.id ?? Constants.empty,
+      this?.cityId ?? Constants.empty,
+      this?.startDate ?? Constants.empty,
+      this?.endDate ?? Constants.empty,
+      this?.active ?? Constants.empty,
+    );
+  }
+}

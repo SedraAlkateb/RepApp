@@ -10,6 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +24,7 @@ FlutterLocalNotificationsPlugin();
 void main() async {
   // 1. التأكد من تهيئة الروابط قبل أي كود برمجـي
   WidgetsFlutterBinding.ensureInitialized();
-
+  FlutterNativeSplash.remove();
   // 2. تهيئة الإعدادات الأساسية
   await _setupAppRequirements();
 

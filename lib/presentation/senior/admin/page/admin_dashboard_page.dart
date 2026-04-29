@@ -85,6 +85,7 @@ class AdminDashboardPage extends StatelessWidget {
                       );
                     },
                   ),
+                  UserInfo.repType == "4"?
                   InteractiveAdminCard(
                     icon: Icons.assignment_outlined,
                     title: 'إدارة التقارير العامة الخاصة بالسينيور',
@@ -92,6 +93,17 @@ class AdminDashboardPage extends StatelessWidget {
                     iconColor: Colors.purple,
                     onTap: () {
 
+                      Navigator.pushNamed(context, Routes.allCitySeniors);
+                      BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
+                    },
+                  ):SizedBox(),
+                  UserInfo.repType == "5"?
+                  InteractiveAdminCard(
+                    icon: Icons.assignment_outlined,
+                    title: 'إدارة التقارير العامة الخاصة بالسينيور',
+                    subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                    iconColor: Colors.purple,
+                    onTap: () {
                       initGeneralReportsModule();
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) => SeniorByCityId(
@@ -101,8 +113,8 @@ class AdminDashboardPage extends StatelessWidget {
                       ));
                       BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
                     },
-                  ),
-                  UserInfo.repType == "5"?
+                  ):SizedBox(),
+                  UserInfo.repType == "4"?
                   InteractiveAdminCard(
                     icon: Icons.assignment_outlined,
                     title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',

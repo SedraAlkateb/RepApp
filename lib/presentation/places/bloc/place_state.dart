@@ -74,11 +74,13 @@ final class AllDoctorArchiveByPlaceErrorState extends PlaceState {
   List<Object?> get props =>[failure];
 }
 final class AllDoctorArchiveByPlaceState extends PlaceState {
-  final List<DoctorModel> data;
+  final List<DoctorModel> searchData;
+  final List<DoctorModel> BaseData;
+
   @override
-  AllDoctorArchiveByPlaceState(this.data);
+  AllDoctorArchiveByPlaceState({required this.searchData, required this.BaseData});
   @override
-  List<Object?> get props =>[data];
+  List<Object?> get props =>[searchData];
 }
 final class AllHospitalArchiveByPlaceErrorState extends PlaceState {
   final Failure failure;
@@ -88,11 +90,13 @@ final class AllHospitalArchiveByPlaceErrorState extends PlaceState {
   List<Object?> get props =>[failure];
 }
 final class AllHospitalArchiveByPlaceState extends PlaceState {
-  final List<HospitalModel> data;
+  final List<HospitalModel> searchData;
+  final List<HospitalModel> baseData;
+
   @override
-  AllHospitalArchiveByPlaceState(this.data);
+  AllHospitalArchiveByPlaceState({required this.searchData,required this.baseData});
   @override
-  List<Object?> get props =>[data];
+  List<Object?> get props =>[searchData];
 }
 final class EmptyArchiveState extends PlaceState {
 

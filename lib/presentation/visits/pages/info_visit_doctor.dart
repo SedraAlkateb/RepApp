@@ -213,16 +213,23 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
 
 // دالة مساعدة لتجنب تكرار الكود وتنسيق أيقونة + نص
   Widget _buildHeaderInfo({required IconData icon, required String label}) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: Colors.white70, size: 14.sp),
-        SizedBox(width: 4.w),
-        Text(
-          label,
-          style: TextStyle(color: Colors.white70, fontSize: 13.sp),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white70, size: 14.sp),
+          SizedBox(width: 4.w),
+          Expanded(
+            child: Text(textAlign: TextAlign.center,
+              label,
+              style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

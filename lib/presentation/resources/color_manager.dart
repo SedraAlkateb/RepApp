@@ -16,7 +16,7 @@ class ColorManager {
   static Color filedColor = const Color(0xffF3F4F3);
   static Color myGrays = const Color(0xffedeeed);
   static Color myGrays2=const Color(0xffA3A09D);
-  static Color myGrays3=const Color(0xffA3A09D);
+  static Color myGrays3=const Color(0xff0f385f);
   static Color primary =const  Color(0xffFDF8F5);
   static Color secondaryColor=const  Color(0xff3A434D);
   static Color secondaryColor4=const  Color(0xff59BEE6);

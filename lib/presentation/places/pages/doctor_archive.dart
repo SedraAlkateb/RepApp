@@ -14,59 +14,84 @@ class DoctorArchive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CustomScrollView(
-          slivers: [
+      // لون الخلفية من الصورة يبدو فاتحاً جداً أو رمادي خفيف
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: CustomScrollView(
+            // فيزياء الحركة "Bouncing" تعطي إحساساً رائعاً عند السحب مثل الصورة
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              BlocBuilder<PlaceBloc, PlaceState>(
+                buildWhen: (previous, current) =>
+                current is AllDoctorArchiveByPlaceState ||
+                    current is AllDoctorArchiveByPlaceErrorState ||
+                    current is EmptyArchiveState,
+                builder: (context, state) {
 
-            BlocBuilder<PlaceBloc, PlaceState>(
-              buildWhen: (previous, current) => current is AllDoctorArchiveByPlaceState||current is AllDoctorArchiveByPlaceErrorState||current is EmptyArchiveState,
-
-              builder: (context, state) {
-
-                if (state is AllDoctorArchiveByPlaceState) {
-                List<DoctorModel>   doctorModel = state.data;
-                return SliverList(
-                  delegate: SliverChildListDelegate([
-                    SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 12.h,
+                  // 1. حالة النجاح: نعرض البحث والقائمة كـ Slivers لكي يتحركوا معاً
+                  if (state is AllDoctorArchiveByPlaceState) {
+                    List<DoctorModel> doctorModel = state.searchData;
+                    return SliverMainAxisGroup(
+                      slivers: [
+                        // حقل البحث مغلف بـ SliverToBoxAdapter ليعمل داخل الـ CustomScrollView
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 12.h),
+                              SearchField(
+                                searchController: searchDocController,
+                                onPressed: (value) {
+                                  BlocProvider.of<PlaceBloc>(context)
+                                      .add(SearchDoctorArchive(value, state.BaseData));
+                                },
+                              ),
+                              SizedBox(height: 16.h),
+                            ],
                           ),
-                          SearchField(
-                            searchController: searchDocController,
-                            onPressed: (value) {
-                              BlocProvider.of<PlaceBloc>(context)
-                                  .add(SearchDoctorArchive(value,doctorModel));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    DoctorListWidget(doctorModel: doctorModel)
-                  ]),
-                );
-                }
-                if (state is AllDoctorArchiveByPlaceErrorState) {
-                  return errorFullScreen(context,mes:  state.failure.massage, func: (){});
-                }
-                if (state is EmptyArchiveState) {
-                  return SliverList(
-                      delegate: SliverChildListDelegate([
-                        SizedBox(
-                          height: 100,
                         ),
-                        emptyFullScreen(context)
-                      ]));
-                }
-                return SizedBox();
+                        // عرض قائمة الأطباء
+                        SliverToBoxAdapter(
+                          child: DoctorListWidget(doctorModel: doctorModel),
+                        ),
+                        // مسافة أمان في الأسفل
+                        SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                      ],
+                    );
+                  }
 
+                  // 2. حالة الخطأ: نستخدم SliverFillRemaining لتتوسط الشاشة
+                  if (state is AllDoctorArchiveByPlaceErrorState) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: errorFullScreen(
+                          context,
+                          mes: state.failure.massage,
+                          func: () {},
+                        ),
+                      ),
+                    );
+                  }
 
-              },
-            ),
-          ],
+                  // 3. حالة القائمة فارغة
+                  if (state is EmptyArchiveState) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: emptyFullScreen(context)),
+                    );
+                  }
+
+                  // 4. حالة التحميل
+                  return const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

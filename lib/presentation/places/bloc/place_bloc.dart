@@ -83,7 +83,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
           emit(AllHospitalArchiveByPlaceErrorState(failure: failure));
         }, (data) async {
           if (data.isNotEmpty) {
-            emit(AllHospitalArchiveByPlaceState(data));
+            emit(AllHospitalArchiveByPlaceState(searchData: data,baseData: data));
           } else {
             emit(EmptyArchiveState());
           }
@@ -94,11 +94,31 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
           emit(AllDoctorArchiveByPlaceErrorState(failure: failure));
         }, (data) async {
           if (data.isNotEmpty) {
-            emit(AllDoctorArchiveByPlaceState(data));
+            emit(AllDoctorArchiveByPlaceState(BaseData: data,searchData: data));
           } else {
             emit(EmptyArchiveState());
           }
         });
+      } else if (event is SearchHospitalArchive) {
+        String search = normalizeText(event.search);
+        List<HospitalModel> hospital = event.hospital.where((value) {
+          if (normalizeText(value.title).contains(search)) {
+            return true;
+          } else {
+            return false;
+          }
+        }).toList();
+        emit(AllHospitalArchiveByPlaceState(baseData: event.hospital,searchData: hospital));
+      }else if (event is SearchDoctorArchive) {
+        String search = normalizeText(event.search);
+        List<DoctorModel> doctors = event.doctors.where((value) {
+          if (normalizeText(value.title).contains(search)) {
+            return true;
+          } else {
+            return false;
+          }
+        }).toList();
+        emit(AllDoctorArchiveByPlaceState(searchData: doctors,BaseData: event.doctors));
       }
     });
   }

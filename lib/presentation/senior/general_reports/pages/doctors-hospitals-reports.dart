@@ -142,7 +142,7 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
           },
           // محتوى الصفحات مع فيزياء تمرير سلسة
           body: TabBarView(
-            physics: const BouncingScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               ReportVisitDoctorPage(
                 userId: UserInfo.repId,
