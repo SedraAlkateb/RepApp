@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 ///////// حذف
@@ -29,7 +30,7 @@ class DeleteDataPage extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                           color: const Color(0xFF1A3E62),
-                          child: const Text("Delete", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                          child:  Text("Delete", style: TextStyle(color: Colors.white, fontSize: 9.sp, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
@@ -38,10 +39,10 @@ class DeleteDataPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            const Text(
+             Text(
               "سوف نحذف الداتا لاعادة تنزيلها",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0D47A1)),
+              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: Color(0xFF0D47A1)),
             ),
             const SizedBox(height: 50),
           ],
@@ -96,7 +97,7 @@ Widget _buildButton(String text, VoidCallback onPressed) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
       onPressed: onPressed,
-      child: Text(text, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+      child: Text(text, style:  TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: Colors.white)),
     ),
   );
 }

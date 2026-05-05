@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_b
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ViewRecipePage extends StatelessWidget {
   const ViewRecipePage({
@@ -112,7 +113,7 @@ class ViewRecipePage extends StatelessWidget {
         child: Text(
           content ?? 'غير متوفر', // Default text when content is null
           style: TextStyle(
-            fontSize: 18, // Slightly increased font size for better readability
+            fontSize: 18.sp, // Slightly increased font size for better readability
             fontWeight: FontWeight.w600, // Make text a bit bolder for emphasis
             color: ColorManager.white, // Text color remains white
           ),
@@ -134,7 +135,7 @@ class ViewRecipePage extends StatelessWidget {
             label,
 
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600, // زيادة الوزن لزيادة وضوح العنوان
               color: ColorManager.secondaryColor1,
             ),

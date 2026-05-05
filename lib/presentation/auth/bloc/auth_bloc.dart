@@ -64,7 +64,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
           emit(InsertLoginErrorState(failure: failure));
         }, (data) async {
-          print("object");
           emit(InsertLoginState());
         });
       }

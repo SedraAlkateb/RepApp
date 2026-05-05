@@ -16,7 +16,7 @@ Widget dataPlan(String? startDate, String? endData){
         ),
         "\nتاريخ الخطة : ${startDate ?? 'غير متاح'} >>> ${endData ?? 'غير متاح'} \n ",
       ),
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20.w),
     ),
   );
 }

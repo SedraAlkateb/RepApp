@@ -8,6 +8,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class AllRecipesForView extends StatelessWidget {
@@ -105,10 +106,10 @@ Widget _buildTitleSection(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("قائمة الوصفات",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: ColorManager.medicalText)),
+                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w900, color: ColorManager.medicalText)),
             const SizedBox(height: 4),
             Text("استعراض كافة الوصفات الصادرة لهذا المندوب",
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 13.sp)),
           ],
         ),
         // الخط الأزرق الجمالي الموجود في الصورة
@@ -171,7 +172,7 @@ Widget _buildSmartCard(BuildContext context, ReciModel item, bool isClinic) {
                       size: 18, color: Colors.grey.shade400),
                   const SizedBox(width: 8),
                   Text(isClinic ? "د. ${item.docName}" : item.docName ?? "",
-                      style: TextStyle(fontSize: 15, color: Colors.blueGrey.shade600, fontWeight: FontWeight.w600)),
+                      style: TextStyle(fontSize: 15.sp, color: Colors.blueGrey.shade600, fontWeight: FontWeight.w600)),
                 ],
               ),
               Padding(
@@ -185,10 +186,10 @@ Widget _buildSmartCard(BuildContext context, ReciModel item, bool isClinic) {
                   Expanded(
                     child: Text("ملاحظات مدونة : ${item.note_emp?? "لا توجد ملاحظات مدونة"}" ,
 
-                        style: TextStyle(fontSize: 12, color: Colors.grey.shade500, fontStyle: FontStyle.italic)),
+                        style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500, fontStyle: FontStyle.italic)),
                   ),
                   const SizedBox(width: 8),
-                  const Text("وحدة", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                   Text("وحدة", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
                   const SizedBox(width: 8),
                   _buildQuantityBubble(item.total ?? "0"),
                 ],
@@ -212,7 +213,7 @@ Widget _buildTypeBadge(bool isClinic) {
       isClinic ? "وصفة عيادة" : "وصفة مشفى",
       style: TextStyle(
         color: isClinic ? Colors.blue.shade700 : Colors.green.shade700,
-        fontSize: 11,
+        fontSize: 11.sp,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -224,7 +225,7 @@ Widget _buildDateSection(String date) {
     children: [
       Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey.shade500),
       const SizedBox(width: 6),
-      Text(date, style: TextStyle(color: Colors.grey.shade600, fontSize: 12, fontWeight: FontWeight.w500)),
+      Text(date, style: TextStyle(color: Colors.grey.shade600, fontSize: 12.sp, fontWeight: FontWeight.w500)),
     ],
   );
 }
@@ -240,6 +241,6 @@ Widget _buildQuantityBubble(String quantity) {
       ],
     ),
     child: Text(quantity,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+        style:  TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.sp)),
   );
 }

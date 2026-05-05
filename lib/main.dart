@@ -34,6 +34,45 @@ void main() async {
   // 4. التشغيل
   runApp(Phoenix(child: const MyResponsiveApp()));
 }
+class MyResponsiveApp extends StatelessWidget {
+  const MyResponsiveApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      // تثبيت مقاس التصميم المرجعي (الجوال) لضمان استقرار الأبعاد
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return ResponsiveBreakpoints.builder(
+          breakpoints: const [
+            Breakpoint(start: 0, end: 450, name: MOBILE),
+            Breakpoint(start: 451, end: 1023, name: TABLET),
+            Breakpoint(start: 1024, end: double.infinity, name: DESKTOP),
+          ],
+          child: MaterialApp(
+            builder: (context, widget) {
+              // تحديد نوع الجهاز باستخدام المكتبة
+              final bool isTablet = ResponsiveBreakpoints.of(context).isTablet;
+
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  // إذا كان تابلت، نستخدم معامل تصغير (0.8) بدلاً من التكبير
+                  // وإذا كان جوال نتركه كما هو (1.0)
+                  textScaleFactor: isTablet ? 0.8 : 1.0,
+                ),
+                child: widget!,
+              );
+            },
+            debugShowCheckedModeBanner: false,
+            home: const MyApp(),
+          ),
+        );
+      },
+    );
+  }
+}
 
 /// تجميع كل إعدادات التهيئة التقنية في دالة واحدة
 Future<void> _setupAppRequirements() async {
@@ -222,43 +261,6 @@ Future<void> _showEndDateNotification() async {
   );
 }
 
-class MyResponsiveApp extends StatelessWidget {
-  const MyResponsiveApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ResponsiveBreakpoints.builder(
-      breakpoints: const [
-        Breakpoint(start: 0, end: 450, name: MOBILE),
-        Breakpoint(start: 451, end: 1023, name: TABLET),
-        Breakpoint(start: 1024, end: double.infinity, name: DESKTOP),
-      ],
-      child: Builder(
-        builder: (context) {
-
-          return ScreenUtilInit(
-            designSize: const Size(360, 690),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            builder: (context, child) => const MyApp(),
-          );
-        },
-      ),
-    );
-  }
-}
-
-Size getDesignSizeByBreakpoint(Breakpoint breakPoint) {
-  if (breakPoint.name == MOBILE) {
-    UserInfo.isScreenWidth = false;
-    return const Size(360, 690);
-  } else if (breakPoint.name == TABLET) {
-    UserInfo.isScreenWidth = true;
-    return const Size(768, 1024);
-  } else {
-    return const Size(1024, 768);
-  }
-}
 
 class MyHttpOverrides extends HttpOverrides {
   @override

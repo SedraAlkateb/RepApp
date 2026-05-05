@@ -40,7 +40,7 @@ class AdminDashboardPage extends StatelessWidget {
         ),
         title: Text(
           'لوحة التحكم الإدارية',
-          //   style: TextStyle(color: ColorManager.primaryText, fontWeight: FontWeight.bold, fontSize: 20.sp),
+        style: TextStyle(color: ColorManager.primaryText, fontWeight: FontWeight.bold, fontSize: 20.sp),
         ),
       ),
       body: Directionality(
@@ -155,7 +155,8 @@ class AdminDashboardPage extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            Routes.createOrder,
+                              Routes.finishedPlan,
+                              arguments:UserInfo.repType=="5"?UserInfo.cityId:0
                           );
                         },
                       ),

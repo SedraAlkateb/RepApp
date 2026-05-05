@@ -7,6 +7,7 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class AllRecip extends StatelessWidget {
@@ -47,7 +48,7 @@ class AllRecip extends StatelessWidget {
 
               // 3. البطاقات الذكية مع تأثير الدخول المتتالي
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:  EdgeInsets.symmetric(horizontal: 16.w),
                 sliver: AnimationLimiter(
                   child: SliverList(
                     delegate: SliverChildBuilderDelegate(

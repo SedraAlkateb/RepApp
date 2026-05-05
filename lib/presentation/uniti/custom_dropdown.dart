@@ -30,7 +30,7 @@ class CustomDropDown extends StatelessWidget {
       validator: validator,
       hint: Text(
         hintText,
-        style: TextStyle(fontSize: tablet ? 17.sp : 12.sp, color: Colors.black),
+        style: TextStyle(fontSize:  12.sp, color: Colors.black),
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(

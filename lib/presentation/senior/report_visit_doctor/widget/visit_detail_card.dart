@@ -685,9 +685,9 @@ Widget buildTotalReportsCard(int length) {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                   Text(
                     'إجمالي التقارير',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A)),
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A)),
                   ),
                   const Text('لهذا الشهر', style: TextStyle(color: Colors.grey)),
                 ],

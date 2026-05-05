@@ -3,6 +3,7 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/font_manager.dart';
 import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //presentation
 ThemeData getApplicationTheme() {
@@ -33,12 +34,13 @@ ThemeData getApplicationTheme() {
       iconTheme: IconThemeData(
         color: ColorManager.secondaryColor1,
       ),
-      toolbarHeight: 60,
+      toolbarHeight: 60.h,
+
       backgroundColor: ColorManager.white,
       elevation: 9,
       shadowColor: ColorManager.secondaryColor3,
       titleTextStyle: getBoldStyle(
-          fontSize: FontSize.s20, color: ColorManager.secondaryColor1),
+          fontSize: 20.sp, color: ColorManager.secondaryColor1),
     ),
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),
@@ -83,7 +85,7 @@ ThemeData getApplicationTheme() {
           getSemiBoldStyle(color: ColorManager.white, fontSize: FontSize.s14),
       titleSmall:
           getBoldStyle(color: ColorManager.white, fontSize: FontSize.s20),
-      bodyMedium: getRegularStyle(color: Colors.black, fontSize: FontSize.s14),
+      bodyMedium: getRegularStyle(color: Colors.black, fontSize: 12.sp),
     ),
     inputDecorationTheme: InputDecorationTheme(
         contentPadding: EdgeInsets.all(AppPaddingH.p12),

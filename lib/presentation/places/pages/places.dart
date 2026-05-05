@@ -33,9 +33,10 @@ class _PlacesState extends State<Places> {
   @override
   Widget build(BuildContext context) {
 
+    final placeBloc = context.read<PlaceBloc>();
     final size = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (context.read<PlaceBloc>().k == 0) {
+      if (placeBloc.k == 0) {
         showDialog(
             context: context,
             builder: (context) {
@@ -86,7 +87,7 @@ class _PlacesState extends State<Places> {
                                     child: Text("موافق"),
                                   ),
                                   onPressed: () {
-                                    context.read<PlaceBloc>().k = 1;
+                                    placeBloc.k = 1;
                                     Navigator.pop(context);
                                   })
                             ],
@@ -96,7 +97,7 @@ class _PlacesState extends State<Places> {
                     )),
               )));
             });
-        context.read<PlaceBloc>().k = 1;
+        placeBloc.k = 1;
       }
     });
     return Scaffold(

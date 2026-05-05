@@ -2,6 +2,7 @@
 
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class CustomButton extends StatelessWidget {
@@ -32,7 +33,7 @@ class CustomButton extends StatelessWidget {
           minWidth: MediaQuery.of(context).size.width,
           child: Text(
             text,
-            style:  TextStyle(color: ColorManager.secondaryColor2,  fontSize: tablet?17:14,),
+            style:  TextStyle(color: ColorManager.secondaryColor2,  fontSize: 14.sp,),
           ),
         ),
       ),

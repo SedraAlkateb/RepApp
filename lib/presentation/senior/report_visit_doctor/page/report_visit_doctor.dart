@@ -69,13 +69,13 @@ class ReportVisitDoctorPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 20.h),
-                        const Text(
+                         Text(
                           'تقارير اللزيارات للأطباء',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                          style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                         ),
-                        const Text(
+                         Text(
                           'مراجعة تفاصيل الزيارات للأطباء الميدانية للمندوب',
-                          style: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
+                          style: TextStyle(fontSize: 14.sp, color: Color(0xFF64748B)),
                         ),
                         SizedBox(height: 20.h),
 
@@ -155,7 +155,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                 .add(SenSearchNoteVisitDoctorEvent(value));
                           },
                         ),
-                     //   SizedBox(height: 20.h),
+                    SizedBox(height: 20.h),
                         buildTotalReportsCard(doctorNoteModel.length),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),

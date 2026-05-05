@@ -17,7 +17,7 @@ class BrandPage extends StatelessWidget {
           title: Text(' الأصناف'),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding:  EdgeInsets.symmetric(horizontal: 8.w),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

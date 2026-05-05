@@ -62,7 +62,7 @@ class Customdropdownsearchspec extends StatelessWidget {
                   isDense: true,
                 //  contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   hintText: 'ابحث هنا',
-                  hintStyle: TextStyle(fontSize: tablet?17:12,overflow: TextOverflow.fade,),
+                  hintStyle: TextStyle(fontSize: 1214.sp,overflow: TextOverflow.fade,),
                   prefixIcon: Icon(Icons.search,size: 20,color: ColorManager.black,)
               ),
             )
@@ -70,12 +70,12 @@ class Customdropdownsearchspec extends StatelessWidget {
         ),
         items:items,
         dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(fontSize:tablet?19: 14,overflow: TextOverflow.fade,),
+          baseStyle: TextStyle(fontSize: 1414.sp,overflow: TextOverflow.fade,),
           dropdownSearchDecoration: InputDecoration(
             icon:icon,
-           labelStyle: TextStyle(fontSize:tablet?19.sp:  14.sp,overflow: TextOverflow.fade,),
+           labelStyle: TextStyle(fontSize:14.sp,overflow: TextOverflow.fade,),
             hintText:hintText ,
-            hintStyle: TextStyle(fontSize:tablet?17.sp:  12.sp,overflow: TextOverflow.fade,)
+            hintStyle: TextStyle(fontSize: 12.sp,overflow: TextOverflow.fade,)
 
           ),
 

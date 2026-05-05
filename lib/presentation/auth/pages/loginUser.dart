@@ -214,62 +214,79 @@ class _MyLoginState extends State<MyLogin> {
   }
 
   Widget _buildPremiumButton(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is InsertLoginState) {
+          // 1. استدعاء دالة النجاح (التي تحتوي على pop بداخلها كما ذكرت)
+          success(context);
+
+          // 2. تأخير بسيط لضمان انتهاء أنيميشن إغلاق البوب آب قبل الانتقال الكبير
+          Future.delayed(const Duration(milliseconds: 600), () {
+            if (context.mounted) {
+              // 3. الانتقال النهائي وحذف السجل
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                Routes.syncData,
+                    (route) => false,
+              );
+            }
+          });
+        }
+        return GestureDetector(
+          onTap: () {
+            if (formKey.currentState!.validate()) {
+              BlocProvider.of<AuthBloc>(context).add(LoginEvent(userName.text, password.text));
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            height: 60.h,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  ColorManager.medicalPrimary,
+                  ColorManager.medicalPrimary.withBlue(255),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(18.r),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorManager.medicalPrimary.withOpacity(0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "تسجيل الدخول",
+                  style: TextStyle(color: Colors.white, fontSize: 17.sp, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 12.w),
+                const Icon(Icons.login_rounded, color: Colors.white),
+              ],
+            ),
+          ),
+        );
+      },
       listener: (context, state) {
         if (state is LoginLoadingState) loading(context);
-        if (state is LoginState) BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
-        if (state is InsertLoginState) {
-          success(context);
-          Navigator.pushNamedAndRemoveUntil(context, Routes.syncData, (route) => false);
+
+        if (state is LoginState) {
+          BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
         }
 
-
+        // --- هذا هو المكان الأصح للإضافة ---
 
         if (state is LoginErrorState || state is InsertLoginErrorState) {
           dynamic errorState = state;
           error(context, errorState.failure.massage, errorState.failure.code);
         }
       },
-      child: GestureDetector(
-        onTap: () {
-          if (formKey.currentState!.validate()) {
-            BlocProvider.of<AuthBloc>(context).add(LoginEvent(userName.text, password.text));
-          }
-        },
-        child: Container(
-          width: double.infinity,
-          height: 60.h,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                ColorManager.medicalPrimary,
-                ColorManager.medicalPrimary.withBlue(255), // تدرج لوني خفيف
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            borderRadius: BorderRadius.circular(18.r),
-            boxShadow: [
-              BoxShadow(
-                color: ColorManager.medicalPrimary.withOpacity(0.3),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "تسجيل الدخول",
-                style: TextStyle(color: Colors.white, fontSize: 17.sp, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(width: 12.w),
-              const Icon(Icons.login_rounded, color: Colors.white),
-            ],
-          ),
-        ),
-      ),
+
     ).animate().fadeIn(delay: 700.ms);
-  }
-}
+  }}

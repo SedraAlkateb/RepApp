@@ -42,7 +42,7 @@ class HospitalSenior extends StatelessWidget {
                         color: ColorManager.medicalText
                             .withOpacity(0.8),
                         fontWeight: FontWeight.bold,
-                        fontSize: 18),
+                        fontSize: 18.sp),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(

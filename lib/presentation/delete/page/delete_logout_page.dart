@@ -68,13 +68,13 @@ class _DeleteLogoutPageState extends State<DeleteLogoutPage> {
                                   top: 15,
                                   right: -5,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                    padding:  EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                                     color: const Color(0xFF1A3E62),
-                                    child: const Text(
+                                    child:  Text(
                                       "Delete",
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 9,
+                                          fontSize: 9.sp,
                                           fontWeight: FontWeight.bold
                                       ),
                                     ),

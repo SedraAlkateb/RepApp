@@ -214,7 +214,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
 // دالة مساعدة لتجنب تكرار الكود وتنسيق أيقونة + نص
   Widget _buildHeaderInfo({required IconData icon, required String label}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding:  EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -8,6 +8,7 @@ class SearchField extends StatelessWidget {
       {super.key, required this.searchController, this.onPressed});
   final TextEditingController searchController;
   final Function(String)? onPressed;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,7 +32,7 @@ class SearchField extends StatelessWidget {
                 ),
 
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: ColorManager.medicalBorder),
                     borderRadius:
@@ -40,7 +41,7 @@ class SearchField extends StatelessWidget {
 
                 hintText: 'ابحث هنا',
                 hintStyle: TextStyle(
-                    fontSize: AppSize.s16, overflow: TextOverflow.fade),
+                    fontSize: 16.sp, overflow: TextOverflow.fade),
               ),
             ),
           ),

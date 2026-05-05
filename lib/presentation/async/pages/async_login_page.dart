@@ -133,11 +133,11 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
 
                       SizedBox(height: 40.h),
 
-                      const Text(
+                       Text(
                         "تأكد من اتصالك بالإنترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF0D47A1),
                             height: 1.5
@@ -210,8 +210,8 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                                   state is SyncDataLoadingState || state is LoadingState
                                       ? "جاري التحميل..."
                                       : "تحميل البيانات",
-                                  style: const TextStyle(
-                                      fontSize: 18,
+                                  style:  TextStyle(
+                                      fontSize: 18.sp,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white
                                   ),

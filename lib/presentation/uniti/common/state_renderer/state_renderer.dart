@@ -7,6 +7,7 @@ import 'package:domina_app/presentation/resources/font_manager.dart';
 import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 enum StateRendererType{
@@ -97,7 +98,7 @@ Widget _getMessage(String? message){
           message??"",
           style: getRegularStyle(
               color: ColorManager.black,
-            fontSize: FontSize.s18
+            fontSize: 18.sp
           )
           ,
         ),

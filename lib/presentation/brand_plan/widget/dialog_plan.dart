@@ -3,6 +3,7 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
  Widget dialogPlan(BuildContext context,
      String text,{required VoidCallback fun}){
@@ -30,7 +31,7 @@ import 'package:flutter/material.dart';
              ]
          ),
          child: Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 40),
+           padding:  EdgeInsets.symmetric(horizontal: 8.w,vertical: 40.h),
            child: Column(
              mainAxisSize: MainAxisSize.min,
              mainAxisAlignment: MainAxisAlignment.spaceBetween,

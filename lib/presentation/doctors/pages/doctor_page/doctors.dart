@@ -15,7 +15,7 @@ class Doctors extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding:  EdgeInsets.symmetric(horizontal: 8.w),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
