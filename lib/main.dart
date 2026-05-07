@@ -18,7 +18,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 void main() async {
@@ -34,6 +34,7 @@ void main() async {
   // 4. التشغيل
   runApp(Phoenix(child: const MyResponsiveApp()));
 }
+
 class MyResponsiveApp extends StatelessWidget {
   const MyResponsiveApp({super.key});
 
@@ -90,44 +91,44 @@ Future<void> _setupAppRequirements() async {
     DeviceOrientation.portraitDown,
   ]);
 }
+
 Future<void> _prepareUserData() async {
   final isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   final result = await isLoginSqlUsecase.execute();
 
-  await result.fold(
-          (failure) => UserInfo.isLogging = 0,
-          (data) async {
-        if (data != null && data.isLogin > 0) {
-          // 1. تعبئة البيانات
-          UserInfo.fillFromModel(data);
+  await result.fold((failure) => UserInfo.isLogging = 0, (data) async {
+    if (data != null && data.isLogin > 0) {
+      // 1. تعبئة البيانات
+      UserInfo.fillFromModel(data);
 
-          // 2. الفحص الفوري (لو المندوب فتح التطبيق في يوم الانتهاء أو بعده)
-          await _checkPlanExpiration();
+      // 2. الفحص الفوري (لو المندوب فتح التطبيق في يوم الانتهاء أو بعده)
+      await _checkPlanExpiration();
 
-          // 3. جدولة الإشعار (ليعمل تلقائياً الساعة 9 صباحاً في يوم الانتهاء)
-          await AlarmAndNotifications.scheduleExpirationNotification();
-        } else {
-          UserInfo.isLogging = 0;
-        }
-      }
-  );
+      // 3. جدولة الإشعار (ليعمل تلقائياً الساعة 9 صباحاً في يوم الانتهاء)
+      await AlarmAndNotifications.scheduleExpirationNotification();
+    } else {
+      UserInfo.isLogging = 0;
+    }
+  });
 }
 
 // دالة فحص انتهاء الصلاحية الفوري
 Future<void> _checkPlanExpiration() async {
-  if (UserInfo.isLogging != 0 && UserInfo.endDate != null && UserInfo.endDate != "") {
+  if (UserInfo.isLogging != 0 &&
+      UserInfo.endDate != null &&
+      UserInfo.endDate != "") {
     try {
       final String today = DateFormat("dd-MM-yyyy").format(DateTime.now());
       DateTime endDateTime = formatStringToDataTime(UserInfo.endDate!);
 
       // اليوم التالي للانقضاء (يوم المزامنة الإجباري)
-      String nextDay = DateFormat("dd-MM-yyyy").format(
-          endDateTime.add(const Duration(days: 1))
-      );
+      String nextDay = DateFormat("dd-MM-yyyy")
+          .format(endDateTime.add(const Duration(days: 1)));
 
       // حالة قفل التطبيق إذا تجاوزنا التاريخ
       if (UserInfo.isLogging != 5 && today == nextDay) {
-        EditIsLoginSqlUsecase editIsLoginSqlUsecase = EditIsLoginSqlUsecase(instance());
+        EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+            EditIsLoginSqlUsecase(instance());
         await editIsLoginSqlUsecase.execute(UserInfo.repId, 5);
         UserInfo.isLogging = 5;
       }
@@ -137,10 +138,9 @@ Future<void> _checkPlanExpiration() async {
   }
 }
 
-
 Future<void> _initNotifications() async {
   const AndroidInitializationSettings androidSettings =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
   const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -149,7 +149,7 @@ Future<void> _initNotifications() async {
   );
 
   const InitializationSettings initSettings =
-  InitializationSettings(android: androidSettings, iOS: iosSettings);
+      InitializationSettings(android: androidSettings, iOS: iosSettings);
 
   await flutterLocalNotificationsPlugin.initialize(settings: initSettings);
   await AlarmAndNotifications.initialize();
@@ -168,8 +168,9 @@ Future<void> requestNotificationPermission() async {
       print("🚫 تم رفض الإذن نهائيًا. يمكنك تفعيله من إعدادات النظام.");
     }
   } else if (Platform.isIOS) {
-    final iosPlugin = flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+    final iosPlugin =
+        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>();
     await iosPlugin?.requestPermissions(alert: true, badge: true, sound: true);
     print("✅ تم طلب صلاحيات الإشعارات على iOS.");
   }
@@ -180,11 +181,10 @@ Future<int?> sss() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
 
-  IsLoginSqlUsecase isLoginSqlUsecase =  IsLoginSqlUsecase(instance());
+  IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
 
   final result = await isLoginSqlUsecase.execute();
-  await
-  result.fold((failure) {
+  await result.fold((failure) {
     return 0;
   }, (data) async {
     if (data != null && (data.isLogin > 0)) {
@@ -208,7 +208,10 @@ Future<int?> sss() async {
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
 
-      if ((UserInfo.isLogging != 0 )&&( UserInfo.endDate != null)&&(UserInfo.endDate!="0")&&(UserInfo.endDate!="")) {
+      if ((UserInfo.isLogging != 0) &&
+          (UserInfo.endDate != null) &&
+          (UserInfo.endDate != "0") &&
+          (UserInfo.endDate != "")) {
         final now = formatDateTimeFromDataTime(DateTime.now());
         print("UserInfo.endDate = ${UserInfo.endDate}");
         if (now == formatDateTime(UserInfo.endDate!)) {
@@ -216,13 +219,16 @@ Future<int?> sss() async {
         }
 
         String? nextDay = UserInfo.endDate != null
-            ? DateFormat("dd-MM-yyyy")
-            .format(formatStringToDataTime(UserInfo.endDate!).add(const Duration(days: 1)))
+            ? DateFormat("dd-MM-yyyy").format(
+                formatStringToDataTime(UserInfo.endDate!)
+                    .add(const Duration(days: 1)))
             : "";
 
         if (UserInfo.isLogging != 5 && now == nextDay) {
-          EditIsLoginSqlUsecase editIsLoginSqlUsecase = EditIsLoginSqlUsecase(instance());
-          (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+          EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+              EditIsLoginSqlUsecase(instance());
+          (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
+              (failure) {
             return 0;
           }, (data) async {
             UserInfo.isLogging = 5;
@@ -250,23 +256,24 @@ Future<void> _showEndDateNotification() async {
     playSound: true,
   );
 
-  const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
+  const NotificationDetails platformDetails =
+      NotificationDetails(android: androidDetails);
 
   await flutterLocalNotificationsPlugin.show(
     id: 2, // يجب إضافة id: هنا
     title: 'شركة دومِنا', // يجب إضافة title: هنا
-    body: 'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.', // يجب إضافة body: هنا
+    body:
+        'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.', // يجب إضافة body: هنا
     notificationDetails: platformDetails, // يجب إضافة notificationDetails: هنا
     payload: 'end_date_notification',
   );
 }
 
-
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
-
