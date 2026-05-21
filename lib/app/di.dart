@@ -67,6 +67,7 @@ import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/finished_plans_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
+import 'package:domina_app/domain/usecase/get_pan_reps_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
@@ -775,8 +776,10 @@ Future<void> iniAllCityModule() async {
 Future<void> initFinishedPlan() async {
   if (!GetIt.I.isRegistered<FinishedPlansUsecase>()) {
     instance.registerFactory<FinishedPlansUsecase>(() => FinishedPlansUsecase(instance()));
+    instance.registerFactory<GetPanRepsUsecase>(() => GetPanRepsUsecase(instance()));
+
   }
   if (!GetIt.I.isRegistered<FinishedPlanBloc>()) {
-    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance()));
+    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance(),instance()));
   }
 }

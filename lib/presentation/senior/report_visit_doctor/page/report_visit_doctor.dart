@@ -147,6 +147,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                       );
                     }
                     return SliverList(
+
                       delegate: SliverChildListDelegate([
                         SearchField(
                           searchController: searchNoteDoctorController,

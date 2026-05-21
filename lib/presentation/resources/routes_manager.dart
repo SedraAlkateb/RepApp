@@ -16,6 +16,7 @@ import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/finished_plan_page.dart';
+import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
@@ -115,6 +116,7 @@ class Routes {
   static const String teamLeader = "/teamLeader";
   static const String doctorAndHospitalArchive = "/doctorAndHospitalArchive";
   static const String finishedPlan = "/finishedPlan";
+  static const String planReps = "/planReps";
 
 }
 
@@ -337,6 +339,10 @@ class RouteGenerator {
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
         return _animatedRoute( FinishedPlanPage(cityId: args));
+      case Routes.planReps:
+        return _animatedRoute( PlanRepsPage());
+
+
       default:
         return unDefinedRoute();
     }

@@ -1960,3 +1960,33 @@ Map<String, dynamic> _$FinishedPlansBaseResponseToJson(
       'message': instance.message,
       'Plans': instance.plans,
     };
+
+PlanRepsResponse _$PlanRepsResponseFromJson(Map<String, dynamic> json) =>
+    PlanRepsResponse(
+      json['id'] as String?,
+      json['name'] as String?,
+    );
+
+Map<String, dynamic> _$PlanRepsResponseToJson(PlanRepsResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+    };
+
+PlanRepsBaseResponse _$PlanRepsBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    PlanRepsBaseResponse(
+      (json['Representative'] as List<dynamic>?)
+          ?.map((e) => PlanRepsResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$PlanRepsBaseResponseToJson(
+        PlanRepsBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Representative': instance.rep,
+    };

@@ -2068,3 +2068,9 @@ class FinishedPlanModel {
   FinishedPlanModel(
       this.id, this.cityId, this.startDate, this.endDate, this.active);
 }
+class PlanRepsModel {
+  String id;
+  String name;
+  PlanRepsModel(
+      this.id, this.name);
+}

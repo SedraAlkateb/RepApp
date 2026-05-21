@@ -33,3 +33,26 @@ class FinishedPlanError extends FinishedPlanState {
   @override
   List<Object> get props => [message];
 }
+
+
+// 2. حالة التحميل (يتم عرض Spinner في الواجهة)
+class PlanRepsLoading extends FinishedPlanState {}
+
+// 3. حالة النجاح (تحتوي على قائمة الخطط المستلمة)
+class PlanRepsLoaded extends FinishedPlanState {
+ final List<PlanRepsModel> reps;
+  const PlanRepsLoaded(this.reps);
+
+  @override
+  List<Object> get props => [reps];
+}
+
+// 4. حالة الخطأ (تحتوي على رسالة الخطأ)
+class PlanRepsError extends FinishedPlanState {
+  final String message;
+
+  const PlanRepsError({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

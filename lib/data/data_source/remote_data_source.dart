@@ -106,6 +106,9 @@ abstract class RemoteDataSource {
       );
   Future<FinishedPlansBaseResponse> getFinishedPlans(int cityId,
       );
+  Future<PlanRepsBaseResponse> getPlanReps(int planId,
+      );
+
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -465,4 +468,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<FinishedPlansBaseResponse> getFinishedPlans(int cityId) async {
     return await _appServiceClient.getFinishedPlans(cityId);
   }
+
+  @override
+  Future<PlanRepsBaseResponse> getPlanReps(int planId)async {
+    return await _appServiceClient.getPlanReps(planId);
+  }
+
 }

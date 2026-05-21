@@ -951,3 +951,21 @@ extension FinishedPlanMapper on FinishedPlanResponse? {
     );
   }
 }
+extension PlanRepsMapper on PlanRepsResponse? {
+  PlanRepsModel toDomain() {
+    return PlanRepsModel(
+      this?.id ?? Constants.empty,
+      this?.name ?? Constants.empty,
+    );
+  }
+}
+extension PlanRepsBaseMapper on PlanRepsBaseResponse? {
+  List<PlanRepsModel> toDomain() {
+    List<PlanRepsModel> rep =
+    (this?.rep?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<PlanRepsModel>()
+        .toList();
+    return rep;
+  }
+}

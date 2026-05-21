@@ -12,3 +12,8 @@ class GetFinishedPlansEvent extends FinishedPlanEvent {
   GetFinishedPlansEvent({required this.cityId});
 
 }
+class GetPlanRepsEvent extends FinishedPlanEvent {
+  final int planId;
+  GetPlanRepsEvent({required this.planId});
+
+}

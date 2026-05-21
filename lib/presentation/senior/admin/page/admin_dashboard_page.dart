@@ -97,7 +97,7 @@ class AdminDashboardPage extends StatelessWidget {
                       BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
                     },
                   ):SizedBox(),
-                  UserInfo.repType == "5"?
+                 ( UserInfo.repType == "5")?
                   InteractiveAdminCard(
                     icon: Icons.assignment_outlined,
                     title: 'إدارة التقارير العامة الخاصة بالسينيور',

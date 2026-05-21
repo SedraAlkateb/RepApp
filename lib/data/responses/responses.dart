@@ -1786,3 +1786,27 @@ class FinishedPlansBaseResponse extends BaseResponse {
   // to json
   Map<String, dynamic> toJson() => _$FinishedPlansBaseResponseToJson(this);
 }
+@JsonSerializable()
+class PlanRepsResponse {
+  @JsonKey(name: "id")
+  String? id;
+  @JsonKey(name: "name")
+  String? name;
+
+  PlanRepsResponse(this.id, this.name); // from json
+  factory PlanRepsResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanRepsResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$PlanRepsResponseToJson(this);
+}
+@JsonSerializable()
+class PlanRepsBaseResponse extends BaseResponse {
+  @JsonKey(name: "Representative")
+  List<PlanRepsResponse>? rep;
+  PlanRepsBaseResponse(this.rep);
+  // from json
+  factory PlanRepsBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanRepsBaseResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$PlanRepsBaseResponseToJson(this);
+}

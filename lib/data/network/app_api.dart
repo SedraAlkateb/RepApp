@@ -301,4 +301,9 @@ abstract class AppServiceClient {
   Future<FinishedPlansBaseResponse> getFinishedPlans(
       @Part(name: "cityId") int cityId,
       );
+
+  @POST("/admin/getPlanReps.php")
+  Future<PlanRepsBaseResponse> getPlanReps(
+      @Part(name: "planId") int planId,
+      );
 }

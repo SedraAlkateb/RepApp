@@ -115,5 +115,6 @@ abstract class Repository {
   Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(String name);
   Future<Either<Failure, List<SearchHospitalNoteModel>>> getSearchHospitalsNotes(int hosId, int spId);
   Future<Either<Failure, List<FinishedPlanModel>>> getFinishedPlans(int cityId);
+  Future<Either<Failure, List<PlanRepsModel>>> getPlanReps(int planId);
 
 }
