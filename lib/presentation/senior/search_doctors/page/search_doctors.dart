@@ -5,7 +5,6 @@ import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctor
 import 'package:domina_app/presentation/senior/search_doctors/page/doctor_details.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

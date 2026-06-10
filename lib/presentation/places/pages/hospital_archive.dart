@@ -159,7 +159,7 @@ class HospitalArchive extends StatelessWidget {
 
               Expanded(
                 child: Text(
-                  hospital.title ?? "",
+                  hospital.title ,
                   textAlign: TextAlign.end,
                   style: TextStyle(
                       fontSize: 18.sp,
@@ -170,8 +170,8 @@ class HospitalArchive extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10.h),
-          _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle ?? ""),
-          _buildInfoRow(Icons.map_outlined, hospital.address ?? ""),
+          _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle),
+          _buildInfoRow(Icons.map_outlined, hospital.address),
           SizedBox(height: 16.h),
           const Divider(thickness: 0.1, color: Colors.grey),
           Row(

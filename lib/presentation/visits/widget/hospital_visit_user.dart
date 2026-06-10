@@ -99,7 +99,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                                     color: Colors.blue.shade50,
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
-                                  child: Text(hospitals[index].specModel.title ?? "", style
+                                  child: Text(hospitals[index].specModel.title , style
                                       : TextStyle(color: Colors.blue, fontSize: 12.sp)),
                                 ),
                                 Expanded(

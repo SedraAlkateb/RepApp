@@ -3,12 +3,9 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/font_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
-import 'package:domina_app/presentation/senior/manage_future/widget/Buttom.dart';
 import 'package:domina_app/presentation/senior/manage_future/widget/drop_down_change_plan.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -80,9 +77,6 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
 
   Widget _buildRepItem(AllRepresentativeFuture rep, int index) {
     bool isSelected = selectedIndex == index;
-    // تحديد لون الثيم بناءً على حالة المندوب لإضافة حياة للتصميم
-    Color statusColor = rep.flag.flag == 0 ? Colors.green : (rep.flag.flag == 1 ? Colors.orange : Colors.red);
-
     return GestureDetector(
       onTap: () => setState(() => selectedIndex = isSelected ? -1 : index),
       child: AnimatedContainer(
@@ -249,7 +243,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
           onTapCancel: () => setBtnState(() => isPressed = false),
           onTap: isActive ? onTap : null,
           child: AnimatedScale(
-            scale: isPressed ? 0.96 : 1.0,
+            scale: 1.0,
             duration: const Duration(milliseconds: 100),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),

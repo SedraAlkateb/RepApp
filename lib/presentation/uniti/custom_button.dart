@@ -14,7 +14,6 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool tablet=MediaQuery.of(context).size.width>800;
 
     return Padding(
       padding:  EdgeInsets.symmetric(horizontal:size.width*0.2),

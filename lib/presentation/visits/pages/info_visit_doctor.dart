@@ -35,6 +35,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
     print(_targetController.text);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
+
     super.initState();
   }
 
@@ -42,6 +43,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   Widget build(BuildContext context) {
     bool isEditable =
         widget.doctorModel.visitDoctorModel.flag == 0 ? true : false;
+
     return Scaffold(
       appBar: null,
       body: SingleChildScrollView(
@@ -254,6 +256,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   }
 
   Widget _buildSamplesSection(bool isEditable) {
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -323,6 +326,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       current is EditAmountBrandState;
                 },
                 builder: (context, state) {
+                  print("sssssssssssssssss: ${context.watch<VisitBloc>().brands}");
                   List<PharmacyBrandModel> selectBrand =
                       context.watch<VisitBloc>().brands;
                   if (state is BrandPharmacyVisitState) {
@@ -383,6 +387,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                           current is EditAmountBrandState;
                     },
                     builder: (context, state) {
+
                       List<PharmacyBrandModel> selectBrand =
                           context.watch<VisitBloc>().brands;
                       if (state

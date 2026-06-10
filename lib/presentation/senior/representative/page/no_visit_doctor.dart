@@ -1,6 +1,4 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';

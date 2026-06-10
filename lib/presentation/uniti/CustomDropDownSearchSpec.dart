@@ -18,8 +18,8 @@ class Customdropdownsearchspec extends StatelessWidget {
   final Icon? icon;
   @override
   Widget build(BuildContext context) {
-    bool tablet=false;
-    tablet=MediaQuery.of(context).size.width>800;
+//    bool tablet=false;
+  //  tablet=MediaQuery.of(context).size.width>800;
 
     return    Container(
       decoration: BoxDecoration(

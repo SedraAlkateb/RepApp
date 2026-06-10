@@ -202,17 +202,17 @@ class RemainingVisitCard extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildAddressRow() {
-    return Row(
-      children: [
-        Icon(Icons.location_on_outlined, size: 16.sp, color: Colors.blue[300]),
-        SizedBox(width: 6.w),
-        Text(
-          data.address,
-          style: TextStyle(fontSize: 12.sp, color: Colors.black),
-        ),
-      ],
-    );
-  }
+  //
+  // Widget _buildAddressRow() {
+  //   return Row(
+  //     children: [
+  //       Icon(Icons.location_on_outlined, size: 16.sp, color: Colors.blue[300]),
+  //       SizedBox(width: 6.w),
+  //       Text(
+  //         data.address,
+  //         style: TextStyle(fontSize: 12.sp, color: Colors.black),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

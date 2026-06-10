@@ -53,6 +53,7 @@ abstract class AppServiceClient {
     @Part(name: "repDet") int repDet,
   );
   @POST("/getAllPlanBrands.php")//
+
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
       @Part(name: "repPlanIdActive") int repPlanIdActive,
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
