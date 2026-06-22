@@ -71,6 +71,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
               },
             ),
           ),
+          SizedBox(height: 12.h),
         ],
       ),
     );
@@ -334,7 +335,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   void _handleEditBrands(AllRepresentativeFuture rep) {
     iniEditBrandPlanModule();
     BlocProvider.of<EditBrandPlanBloc>(context).add(FutureGetPlanBrandEvent(Rep(rep.activePlan, 1)));
-    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan,flag: rep.flag.flag,)));
+    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan)));
   }
 
   Route _createRoute(Widget page) {

@@ -10,10 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditingPlan extends StatelessWidget {
-  EditingPlan({super.key, required this.repPlan,required this.flag});
+  EditingPlan({super.key, required this.repPlan});
   final int repPlan;
-
-  final int flag;
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -127,8 +125,8 @@ class EditingPlan extends StatelessWidget {
             // المحتوى الذي يتغير بناءً على الـ Tabs
             body: TabBarView(
               physics: const NeverScrollableScrollPhysics(),              children: [
-                EditingPlanTarget(repPlan: repPlan,flag: flag,),
-                EditingPlanAssistant(repPlan: repPlan,flag: flag,),
+                EditingPlanTarget(repPlan: repPlan),
+                EditingPlanAssistant(repPlan: repPlan),
               ],
             ),
           ),

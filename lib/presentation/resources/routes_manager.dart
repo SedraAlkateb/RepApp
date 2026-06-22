@@ -287,8 +287,6 @@ class RouteGenerator {
         return _animatedRoute(
            EditingPlan(
             repPlan: 7,
-             flag: 2,
-
           )
         );
       case Routes.searchdoctors:

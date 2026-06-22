@@ -11,9 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EditingPlanTarget extends StatefulWidget {
-  const EditingPlanTarget({super.key, required this.repPlan,required this.flag});
+  const EditingPlanTarget({super.key, required this.repPlan});
   final int repPlan;
-  final int flag;
+
   @override
   State<EditingPlanTarget> createState() => _EditingPlanTargetState();
 }
@@ -26,23 +26,6 @@ class _EditingPlanTargetState extends State<EditingPlanTarget> with AutomaticKee
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: BlocListener<EditBrandPlanBloc, EditBrandPlanState>(
-        listener: (context, state) {
-          if (state is EditeStatusLoadingState) loading(context);
-          else if (state is EditeStatusFailureState) error(context, state.failure.massage, state.failure.code);
-          else if (state is EditeStatusState) success(context);
-        },
-        child: FloatingActionButton.extended(
-          label: const Text("اعتماد التعديلات", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          icon: const Icon(Icons.done_all_rounded, color: Colors.white),
-          onPressed: () {
-            BlocProvider.of<EditBrandPlanBloc>(context).add(EditePlanStatusEvent(widget.repPlan, 0));
-          },
-          backgroundColor: ColorManager.secondaryColor1,
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
-        ),
-      ),
       body: Column(
         children: [
           Padding(

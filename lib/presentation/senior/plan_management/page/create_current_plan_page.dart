@@ -148,6 +148,9 @@ class _CreateCurrentPlanPageState extends State<CreateCurrentPlanPage> {
                             SizedBox(
                               width: 90,
                               child: TextFormField(
+                                enabled: ((UserInfo.repType=="5")&&(UserInfo.otherstatus==5))
+
+                                ,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
