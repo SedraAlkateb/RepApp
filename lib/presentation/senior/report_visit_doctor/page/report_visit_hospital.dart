@@ -266,7 +266,7 @@ class ReportVisitHospital extends StatelessWidget {
                           buildIconButton(
                             icon: Icons.visibility,
                             onPressed: () {
-                              whoReadDialog(context);
+                              whoReadDialog(context, BlocProvider.of<ReportVisitDoctorBloc>(context));
                               BlocProvider.of<ReportVisitDoctorBloc>(context).add(WhoAllReadEvent(doctorNoteModel.visitId, "2"));
                             },
                           ),

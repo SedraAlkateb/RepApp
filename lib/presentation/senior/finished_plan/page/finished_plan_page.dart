@@ -129,7 +129,7 @@ class PlanCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         BlocProvider.of<FinishedPlanBloc>(context).add(GetPlanRepsEvent(planId: int.parse(plan.id)));
-        Navigator.pushNamed(context, Routes.planReps);
+        Navigator.pushNamed(context, Routes.planReps,arguments:int.parse(plan.id) );
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),

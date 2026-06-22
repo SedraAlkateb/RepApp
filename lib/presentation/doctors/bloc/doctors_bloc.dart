@@ -56,6 +56,7 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
       if (event is CheckReciEvent) {
         emit(CheckRecipesLoadingState(event.docId));
         (await checkReciUsecase.execute(UserInfo.repId)).fold((failure) {
+
           emit(CheckRecipesErrorState(failure: failure,event.docId));
         }, (data) async {
           emit(CheckRecipesState(data.accepted ?? false,event.st,event.docId));

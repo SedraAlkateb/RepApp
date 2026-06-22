@@ -21,9 +21,9 @@ class SaveSendBottom extends StatelessWidget {
                 UserInfo.otherstatus == 0
                     ? showDialog(
                   context: context,
-                  builder: (context) {
+                  builder: (dialogContext) {
                     return dialogPlan(
-                        context,
+                        dialogContext,
                         fun: () => BlocProvider.of<
                             BrandPlanBloc>(context)
                             .add(UpdateAmountSucEvent()),
@@ -63,9 +63,9 @@ class SaveSendBottom extends StatelessWidget {
                 UserInfo.otherstatus == 0
                     ? showDialog(
                   context: context,
-                  builder: (context) {
+                  builder: (dialogContext) {
                     return dialogPlan(
-                        context,
+                        dialogContext,
                         fun: () =>
                             BlocProvider.of<BrandPlanBloc>(
                                 context)

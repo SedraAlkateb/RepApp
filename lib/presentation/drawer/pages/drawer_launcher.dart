@@ -12,10 +12,7 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final String type = UserInfo.repType;
-
-
     // منطق توزيع الأدوار
     if (type == "4") {
       return CustomAppDrawer(
@@ -291,7 +288,7 @@ class DrawerPage extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(
             context,
-            Routes.brandPlan,
+              Routes.createCurrentPlan
           );
         },
       ),

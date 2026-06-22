@@ -30,6 +30,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
+    print("UserInfo.statusPlan :${UserInfo.statusPlan} , UserInfo.repType: ${UserInfo.repType}");
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(title: const Text("إدارة الخطة الفعالة")),
@@ -155,14 +156,12 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
                         ],
                       ),
                       SizedBox(height: 12.h),
-
+//TODO
                       // الدرو داون مغلف بكونتينر رمادي فاتح لتمييزه كحقل إدخال
                       DropDownChangePlan(
                           hintText: rep.flag.name,
                           items: allFlags,
-                          statusColor: rep.flag.flag == 3
-                              ? Colors.green
-                              : (rep.flag.flag == 2 ? Colors.orange : Colors.red),
+                          statusColor: getColor(rep.flag.flag),
                           onChanged: (x) {
 
                             BlocProvider.of<ManageFutureBloc>(context).add(
@@ -282,10 +281,24 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
       },
     );
   }
-
+  Color getColor(int flag){
+    if(flag==0){
+      return Colors.blue;
+    }else if(flag==5){
+      return Colors.orange;
+    }else if(flag==1){
+      return Colors.red;
+    }else if(flag==2){
+      return Colors.green;
+    }
+    else if(flag==3){
+      return Colors.black;
+    }
+    return Colors.purple;
+  }
   // 4. Pulsing Dot Animation logic
   Widget _buildPulseDot(int flag) {
-    Color color = flag == 0 ? Colors.green : (flag == 1 ? Colors.orange : Colors.red);
+    Color color = getColor(flag);
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.4, end: 1.0),
       duration: const Duration(seconds: 1),
@@ -321,7 +334,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   void _handleEditBrands(AllRepresentativeFuture rep) {
     iniEditBrandPlanModule();
     BlocProvider.of<EditBrandPlanBloc>(context).add(FutureGetPlanBrandEvent(Rep(rep.activePlan, 1)));
-    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan)));
+    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan,flag: rep.flag.flag,)));
   }
 
   Route _createRoute(Widget page) {

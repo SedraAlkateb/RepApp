@@ -49,6 +49,46 @@ class BrandSpPlanModel {
   BrandModel brandModel;
   List<SpPlan> spPlan = [];
   BrandSpPlanModel(this.brandModel, this.spPlan);
+ static void printBrandPlanActive(List<BrandSpPlanModel> data) {
+    print("=== 🚀 بدء طباعة مصفوفة planBrandActive (إجمالي العناصر: ${data.length}) ===");
+
+    for (int i = 0; i < data.length; i++) {
+      final mainItem = data[i];
+      print("\n---------------- [العنصر الرئيسي رقم: $i] ----------------");
+
+      // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
+      if (mainItem.brandModel != null) {
+        print("  🔹 Brand ID: ${mainItem.brandModel.id}");
+        print("  🔹 Brand Title: ${mainItem.brandModel.title ?? '🛑 NULL (خطأ)'}");
+      } else {
+        print("  🛑 خطأ قاتل: brandModel نفسه قيمته NULL!");
+      }
+
+      // طباعة مصفوفة الـ SpPlan الداخلية
+      print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan?.length ?? 0}");
+      if (mainItem.spPlan != null) {
+        for (int j = 0; j < mainItem.spPlan.length; j++) {
+          final sp = mainItem.spPlan[j];
+          print("     🔸 [$j] ID: ${sp.id}");
+          print("     🔸 [$j] Title: ${sp.title ?? '🛑 NULL (خطأ)'}");
+
+          // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
+          if (sp.brandType == null) {
+            print("     🛑 كشف الخطأ الحقل brandType قيمته NULL في العنصر الرئيسي [$i] والفرعي [$j]!");
+          } else {
+            print("     🔸 [$j] BrandType: '${sp.brandType}'");
+          }
+
+          print("     🔸 [$j] Amount: ${sp.amount}");
+          print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
+          print("     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
+        }
+      } else {
+        print("     🛑 قائمة spPlan نفسها قيمتها NULL!");
+      }
+    }
+    print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
+  }
 }
 
 class OtherBrandSpPlanModel {
@@ -308,10 +348,12 @@ class VisitPharmacyRequestBody {
 
 class RepPlanBrandBody {
   List<PlanBrandModel> planBrand;
-  RepPlanBrandBody(this.planBrand);
+  int status ;
+  RepPlanBrandBody(this.planBrand,this.status);
   Map<String, dynamic> toJson() {
     return {
       'list1': planBrand.map((e) => e.toMap()).toList(),
+      'status':status
     };
   }
 }
@@ -990,6 +1032,11 @@ class HospitalSpModel {
   int visit;
   int? visited;
   int flag;
+  String? placeTitle;
+  String? address;
+  String? title;
+  String? note;
+  String? SpName;
   HospitalSpModel(
     this.id,
     this.hospitalId,
@@ -998,6 +1045,11 @@ class HospitalSpModel {
     this.rate,
     this.visit,
     this.flag, {
+    this.SpName,
+    this.placeTitle,
+    this.address,
+    this.title,
+    this.note,
     this.visited,
   });
   Map<String, dynamic> toMap() {
@@ -1008,20 +1060,26 @@ class HospitalSpModel {
       'totalDocs': totalDocs,
       "rate": rate,
       "visit": visit,
-      'flag': flag
+      'flag': flag,
     };
   }
 
   factory HospitalSpModel.fromMap(Map<String, dynamic> map) {
     return HospitalSpModel(
-        map['id'],
-        map['hospitalId'],
-        map['spId'],
-        map['totalDocs'],
-        map["rate"],
-        map["visit"],
-        visited: map["visited"],
-        map['flag']);
+      map['id'],
+      map['hospitalId'],
+      map['spId'],
+      map['totalDocs'],
+      map["rate"],
+      map["visit"],
+      visited: map["visited"],
+      map['flag'],
+      placeTitle: map['placeTitle'],
+      address: map['address'],
+      title: map['title'],
+      note: map['note'],
+      SpName: map["SpName"],
+    );
   }
   factory HospitalSpModel.fromMap1(Map<String, dynamic> map) {
     return HospitalSpModel(
@@ -1032,7 +1090,13 @@ class HospitalSpModel {
         map["rate"],
         map["visit"],
         visited: map["visited"],
-        map['flag']);
+        map['flag'],
+    placeTitle: map['placeTitle'],
+    address: map['address'],
+    title: map['title'],
+    note: map['note'],
+    SpName: map["SpName"],
+    );
   }
 }
 
@@ -1273,8 +1337,8 @@ class PlanBrandModel {
         map['repPlanId'],
         map['brandType'],
         "",
-        map['amount'],
-        map['pharmaceuticalForm']);
+        map['amount'],"");
+
   }
 }
 
@@ -1720,8 +1784,9 @@ class InventoryModel {
   String title;
   String used;
   String total;
+  int type;
   int rest;
-  InventoryModel(this.title, this.used, this.total, this.rest);
+  InventoryModel(this.title, this.used, this.total, this.rest, this.type);
 }
 
 class AsRead {
@@ -1873,6 +1938,26 @@ class PlanBrandSp {
 
   PlanBrandSp(this.id, this.brandId, this.brandType, this.titleAr, this.spId,
       this.phTitle, this.totalAmount);
+  // 2. دالة copyWith اليدوية لتعديل الكمية محلياً في الذاكرة
+  PlanBrandSp copyWith({
+    int? id,
+    int? brandId,
+    int? brandType,
+    String? titleAr,
+    int? spId,
+    String? phTitle,
+    int? totalAmount,
+  }) {
+    return PlanBrandSp(
+      id ?? this.id,
+       brandId ?? this.brandId,
+    brandType ?? this.brandType,
+      titleAr ?? this.titleAr,
+     spId ?? this.spId,
+     phTitle ?? this.phTitle,
+      totalAmount ?? this.totalAmount,
+    );
+  }
 }
 
 class doctorsModel {
@@ -2068,9 +2153,9 @@ class FinishedPlanModel {
   FinishedPlanModel(
       this.id, this.cityId, this.startDate, this.endDate, this.active);
 }
+
 class PlanRepsModel {
   String id;
   String name;
-  PlanRepsModel(
-      this.id, this.name);
+  PlanRepsModel(this.id, this.name);
 }

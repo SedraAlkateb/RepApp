@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/Recipes/pages/recipes_hospital.dart';
+import 'package:domina_app/presentation/recipes/pages/recipes_hospital.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,35 +13,39 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocConsumer<DoctorsBloc, DoctorsState>(
+        listenWhen: (previous, current) {
+          // 1. تحقق أن الحالة تخص هذا المشفى بالتحديد
+          final bool isMyHospital = (current is CheckRecipesState && current.docId == hospitalId) ||
+              (current is CheckRecipesErrorState && current.docId == hospitalId);
 
-      listenWhen: (previous, current) {
-        if (current is CheckRecipesState && current.docId == hospitalId) return true;
-        if (current is CheckRecipesErrorState && current.docId == hospitalId) return true;
-        return false;
-      },
+          // 2. السحر هنا: تحقق أن هذه الواجهة هي الواجهة النشطة حالياً وليست واجهة بالخلفية مكررة
+          final bool isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? false;
+
+          return isMyHospital && isCurrentRoute;
+        },
       listener: (context, state) {
         if (state is CheckRecipesState) {
           if (state.isCheck == true) {
             initBrandRecModule();
+
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => RecipesHospital(
-                  HospitalId:
-                  hospitalId ,
-                  //  docId: doctor.id,
+                  HospitalId: hospitalId,
                   st: state.st,
                 ),
               ),
             );
+
+            // 💡 نصيحة احترافية: يفضل إرسال حدث للـ Bloc لتصفير الحالة (Reset State) هنا
+            // لمنع تكرار فتح الشاشة عند العودة بـ Back (مثال: context.read<DoctorsBloc>().add(ResetCheckRecEvent());)
+
           } else {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(
-              SnackBar(
-                  content: Text(
-                      'لقد تجاوزت الحد المسموح لعدد الوصفات')),
+            ScaffoldMessenger.of(context).clearSnackBars(); // تنظيف السناكبbars السابقة
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
             );
           }
         }
@@ -49,14 +53,17 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
           error(context, state.failure.massage, state.failure.code);
         }
       },
+      // 2. الفحص الصارم للبناء: لا تعد بناء الـ Widget (حالة التحميل) إلا للمشفى المطلوب فقط
       buildWhen: (previous, current) {
-        return (current is CheckRecipesLoadingState || previous is CheckRecipesLoadingState);
+        final bool isCurrentLoading = current is CheckRecipesLoadingState && current.docId == hospitalId;
+        final bool isPreviousLoading = previous is CheckRecipesLoadingState && previous.docId == hospitalId;
+        return isCurrentLoading || isPreviousLoading || current is AllHospitalsState;
       },
       builder: (context, state) {
         bool isLoading = (state is CheckRecipesLoadingState && state.docId == hospitalId);
+
         return PopupMenuButton<int>(
           onSelected: (value) {
-
             context.read<DoctorsBloc>().add(CheckReciEvent(hospitalId, value));
           },
           enabled: !isLoading,

@@ -1,12 +1,15 @@
+import 'package:domina_app/app/di.dart';
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/finished_plan/page/report_finished_plan_user_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlanRepsPage extends StatelessWidget {
-  const PlanRepsPage({Key? key}) : super(key: key);
-
+  const PlanRepsPage({Key? key, required this.repPlanId}) : super(key: key);
+  final int repPlanId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +48,7 @@ class PlanRepsPage extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         // تمرير كائن المندوب للبطاقة الجديدة المصممة أدناه
-                        return RepCard(repName: state.reps[index].name);
+                        return RepCard(repName: state.reps[index],repPlanId: repPlanId,);
                       },
                       childCount: state.reps.length,
                     ),
@@ -107,9 +110,10 @@ class PlanRepsPage extends StatelessWidget {
 
 /// بطاقة عرض المندوب (تصميم بسيط ومركّز على الاسم)
 class RepCard extends StatelessWidget {
-  final String repName;
-
-  const RepCard({Key? key, required this.repName}) : super(key: key);
+  final PlanRepsModel repName;
+  final int repPlanId;
+  const RepCard({Key? key, required this.repName, required this.repPlanId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +141,7 @@ class RepCard extends StatelessWidget {
         ),
         // عرض اسم المندوب بخط واضح
         title: Text(
-          repName,
+          repName.name,
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
@@ -151,7 +155,13 @@ class RepCard extends StatelessWidget {
           color: Colors.grey[400],
         ),
         onTap: () {
-          // هنا يمكن إضافة الانتقال لصفحة تقرير المندوب لاحقاً
+          initSeniorProfModule();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReportFinishedPlanUserPage(
+                    id: int.parse(repName.id), repPlanId: repPlanId, name: repName.name??""),
+              ));
         },
       ),
     );

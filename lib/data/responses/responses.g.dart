@@ -947,6 +947,11 @@ HospitalSpResponse _$HospitalSpResponseFromJson(Map<String, dynamic> json) =>
       json['totalDocs'] as String?,
       json['rate'] as String?,
       json['visit'] as String?,
+      json['note'] as String?,
+      json['title'] as String?,
+      json['address'] as String?,
+      json['place'] as String?,
+      json['spTitle'] as String?,
     );
 
 Map<String, dynamic> _$HospitalSpResponseToJson(HospitalSpResponse instance) =>
@@ -957,6 +962,11 @@ Map<String, dynamic> _$HospitalSpResponseToJson(HospitalSpResponse instance) =>
       'totalDocs': instance.totalDocs,
       'rate': instance.rate,
       'visit': instance.visit,
+      'note': instance.note,
+      'title': instance.title,
+      'address': instance.address,
+      'place': instance.place,
+      'spTitle': instance.spTitle,
     };
 
 PlanBrandResponse _$PlanBrandResponseFromJson(Map<String, dynamic> json) =>
@@ -1485,6 +1495,7 @@ InventoryResponse _$InventoryResponseFromJson(Map<String, dynamic> json) =>
       json['used'] as String?,
       json['total'] as String?,
       (json['rest'] as num?)?.toInt(),
+      json['type'] as String?,
     );
 
 Map<String, dynamic> _$InventoryResponseToJson(InventoryResponse instance) =>
@@ -1493,6 +1504,7 @@ Map<String, dynamic> _$InventoryResponseToJson(InventoryResponse instance) =>
       'used': instance.used,
       'total': instance.total,
       'rest': instance.rest,
+      'type': instance.type,
     };
 
 InventoryResponseBaseResponse _$InventoryResponseBaseResponseFromJson(

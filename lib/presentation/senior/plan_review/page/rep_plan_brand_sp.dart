@@ -155,8 +155,9 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     Color typeColor = item.brandType == 1
         ? ColorManager.secondaryColor1
         : ColorManager.secondaryColor2;
-    bool isEditable = widget.flag == 5 &&
-        (UserInfo.otherstatus == 0 || state is! SumErrorState);
+    bool isEditable = widget.flag == UserInfo.statusPlan ;
+   // &&
+      //  ( state is! SumErrorState);
 
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),

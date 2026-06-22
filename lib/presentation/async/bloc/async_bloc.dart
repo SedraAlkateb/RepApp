@@ -134,7 +134,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             emit(SyncDataErrorState(failure: brandsFailureOrSuccess));
             return false;
           }
-
           brands = brandsFailureOrSuccess as List<BrandModel>;
           emit(LoadingState(1));
           final visitDoctorResult = await getVisitDoctorUsecase.execute(

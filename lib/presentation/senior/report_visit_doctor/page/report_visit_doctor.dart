@@ -300,7 +300,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                             icon: Icons.visibility,
                             onPressed: () {
                               // دالة من يقرأ
-                              whoReadDialog(context);
+                              whoReadDialog(context,BlocProvider.of<ReportVisitDoctorBloc>(context));
                               BlocProvider.of<ReportVisitDoctorBloc>(context)
                                   .add(WhoAllReadEvent(doctorNoteModel.visitId, "2"));
                             },

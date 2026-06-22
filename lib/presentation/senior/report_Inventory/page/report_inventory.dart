@@ -11,16 +11,26 @@ class InventoryCard extends StatelessWidget {
   final InventoryModel data;
 
   const InventoryCard({super.key, required this.data});
-
+  Widget _buildBadge(String text, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(6.r)),
+      child: Text(text,
+          style: TextStyle(
+              color: color, fontSize: 10.sp, fontWeight: FontWeight.bold)),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    // الحسابات
     final int total = int.parse(data.total);
     final int used =  int.parse(data.used);
     final int rest =  data.rest;
 
     // نسبة التوزيع
     double usePercent = total == 0 ? 0 : used / total;
+    final Color typeColor = data.type==1 ? const Color(0xFF10B981) : const Color(0xFFF59E0B);
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -50,19 +60,28 @@ class InventoryCard extends StatelessWidget {
                 ),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.medication_liquid, color: ColorManager.medicalSecondary, size: 22.sp),
-                  SizedBox(width: 8.w),
                   Expanded(
-                    child: Text(
-                      data.title,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF0D47A1),
-                      ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.medication_liquid, color: ColorManager.medicalSecondary, size: 22.sp),
+                        SizedBox(width: 8.w),
+                        Expanded(
+                          child: Text(
+                            data.title,
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF0D47A1),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  _buildBadge(
+                      data.type == 1 ? "هدف" : "مساعد", typeColor),
                 ],
               ),
             ),
@@ -192,7 +211,7 @@ class ReportInventory extends StatelessWidget {
 
         if (state is SenAllInventoryErrorState) {
           return errorFullScreen(context, func: () =>
-              BlocProvider.of<ReportInventoryBloc>(context).add(SenAllInventoryEvent(203)));
+              BlocProvider.of<ReportInventoryBloc>(context).add(SenAllInventoryEvent(203,state.planId)));
         }
 
         return const SizedBox();

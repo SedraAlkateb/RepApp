@@ -35,7 +35,7 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
         },
         builder: (context, state) {
           List<BrandSpPlanModel> planBrandModel =
-              context.watch<BrandPlanBloc>().planBrandActive;
+              context.read<BrandPlanBloc>().planBrandActive;
 
           if (state is SearchBrandState) {
             planBrandModel = state.brand;
@@ -282,6 +282,7 @@ class ActiveBrandPlanCard extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: model.spPlan.length,
                   itemBuilder: (context, i) {
+
                     return Container(
                       margin: EdgeInsets.only(bottom: 8.h),
                       padding: EdgeInsets.symmetric(

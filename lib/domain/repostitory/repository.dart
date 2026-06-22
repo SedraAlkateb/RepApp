@@ -64,18 +64,18 @@ abstract class Repository {
 
   Future<Either<Failure, List<DoctorNoteModel>>> visitNotes(int depId);
 
-  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(int depId);
+  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(int repDet,int planId);
 
   Future<Either<Failure, List<AllRepresentative>>> getReps(int id,int cityId);
 
-  Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(int repDet);
-  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(int repDet);
+  Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(int repDet,int planId);
+  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(int repDet,int planId );
   Future<Either<Failure, List<DoctorIssueModel>>> getVisitIssue(int repDet);
 
   Future<Either<Failure, Message1Response>> insertLog(
       ExceptionRequestBody list1);
 
-  Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet);
+  Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet,int planId );
 
   Future<Either<Failure, InfoRep>> getInfoRep(int repDet);
 

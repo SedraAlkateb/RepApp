@@ -40,7 +40,7 @@ class NoVisitDoctor extends StatelessWidget {
                 if (state is SenNoVisitDocLoadingState) return loadingFullScreen(context);
                 if (state is SenNoVisitDocEmptyState || noVisitDoc.isEmpty) return emptyFullScreen(context);
                 if (state is SenNoVisitDocErrorState) return errorFullScreen(context, func: () {
-                  BlocProvider.of<SeniorProfBloc>(context).add(NoVisitDocEvent(156));
+                  BlocProvider.of<SeniorProfBloc>(context).add(NoVisitDocEvent(156,state.planId));
                 });
 
                 return ListView.builder(

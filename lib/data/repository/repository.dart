@@ -807,10 +807,10 @@ class RepositoryImp implements Repository {
     }
   }
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(int depId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(int repDet,int planId ) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getUnfinishedDoctorVisits(depId);
+        final response = await _remoteDataSource.getUnfinishedDoctorVisits(repDet,planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -834,10 +834,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(int depId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(int repDet,int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.noVisitDoc(depId);
+        final response = await _remoteDataSource.noVisitDoc(repDet,planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -861,10 +861,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(int depId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(int repDet,int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitDoc(depId);
+        final response = await _remoteDataSource.visitDoc(repDet,planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -912,10 +912,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet) async {
+  Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet,int planId ) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getInventory(repDet);
+        final response = await _remoteDataSource.getInventory(repDet,planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

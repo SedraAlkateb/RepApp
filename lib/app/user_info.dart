@@ -28,7 +28,8 @@ class UserInfo {
   static bool isChange = false;
   static int numDoctor = 0;
   static int numHospital = 0;
-  static int statusPlan = UserInfo.repType == "5" ? 5 : 1;
+  static int statusPlan = UserInfo.repType == "5" ? 5 : UserInfo.repType=="4"?2:UserInfo.repType==6?-1:-1;
+
 
   /// 🔹 الدالة الجديدة لتعبئة البيانات من الموديل مباشرة
   static void fillFromModel(dynamic data) {

@@ -329,7 +329,7 @@ class RepProfile extends StatelessWidget {
           icon: Icons.check_circle_outline,
           color: const Color(0xFF2D947A),
           onTap: () {
-            context.read<SeniorProfBloc>().add(VisitDocEvent(id));
+            context.read<SeniorProfBloc>().add(VisitDocEvent(id,repPlanId));
             Navigator.pushNamed(context, Routes.senVisitDoctor);
           }),
       InteractiveActionTile(
@@ -337,7 +337,7 @@ class RepProfile extends StatelessWidget {
           icon: Icons.cancel_outlined,
           color: const Color(0xFFE74C3C),
           onTap: () {
-            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id));
+            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id,repPlanId));
             Navigator.pushNamed(context, Routes.noVisitDoctor);
           }),
       InteractiveActionTile(
@@ -345,7 +345,7 @@ class RepProfile extends StatelessWidget {
           icon: Icons.hourglass_empty_rounded,
           color: const Color(0xFFF39C12),
           onTap: () {
-            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id));
+            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id,repPlanId));
             Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
           }),
       InteractiveActionTile(
@@ -355,7 +355,7 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             initSeniorReportInventoryModule();
             Navigator.push(context, MaterialPageRoute(builder: (c) {
-              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id));
+              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id,repPlanId));
               return ReportInventory();
             }));
           }),

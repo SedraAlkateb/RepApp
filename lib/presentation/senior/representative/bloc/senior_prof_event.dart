@@ -88,22 +88,26 @@ class SenSearchVisitDoctorEvent extends SeniorProfEvent{
 
 class NoVisitDocEvent extends SeniorProfEvent{
   final  int id;
+  final int planId;
   @override
-  NoVisitDocEvent(this.id);
-  List<Object?> get props => [id];
+  NoVisitDocEvent(this.id,this.planId);
+  List<Object?> get props => [id,planId];
 
 }
 class RemainingVisitsDocEvent extends SeniorProfEvent{
   final  int id;
+  final int planId;
   @override
-  RemainingVisitsDocEvent(this.id);
+  RemainingVisitsDocEvent(this.id,this.planId);
   List<Object?> get props => [id];
 
 }
 class VisitDocEvent extends SeniorProfEvent{
   final  int id;
+  final  int planId;
+
   @override
-  VisitDocEvent(this.id);
+  VisitDocEvent(this.id , this.planId);
   List<Object?> get props => [id];
 
 }

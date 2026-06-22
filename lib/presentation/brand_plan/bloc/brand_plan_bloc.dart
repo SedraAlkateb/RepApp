@@ -49,6 +49,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
           return false;
         }, (data) async {
           planBrandActive = data;
+          BrandSpPlanModel.printBrandPlanActive(planBrandActive);
           planBrandActiveSearch = data;
           emit(AllBrandPlanState(data));
         });
@@ -80,43 +81,37 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         }).toList();
 
         emit(SearchBrandState(planBrandActiveSearch));
-      } else if (event is ChangeFieldEvent) {
-        int sum1 = sum;
-        sum1 = sum1 -
-            (planBrand[event.index].brands[event.indexBr].amount *
-                planBrand[event.index].brands[event.indexBr].sampleCoast);
-        sum1 = sum1 +
-            (event.number *
-                planBrand[event.index].brands[event.indexBr].sampleCoast);
-        int sum2 = sumS;
-        sum2 = sum2 - planBrand[event.index].brands[event.indexBr].amount;
-        sum2 = sum2 + event.number;
-        print(event.brandM);
-        print("event.brandM");
+      } // استبدل جزء معالجة الـ ChangeFieldEvent والـ UpdateEvent بهذا الكود المحسن ⚡:
+
+      if (event is ChangeFieldEvent) {
+        // 1. فحص الحسابات الرياضية بشكل فوري ومباشر وسريع
+        final currentAmount = planBrand[event.index].brands[event.indexBr].amount;
+        final sampleCoast = planBrand[event.index].brands[event.indexBr].sampleCoast;
+
+        int sum1 = sum - (currentAmount * sampleCoast) + (event.number * sampleCoast);
+        int sum2 = sumS - currentAmount + event.number;
+
+        // 2. تحديث البيانات محلياً أولاً لحفظ الحالة في الذاكرة
+        planBrand[event.index].brands[event.indexBr].amount = event.number;
+        sum = sum1;
+        sumS = sum2;
+
+        // 3. التحقق الصارم من الشروط وإطلاق الـ State المناسبة
         if (sum2 <= event.brandM) {
           if (sum1 < UserInfo.percentage) {
-            planBrand[event.index].brands[event.indexBr].amount = event.number;
-            sum = sum1;
-            sumS = sum2;
-            emit(SumState(planBrand));
+            // إطلاق حالة النجاح صامتة للـ UI بالخلفية دون الحاجة لإعادة بناء الحقول
+            emit(SumState(List.from(planBrand)));
           } else {
-            planBrand[event.index].brands[event.indexBr].amount = event.number;
-            sum = sum1;
-            sumS = sum2;
-            emit(SumErrorState(
-                failure: Failure(100, "لقد تجاوزت الحد المسموح ")));
+            emit(SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح ميزانياً")));
           }
         } else {
-          planBrand[event.index].brands[event.indexBr].amount = event.number;
-          sumS = sum2;
-          emit(SumErrorState(
-              failure: Failure(
-                  100, "لقد تجاوزت الحد المسموح للعينات في هذا الإختصاص")));
+          emit(SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح للعينات في هذا الإختصاص")));
         }
       }
-      if (event is UpdateEvent) {
-        List<OtherBrandSpPlanModel> planBrandSum = List.from(planBrand);
-        emit(SumState(planBrandSum));
+
+      else if (event is UpdateEvent) {
+        // تحسين استهلاك الذاكرة عبر تمرير مرجع سريع بدلاً من تكرار عمل كتل برمجية ثقيلة
+        emit(SumState(planBrand));
       }
       if (event is SendToS) {
         emit(UpdateAmountLoadingState());
@@ -126,7 +121,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
               failure: Failure(5, "لقد تجاوزت الحد المسموح")));
         } else if (x.state == 0) {
           UserInfo.otherstatus = 5;
-          (await updateOtherStatusUsecase.execute(UserInfo.repId, 1, planBrand))
+          (await updateOtherStatusUsecase.execute(UserInfo.repId, 5, planBrand))
               .fold((failure) {
             emit(UpdateAmountErrorState(failure: failure));
             return false;

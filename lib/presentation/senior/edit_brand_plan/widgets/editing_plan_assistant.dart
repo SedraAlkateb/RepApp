@@ -11,9 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EditingPlanAssistant extends StatefulWidget {
-  const EditingPlanAssistant({super.key, required this.repPlan});
+  const EditingPlanAssistant({super.key, required this.repPlan,required this.flag});
   final int repPlan;
-
+  final int flag;
   @override
   State<EditingPlanAssistant> createState() => _EditingPlanAssistantState();
 }

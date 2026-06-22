@@ -51,7 +51,6 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
         });
       }
    else   if ((event is NumEvent)&& (isOpen==false)) {
-     print("ddddddddddddddddddddd");
         (await numDocHasSqlUsecase.execute()).fold((failure) {
           emit(NumVisitErrorState(failure: failure));
         }, (data) async {

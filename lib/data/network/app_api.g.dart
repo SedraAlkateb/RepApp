@@ -1007,12 +1007,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int docId) async {
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int docId, int planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', docId.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1037,12 +1038,14 @@ class _AppServiceClient implements AppServiceClient {
   @override
   Future<AllNoVisitDoctorBaseResponse> getUnfinishedDoctorVisits(
     int docId,
+    int planId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', docId.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1065,12 +1068,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> visitDoc(int docId) async {
+  Future<AllNoVisitDoctorBaseResponse> visitDoc(int docId, int planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', docId.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1149,12 +1153,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<InventoryResponseBaseResponse> getInventory(int id) async {
+  Future<InventoryResponseBaseResponse> getInventory(int id, int planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', id.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<InventoryResponseBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

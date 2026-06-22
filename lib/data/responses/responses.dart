@@ -858,14 +858,40 @@ class HospitalSpResponse {
   String? hospitalId;
   @JsonKey(name: "spId")
   String? spId;
+  /////////////////////////`-
   @JsonKey(name: "totalDocs")
   String? totalDocs;
   @JsonKey(name: "rate")
   String? rate;
   @JsonKey(name: "visit")
   String? visit;
-  HospitalSpResponse(this.id, this.hospitalId, this.spId, this.totalDocs,
-      this.rate, this.visit); // from json
+  /////////////////////////////////////////////
+
+  @JsonKey(name: "note")
+  String? note;
+  @JsonKey(name: "title")
+  String? title;
+  @JsonKey(name: "address")
+  String? address;
+  @JsonKey(name: "place")
+  String? place;
+  @JsonKey(name: "spTitle")
+  String? spTitle;
+
+
+  HospitalSpResponse(
+      this.id,
+      this.hospitalId,
+      this.spId,
+      this.totalDocs,
+      this.rate,
+      this.visit,
+      this.note,
+      this.title,
+      this.address,
+      this.place,
+      this.spTitle);
+
   factory HospitalSpResponse.fromJson(Map<String, dynamic> json) =>
       _$HospitalSpResponseFromJson(json);
 
@@ -1315,7 +1341,6 @@ class VisitDoctorBaseResponse extends BaseResponse {
       _$VisitDoctorBaseResponseFromJson(json);
   Map<String, dynamic> toJson() => _$VisitDoctorBaseResponseToJson(this);
 }
-
 @JsonSerializable()
 class VisitHospitalResponse {
   @JsonKey(name: "hosVisitTemp", defaultValue: [])
@@ -1348,7 +1373,9 @@ class InventoryResponse {
   String? total;
   @JsonKey(name: "rest")
   int? rest;
-  InventoryResponse(this.title, this.used, this.total, this.rest);
+  @JsonKey(name: "type")
+  String? type;
+  InventoryResponse(this.title, this.used, this.total, this.rest,this.type);
 
   factory InventoryResponse.fromJson(Map<String, dynamic> json) =>
       _$InventoryResponseFromJson(json);
