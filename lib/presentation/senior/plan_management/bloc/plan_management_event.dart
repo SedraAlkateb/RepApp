@@ -14,6 +14,12 @@ class RepPlanBrandSpEvent extends PlanManagementEvent {
   @override
   List<Object?> get props => [rep];
 }
+class RepActivePlanBrandEvent extends PlanManagementEvent {
+
+  RepActivePlanBrandEvent();
+  @override
+  List<Object?> get props => [];
+}
 // حدث تحديث الكمية في الذاكرة
 class UpdateBrandQuantityEvent extends PlanManagementEvent {
   final int index;
@@ -27,4 +33,7 @@ class UpdateBrandQuantityEvent extends PlanManagementEvent {
 // حدث الموافقة والإرسال النهائي
 class SubmitPlanEvent extends PlanManagementEvent {
    SubmitPlanEvent();
+}
+class GetRepInfoEvent extends PlanManagementEvent {
+  GetRepInfoEvent();
 }

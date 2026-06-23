@@ -46,7 +46,7 @@ class _HospitalVisitState extends State<HospitalVisit>
                   });
                 }
               }, builder: (context, state) {
-                List<HospitalModel> hospitals =
+                List<HospitalSpAllModel> hospitals =
                     context.watch<VisitPlaceBloc>().hospitals;
                 if (state is SearchVisitHospitalState) {
                   hospitals = state.hospitalVisit;
@@ -85,7 +85,7 @@ class _HospitalVisitState extends State<HospitalVisit>
                           children: [
 
                             Text(
-                                hospitals[index].title,
+                                hospitals[index].title??"",
                                 style: TextStyle(
                                     fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
                             SizedBox(height: 10.h),
@@ -96,7 +96,7 @@ class _HospitalVisitState extends State<HospitalVisit>
                                 Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
                                 SizedBox(width: 8.w,),
                                 Expanded(
-                                  child: Text(hospitals[index].address,
+                                  child: Text(hospitals[index].address??"",
                                       style: TextStyle
                                         (color: Colors.grey,
                                           fontSize: 15.sp)),
@@ -109,7 +109,7 @@ class _HospitalVisitState extends State<HospitalVisit>
                             // أزرار الأكشن
                             Row(
                               children: [
-                                PrescriptionHospitalMenuWidget(hospitalId: hospitals[index].id),
+                                PrescriptionHospitalMenuWidget(hospitalId: hospitals[index].hospitalId),
                                 const Spacer(),
                                 InkWell(
                                   onTap: () {

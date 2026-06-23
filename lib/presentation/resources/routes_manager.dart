@@ -15,6 +15,7 @@ import 'package:domina_app/presentation/places/pages/places_archive.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
+import 'package:domina_app/presentation/senior/finished_plan/page/all_city-plan.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/finished_plan_page.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
@@ -119,6 +120,7 @@ class Routes {
   static const String finishedPlan = "/finishedPlan";
   static const String planReps = "/planReps";
   static const String createCurrentPlan = "/createCurrentPlan";
+  static const String cityPlan = "/cityPlan";
 
 }
 
@@ -343,11 +345,14 @@ class RouteGenerator {
 
         return _animatedRoute( FinishedPlanPage(cityId: args));
       case Routes.planReps:
-        final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute( PlanRepsPage(repPlanId: args,));
+
+        return _animatedRoute( PlanRepsPage());
       case Routes.createCurrentPlan:
         initCurrentPlanModule();
         return _animatedRoute( CreateCurrentPlanPage());
+      case Routes.cityPlan:
+        initFinishedPlan();
+        return _animatedRoute(AllCityPlan());
 
 
       default:

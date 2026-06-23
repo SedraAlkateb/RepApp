@@ -1774,10 +1774,13 @@ class FlagModel {
         return "بانتظار موافقة المستودع";
       case 5:
         return "بانتظار TeamLeader";
+      case 6:
+        return "بانتظار موافقة Senior";
       default:
         return "خطأ";
     }
   }
+
 }
 
 class InventoryModel {
@@ -2054,8 +2057,10 @@ class AllRepresentativeFuture {
   String name;
   FlagModel flag;
   int samplesCount;
+  String reptype;
+
   AllRepresentativeFuture(
-      this.id, this.name, this.flag, this.activePlan, this.samplesCount);
+      this.id, this.name, this.flag, this.activePlan, this.samplesCount,this.reptype);
 }
 
 class WhoReadModel {
@@ -2122,9 +2127,11 @@ List<FlagModel> allFlags = [
   FlagModel(0),
   FlagModel(1),
   FlagModel(2),
-  FlagModel(3),
-  FlagModel(4),
+//  FlagModel(3),
+ // FlagModel(4),
   FlagModel(5),
+  FlagModel(6),
+
 ];
 
 class StatusPlanModel {
@@ -2135,12 +2142,13 @@ class StatusPlanModel {
 
 List<StatusPlanModel> statusPlanSupervisor = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
-  StatusPlanModel(4, "بانتظار موافقة المستودع"),
+  StatusPlanModel(6, "بانتظار موافقة Senior"),
   StatusPlanModel(5, "بانتظار TeamLeader"),
 ];
 List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
   StatusPlanModel(1, "بانتظار موافقة المشرف"),
+  StatusPlanModel(6, "بانتظار موافقة Senior"),
 ];
 
 class FinishedPlanModel {
@@ -2157,5 +2165,6 @@ class FinishedPlanModel {
 class PlanRepsModel {
   String id;
   String name;
-  PlanRepsModel(this.id, this.name);
+  String repPlan;
+  PlanRepsModel(this.id, this.name,this.repPlan);
 }

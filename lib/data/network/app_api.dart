@@ -304,7 +304,7 @@ abstract class AppServiceClient {
       @Body() BrandAmountRequestBody list);
 
   @POST("/admin/getFinishedPlans.php")
-  Future<FinishedPlansBaseResponse> getFinishedPlans(//1246 , 1299
+  Future<FinishedPlansBaseResponse> getFinishedPlans(
       @Part(name: "cityId") int cityId,
       );
 

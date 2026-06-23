@@ -1923,6 +1923,7 @@ RepresentativeFutureResponse _$RepresentativeFutureResponseFromJson(
       json['flag'] as String?,
       json['futurePlan'] as String?,
       json['samplesCount'] as String?,
+      json['reptype'] as String,
     );
 
 Map<String, dynamic> _$RepresentativeFutureResponseToJson(
@@ -1933,6 +1934,7 @@ Map<String, dynamic> _$RepresentativeFutureResponseToJson(
       'flag': instance.flag,
       'futurePlan': instance.futurePlan,
       'samplesCount': instance.samplesCount,
+      'reptype': instance.reptype,
     };
 
 FinishedPlanResponse _$FinishedPlanResponseFromJson(
@@ -1977,12 +1979,14 @@ PlanRepsResponse _$PlanRepsResponseFromJson(Map<String, dynamic> json) =>
     PlanRepsResponse(
       json['id'] as String?,
       json['name'] as String?,
+      json['repPlan'] as String?,
     );
 
 Map<String, dynamic> _$PlanRepsResponseToJson(PlanRepsResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'repPlan': instance.repPlan,
     };
 
 PlanRepsBaseResponse _$PlanRepsBaseResponseFromJson(

@@ -60,7 +60,7 @@ class SearchDoctorArchive extends PlaceEvent{
 }
 class SearchHospitalArchive extends PlaceEvent{
   final  String search;
-  final List<HospitalModel> hospital;
+  final List<HospitalSpAllModel> hospital;
 
   SearchHospitalArchive(this.search,this.hospital);
   @override

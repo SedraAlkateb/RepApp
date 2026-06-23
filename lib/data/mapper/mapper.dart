@@ -364,7 +364,29 @@ extension RepBrandSpMapper on PlanBrandSpecResponse? {
     );
   }
 }
-
+extension ActivePlanMapper on PlanBrandModel? {
+  PlanBrandSp toDomain() {
+    return PlanBrandSp(
+      this?.id ?? Constants.zero,
+      this?.brandId ?? Constants.zero,
+      int.parse(this?.brandType??Constants.empty),
+      this?.title ??Constants.empty,
+      this?.spId ?? Constants.zero,
+      "",
+      int.parse(this?.amount??Constants.empty),
+    );
+  }
+}
+extension AllActivePlansMapper on List<PlanBrandModel>? {
+  List<PlanBrandSp> toDomain() {
+    List<PlanBrandSp> planBrands =
+    (this?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<PlanBrandSp>()
+        .toList();
+    return planBrands;
+  }
+}
 extension CurrentPlanMapper on PlanBrandSp? {
   PlanBrandModel toDomain(int planId) {
     return PlanBrandModel(
@@ -891,6 +913,7 @@ extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
       FlagModel(int.parse(this?.flag ?? "0")),
       int.parse(this?.futurePlan ?? "0"),
       int.parse(this?.samplesCount ?? "0"),
+      this?.reptype ?? Constants.empty,
     );
   }
 }
@@ -994,6 +1017,8 @@ extension PlanRepsMapper on PlanRepsResponse? {
     return PlanRepsModel(
       this?.id ?? Constants.empty,
       this?.name ?? Constants.empty,
+      this?.repPlan ?? Constants.empty,
+
     );
   }
 }

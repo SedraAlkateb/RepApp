@@ -235,6 +235,7 @@ Future<int?> sss() async {
           });
         }
       }
+      UserInfo.initializeUserPlan();
     } else {
       UserInfo.isLogging = 0;
     }

@@ -16,6 +16,7 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
   AllHospitalSpNSqlUsecase allHospitalSpNSqlUsecase;
   List<HospitalSpAllModel> hospital = [];
   List<DoctorModel> doctor = [];
+
   DoctorsBloc(this.allDoctorsqlUsecase, this.checkReciUsecase,this.allHospitalSpNSqlUsecase)
       : super(DoctorsInitial()) {
     on<DoctorsEvent>((event, emit) async {

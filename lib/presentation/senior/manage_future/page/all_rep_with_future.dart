@@ -3,10 +3,12 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/widget/drop_down_change_plan.dart';
+import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -153,11 +155,12 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
                             ),
                           ),
                           // نقطة الحالة تنبض باللون الخاص بها
-                          _buildPulseDot(rep.flag.flag),
+                          _buildPulseDot(rep.flag.flag,rep.reptype),
                         ],
                       ),
                       SizedBox(height: 12.h),
-//TODO
+
+
                       // الدرو داون مغلف بكونتينر رمادي فاتح لتمييزه كحقل إدخال
                       DropDownChangePlan(
                           hintText: rep.flag.name,
@@ -298,23 +301,29 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
     return Colors.purple;
   }
   // 4. Pulsing Dot Animation logic
-  Widget _buildPulseDot(int flag) {
+  Widget _buildPulseDot(int flag,String repType) {
     Color color = getColor(flag);
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.4, end: 1.0),
       duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
       builder: (context, value, child) {
-        return Container(
-          width: 10.w,
-          height: 10.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            boxShadow: [
-              BoxShadow(color: color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
-            ],
-          ),
+        return Row(
+          children: [
+            Text(UserInfo.getRepType(repType)),
+
+            Container(
+              width: 10.w,
+              height: 10.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color,
+                boxShadow: [
+                  BoxShadow(color: color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
+                ],
+              ),
+            ),
+          ],
         );
       },
       onEnd: () => {}, // Loop handled by the builder naturally
@@ -324,12 +333,32 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   // Navigation Handlers with Animation logic
   void _handleAuditing(AllRepresentativeFuture rep) {
     iniFutureModule();
-    Navigator.push(context, _createRoute(FutureSpecializationsPage(
-      id: rep.id,
-      repPlanId: rep.activePlan,
-      flag: rep.flag,
-      sampleCount: rep.samplesCount,
-    )));
+    if(rep.reptype=="7"){
+
+      Navigator.push(context, _createRoute(FutureSpecializationsPage(
+        id: rep.id,
+        repPlanId: rep.activePlan,
+        flag: rep.flag,
+        sampleCount: rep.samplesCount,
+      )));
+    }else{
+      BlocProvider.of<FutureRepBloc>(context).add(
+        FutureRepPlanBrandSpEvent(
+          RepSp(rep.activePlan, 38, rep.id),
+          rep.samplesCount,
+        ),
+      );
+      Navigator.pushNamed(
+        context,
+        Routes.RepPlanBrandSp,
+        arguments: {
+          'title': "كل الاختصاصات",
+          'flag':  rep.flag.flag,
+        },
+      );
+    }
+
+
   }
 
   void _handleEditBrands(AllRepresentativeFuture rep) {

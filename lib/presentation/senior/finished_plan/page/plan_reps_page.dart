@@ -8,8 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlanRepsPage extends StatelessWidget {
-  const PlanRepsPage({Key? key, required this.repPlanId}) : super(key: key);
-  final int repPlanId;
+  const PlanRepsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +48,7 @@ class PlanRepsPage extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         // تمرير كائن المندوب للبطاقة الجديدة المصممة أدناه
-                        return RepCard(repName: state.reps[index],repPlanId: repPlanId,);
+                        return RepCard(repName: state.reps[index],repPlanId:  int.parse(state.reps[index].repPlan),);//
                       },
                       childCount: state.reps.length,
                     ),

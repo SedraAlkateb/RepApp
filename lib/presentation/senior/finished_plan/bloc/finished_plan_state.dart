@@ -56,3 +56,24 @@ class PlanRepsError extends FinishedPlanState {
   @override
   List<Object> get props => [message];
 }
+final class AllCityErrorState extends FinishedPlanState {
+
+  final Failure failure;
+  const AllCityErrorState({required this.failure});
+  @override
+
+  List<Object> get props=>[failure];
+}
+
+final class AllCityLoadingState extends FinishedPlanState {
+  const AllCityLoadingState();
+  @override
+  List<Object> get props => [];
+}
+
+final class GetAllCityState extends FinishedPlanState {
+  final List<CityModel> cities;
+  const GetAllCityState(this.cities);
+  @override
+  List<Object> get props =>[cities];
+}

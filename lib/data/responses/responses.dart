@@ -1769,9 +1769,10 @@ class RepresentativeFutureResponse {
   String? futurePlan;
   @JsonKey(name: "samplesCount")
   String? samplesCount;
-
+  @JsonKey(name: "reptype")
+  String reptype;
   RepresentativeFutureResponse(
-      this.id, this.name, this.flag, this.futurePlan, this.samplesCount);
+      this.id, this.name, this.flag, this.futurePlan, this.samplesCount,this.reptype);
 
   // from json
   factory RepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>
@@ -1819,8 +1820,10 @@ class PlanRepsResponse {
   String? id;
   @JsonKey(name: "name")
   String? name;
+  @JsonKey(name: "repPlan")
+  String? repPlan;
 
-  PlanRepsResponse(this.id, this.name); // from json
+  PlanRepsResponse(this.id, this.name,this.repPlan); // from json
   factory PlanRepsResponse.fromJson(Map<String, dynamic> json) =>
       _$PlanRepsResponseFromJson(json);
   // to json

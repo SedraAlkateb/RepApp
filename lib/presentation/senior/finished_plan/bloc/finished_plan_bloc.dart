@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/all_city_usecase.dart';
 import 'package:domina_app/domain/usecase/finished_plans_usecase.dart';
 import 'package:domina_app/domain/usecase/get_pan_reps_usecase.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -12,10 +15,12 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
   // تعريف الـ Usecase كمتغير نهائي لضمان عدم تغييره
   final FinishedPlansUsecase finishedPlansUsecase;
   final GetPanRepsUsecase getPanRepsUsecase;
-  FinishedPlanBloc(this.finishedPlansUsecase,this.getPanRepsUsecase) : super(FinishedPlanInitial()) {
+  final AllCityUsecase allcityUsecase;
+  FinishedPlanBloc(this.finishedPlansUsecase,this.getPanRepsUsecase,this.allcityUsecase) : super(FinishedPlanInitial()) {
     // تسجيل الأحداث: هنا نربط الحدث بالدالة المسؤولة عنه فقط
     on<GetFinishedPlansEvent>(_onGetFinishedPlans);
     on<GetPlanRepsEvent>(_onGetPlanReps);
+    on<GetAllCityEventForPlan>(_onGetCity);
 
   }
 
@@ -63,6 +68,29 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
           (data) {
         // في حال النجاح، نرسل البيانات المستلمة للواجهة
         emit(PlanRepsLoaded(data));
+      },
+    );
+  }
+
+  Future<void> _onGetCity(
+      GetAllCityEventForPlan event,
+      Emitter<FinishedPlanState> emit,
+      ) async {
+    // 1. تغيير الحالة إلى "تحميل" لإبلاغ الواجهة
+    emit(AllCityLoadingState());
+
+    // 2. طلب البيانات من طبقة الـ Domain وانتظار النتيجة
+    final result = await allcityUsecase.execute();
+
+    // 3. معالجة النتيجة القادمة (إما فشل Failure أو نجاح Success)
+    result.fold(
+          (failure) {
+        // في حال حدوث خطأ، نرسل حالة الخطأ مع الرسالة
+        emit(AllCityErrorState( failure: failure));
+      },
+          (data) {
+        // في حال النجاح، نرسل البيانات المستلمة للواجهة
+        emit(GetAllCityState(data));
       },
     );
   }

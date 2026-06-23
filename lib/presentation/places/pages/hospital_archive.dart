@@ -32,7 +32,7 @@ class HospitalArchive extends StatelessWidget {
                 builder: (context, state) {
                   // 1. حالة النجاح وعرض البيانات
                   if (state is AllHospitalArchiveByPlaceState) {
-                    List<HospitalModel> hospitals = state.searchData;
+                    List<HospitalSpAllModel> hospitals = state.searchData;
 
                     return SliverMainAxisGroup(
                       slivers: [
@@ -136,7 +136,7 @@ class HospitalArchive extends StatelessWidget {
   }
 
   // ويدجت الكرت مفصول لتحسين الأداء ونظافة الكود
-  Widget _buildHospitalCard(BuildContext context, HospitalModel hospital) {
+  Widget _buildHospitalCard(BuildContext context, HospitalSpAllModel hospital) {
     return Container(
       margin: EdgeInsets.only(bottom: 16.h, right: 8.w, left: 8.w),
       padding: EdgeInsets.all(16.w),
@@ -159,7 +159,7 @@ class HospitalArchive extends StatelessWidget {
 
               Expanded(
                 child: Text(
-                  hospital.title ,
+                  hospital.title??"" ,
                   textAlign: TextAlign.end,
                   style: TextStyle(
                       fontSize: 18.sp,
@@ -167,11 +167,14 @@ class HospitalArchive extends StatelessWidget {
                       color: ColorManager.medicalPrimary),
                 ),
               ),
+
             ],
           ),
           SizedBox(height: 10.h),
-          _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle),
-          _buildInfoRow(Icons.map_outlined, hospital.address),
+          _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle??""),
+          _buildInfoRow(Icons.map_outlined, hospital.address??""),
+          _buildInfoRow(Icons.folder_special_outlined, hospital.titleSp??""),
+
           SizedBox(height: 16.h),
           const Divider(thickness: 0.1, color: Colors.grey),
           Row(

@@ -151,11 +151,15 @@ class AdminDashboardPage extends StatelessWidget {
                         title: 'الخطط المنتهية',
                         subtitle: 'أرشيف الخطط',
                         iconColor: Colors.grey,
-                        onTap: () {
+                        onTap: () { //TODO
+                          UserInfo.repType!="4"?
                           Navigator.pushNamed(
                             context,
                               Routes.finishedPlan,
-                              arguments:UserInfo.repType=="5"?UserInfo.cityId:0
+                              arguments:UserInfo.cityId
+                          ):Navigator.pushNamed(
+                              context,
+                              Routes.cityPlan,
                           );
                         },
                       ),

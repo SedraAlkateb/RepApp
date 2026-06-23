@@ -185,11 +185,11 @@ class DrawerPage extends StatelessWidget {
           }),
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
-        title: "الخطط",
+        title: "إدارة الخطة",
         onTap: () {
           Navigator.pushNamed(
-            context,
-            Routes.brandPlan,
+              context,
+              Routes.createCurrentPlan
           );
         },
       ),
@@ -284,7 +284,7 @@ class DrawerPage extends StatelessWidget {
           )),
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
-        title: "إنشاء خطة",
+        title: "إدارة الخطة",
         onTap: () {
           Navigator.pushNamed(
             context,

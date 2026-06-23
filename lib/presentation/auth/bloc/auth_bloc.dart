@@ -57,6 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             loginModel?.flag1 = 0;
             UserInfo.flag1 = 0;
             UserInfo.repType = data.repType;
+            UserInfo.initializeUserPlan();
             emit(LoginState());
       //    }
         });

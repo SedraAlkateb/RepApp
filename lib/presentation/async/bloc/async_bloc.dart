@@ -311,6 +311,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           if (UserInfo.otherstatus == -1) {
             UserInfo.flag1 = 0;
           }
+          UserInfo.initializeUserPlan();
+
           emit(IsActiveState());
         });
       }
@@ -337,6 +339,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           } else {
             UserInfo.flag1 = 0;
           }
+          UserInfo.initializeUserPlan();
 
           emit(UpdateIsActiveState());
         });

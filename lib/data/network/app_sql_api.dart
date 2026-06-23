@@ -47,7 +47,7 @@ abstract class AppSqlApiAbs {
   Future<List<PlaceModel>> getPlace();
   Future<List<PharmacyModel>> getPharmacy();
   Future<List<BrandModel>> getBrands();
-  Future<List<HospitalModel>> getHospitalByPlaceId(int placeId);
+  Future<List<HospitalSpAllModel>> getHospitalByPlaceId(int placeId);
   Future<List<DoctorModel>> getDoctorByPlaceId(int placeId);
   Future<List<PharmacyModel>> getPharmaciesByPlaceId(int placeId);
   Future<List<DoctorModel>> getDoctorBySpec(int spId);
@@ -518,23 +518,40 @@ class AppSqlApi extends AppSqlApiAbs {
     return pharmacies;
   }
 
-  Future<List<HospitalModel>> getHospitalByPlaceId(int placeId) async {
+  Future<List<HospitalSpAllModel>> getHospitalByPlaceId(int placeId) async {
     final db = await databaseHelper.database;
-    List<Map<String, dynamic>> result = await db.rawQuery('''
-    SELECT hospital.*, 
-           SUM(CASE WHEN visit_hospital.hospitalSpId IS NOT NULL THEN 1 ELSE 0 END) as total_visits
-    FROM hospital
-    LEFT JOIN hospitalSp ON hospital.id = hospitalSp.hospitalId
-    LEFT JOIN visit_hospital ON hospitalSp.id = visit_hospital.hospitalSpId
-    WHERE hospital.placeId = ?
-    GROUP BY hospital.id
-    HAVING total_visits < SUM(hospitalSp.visit)
-  ''', [placeId]);
-    List<HospitalModel> hospitals =
-        result.map((map) => HospitalModel.fromMap(map)).toList();
-    return hospitals;
-  }
 
+    // الاستعلام يقوم بجلب تفاصيل المشفى والاختصاص المرتبط به
+    // مع احتساب إجمالي الزيارات الفعلي مقارنة بالزيارات المطلوبة
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+    SELECT 
+      hospital.id as hospitalId,
+      hospital.title,
+      hospital.address,
+      hospital.placeTitle,
+      hospital.note,
+      hospitalSp.rate,
+      hospitalSp.totalDocs,
+      hospitalSp.visit,
+      hospitalSp.flag,
+      specialization.title as titleSp,
+      specialization.flag as flagSp,
+      -- حساب عدد الزيارات الفعلي لهذا الاختصاص بالتحديد داخل المشفى
+      (SELECT COUNT(*) FROM visit_hospital WHERE visit_hospital.hospitalSpId = hospitalSp.id) as current_visits
+    FROM hospital
+    JOIN hospitalSp ON hospitalSp.hospitalId = hospital.id
+    JOIN specialization ON hospitalSp.spId = specialization.id
+    WHERE hospital.placeId = ?
+    -- الشرط: جلب الاختصاصات التي لم يكتمل هدف زياراتها بعد
+    GROUP BY hospitalSp.id
+    HAVING current_visits < hospitalSp.visit
+  ''', [placeId]);
+
+    // صب البيانات وتحويلها إلى مصفوفة الموديل المطلوب
+    return List.generate(maps.length, (i) {
+      return HospitalSpAllModel.fromMap(maps[i]);
+    });
+  }
   Future<List<DoctorModel>> getDoctorByPlaceId(int placeId) async {
     final db = await databaseHelper.database;
 

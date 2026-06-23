@@ -505,8 +505,16 @@ Future<void> initCurrentPlanModule() async {
       instance
           .registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
     }
+    if (!GetIt.I.isRegistered<CheckActiveBrandPlanUsecase>()) {
+      instance
+          .registerFactory<CheckActiveBrandPlanUsecase>(() => CheckActiveBrandPlanUsecase(instance()));
+    }
+    if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+      instance
+          .registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+    }
     instance.registerFactory<PlanManagementBloc>(
-            () => PlanManagementBloc(instance(),instance()));
+            () => PlanManagementBloc(instance(),instance(),instance(),instance()));
   }
 }
 
@@ -798,7 +806,10 @@ Future<void> initFinishedPlan() async {
     instance.registerFactory<GetPanRepsUsecase>(() => GetPanRepsUsecase(instance()));
 
   }
+  if (!GetIt.I.isRegistered<AllCityUsecase>()) {
+    instance.registerFactory<AllCityUsecase>(() => AllCityUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<FinishedPlanBloc>()) {
-    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance(),instance()));
+    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance(),instance(),instance()));
   }
 }

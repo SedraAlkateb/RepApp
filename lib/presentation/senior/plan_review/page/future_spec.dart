@@ -20,6 +20,7 @@ class FutureSpecializationsPage extends StatefulWidget {
     required this.repPlanId,
     required this.flag,
     required this.sampleCount,
+
   });
 
   final int id;
