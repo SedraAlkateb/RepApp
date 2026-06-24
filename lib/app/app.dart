@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<GeneralReportsBloc>(
           create: (context) {
             final bloc = instance<GeneralReportsBloc>();
-            bloc.add(const TeamLeaderAndCityEvent());
+         //   bloc.add(const TeamLeaderAndCityEvent());
             return bloc;
           },
         ),

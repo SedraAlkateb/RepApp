@@ -1319,7 +1319,7 @@ class AppSqlApi extends AppSqlApiAbs {
                 row['plan_id'],
                 int.parse(convertArabicNumberToEnglish(row['amount'])),
                 row['specialization_title'] as String,
-                row['brandType'],
+                 Type.fromIntS(row['brandType']) ,
                 row['specialization_id'],
                 row['specialization_flag'],
                 row['sumDoctor'],
@@ -1394,21 +1394,21 @@ class AppSqlApi extends AppSqlApiAbs {
                   row['brand_sampleCost'],
                   row['plan_id'],
                   int.parse(convertArabicNumberToEnglish(row['amount'])),
-                  row['brandType']),
+                  Type.fromIntS(row['brandType'])),
             );
       }
     }
 
     // ترتيب العلامات التجارية داخل كل تخصص حسب brandType
     for (var model in SpMap.values) {
-      model.brands.sort((a, b) => a.brandType.compareTo(b.brandType));
+      model.brands.sort((a, b) => a.brandType.i.compareTo(b.brandType.i));
     }
 
     // ترتيب القائمة النهائية حسب أول brandType في كل تخصص (إذا كان التخصص يحتوي على علامات تجارية)
     List<OtherBrandSpPlanModel> sortedList = SpMap.values.toList()
       ..sort((a, b) {
         if (a.brands.isNotEmpty && b.brands.isNotEmpty) {
-          return a.brands.first.brandType.compareTo(b.brands.first.brandType);
+          return a.brands.first.brandType.i.compareTo(b.brands.first.brandType.i);
         }
         return 0;
       });

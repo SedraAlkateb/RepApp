@@ -30,7 +30,6 @@ class InventoryCard extends StatelessWidget {
 
     // نسبة التوزيع
     double usePercent = total == 0 ? 0 : used / total;
-    final Color typeColor = data.type==1 ? const Color(0xFF10B981) : const Color(0xFFF59E0B);
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -81,7 +80,7 @@ class InventoryCard extends StatelessWidget {
                     ),
                   ),
                   _buildBadge(
-                      data.type == 1 ? "هدف" : "مساعد", typeColor),
+                      data.type.name, data.type.color),
                 ],
               ),
             ),

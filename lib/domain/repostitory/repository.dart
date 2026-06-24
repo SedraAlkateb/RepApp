@@ -77,7 +77,7 @@ abstract class Repository {
 
   Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet,int planId );
 
-  Future<Either<Failure, InfoRep>> getInfoRep(int repDet);
+  Future<Either<Failure, InfoRep>> getInfoRep(int repDet,int planId);
 
   Future<Either<Failure, List<RepVisitsModel>>> getRepVisits(
       VisitRepSen visitRepSen);

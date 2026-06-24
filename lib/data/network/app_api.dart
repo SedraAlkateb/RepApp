@@ -185,7 +185,9 @@ abstract class AppServiceClient {
       );
   @POST("/admin/getRepInfo.php")//
   Future<AllRepInfoResponseBaseResponse> getRepInfo(
-      @Part(name: "repDet") int id
+      @Part(name: "repDet") int id,
+      @Part(name: "repPlan") int repPlan,
+
       );
   @POST("/admin/getRepVisits.php")//
   Future<AllRepVisitsResponseBaseResponse> getRepVisits(
@@ -251,7 +253,7 @@ abstract class AppServiceClient {
     @Part(name: "active") String? active,
   });
 
-  @POST("/admin/getinfoPlanBrandsType.php")//
+  @POST("/admin/getinfoPlanBrandsType.php")
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     @Part(name: "repPlanId") int repPlanId,
   );

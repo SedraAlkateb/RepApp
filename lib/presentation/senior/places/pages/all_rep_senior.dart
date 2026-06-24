@@ -216,7 +216,7 @@ class _AllRepSeniorState extends State<AllRepSenior> {
 
                     // 2. إرسال حدث جلب بيانات المندوب المحدد
                     context.read<SeniorProfBloc>().add(
-                          getInfoRepEvent(rep.id),
+                          getInfoRepEvent(rep.id,rep.activePlan),
                         );
 
                     // 3. الانتقال لصفحة البروفايل مع تمرير البيانات المطلوبة

@@ -32,7 +32,6 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    print("UserInfo.statusPlan :${UserInfo.statusPlan} , UserInfo.repType: ${UserInfo.repType}");
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(title: const Text("إدارة الخطة الفعالة")),

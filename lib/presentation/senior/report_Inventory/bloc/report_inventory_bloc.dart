@@ -21,7 +21,7 @@ class ReportInventoryBloc extends Bloc<ReportInventoryEvent, ReportInventoryStat
           if (normalizeText(value.title).contains(search)) {
             return true;
           }
-          if (normalizeText(value.type==1?"هدف":"مساعد").contains(search)) {
+          if (normalizeText(value.type.name).contains(search)) {
             return true;
           }
           return false;
@@ -33,6 +33,7 @@ class ReportInventoryBloc extends Bloc<ReportInventoryEvent, ReportInventoryStat
         (await allInventoryUsecase.execute(event.id,event.planId)).fold((failure) async{
       emit(SenAllInventoryErrorState(failure: failure,planId: event.planId));
       }, (data) async {
+          data.sort((b, a) => b.type.i.compareTo(a.type.i));
           inventoryModel=data;
       if(data.isEmpty){
       emit(SenAllInventoryEmptyState());

@@ -27,7 +27,6 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
         }, (data) async {
 
           data.sort((a, b) {
-            print("a.flag.flag ${a.flag.flag} UserInfo.statusPlan:${UserInfo.statusPlan}");
             // 1️⃣ فحص المطابقة مع حالة الخطة الحالية
             final bool aMatches = a.flag.flag == UserInfo.statusPlan;
             final bool bMatches = b.flag.flag == UserInfo.statusPlan;

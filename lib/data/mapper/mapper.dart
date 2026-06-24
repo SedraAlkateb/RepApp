@@ -343,7 +343,7 @@ extension PlanBrandMapper on PlanBrandResponse? {
       int.parse(this?.spId ?? "0"),
       int.parse(this?.brandId ?? "0"),
       int.parse(this?.repPlanId ?? "0"),
-      this?.brandType ?? Constants.empty,
+      Type.fromIntS(this?.brandType ?? Constants.empty),
       this?.title ?? Constants.empty,
       this?.amount ?? Constants.empty,
       this?.pharmaceuticalForm ?? Constants.empty,
@@ -356,7 +356,7 @@ extension RepBrandSpMapper on PlanBrandSpecResponse? {
     return PlanBrandSp(
       int.parse(this?.id ?? "0"),
       int.parse(this?.brandId ?? "0"),
-      int.parse(this?.brandType ?? "0"),
+      Type.fromIntS(this?.brandType),
       this?.titleAr ?? Constants.empty,
       int.parse(this?.spId ?? "0"),
       this?.phTitle ?? Constants.empty,
@@ -364,53 +364,57 @@ extension RepBrandSpMapper on PlanBrandSpecResponse? {
     );
   }
 }
+
 extension ActivePlanMapper on PlanBrandModel? {
   PlanBrandSp toDomain() {
     return PlanBrandSp(
       this?.id ?? Constants.zero,
       this?.brandId ?? Constants.zero,
-      int.parse(this?.brandType??Constants.empty),
-      this?.title ??Constants.empty,
+      this?.brandType??Type.fromIntS(null),
+      this?.title ?? Constants.empty,
       this?.spId ?? Constants.zero,
       "",
-      int.parse(this?.amount??Constants.empty),
+      int.parse(this?.amount ?? Constants.empty),
     );
   }
 }
+
 extension AllActivePlansMapper on List<PlanBrandModel>? {
   List<PlanBrandSp> toDomain() {
     List<PlanBrandSp> planBrands =
-    (this?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<PlanBrandSp>()
-        .toList();
+        (this?.map((response) => response.toDomain()) ?? const Iterable.empty())
+            .cast<PlanBrandSp>()
+            .toList();
     return planBrands;
   }
 }
+
 extension CurrentPlanMapper on PlanBrandSp? {
   PlanBrandModel toDomain(int planId) {
     return PlanBrandModel(
-        this?.id ?? Constants.zero,
+      this?.id ?? Constants.zero,
       this?.spId ?? Constants.zero,
       this?.brandId ?? Constants.zero,
       planId,
-      this?.brandType.toString() ??Constants.empty,
-      this?.titleAr ??Constants.empty,
-      this?.totalAmount.toString() ??Constants.empty,
-      this?.phTitle ??Constants.empty,
+      this?.brandType??Type.fromIntS(null),
+      this?.titleAr ?? Constants.empty,
+      this?.totalAmount.toString() ?? Constants.empty,
+      this?.phTitle ?? Constants.empty,
     );
   }
 }
+
 extension AllCurrentPlansMapper on List<PlanBrandSp>? {
   List<PlanBrandModel> toDomain(int planId) {
     List<PlanBrandModel> planBrands =
-    (this?.map((response) => response.toDomain(planId)) ??
-        const Iterable.empty())
-        .cast<PlanBrandModel>()
-        .toList();
+        (this?.map((response) => response.toDomain(planId)) ??
+                const Iterable.empty())
+            .cast<PlanBrandModel>()
+            .toList();
     return planBrands;
   }
 }
+
 extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
   List<PlanBrandModel> toDomain() {
     List<PlanBrandModel> planBrands =
@@ -713,7 +717,7 @@ extension InventoryMapper on InventoryResponse? {
         this?.used ?? Constants.empty,
         this?.total ?? Constants.empty,
         this?.rest ?? Constants.zero,
-        int.parse(this?.type ?? Constants.empty));
+        Type.fromIntS(this?.type ?? Constants.empty));
   }
 }
 
@@ -853,7 +857,7 @@ extension ActivePlanBrandMapper on ActiveBrandPlanResponse? {
             .toList();
     return ActivePlanBrandModel(
       specPlans,
-      this?.type.toString() ?? Constants.empty,
+      Type.fromName(this?.type.toString() ?? Constants.empty),
       this?.title ?? Constants.empty,
       this?.pharmaceuticalFormTitle ?? Constants.empty,
     );
@@ -1018,7 +1022,6 @@ extension PlanRepsMapper on PlanRepsResponse? {
       this?.id ?? Constants.empty,
       this?.name ?? Constants.empty,
       this?.repPlan ?? Constants.empty,
-
     );
   }
 }

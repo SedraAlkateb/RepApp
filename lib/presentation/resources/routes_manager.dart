@@ -15,6 +15,7 @@ import 'package:domina_app/presentation/places/pages/places_archive.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
+import 'package:domina_app/presentation/senior/all_city/pages/all_city_for_rep_super.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/all_city-plan.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/finished_plan_page.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page.dart';
@@ -121,6 +122,7 @@ class Routes {
   static const String planReps = "/planReps";
   static const String createCurrentPlan = "/createCurrentPlan";
   static const String cityPlan = "/cityPlan";
+  static const String allCitySupervisor = "/allCitySupervisor";
 
 }
 
@@ -259,8 +261,10 @@ class RouteGenerator {
                 ));
       case Routes.AllRepSenior:
         initSeniorModule();
+        final args = settings.arguments as int?; // ننتظر الـ ID هنا كـ Integer
+
         return _animatedRoute( AllRepSenior(
-          cityId: UserInfo.cityId,
+          cityId:args!=null?args: UserInfo.cityId,
           cityname: UserInfo.cityTitle,
           repId: UserInfo.repId,
         ));
@@ -339,6 +343,9 @@ class RouteGenerator {
       case Routes.allCitySeniors:
         iniAllCityModule();
         return _animatedRoute( AllCitySeniors());
+      case Routes.allCitySupervisor:
+        iniAllCityModule();
+        return _animatedRoute( AllCityForRepSuper());
       case Routes.finishedPlan:
         initFinishedPlan();
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer

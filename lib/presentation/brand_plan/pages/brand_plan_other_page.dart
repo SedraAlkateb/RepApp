@@ -102,13 +102,11 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                         Container(
                           padding: EdgeInsets.symmetric(vertical: AppPaddingH.p8, horizontal: AppPaddingW.p14),
                           decoration: BoxDecoration(
-                            color: int.tryParse(brandItem.brandType) == 1
-                                ? ColorManager.secondaryColor1
-                                : ColorManager.secondaryColor2,
+                            color: brandItem.brandType.color,
                             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
                           ),
                           child: Text(
-                            int.tryParse(brandItem.brandType) == 1 ? "هدف" : "مساعد",
+                            brandItem.brandType.name,
                             style: TextStyle(color: ColorManager.white, fontWeight: FontWeight.bold),
                           ),
                         )

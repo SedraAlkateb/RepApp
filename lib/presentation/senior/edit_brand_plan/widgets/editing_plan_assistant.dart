@@ -62,7 +62,7 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
   }
 
   Widget _buildElegantCard(int index, List<PlanBrandModel> planBrand) {
-    int brandTypeId = int.parse(planBrand[index].brandType);
+    int brandTypeId = planBrand[index].brandType.i;
     String brandTypeHintText = "غير محدد";
     for (var type in brandType) {
       if (type.i == brandTypeId) {
@@ -145,7 +145,7 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
                   BlocProvider.of<EditBrandPlanBloc>(context).add(
                     FutureChangePlanBrandTypeEvent(planBrand[index].id, value.i),
                   );
-                  planBrand[index].brandType = value.i.toString();
+                  planBrand[index].brandType.i = value.i;
                   BlocProvider.of<EditBrandPlanBloc>(context).add(
                     FutureChangeLoadingItemValueEvent(index),
                   );

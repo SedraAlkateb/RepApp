@@ -80,7 +80,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         });
       } else if (event is getInfoRepEvent) {
         emit(RepInfoLoadingState());
-        (await infoRepUsecase.execute(event.id)).fold((failure) {
+        (await infoRepUsecase.execute(event.id,event.planId)).fold((failure) {
           emit(RepInfoErrorState(failure: failure));
         }, (data) async {
           emit(RepInfoState(data));

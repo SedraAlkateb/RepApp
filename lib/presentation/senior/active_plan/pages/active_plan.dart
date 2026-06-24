@@ -124,22 +124,13 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
   Widget _buildFluidAnimation({required Widget child, required int index}) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 800),
-      curve: Interval(
-        (index * 0.06).clamp(0.0, 0.5),
-        1.0,
-        curve: Curves.easeOutBack, // التأثير المرتد الاحترافي
-      ),
+      duration: const Duration(milliseconds: 100),
       builder: (context, value, child) {
-        return Opacity(
-          // تم إضافة clamp هنا لمنع الخطأ البرمجي (Assertion Error)
-          opacity: value.clamp(0.0, 1.0),
-          child: Transform.translate(
-            offset: Offset(0, 50 * (1 - value)),
-            child: Transform.scale(
-              scale: 0.9 + (0.1 * value),
-              child: child,
-            ),
+        return Transform.translate(
+          offset: Offset(0, 50 * (1 - value)),
+          child: Transform.scale(
+            scale: 0.9 + (0.1 * value),
+            child: child,
           ),
         );
       },
@@ -215,14 +206,14 @@ class BrandPlanCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: model.type.color.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(10.r),
                     border: Border.all(color: const Color(0xFFE2E8F0)),
                   ),
                   child: Text(
-                    model.type,
+                    model.type.name,
                     style: TextStyle(
-                      color: const Color(0xFF3B82F6),
+                      color:  model.type.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 12.sp,
                     ),
