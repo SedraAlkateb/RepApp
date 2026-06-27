@@ -40,9 +40,13 @@ class MyResponsiveApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 💡 جلب أبعاد الشاشة الحقيقية قبل البناء لتحديد مقاس التصميم المرجعي
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final bool isTabletDevice = deviceWidth > 450; // إذا كان العرض أكبر من 450 فهو تابلت
+
     return ScreenUtilInit(
-      // تثبيت مقاس التصميم المرجعي (الجوال) لضمان استقرار الأبعاد
-      designSize: const Size(360, 690),
+      // 🔥 إذا كان الجهاز تابلت نرفع المقاس المرجعي لـ (400x800) لمنع تضخم العناصر، وإلا نتركه مقاس الجوال الطبيعي
+      designSize: isTabletDevice ? const Size(400, 800) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -54,16 +58,24 @@ class MyResponsiveApp extends StatelessWidget {
           ],
           child: MaterialApp(
             builder: (context, widget) {
-              // تحديد نوع الجهاز باستخدام المكتبة
               final bool isTablet = ResponsiveBreakpoints.of(context).isTablet;
+              final mediaQueryData = MediaQuery.of(context);
 
               return MediaQuery(
-                data: MediaQuery.of(context).copyWith(
-                  // إذا كان تابلت، نستخدم معامل تصغير (0.8) بدلاً من التكبير
-                  // وإذا كان جوال نتركه كما هو (1.0)
-                  textScaleFactor: isTablet ? 0.8 : 1.0,
+                // استخدام الـ context المحدث الخاص بـ ScreenUtil لضمان تطبيق الأبعاد الجديدة والخطوط
+                data: mediaQueryData.copyWith(
+                  // 📉 تصغير حجم الخطوط بنسبة 25% إضافية على التابلت لتبدو متناسقة ومحترفة
+                  textScaleFactor: isTablet ? 0.75 : 1.0,
                 ),
-                child: widget!,
+                // 🚀 الحل الشامل: إضافة Padding سفلي ديناميكي يتحسس أزرار اللمس لجميع الأجهزة (موبايل + تابلت)
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: mediaQueryData.viewPadding.bottom > 0
+                        ? mediaQueryData.viewPadding.bottom // إذا كان النظام يفرص مسافة للأزرار أو حافة الآيفون السفلية
+                        : (isTablet ? 16.h : 8.h), // مسافة أمان احتياطية إذا كانت أزرار النظام مخفية (حتى لا تلتصق الكروت بالحافة)
+                  ),
+                  child: widget!,
+                ),
               );
             },
             debugShowCheckedModeBanner: false,
@@ -74,7 +86,6 @@ class MyResponsiveApp extends StatelessWidget {
     );
   }
 }
-
 /// تجميع كل إعدادات التهيئة التقنية في دالة واحدة
 Future<void> _setupAppRequirements() async {
   await ScreenUtil.ensureScreenSize();

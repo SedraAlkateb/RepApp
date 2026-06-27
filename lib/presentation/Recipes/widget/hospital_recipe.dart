@@ -15,16 +15,13 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<DoctorsBloc, DoctorsState>(
         listenWhen: (previous, current) {
-          // 1. تحقق أن الحالة تخص هذا المشفى بالتحديد
-          final bool isMyHospital = (current is CheckRecipesState && current.docId == hospitalId) ||
-              (current is CheckRecipesErrorState && current.docId == hospitalId);
+          if (current is CheckRecipesState && current.docId == hospitalId) return true;
+          if (current is CheckRecipesErrorState && current.docId == hospitalId) return true;
+          return false;
 
-          // 2. السحر هنا: تحقق أن هذه الواجهة هي الواجهة النشطة حالياً وليست واجهة بالخلفية مكررة
-          final bool isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? false;
-
-          return isMyHospital && isCurrentRoute;
         },
       listener: (context, state) {
+
         if (state is CheckRecipesState) {
           if (state.isCheck == true) {
             initBrandRecModule();

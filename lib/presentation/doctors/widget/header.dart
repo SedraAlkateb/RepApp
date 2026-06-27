@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget buildHeader(String? title) {
-  return Container(
+  return  Container(
     width: double.infinity,
     padding: EdgeInsets.only(bottom: 40.h, top: 20.h),
     decoration: BoxDecoration(

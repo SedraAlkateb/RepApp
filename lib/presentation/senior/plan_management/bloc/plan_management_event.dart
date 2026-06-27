@@ -37,3 +37,11 @@ class SubmitPlanEvent extends PlanManagementEvent {
 class GetRepInfoEvent extends PlanManagementEvent {
   GetRepInfoEvent();
 }
+class SearchPlanBrandEvent extends PlanManagementEvent {
+  final String query; // 👈 النص القادم من حقل البحث في الـ UI
+
+  const SearchPlanBrandEvent(this.query);
+
+  @override
+  List<Object?> get props => [query]; // إضافة الـ query هنا ليتحسس الـ Bloc التغيير عند اختلاف النص
+}

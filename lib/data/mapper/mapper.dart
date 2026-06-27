@@ -403,6 +403,18 @@ extension CurrentPlanMapper on PlanBrandSp? {
     );
   }
 }
+extension HospitalMapper on HospitalSpAllModel? {
+  HospitalModel toDomain() {
+    return HospitalModel(
+      this?.hospitalId ?? Constants.zero,
+      this?.title ?? Constants.empty,
+     -1,
+      this?.address ?? Constants.empty,
+      this?.note ?? Constants.empty,
+      this?.placeTitle.toString() ?? Constants.empty,
+    );
+  }
+}
 
 extension AllCurrentPlansMapper on List<PlanBrandSp>? {
   List<PlanBrandModel> toDomain(int planId) {

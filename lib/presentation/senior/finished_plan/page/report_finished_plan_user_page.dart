@@ -3,13 +3,14 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-class ReportFinishedPlanUserPage extends StatelessWidget {
+class ReportFinishedPlanUserPage extends StatefulWidget {
   final int id;
   final int repPlanId;
   final String name;
@@ -21,6 +22,16 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
     required this.name,
   });
 
+  @override
+  State<ReportFinishedPlanUserPage> createState() => _ReportFinishedPlanUserPageState();
+}
+
+class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage> {
+  @override
+  void initState() {
+    context.read<SeniorProfBloc>().add(getInfoRepEvent(widget.id,widget.repPlanId));
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -34,7 +45,7 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("ملف المندوب $name",
+          title: Text("ملف المندوب ${widget.name}",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18.sp,
@@ -45,35 +56,196 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
         ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              // SizedBox(height: 25.h),
-              // _buildHeroHeader(rep),
-              AnimationLimiter(
-                child: Column(
-                  children: AnimationConfiguration.toStaggeredList(
-                    duration: const Duration(milliseconds: 500),
-                    childAnimationBuilder: (widget) => SlideAnimation(
-                      verticalOffset: 40.0,
-                      child: FadeInAnimation(child: widget),
-                    ),
+        body:BlocBuilder<SeniorProfBloc, SeniorProfState>(
+            buildWhen: (previous, current) =>
+            current is RepInfoState || current is RepInfoLoadingState,
+            builder: (context, state) {
+              if (state is RepInfoLoadingState)
+                return loadingFullScreen(context);
+              if (state is RepInfoErrorState) return errorFullScreen(context);
+
+              if (state is RepInfoState) {
+                final rep = state.infoRep;
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
                     children: [
-                      // SizedBox(height: 25.h),
-                      // _buildStatsGrid(rep),
                       SizedBox(height: 25.h),
-                      //  _buildQuickActions(context),
-                      // SizedBox(height: 25.h),
-                      _buildCoverageSection(context),
-                      SizedBox(height: 50.h),
+                      _buildHeroHeader(rep),
+                      AnimationLimiter(
+                        child: Column(
+                          children: AnimationConfiguration.toStaggeredList(
+                            duration: const Duration(milliseconds: 500),
+                            childAnimationBuilder: (widget) =>
+                                SlideAnimation(
+                                  verticalOffset: 40.0,
+                                  child: FadeInAnimation(child: widget),
+                                ),
+                            children: [
+                              SizedBox(height: 25.h),
+                              _buildStatsGrid(rep),
+                              SizedBox(height: 25.h),
+                              SizedBox(height: 25.h),
+                              //  _buildQuickActions(context),
+                              // SizedBox(height: 25.h),
+                              _buildCoverageSection(context),
+                              SizedBox(height: 50.h),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
+                );
+              }
+              return SizedBox();
+            }
+)
+      ),
+    );
+  }
+
+  Widget _buildHeroHeader(dynamic rep) {
+    return Hero(
+      tag: 'rep_card_${rep.id}',
+      child: Container(
+        width: double.infinity,
+        // تقليل الهوامش الجانبية ليلتصق بالأعلى بشكل أفضل مثل الصور
+        margin: EdgeInsets.symmetric(horizontal: 15.w),
+        padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
+        decoration: BoxDecoration(
+          // gradient: const LinearGradient(
+          //   colors: [ Color(0xFF3B7DBF)],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
+          color: Color(0xFF164683),
+
+          // تعديل الحواف لتكون دائرية من الأسفل فقط لتعطي طابع الـ Header الحديث
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(50.r),
+            bottomRight: Radius.circular(50.r),
+            topLeft: Radius.circular(35.r),
+            topRight: Radius.circular(35.r),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF1F4E79).withOpacity(0.3),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            )
+          ],
+        ),
+        child: Column(
+          children: [
+            // الدائرة التي تحتوي على الحرف الأول (تصميم زجاجي شفاف)
+            Container(
+              width: 100.r,
+              height: 100.r,
+              decoration: BoxDecoration(
+                //  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.2),
+                  border: Border.all(
+                      color: Colors.white.withOpacity(0.3), width: 1.5),
+                  borderRadius: BorderRadius.all(Radius.circular(45))),
+              alignment: Alignment.center,
+              child: Text(
+                rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
+                style: TextStyle(
+                  fontSize: 36.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            // اسم المندوب
+            Text(
+              rep.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+            ),
+            // العنوان أو النص الفرعي
+            if (rep.address != null && rep.address.isNotEmpty) ...[
+              SizedBox(height: 8.h),
+              Text(
+                rep.address,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.white.withOpacity(0.9),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
-          ),
-        )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatsGrid(dynamic rep) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: GridView.count(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        mainAxisSpacing: 15.h,
+        crossAxisSpacing: 15.w,
+        childAspectRatio: 1.5,
+        children: [
+          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
+              const Color(0xFF1F4E79)),
+          _buildStatCard(
+              "المحققة", rep.visitDon.toString(), const Color(0xFF2D947A)),
+          _buildStatCard(
+              "المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
+          _buildStatCard(
+              "الوصفات", rep.recipesCount.toString(), const Color(0xFF8E44AD)),
+        ],
+      ),
+    );
+  }
+  Widget _buildStatCard(String title, String val, Color color) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25.r),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 15,
+              offset: const Offset(0, 8))
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title,
+              style: TextStyle(
+                  fontSize: 11.sp,
+                  color: Colors.grey[500],
+                  fontWeight: FontWeight.bold)),
+          SizedBox(height: 6.h),
+          Text(val,
+              style: TextStyle(
+                  fontSize: 22.sp, fontWeight: FontWeight.w900, color: color)),
+        ],
       ),
     );
   }
@@ -85,7 +257,7 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
           icon: Icons.check_circle_outline,
           color: const Color(0xFF2D947A),
           onTap: () {
-            context.read<SeniorProfBloc>().add(VisitDocEvent(id,repPlanId));
+            context.read<SeniorProfBloc>().add(VisitDocEvent(widget.id,widget.repPlanId));
             Navigator.pushNamed(context, Routes.senVisitDoctor);
           }),
       InteractiveActionTile(
@@ -93,7 +265,7 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
           icon: Icons.cancel_outlined,
           color: const Color(0xFFE74C3C),
           onTap: () {
-            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id,repPlanId));
+            context.read<SeniorProfBloc>().add(NoVisitDocEvent(widget.id,widget.repPlanId));
             Navigator.pushNamed(context, Routes.noVisitDoctor);
           }),
       InteractiveActionTile(
@@ -101,7 +273,7 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
           icon: Icons.hourglass_empty_rounded,
           color: const Color(0xFFF39C12),
           onTap: () {
-            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id,repPlanId));
+            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(widget.id,widget.repPlanId));
             Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
           }),
       InteractiveActionTile(
@@ -111,13 +283,12 @@ class ReportFinishedPlanUserPage extends StatelessWidget {
           onTap: () {
             initSeniorReportInventoryModule();
             Navigator.push(context, MaterialPageRoute(builder: (c) {
-              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id,repPlanId));
+              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(widget.id,widget.repPlanId));
               return ReportInventory();
             }));
           }),
     ]);
   }
-
 
   Widget _buildSectionLayout(String title, List<Widget> items) {
     return Padding(

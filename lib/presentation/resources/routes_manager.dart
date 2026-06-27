@@ -22,7 +22,7 @@ import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
-import 'package:domina_app/presentation/senior/plan_management/page/create_current_plan_page.dart';
+import 'package:domina_app/presentation/senior/plan_management/page/plan_help_goal_tap.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
@@ -356,7 +356,7 @@ class RouteGenerator {
         return _animatedRoute( PlanRepsPage());
       case Routes.createCurrentPlan:
         initCurrentPlanModule();
-        return _animatedRoute( CreateCurrentPlanPage());
+        return _animatedRoute( PlanHelpGoalTap());
       case Routes.cityPlan:
         initFinishedPlan();
         return _animatedRoute(AllCityPlan());
