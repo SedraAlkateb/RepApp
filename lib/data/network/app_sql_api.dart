@@ -2,8 +2,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
-import 'package:sqflite/sqflite.dart';
-
+import 'package:sqflite_sqlcipher/sqflite.dart';
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
       List<BrandModel> brands,

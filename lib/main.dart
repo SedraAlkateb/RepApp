@@ -30,8 +30,17 @@ void main() async {
 
   // 3. تهيئة البيانات والمستخدم
   await _prepareUserData();
-
-  // 4. التشغيل
+  // FlutterError.onError =
+  //     FirebaseCrashlytics.instance.recordFlutterFatalError;
+  //
+  // PlatformDispatcher.instance.onError = (error, stack) {
+  //   FirebaseCrashlytics.instance.recordError(
+  //     error,
+  //     stack,
+  //     fatal: true,
+  //   );
+  //   return true;
+  // };  // 4. التشغيل
   runApp(Phoenix(child: const MyResponsiveApp()));
 }
 
