@@ -26,23 +26,6 @@ class _EditingPlanTargetState extends State<EditingPlanTarget> with AutomaticKee
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: BlocListener<EditBrandPlanBloc, EditBrandPlanState>(
-        listener: (context, state) {
-          if (state is EditeStatusLoadingState) loading(context);
-          else if (state is EditeStatusFailureState) error(context, state.failure.massage, state.failure.code);
-          else if (state is EditeStatusState) success(context);
-        },
-        child: FloatingActionButton.extended(
-          label: const Text("اعتماد التعديلات", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          icon: const Icon(Icons.done_all_rounded, color: Colors.white),
-          onPressed: () {
-            BlocProvider.of<EditBrandPlanBloc>(context).add(EditePlanStatusEvent(widget.repPlan, 0));
-          },
-          backgroundColor: ColorManager.secondaryColor1,
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
-        ),
-      ),
       body: Column(
         children: [
           Padding(
@@ -78,7 +61,7 @@ class _EditingPlanTargetState extends State<EditingPlanTarget> with AutomaticKee
   }
 
   Widget _buildElegantCard(int index, List<PlanBrandModel> planBrand) {
-    int brandTypeId = int.parse(planBrand[index].brandType);
+    int brandTypeId = planBrand[index].brandType.i;
     String brandTypeHintText = "غير محدد";
     for (var type in brandType) {
       if (type.i == brandTypeId) {
@@ -154,7 +137,7 @@ class _EditingPlanTargetState extends State<EditingPlanTarget> with AutomaticKee
                 prefixIcon: null, // تم إلغاء الأيقونة هنا
                 onChanged: (value) {
                   BlocProvider.of<EditBrandPlanBloc>(context).add(FutureChangePlanBrandTypeEvent(planBrand[index].id, value.i));
-                  planBrand[index].brandType = value.i.toString();
+                  planBrand[index].brandType.i = value.i;
                   BlocProvider.of<EditBrandPlanBloc>(context).add(FutureChangeLoadingItemValueEvent(index));
                 },
                 validator: (value) => null,

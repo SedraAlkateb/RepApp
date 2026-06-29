@@ -23,8 +23,6 @@ class CustomDropDownSearchNot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool tablet = MediaQuery.of(context).size.width > 800;
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),

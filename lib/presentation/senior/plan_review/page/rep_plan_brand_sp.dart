@@ -2,7 +2,6 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -153,11 +152,9 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
   // تصميم البطاقة الفاخر
   Widget _buildModernCard(int index, FutureRepState state) {
     final item = planBrandsp[index];
-    Color typeColor = item.brandType == 1
-        ? ColorManager.secondaryColor1
-        : ColorManager.secondaryColor2;
-    bool isEditable = widget.flag == 5 &&
-        (UserInfo.otherstatus == 0 || state is! SumErrorState);
+    bool isEditable = widget.flag == UserInfo.statusPlan ;
+   // &&
+      //  ( state is! SumErrorState);
 
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
@@ -179,7 +176,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                 left: 0,
                 top: 0,
                 bottom: 0,
-                child: Container(width: 5, color: typeColor)),
+                child: Container(width: 5, color: item.brandType.color)),
             Padding(
               padding: EdgeInsets.all(16.w),
               child: Column(
@@ -188,7 +185,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                   Row(
                     children: [
                       Icon(Icons.medication_rounded,
-                          color: typeColor, size: 20.sp),
+                          color: item.brandType.color, size: 20.sp),
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
@@ -200,7 +197,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                         ),
                       ),
                       _buildBadge(
-                          item.brandType == 1 ? "هدف" : "مساعد", typeColor),
+                          item.brandType.name, item.brandType.color),
                     ],
                   ),
                   SizedBox(height: 12.h),
@@ -239,7 +236,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                             }
                           },
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: typeColor),
+                              fontWeight: FontWeight.bold, color: item.brandType.color),
                           decoration: InputDecoration(
                             hintText: item.totalAmount.toString(),
                             border: InputBorder.none,

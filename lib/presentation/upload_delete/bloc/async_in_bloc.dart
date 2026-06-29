@@ -304,7 +304,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         }
         if (UserInfo.isChange == false) {
           final planBrandResult =
-              await planBrandUsecase.execute(RepPlanBrandBody(planBrands));
+              await planBrandUsecase.execute(RepPlanBrandBody(planBrands,5));
           final planBrandFailureOrSuccess =
               planBrandResult.fold((failure) => failure, (data) => data);
           if (planBrandFailureOrSuccess is Failure) {

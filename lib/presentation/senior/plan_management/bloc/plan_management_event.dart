@@ -1,0 +1,47 @@
+part of 'plan_management_bloc.dart';
+
+@immutable
+abstract class PlanManagementEvent extends Equatable{
+
+  const PlanManagementEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+class RepPlanBrandSpEvent extends PlanManagementEvent {
+  final RepSp rep;
+  RepPlanBrandSpEvent(this.rep);
+  @override
+  List<Object?> get props => [rep];
+}
+class RepActivePlanBrandEvent extends PlanManagementEvent {
+
+  RepActivePlanBrandEvent();
+  @override
+  List<Object?> get props => [];
+}
+// حدث تحديث الكمية في الذاكرة
+class UpdateBrandQuantityEvent extends PlanManagementEvent {
+  final int index;
+  final int quantity;
+   UpdateBrandQuantityEvent({required this.index, required this.quantity});
+
+  @override
+  List<Object?> get props => [index, quantity];
+}
+
+// حدث الموافقة والإرسال النهائي
+class SubmitPlanEvent extends PlanManagementEvent {
+   SubmitPlanEvent();
+}
+class GetRepInfoEvent extends PlanManagementEvent {
+  GetRepInfoEvent();
+}
+class SearchPlanBrandEvent extends PlanManagementEvent {
+  final String query; // 👈 النص القادم من حقل البحث في الـ UI
+
+  const SearchPlanBrandEvent(this.query);
+
+  @override
+  List<Object?> get props => [query]; // إضافة الـ query هنا ليتحسس الـ Bloc التغيير عند اختلاف النص
+}

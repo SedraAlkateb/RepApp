@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,6 +32,10 @@ class FinishedPlanPage extends StatelessWidget {
 
           // 2. التعامل مع حالات الـ Bloc داخل نظام الـ Slivers
           BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
+            buildWhen: (previous, current) =>
+            current is FinishedPlanLoading ||
+                current is FinishedPlanLoaded ||
+                current is FinishedPlanError,
             builder: (context, state) {
               if (state is FinishedPlanLoading) {
                 // نستخدم SliverFillRemaining لوضع مؤشر التحميل في وسط المساحة المتبقية
@@ -121,61 +126,67 @@ class PlanCard extends StatelessWidget {
       statusText = "مراجعة نهائية";
     }
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(35.r),
-        border: Border(
-          // الخط الجانبي يتغير لونه بناءً على الـ flag (مقروء أو غير مقروء)
-          right: BorderSide(
-            color: mainColor,
-            width: 8.w,
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<FinishedPlanBloc>(context).add(GetPlanRepsEvent(planId: int.parse(plan.id)));
+        Navigator.pushNamed(context, Routes.planReps);
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(35.r),
+          border: Border(
+            // الخط الجانبي يتغير لونه بناءً على الـ flag (مقروء أو غير مقروء)
+            right: BorderSide(
+              color: mainColor,
+              width: 8.w,
+            ),
           ),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          )
-        ],
-      ),
-      padding: EdgeInsets.all(20.w),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _generatePlanTitle(plan.startDate),
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF0D47A1),
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  _buildStatusBadge(statusText, mainColor),
-                  SizedBox(height: 10.h),
-                  _buildDateContainer(plan.startDate, plan.endDate),
-                ],
-              ),
-            ),
-            // زر الانتقال المستدير
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF0F4F8),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.arrow_forward_ios, size: 14.sp, color: Colors.blueGrey),
-            ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            )
           ],
         ),
-
+        padding: EdgeInsets.all(20.w),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _generatePlanTitle(plan.startDate),
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF0D47A1),
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    _buildStatusBadge(statusText, mainColor),
+                    SizedBox(height: 10.h),
+                    _buildDateContainer(plan.startDate, plan.endDate),
+                  ],
+                ),
+              ),
+              // زر الانتقال المستدير
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0F4F8),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.arrow_forward_ios, size: 14.sp, color: Colors.blueGrey),
+              ),
+            ],
+          ),
+      
+      ),
     );
   }
 

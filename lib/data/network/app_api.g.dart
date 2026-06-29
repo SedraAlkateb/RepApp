@@ -8,7 +8,7 @@ part of 'app_api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main,avoid_redundant_argument_values
 
 class _AppServiceClient implements AppServiceClient {
   _AppServiceClient(this._dio, {this.baseUrl, this.errorLogger}) {
@@ -1007,12 +1007,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int docId) async {
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int docId, int planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', docId.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1037,12 +1038,14 @@ class _AppServiceClient implements AppServiceClient {
   @override
   Future<AllNoVisitDoctorBaseResponse> getUnfinishedDoctorVisits(
     int docId,
+    int planId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', docId.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1065,12 +1068,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> visitDoc(int docId) async {
+  Future<AllNoVisitDoctorBaseResponse> visitDoc(int docId, int planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', docId.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1149,12 +1153,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<InventoryResponseBaseResponse> getInventory(int id) async {
+  Future<InventoryResponseBaseResponse> getInventory(int id, int planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', id.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
     final _options = _setStreamType<InventoryResponseBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1177,12 +1182,13 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id) async {
+  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id, int repPlan) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', id.toString()));
+    _data.fields.add(MapEntry('repPlan', repPlan.toString()));
     final _options = _setStreamType<AllRepInfoResponseBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1881,6 +1887,34 @@ class _AppServiceClient implements AppServiceClient {
     late FinishedPlansBaseResponse _value;
     try {
       _value = FinishedPlansBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<PlanRepsBaseResponse> getPlanReps(int planId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('planId', planId.toString()));
+    final _options = _setStreamType<PlanRepsBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getPlanReps.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late PlanRepsBaseResponse _value;
+    try {
+      _value = PlanRepsBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

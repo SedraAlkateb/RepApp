@@ -36,8 +36,3 @@ class UpdateRepEvent extends AsyncEvent{
   List<Object?> get props => [];
 
 }
-class OkEvent extends AsyncEvent{
-  @override
-  List<Object?> get props => [];
-
-}

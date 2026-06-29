@@ -90,8 +90,8 @@ final class AllHospitalArchiveByPlaceErrorState extends PlaceState {
   List<Object?> get props =>[failure];
 }
 final class AllHospitalArchiveByPlaceState extends PlaceState {
-  final List<HospitalModel> searchData;
-  final List<HospitalModel> baseData;
+  final List<HospitalSpAllModel> searchData;
+  final List<HospitalSpAllModel> baseData;
 
   @override
   AllHospitalArchiveByPlaceState({required this.searchData,required this.baseData});

@@ -1,9 +1,6 @@
 
-// ignore_for_file: deprecated_member_use
-
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/font_manager.dart';
 import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
@@ -154,11 +151,13 @@ Widget _getPopupDialog(BuildContext context,List<Widget> children){
     );
 }
 Widget  _getDialogContent (BuildContext context,List<Widget>children){
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-  mainAxisAlignment: MainAxisAlignment.center,
-  crossAxisAlignment: CrossAxisAlignment.center,
-  children: children,
+  return SingleChildScrollView(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: children,
+    ),
   );
 }
 getMessage(String ){

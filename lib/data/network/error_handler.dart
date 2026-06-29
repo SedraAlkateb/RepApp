@@ -2,8 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/network/failure.dart';
-import 'package:sqflite/sqflite.dart';
-
+import 'package:sqflite_sqlcipher/sqflite.dart';
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {

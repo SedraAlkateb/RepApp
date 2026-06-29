@@ -15,10 +15,14 @@ import 'package:domina_app/presentation/places/pages/places_archive.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
+import 'package:domina_app/presentation/senior/all_city/pages/all_city_for_rep_super.dart';
+import 'package:domina_app/presentation/senior/finished_plan/page/all_city-plan.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/finished_plan_page.dart';
+import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
+import 'package:domina_app/presentation/senior/plan_management/page/plan_help_goal_tap.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
@@ -115,6 +119,10 @@ class Routes {
   static const String teamLeader = "/teamLeader";
   static const String doctorAndHospitalArchive = "/doctorAndHospitalArchive";
   static const String finishedPlan = "/finishedPlan";
+  static const String planReps = "/planReps";
+  static const String createCurrentPlan = "/createCurrentPlan";
+  static const String cityPlan = "/cityPlan";
+  static const String allCitySupervisor = "/allCitySupervisor";
 
 }
 
@@ -253,8 +261,10 @@ class RouteGenerator {
                 ));
       case Routes.AllRepSenior:
         initSeniorModule();
+        final args = settings.arguments as int?; // ننتظر الـ ID هنا كـ Integer
+
         return _animatedRoute( AllRepSenior(
-          cityId: UserInfo.cityId,
+          cityId:args!=null?args: UserInfo.cityId,
           cityname: UserInfo.cityTitle,
           repId: UserInfo.repId,
         ));
@@ -313,6 +323,7 @@ class RouteGenerator {
       case Routes.viewRecipe:
         return _animatedRoute( ViewRecipePage());
       case Routes.recipeDH:
+        initDoctorAndHospitalModule() ;
         return _animatedRoute( RecipeDH());
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
@@ -332,11 +343,25 @@ class RouteGenerator {
       case Routes.allCitySeniors:
         iniAllCityModule();
         return _animatedRoute( AllCitySeniors());
+      case Routes.allCitySupervisor:
+        iniAllCityModule();
+        return _animatedRoute( AllCityForRepSuper());
       case Routes.finishedPlan:
         initFinishedPlan();
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
         return _animatedRoute( FinishedPlanPage(cityId: args));
+      case Routes.planReps:
+
+        return _animatedRoute( PlanRepsPage());
+      case Routes.createCurrentPlan:
+        initCurrentPlanModule();
+        return _animatedRoute( PlanHelpGoalTap());
+      case Routes.cityPlan:
+        initFinishedPlan();
+        return _animatedRoute(AllCityPlan());
+
+
       default:
         return unDefinedRoute();
     }

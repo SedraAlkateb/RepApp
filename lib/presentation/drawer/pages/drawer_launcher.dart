@@ -85,15 +85,15 @@ class DrawerPage extends StatelessWidget {
               Routes.allRecip,
             );
           }),
-      DrawerMenuItem(
-          icon: Icons.inventory_2_outlined,
-          title: "إنشاء طلبية",
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.createOrder,
-            );
-          }),
+      // DrawerMenuItem(
+      //     icon: Icons.inventory_2_outlined,
+      //     title: "إنشاء طلبية",
+      //     onTap: () {
+      //       Navigator.pushNamed(
+      //         context,
+      //         Routes.createOrder,
+      //       );
+      //     }),
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
         title: "الخطط",
@@ -174,22 +174,22 @@ class DrawerPage extends StatelessWidget {
               Routes.allRecip,
             );
           }),
-      DrawerMenuItem(
-          icon: Icons.inventory_2_outlined,
-          title: "إنشاء طلبية",
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.createOrder,
-            );
-          }),
+      // DrawerMenuItem(
+      //     icon: Icons.inventory_2_outlined,
+      //     title: "إنشاء طلبية",
+      //     onTap: () {
+      //       Navigator.pushNamed(
+      //         context,
+      //         Routes.createOrder,
+      //       );
+      //     }),
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
-        title: "الخطط",
+        title: "إدارة الخطة",
         onTap: () {
           Navigator.pushNamed(
-            context,
-            Routes.brandPlan,
+              context,
+              Routes.createCurrentPlan
           );
         },
       ),
@@ -284,11 +284,11 @@ class DrawerPage extends StatelessWidget {
           )),
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
-        title: "إنشاء خطة",
+        title: "إدارة الخطة",
         onTap: () {
           Navigator.pushNamed(
             context,
-            Routes.brandPlan,
+              Routes.createCurrentPlan
           );
         },
       ),
@@ -309,15 +309,15 @@ class DrawerPage extends StatelessWidget {
               Routes.allRecip,
             );
           }),
-      DrawerMenuItem(
-          icon: Icons.inventory_2_outlined,
-          title: "إنشاء طلبية",
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.createOrder,
-            );
-          }),
+      // DrawerMenuItem(
+      //     icon: Icons.inventory_2_outlined,
+      //     title: "إنشاء طلبية",
+      //     onTap: () {
+      //       Navigator.pushNamed(
+      //         context,
+      //         Routes.createOrder,
+      //       );
+      //     }),
       DrawerMenuItem(
         icon: Icons.person_search_outlined,
         title: "البحث عن طبيب او مشفى",

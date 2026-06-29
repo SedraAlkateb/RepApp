@@ -37,6 +37,7 @@ class PrescriptionMenuWidget extends StatelessWidget {
           }
         }
         if (state is CheckRecipesErrorState) {
+          print("ddddddddddddddddddddddddddddddddddddddddddddddddd");
           error(context, state.failure.massage, state.failure.code);
         }
       },

@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
+import 'package:flutter/material.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -49,6 +52,50 @@ class BrandSpPlanModel {
   BrandModel brandModel;
   List<SpPlan> spPlan = [];
   BrandSpPlanModel(this.brandModel, this.spPlan);
+  static void printBrandPlanActive(List<BrandSpPlanModel> data) {
+    print(
+        "=== 🚀 بدء طباعة مصفوفة planBrandActive (إجمالي العناصر: ${data.length}) ===");
+
+    for (int i = 0; i < data.length; i++) {
+      final mainItem = data[i];
+      print("\n---------------- [العنصر الرئيسي رقم: $i] ----------------");
+
+      // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
+      if (mainItem.brandModel != null) {
+        print("  🔹 Brand ID: ${mainItem.brandModel.id}");
+        print(
+            "  🔹 Brand Title: ${mainItem.brandModel.title ?? '🛑 NULL (خطأ)'}");
+      } else {
+        print("  🛑 خطأ قاتل: brandModel نفسه قيمته NULL!");
+      }
+
+      // طباعة مصفوفة الـ SpPlan الداخلية
+      print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan?.length ?? 0}");
+      if (mainItem.spPlan != null) {
+        for (int j = 0; j < mainItem.spPlan.length; j++) {
+          final sp = mainItem.spPlan[j];
+          print("     🔸 [$j] ID: ${sp.id}");
+          print("     🔸 [$j] Title: ${sp.title ?? '🛑 NULL (خطأ)'}");
+
+          // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
+          if (sp.brandType == null) {
+            print(
+                "     🛑 كشف الخطأ الحقل brandType قيمته NULL في العنصر الرئيسي [$i] والفرعي [$j]!");
+          } else {
+            print("     🔸 [$j] BrandType: '${sp.brandType}'");
+          }
+
+          print("     🔸 [$j] Amount: ${sp.amount}");
+          print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
+          print(
+              "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
+        }
+      } else {
+        print("     🛑 قائمة spPlan نفسها قيمتها NULL!");
+      }
+    }
+    print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
+  }
 }
 
 class OtherBrandSpPlanModel {
@@ -65,7 +112,7 @@ class SpPlan {
   int flagSp;
   int amount;
   String title;
-  String brandType;
+  Type brandType;
   int sumDoctor;
   int sumHospital;
   int sumBrandHospital;
@@ -118,20 +165,9 @@ class OtherBrandModel {
   int sampleCoast;
   int Plan;
   int amount;
-  String brandType;
+  Type brandType;
   OtherBrandModel(this.id, this.title, this.phTitle, this.flag,
       this.sampleCoast, this.Plan, this.amount, this.brandType);
-}
-
-class FutureBrandModel {
-  int id;
-  String title;
-  String phTitle;
-  int flag;
-  int amount;
-  String brandType;
-  FutureBrandModel(this.id, this.title, this.phTitle, this.flag, this.amount,
-      this.brandType);
 }
 
 class VisitBrandPharmacyModel {
@@ -308,10 +344,12 @@ class VisitPharmacyRequestBody {
 
 class RepPlanBrandBody {
   List<PlanBrandModel> planBrand;
-  RepPlanBrandBody(this.planBrand);
+  int status;
+  RepPlanBrandBody(this.planBrand, this.status);
   Map<String, dynamic> toJson() {
     return {
       'list1': planBrand.map((e) => e.toMap()).toList(),
+      'status': status
     };
   }
 }
@@ -990,6 +1028,11 @@ class HospitalSpModel {
   int visit;
   int? visited;
   int flag;
+  String? placeTitle;
+  String? address;
+  String? title;
+  String? note;
+  String? SpName;
   HospitalSpModel(
     this.id,
     this.hospitalId,
@@ -998,6 +1041,11 @@ class HospitalSpModel {
     this.rate,
     this.visit,
     this.flag, {
+    this.SpName,
+    this.placeTitle,
+    this.address,
+    this.title,
+    this.note,
     this.visited,
   });
   Map<String, dynamic> toMap() {
@@ -1008,31 +1056,43 @@ class HospitalSpModel {
       'totalDocs': totalDocs,
       "rate": rate,
       "visit": visit,
-      'flag': flag
+      'flag': flag,
     };
   }
 
   factory HospitalSpModel.fromMap(Map<String, dynamic> map) {
     return HospitalSpModel(
-        map['id'],
-        map['hospitalId'],
-        map['spId'],
-        map['totalDocs'],
-        map["rate"],
-        map["visit"],
-        visited: map["visited"],
-        map['flag']);
+      map['id'],
+      map['hospitalId'],
+      map['spId'],
+      map['totalDocs'],
+      map["rate"],
+      map["visit"],
+      visited: map["visited"],
+      map['flag'],
+      placeTitle: map['placeTitle'],
+      address: map['address'],
+      title: map['title'],
+      note: map['note'],
+      SpName: map["SpName"],
+    );
   }
   factory HospitalSpModel.fromMap1(Map<String, dynamic> map) {
     return HospitalSpModel(
-        map['hospitalSp_id'],
-        map['hospitalId'],
-        map['spId'],
-        map['totalDocs'],
-        map["rate"],
-        map["visit"],
-        visited: map["visited"],
-        map['flag']);
+      map['hospitalSp_id'],
+      map['hospitalId'],
+      map['spId'],
+      map['totalDocs'],
+      map["rate"],
+      map["visit"],
+      visited: map["visited"],
+      map['flag'],
+      placeTitle: map['placeTitle'],
+      address: map['address'],
+      title: map['title'],
+      note: map['note'],
+      SpName: map["SpName"],
+    );
   }
 }
 
@@ -1191,18 +1251,51 @@ class LoginModel {
 class Type {
   int i;
   String name;
-  Type(this.i, this.name);
+  Color color;
+
+  Type(this.i, this.name, {this.color = Colors.grey});
+
+  // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
+  static Type fromInt(int value) {
+    return switch (value) {
+      1 => Type(1, "هدف", color: Colors.blue),
+      2 => Type(2, "مساعد", color: Colors.orange),
+      _ => Type(3, "لاشيء", color: Colors.grey),
+    };
+  }
+
+  static Type fromIntS(String? value) {
+    return switch (value) {
+      "1" => Type(1, "هدف", color: Colors.blue),
+      "2" => Type(2, "مساعد", color: Colors.orange),
+      _ => Type(3, "لاشيء", color: Colors.grey),
+    };
+  }
+
+  // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
+  static Type fromName(String name) {
+    return switch (name) {
+      "هدف" => Type(1, "هدف", color: ColorManager.secondaryColor1),
+      "مساعد" => Type(2, "مساعد", color: ColorManager.secondaryColor2),
+      _ => Type(3, "لاشيء", color: Colors.grey),
+    };
+  }
+
+  // 3️⃣ التابع الثالث: تستدعيه من الـ Type نفسه -> يعطيك الرقم
+  int toInt() {
+    return this.i;
+  }
 }
 
 final List<Type> type = [
-  Type(0, "دفاتر"),
-  Type(1, "عينات"),
-  Type(2, "لاشيء"),
+  Type(0, "دفاتر", color: Colors.cyan),
+  Type(1, "عينات", color: Colors.lime),
+  Type(2, "لاشيء", color: Colors.teal),
 ];
 final List<Type> brandType = [
-  Type(1, "هدف"),
-  Type(2, "مساعد"),
-  Type(3, "لاشيء"),
+  Type(1, "هدف", color: Colors.blue),
+  Type(2, "مساعد", color: Colors.orange),
+  Type(3, "لاشيء", color: Colors.grey),
 ];
 
 class BrandSpModel {
@@ -1246,7 +1339,7 @@ class PlanBrandModel {
   int spId;
   int brandId;
   int repPlanId;
-  String brandType;
+  Type brandType;
   String title;
   String amount;
   String pharmaceuticalForm;
@@ -1258,7 +1351,7 @@ class PlanBrandModel {
       'spId': spId,
       'brandId': brandId,
       'repPlanId': repPlanId,
-      'brandType': brandType,
+      'brandType': brandType.i,
       //  'title': title,
       'amount': amount,
       // 'pharmaceuticalForm': pharmaceuticalForm,
@@ -1271,10 +1364,10 @@ class PlanBrandModel {
         map['spId'],
         map['brandId'],
         map['repPlanId'],
-        map['brandType'],
+        Type.fromIntS(map['brandType']),
         "",
         map['amount'],
-        map['pharmaceuticalForm']);
+        "");
   }
 }
 
@@ -1710,6 +1803,8 @@ class FlagModel {
         return "بانتظار موافقة المستودع";
       case 5:
         return "بانتظار TeamLeader";
+      case 6:
+        return "بانتظار موافقة Senior";
       default:
         return "خطأ";
     }
@@ -1720,8 +1815,9 @@ class InventoryModel {
   String title;
   String used;
   String total;
+  Type type;
   int rest;
-  InventoryModel(this.title, this.used, this.total, this.rest);
+  InventoryModel(this.title, this.used, this.total, this.rest, this.type);
 }
 
 class AsRead {
@@ -1865,7 +1961,7 @@ class ReciModel {
 class PlanBrandSp {
   int id;
   int brandId;
-  int brandType;
+  Type brandType;
   String titleAr;
   int spId;
   String phTitle;
@@ -1873,6 +1969,26 @@ class PlanBrandSp {
 
   PlanBrandSp(this.id, this.brandId, this.brandType, this.titleAr, this.spId,
       this.phTitle, this.totalAmount);
+  // 2. دالة copyWith اليدوية لتعديل الكمية محلياً في الذاكرة
+  PlanBrandSp copyWith({
+    int? id,
+    int? brandId,
+    Type? brandType,
+    String? titleAr,
+    int? spId,
+    String? phTitle,
+    int? totalAmount,
+  }) {
+    return PlanBrandSp(
+      id ?? this.id,
+      brandId ?? this.brandId,
+      brandType ?? this.brandType,
+      titleAr ?? this.titleAr,
+      spId ?? this.spId,
+      phTitle ?? this.phTitle,
+      totalAmount ?? this.totalAmount,
+    );
+  }
 }
 
 class doctorsModel {
@@ -1916,7 +2032,7 @@ class SpecPlan {
 
 class ActivePlanBrandModel {
   List<SpecPlan> spPlan;
-  String type;
+  Type type;
   String title;
   String pharmaceuticalFormTitle;
   ActivePlanBrandModel(
@@ -1969,8 +2085,10 @@ class AllRepresentativeFuture {
   String name;
   FlagModel flag;
   int samplesCount;
-  AllRepresentativeFuture(
-      this.id, this.name, this.flag, this.activePlan, this.samplesCount);
+  String reptype;
+
+  AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan,
+      this.samplesCount, this.reptype);
 }
 
 class WhoReadModel {
@@ -2037,9 +2155,10 @@ List<FlagModel> allFlags = [
   FlagModel(0),
   FlagModel(1),
   FlagModel(2),
-  FlagModel(3),
-  FlagModel(4),
+//  FlagModel(3),
+  // FlagModel(4),
   FlagModel(5),
+  FlagModel(6),
 ];
 
 class StatusPlanModel {
@@ -2050,12 +2169,13 @@ class StatusPlanModel {
 
 List<StatusPlanModel> statusPlanSupervisor = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
-  StatusPlanModel(4, "بانتظار موافقة المستودع"),
+  StatusPlanModel(6, "بانتظار موافقة Senior"),
   StatusPlanModel(5, "بانتظار TeamLeader"),
 ];
 List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
   StatusPlanModel(1, "بانتظار موافقة المشرف"),
+  StatusPlanModel(6, "بانتظار موافقة Senior"),
 ];
 
 class FinishedPlanModel {
@@ -2067,4 +2187,11 @@ class FinishedPlanModel {
 
   FinishedPlanModel(
       this.id, this.cityId, this.startDate, this.endDate, this.active);
+}
+
+class PlanRepsModel {
+  String id;
+  String name;
+  String repPlan;
+  PlanRepsModel(this.id, this.name, this.repPlan);
 }

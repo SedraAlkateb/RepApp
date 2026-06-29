@@ -35,7 +35,7 @@ class _RecipesPageState extends State<RecipesPage> {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(CopyRecipesEvent(widget.docId, 1));
-    
+
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -61,14 +61,14 @@ class _RecipesPageState extends State<RecipesPage> {
       ),
       body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
-          if(state is RecipesRecipesLoadingState){
+          if (state is RecipesRecipesLoadingState) {
             return loadingFullScreen(context);
           }
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             print("sddddddddddddddddddd");
             return Center(
-                child: emptyFullScreen(
-                    context,message:  " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
+                child: emptyFullScreen(context,
+                    message: " لم يتم ادخال وصفات لهذا الطبيب من قبل"));
           }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =
@@ -199,23 +199,28 @@ class _RecipesPageState extends State<RecipesPage> {
                                   .insertRecipesObject
                                   .brand_1,
                               hintText: (state is AllRecipesLoadingState ||
-                                  state is AllNumLoadingState)
+                                      state is AllNumLoadingState)
                                   ? 'loading'
                                   : widget.st == 1
-                                  ? context
-                                  .watch<RecipesBrandBloc>()
-                                  .insertRecipesObject
-                                  .brand_1
-                                  .title_en
-                                  : 'اختر المستحضر',
-                              items: context.watch<RecipesBrandBloc>().brandRecs,
+                                      ? context
+                                          .watch<RecipesBrandBloc>()
+                                          .insertRecipesObject
+                                          .brand_1
+                                          .title_en
+                                      : 'اختر المستحضر',
+                              items:
+                                  context.watch<RecipesBrandBloc>().brandRecs,
                               onChanged: (value) {
                                 BrandRes brand = value;
-                                state.didChange(brand); // لتحديث القيمة داخل النموذج
+                                state.didChange(
+                                    brand); // لتحديث القيمة داخل النموذج
                                 BlocProvider.of<RecipesBrandBloc>(context).add(
                                     SelectBrandEvent(
                                         brandRecipeModel: brand, index: 1));
-                              }, validator: (value) { return null; },
+                              },
+                              validator: (value) {
+                                return null;
+                              },
                             ),
                             if (state.hasError)
                               Padding(
@@ -229,7 +234,6 @@ class _RecipesPageState extends State<RecipesPage> {
                         );
                       },
                     ),
-
                     SizedBox(height: 5),
                     Text('المستحضر الثاني'),
                     BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
@@ -897,17 +901,27 @@ class _RecipesPageState extends State<RecipesPage> {
                     ),
                     SizedBox(height: 20),
                     BlocListener<RecipesBrandBloc, RecipesBrandState>(
-                      listener: (context, state) {
+                      listener: (context, state) async {
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
                         } else if (state is InsertRecipesState) {
-                          success(context);
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('تم إرسال البيانات بنجاح')),
-                          );
+                          // 1. انتظر أولاً حتى يتم إغلاق دالة الـ success (الـ Dialog) بالكامل ⏳
+                          await dismissDialog(context);
+
+                          // 2. إظهار رسالة النجاح للمستخدم بشكل نظيف
+                          if (context.mounted) {
+                            // تحقق أن الشاشة لا تزال حية
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('تم إرسال البيانات بنجاح')),
+                            );
+
+                            // 3. الآن يمكنك إغلاق الشاشة الحالية بأمان بعد اختفاء الـ Dialog 🚀
+                            Navigator.of(context).pop();
+                          }
                         } else if (state is InsertRecipesErrorState) {
-                          success(context);
+
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
@@ -933,7 +947,8 @@ class _RecipesPageState extends State<RecipesPage> {
                                   SnackBar(
                                     content:
                                         Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                    backgroundColor: ColorManager.secondaryColor,
+                                    backgroundColor:
+                                        ColorManager.secondaryColor,
                                   ),
                                 );
                               }
@@ -942,7 +957,6 @@ class _RecipesPageState extends State<RecipesPage> {
                               "إرسال",
                             ),
                           ),
-
                         ],
                       ),
                     ),

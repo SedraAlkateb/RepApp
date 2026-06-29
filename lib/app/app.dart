@@ -11,6 +11,7 @@ import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_p
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
+import 'package:domina_app/presentation/senior/plan_management/bloc/plan_management_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
@@ -50,6 +51,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => instance<PlanManagementBloc>()),
+
         BlocProvider(create: (_) => instance<FinishedPlanBloc>()),
         BlocProvider(create: (_) => instance<AuthBloc>()),
         BlocProvider(create: (_) => instance<ReportVisitDoctorBloc>()),
@@ -94,7 +97,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SeniorRepsBloc>(
           create: (context) {
             final bloc = instance<SeniorRepsBloc>();
-            bloc.add(AllSeniorRepEvent(UserInfo.cityId,UserInfo.repId));
+          //  bloc.add(AllSeniorRepEvent(UserInfo.cityId,UserInfo.repId));
             //   bloc.add(AllNumEvent());
             return bloc;
           },
@@ -196,7 +199,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<GeneralReportsBloc>(
           create: (context) {
             final bloc = instance<GeneralReportsBloc>();
-            bloc.add(const TeamLeaderAndCityEvent());
+         //   bloc.add(const TeamLeaderAndCityEvent());
             return bloc;
           },
         ),

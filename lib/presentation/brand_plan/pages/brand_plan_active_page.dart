@@ -35,7 +35,7 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
         },
         builder: (context, state) {
           List<BrandSpPlanModel> planBrandModel =
-              context.watch<BrandPlanBloc>().planBrandActive;
+              context.read<BrandPlanBloc>().planBrandActive;
 
           if (state is SearchBrandState) {
             planBrandModel = state.brand;
@@ -174,9 +174,6 @@ class ActiveBrandPlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isGoal = int.parse(model.spPlan[0].brandType) == 1;
-    final Color typeColor = isGoal ? const Color(0xFF10B981) : const Color(0xFFF59E0B);
-
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
@@ -236,17 +233,16 @@ class ActiveBrandPlanCard extends StatelessWidget {
                   padding:
                   EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
-                    color:   isGoal ? ColorManager.secondaryColor1
-                        : ColorManager.secondaryColor2,
+                    color:   model.spPlan[0].brandType.color.withOpacity(0.3),
                     borderRadius:
                     BorderRadius.all(
                       Radius.circular(AppSize.s8),
                     ),
                     ),
                   child: Text(
-                    isGoal ? "هدف" : "مساعد",
+                    model.spPlan[0].brandType.name,
                     style: TextStyle(
-                      color: typeColor,
+                      color: model.spPlan[0].brandType.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 12.sp,
                     ),
@@ -282,6 +278,7 @@ class ActiveBrandPlanCard extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: model.spPlan.length,
                   itemBuilder: (context, i) {
+
                     return Container(
                       margin: EdgeInsets.only(bottom: 8.h),
                       padding: EdgeInsets.symmetric(

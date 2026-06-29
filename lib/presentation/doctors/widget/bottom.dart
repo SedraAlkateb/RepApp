@@ -16,35 +16,8 @@ Widget buildBottomButtonsDoctor(int id) {
         color: Colors.white,
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
-      child:  BlocConsumer<DoctorsBloc, DoctorsState>(
+      child:  BlocBuilder<DoctorsBloc, DoctorsState>(
 
-        listener: (context, state) {
-          if (state is CheckRecipesState) {
-            if (state.isCheck == true) {
-              initBrandRecModule();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RecipesPage(
-
-                    docId: id,
-                    st: state.st,
-                  ),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text(
-                        'لقد تجاوزت الحد المسموح لعدد الوصفات')),
-              );
-            }
-          }
-          if (state is CheckRecipesErrorState) {
-            error(context, state.failure.massage,
-                state.failure.code);
-          }
-        },
         builder: (context, state) {
           return Row(
             children: [
@@ -118,37 +91,7 @@ Widget buildBottomButtons(int hospitalId) {
         color: Colors.white,
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
-      child:  BlocConsumer<DoctorsBloc, DoctorsState>(
-        listener: (context, state) {
-          if (state is CheckRecipesState) {
-
-            if (state.isCheck == true) {
-              initBrandRecModule();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RecipesHospital(
-                    HospitalId:
-                    hospitalId ,
-                    //  docId: doctor.id,
-                    st: state.st,
-                  ),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(
-                SnackBar(
-                    content: Text(
-                        'لقد تجاوزت الحد المسموح لعدد الوصفات')),
-              );
-            }
-          }
-          if (state is CheckRecipesErrorState) {
-            error(context, state.failure.massage,
-                state.failure.code);
-          }
-        },
+      child:   BlocBuilder<DoctorsBloc, DoctorsState>(
         builder: (context, state) {
           return Row(
             children: [

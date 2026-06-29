@@ -28,7 +28,33 @@ class UserInfo {
   static bool isChange = false;
   static int numDoctor = 0;
   static int numHospital = 0;
-  static int statusPlan = UserInfo.repType == "5" ? 5 : 1;
+  static int statusPlan =  -1;
+  static void initializeUserPlan() {
+    statusPlan = UserInfo.repType == "5"
+        ? 5
+        : UserInfo.repType == "4"
+        ? 1
+        : UserInfo.repType == "6"
+        ? 6
+        : UserInfo.repType == "7"
+        ? 0
+        : -1;
+  }
+  static String getRepType(String repType) {
+    switch (repType) {
+      case "4":
+        return "supervisor";
+      case "5":
+        return "TeamLeader";
+      case "6":
+        return "Senior";
+      case "7":
+        return "مندوب";
+      default:
+        return "خطأ";
+    }
+
+  }
 
   /// 🔹 الدالة الجديدة لتعبئة البيانات من الموديل مباشرة
   static void fillFromModel(dynamic data) {
@@ -53,9 +79,7 @@ class UserInfo {
 
     // منطق التحقق من الـ Flag كما كان في ملف المين
     flag1 = otherstatus == -1 ? 0 : (data.flag1 ?? 0);
-
-    // تحديث حالة الخطة بناءً على نوع المندوب
-    statusPlan = repType == "5" ? 5 : 1;
+    UserInfo.initializeUserPlan();
   }
 
   /// دالة اختيارية لتصفير البيانات عند تسجيل الخروج

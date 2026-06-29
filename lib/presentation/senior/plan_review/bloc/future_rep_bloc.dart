@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
@@ -74,17 +75,33 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
           }
         });
       } else if (event is ChangeFieldEvent) {
-        int sumF =
-            sumBrandsAmount - planBrandSp.planBrandSps[event.index].totalAmount;
-        sumF = sumF + event.number;
-        if (sumF > planBrandSp.amount) {
-          emit(SumErrorState(
-              failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص")));
-        } else {
+        if(UserInfo.repType==7){
+          int sumF =
+              sumBrandsAmount - planBrandSp.planBrandSps[event.index].totalAmount;
+          sumF = sumF + event.number;
+          if (sumF > planBrandSp.amount) {
+            emit(SumErrorState(
+                failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص")));
+          } else {
+            planBrandSp.planBrandSps[event.index].totalAmount = event.number;
+            sumBrandsAmount = sumF;
+            int existingIndex = planBrandSpSend.indexWhere(
+                  (item) => item.id == planBrandSp.planBrandSps[event.index].id,
+            );
+            if (existingIndex == -1) {
+              planBrandSpSend.add(BrandAmountRequestModel(
+                planBrandSp.planBrandSps[event.index].id,
+                planBrandSp.planBrandSps[event.index].totalAmount,
+              ));
+            } else {
+              planBrandSpSend[existingIndex].amount =
+                  planBrandSp.planBrandSps[event.index].totalAmount;
+            }
+          }
+        }else{
           planBrandSp.planBrandSps[event.index].totalAmount = event.number;
-          sumBrandsAmount = sumF;
           int existingIndex = planBrandSpSend.indexWhere(
-            (item) => item.id == planBrandSp.planBrandSps[event.index].id,
+                (item) => item.id == planBrandSp.planBrandSps[event.index].id,
           );
           if (existingIndex == -1) {
             planBrandSpSend.add(BrandAmountRequestModel(
@@ -96,6 +113,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
                 planBrandSp.planBrandSps[event.index].totalAmount;
           }
         }
+
       }
       if (event is UpdateAmountEvent) {
         emit(UpdateAmountLoadingState());

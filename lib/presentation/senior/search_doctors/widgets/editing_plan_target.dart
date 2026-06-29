@@ -77,15 +77,6 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      int brandTypeId = int.parse(widget.planBrand[index].brandType);
-
-                      String brandTypeHintText = "لاشيء";
-                      for (var type in brandType) {
-                        if (type.i == brandTypeId) {
-                          brandTypeHintText = type.name;
-                          break;
-                        }
-                      }
 
                       return Container(
                         margin: EdgeInsets.all(AppPaddingH.p8),
@@ -118,7 +109,7 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                                 }
 
                                 return CustomDropDown(
-                                  hintText: brandTypeHintText,
+                                  hintText: widget.planBrand[index].brandType.name,
                                   items: brandType,
                                   prefixIcon: null,
                                   onChanged: (value) {
@@ -129,8 +120,8 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                                         value.i,
                                       ),
                                     );
-                                    widget.planBrand[index].brandType =
-                                        value.i.toString();
+                                    widget.planBrand[index].brandType.i =
+                                        value.i;
                                     BlocProvider.of<EditBrandPlanBloc>(context)
                                         .add(
                                       FutureChangeLoadingItemValueEvent(index),

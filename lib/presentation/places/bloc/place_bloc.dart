@@ -51,7 +51,6 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
         });
       }
    else   if ((event is NumEvent)&& (isOpen==false)) {
-     print("ddddddddddddddddddddd");
         (await numDocHasSqlUsecase.execute()).fold((failure) {
           emit(NumVisitErrorState(failure: failure));
         }, (data) async {
@@ -101,8 +100,8 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
         });
       } else if (event is SearchHospitalArchive) {
         String search = normalizeText(event.search);
-        List<HospitalModel> hospital = event.hospital.where((value) {
-          if (normalizeText(value.title).contains(search)) {
+        List<HospitalSpAllModel> hospital = event.hospital.where((value) {
+          if (normalizeText(value.title??"").contains(search)) {
             return true;
           } else {
             return false;

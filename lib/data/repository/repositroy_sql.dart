@@ -291,7 +291,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<HospitalModel>>> getHospitalByPlaceId(
+  Future<Either<Failure, List<HospitalSpAllModel>>> getHospitalByPlaceId(
       int placeId) async {
     try {
       final response = await _databaseHelper.getHospitalByPlaceId(placeId);

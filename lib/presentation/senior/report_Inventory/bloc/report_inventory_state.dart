@@ -8,7 +8,8 @@ final class ReportInventoryInitial extends ReportInventoryState {
   List<Object?> get props =>[];}
 final class  SenAllInventoryErrorState extends ReportInventoryState {
   final Failure failure;
-  SenAllInventoryErrorState({required this.failure});
+  final int planId;
+  SenAllInventoryErrorState({required this.failure,required this.planId});
   @override
 
   List<Object?> get props =>[failure];

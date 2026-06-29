@@ -10,7 +10,8 @@ class SenSearchInventoryEvent extends ReportInventoryEvent{
 }
 class SenAllInventoryEvent extends ReportInventoryEvent{
   final  int id;
+  final int planId;
   @override
-  SenAllInventoryEvent(this.id);
+  SenAllInventoryEvent(this.id,this.planId);
   List<Object?> get props => [id];
 }

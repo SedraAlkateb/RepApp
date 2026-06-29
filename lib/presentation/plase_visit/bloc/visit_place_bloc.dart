@@ -38,8 +38,8 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   //  List<PharmacyModel> pharmaSearchModel = [];
   List<DoctorModel> doctors = [];
   List<DoctorModel> doctorSearchModel = [];
-  List<HospitalModel> hospitals = [];
-  List<HospitalModel> hospitalSearchModel = [];
+  List<HospitalSpAllModel> hospitals = [];
+  List<HospitalSpAllModel> hospitalSearchModel = [];
   List<SpecHospitalSp> specialization = [];
   SpecHospitalSp? spec;
   List<VisitBrandPharmacyModel> visitBrandPharmacys = [];
@@ -295,7 +295,7 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
       else if (event is SearchHospitalVisitEvent) {
         String search = normalizeText(event.value);
         hospitalSearchModel = hospitals.where((hospital) {
-          if (normalizeText(hospital.title).contains(search)) {
+          if (normalizeText(hospital.title??"").contains(search)) {
             return true;
           } else {
             return false;

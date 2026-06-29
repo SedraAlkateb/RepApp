@@ -21,38 +21,27 @@ class CustomAppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // الخلفية الزجاجية
-        ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-            child: Container(color: Colors.white.withOpacity(0.1)),
+    return     Drawer(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      child: Column(
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.only(top: 10.h),
+              children: [
+
+                ...menuItems.map((item) => _buildListTile(context, item)),
+                const Divider(color: Colors.black12, thickness: 0.5),
+
+                ...getLogoutItem(context).map((item) => _buildListTile(context, item)),
+
+                _buildVersionInfo(), // إضافة معلومات الإصدار هنا
+              ],
+            ),
           ),
-        ),
-        Drawer(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.only(top: 10.h),
-                  children: [
-
-                    ...menuItems.map((item) => _buildListTile(context, item)),
-                    const Divider(color: Colors.black12, thickness: 0.5),
-
-                    ...getLogoutItem(context).map((item) => _buildListTile(context, item)),
-
-                    _buildVersionInfo(), // إضافة معلومات الإصدار هنا
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
