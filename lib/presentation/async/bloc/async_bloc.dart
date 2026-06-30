@@ -134,7 +134,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             emit(SyncDataErrorState(failure: brandsFailureOrSuccess));
             return false;
           }
-
           brands = brandsFailureOrSuccess as List<BrandModel>;
           emit(LoadingState(1));
           final visitDoctorResult = await getVisitDoctorUsecase.execute(
@@ -312,6 +311,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           if (UserInfo.otherstatus == -1) {
             UserInfo.flag1 = 0;
           }
+          UserInfo.initializeUserPlan();
+
           emit(IsActiveState());
         });
       }
@@ -338,6 +339,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           } else {
             UserInfo.flag1 = 0;
           }
+          UserInfo.initializeUserPlan();
 
           emit(UpdateIsActiveState());
         });

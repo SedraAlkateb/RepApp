@@ -16,6 +16,7 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
   AllHospitalSpNSqlUsecase allHospitalSpNSqlUsecase;
   List<HospitalSpAllModel> hospital = [];
   List<DoctorModel> doctor = [];
+
   DoctorsBloc(this.allDoctorsqlUsecase, this.checkReciUsecase,this.allHospitalSpNSqlUsecase)
       : super(DoctorsInitial()) {
     on<DoctorsEvent>((event, emit) async {
@@ -56,6 +57,7 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
       if (event is CheckReciEvent) {
         emit(CheckRecipesLoadingState(event.docId));
         (await checkReciUsecase.execute(UserInfo.repId)).fold((failure) {
+
           emit(CheckRecipesErrorState(failure: failure,event.docId));
         }, (data) async {
           emit(CheckRecipesState(data.accepted ?? false,event.st,event.docId));

@@ -28,7 +28,7 @@ class SpecGridWidget extends StatelessWidget {
         crossAxisCount: crossAxisCount,
         crossAxisSpacing: 12.w,
         mainAxisSpacing: 12.h,
-        childAspectRatio: 0.9, // زيادة الارتفاع قليلاً لاستيعاب النصوص
+        childAspectRatio: 0.6, // زيادة الارتفاع قليلاً لاستيعاب النصوص
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {

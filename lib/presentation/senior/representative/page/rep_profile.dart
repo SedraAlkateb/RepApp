@@ -4,7 +4,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/active_plan/pages/active_plan.dart';
-import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
@@ -330,7 +329,7 @@ class RepProfile extends StatelessWidget {
           icon: Icons.check_circle_outline,
           color: const Color(0xFF2D947A),
           onTap: () {
-            context.read<SeniorProfBloc>().add(VisitDocEvent(id));
+            context.read<SeniorProfBloc>().add(VisitDocEvent(id,repPlanId));
             Navigator.pushNamed(context, Routes.senVisitDoctor);
           }),
       InteractiveActionTile(
@@ -338,7 +337,7 @@ class RepProfile extends StatelessWidget {
           icon: Icons.cancel_outlined,
           color: const Color(0xFFE74C3C),
           onTap: () {
-            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id));
+            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id,repPlanId));
             Navigator.pushNamed(context, Routes.noVisitDoctor);
           }),
       InteractiveActionTile(
@@ -346,7 +345,7 @@ class RepProfile extends StatelessWidget {
           icon: Icons.hourglass_empty_rounded,
           color: const Color(0xFFF39C12),
           onTap: () {
-            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id));
+            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id,repPlanId));
             Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
           }),
       InteractiveActionTile(
@@ -356,7 +355,7 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             initSeniorReportInventoryModule();
             Navigator.push(context, MaterialPageRoute(builder: (c) {
-              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id));
+              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id,repPlanId));
               return ReportInventory();
             }));
           }),

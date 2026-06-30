@@ -25,10 +25,25 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
         (await allRepsFutureUsecase.execute(UserInfo.repId)).fold((failure) {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
-          data.sort((a, b) => a.flag.flag.compareTo(b.flag.flag));
+
+          data.sort((a, b) {
+            // 1️⃣ فحص المطابقة مع حالة الخطة الحالية
+            final bool aMatches = a.flag.flag == UserInfo.statusPlan;
+            final bool bMatches = b.flag.flag == UserInfo.statusPlan;
+
+            // 🚀 التعديل هنا: جعل العناصر المطابقة تنزل لأسفل القائمة (العكس)
+            if (aMatches && !bMatches) return -1;  // a ينزل للأسفل
+            if (!aMatches && bMatches) return 1; // b ينزل للأسفل
+
+            // 2️⃣ إذا تساويا في التطابق، نلتزم بالترتيب السابق تصاعدياً بدون أي تغيير
+            return a.flag.flag.compareTo(b.flag.flag);
+          });
+
           allRepresentative = data;
+
           emit(AllSeniorRepState(data));
         });
+
       } 
       else if (event is SenSearchRepFutureEvent) {
         List<AllRepresentativeFuture> allRepresentativeModel = [];

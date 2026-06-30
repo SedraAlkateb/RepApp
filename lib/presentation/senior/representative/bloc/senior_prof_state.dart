@@ -50,7 +50,7 @@ final class SenAllSpecLoadingState extends SeniorProfState {
 }
 
 final class SenAllHospitalsState extends SeniorProfState {
-  final List<HospitalModel> hospital;
+  final List<HospitalSpModel> hospital;
   SenAllHospitalsState(this.hospital);
   @override
   List<Object?> get props =>[hospital];
@@ -110,7 +110,9 @@ final class SenNoVisitDocsState extends SeniorProfState {
 }
 final class  SenNoVisitDocErrorState extends SeniorProfState {
   final Failure failure;
-  SenNoVisitDocErrorState({required this.failure});
+  final int planId;
+
+  SenNoVisitDocErrorState({required this.failure,required this.planId});
   @override
 
   List<Object?> get props =>[failure];
@@ -137,7 +139,8 @@ final class SenVisitDocsState extends SeniorProfState {
 }
 final class  SenVisitDocErrorState extends SeniorProfState {
   final Failure failure;
-  SenVisitDocErrorState({required this.failure});
+  final int planId;
+  SenVisitDocErrorState({required this.failure,required this.planId});
   @override
 
   List<Object?> get props =>[failure];

@@ -155,11 +155,11 @@ class SpecPlanPage extends StatelessWidget {
               }
               if (state is UpdateAmountState) {
                 BlocProvider.of<BrandPlanBloc>(context).add(UpdateSaveEvent());
-                Navigator.pop(context);
+                dismissDialog(context);
                 successWithMessage(context, "تم حفظ التغيرات");
               }
               if (state is UpdateAmountSendState) {
-                Navigator.pop(context);
+                dismissDialog(context);
                 successWithMessage(context, "تم الارسال يرجى المزامنة ");
               }
             },
@@ -263,95 +263,95 @@ class SpecPlanPage extends StatelessWidget {
   }
 
   // ويدجت الكرت (تصميم عصري + خط فاصل + توزيع أفقي + Hero)
-  Widget _buildSpecCard(BuildContext context, OtherBrandSpPlanModel model, int index) {
-    return Hero(
-      tag: "spec_plan_${model.specModel.id}",
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20.r),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BrandPlanOtherPage(
-                  otherBrandSpPlanModel: model,
-                  index1: index,
-                ),
-              ),
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-              border: Border.all(color: const Color(0xFFF1F5F9)),
-            ),
-            child: Column(
-              children: [
-                // الأيقونة
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10.h),
-                    padding: EdgeInsets.all(12.w),
-                    decoration: BoxDecoration(
-                      color: ColorManager.medicalSecondary.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      ImageAssetsSpec().getImage(model.specModel.id),
-                      color: ColorManager.medicalSecondary,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.medical_services_outlined, color: ColorManager.medicalSecondary, size: 24.sp),
-                    ),
-                  ),
-                ),
-
-                // اسم الاختصاص
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
-                  child: Text(
-                    model.specModel.title,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1E293B),
-                    ),
-                  ),
-                ),
-
-                // البيانات مع الخطوط الفاصلة
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: Column(
-                    children: [
-                      _buildStatItem("زيارات أطباء", "${model.specModel.sumDoctor}"),
-                      Divider(height: 10.h, color: Colors.grey.withOpacity(0.1), thickness: 1),
-                      _buildStatItem("زيارات مشافي", "${model.specModel.sumHospital}"),
-                      Divider(height: 10.h, color: Colors.grey.withOpacity(0.1), thickness: 1),
-                      _buildStatItem("عينات", "${(model.brandk / UserInfo.samplesCount).toStringAsFixed(0)}"),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 12.h),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildSpecCard(BuildContext context, OtherBrandSpPlanModel model, int index) {
+  //   return Hero(
+  //     tag: "spec_plan_${model.specModel.id}",
+  //     child: Material(
+  //       color: Colors.transparent,
+  //       child: InkWell(
+  //         borderRadius: BorderRadius.circular(20.r),
+  //         onTap: () {
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (context) => BrandPlanOtherPage(
+  //                 otherBrandSpPlanModel: model,
+  //                 index1: index,
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //         child: Container(
+  //           decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(20.r),
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: Colors.black.withOpacity(0.04),
+  //                 blurRadius: 10,
+  //                 offset: const Offset(0, 4),
+  //               ),
+  //             ],
+  //             border: Border.all(color: const Color(0xFFF1F5F9)),
+  //           ),
+  //           child: Column(
+  //             children: [
+  //               // الأيقونة
+  //               Expanded(
+  //                 flex: 5,
+  //                 child: Container(
+  //                   margin: EdgeInsets.only(top: 10.h),
+  //                   padding: EdgeInsets.all(12.w),
+  //                   decoration: BoxDecoration(
+  //                     color: ColorManager.medicalSecondary.withOpacity(0.1),
+  //                     shape: BoxShape.circle,
+  //                   ),
+  //                   child: Image.asset(
+  //                     ImageAssetsSpec().getImage(model.specModel.id),
+  //                     color: ColorManager.medicalSecondary,
+  //                     errorBuilder: (context, error, stackTrace) =>
+  //                         Icon(Icons.medical_services_outlined, color: ColorManager.medicalSecondary, size: 24.sp),
+  //                   ),
+  //                 ),
+  //               ),
+  //
+  //               // اسم الاختصاص
+  //               Padding(
+  //                 padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+  //                 child: Text(
+  //                   model.specModel.title,
+  //                   textAlign: TextAlign.center,
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   style: TextStyle(
+  //                     fontSize: 14.sp,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: const Color(0xFF1E293B),
+  //                   ),
+  //                 ),
+  //               ),
+  //
+  //               // البيانات مع الخطوط الفاصلة
+  //               Padding(
+  //                 padding: EdgeInsets.symmetric(horizontal: 12.w),
+  //                 child: Column(
+  //                   children: [
+  //                     _buildStatItem("زيارات أطباء", "${model.specModel.sumDoctor}"),
+  //                     Divider(height: 10.h, color: Colors.grey.withOpacity(0.1), thickness: 1),
+  //                     _buildStatItem("زيارات مشافي", "${model.specModel.sumHospital}"),
+  //                     Divider(height: 10.h, color: Colors.grey.withOpacity(0.1), thickness: 1),
+  //                     _buildStatItem("عينات", "${(model.brandk / UserInfo.samplesCount).toStringAsFixed(0)}"),
+  //                   ],
+  //                 ),
+  //               ),
+  //               SizedBox(height: 12.h),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // سطر المعلومات (Label - Value)
   Widget _buildStatItem(String label, String value) {

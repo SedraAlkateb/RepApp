@@ -3,7 +3,7 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
-import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_no_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
@@ -21,22 +21,22 @@ part 'senior_prof_state.dart';
 class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllPlaceUsecase allPlaceUsecase;
   AllSpeUsecase allSpeUsecase;
-  AllHospitalUsecase allHospitalUsecase;
+  AllHospialSpUsecase _allHospitalSpUsecase;
   AllDoctorUsecase allDoctorUsecase;
   AllBrandsUsecase allBrandsUsecase;
 
   InfoRepUsecase infoRepUsecase;
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
-    RemainingVisitsUsecase remainingVisitsUsecase;
+  RemainingVisitsUsecase remainingVisitsUsecase;
   AllReciUsecase allReciUsecase;
   GetRepReciUsecase getRepReciUsecase;
   List<SpecDModel> specialization = [];
-  List<HospitalModel> hospital = [];
+  List<HospitalSpModel> hospital = [];
   List<BrandModel> brand = [];
 
   List<NoVisitDocModel> noVisitDoc = [];
-  
+
   List<NoVisitDocModel> remainingVisits = [];
   List<NoVisitDocModel> visitDoc = [];
 
@@ -45,13 +45,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       this.allPlaceUsecase,
       this.allSpeUsecase,
       this.allDoctorUsecase,
-      this.allHospitalUsecase,
+      this._allHospitalSpUsecase,
       this.allNoVisitDoctorUsecase,
-      this.remainingVisitsUsecase, 
+      this.remainingVisitsUsecase,
       this.allSenVisitDoctorUsecase,
-      this.infoRepUsecase,this.allBrandsUsecase,
-      this.allReciUsecase,this.getRepReciUsecase
-      )
+      this.infoRepUsecase,
+      this.allBrandsUsecase,
+      this.allReciUsecase,
+      this.getRepReciUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -61,17 +62,15 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         }, (data) async {
           emit(SenAllPlaceState(data));
         });
-      }
-      else  if (event is SenAllHospitalEvent) {
+      } else if (event is SenAllHospitalEvent) {
         emit(SenAllHospitalLoadingState());
-        (await allHospitalUsecase.execute(event.id)).fold((failure) {
+        (await _allHospitalSpUsecase.execute(event.id)).fold((failure) {
           emit(SenAllHospitalErrorState(failure: failure));
         }, (data) async {
           hospital = data;
           emit(SenAllHospitalsState(data));
         });
-      }
-      else  if (event is SenAllBrandEvent) {
+      } else if (event is SenAllBrandEvent) {
         emit(SenAllBrandLoadingState());
         (await allBrandsUsecase.execute(event.id)).fold((failure) {
           emit(SenAllBrandErrorState(failure: failure));
@@ -79,16 +78,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           brand = data;
           emit(SenAllBrandsState(data));
         });
-      }
-      else  if (event is getInfoRepEvent) {
+      } else if (event is getInfoRepEvent) {
         emit(RepInfoLoadingState());
-        (await infoRepUsecase.execute(event.id)).fold((failure) {
+        (await infoRepUsecase.execute(event.id,event.planId)).fold((failure) {
           emit(RepInfoErrorState(failure: failure));
         }, (data) async {
           emit(RepInfoState(data));
         });
-      }
-      else  if (event is SenAllSpecEvent) {
+      } else if (event is SenAllSpecEvent) {
         emit(SenAllSpecLoadingState());
         (await allSpeUsecase.execute(event.id)).fold((failure) {
           emit(SenAllSpecErrorState(failure: failure));
@@ -96,8 +93,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           specialization = data;
           emit(SenAllSpecState(data));
         });
-      }
-      else if (event is SenSearchSpecEvent) {
+      } else if (event is SenSearchSpecEvent) {
         List<SpecDModel> spec;
         String search = normalizeText(event.contant);
         spec = specialization.where((value) {
@@ -107,26 +103,24 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           return false;
         }).toList();
         emit(SenAllSpecState(spec));
-      }
-      else if (event is SenSearchHospEvent) {
-        List<HospitalModel> hospitalList;
+      } else if (event is SenSearchHospEvent) {
+        List<HospitalSpModel> hospitalList;
         String search = normalizeText(event.contant);
         hospitalList = hospital.where((value) {
-          if (normalizeText(value.title).contains(search)) {
+          if (normalizeText(value.title ?? "").contains(search)) {
             return true;
           }
-          if (normalizeText(value.address).contains(search)) {
+          if (normalizeText(value.address ?? "").contains(search)) {
             return true;
           }
-          if (normalizeText(value.placeTitle).contains(search)) {
+          if (normalizeText(value.placeTitle ?? "").contains(search)) {
             return true;
           }
           return false;
         }).toList();
 
         emit(SenAllHospitalsState(hospitalList));
-      }
-      else if (event is SenSearchVisitDoctorEvent) {
+      } else if (event is SenSearchVisitDoctorEvent) {
         List<NoVisitDocModel> visitDocModel;
         String search = normalizeText(event.contant);
         visitDocModel = visitDoc.where((value) {
@@ -145,8 +139,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           return false;
         }).toList();
         emit(SenVisitDocsState(visitDocModel));
-      }
-      else if (event is SenSearchNoVisitDoctorEvent) {
+      } else if (event is SenSearchNoVisitDoctorEvent) {
         List<NoVisitDocModel> noVisitDocModel;
         String search = normalizeText(event.contant);
         noVisitDocModel = noVisitDoc.where((value) {
@@ -165,8 +158,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           return false;
         }).toList();
         emit(SenNoVisitDocsState(noVisitDocModel));
-      }
-      else  if (event is SenAllDoctorEvent) {
+      } else if (event is SenAllDoctorEvent) {
         emit(SenAllDoctorLoadingState());
         (await allDoctorUsecase.execute(event.id)).fold((failure) {
           emit(SenAllDoctorErrorState(failure: failure));
@@ -179,8 +171,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenAllDoctorEmptyState());
           }
         });
-      }
-      else if (event is SenSearchDoctorEvent) {
+      } else if (event is SenSearchDoctorEvent) {
         List<DoctorModel> doctorList;
         String search = normalizeText(event.contant);
         doctorList = doctor.where((value) {
@@ -199,11 +190,11 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           return false;
         }).toList();
         emit(SenAllDoctorsState(doctorList));
-      }
-      else if (event is NoVisitDocEvent) {
+      } else if (event is NoVisitDocEvent) {
         emit(SenNoVisitDocLoadingState());
-        (await allNoVisitDoctorUsecase.execute(event.id)).fold((failure) {
-          emit(SenNoVisitDocErrorState(failure: failure));
+        (await allNoVisitDoctorUsecase.execute(event.id, event.planId)).fold(
+            (failure) {
+          emit(SenNoVisitDocErrorState(failure: failure, planId: event.planId));
         }, (data) async {
           noVisitDoc = data;
           if (data.isEmpty) {
@@ -212,11 +203,11 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenNoVisitDocsState(data));
           }
         });
-      }
-      else if (event is RemainingVisitsDocEvent) {
+      } else if (event is RemainingVisitsDocEvent) {
         emit(SenNoVisitDocLoadingState());
-        (await remainingVisitsUsecase.execute(event.id)).fold((failure) {
-          emit(SenNoVisitDocErrorState(failure: failure));
+        (await remainingVisitsUsecase.execute(event.id, event.planId)).fold(
+            (failure) {
+          emit(SenNoVisitDocErrorState(failure: failure, planId: event.planId));
         }, (data) async {
           remainingVisits = data;
           if (data.isEmpty) {
@@ -225,11 +216,11 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenNoVisitDocsState(data));
           }
         });
-      }
-      else if (event is VisitDocEvent) {
+      } else if (event is VisitDocEvent) {
         emit(SenVisitDocLoadingState());
-        (await allSenVisitDoctorUsecase.execute(event.id)).fold((failure) {
-          emit(SenVisitDocErrorState(failure: failure));
+        (await allSenVisitDoctorUsecase.execute(event.id, event.planId)).fold(
+            (failure) {
+          emit(SenVisitDocErrorState(failure: failure, planId: event.planId));
         }, (data) async {
           visitDoc = data;
           if (data.isEmpty) {
@@ -256,7 +247,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
           emit(ViewRecipeErrorState(failure: failure));
         }, (data) async {
-          emit(ViewRecipeState(data,event.isDoctor,event.name));
+          emit(ViewRecipeState(data, event.isDoctor, event.name));
         });
       }
     });

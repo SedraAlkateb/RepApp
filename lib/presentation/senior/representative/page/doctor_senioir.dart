@@ -136,7 +136,7 @@ class DoctorSenior extends StatelessWidget {
                         children: [
                           _buildInfoBox("المكان", doctor.placeTitle, Icons.location_on_outlined),
                           SizedBox(width: 10.w),
-                          _buildInfoBox("الزيارات", "${doctor.visits ?? 0} زيارة", Icons.calendar_month_outlined),
+                          _buildInfoBox("الزيارات", "${doctor.visits} زيارة", Icons.calendar_month_outlined),
                         ],
                       ),
                       SizedBox(height: 12.h),

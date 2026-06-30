@@ -3,13 +3,12 @@ import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/font_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
-import 'package:domina_app/presentation/senior/manage_future/widget/Buttom.dart';
 import 'package:domina_app/presentation/senior/manage_future/widget/drop_down_change_plan.dart';
+import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -73,6 +72,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
               },
             ),
           ),
+          SizedBox(height: 12.h),
         ],
       ),
     );
@@ -80,9 +80,6 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
 
   Widget _buildRepItem(AllRepresentativeFuture rep, int index) {
     bool isSelected = selectedIndex == index;
-    // تحديد لون الثيم بناءً على حالة المندوب لإضافة حياة للتصميم
-    Color statusColor = rep.flag.flag == 0 ? Colors.green : (rep.flag.flag == 1 ? Colors.orange : Colors.red);
-
     return GestureDetector(
       onTap: () => setState(() => selectedIndex = isSelected ? -1 : index),
       child: AnimatedContainer(
@@ -157,18 +154,17 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
                             ),
                           ),
                           // نقطة الحالة تنبض باللون الخاص بها
-                          _buildPulseDot(rep.flag.flag),
+                          _buildPulseDot(rep.flag.flag,rep.reptype),
                         ],
                       ),
                       SizedBox(height: 12.h),
+
 
                       // الدرو داون مغلف بكونتينر رمادي فاتح لتمييزه كحقل إدخال
                       DropDownChangePlan(
                           hintText: rep.flag.name,
                           items: allFlags,
-                          statusColor: rep.flag.flag == 3
-                              ? Colors.green
-                              : (rep.flag.flag == 2 ? Colors.orange : Colors.red),
+                          statusColor: getColor(rep.flag.flag),
                           onChanged: (x) {
 
                             BlocProvider.of<ManageFutureBloc>(context).add(
@@ -249,7 +245,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
           onTapCancel: () => setBtnState(() => isPressed = false),
           onTap: isActive ? onTap : null,
           child: AnimatedScale(
-            scale: isPressed ? 0.96 : 1.0,
+            scale: 1.0,
             duration: const Duration(milliseconds: 100),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
@@ -288,25 +284,45 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
       },
     );
   }
-
+  Color getColor(int flag){
+    if(flag==0){
+      return Colors.blue;
+    }else if(flag==5){
+      return Colors.orange;
+    }else if(flag==1){
+      return Colors.red;
+    }else if(flag==2){
+      return Colors.green;
+    }
+    else if(flag==3){
+      return Colors.black;
+    }
+    return Colors.purple;
+  }
   // 4. Pulsing Dot Animation logic
-  Widget _buildPulseDot(int flag) {
-    Color color = flag == 0 ? Colors.green : (flag == 1 ? Colors.orange : Colors.red);
+  Widget _buildPulseDot(int flag,String repType) {
+    Color color = getColor(flag);
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.4, end: 1.0),
       duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
       builder: (context, value, child) {
-        return Container(
-          width: 10.w,
-          height: 10.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            boxShadow: [
-              BoxShadow(color: color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
-            ],
-          ),
+        return Row(
+          children: [
+            Text(UserInfo.getRepType(repType)),
+
+            Container(
+              width: 10.w,
+              height: 10.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color,
+                boxShadow: [
+                  BoxShadow(color: color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
+                ],
+              ),
+            ),
+          ],
         );
       },
       onEnd: () => {}, // Loop handled by the builder naturally
@@ -316,12 +332,32 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   // Navigation Handlers with Animation logic
   void _handleAuditing(AllRepresentativeFuture rep) {
     iniFutureModule();
-    Navigator.push(context, _createRoute(FutureSpecializationsPage(
-      id: rep.id,
-      repPlanId: rep.activePlan,
-      flag: rep.flag,
-      sampleCount: rep.samplesCount,
-    )));
+    if(rep.reptype=="7"){
+
+      Navigator.push(context, _createRoute(FutureSpecializationsPage(
+        id: rep.id,
+        repPlanId: rep.activePlan,
+        flag: rep.flag,
+        sampleCount: rep.samplesCount,
+      )));
+    }else{
+      BlocProvider.of<FutureRepBloc>(context).add(
+        FutureRepPlanBrandSpEvent(
+          RepSp(rep.activePlan, 38, rep.id),
+          rep.samplesCount,
+        ),
+      );
+      Navigator.pushNamed(
+        context,
+        Routes.RepPlanBrandSp,
+        arguments: {
+          'title': "كل الاختصاصات",
+          'flag':  rep.flag.flag,
+        },
+      );
+    }
+
+
   }
 
   void _handleEditBrands(AllRepresentativeFuture rep) {

@@ -81,9 +81,9 @@ extension FlowStateExtension on FlowState {
       case ErrorState:
         {
           if (getStateRendererType() == StateRendererType.popupErrorState) {
-       //     dismissDialog(context);
+          //  dismissDialog(context);
             showPopup(context, getStateRendererType(), getMessage());
-           print("Ddd");
+            print("Ddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
             return contentScreenWidget;
           } else {
             //full screen state loading
@@ -147,8 +147,6 @@ extension FlowStateExtension on FlowState {
         builder: (BuildContext context) => StateRenderer(
             stateRendererType: stateRendererType,
             message: message,
-            retryActionFunction: () {}
-        )
-    );
+            retryActionFunction: () {}));
   }
 }

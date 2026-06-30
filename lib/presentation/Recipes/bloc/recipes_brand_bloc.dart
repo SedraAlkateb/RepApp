@@ -174,6 +174,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           emit(AllNumState(data));
         });
       }
+
       if (event is InsertReciEvent) {
         emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(

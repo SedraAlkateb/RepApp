@@ -36,7 +36,7 @@ class BrandPlanPage extends StatelessWidget {
                 //   onPressed: () => Navigator.pop(context),
                 // ),
                 title: Text(
-                  "خطة الماركة", // عنوان الصفحة
+                  "خطة المندوب", // عنوان الصفحة
                   style: TextStyle(
                     color: const Color(0xFF0D47A1), // اللون الأزرق الداكن للعنوان
                     fontWeight: FontWeight.bold,

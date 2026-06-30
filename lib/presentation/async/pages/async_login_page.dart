@@ -154,15 +154,12 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                           }
                           if (state is SyncDataErrorState) {
                             error(context, state.failure.massage, state.failure.code);
-                            BlocProvider.of<AsyncBloc>(context).add(OkEvent());
                           }
                           if (state is IsActiveErrorState) {
                             error(context, state.failure.massage, state.failure.code);
-                            BlocProvider.of<AsyncBloc>(context).add(OkEvent());
                           }
                           if (state is UpdateIsActiveErrorState) {
                             error(context, state.failure.massage, state.failure.code);
-                            BlocProvider.of<AsyncBloc>(context).add(OkEvent());
                           }
                           if (state is getDataSucState) {
                             BlocProvider.of<AsyncBloc>(context).add(SetDataSEvent());
@@ -181,7 +178,6 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                           }
                           if (state is EditStatusDErrorState) {
                             error(context, state.failure.massage, state.failure.code);
-                            BlocProvider.of<AsyncBloc>(context).add(OkEvent());
                           }
                           if (state is EditStatusDState) {
                             success(context);

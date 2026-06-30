@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
+// استدعاء كارد الطبيب الفردي المطور والسريع
 import 'package:domina_app/presentation/uniti/basic/doctor.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -14,56 +15,61 @@ class DoctorArchive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // لون الخلفية من الصورة يبدو فاتحاً جداً أو رمادي خفيف
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50], // خلفية ناعمة ومريحة للعين تعزل الكروت
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: CustomScrollView(
-            // فيزياء الحركة "Bouncing" تعطي إحساساً رائعاً عند السحب مثل الصورة
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              BlocBuilder<PlaceBloc, PlaceState>(
-                buildWhen: (previous, current) =>
-                current is AllDoctorArchiveByPlaceState ||
-                    current is AllDoctorArchiveByPlaceErrorState ||
-                    current is EmptyArchiveState,
-                builder: (context, state) {
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          child: BlocBuilder<PlaceBloc, PlaceState>(
+            buildWhen: (previous, current) =>
+            current is AllDoctorArchiveByPlaceState ||
+                current is AllDoctorArchiveByPlaceErrorState ||
+                current is EmptyArchiveState,
+            builder: (context, state) {
 
-                  // 1. حالة النجاح: نعرض البحث والقائمة كـ Slivers لكي يتحركوا معاً
-                  if (state is AllDoctorArchiveByPlaceState) {
-                    List<DoctorModel> doctorModel = state.searchData;
-                    return SliverMainAxisGroup(
-                      slivers: [
-                        // حقل البحث مغلف بـ SliverToBoxAdapter ليعمل داخل الـ CustomScrollView
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              SizedBox(height: 12.h),
-                              SearchField(
-                                searchController: searchDocController,
-                                onPressed: (value) {
-                                  BlocProvider.of<PlaceBloc>(context)
-                                      .add(SearchDoctorArchive(value, state.BaseData));
-                                },
-                              ),
-                              SizedBox(height: 16.h),
-                            ],
+              // 1. حالة النجاح وعرض البيانات
+              if (state is AllDoctorArchiveByPlaceState) {
+                List<DoctorModel> doctorModel = state.searchData;
+
+                return CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    // حقل البحث مدمج بسلاسة في الأعلى
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 12.h),
+                          SearchField(
+                            searchController: searchDocController,
+                            onPressed: (value) {
+                              BlocProvider.of<PlaceBloc>(context)
+                                  .add(SearchDoctorArchive(value, state.BaseData));
+                            },
                           ),
-                        ),
-                        // عرض قائمة الأطباء
-                        SliverToBoxAdapter(
-                          child: DoctorListWidget(doctorModel: doctorModel),
-                        ),
-                        // مسافة أمان في الأسفل
-                        SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-                      ],
-                    );
-                  }
+                          SizedBox(height: 16.h),
+                        ],
+                      ),
+                    ),
 
-                  // 2. حالة الخطأ: نستخدم SliverFillRemaining لتتوسط الشاشة
-                  if (state is AllDoctorArchiveByPlaceErrorState) {
-                    return SliverFillRemaining(
+                    // الحل السحري: بناء قائمة الأطباء بذكاء وسرعة صاروخية 🚀
+                    SliverList.builder(
+                      itemCount: doctorModel.length,
+                      itemBuilder: (context, index) {
+                        // نمرر طبيب واحد فقط لكل كارد ليتم بناء العناصر الظاهرة على الشاشة فقط
+                        return DoctorCardItem(doctor: doctorModel[index]);
+                      },
+                    ),
+
+                    // مسافة أمان مريحة في الأسفل بعد انتهاء القائمة
+                    SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+                  ],
+                );
+              }
+
+              // 2. حالة الخطأ
+              if (state is AllDoctorArchiveByPlaceErrorState) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(
                         child: errorFullScreen(
@@ -72,25 +78,33 @@ class DoctorArchive extends StatelessWidget {
                           func: () {},
                         ),
                       ),
-                    );
-                  }
+                    ),
+                  ],
+                );
+              }
 
-                  // 3. حالة القائمة فارغة
-                  if (state is EmptyArchiveState) {
-                    return SliverFillRemaining(
+              // 3. حالة القائمة فارغة
+              if (state is EmptyArchiveState) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(child: emptyFullScreen(context)),
-                    );
-                  }
+                    ),
+                  ],
+                );
+              }
 
-                  // 4. حالة التحميل
-                  return const SliverFillRemaining(
+              // 4. حالة التحميل الأساسي (Loading)
+              return const CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                },
-              ),
-            ],
+                    child: Center(child: CircularProgressIndicator(color: Colors.blue)),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

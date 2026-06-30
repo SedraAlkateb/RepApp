@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
@@ -11,243 +13,158 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BrandPlanOtherPage extends StatefulWidget {
   final OtherBrandSpPlanModel otherBrandSpPlanModel;
   final int index1;
-  @override
-  const BrandPlanOtherPage(
-      {super.key, required this.otherBrandSpPlanModel, required this.index1});
 
+  const BrandPlanOtherPage({
+    super.key,
+    required this.otherBrandSpPlanModel,
+    required this.index1
+  });
+
+  @override
   State<BrandPlanOtherPage> createState() => _BrandPlanOtherPageState();
 }
 
 class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
     with AutomaticKeepAliveClientMixin {
   int summ = 0;
+  final List<TextEditingController> _controllers = [];
+
   @override
   void initState() {
+    super.initState();
     for (var brand in widget.otherBrandSpPlanModel.brands) {
-      summ = summ + brand.amount;
+      summ += brand.amount;
+      _controllers.add(TextEditingController(
+          text: brand.amount == 0 ? "" : brand.amount.toString()));
     }
     BlocProvider.of<BrandPlanBloc>(context).sumS = summ;
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true, // السماح للكيبورد بالارتفاع بسلاسة
       appBar: AppBar(
           centerTitle: true,
           title: Text(widget.otherBrandSpPlanModel.specModel.title)),
       backgroundColor: ColorManager.white,
-      body: Container(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: BlocConsumer<BrandPlanBloc, BrandPlanState>(
-                    listener: (context, state) {
-                      if (state is SumErrorState) {
-                        error(
-                            context, state.failure.massage, state.failure.code);
-                        BlocProvider.of<BrandPlanBloc>(context)
-                            .add(UpdateEvent());
-                      }
-                    },
-                    builder: (context, state) {
-                      return ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) =>
-                            BlocBuilder<BrandPlanBloc, BrandPlanState>(
-                          builder: (context, state) {
-                            return Container(
-                              margin: EdgeInsets.all(AppPaddingH.p8),
-                              padding: EdgeInsets.all(AppPaddingH.p16),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(color: ColorManager.secondaryColor),
-                                ],
-                                color: ColorManager.white,
-                                border: Border.all(
-                                    color: ColorManager.secondaryColor7),
-                                borderRadius:  BorderRadius.all(
-                                    Radius.circular(AppSize.s8)),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Icon(
-                                            Icons.medication_outlined,
-                                            color: ColorManager.secondaryColor4,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            "العينة : ${widget.otherBrandSpPlanModel.brands[index].title}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headlineMedium,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: AppPaddingH.p8,
-                                            horizontal: AppPaddingW.p14,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: int.parse(widget
-                                                        .otherBrandSpPlanModel
-                                                        .brands[index]
-                                                        .brandType) ==
-                                                    1
-                                                ? ColorManager.secondaryColor1
-                                                : ColorManager.secondaryColor2,
-                                            borderRadius:
-                                                 BorderRadius.all(
-                                              Radius.circular(AppSize.s8),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            int.parse(widget
-                                                        .otherBrandSpPlanModel
-                                                        .brands[index]
-                                                        .brandType) ==
-                                                    1
-                                                ? "هدف"
-                                                : "مساعد",
-                                            style: TextStyle(
-                                              color: ColorManager.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Divider(color: ColorManager.secondaryColor7),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Icon(
-                                            Icons.medical_information_outlined,
-                                            color: ColorManager.secondaryColor4,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8), // مسافة صغيرة
-                                        Expanded(
-                                          child: Text(
-                                            "النوع : ${widget.otherBrandSpPlanModel.brands[index].phTitle}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headlineMedium,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Divider(color: ColorManager.secondaryColor7),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Text(
-                                            'العدد ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headlineMedium,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                10), // مسافة بين النص وحقل الإدخال
-                                        Expanded(
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                              hintText: widget
-                                                  .otherBrandSpPlanModel
-                                                  .brands[index]
-                                                  .amount
-                                                  .toString(),
-                                              enabled: UserInfo.otherstatus == 0
-                                                  ? true
-                                                  : state is SumErrorState
-                                                      ? false
-                                                      : false,
-                                              border: OutlineInputBorder(),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                vertical: 8,
-                                                horizontal: 10,
-                                              ),
-                                            ),
-                                            onChanged: (value) {
-                                              if (value.isNotEmpty &&
-                                                  value != "") {
-                                                print(value);
-                                                print("value");
-                                                BlocProvider.of<BrandPlanBloc>(
-                                                        context)
-                                                    .add(ChangeFieldEvent(
-                                                    int.parse(convertArabicNumberToEnglish(value)),
-                                                        widget.index1,
-                                                        index,
-                                                        widget
-                                                            .otherBrandSpPlanModel
-                                                            .brandm));
-                                              }
-                                            },
-                                            keyboardType: TextInputType.number,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+      body: BlocConsumer<BrandPlanBloc, BrandPlanState>(
+        // 🚀 الاستماع لحالة الخطأ المخصصة لعرض الدايالوج هنا بشكل مستقر
+        listenWhen: (previous, current) => current is SumErrorState,
+        listener: (context, state) {
+          if (state is SumErrorState) {
+            error(
+                context, state.failure.massage, state.failure.code);
+            BlocProvider.of<BrandPlanBloc>(context)
+                .add(UpdateEvent());
+          }
+        },
+        // ⚡ منع إعادة بناء القائمة كلياً أثناء الكتابة لإنهاء التعليق نهائياً
+        buildWhen: (previous, current) => false,
+        builder: (context, state) {
+          return ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: widget.otherBrandSpPlanModel.brands.length,
+            itemBuilder: (context, index) {
+              final brandItem = widget.otherBrandSpPlanModel.brands[index];
+              return Container(
+                margin: EdgeInsets.all(AppPaddingH.p8),
+                padding: EdgeInsets.all(AppPaddingH.p16),
+                decoration: BoxDecoration(
+                  boxShadow: [BoxShadow(color: ColorManager.secondaryColor.withOpacity(0.05), blurRadius: 4)],
+                  color: ColorManager.white,
+                  border: Border.all(color: ColorManager.secondaryColor7),
+                  borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.medication_outlined, color: ColorManager.secondaryColor4),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            "العينة : ${brandItem.title}",
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        itemCount: widget.otherBrandSpPlanModel.brands.length,
-                      );
-                    },
-                  )),
-            ),
-          ],
-        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: AppPaddingH.p8, horizontal: AppPaddingW.p14),
+                          decoration: BoxDecoration(
+                            color: brandItem.brandType.color.withOpacity(0.3),
+                            borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
+                          ),
+                          child: Text(
+                            brandItem.brandType.name,
+                            style: TextStyle(color:    brandItem.brandType.color, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Divider(color: ColorManager.secondaryColor7),
+                    Row(
+                      children: [
+                        Icon(Icons.medical_information_outlined, color: ColorManager.secondaryColor4),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            "النوع : ${brandItem.phTitle}",
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(color: ColorManager.secondaryColor7),
+                    Row(
+                      children: [
+                        Text('العدد ', style: Theme.of(context).textTheme.headlineMedium),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: _controllers[index],
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                            ),
+                            enabled: UserInfo.otherstatus == 0,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              final cleanValue = value.trim();
+                              final parsedNumber = cleanValue.isEmpty
+                                  ? 0
+                                  : int.tryParse(convertArabicNumberToEnglish(cleanValue)) ?? 0;
+
+                              BlocProvider.of<BrandPlanBloc>(context).add(
+                                ChangeFieldEvent(
+                                  parsedNumber,
+                                  widget.index1,
+                                  index,
+                                  widget.otherBrandSpPlanModel.brandm,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

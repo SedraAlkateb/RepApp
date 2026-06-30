@@ -838,11 +838,11 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
                     ),
                     SizedBox(height: 20),
                     BlocListener<RecipesBrandBloc, RecipesBrandState>(
-                      listener: (context, state) {
+                      listener: (context, state) async{
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
                         } else if (state is InsertRecipesState) {
-                          success(context);
+                          await dismissDialog(context);
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),

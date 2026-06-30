@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
@@ -29,44 +28,53 @@ class _TeamLeaderState extends State<TeamLeader>
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // 1. الهيدر: يظهر فوراً ولا يسبب Overflow لأنه داخل SliverToBoxAdapter
+          // 1. الهيدر
           SliverToBoxAdapter(
             child: _buildHeader(context),
           ),
 
-          // 2. المحتوى: يتم التحكم به عبر BlocBuilder ولكن داخل نظام الـ Slivers
+          // 2. المحتوى المعالج برمجياً بطريقة ذكية تمنع الـ Render Exception
           BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
             builder: (context, state) {
+              // ⚠️ تم تغيير watch إلى read هنا لأننا داخل الـ builder الخاص بالـ BlocBuilder لتجنب التكرار 불필요
               List<SeniorCityModel> seniors =
-                  context.watch<GeneralReportsBloc>().dataseniors;
+                  context.read<GeneralReportsBloc>().dataseniors;
 
-              // حالة التحميل: نستخدم SliverFillRemaining لمنع الخطأ
+              final double availableHeight = MediaQuery.of(context).size.height * 0.6;
+
+              // 🟢 حالة التحميل: استخدام SliverToBoxAdapter بدلاً من SliverFillRemaining
               if (state is TeamLeaderAndCityLoadingState) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(
-                    child: loadingShimmer(context, 8, 25, 25, BorderRadius.circular(20)),
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: availableHeight,
+                    child: Center(
+                      child: loadingShimmer(context, 8, 25, 25, BorderRadius.circular(20)),
+                    ),
                   ),
                 );
               }
 
-              // حالة الخطأ
+              // 🟢 حالة الخطأ
               if (state is TeamLeaderAndCityErrorState) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: errorFullScreen(context, func: () {}),
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: availableHeight,
+                    child: errorFullScreen(context, func: () {}),
+                  ),
                 );
               }
 
-              // حالة القائمة الفارغة
+              // 🟢 حالة القائمة الفارغة
               if (seniors.isEmpty) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: emptyFullScreen(context),
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: availableHeight,
+                    child: emptyFullScreen(context),
+                  ),
                 );
               }
 
-              // حالة عرض البيانات: نستخدم SliverList بدلاً من ListView العادي
+              // حالة عرض البيانات الطبيعية
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 sliver: AnimationLimiter(
@@ -150,7 +158,8 @@ class _TeamLeaderState extends State<TeamLeader>
         borderRadius: BorderRadius.circular(18),
         child: InkWell(
           onTap: () {
-            initGeneralReportsModule();
+            // ملاحظة: تفعيل الـ Module مسبقاً قبل التوجيه لمنع مشاكل الـ GetIt
+            // initGeneralReportsModule();
             Navigator.push(context, MaterialPageRoute(
               builder: (context) => SeniorByCityId(
                 cityname: senior.city_name,

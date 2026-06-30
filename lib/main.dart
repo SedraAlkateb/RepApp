@@ -18,7 +18,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 void main() async {
@@ -30,18 +30,32 @@ void main() async {
 
   // 3. تهيئة البيانات والمستخدم
   await _prepareUserData();
-
-  // 4. التشغيل
+  // FlutterError.onError =
+  //     FirebaseCrashlytics.instance.recordFlutterFatalError;
+  //
+  // PlatformDispatcher.instance.onError = (error, stack) {
+  //   FirebaseCrashlytics.instance.recordError(
+  //     error,
+  //     stack,
+  //     fatal: true,
+  //   );
+  //   return true;
+  // };  // 4. التشغيل
   runApp(Phoenix(child: const MyResponsiveApp()));
 }
+
 class MyResponsiveApp extends StatelessWidget {
   const MyResponsiveApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // 💡 جلب أبعاد الشاشة الحقيقية قبل البناء لتحديد مقاس التصميم المرجعي
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final bool isTabletDevice = deviceWidth > 450; // إذا كان العرض أكبر من 450 فهو تابلت
+
     return ScreenUtilInit(
-      // تثبيت مقاس التصميم المرجعي (الجوال) لضمان استقرار الأبعاد
-      designSize: const Size(360, 690),
+      // 🔥 إذا كان الجهاز تابلت نرفع المقاس المرجعي لـ (400x800) لمنع تضخم العناصر، وإلا نتركه مقاس الجوال الطبيعي
+      designSize: isTabletDevice ? const Size(400, 800) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -53,16 +67,24 @@ class MyResponsiveApp extends StatelessWidget {
           ],
           child: MaterialApp(
             builder: (context, widget) {
-              // تحديد نوع الجهاز باستخدام المكتبة
               final bool isTablet = ResponsiveBreakpoints.of(context).isTablet;
+              final mediaQueryData = MediaQuery.of(context);
 
               return MediaQuery(
-                data: MediaQuery.of(context).copyWith(
-                  // إذا كان تابلت، نستخدم معامل تصغير (0.8) بدلاً من التكبير
-                  // وإذا كان جوال نتركه كما هو (1.0)
-                  textScaleFactor: isTablet ? 0.8 : 1.0,
+                // استخدام الـ context المحدث الخاص بـ ScreenUtil لضمان تطبيق الأبعاد الجديدة والخطوط
+                data: mediaQueryData.copyWith(
+                  // 📉 تصغير حجم الخطوط بنسبة 25% إضافية على التابلت لتبدو متناسقة ومحترفة
+                  textScaleFactor: isTablet ? 0.75 : 1.0,
                 ),
-                child: widget!,
+                // 🚀 الحل الشامل: إضافة Padding سفلي ديناميكي يتحسس أزرار اللمس لجميع الأجهزة (موبايل + تابلت)
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: mediaQueryData.viewPadding.bottom > 0
+                        ? mediaQueryData.viewPadding.bottom // إذا كان النظام يفرص مسافة للأزرار أو حافة الآيفون السفلية
+                        : (isTablet ? 16.h : 8.h), // مسافة أمان احتياطية إذا كانت أزرار النظام مخفية (حتى لا تلتصق الكروت بالحافة)
+                  ),
+                  child: widget!,
+                ),
               );
             },
             debugShowCheckedModeBanner: false,
@@ -73,7 +95,6 @@ class MyResponsiveApp extends StatelessWidget {
     );
   }
 }
-
 /// تجميع كل إعدادات التهيئة التقنية في دالة واحدة
 Future<void> _setupAppRequirements() async {
   await ScreenUtil.ensureScreenSize();
@@ -90,44 +111,44 @@ Future<void> _setupAppRequirements() async {
     DeviceOrientation.portraitDown,
   ]);
 }
+
 Future<void> _prepareUserData() async {
   final isLoginSqlUsecase = IsLoginSqlUsecase(instance());
   final result = await isLoginSqlUsecase.execute();
 
-  await result.fold(
-          (failure) => UserInfo.isLogging = 0,
-          (data) async {
-        if (data != null && data.isLogin > 0) {
-          // 1. تعبئة البيانات
-          UserInfo.fillFromModel(data);
+  await result.fold((failure) => UserInfo.isLogging = 0, (data) async {
+    if (data != null && data.isLogin > 0) {
+      // 1. تعبئة البيانات
+      UserInfo.fillFromModel(data);
 
-          // 2. الفحص الفوري (لو المندوب فتح التطبيق في يوم الانتهاء أو بعده)
-          await _checkPlanExpiration();
+      // 2. الفحص الفوري (لو المندوب فتح التطبيق في يوم الانتهاء أو بعده)
+      await _checkPlanExpiration();
 
-          // 3. جدولة الإشعار (ليعمل تلقائياً الساعة 9 صباحاً في يوم الانتهاء)
-          await AlarmAndNotifications.scheduleExpirationNotification();
-        } else {
-          UserInfo.isLogging = 0;
-        }
-      }
-  );
+      // 3. جدولة الإشعار (ليعمل تلقائياً الساعة 9 صباحاً في يوم الانتهاء)
+      await AlarmAndNotifications.scheduleExpirationNotification();
+    } else {
+      UserInfo.isLogging = 0;
+    }
+  });
 }
 
 // دالة فحص انتهاء الصلاحية الفوري
 Future<void> _checkPlanExpiration() async {
-  if (UserInfo.isLogging != 0 && UserInfo.endDate != null && UserInfo.endDate != "") {
+  if (UserInfo.isLogging != 0 &&
+      UserInfo.endDate != null &&
+      UserInfo.endDate != "") {
     try {
       final String today = DateFormat("dd-MM-yyyy").format(DateTime.now());
       DateTime endDateTime = formatStringToDataTime(UserInfo.endDate!);
 
       // اليوم التالي للانقضاء (يوم المزامنة الإجباري)
-      String nextDay = DateFormat("dd-MM-yyyy").format(
-          endDateTime.add(const Duration(days: 1))
-      );
+      String nextDay = DateFormat("dd-MM-yyyy")
+          .format(endDateTime.add(const Duration(days: 1)));
 
       // حالة قفل التطبيق إذا تجاوزنا التاريخ
       if (UserInfo.isLogging != 5 && today == nextDay) {
-        EditIsLoginSqlUsecase editIsLoginSqlUsecase = EditIsLoginSqlUsecase(instance());
+        EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+            EditIsLoginSqlUsecase(instance());
         await editIsLoginSqlUsecase.execute(UserInfo.repId, 5);
         UserInfo.isLogging = 5;
       }
@@ -137,10 +158,9 @@ Future<void> _checkPlanExpiration() async {
   }
 }
 
-
 Future<void> _initNotifications() async {
   const AndroidInitializationSettings androidSettings =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
   const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -149,7 +169,7 @@ Future<void> _initNotifications() async {
   );
 
   const InitializationSettings initSettings =
-  InitializationSettings(android: androidSettings, iOS: iosSettings);
+      InitializationSettings(android: androidSettings, iOS: iosSettings);
 
   await flutterLocalNotificationsPlugin.initialize(settings: initSettings);
   await AlarmAndNotifications.initialize();
@@ -168,8 +188,9 @@ Future<void> requestNotificationPermission() async {
       print("🚫 تم رفض الإذن نهائيًا. يمكنك تفعيله من إعدادات النظام.");
     }
   } else if (Platform.isIOS) {
-    final iosPlugin = flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+    final iosPlugin =
+        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>();
     await iosPlugin?.requestPermissions(alert: true, badge: true, sound: true);
     print("✅ تم طلب صلاحيات الإشعارات على iOS.");
   }
@@ -180,11 +201,10 @@ Future<int?> sss() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   HttpOverrides.global = MyHttpOverrides();
 
-  IsLoginSqlUsecase isLoginSqlUsecase =  IsLoginSqlUsecase(instance());
+  IsLoginSqlUsecase isLoginSqlUsecase = IsLoginSqlUsecase(instance());
 
   final result = await isLoginSqlUsecase.execute();
-  await
-  result.fold((failure) {
+  await result.fold((failure) {
     return 0;
   }, (data) async {
     if (data != null && (data.isLogin > 0)) {
@@ -208,7 +228,10 @@ Future<int?> sss() async {
       UserInfo.flag = data.flag;
       UserInfo.flag1 = UserInfo.otherstatus == -1 ? 0 : data.flag1;
 
-      if ((UserInfo.isLogging != 0 )&&( UserInfo.endDate != null)&&(UserInfo.endDate!="0")&&(UserInfo.endDate!="")) {
+      if ((UserInfo.isLogging != 0) &&
+          (UserInfo.endDate != null) &&
+          (UserInfo.endDate != "0") &&
+          (UserInfo.endDate != "")) {
         final now = formatDateTimeFromDataTime(DateTime.now());
         print("UserInfo.endDate = ${UserInfo.endDate}");
         if (now == formatDateTime(UserInfo.endDate!)) {
@@ -216,19 +239,23 @@ Future<int?> sss() async {
         }
 
         String? nextDay = UserInfo.endDate != null
-            ? DateFormat("dd-MM-yyyy")
-            .format(formatStringToDataTime(UserInfo.endDate!).add(const Duration(days: 1)))
+            ? DateFormat("dd-MM-yyyy").format(
+                formatStringToDataTime(UserInfo.endDate!)
+                    .add(const Duration(days: 1)))
             : "";
 
         if (UserInfo.isLogging != 5 && now == nextDay) {
-          EditIsLoginSqlUsecase editIsLoginSqlUsecase = EditIsLoginSqlUsecase(instance());
-          (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold((failure) {
+          EditIsLoginSqlUsecase editIsLoginSqlUsecase =
+              EditIsLoginSqlUsecase(instance());
+          (await editIsLoginSqlUsecase.execute(UserInfo.repId, 5)).fold(
+              (failure) {
             return 0;
           }, (data) async {
             UserInfo.isLogging = 5;
           });
         }
       }
+      UserInfo.initializeUserPlan();
     } else {
       UserInfo.isLogging = 0;
     }
@@ -250,23 +277,24 @@ Future<void> _showEndDateNotification() async {
     playSound: true,
   );
 
-  const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
+  const NotificationDetails platformDetails =
+      NotificationDetails(android: androidDetails);
 
   await flutterLocalNotificationsPlugin.show(
     id: 2, // يجب إضافة id: هنا
     title: 'شركة دومِنا', // يجب إضافة title: هنا
-    body: 'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.', // يجب إضافة body: هنا
+    body:
+        'لقد وصلت إلى نهاية الخطة الحالية، يرجى ضغط زر المزامنة لرفع الزيارات وتحديث المعلومات.', // يجب إضافة body: هنا
     notificationDetails: platformDetails, // يجب إضافة notificationDetails: هنا
     payload: 'end_date_notification',
   );
 }
 
-
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
-

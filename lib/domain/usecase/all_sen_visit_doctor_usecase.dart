@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 class AllSenVisitDoctorUsecase extends Equatable {
   final Repository _repository;
   AllSenVisitDoctorUsecase(this._repository);
-  Future<Either<Failure, List<NoVisitDocModel>>> execute(int repDet) async{
-    return await _repository.visitDoc(repDet);
+  Future<Either<Failure, List<NoVisitDocModel>>> execute(int repDet,int planId) async{
+    return await _repository.visitDoc(repDet,planId);
   }
 
   @override

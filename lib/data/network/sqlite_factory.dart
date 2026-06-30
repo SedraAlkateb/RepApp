@@ -1,46 +1,65 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+// تغيير الاستيراد إلى sqlcipher
+import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
-  Batch? batch;
+
+  // تعريف التخزين الآمن للجهاز
+  final _secureStorage = const FlutterSecureStorage();
+
   factory DatabaseHelper() {
     return _instance;
   }
   DatabaseHelper._internal();
+
   Future<Database> get database async {
     if (_database != null) return _database!;
-
     _database = await _initDatabase();
     return _database!;
   }
 
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    await db.execute("PRAGMA foreign_keys = OFF");
-    List<Map<String, dynamic>> tables = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
-    for (var table in tables) {
-      String tableName = table['name'];
-      await db.execute("DROP TABLE IF EXISTS $tableName");
-    }
-    await _onCreate(db, newVersion);
-    await db.execute("PRAGMA foreign_keys = ON");
-  }
+  // دالة مخصصة للحصول على مفتاح التشفير أو إنشائه إن لم يكن موجوداً
+  Future<String> _getOrCreateEncryptionKey() async {
+    const keyName = 'db_encryption_key';
 
+    String? storedKey = await _secureStorage.read(key: keyName);
+
+    if (storedKey == null) {
+      // إذا لم يكن موجوداً، قم بتوليد مفتاح عشوائي قوي
+      var random = Random.secure();
+      var values = List<int>.generate(32, (i) => random.nextInt(256));
+      String newKey = base64Url.encode(values);
+
+      // ✅ والتصحيح هنا أيضاً عند الكتابة
+      await _secureStorage.write(key: keyName, value: newKey);
+      return newKey;
+    }
+
+    return storedKey;
+  }
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database1.db');
+
+    // جلب المفتاح السري الآمن
+    final encryptionKey = await _getOrCreateEncryptionKey();
+
     return await openDatabase(
       path,
       version: 5,
-      onUpgrade: _onUpgrade,
+      password: encryptionKey, // 👈 هنا يكمن السحر: يتم تشفير البيانات بالكامل بـ AES-256
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
       },
     );
   }
+
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''

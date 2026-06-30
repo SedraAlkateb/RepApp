@@ -56,8 +56,8 @@ Widget loadingShimmer(BuildContext context, int count, double? width,
     ),
   );
 }
-void error(BuildContext context, String massage, int code) {
-  dismissDialog(context);
+void error(BuildContext context, String massage, int code)async {
+  await dismissDialog(context);
   ErrorState(StateRendererType.popupErrorState, massage)
       .showPopup(context, StateRendererType.popupErrorState, massage);
 }
@@ -66,8 +66,9 @@ void loading(BuildContext context, {String? text}) {
       .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
 }
 Future<bool> success(BuildContext context) async{
+
   try {
-    ContentState().dismissDialog(context);
+   dismissDialog(context);
     return true;
   } catch (e) {
     print("ssssssssssssssssss: $e");
@@ -80,16 +81,19 @@ void successWithMessage(BuildContext context, String message) {
 }
 Future<bool> dismissDialog(BuildContext context) async {
   try {
-    if (_isCurrentDialogShowing(context)) {
+    // نتحقق مباشرة من الـ rootNavigator إذا كان لديه أي Dialog مفتوح يمكن إغلاقه
+    if (Navigator.of(context, rootNavigator: true).canPop()) {
       Navigator.of(context, rootNavigator: true).pop(true);
       print("Dialog dismissed successfully.");
+
+      // نمنح المعالج 50 ملي ثانية لإنهاء حركة الإغلاق والتأكد من استقرار الـ Context
+      await Future.delayed(const Duration(milliseconds: 50));
+      return true;
     }
-    return true;
+    print("No dialog found to dismiss.");
+    return false;
   } catch (e) {
-    print("ssssssssssssssssss: $e");
+    print("Error during dismissDialog: $e");
     return false;
   }
-}
-bool _isCurrentDialogShowing(BuildContext context) {
-  return ModalRoute.of(context)?.isCurrent != true;
 }

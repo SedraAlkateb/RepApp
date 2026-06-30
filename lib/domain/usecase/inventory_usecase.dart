@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 class AllInventoryUsecase extends Equatable {
   final Repository _repository;
   AllInventoryUsecase(this._repository);
-  Future<Either<Failure, List<InventoryModel>>> execute(int repDet) async{
-    return await _repository.getInventory(repDet);
+  Future<Either<Failure, List<InventoryModel>>> execute(int repDet,int planId ) async{
+    return await _repository.getInventory(repDet,planId);
   }
 
   @override

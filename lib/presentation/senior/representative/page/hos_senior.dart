@@ -66,7 +66,7 @@ class HospitalSenior extends StatelessWidget {
             BlocBuilder<SeniorProfBloc, SeniorProfState>(
               builder: (context, state) {
                 // جلب البيانات من الـ Bloc
-                List<HospitalModel> hospitalModel = context.watch<SeniorProfBloc>().hospital;
+                List<HospitalSpModel> hospitalModel = context.watch<SeniorProfBloc>().hospital;
 
                 if (state is SenAllHospitalsState) {
                   hospitalModel = state.hospital;
