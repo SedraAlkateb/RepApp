@@ -75,6 +75,7 @@ abstract class AppServiceClient {
   );
   @POST("/getDocVisit.php")//
   Future<VisitDoctorBaseResponse> getDocVisit(
+      /////////////////////////////////////////
     @Part(name: "repPlanId") String repPlanId,
     @Part(name: "representativeId") String representativeId,
   );
@@ -315,3 +316,4 @@ abstract class AppServiceClient {
       @Part(name: "planId") int planId,
       );
 }
+///admin/getinfoPlanBrandsType.php

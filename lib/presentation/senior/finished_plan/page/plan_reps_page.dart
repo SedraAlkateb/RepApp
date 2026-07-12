@@ -3,12 +3,29 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/report_finished_plan_user_page.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PlanRepsPage extends StatelessWidget {
+// 🌟 تم تحويل الكلاس إلى StatefulWidget لإنشاء وإدارة الـ TextEditingController الخاص بالبحث
+class PlanRepsPage extends StatefulWidget {
   const PlanRepsPage({Key? key}) : super(key: key);
+
+  @override
+  State<PlanRepsPage> createState() => _PlanRepsPageState();
+}
+
+class _PlanRepsPageState extends State<PlanRepsPage> {
+  // 🔍 متحكم حقل إدخال البحث لمراقبة النص ومسحه عند الحاجة
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    // 🛡️ تنظيف الـ Controller من الذاكرة فور إغلاق الصفحة لمنع تسريب الذاكرة (Memory Leak)
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +38,7 @@ class PlanRepsPage extends StatelessWidget {
       ),
       body: CustomScrollView(
         slivers: [
-          // 1. هيدر الصفحة
+          // 1. هيدر الصفحة الرئيسي
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(25.w, 20.h, 25.w, 10.h),
@@ -29,10 +46,23 @@ class PlanRepsPage extends StatelessWidget {
             ),
           ),
 
-          // 2. قائمة المندوبين المستمدة من الـ Bloc
+          // 🌟 2. شريط البحث الجديد (تم إضافته كـ Sliver مخصص)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              child:
+              SearchField(
+                  searchController: _searchController,
+                  onPressed: (value) {
+                    context.read<FinishedPlanBloc>().add(SearchPlanRepsEvent(value));
+                  }),
+            ),
+          ),
+
+          // 3. قائمة المندوبين المستمدة من الـ Bloc
           BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
             buildWhen: (previous, current) =>
-                current is PlanRepsLoading ||
+            current is PlanRepsLoading ||
                 current is PlanRepsLoaded ||
                 current is PlanRepsError,
             builder: (context, state) {
@@ -42,13 +72,29 @@ class PlanRepsPage extends StatelessWidget {
                   child: Center(child: CircularProgressIndicator()),
                 );
               } else if (state is PlanRepsLoaded) {
+                // 💡 التحقق في حال كانت القائمة المفلترة الممررة من الـ State فارغة (لا توجد نتائج بحث)
+                if (state.reps.isEmpty) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text(
+                        'لا يوجد نتائج تطابق البحث',
+                        style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+                      ),
+                    ),
+                  );
+                }
+
+                // عرض القائمة الحالية (المفلترة تلقائياً عبر الـ State)
                 return SliverPadding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        // تمرير كائن المندوب للبطاقة الجديدة المصممة أدناه
-                        return RepCard(repName: state.reps[index],repPlanId:  int.parse(state.reps[index].repPlan),);//
+                          (context, index) {
+                        return RepCard(
+                          repName: state.reps[index],
+                          repPlanId: int.parse(state.reps[index].repPlan),
+                        );
                       },
                       childCount: state.reps.length,
                     ),
@@ -87,7 +133,6 @@ class PlanRepsPage extends StatelessWidget {
                 color: ColorManager.medicalPrimary,
               ),
             ),
-            // شكل جمالي صغير (خط أزرق)
             Container(
               height: 4.h,
               width: 30.w,
@@ -122,7 +167,6 @@ class RepCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15.r),
-        // ظل خفيف جداً لإعطاء عمق
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -133,13 +177,10 @@ class RepCard extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
-        // أيقونة المستخدم الجانبية
         leading: CircleAvatar(
           backgroundColor: ColorManager.medicalPrimary.withOpacity(0.1),
-          child: Icon(Icons.person,
-              color: ColorManager.medicalPrimary, size: 20.sp),
+          child: Icon(Icons.person, color: ColorManager.medicalPrimary, size: 20.sp),
         ),
-        // عرض اسم المندوب بخط واضح
         title: Text(
           repName.name,
           style: TextStyle(
@@ -148,7 +189,6 @@ class RepCard extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
-        // سهم صغير للاشارة إلى قابلية النقر
         trailing: Icon(
           Icons.arrow_forward_ios,
           size: 14.sp,
@@ -160,7 +200,7 @@ class RepCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ReportFinishedPlanUserPage(
-                    id: int.parse(repName.id), repPlanId: repPlanId, name: repName.name??""),
+                    id: int.parse(repName.id), repPlanId: repPlanId, name: repName.name ?? ""),
               ));
         },
       ),

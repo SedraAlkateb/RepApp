@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_v
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/visit_detail_card.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/who_read_dialog.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
+import 'package:domina_app/presentation/uniti/share_watsapp.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +19,8 @@ class ReportVisitHospital extends StatelessWidget {
     required this.repId,
     required this.indexRep,
     required this.repName,
+    required this.phone,
+
     required this.repPlan,
     required this.iscanedite,
   });
@@ -25,6 +28,8 @@ class ReportVisitHospital extends StatelessWidget {
   final int userId;
   final int repId;
   final String repName;
+  final String phone;
+
   final int indexRep;
   final int repPlan;
   final bool iscanedite;
@@ -141,7 +146,7 @@ class ReportVisitHospital extends StatelessWidget {
                                     context: context,
                                     label: 'قراءة الكل',
                                     icon: Icons.bookmarks_rounded,
-                                    color: const Color(0xFF1E3A8A),
+                                    color: ColorManager.primary1,
                                     onTap: () {
                                       BlocProvider.of<ReportVisitDoctorBloc>(context).add(AllReadDocNoteEvent(readAll: ReadAll(repPlan, UserInfo.repId, 2, 1)));
                                     },
@@ -263,7 +268,22 @@ class ReportVisitHospital extends StatelessWidget {
                     builder: (context, state) {
                       return Row(
                         children: [
+                          buildIconWatsAppButton(
+
+                            onPressed: () {
+                              shareReportToWhatsApp(
+                                context: context,
+                                doctorName: doctorNoteModel.docTitle,
+                                specialty: doctorNoteModel.spTitle,
+                                scientificOfficeNote: doctorNoteModel.note,
+                                visitDate: doctorNoteModel.visitDate,
+                                phoneNumber: phone, // رقم الجوال من قاعدة البيانات
+                                repName: repName,
+                              );
+                            },
+                          ),
                           buildIconButton(
+                            false,
                             icon: Icons.visibility,
                             onPressed: () {
                               whoReadDialog(context, BlocProvider.of<ReportVisitDoctorBloc>(context));
@@ -272,6 +292,7 @@ class ReportVisitHospital extends StatelessWidget {
                           ),
                           SizedBox(width: 8.w),
                           buildIconButton(
+                            doctorNoteModel.flag,
                             icon: Icons.book_outlined,
                             isLoading: state is AsReadLoadingState,
                             onPressed: () {

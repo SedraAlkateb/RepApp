@@ -6,14 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // إضافة مكتبة البلوك
 
-class FinishedPlanPage extends StatelessWidget {
+class FinishedPlanPage extends StatefulWidget {
   const FinishedPlanPage({Key? key, required this.cityId}) : super(key: key);
   final int cityId;
 
   @override
+  State<FinishedPlanPage> createState() => _FinishedPlanPageState();
+}
+
+class _FinishedPlanPageState extends State<FinishedPlanPage> {
+  @override
+  void initState() {
+    context.read<FinishedPlanBloc>().add(GetFinishedPlansEvent(cityId: widget.cityId));
+
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     // إرسال الحدث لجلب البيانات بناءً على معرف المدينة
-    context.read<FinishedPlanBloc>().add(GetFinishedPlansEvent(cityId: cityId));
 
     return Scaffold(
       appBar: AppBar(
@@ -118,6 +128,7 @@ class PlanCard extends StatelessWidget {
     if (plan.active == "-1") {
       mainColor = Colors.blueGrey;
       statusText = "مؤرشفة";
+      ///////TODO
     } else if (plan.active == "0") {
       mainColor = Colors.redAccent;
       statusText = "منتهية";
@@ -239,10 +250,20 @@ class PlanCard extends StatelessWidget {
       return "خطة الشتاء";
     }
 
-    // 3. قائمة أسماء الأشهر العربية (تستخدم في حال كان التاريخ صحيحاً)
+// قائمة أسماء الأشهر العربية (تستخدم في حال كان التاريخ صحيحاً)
     List<String> months = [
-      "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-      "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+      "كانون الثاني", // يناير
+      "شباط",         // فبراير
+      "آذار",         // مارس
+      "نيسان",        // أبريل
+      "أيار",         // مايو
+      "حزيران",       // يونيو
+      "تموز",         // يوليو
+      "آب",           // أغسطس
+      "أيلول",        // سبتمبر
+      "تشرين الأول",  // أكتوبر
+      "تشرين الثاني", // نوفمبر
+      "كانون الأول"   // ديسمبر
     ];
 
     // 4. استخراج اسم الشهر والسنة

@@ -81,7 +81,7 @@ class AdminDashboardPage extends StatelessWidget {
                       subtitle: 'متابعة أداء المندوبين والزيارات اليومية',
                       iconColor: ColorManager.primaryBlue,
                       onTap: () {
-                        if(UserInfo.repType=="4"){
+                        if(UserInfo.repType.i==4||UserInfo.repType.i==5){
                           Navigator.pushNamed(context, Routes.allCitySupervisor);
                         }
                         else{
@@ -93,7 +93,7 @@ class AdminDashboardPage extends StatelessWidget {
 
                       },
                     ),
-                    UserInfo.repType == "4"?
+                    (UserInfo.repType.i==4||UserInfo.repType.i==5)?
                     InteractiveAdminCard(
                       icon: Icons.assignment_outlined,
                       title: 'إدارة التقارير العامة الخاصة بالسينيور',
@@ -104,24 +104,24 @@ class AdminDashboardPage extends StatelessWidget {
                         Navigator.pushNamed(context, Routes.allCitySeniors);
                       },
                     ):SizedBox(),
-                   ( UserInfo.repType == "5")?
-                    InteractiveAdminCard(
-                      icon: Icons.assignment_outlined,
-                      title: 'إدارة التقارير العامة الخاصة بالسينيور',
-                      subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                      iconColor: Colors.purple,
-                      onTap: () {
-                        initGeneralReportsModule();
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => SeniorByCityId(
-                            cityname: UserInfo.cityTitle,
-                            cityid: UserInfo.cityId,
-                          ),
-                        ));
-                        BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
-                      },
-                    ):SizedBox(),
-                    UserInfo.repType == "4"?
+                   // ( UserInfo.repType.i == 5)?
+                   //  InteractiveAdminCard(
+                   //    icon: Icons.assignment_outlined,
+                   //    title: 'إدارة التقارير العامة الخاصة بالسينيور',
+                   //    subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                   //    iconColor: Colors.purple,
+                   //    onTap: () {
+                   //      initGeneralReportsModule();
+                   //      Navigator.push(context, MaterialPageRoute(
+                   //        builder: (context) => SeniorByCityId(
+                   //          cityname: UserInfo.cityTitle,
+                   //          cityid: UserInfo.cityId,
+                   //        ),
+                   //      ));
+                   //      BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
+                   //    },
+                   //  ):SizedBox(),
+                    UserInfo.repType.i == 4?
                     InteractiveAdminCard(
                       icon: Icons.assignment_outlined,
                       title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
@@ -160,7 +160,7 @@ class AdminDashboardPage extends StatelessWidget {
                           subtitle: 'أرشيف الخطط',
                           iconColor: Colors.grey,
                           onTap: () { //TODO
-                            UserInfo.repType!="4"?
+                            UserInfo.repType.i!=4?
                             Navigator.pushNamed(
                               context,
                                 Routes.finishedPlan,

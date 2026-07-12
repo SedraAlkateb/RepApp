@@ -1,6 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class _AllCityState extends State<AllCityPlan> {
 
   @override
   void initState() {
-    BlocProvider.of<FinishedPlanBloc>(context).add(GetAllCityEventForPlan());
+    BlocProvider.of<AllCityBloc>(context).add(GetAllCityEvent());
     super.initState();
   }
 
@@ -42,14 +42,16 @@ class _AllCityState extends State<AllCityPlan> {
         _buildHeader(),
         // 3. قائمة المدن مع الأنيميشن
         Expanded(
-          child: BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
+          child: BlocBuilder<AllCityBloc, AllCityState>(
             buildWhen: (previous, current) => current is GetAllCityState||
                 current is AllCityLoadingState||
                 current is AllCityErrorState,
             builder: (context, state) {
               if (state is GetAllCityState) {
                 final List<CityModel> cities = state.cities;
-                return AnimationLimiter(
+                return
+                  cities.isEmpty?emptyFullScreen(context):
+                  AnimationLimiter(
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
@@ -75,7 +77,7 @@ class _AllCityState extends State<AllCityPlan> {
               }
               if (state is AllCityErrorState) {
                 return errorFullScreen(context,
-                    func: () => BlocProvider.of<FinishedPlanBloc>(context).add(const GetAllCityEventForPlan()));
+                    func: () => BlocProvider.of<AllCityBloc>(context).add(const GetAllCityEvent()));
               }
               return const SizedBox();
             },

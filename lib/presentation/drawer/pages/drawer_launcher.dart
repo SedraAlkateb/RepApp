@@ -12,27 +12,27 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String type = UserInfo.repType;
+    final int type = UserInfo.repType.i;
     // منطق توزيع الأدوار
-    if (type == "4") {
+    if (type == 4) {
       return CustomAppDrawer(
         roleTitle: "Supervisor",
         menuItems: _getSupervisorItems(context),
         showStats: false,
       );
-    } else if (type == "5") {
+    } else if (type == 5) {
       return CustomAppDrawer(
         roleTitle: "TeamLeader",
         menuItems: _getTeamLeaderItems(context),
         showStats: false,
       );
-    } else if (type == "6") {
+    } else if (type == 6) {
       return CustomAppDrawer(
         roleTitle: "senior",
         menuItems: _getSeniorItems(context),
         showStats: false,
       );
-    } else if (type == "7") {
+    } else if (type == 7) {
       return CustomAppDrawer(
         roleTitle: "مندوب",
         menuItems: _getRepresentativeItems(context),
@@ -226,53 +226,6 @@ class DrawerPage extends StatelessWidget {
           );
         },
       ),
-      // DrawerMenuItem(
-      //   icon: Icons.list_alt_outlined,
-      //   title: "إدارة تقارير المندوبين",
-      //   onTap:   () {
-      //     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //       Navigator.pushNamed(
-      //         context,
-      //         Routes.AllRepSenior,
-      //
-      //       );
-      //     });
-      //   },
-      // ),
-      // DrawerMenuItem(
-      //     icon:  Icons.assignment_outlined,
-      //     title: "إدارة تقارير عامة",
-      //     onTap:    () {
-      //       // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
-      //       Navigator.pushNamed(
-      //         context,
-      //         Routes.generalReports,
-      //
-      //       );
-      //     }
-      // ),
-      // DrawerMenuItem(
-      //   icon:  Icons.list_alt_outlined,
-      //   title: "إدارة الخطة الحالية",
-      //   onTap:       () {
-      //     Navigator.pushNamed(
-      //       context,
-      //       Routes.allRepWithFuture,
-      //     );
-      //   },
-      // ),
-      // DrawerMenuItem(
-      //     icon:  Icons.inventory_2_outlined,
-      //     title: "ادارة الخطط المنتهية",
-      //     onTap:        () {
-      //
-      //       Navigator.pushNamed(
-      //         context,
-      //         Routes.createOrder,
-      //
-      //       );
-      //     }
-      // ),
 
       DrawerMenuItem(
           icon: Icons.location_city_outlined,
@@ -283,6 +236,16 @@ class DrawerPage extends StatelessWidget {
 
           )),
       DrawerMenuItem(
+        icon: Icons.person_search_outlined,
+        title: "البحث عن طبيب او مشفى",
+        onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushNamed(
+            context,
+            Routes.searchdoctors,
+          );
+        }),
+      ),
+      DrawerMenuItem(
         icon: Icons.list_alt_outlined,
         title: "إدارة الخطة",
         onTap: () {
@@ -292,6 +255,24 @@ class DrawerPage extends StatelessWidget {
           );
         },
       ),
+      DrawerMenuItem(
+          icon: Icons.grid_view_outlined,
+          title: "الإختصاصات",
+          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushNamed(
+              context,
+              Routes.spec,
+            );
+          })),
+      DrawerMenuItem(
+          icon: Icons.medication_outlined,
+          title: "الأصناف الدوائية",
+          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushNamed(
+              context,
+              Routes.brand,
+            );
+          })),
       DrawerMenuItem(
           icon: Icons.edit_note_sharp,
           title: "إنشاء وصفة",
@@ -318,35 +299,9 @@ class DrawerPage extends StatelessWidget {
       //         Routes.createOrder,
       //       );
       //     }),
-      DrawerMenuItem(
-        icon: Icons.person_search_outlined,
-        title: "البحث عن طبيب او مشفى",
-        onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushNamed(
-            context,
-            Routes.searchdoctors,
-          );
-        }),
-      ),
+
       ///////////
-      DrawerMenuItem(
-          icon: Icons.grid_view_outlined,
-          title: "الإختصاصات",
-          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
-                  context,
-                  Routes.spec,
-                );
-              })),
-      DrawerMenuItem(
-          icon: Icons.medication_outlined,
-          title: "الأصناف الدوائية",
-          onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
-                  context,
-                  Routes.brand,
-                );
-              })),
+
     ];
   }
 
@@ -409,7 +364,7 @@ class DrawerPage extends StatelessWidget {
 
 List<DrawerMenuItem> getLogoutItem(BuildContext context) {
   return
-    UserInfo.repType=="7"?
+    UserInfo.repType==7?
     [
     DrawerMenuItem(
         icon: Icons.sync_outlined,

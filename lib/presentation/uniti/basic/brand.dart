@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -50,6 +51,7 @@ class BrandListWidget extends StatelessWidget {
             ],
           ),
         ),
+       brands.isEmpty?emptyFullScreen(context):
         ListView.builder(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           shrinkWrap: true,

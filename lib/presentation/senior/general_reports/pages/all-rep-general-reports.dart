@@ -211,6 +211,7 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                   indexRep: index,
                   senId: widget.repId,
                   repId: rep.id,
+                  phone: rep.number.toString(),
                 );
               },
             ));

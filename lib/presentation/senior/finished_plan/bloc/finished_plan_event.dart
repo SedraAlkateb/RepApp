@@ -18,9 +18,8 @@ class GetPlanRepsEvent extends FinishedPlanEvent {
   GetPlanRepsEvent({required this.planId});
 }
 
-class GetAllCityEventForPlan extends FinishedPlanEvent {
-  const GetAllCityEventForPlan();
 
-  @override
-  List<Object> get props => [];
+class SearchPlanRepsEvent extends FinishedPlanEvent {
+  final String query;
+  SearchPlanRepsEvent(this.query);
 }

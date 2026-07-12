@@ -1,17 +1,19 @@
-// ignore_for_file: must_be_immutable
 import 'package:domina_app/domain/models/models.dart';
+
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/widgets/editing_plan_assistant.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/widgets/editing_plan_target.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditingPlan extends StatelessWidget {
-  EditingPlan({super.key, required this.repPlan});
+  EditingPlan({super.key, required this.repPlan,required this.repName});
   final int repPlan;
+  final String repName;
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -27,6 +29,8 @@ class EditingPlan extends StatelessWidget {
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
+
+
           backgroundColor: const Color(0xFFF8F9FB), // خلفية ناعمة لإبراز العناصر
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -46,7 +50,7 @@ class EditingPlan extends StatelessWidget {
                     },
                   ),
                   title: Text(
-                    "تعديل خطة العلامة التجارية",
+                    "تعديل أصناف خطة ${repName}",
                     style: TextStyle(
                       color: ColorManager.secondaryColor1,
                       fontWeight: FontWeight.bold,
