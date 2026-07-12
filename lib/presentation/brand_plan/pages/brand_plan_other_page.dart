@@ -71,7 +71,9 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
         // ⚡ منع إعادة بناء القائمة كلياً أثناء الكتابة لإنهاء التعليق نهائياً
         buildWhen: (previous, current) => false,
         builder: (context, state) {
-          return ListView.builder(
+          return
+            widget.otherBrandSpPlanModel.brands.isEmpty?emptyFullScreen(context):
+            ListView.builder(
             padding: const EdgeInsets.all(16.0),
             itemCount: widget.otherBrandSpPlanModel.brands.length,
             itemBuilder: (context, index) {
@@ -99,17 +101,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: AppPaddingH.p8, horizontal: AppPaddingW.p14),
-                          decoration: BoxDecoration(
-                            color: brandItem.brandType.color.withOpacity(0.3),
-                            borderRadius: BorderRadius.all(Radius.circular(AppSize.s8)),
-                          ),
-                          child: Text(
-                            brandItem.brandType.name,
-                            style: TextStyle(color:    brandItem.brandType.color, fontWeight: FontWeight.bold),
-                          ),
-                        )
+                        Type.buildBadge(brandItem.brandType),
+
                       ],
                     ),
                     Divider(color: ColorManager.secondaryColor7),

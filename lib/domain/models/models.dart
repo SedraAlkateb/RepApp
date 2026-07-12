@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -61,13 +61,9 @@ class BrandSpPlanModel {
       print("\n---------------- [العنصر الرئيسي رقم: $i] ----------------");
 
       // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
-      if (mainItem.brandModel != null) {
-        print("  🔹 Brand ID: ${mainItem.brandModel.id}");
-        print(
-            "  🔹 Brand Title: ${mainItem.brandModel.title ?? '🛑 NULL (خطأ)'}");
-      } else {
-        print("  🛑 خطأ قاتل: brandModel نفسه قيمته NULL!");
-      }
+      print("  🔹 Brand ID: ${mainItem.brandModel.id}");
+      print(
+          "  🔹 Brand Title: ${mainItem.brandModel.title ?? '🛑 NULL (خطأ)'}");
 
       // طباعة مصفوفة الـ SpPlan الداخلية
       print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan?.length ?? 0}");
@@ -78,11 +74,11 @@ class BrandSpPlanModel {
           print("     🔸 [$j] Title: ${sp.title ?? '🛑 NULL (خطأ)'}");
 
           // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
-          if (sp.brandType == null) {
+          if (sp.brandType.name == null) {
             print(
                 "     🛑 كشف الخطأ الحقل brandType قيمته NULL في العنصر الرئيسي [$i] والفرعي [$j]!");
           } else {
-            print("     🔸 [$j] BrandType: '${sp.brandType}'");
+            print("     🔸 [$j] BrandType: '${sp.brandType.name}'");
           }
 
           print("     🔸 [$j] Amount: ${sp.amount}");
@@ -1178,7 +1174,7 @@ class LoginModel {
   String? otherStartDate;
   String? otherEndDate;
   int flag1;
-  String repType;
+  RepType repType;
   LoginModel(
       this.samplesCount,
       this.token,
@@ -1219,7 +1215,7 @@ class LoginModel {
       'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
-      'repType': repType
+      'repType': repType.i.toString()
     };
   }
 
@@ -1241,7 +1237,7 @@ class LoginModel {
       map['flag1'] ?? 0,
       map['cityId'] ?? 0,
       map['cityTitle'],
-      map['repType'] ?? "0",
+      RepType.fromIntS(map['repType']),
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );
@@ -1260,24 +1256,80 @@ class Type {
     return switch (value) {
       1 => Type(1, "هدف", color: Colors.blue),
       2 => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "لاشيء", color: Colors.grey),
+      _ => Type(3, "غير متوفر", color: Colors.grey),
     };
   }
-
+  static  Widget buildBadge(Type brandType) {
+    return
+      Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: brandType.color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(brandType.name,
+          style: TextStyle(
+              color: brandType.color, fontSize: 10.sp, fontWeight: FontWeight.bold)),
+    );
+  }
   static Type fromIntS(String? value) {
     return switch (value) {
       "1" => Type(1, "هدف", color: Colors.blue),
       "2" => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "لاشيء", color: Colors.grey),
+      _ => Type(3, "غير متوفر", color: Colors.grey),
     };
   }
 
   // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
   static Type fromName(String name) {
     return switch (name) {
-      "هدف" => Type(1, "هدف", color: ColorManager.secondaryColor1),
-      "مساعد" => Type(2, "مساعد", color: ColorManager.secondaryColor2),
-      _ => Type(3, "لاشيء", color: Colors.grey),
+      "هدف" => Type(1, "هدف", color: Colors.blue),
+      "مساعد" => Type(2, "مساعد", color: Colors.orange),
+      _ => Type(3, "غير متوفر", color: Colors.grey),
+    };
+  }
+
+  // 3️⃣ التابع الثالث: تستدعيه من الـ Type نفسه -> يعطيك الرقم
+  int toInt() {
+    return this.i;
+  }
+}
+class RepType {
+  int i;
+  String name;
+  Color color;
+
+  RepType(this.i, this.name, {this.color = Colors.grey});
+
+  // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
+  static RepType fromInt(int value) {
+    return switch (value) {
+      4 => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+      5 => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      6 => RepType(6, "senior",     color: const Color(0xFF4A7FA7)), // splash1
+      7 => RepType(7, "مندوب",      color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      _ => RepType(8, "other",      color: const Color(0xFF94A3B8)), // رمادي ناعم
+    };
+  }
+
+  static RepType fromIntS(String? value) {
+    return switch (value) {
+      "4" => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+      "5" => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      "6" => RepType(6, "senior",     color: const Color(0xFF4A7FA7)), // splash1
+      "7" => RepType(7, "مندوب",      color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      _ => RepType(8, "other",      color: const Color(0xFF94A3B8)), // رمادي ناعم
+    };
+  }
+
+  // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
+  static RepType fromName(String name) {
+    return switch (name) {
+      "supervisor" => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+      "teamleader" => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      "senior" => RepType(6, "senior",     color: const Color(0xFF4A7FA7)), // splash1
+      "مندوب" => RepType(7, "مندوب",      color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      _ => RepType(8, "other",      color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
 
@@ -1290,19 +1342,19 @@ class Type {
 final List<Type> type = [
   Type(0, "دفاتر", color: Colors.cyan),
   Type(1, "عينات", color: Colors.lime),
-  Type(2, "لاشيء", color: Colors.teal),
+  Type(2, "غير متوفر", color: Colors.teal),
 ];
 final List<Type> brandType = [
   Type(1, "هدف", color: Colors.blue),
   Type(2, "مساعد", color: Colors.orange),
-  Type(3, "لاشيء", color: Colors.grey),
+  Type(3, "غير متوفر", color: Colors.grey),
 ];
 
 class BrandSpModel {
   int id;
   int spId;
   int brandId;
-  String brandType;
+  Type brandType;
   BrandSpModel(this.id, this.spId, this.brandId, this.brandType);
 
   Map<String, dynamic> toMap() {
@@ -1310,13 +1362,13 @@ class BrandSpModel {
       'id': id,
       'spId': spId,
       'brandId': brandId,
-      'brandType': brandType,
+      'brandType': brandType.i,
     };
   }
 
   factory BrandSpModel.fromMap(Map<String, dynamic> map) {
     return BrandSpModel(
-        map['id'], map['spId'], map['brandId'], map['brandType']);
+        map['id'], map['spId'], map['brandId'], Type.fromInt(map['brandType']));
   }
 }
 
@@ -1375,7 +1427,7 @@ class PlanBrandsSp {
   int id;
   int spId;
   int brandId;
-  String brandType;
+  Type brandType;
   String titleAr;
   String phTitle;
   String totalAmount;
@@ -1388,7 +1440,7 @@ class PlanBrandsSp {
       'id': id,
       'spId': spId,
       'brandId': brandId,
-      'brandType': brandType,
+      'brandType': brandType.i,
       'titleAr': titleAr,
       'phTitle': phTitle,
       'totalAmount': totalAmount,
@@ -1397,7 +1449,7 @@ class PlanBrandsSp {
 
   factory PlanBrandsSp.fromMap(Map<String, dynamic> map) {
     return PlanBrandsSp(map['id'], map['spId'], map['brandId'],
-        map['brandType'], map['titleAr'], map['phTitle'], map['totalAmount']);
+        Type.fromInt(map['brandType']), map['titleAr'], map['phTitle'], map['totalAmount']);
   }
 }
 
@@ -1458,7 +1510,7 @@ class ExceptionModel {
 class PlanBrandSqlModel {
   int id;
   int repPlanId;
-  String brandType;
+  Type brandType;
   int amount;
   String phTitle;
   String brandTitle;
@@ -1479,7 +1531,7 @@ class PlanBrandSqlModel {
     return {
       'id': id.toString(),
       'repPlanId': repPlanId.toString(),
-      'brandType': brandType.toString(),
+      'brandType': brandType.i.toString(),
       'amount': amount.toString(),
       'phTitle': phTitle.toString(),
       'brandTitle': brandTitle.toString(),
@@ -1492,7 +1544,7 @@ class PlanBrandSqlModel {
     return PlanBrandSqlModel(
         map['id'],
         map['repPlanId'],
-        map['brandType'],
+        Type.fromInt(map['brandType']),
         int.parse(convertArabicNumberToEnglish(map['amount'])),
         map['phTitle'],
         map['brandTitle'],
@@ -1795,10 +1847,6 @@ class FlagModel {
         return "بانتظار موافقة المندوب";
       case 1:
         return "بانتظار موافقة المشرف";
-      case 2:
-        return "فعالة";
-      case 3:
-        return "منتهية";
       case 4:
         return "بانتظار موافقة المستودع";
       case 5:
@@ -1809,8 +1857,18 @@ class FlagModel {
         return "خطأ";
     }
   }
-}
 
+  // 🌟 أضف هذين السطرين السحريين هنا لحل مشكلة الـ الـ Exception والأمان عند الـ Rebuild:
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is FlagModel &&
+              runtimeType == other.runtimeType &&
+              flag == other.flag;
+
+  @override
+  int get hashCode => flag.hashCode;
+}
 class InventoryModel {
   String title;
   String used;
@@ -2085,7 +2143,7 @@ class AllRepresentativeFuture {
   String name;
   FlagModel flag;
   int samplesCount;
-  String reptype;
+  RepType reptype;
 
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan,
       this.samplesCount, this.reptype);
@@ -2094,7 +2152,7 @@ class AllRepresentativeFuture {
 class WhoReadModel {
   String userId;
   String name;
-  String repType;
+  RepType repType;
   String role;
 
   WhoReadModel(this.userId, this.name, this.repType, this.role);
@@ -2150,17 +2208,71 @@ class SearchHospitalNoteModel {
   SearchHospitalNoteModel(
       this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);
 }
+ List<FlagModel> getAllFlags(int repType){
+  List<FlagModel> allFlag=[];
+  if(repType==7){
+    allFlag.addAll(  [
+      FlagModel(1),
+      FlagModel(5),
+      FlagModel(0),
+    ]);
 
-List<FlagModel> allFlags = [
-  FlagModel(0),
-  FlagModel(1),
-  FlagModel(2),
-//  FlagModel(3),
-  // FlagModel(4),
-  FlagModel(5),
-  FlagModel(6),
-];
+  }else
+  if(repType==6){
+    allFlag.addAll(  [
+      FlagModel(1),
+      FlagModel(5),
+      FlagModel(6),
+    ]);
 
+  }else if(repType==5){
+    allFlag.addAll(  [
+      FlagModel(5),
+      FlagModel(1),
+    ]);
+
+  }
+  if(UserInfo.repType.i==4){
+    allFlag.add(   FlagModel(4),);
+  }
+  return allFlag;
+}
+
+Color getColor(int flag) {
+  switch (flag) {
+    case 0:
+    // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
+      return const Color(0xFF0288D1);
+
+    case 1:
+    // بانتظار موافقة المشرف: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
+      return const Color(0xFFE53935);
+
+    case 2:
+    // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
+      return const Color(0xFF43A047);
+
+    case 3:
+    // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
+      return const Color(0xFF37474F);
+
+    case 4:
+    // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
+      return const Color(0xFF00897B);
+
+    case 5:
+    // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
+      return const Color(0xFFFB8C00);
+
+    case 6:
+    // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
+      return const Color(0xFF5E35B1);
+
+    default:
+    // الحالة الافتراضية: الكحلي الأساسي للتطبيق
+      return const Color(0xFF0D47A1);
+  }
+}
 class StatusPlanModel {
   String name;
   int id;

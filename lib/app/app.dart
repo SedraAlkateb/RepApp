@@ -249,10 +249,10 @@ String _getInitialRoute() {
   if (UserInfo.isLogging == 4) return Routes.syncData;
   if (UserInfo.isLogging == 5) return Routes.asyncIn;
   if (UserInfo.isLogging == 2) {
-    if(UserInfo.repType=="7"){
+    if(UserInfo.repType.i==7){
       return Routes.places;
 
-    }else if( UserInfo.repType=="6"){
+    }else if( UserInfo.repType.i==6){
       return Routes.AllRepSenior;
     }else{
       return Routes.adminControl;

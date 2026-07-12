@@ -16,7 +16,7 @@ import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
 import 'package:domina_app/presentation/senior/all_city/pages/all_city_for_rep_super.dart';
-import 'package:domina_app/presentation/senior/finished_plan/page/all_city-plan.dart';
+import 'package:domina_app/presentation/senior/all_city/pages/all_city-plan.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/finished_plan_page.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
@@ -115,14 +115,14 @@ class Routes {
   static const String seniorByCityId = "/seniorByCityId";
   static const String adminControl = "/adminControl";
 
-  static const String allCitySeniors = "/allCitySeniors";
+  static const String allCitySeniors = "/allCitySeniors";/////////ToDo
   static const String teamLeader = "/teamLeader";
   static const String doctorAndHospitalArchive = "/doctorAndHospitalArchive";
   static const String finishedPlan = "/finishedPlan";
   static const String planReps = "/planReps";
   static const String createCurrentPlan = "/createCurrentPlan";
   static const String cityPlan = "/cityPlan";
-  static const String allCitySupervisor = "/allCitySupervisor";
+  static const String allCitySupervisor = "/allCitySupervisor";/////////ToDo
 
 }
 
@@ -288,13 +288,7 @@ class RouteGenerator {
         return _animatedRoute( RemainingVisits());
       case Routes.senVisitDoctor:
         return _animatedRoute( SenVisitDoctor());
-      case Routes.EditingPlan:
-        iniEditBrandPlanModule();
-        return _animatedRoute(
-           EditingPlan(
-            repPlan: 7,
-          )
-        );
+
       case Routes.searchdoctors:
         iniSearchDoctorsModule();
         return _animatedRoute(
@@ -358,7 +352,7 @@ class RouteGenerator {
         initCurrentPlanModule();
         return _animatedRoute( PlanHelpGoalTap());
       case Routes.cityPlan:
-        initFinishedPlan();
+        iniAllCityModule();
         return _animatedRoute(AllCityPlan());
 
 

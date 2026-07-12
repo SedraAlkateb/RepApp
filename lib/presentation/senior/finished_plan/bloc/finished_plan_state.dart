@@ -40,11 +40,12 @@ class PlanRepsLoading extends FinishedPlanState {}
 
 // 3. حالة النجاح (تحتوي على قائمة الخطط المستلمة)
 class PlanRepsLoaded extends FinishedPlanState {
- final List<PlanRepsModel> reps;
-  const PlanRepsLoaded(this.reps);
+  final List<PlanRepsModel> reps;        // القائمة التي تظهر للمستخدم (المفلترة)
+  final List<PlanRepsModel> allOriginalReps; // 🌟 النسخة الأصلية الكاملة للاستخدام عند البحث
 
+  PlanRepsLoaded({required this.reps, required this.allOriginalReps});
   @override
-  List<Object> get props => [reps];
+  List<Object> get props => [reps,allOriginalReps];
 }
 
 // 4. حالة الخطأ (تحتوي على رسالة الخطأ)
@@ -55,25 +56,4 @@ class PlanRepsError extends FinishedPlanState {
 
   @override
   List<Object> get props => [message];
-}
-final class AllCityErrorState extends FinishedPlanState {
-
-  final Failure failure;
-  const AllCityErrorState({required this.failure});
-  @override
-
-  List<Object> get props=>[failure];
-}
-
-final class AllCityLoadingState extends FinishedPlanState {
-  const AllCityLoadingState();
-  @override
-  List<Object> get props => [];
-}
-
-final class GetAllCityState extends FinishedPlanState {
-  final List<CityModel> cities;
-  const GetAllCityState(this.cities);
-  @override
-  List<Object> get props =>[cities];
 }

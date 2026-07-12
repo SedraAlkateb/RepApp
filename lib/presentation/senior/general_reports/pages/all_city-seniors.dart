@@ -48,7 +48,9 @@ class _AllCityState extends State<AllCitySeniors> {
             builder: (context, state) {
               if (state is GetAllCityState) {
                 final List<CityModel> cities = state.cities;
-                return AnimationLimiter(
+                return
+                  cities.isEmpty?emptyFullScreen(context):
+                  AnimationLimiter(
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),

@@ -46,7 +46,9 @@ class _EditingPlanTargetState extends State<EditingPlanTarget> with AutomaticKee
                 if (state is FutureSpRepLoadingState) return loadingFullScreen(context);
                 if (state is FutureSpRepErrorState) return errorFullScreen(context, func: () {});
 
-                return ListView.builder(
+                return
+                  planBrand.isEmpty?emptyFullScreen(context):
+                  ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 90.h),
                   itemCount: planBrand.length,

@@ -16,12 +16,15 @@ class DoctorsHospitalsReports extends StatefulWidget {
     required this.senId,
     required this.indexRep,
     required this.repName,
-  });
+    required this.phone,
+
+});
 
   final int repId;
   final int senId;
   final int indexRep;
   final String repName;
+  final String phone;
 
   @override
   State<DoctorsHospitalsReports> createState() => _DoctorsHospitalsReportsState();
@@ -150,6 +153,7 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
                 repName: widget.repName,
                 indexRep: widget.indexRep,
                 repPlan: 0,
+                phone: widget.phone,
                 iscanedite: false,
               ),
               ReportVisitHospital(
@@ -159,6 +163,7 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
                 repName: widget.repName,
                 repPlan: 0,
                 iscanedite: false,
+                phone: widget.phone,
               ),
             ],
           ),

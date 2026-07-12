@@ -15,6 +15,7 @@ class MainSearchPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+
         backgroundColor: const Color(0xFFF8F9FB), // لون الخلفية الموحد للتطبيق
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {

@@ -15,12 +15,12 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
   // تعريف الـ Usecase كمتغير نهائي لضمان عدم تغييره
   final FinishedPlansUsecase finishedPlansUsecase;
   final GetPanRepsUsecase getPanRepsUsecase;
-  final AllCityUsecase allcityUsecase;
-  FinishedPlanBloc(this.finishedPlansUsecase,this.getPanRepsUsecase,this.allcityUsecase) : super(FinishedPlanInitial()) {
+
+  FinishedPlanBloc(this.finishedPlansUsecase,this.getPanRepsUsecase) : super(FinishedPlanInitial()) {
     // تسجيل الأحداث: هنا نربط الحدث بالدالة المسؤولة عنه فقط
     on<GetFinishedPlansEvent>(_onGetFinishedPlans);
     on<GetPlanRepsEvent>(_onGetPlanReps);
-    on<GetAllCityEventForPlan>(_onGetCity);
+    on<SearchPlanRepsEvent>(_onSearchReps);
 
   }
 
@@ -67,31 +67,33 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
       },
           (data) {
         // في حال النجاح، نرسل البيانات المستلمة للواجهة
-        emit(PlanRepsLoaded(data));
+        emit(PlanRepsLoaded(allOriginalReps: data,reps: data));
       },
     );
   }
+  void _onSearchReps(SearchPlanRepsEvent event, Emitter<FinishedPlanState> emit) {
 
-  Future<void> _onGetCity(
-      GetAllCityEventForPlan event,
-      Emitter<FinishedPlanState> emit,
-      ) async {
-    // 1. تغيير الحالة إلى "تحميل" لإبلاغ الواجهة
-    emit(AllCityLoadingState());
+    if (state is PlanRepsLoaded) {
 
-    // 2. طلب البيانات من طبقة الـ Domain وانتظار النتيجة
-    final result = await allcityUsecase.execute();
+      final currentState = state as PlanRepsLoaded;
+      final originalList = currentState.allOriginalReps; // 🌟 سحب النسخة النظيفة من الـ State
 
-    // 3. معالجة النتيجة القادمة (إما فشل Failure أو نجاح Success)
-    result.fold(
-          (failure) {
-        // في حال حدوث خطأ، نرسل حالة الخطأ مع الرسالة
-        emit(AllCityErrorState( failure: failure));
-      },
-          (data) {
-        // في حال النجاح، نرسل البيانات المستلمة للواجهة
-        emit(GetAllCityState(data));
-      },
-    );
+      if (event.query.isEmpty) {
+
+        emit(PlanRepsLoaded(reps: originalList, allOriginalReps: originalList));
+      } else {
+
+        final filteredList = originalList
+            .where((rep) {
+         return rep.name.toLowerCase().contains(event.query.toLowerCase());
+        })
+            .toList();
+        print("filteredList.length");
+
+        print(filteredList.length);
+        emit(PlanRepsLoaded(reps: filteredList, allOriginalReps: originalList));
+      }
+    }
   }
+
 }

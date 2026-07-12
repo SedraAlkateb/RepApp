@@ -509,10 +509,11 @@ Future<void> initCurrentPlanModule() async {
       instance
           .registerFactory<CheckActiveBrandPlanUsecase>(() => CheckActiveBrandPlanUsecase(instance()));
     }
-    if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
+    if (!GetIt.I.isRegistered<GetInfoPlanBrandsUsecase>()) {
       instance
-          .registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+          .registerFactory<GetInfoPlanBrandsUsecase>(() => GetInfoPlanBrandsUsecase(instance()));
     }
+
     instance.registerFactory<PlanManagementBloc>(
             () => PlanManagementBloc(instance(),instance(),instance(),instance()));
   }
@@ -647,9 +648,10 @@ Future<void> initSeniorReportInventoryModule() async {
 }
 
 Future<void> initActivePlanModule() async {
+  if (!GetIt.I.isRegistered<ActivePlanBloc>()) {
   if (!GetIt.I.isRegistered<GetInfoPlanBrandsUsecase>()) {
     instance.registerFactory<GetInfoPlanBrandsUsecase>(
-        () => GetInfoPlanBrandsUsecase(instance()));
+        () => GetInfoPlanBrandsUsecase(instance()));}
     instance.registerFactory<ActivePlanBloc>(() => ActivePlanBloc(instance()));
   }
 }
@@ -795,8 +797,6 @@ Future<void> initSeniorManageFutureModule() async {
 Future<void> iniAllCityModule() async {
   if (!GetIt.I.isRegistered<AllCityUsecase>()) {
     instance.registerFactory<AllCityUsecase>(() => AllCityUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<AllCityBloc>()) {
     instance.registerFactory<AllCityBloc>(() => AllCityBloc(instance()));
   }
 }
@@ -806,10 +806,7 @@ Future<void> initFinishedPlan() async {
     instance.registerFactory<GetPanRepsUsecase>(() => GetPanRepsUsecase(instance()));
 
   }
-  if (!GetIt.I.isRegistered<AllCityUsecase>()) {
-    instance.registerFactory<AllCityUsecase>(() => AllCityUsecase(instance()));
-  }
   if (!GetIt.I.isRegistered<FinishedPlanBloc>()) {
-    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance(),instance(),instance()));
+    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance(),instance()));
   }
 }

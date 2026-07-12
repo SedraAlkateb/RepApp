@@ -113,7 +113,9 @@ class _PlacesArchiveState extends State<PlacesArchive> {
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.builder(
+                child:
+                placeModel.isEmpty?emptyFullScreen(context):
+                ListView.builder(
                   itemCount: placeModel.length,
                   itemBuilder: (context, index) {
                     return AnimatedPlaceCard(

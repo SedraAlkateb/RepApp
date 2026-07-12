@@ -5,10 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField(
-      {super.key, required this.searchController, this.onPressed});
+
+      {super.key, required this.searchController, this.onPressed,this.isIcon});
   final TextEditingController searchController;
   final Function(String)? onPressed;
-
+  final bool? isIcon;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,11 +26,11 @@ class SearchField extends StatelessWidget {
                 fillColor: ColorManager.white,
                 border: InputBorder.none,
                 isDense: true,
-                suffixIcon: Icon(
+                suffixIcon:isIcon==true? Icon(
                   Icons.search,
                   color: ColorManager.medicalMuted,
                   size: AppSize.s28,
-                ),
+                ):null,
 
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),

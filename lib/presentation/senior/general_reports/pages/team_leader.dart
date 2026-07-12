@@ -1,8 +1,11 @@
 // ignore_for_file: must_be_immutable
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
+import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -158,16 +161,32 @@ class _TeamLeaderState extends State<TeamLeader>
         borderRadius: BorderRadius.circular(18),
         child: InkWell(
           onTap: () {
+            initSeniorModule();
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return AllRepSeniorGenerlReports(
+                  cityname: senior.city_name,
+                  cityId: int.parse(senior.city_id),
+                  repId: int.parse(senior.rep_id),
+                );
+              },
+            ));
+            print("rep_id:${senior.rep_id}");
+            BlocProvider.of<SeniorRepsBloc>(context).add(
+                AllSeniorRepEvent(
+                    int.parse(senior.city_id),
+                    int.parse(senior.rep_id)
+                ));
             // ملاحظة: تفعيل الـ Module مسبقاً قبل التوجيه لمنع مشاكل الـ GetIt
             // initGeneralReportsModule();
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => SeniorByCityId(
-                cityname: senior.city_name,
-                cityid: int.parse(senior.city_id),
-              ),
-            ));
-            BlocProvider.of<GeneralReportsBloc>(context)
-                .add(GetSeniorByCityIdEvent(int.parse(senior.city_id)));
+            // Navigator.push(context, MaterialPageRoute(
+            //   builder: (context) => SeniorByCityId(
+            //     cityname: senior.city_name,
+            //     cityid: int.parse(senior.city_id),
+            //   ),
+            // ));
+            // BlocProvider.of<GeneralReportsBloc>(context)
+            //     .add(GetSeniorByCityIdEvent(int.parse(senior.city_id)));
           },
           child: Padding(
             padding: const EdgeInsets.all(18.0),

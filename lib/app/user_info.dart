@@ -1,3 +1,4 @@
+import 'package:domina_app/domain/models/models.dart';
 class UserInfo {
   static int percentage = 0;
   static int repId = 0;
@@ -21,7 +22,7 @@ class UserInfo {
   static int visited = -1;
   static int flag1 = 0;
   static int version = 4;
-  static String repType = "0";
+  static RepType  repType = RepType(8, "other");
   static int numOfDoctorVisit = -1;
   static int numOfHospitalVisit = -1;
   static bool isScreenWidth = false;
@@ -30,31 +31,17 @@ class UserInfo {
   static int numHospital = 0;
   static int statusPlan =  -1;
   static void initializeUserPlan() {
-    statusPlan = UserInfo.repType == "5"
+    statusPlan = UserInfo.repType.i == 5
         ? 5
-        : UserInfo.repType == "4"
+        : UserInfo.repType.i == 4
         ? 1
-        : UserInfo.repType == "6"
+        : UserInfo.repType.i == 6
         ? 6
-        : UserInfo.repType == "7"
+        : UserInfo.repType.i == 7
         ? 0
         : -1;
   }
-  static String getRepType(String repType) {
-    switch (repType) {
-      case "4":
-        return "supervisor";
-      case "5":
-        return "TeamLeader";
-      case "6":
-        return "Senior";
-      case "7":
-        return "مندوب";
-      default:
-        return "خطأ";
-    }
 
-  }
 
   /// 🔹 الدالة الجديدة لتعبئة البيانات من الموديل مباشرة
   static void fillFromModel(dynamic data) {

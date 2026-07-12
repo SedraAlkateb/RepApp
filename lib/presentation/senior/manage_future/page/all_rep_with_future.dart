@@ -60,7 +60,9 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
                     BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
                     _refreshController.refreshCompleted();
                   },
-                  child: ListView.builder(
+                  child:
+                  allRepresentative.isEmpty?emptyFullScreen(context):
+                  ListView.builder(
                     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                     itemCount: allRepresentative.length,
                     itemBuilder: (context, index) {
@@ -80,29 +82,29 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
 
   Widget _buildRepItem(AllRepresentativeFuture rep, int index) {
     bool isSelected = selectedIndex == index;
+
     return GestureDetector(
       onTap: () => setState(() => selectedIndex = isSelected ? -1 : index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOutQuart,
-        margin: EdgeInsets.only(bottom: 16.h, left: 4.w, right: 4.w),
+        duration: const Duration(milliseconds: 400), // تقليل المدة قليلاً لسرعة استجابة بصرية أعلى
+        curve: Curves.easeInOutCubic,
+        margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w), // ضبط متناسق للهوامش الخارجية
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(22.r),
-          // إضافة ظل ناعم جداً ملون عند الاختيار
+          borderRadius: BorderRadius.circular(20.r), // حواف أكثر عصرية ونعومة
           boxShadow: [
             BoxShadow(
               color: isSelected
-                  ? ColorManager.secondaryColor1.withOpacity(0.15)
-                  : Colors.black.withOpacity(0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
+                  ? ColorManager.secondaryColor1.withOpacity(0.08) // تقليل الشفافية ليكون الظل ناعماً جداً وغير مزعج
+                  : Colors.black.withOpacity(0.02),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
             ),
           ],
           border: Border.all(
-              color: isSelected ? ColorManager.secondaryColor1 : Colors.transparent,
-              width: 1.8
+            color: isSelected ? ColorManager.secondaryColor1 : const Color(0xFFE2E8F0), // إضافة حد رمادي باهت جداً في الحالة العادية
+            width: isSelected ? 1.6 : 1.0,
           ),
         ),
         child: Column(
@@ -110,87 +112,104 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. زر السهم بتصميم دائري أكثر بروزاً
-                AnimatedRotation(
-                  turns: isSelected ? 0.0 : 0.5,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOutBack,
-                  child: Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? ColorManager.secondaryColor1
-                          : ColorManager.secondaryColor1.withOpacity(0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.keyboard_arrow_up_rounded,
-                      color: isSelected ? Colors.white : ColorManager.secondaryColor1,
-                      size: 22.sp,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 14.w),
+                // 1️⃣ زر السهم التفاعلي المطور: بتصميم دائري مريح
 
-                // 2. المحتوى النصي بتنسيق أفضل
+
+
+                // 2️⃣ قسم المحتوى النصي المطور والمحسن بـ الكبسولات التعريفية (Badges)
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Flexible(
-                            child: Text(
-                              rep.name,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AnimatedRotation(
+                              turns: isSelected ? 0.0 : 0.5,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeOutBack,
+                              child: Container(
+                                padding: EdgeInsets.all(8.w),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? ColorManager.secondaryColor1
+                                      : ColorManager.secondaryColor1.withOpacity(0.08),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.keyboard_arrow_up_rounded,
+                                  color: isSelected ? Colors.white : ColorManager.secondaryColor1,
+                                  size: 22.sp,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              rep.name ,
                               style: TextStyle(
-                                color: const Color(0xFF1A237E), // كحلي عميق للفخامة
+                                color: const Color(0xFF1E293B), // لون Slate داكن فخم جداً ومريح للقراءة
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3,
+                                letterSpacing: 0.1,
                               ),
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.ellipsis, // نقاط حماية لمنع الطفح العرضي
                             ),
-                          ),
-                          // نقطة الحالة تنبض باللون الخاص بها
-                          _buildPulseDot(rep.flag.flag,rep.reptype),
-                        ],
-                      ),
-                      SizedBox(height: 12.h),
+                            Text(
+                              "   ( ${rep.reptype.name} ) ",
+                              style: TextStyle(
+                                color: const Color(0xFF3A5A75), // لون نص متناسق وثابت
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
 
-
-                      // الدرو داون مغلف بكونتينر رمادي فاتح لتمييزه كحقل إدخال
-                      DropDownChangePlan(
-                          hintText: rep.flag.name,
-                          items: allFlags,
-                          statusColor: getColor(rep.flag.flag),
-                          onChanged: (x) {
-
-                            BlocProvider.of<ManageFutureBloc>(context).add(
-
-                              ChangPlanStatusEvent(rep.activePlan, x.flag, index),
-                            );
-                          },
-                          errorText: "",
+                          ],
                         ),
 
+                          // نقطة الحالة النابضة
+                          _buildPulseDot(rep.flag.flag, rep.reptype),
+                        ],
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // حقل الـ Dropdown التفاعلي لتعديل حالة الخطة
+                      DropDownChangePlan(
+                        hintText: rep.flag.name,
+                        items: getAllFlags(rep.reptype.i),
+                        statusColor: getColor(rep.flag.flag),
+                        onChanged:
+                            rep.flag.flag!=4?
+                                (x)  {
+                          FlagModel xx=x as FlagModel;
+                          // 🛡️ الحفاظ المطلق على الـ Logic والـ Behavior دون تغيير
+                          BlocProvider.of<ManageFutureBloc>(context).add(
+                            ChangPlanStatusEvent(rep.activePlan, xx.flag, index),
+                          );
+                        }:null,
+                        errorText: "",
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
 
-            // 3. قسم الأزرار مع حركة انزلاق (Slide)
+            // 3️⃣ قسم الأزرار السفلية الممتدة مع حركة فتح وإغلاق انسيابية بالكامل
             AnimatedSize(
-              duration: const Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.fastOutSlowIn,
               child: isSelected
                   ? Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: Divider(color: Colors.grey.shade100, thickness: 1.5),
+                    padding: EdgeInsets.only(top: 16.h, bottom: 12.h),
+                    child: Divider(color: const Color(0xFFF1F5F9), thickness: 1.5), // خط تقسيم ناعم وأفتح
                   ),
                   Row(
                     children: [
@@ -204,14 +223,15 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
                           onTap: () => _handleAuditing(rep),
                         ),
                       ),
-                      SizedBox(width: 12.w),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: _buildMicroActionButton(
                           title: "الأصناف",
                           subtitle: "تعديل القائمة",
+                          isActive: rep.flag.flag == UserInfo.statusPlan,
                           icon: Icons.auto_awesome_motion_rounded,
-                          isActive: true,
-                          color: const Color(0xFF448AFF), // أزرق حيوي
+                          //isActive: true,
+                          color: const Color(0xFF3F7FBF), // تم تحديث اللون ليتطابق مع درجة splash2 الفاخرة المعتمدة لديك
                           onTap: () => _handleEditBrands(rep),
                         ),
                       ),
@@ -226,7 +246,6 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
       ),
     );
   }
-
   // تطوير زر الأكشن ليكون أكثر حيوية (Micro-interactions)
   Widget _buildMicroActionButton({
     required String title,
@@ -284,45 +303,24 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
       },
     );
   }
-  Color getColor(int flag){
-    if(flag==0){
-      return Colors.blue;
-    }else if(flag==5){
-      return Colors.orange;
-    }else if(flag==1){
-      return Colors.red;
-    }else if(flag==2){
-      return Colors.green;
-    }
-    else if(flag==3){
-      return Colors.black;
-    }
-    return Colors.purple;
-  }
+
   // 4. Pulsing Dot Animation logic
-  Widget _buildPulseDot(int flag,String repType) {
-    Color color = getColor(flag);
+  Widget _buildPulseDot(int flag,RepType repType) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.4, end: 1.0),
       duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
       builder: (context, value, child) {
-        return Row(
-          children: [
-            Text(UserInfo.getRepType(repType)),
-
-            Container(
-              width: 10.w,
-              height: 10.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color,
-                boxShadow: [
-                  BoxShadow(color: color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
-                ],
-              ),
-            ),
-          ],
+        return Container(
+          width: 10.w,
+          height: 10.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color:getColor(flag) ,
+            boxShadow: [
+              BoxShadow(color: repType.color.withOpacity(0.5), blurRadius: 10 * (1 - value), spreadRadius: 4 * (1 - value)),
+            ],
+          ),
         );
       },
       onEnd: () => {}, // Loop handled by the builder naturally
@@ -332,13 +330,15 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   // Navigation Handlers with Animation logic
   void _handleAuditing(AllRepresentativeFuture rep) {
     iniFutureModule();
-    if(rep.reptype=="7"){
+    if(rep.reptype.i==7){
 
       Navigator.push(context, _createRoute(FutureSpecializationsPage(
         id: rep.id,
         repPlanId: rep.activePlan,
         flag: rep.flag,
         sampleCount: rep.samplesCount,
+        repName:rep.name,
+           repType: rep.reptype,
       )));
     }else{
       BlocProvider.of<FutureRepBloc>(context).add(
@@ -363,7 +363,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   void _handleEditBrands(AllRepresentativeFuture rep) {
     iniEditBrandPlanModule();
     BlocProvider.of<EditBrandPlanBloc>(context).add(FutureGetPlanBrandEvent(Rep(rep.activePlan, 1)));
-    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan)));
+    Navigator.push(context, _createRoute(EditingPlan(repPlan: rep.activePlan,repName: rep.name,)));
   }
 
   Route _createRoute(Widget page) {

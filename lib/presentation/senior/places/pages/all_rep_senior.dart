@@ -64,14 +64,14 @@ class _AllRepSeniorState extends State<AllRepSenior> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: UserInfo.repType == "6" ? DrawerPage() : null,
+      drawer: UserInfo.repType.i == 6 ? DrawerPage() : null,
       appBar: AppBar(
         title: Text('تقارير المندوبين (${widget.cityname})'),
         leading: Builder(
           builder: (BuildContext context) {
             return Center(
               child:
-              UserInfo.repType == "6"?
+              UserInfo.repType.i == 6?
               IconButton(
                 icon: Icon(
                   size: AppSize.s30,

@@ -45,3 +45,11 @@ class SearchPlanBrandEvent extends PlanManagementEvent {
   @override
   List<Object?> get props => [query]; // إضافة الـ query هنا ليتحسس الـ Bloc التغيير عند اختلاف النص
 }
+class SearchActivePlanBrandEvent extends PlanManagementEvent {
+  final String query; // 👈 النص القادم من حقل البحث في الـ UI
+
+  const SearchActivePlanBrandEvent(this.query);
+
+  @override
+  List<Object?> get props => [query]; // إضافة الـ query هنا ليتحسس الـ Bloc التغيير عند اختلاف النص
+}

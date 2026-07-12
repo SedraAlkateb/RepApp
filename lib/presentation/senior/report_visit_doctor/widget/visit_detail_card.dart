@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 Widget stackInputDoctor({required int indexRep, required bool iscanedite}){
   return  BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
     builder: (context, state) {
@@ -264,9 +265,9 @@ Widget stackInputDoctor({required int indexRep, required bool iscanedite}){
                                       Icons.book_outlined,
                                       color: doctorNoteModel.flag
                                           ? ColorManager
-                                          .secondaryColor4
+                                          .secondaryColor2
                                           : ColorManager
-                                          .secondaryColor,
+                                          .primary1,
                                     ),
                                   ),
                                 ),
@@ -537,9 +538,9 @@ Widget stackInputHospital({required int indexRep, required bool iscanedite}){
                                       Icons.book_outlined,
                                       color: doctorNoteModel.flag
                                           ? ColorManager
-                                          .secondaryColor4
+                                          .secondaryColor2
                                           : ColorManager
-                                          .secondaryColor,
+                                          .primary1,
                                     ),
                                   ),
                                 ),
@@ -566,7 +567,7 @@ Widget stackInputHospital({required int indexRep, required bool iscanedite}){
 
 // أجزاء التصميم المساعدة (Helpers)
 
-Widget buildIconButton({required IconData icon, VoidCallback? onPressed, bool isLoading = false}) {
+Widget buildIconButton(bool flag,{required IconData icon, VoidCallback? onPressed, bool isLoading = false}) {
   return Container(
     decoration: BoxDecoration(
       color: const Color(0xFFF1F5F9),
@@ -577,7 +578,23 @@ Widget buildIconButton({required IconData icon, VoidCallback? onPressed, bool is
       padding: const EdgeInsets.all(8),
       icon: isLoading
           ? SizedBox(width: 20.w, height: 20.h, child: const CircularProgressIndicator(strokeWidth: 2))
-          : Icon(icon, size: 20.sp, color: const Color(0xFF1E3A8A)),
+          : Icon(icon, size: 20.sp, color: flag ? ColorManager.secondaryColor2 : ColorManager.primary1),
+      onPressed: onPressed,
+    ),
+  );
+}
+Widget buildIconWatsAppButton({ VoidCallback? onPressed, bool isLoading = false}) {
+  return Container(
+    decoration: BoxDecoration(
+      color: const Color(0xFFF1F5F9),
+      borderRadius: BorderRadius.circular(10.r),
+    ),
+    child: IconButton(
+      constraints: const BoxConstraints(),
+      padding: const EdgeInsets.all(8),
+      icon: isLoading
+          ? SizedBox(width: 20.w, height: 20.h, child: const CircularProgressIndicator(strokeWidth: 2))
+          : FaIcon(FontAwesomeIcons.whatsapp, size: 20.sp, color:  ColorManager.primary1),
       onPressed: onPressed,
     ),
   );

@@ -203,22 +203,9 @@ class BrandPlanCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: model.type.color.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: const Color(0xFFE2E8F0)),
-                  ),
-                  child: Text(
-                    model.type.name,
-                    style: TextStyle(
-                      color:  model.type.color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
-                    ),
-                  ),
-                ),
+                Type.buildBadge(model.type),
+
+
               ],
             ),
           ),
@@ -245,7 +232,7 @@ class BrandPlanCard extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
 
-                // Specialty List
+            model.spPlan.isEmpty?emptyFullScreen(context):
                 ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,

@@ -3,38 +3,69 @@ part of 'plan_management_bloc.dart';
 enum PlanStatus { initial, loading, success, error, submitting, submitSuccess }
 
 class PlanManagementState extends Equatable {
-  final PlanStatus status;
-  final List<PlanBrandSp> brands;       // 1. القائمة الأصلية الكاملة القادمة من الـ API
-  final List<PlanBrandSp> searchBrands; // 2. 🚀 القائمة المفلترة المخصصة للعرض والبحث في الـ UI
-  final Failure? failure;
-  final bool isEnable;                  // المتغير المسؤول عن قفل وفتح الحقول في الـ UI
+  // ======= 🟢 أولاً: الحالات الخاصة بالخطة المستقبلية (Create / Future Plan) =======
+  final PlanStatus futureStatus;
+  final List<PlanBrandSp> futureBrands;       // القائمة الأصلية المستقبلية
+  final List<PlanBrandSp> searchFutureBrands; // قائمة البحث المستقبلية للمستقبل
+  final Failure? futureFailure;
+  final bool isEnable;                        // متغير قفل وفتح الحقول
+
+  // ======= 🔵 ثانياً: الحالات الخاصة بالخطة الفعالة (View Active Plan) =======
+  final PlanStatus activeStatus;
+  final List<ActivePlanBrandModel> activeBrands;       // 👈 الموديل المخصص للخطة الفعالة
+  final List<ActivePlanBrandModel> searchActiveBrands; // قائمة البحث الفعالة
+  final Failure? activeFailure;
 
   const PlanManagementState({
-    this.status = PlanStatus.initial,
-    this.brands = const [],
-    this.searchBrands = const [], // القيمة الافتراضية مصفوفة فارغة
-    this.failure,
+    this.futureStatus = PlanStatus.initial,
+    this.futureBrands = const [],
+    this.searchFutureBrands = const [],
+    this.futureFailure,
     this.isEnable = true,
+
+    this.activeStatus = PlanStatus.initial,
+    this.activeBrands = const [],
+    this.searchActiveBrands = const [],
+    this.activeFailure,
   });
 
-  // 🟢 دالة copyWith المحدثة لدعم مصفوفة البحث
+  // دالة copyWith المحدثة لضمان الفصل الكامل بين الحالتين
   PlanManagementState copyWith({
-    PlanStatus? status,
-    List<PlanBrandSp>? brands,
-    List<PlanBrandSp>? searchBrands, // 👈 استقبال مصفوفة البحث المفلترة
-    Failure? failure,
+    PlanStatus? futureStatus,
+    List<PlanBrandSp>? futureBrands,
+    List<PlanBrandSp>? searchFutureBrands,
+    Failure? futureFailure,
     bool? isEnable,
+
+    PlanStatus? activeStatus,
+    List<ActivePlanBrandModel>? activeBrands,
+    List<ActivePlanBrandModel>? searchActiveBrands,
+    Failure? activeFailure,
   }) {
     return PlanManagementState(
-      status: status ?? this.status,
-      brands: brands ?? this.brands,
-      searchBrands: searchBrands ?? this.searchBrands, // 👈 إسناد القيمة الجديدة أو الحفاظ على الحالية
-      failure: failure ?? this.failure,
+      futureStatus: futureStatus ?? this.futureStatus,
+      futureBrands: futureBrands ?? this.futureBrands,
+      searchFutureBrands: searchFutureBrands ?? this.searchFutureBrands,
+      futureFailure: futureFailure ?? this.futureFailure,
       isEnable: isEnable ?? this.isEnable,
+
+      activeStatus: activeStatus ?? this.activeStatus,
+      activeBrands: activeBrands ?? this.activeBrands,
+      searchActiveBrands: searchActiveBrands ?? this.searchActiveBrands,
+      activeFailure: activeFailure ?? this.activeFailure,
     );
   }
 
   @override
-  // 💡 تم إضافة searchBrands هنا لكي يتحسس الـ BlocBuilder أي تغيير يحدث أثناء تصفية البحث ويرسم الكروت فوراً
-  List<Object?> get props => [status, brands, searchBrands, failure, isEnable];
+  List<Object?> get props => [
+    futureStatus,
+    futureBrands,
+    searchFutureBrands,
+    futureFailure,
+    isEnable,
+    activeStatus,
+    activeBrands,
+    searchActiveBrands,
+    activeFailure,
+  ];
 }

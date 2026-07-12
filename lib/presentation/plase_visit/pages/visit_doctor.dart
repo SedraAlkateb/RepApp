@@ -36,7 +36,7 @@ class _VisitDoctorState extends State<VisitDoctor>
     BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     BlocProvider.of<VisitPlaceBloc>(context).isBrand = false;
-    BlocProvider.of<VisitPlaceBloc>(context).type = Type(2, "لا شيئ");
+    BlocProvider.of<VisitPlaceBloc>(context).type = Type(0, "غير متوفر");
     super.initState();
   }
 

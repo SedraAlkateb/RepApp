@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/doctors/widget/header.dart';
 import 'package:domina_app/presentation/doctors/widget/note.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -80,6 +81,7 @@ class HospitalViewDetails extends StatelessWidget {
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SizedBox(height: 15.h),
+          hospitalsp.isEmpty?emptyFullScreen(context):
           ListView.separated(
             separatorBuilder: (context, index) => SizedBox(
               height: 10,

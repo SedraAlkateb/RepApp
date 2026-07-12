@@ -6,17 +6,20 @@ import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_v
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/visit_detail_card.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/who_read_dialog.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
+import 'package:domina_app/presentation/uniti/share_watsapp.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ReportVisitDoctorPage extends StatelessWidget {
   ReportVisitDoctorPage({
     super.key,
     required this.userId,
     required this.repId,
     required this.repName,
+    required this.phone,
+
     required this.indexRep,
     required this.repPlan,
     required this.iscanedite,
@@ -24,6 +27,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
   final int userId;
   final int repId;
   final String repName;
+  final String phone;
   final int indexRep;
   final int repPlan;
   final bool iscanedite;
@@ -70,7 +74,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                       children: [
                         SizedBox(height: 20.h),
                          Text(
-                          'تقارير اللزيارات للأطباء',
+                          'تقارير الزيارات للأطباء',
                           style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                         ),
                          Text(
@@ -236,7 +240,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
           border: Border(
             // الخط الجانبي يتغير لونه بناءً على الـ flag (مقروء أو غير مقروء)
             right: BorderSide(
-              color: doctorNoteModel.flag ? ColorManager.secondaryColor2 : const Color(0xFF1E3A8A),
+              color: doctorNoteModel.flag ? ColorManager.secondaryColor2 : ColorManager.primary1,
               width: 8.w,
             ),
           ),
@@ -296,7 +300,24 @@ class ReportVisitDoctorPage extends StatelessWidget {
                     builder: (context, state) {
                       return Row(
                         children: [
+                          buildIconWatsAppButton(
+
+                            onPressed: () {
+                              shareReportToWhatsApp(
+                                context: context,
+                                doctorName: doctorNoteModel.docTitle,
+                                specialty: doctorNoteModel.spTitle,
+                                scientificOfficeNote: doctorNoteModel.note,
+                                visitDate: doctorNoteModel.visitDate,
+
+                                phoneNumber: phone, // رقم الجوال من قاعدة البيانات
+                                repName: repName,
+                              );
+                            },
+                          ),
+                          SizedBox(width: 8.w),
                           buildIconButton(
+                            false,
                             icon: Icons.visibility,
                             onPressed: () {
                               // دالة من يقرأ
@@ -306,7 +327,9 @@ class ReportVisitDoctorPage extends StatelessWidget {
                             },
                           ),
                           SizedBox(width: 8.w),
+
                           buildIconButton(
+                            doctorNoteModel.flag,
                             icon: Icons.book_outlined,
                             isLoading: state is AsReadLoadingState,
                             onPressed: () {
