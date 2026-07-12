@@ -30,6 +30,7 @@ void main() async {
 
   // 3. تهيئة البيانات والمستخدم
   await _prepareUserData();
+
   // FlutterError.onError =
   //     FirebaseCrashlytics.instance.recordFlutterFatalError;
   //

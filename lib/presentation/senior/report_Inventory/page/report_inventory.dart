@@ -11,17 +11,6 @@ class InventoryCard extends StatelessWidget {
   final InventoryModel data;
 
   const InventoryCard({super.key, required this.data});
-  Widget _buildBadge(String text, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(6.r)),
-      child: Text(text,
-          style: TextStyle(
-              color: color, fontSize: 10.sp, fontWeight: FontWeight.bold)),
-    );
-  }
   @override
   Widget build(BuildContext context) {
     final int total = int.parse(data.total);
@@ -79,8 +68,9 @@ class InventoryCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  _buildBadge(
-                      data.type.name, data.type.color),
+                  Type.buildBadge(data.type),
+
+
                 ],
               ),
             ),
@@ -193,8 +183,12 @@ class ReportInventory extends StatelessWidget {
               ),
 
               // القائمة باستخدام البطاقات الجديدة
+
+              inventoryModel.isEmpty?emptyFullScreen(context):
               Expanded(
-                child: ListView.builder(
+                child:
+
+                ListView.builder(
                   padding: EdgeInsets.only(bottom: 20.h),
                   itemCount: inventoryModel.length,
                   itemBuilder: (context, index) {

@@ -1,9 +1,6 @@
-import 'package:domina_app/app/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
-import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
-import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +12,10 @@ class AllCityForRepSuper extends StatefulWidget {
   const AllCityForRepSuper({super.key});
 
   @override
-  State<AllCityForRepSuper> createState() => _AllCityState();
+  State<AllCityForRepSuper> createState() => _AllCityForRepSuperState();
 }
 
-class _AllCityState extends State<AllCityForRepSuper> {
+class _AllCityForRepSuperState extends State<AllCityForRepSuper> {
 
   @override
   void initState() {
@@ -49,7 +46,8 @@ class _AllCityState extends State<AllCityForRepSuper> {
             builder: (context, state) {
               if (state is GetAllCityState) {
                 final List<CityModel> cities = state.cities;
-                return AnimationLimiter(
+
+                return cities.isEmpty?emptyFullScreen(context): AnimationLimiter(
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),

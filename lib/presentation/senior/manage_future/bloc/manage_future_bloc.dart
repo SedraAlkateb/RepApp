@@ -20,31 +20,55 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
       this.changeRepPlanStatus
       ) : super(ManageFutureInitial()) {
     on<ManageFutureEvent>((event, emit) async {
+
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
+
         (await allRepsFutureUsecase.execute(UserInfo.repId)).fold((failure) {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
-
           data.sort((a, b) {
-            // 1️⃣ فحص المطابقة مع حالة الخطة الحالية
-            final bool aMatches = a.flag.flag == UserInfo.statusPlan;
-            final bool bMatches = b.flag.flag == UserInfo.statusPlan;
+            // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
+            int getTeamLeaderWeight(int flagValue) {
+              switch (flagValue) {
+                case 5: return 1;
+                case 0: return 2;
+                case 6: return 3;
+                case 1: return 4;
+                default: return 99;
+              }
+            }
 
-            // 🚀 التعديل هنا: جعل العناصر المطابقة تنزل لأسفل القائمة (العكس)
-            if (aMatches && !bMatches) return -1;  // a ينزل للأسفل
-            if (!aMatches && bMatches) return 1; // b ينزل للأسفل
-
-            // 2️⃣ إذا تساويا في التطابق، نلتزم بالترتيب السابق تصاعدياً بدون أي تغيير
-            return a.flag.flag.compareTo(b.flag.flag);
+            // أوزان السوبرفايزر (1 -> 5 -> 0 -> 6 -> 4)
+            int getSupervisorWeight(int flagValue) {
+              switch (flagValue) {
+                case 1: return 1;
+                case 5: return 2;
+                case 0: return 3;
+                case 6: return 4;
+                case 4: return 5;
+                default: return 99;
+              }
+            }
+            int weightA = 0;
+            int weightB = 0;
+            if (UserInfo.repType.i == 5) {
+              weightA = getTeamLeaderWeight(a.flag.flag);
+              weightB = getTeamLeaderWeight(b.flag.flag);
+            } else if (UserInfo.repType.i == 4) {
+              weightA = getSupervisorWeight(a.flag.flag);
+              weightB = getSupervisorWeight(b.flag.flag);
+            } else {
+              weightA = a.flag.flag;
+              weightB = b.flag.flag;
+            }
+            return weightA.compareTo(weightB);
           });
 
           allRepresentative = data;
-
           emit(AllSeniorRepState(data));
         });
-
-      } 
+      }
       else if (event is SenSearchRepFutureEvent) {
         List<AllRepresentativeFuture> allRepresentativeModel = [];
         String search = normalizeText(event.contant);

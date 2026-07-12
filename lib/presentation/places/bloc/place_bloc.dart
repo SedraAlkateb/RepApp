@@ -103,7 +103,11 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
         List<HospitalSpAllModel> hospital = event.hospital.where((value) {
           if (normalizeText(value.title??"").contains(search)) {
             return true;
-          } else {
+          }
+         else if (normalizeText(value.titleSp??"").contains(search)){
+            return true;
+          }
+          else {
             return false;
           }
         }).toList();
@@ -112,6 +116,8 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
         String search = normalizeText(event.search);
         List<DoctorModel> doctors = event.doctors.where((value) {
           if (normalizeText(value.title).contains(search)) {
+            return true;
+          }else if (normalizeText(value.spTitle).contains(search)){
             return true;
           } else {
             return false;

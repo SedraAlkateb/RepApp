@@ -88,7 +88,7 @@ extension BrandsSpRequestMapper on BrandSpResponse? {
       int.parse(this?.id ?? "0"),
       int.parse(this?.spId ?? "0"),
       int.parse(this?.brandId ?? "0"),
-      this?.brandType ?? Constants.empty,
+      Type.fromIntS(this?.brandType)
     );
   }
 }
@@ -270,7 +270,7 @@ extension LoginResponseMapper on LoginResponse? {
       UserInfo.flag1,
       int.parse(this?.data?.cityId ?? "0"),
       this?.data?.cityTitle ?? Constants.empty,
-      this?.data?.repType ?? Constants.empty,
+      RepType.fromIntS(this?.data?.repType),
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
     );
@@ -929,7 +929,8 @@ extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
       FlagModel(int.parse(this?.flag ?? "0")),
       int.parse(this?.futurePlan ?? "0"),
       int.parse(this?.samplesCount ?? "0"),
-      this?.reptype ?? Constants.empty,
+        RepType.fromIntS(this?.reptype)
+
     );
   }
 }
@@ -999,7 +1000,7 @@ extension WhoReadMapper on ReadResponse? {
     return WhoReadModel(
       this?.userId ?? Constants.empty,
       this?.name ?? Constants.empty,
-      this?.repType ?? Constants.empty,
+      RepType.fromIntS(this?.repType),
       this?.role ?? Constants.empty,
     );
   }

@@ -70,7 +70,9 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                 return errorFullScreen(context, func: () {});
               }
 
-              return Expanded(
+              return
+                widget.planBrand.isEmpty?emptyFullScreen(context):
+                Expanded(
                   child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: ListView.builder(

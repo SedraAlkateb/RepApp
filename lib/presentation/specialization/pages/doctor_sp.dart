@@ -95,7 +95,9 @@ class _DoctorSpState extends State<DoctorSp> {
                                 ],
                               ),
                             )
-                          : Padding(
+                          :
+
+                      Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 5),
                               child: ListView.builder(

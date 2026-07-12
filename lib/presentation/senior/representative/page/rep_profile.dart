@@ -89,7 +89,7 @@ class RepProfile extends StatelessWidget {
                             _buildQuickActions(context),
                             SizedBox(height: 30.h),
                             _buildDetailsList(
-                                context, rep, currentRepName, currentRepPlan),
+                                context, rep, currentRepName, currentRepPlan,rep.mobile),
                             SizedBox(height: 25.h),
                             _buildCoverageSection(context),
                             SizedBox(height: 50.h),
@@ -363,7 +363,7 @@ class RepProfile extends StatelessWidget {
   }
 
   Widget _buildDetailsList(
-      BuildContext context, dynamic rep, String name, int plan) {
+      BuildContext context, dynamic rep, String name, int plan,String phone) {
     return _buildSectionLayout("التقارير التفصيلية", [
       InteractiveActionTile(
           title: "تقرير زيارات الأطباء",
@@ -379,6 +379,7 @@ class RepProfile extends StatelessWidget {
                         repId: id,
                         userId: UserInfo.repId,
                         repName: name,
+                        phone:phone,
                         indexRep: index,
                         repPlan: plan)));
             context.read<ReportVisitDoctorBloc>().add(AllReportVisitDoctorEvent(
@@ -398,6 +399,7 @@ class RepProfile extends StatelessWidget {
                         repId: id,
                         userId: UserInfo.repId,
                         repName: name,
+                        phone:phone,
                         indexRep: index,
                         repPlan: plan)));
             context.read<ReportVisitDoctorBloc>().add(

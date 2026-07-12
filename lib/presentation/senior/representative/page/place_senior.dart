@@ -24,7 +24,9 @@ class PlaceSenior extends StatelessWidget {
         if (state is SenAllPlaceState) {
           final List<PlaceModel> placeModel = state.places;
 
-          return ListView.builder(
+          return
+            placeModel.isEmpty?emptyFullScreen(context):
+            ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             itemCount: placeModel.length,
             itemBuilder: (context, index) {

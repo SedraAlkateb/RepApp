@@ -5,6 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
+import 'package:domina_app/presentation/senior/manage_future/widget/status_plan_widget.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/basic/spec_grid_widget.dart'; // الـ Widget المطلوب استخدامه
@@ -20,14 +21,15 @@ class FutureSpecializationsPage extends StatefulWidget {
     required this.repPlanId,
     required this.flag,
     required this.sampleCount,
-
+    required this.repName,
+    required this.repType
   });
-
+  final String repName;
   final int id;
   final int repPlanId;
   final FlagModel flag;
   final int sampleCount;
-
+  final RepType repType;
   @override
   State<FutureSpecializationsPage> createState() => _FutureSpecializationsPageState();
 }
@@ -56,7 +58,7 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
         backgroundColor: ColorManager.background, // تغيير الخلفية لتطابق الصفحة المطلوبة
         appBar: AppBar(
           title: Text(
-            'الإختصاصات',
+            'اختصاصات ${widget.repName}',
           ),
         ),
         floatingActionButton: BlocConsumer<FutureRepBloc, FutureRepState>(
@@ -74,7 +76,7 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
           builder: (context, state) {
             return FloatingActionButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-              onPressed: () => _showStatusBottomSheet(context),
+              onPressed: () => showStatusBottomSheet(context,widget.repType.i,widget.repPlanId),
               backgroundColor: ColorManager.secondaryColor1,
               child: Icon(Icons.check, color: ColorManager.white),
             );
@@ -165,39 +167,5 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
   }
 
   // دالة منفصلة لعرض الـ Bottom Sheet للحفاظ على نظافة الكود
-  void _showStatusBottomSheet(BuildContext context) {
-    List<StatusPlanModel> statusPlan = UserInfo.repType == "4" ? statusPlanSupervisor : statusPlanTeamleader;
 
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'اختر الحالة الجديدة',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 20),
-              ...statusPlan.map((status) => ListTile(
-                title: Text(status.name),
-                onTap: () {
-                  Navigator.pop(context);
-                  BlocProvider.of<FutureRepBloc>(context).add(
-                    EditePlanStatusEvent(widget.repPlanId, status.id),
-                  );
-                },
-              )),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }

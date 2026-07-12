@@ -29,7 +29,9 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     final TextEditingController searchController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6F9), // خلفية ناعمة
+      backgroundColor: const Color(0xFFF3F6F9),
+
+
       floatingActionButton: FloatingActionButton.extended(
         label: const Text("حفظ التعديلات",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -196,8 +198,8 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                               color: ColorManager.secondaryColor1),
                         ),
                       ),
-                      _buildBadge(
-                          item.brandType.name, item.brandType.color),
+                      Type.buildBadge(item.brandType),
+
                     ],
                   ),
                   SizedBox(height: 12.h),
@@ -255,17 +257,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     );
   }
 
-  Widget _buildBadge(String text, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(6.r)),
-      child: Text(text,
-          style: TextStyle(
-              color: color, fontSize: 10.sp, fontWeight: FontWeight.bold)),
-    );
-  }
+
 
   @override
   bool get wantKeepAlive => true;

@@ -229,25 +229,8 @@ class ActiveBrandPlanCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color:   model.spPlan[0].brandType.color.withOpacity(0.3),
-                    borderRadius:
-                    BorderRadius.all(
-                      Radius.circular(AppSize.s8),
-                    ),
-                    ),
-                  child: Text(
-                    model.spPlan[0].brandType.name,
-                    style: TextStyle(
-                      color: model.spPlan[0].brandType.color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
-                    ),
-                  ),
-                ),
+                Type.buildBadge(model.spPlan[0].brandType),
+
               ],
             ),
           ),
