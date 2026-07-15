@@ -229,7 +229,7 @@ class _CreatePlanBrandPageState extends State<CreatePlanBrandPage> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: brand.brandType.color ?? ColorManager.medicalPrimary, width: 1.5),
+                                      color: brand.brandType.color , width: 1.5),
                                 ),
                               ),
                               onChanged: (val) {

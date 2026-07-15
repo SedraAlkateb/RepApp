@@ -5,7 +5,6 @@ import 'package:domina_app/presentation/senior/edit_brand_plan/widgets/editing_p
 import 'package:domina_app/presentation/senior/edit_brand_plan/widgets/editing_plan_target.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

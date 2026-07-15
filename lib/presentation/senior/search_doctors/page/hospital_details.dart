@@ -1,14 +1,9 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
-import 'package:domina_app/presentation/senior/search_doctors/page/doctor_details.dart';
 import 'package:domina_app/presentation/senior/search_doctors/widgets/info_row_item.dart';
-import 'package:domina_app/presentation/senior/search_doctors/widgets/text__serach_doctor.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
-import 'package:domina_app/presentation/uniti/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

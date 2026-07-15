@@ -1,4 +1,3 @@
-import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -7,7 +6,6 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/admin/widget/interactive_admin_card.dart';
 import 'package:domina_app/presentation/senior/admin/widget/square_interactive_card.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
-import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

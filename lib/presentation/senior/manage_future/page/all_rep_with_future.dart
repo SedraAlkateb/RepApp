@@ -257,11 +257,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture> with TickerProvider
   }) {
     return StatefulBuilder(
       builder: (context, setBtnState) {
-        bool isPressed = false;
         return GestureDetector(
-          onTapDown: (_) => setBtnState(() => isPressed = true),
-          onTapUp: (_) => setBtnState(() => isPressed = false),
-          onTapCancel: () => setBtnState(() => isPressed = false),
           onTap: isActive ? onTap : null,
           child: AnimatedScale(
             scale: 1.0,

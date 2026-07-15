@@ -1,10 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/usecase/all_city_usecase.dart';
 import 'package:domina_app/domain/usecase/finished_plans_usecase.dart';
 import 'package:domina_app/domain/usecase/get_pan_reps_usecase.dart';
-import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

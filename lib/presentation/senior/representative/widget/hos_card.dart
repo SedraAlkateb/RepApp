@@ -116,7 +116,7 @@ class HospitalCardWidget extends StatelessWidget {
                       bgColor: const Color(0xFFF0FDF4),
                       textColor: const Color(0xFF16A34A),
                       iconColor: const Color(0xFF16A34A),
-                      "الزيارات: ${hospital.visit ?? '0'}" ?? ""),
+                      "الزيارات: ${hospital.visit}" ),
 
                   // قسم الملاحظات الذكي
                   if (hospital.note != null && hospital.note!.isNotEmpty) ...[

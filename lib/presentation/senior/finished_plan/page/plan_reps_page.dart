@@ -200,7 +200,7 @@ class RepCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ReportFinishedPlanUserPage(
-                    id: int.parse(repName.id), repPlanId: repPlanId, name: repName.name ?? ""),
+                    id: int.parse(repName.id), repPlanId: repPlanId, name: repName.name),
               ));
         },
       ),

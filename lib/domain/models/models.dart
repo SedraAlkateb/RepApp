@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,33 +62,24 @@ class BrandSpPlanModel {
       // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
       print("  🔹 Brand ID: ${mainItem.brandModel.id}");
       print(
-          "  🔹 Brand Title: ${mainItem.brandModel.title ?? '🛑 NULL (خطأ)'}");
+          "  🔹 Brand Title: ${mainItem.brandModel.title}");
 
       // طباعة مصفوفة الـ SpPlan الداخلية
-      print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan?.length ?? 0}");
-      if (mainItem.spPlan != null) {
-        for (int j = 0; j < mainItem.spPlan.length; j++) {
-          final sp = mainItem.spPlan[j];
-          print("     🔸 [$j] ID: ${sp.id}");
-          print("     🔸 [$j] Title: ${sp.title ?? '🛑 NULL (خطأ)'}");
+      print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan.length}");
+      for (int j = 0; j < mainItem.spPlan.length; j++) {
+        final sp = mainItem.spPlan[j];
+        print("     🔸 [$j] ID: ${sp.id}");
+        print("     🔸 [$j] Title: ${sp.title}");
 
-          // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
-          if (sp.brandType.name == null) {
-            print(
-                "     🛑 كشف الخطأ الحقل brandType قيمته NULL في العنصر الرئيسي [$i] والفرعي [$j]!");
-          } else {
-            print("     🔸 [$j] BrandType: '${sp.brandType.name}'");
-          }
+        // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
+        print("     🔸 [$j] BrandType: '${sp.brandType.name}'");
 
-          print("     🔸 [$j] Amount: ${sp.amount}");
-          print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
-          print(
-              "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
-        }
-      } else {
-        print("     🛑 قائمة spPlan نفسها قيمتها NULL!");
+        print("     🔸 [$j] Amount: ${sp.amount}");
+        print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
+        print(
+            "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
       }
-    }
+        }
     print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
   }
 }

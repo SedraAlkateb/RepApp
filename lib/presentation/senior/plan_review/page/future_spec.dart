@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 import 'package:domina_app/app/di.dart';
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';

@@ -11,7 +11,6 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ReportVisitDoctorPage extends StatelessWidget {
   ReportVisitDoctorPage({
     super.key,

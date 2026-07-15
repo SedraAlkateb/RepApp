@@ -3,7 +3,6 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/mapper/mapper.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/usecase/all_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
