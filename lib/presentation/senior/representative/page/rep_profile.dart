@@ -199,7 +199,7 @@ class RepProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsGrid(dynamic rep) {
+  Widget _buildStatsGrid(InfoRep rep) { // تم استبدال dynamic بنوع الكلاس الصريح للـ Clean Code
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: GridView.count(
@@ -208,16 +208,23 @@ class RepProfile extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 15.h,
         crossAxisSpacing: 15.w,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1.25, // تعديل بسيط ليعطي مساحة رأسية مريحة للعناوين الطويلة
         children: [
-          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
-              const Color(0xFF1F4E79)),
-          _buildStatCard(
-              "المحققة", rep.visitDon.toString(), const Color(0xFF2D947A)),
-          _buildStatCard(
-              "المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
-          _buildStatCard(
-              "الوصفات", rep.recipesCount.toString(), const Color(0xFF8E44AD)),
+          // الكروت الأساسية السابقة
+          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(), const Color(0xFF1F4E79)),
+          _buildStatCard("الوصفات", rep.recipesCount, const Color(0xFF8E44AD)),
+
+          // زيارات الأطباء (المحققة والمتبقية)
+          _buildStatCard("زيارات الأطباء المحققة", rep.visitDonDoc, const Color(0xFF2D947A)),
+          _buildStatCard("زيارات الأطباء المتبقية", rep.totDocVisit, const Color(0xFFE67E22)),
+
+          // زيارات المشافي (المحققة والمتبقية)
+          _buildStatCard("زيارات المشافي المحققة", rep.visitDonHos, const Color(0xFF2D947A)),
+          _buildStatCard("زيارات المشافي المتبقية", rep.totHosVisit, const Color(0xFFE67E22)),
+
+          // الإجمالي الكلي للمحققة والمتبقية
+          _buildStatCard("إجمالي المحققة", rep.visitDon.toString(), const Color(0xFF1F4E79)),
+          _buildStatCard("إجمالي المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
         ],
       ),
     );
@@ -225,7 +232,7 @@ class RepProfile extends StatelessWidget {
 
   Widget _buildStatCard(String title, String val, Color color) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h), // توزيع البادينغ ليتناسب مع النصوص الطويلة
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25.r),
@@ -240,20 +247,28 @@ class RepProfile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(title,
-              style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.grey[500],
-                  fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            textAlign: TextAlign.center, // لضمان مظهر متناسق إذا انقسم النص على سطرين
+            maxLines: 2, // يسمح بنزول العنوان لسطرين دون حدوث Overflow
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 11.sp,
+                color: Colors.grey[500],
+                fontWeight: FontWeight.bold),
+          ),
           SizedBox(height: 6.h),
-          Text(val,
-              style: TextStyle(
-                  fontSize: 22.sp, fontWeight: FontWeight.w900, color: color)),
+          Text(
+            val,
+            style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.w900,
+                color: color),
+          ),
         ],
       ),
     );
   }
-
   Widget _buildQuickActions(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.w),

@@ -1527,7 +1527,11 @@ RepInfoResponse _$RepInfoResponseFromJson(Map<String, dynamic> json) =>
       json['recipesCount'] as String?,
       (json['repPlanId'] as num?)?.toInt(),
       (json['totalVisit'] as num?)?.toInt(),
+      json['totDocVisit'] as String?,
+      json['totHosVisit'] as String?,
       (json['visitDon'] as num?)?.toInt(),
+      json['visitDonDoc'] as String?,
+      json['visitDonHos'] as String?,
       (json['visitnotYet'] as num?)?.toInt(),
     );
 
@@ -1541,7 +1545,11 @@ Map<String, dynamic> _$RepInfoResponseToJson(RepInfoResponse instance) =>
       'recipesCount': instance.recipesCount,
       'repPlanId': instance.repPlanId,
       'totalVisit': instance.totalVisit,
+      'totDocVisit': instance.totDocVisit,
+      'totHosVisit': instance.totHosVisit,
       'visitDon': instance.visitDon,
+      'visitDonDoc': instance.visitDonDoc,
+      'visitDonHos': instance.visitDonHos,
       'visitnotYet': instance.visitnotYet,
     };
 

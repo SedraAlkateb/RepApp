@@ -1882,19 +1882,22 @@ class ChangePlanBrandType {
 
   ChangePlanBrandType(this.id, this.brandType);
 }
-
 class InfoRep {
   int id;
   String name;
   String mobile;
   String address;
   String sampleCount;
-
   String recipesCount;
   int repPlanId;
   int totalVisit;
+  String totDocVisit;     // حقل جديد
+  String totHosVisit;     // حقل جديد
   int visitDon;
+  String visitDonDoc;     // حقل جديد
+  String visitDonHos;     // حقل جديد
   int visitNoteYet;
+
   InfoRep(
       this.id,
       this.name,
@@ -1904,10 +1907,13 @@ class InfoRep {
       this.recipesCount,
       this.repPlanId,
       this.totalVisit,
+      this.totDocVisit,
+      this.totHosVisit,
       this.visitDon,
+      this.visitDonDoc,
+      this.visitDonHos,
       this.visitNoteYet);
 }
-
 class VisitRepSen {
   int repId;
   int userId;

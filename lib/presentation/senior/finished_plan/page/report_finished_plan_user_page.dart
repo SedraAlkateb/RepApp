@@ -196,7 +196,7 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
     );
   }
 
-  Widget _buildStatsGrid(dynamic rep) {
+  Widget _buildStatsGrid(dynamic rep) { // يفضل استبدال dynamic بنوع الكلاس الصريح InfoRep
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: GridView.count(
@@ -205,50 +205,129 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
         crossAxisCount: 2,
         mainAxisSpacing: 15.h,
         crossAxisSpacing: 15.w,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1.3, // تعديل النسبة لتناسب التصميم الجديد ومنع الـ Overflow
         children: [
-          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
-              const Color(0xFF1F4E79)),
+          // --- إجمالي الزيارات الكلية والوصفات ---
           _buildStatCard(
-              "المحققة", rep.visitDon.toString(), const Color(0xFF2D947A)),
+            "إجمالي الزيارات",
+            rep.totalVisit.toString(),
+            const Color(0xFF1F4E79),
+            icon: Icons.assignment_outlined,
+          ),
           _buildStatCard(
-              "المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
+            "إجمالي الوصفات",
+            rep.recipesCount,
+            const Color(0xFF8E44AD),
+            icon: Icons.receipt_long_outlined,
+          ),
+
+          // --- زيارات الأطباء (محقق ومتبقي) ---
           _buildStatCard(
-              "الوصفات", rep.recipesCount.toString(), const Color(0xFF8E44AD)),
+            "زيارات الأطباء المحققة",
+            rep.visitDonDoc,
+            const Color(0xFF2D947A),
+            icon: Icons.person_pin_outlined,
+          ),
+          _buildStatCard(
+            "زيارات الأطباء المتبقية",
+            rep.totDocVisit,
+            const Color(0xFFE67E22),
+            icon: Icons.person_search_outlined,
+          ),
+
+          // --- زيارات المستشفيات (محقق ومتبقي) ---
+          _buildStatCard(
+            "زيارات المشافي المحققة",
+            rep.visitDonHos,
+            const Color(0xFF2D947A),
+            icon: Icons.local_hospital_outlined,
+          ),
+          _buildStatCard(
+            "زيارات المشافي المتبقية",
+            rep.totHosVisit,
+            const Color(0xFFE67E22),
+            icon: Icons.local_hospital_sharp,
+          ),
+
+          // --- كليات المحقق والمتبقي القديمة (اختياري إذا أردت الإبقاء عليها) ---
+          _buildStatCard(
+            "إجمالي المحققة",
+            rep.visitDon.toString(),
+            const Color(0xFF1E88E5),
+            icon: Icons.check_circle_outline,
+          ),
+          _buildStatCard(
+            "إجمالي المتبقية",
+            rep.visitNoteYet.toString(),
+            const Color(0xFFD32F2F),
+            icon: Icons.hourglass_empty_outlined,
+          ),
         ],
       ),
     );
   }
-  Widget _buildStatCard(String title, String val, Color color) {
+
+  Widget _buildStatCard(String title, String val, Color color, {required IconData icon}) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(12.w), // تقليل البادينغ قليلاً ليعطي مساحة مريحة للنصوص الطويلة
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25.r),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 15,
-              offset: const Offset(0, 8))
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          )
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Row( // استخدام Row لوضع الأيقونة في طرف والبيانات في طرف
         children: [
-          Text(title,
-              style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.grey[500],
-                  fontWeight: FontWeight.bold)),
-          SizedBox(height: 6.h),
-          Text(val,
-              style: TextStyle(
-                  fontSize: 22.sp, fontWeight: FontWeight.w900, color: color)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // محاذاة النصوص لليمين (أو اليسار حسب اتجاه التطبيق)
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  val,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // الأيقونة التوضيحية الدقيقة خلف النص
+          Container(
+            padding: EdgeInsets.all(6.r),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 20.r,
+              color: color,
+            ),
+          ),
         ],
       ),
     );
   }
+
 
   Widget _buildCoverageSection(BuildContext context) {
     return _buildSectionLayout("إحصائيات التغطية", [

@@ -156,6 +156,7 @@ abstract class AppServiceClient {
   Future<AllVisitNotesBaseResponse> getVisitNotes(
     @Part(name: "repDet") int docId,
   );
+  
   @POST("/admin/noVisitDoc.php")//
   Future<AllNoVisitDoctorBaseResponse> noVisitDoc(
     @Part(name: "repDet") int docId,
@@ -172,6 +173,32 @@ abstract class AppServiceClient {
     @Part(name: "repDet") int docId,
       @Part(name: "planId") int planId,
   );
+  ///////////HOSPITAL
+  //
+  // @POST("/admin/noVisitHos.php")//
+  // Future<AllNoVisitDoctorBaseResponse> noVisitHos(
+  //     @Part(name: "repDet") int HosId,
+  //     @Part(name: "planId") int planId,
+  //     );
+  // @POST("/admin/getUnfinishedHosVisits.php")//
+  // Future<AllNoVisitDoctorBaseResponse> getUnfinishedHosVisits(
+  //     @Part(name: "repDet") int HosId,
+  //     @Part(name: "planId") int planId,
+  //
+  //     );
+  // @POST("/admin/visitHos.php")//
+  // Future<AllNoVisitDoctorBaseResponse> visitHos(
+  //     @Part(name: "representativeId") int HosId,
+  //     @Part(name: "repPlanId") int planId,
+  //     );
+  //
+  //
+  //
+  //
+  
+  
+  
+  
   @POST("/admin/getVisitIssue.php")//\
   Future<AllVisitIssueBaseResponse> getVisitIssue(
     @Part(name: "repDet") int id,

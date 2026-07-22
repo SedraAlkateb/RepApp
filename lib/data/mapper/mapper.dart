@@ -49,17 +49,25 @@ extension visitDoctorRepSenMapper on RepVisitsResponse? {
 
 extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
   InfoRep toDomain() {
+    // جلب العنصر الأول لتسهيل القراءة وتجنب تكرار الكود الطويل
+    final responseItem = this?.data?.repInfoResponse?.isNotEmpty == true
+        ? this!.data!.repInfoResponse![0]
+        : null;
     return InfoRep(
-      int.parse(this?.data?.repInfoResponse![0].id ?? "0"),
-      this?.data?.repInfoResponse![0].name ?? Constants.empty,
-      this?.data?.repInfoResponse![0].mobile ?? Constants.empty,
-      this?.data?.repInfoResponse![0].address ?? Constants.empty,
-      this?.data?.repInfoResponse![0].sampleCount ?? Constants.empty,
-      this?.data?.repInfoResponse![0].recipesCount ?? Constants.empty,
-      this?.data?.repInfoResponse![0].repPlanId ?? Constants.zero,
-      this?.data?.repInfoResponse![0].totalVisit ?? Constants.zero,
-      this?.data?.repInfoResponse![0].visitDon ?? Constants.zero,
-      this?.data?.repInfoResponse![0].visitnotYet ?? Constants.zero,
+      int.parse(responseItem?.id ?? "0"),
+      responseItem?.name ?? Constants.empty,
+      responseItem?.mobile ?? Constants.empty,
+      responseItem?.address ?? Constants.empty,
+      responseItem?.sampleCount ?? Constants.empty,
+      responseItem?.recipesCount ?? Constants.empty,
+      responseItem?.repPlanId ?? Constants.zero,
+      responseItem?.totalVisit ?? Constants.zero,
+      responseItem?.totDocVisit ?? Constants.empty,    // المابر الجديد
+      responseItem?.totHosVisit ?? Constants.empty,    // المابر الجديد
+      responseItem?.visitDon ?? Constants.zero,
+      responseItem?.visitDonDoc ?? Constants.empty,    // المابر الجديد
+      responseItem?.visitDonHos ?? Constants.empty,    // المابر الجديد
+      responseItem?.visitnotYet ?? Constants.zero,
     );
   }
 }

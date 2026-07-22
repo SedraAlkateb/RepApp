@@ -202,7 +202,8 @@ class ReportVisitDoctorPage extends StatelessWidget {
                         ...doctorNoteModel.asMap().entries.map((entry) {
                           final index = entry.key;
                           final doctorNoteModel = entry.value;
-                          return _buildDoctorVisitCard(doctorNoteModel: doctorNoteModel, index: index, indexRep: indexRep, iscanedite: iscanedite, context: context);
+                          return _buildDoctorVisitCard(
+                              doctorNoteModel: doctorNoteModel, index: index, indexRep: indexRep, iscanedite: iscanedite, context: context);
 
                         }),
                       ]),
