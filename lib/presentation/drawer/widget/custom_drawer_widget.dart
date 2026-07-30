@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/drawer_model.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
@@ -72,7 +71,7 @@ class CustomAppDrawer extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            "$roleTitle _ ${UserInfo.cityTitle ?? ''}",
+            "$roleTitle _ ${UserInfo.cityTitle}",
             style: TextStyle(fontSize: 13.sp, color: Colors.grey[700]),
           ),
 
@@ -99,7 +98,7 @@ class CustomAppDrawer extends StatelessWidget {
                 ),
                 SizedBox(width: 6.w),
                 Text(
-                  "الوصفات المنجزة: ${UserInfo.usedReci ?? 0}",
+                  "الوصفات المنجزة: ${UserInfo.usedReci }",
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,

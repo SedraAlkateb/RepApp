@@ -126,7 +126,7 @@ class MyApiInterceptor extends Interceptor {
     if (statusCode != null && statusCode >= 500) {
       crashlyticsService.recordError(
         error: err,
-        stackTrace: err.stackTrace ?? StackTrace.current,
+        stackTrace: err.stackTrace,
         reason: "Server Error $statusCode : $path",
         fatal: false,
       );
@@ -172,7 +172,7 @@ class MyApiInterceptor extends Interceptor {
     else {
       crashlyticsService.recordError(
         error: err,
-        stackTrace: err.stackTrace ?? StackTrace.current,
+        stackTrace: err.stackTrace,
         reason: "Unknown Dio Error : $path",
         fatal: false,
       );
