@@ -14,23 +14,38 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.0' # اضبط حسب SDK المطلوب
-      - name: Flutter format check
-        run: flutter format --set-exit-if-changed .
-      - name: Flutter analyze
-        run: flutter analyze
+          flutter-version: '3.10.0' # يمكنك تعديل الإصدار حسب مشروعك (أو استبدال السطر بـ channel: 'stable' لاستخدام أحدث إصدار)
+          cache: true # تفعيل التخزين المؤقت لتسريع عملية البناء
+
       - name: Get dependencies
         run: flutter pub get
+
+      # ✅ 1. تصحيح أمر التنسيق القديم واستبداله بالأمر الحديث
+      - name: Flutter format check
+        run: dart format --output=none --set-exit-if-changed .
+
+      # ✅ 2. التحقق من سلامة الكود والتحذيرات
+      - name: Flutter analyze
+        run: flutter analyze
+
+      # ✅ 3. تشغيل الـ Build Runner (تم التحديث للأمر الحديث dart run)
       - name: Run codegen
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # ✅ 4. تشغيل الاختبارات واستخراج التغطية (Coverage)
       - name: Run tests
         run: flutter test --coverage
+
+      # ✅ 5. بناء تطبيق APK عند الدمج في الفرع الرئيسي فقط
       - name: Build APK (optional)
         if: github.ref == 'refs/heads/main'
         run: flutter build apk --release
+
+      # ✅ 6. رفع تقرير التغطية
       - name: Upload coverage
         if: success()
         uses: actions/upload-artifact@v4
