@@ -28,6 +28,41 @@ Map<String, dynamic> _$MessageResponseToJson(MessageResponse instance) =>
       'message': instance.message,
     };
 
+InsertRecipeResponse _$InsertRecipeResponseFromJson(
+        Map<String, dynamic> json) =>
+    InsertRecipeResponse(
+      (json['TotalReci'] as num?)?.toInt(),
+      (json['usedReci'] as num?)?.toInt(),
+      (json['remainReci'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$InsertRecipeResponseToJson(
+        InsertRecipeResponse instance) =>
+    <String, dynamic>{
+      'TotalReci': instance.TotalReci,
+      'usedReci': instance.usedReci,
+      'remainReci': instance.remainReci,
+    };
+
+InsertRecipeBaseResponse _$InsertRecipeBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    InsertRecipeBaseResponse(
+      json['Reci Data'] == null
+          ? null
+          : InsertRecipeResponse.fromJson(
+              json['Reci Data'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$InsertRecipeBaseResponseToJson(
+        InsertRecipeBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Reci Data': instance.data,
+    };
+
 CheckResponse _$CheckResponseFromJson(Map<String, dynamic> json) =>
     CheckResponse(
       json['id'] as String?,
@@ -268,7 +303,10 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['otherEndDate'] as String? ?? '-9',
     )
       ..samplesCount = json['samplesCount'] as String?
-      ..repType = json['repType'] as String?;
+      ..repType = json['repType'] as String?
+      ..totalReci = (json['TotalReci'] as num?)?.toInt()
+      ..usedReci = (json['usedReci'] as num?)?.toInt()
+      ..remainReci = (json['remainReci'] as num?)?.toInt();
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
     <String, dynamic>{
@@ -288,6 +326,9 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'recipesCount': instance.recipesCount,
       'otherStartDate': instance.otherStartDate,
       'otherEndDate': instance.otherEndDate,
+      'TotalReci': instance.totalReci,
+      'usedReci': instance.usedReci,
+      'remainReci': instance.remainReci,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
@@ -1533,10 +1574,11 @@ RepInfoResponse _$RepInfoResponseFromJson(Map<String, dynamic> json) =>
       json['visitDonDoc'] as String?,
       json['visitDonHos'] as String?,
       (json['visitnotYet'] as num?)?.toInt(),
-    );
+    )..repType = json['repType'] as String?;
 
 Map<String, dynamic> _$RepInfoResponseToJson(RepInfoResponse instance) =>
     <String, dynamic>{
+      'repType': instance.repType,
       'id': instance.id,
       'name': instance.name,
       'mobile': instance.mobile,

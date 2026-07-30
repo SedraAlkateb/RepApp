@@ -77,9 +77,7 @@ class AllBrand extends StatelessWidget {
                   ]));
                 }
                 return SliverList(
-                  delegate: SliverChildListDelegate([
-                    BrandListWidget(brands: brandModel,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),
-                  ]),
+                  delegate: SliverChildBuilderDelegate((context, index) =>    BrandListWidget(brands: brandModel,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),),
                 );
               },
             ),

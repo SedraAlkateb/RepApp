@@ -11,7 +11,10 @@ import 'package:domina_app/domain/usecase/all_sen_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/info_rep_usecase.dart';
+import 'package:domina_app/domain/usecase/no_visit_hos_usecase.dart';
 import 'package:domina_app/domain/usecase/remaining_visits_use_case.dart';
+import 'package:domina_app/domain/usecase/unfinished_visit_hos_usecase.dart';
+import 'package:domina_app/domain/usecase/visit_hos_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -29,6 +32,11 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllNoVisitDoctorUsecase allNoVisitDoctorUsecase;
   AllSenVisitDoctorUsecase allSenVisitDoctorUsecase;
   RemainingVisitsUsecase remainingVisitsUsecase;
+
+  VisitHosUsecase visitHosUsecase;
+  NoVisitHosUsecase noVisitHosUsecase;
+  UnfinishedVisitHosUsecase unfinishedVisitHosUsecase;
+
   AllReciUsecase allReciUsecase;
   GetRepReciUsecase getRepReciUsecase;
   List<SpecDModel> specialization = [];
@@ -39,7 +47,6 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
 
   List<NoVisitDocModel> remainingVisits = [];
   List<NoVisitDocModel> visitDoc = [];
-
   List<DoctorModel> doctor = [];
   SeniorProfBloc(
       this.allPlaceUsecase,
@@ -52,7 +59,10 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       this.infoRepUsecase,
       this.allBrandsUsecase,
       this.allReciUsecase,
-      this.getRepReciUsecase)
+      this.getRepReciUsecase,
+      this.visitHosUsecase,
+      this.noVisitHosUsecase,
+      this.unfinishedVisitHosUsecase)
       : super(SeniorProfInitial()) {
     on<SeniorProfEvent>((event, emit) async {
       if (event is SenAllPlaceEvent) {
@@ -80,7 +90,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         });
       } else if (event is getInfoRepEvent) {
         emit(RepInfoLoadingState());
-        (await infoRepUsecase.execute(event.id,event.planId)).fold((failure) {
+        (await infoRepUsecase.execute(event.id, event.planId)).fold((failure) {
           emit(RepInfoErrorState(failure: failure));
         }, (data) async {
           emit(RepInfoState(data));
@@ -203,6 +213,19 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenNoVisitDocsState(data));
           }
         });
+      } else if (event is NoVisitHosEvent) {
+        emit(SenNoVisitDocLoadingState());
+        (await noVisitHosUsecase.execute(event.id, event.planId)).fold(
+            (failure) {
+          emit(SenNoVisitDocErrorState(failure: failure, planId: event.planId));
+        }, (data) async {
+          noVisitDoc = data;
+          if (data.isEmpty) {
+            emit(SenNoVisitDocEmptyState());
+          } else {
+            emit(SenNoVisitDocsState(data));
+          }
+        });
       } else if (event is RemainingVisitsDocEvent) {
         emit(SenNoVisitDocLoadingState());
         (await remainingVisitsUsecase.execute(event.id, event.planId)).fold(
@@ -216,10 +239,34 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             emit(SenNoVisitDocsState(data));
           }
         });
+      } else if (event is RemainingVisitsHosEvent) {
+        emit(SenNoVisitDocLoadingState());
+        (await unfinishedVisitHosUsecase.execute(event.planId)).fold((failure) {
+          emit(SenNoVisitDocErrorState(failure: failure, planId: event.planId));
+        }, (data) async {
+          remainingVisits = data;
+          if (data.isEmpty) {
+            emit(SenNoVisitDocEmptyState());
+          } else {
+            emit(SenNoVisitDocsState(data));
+          }
+        });
       } else if (event is VisitDocEvent) {
         emit(SenVisitDocLoadingState());
         (await allSenVisitDoctorUsecase.execute(event.id, event.planId)).fold(
             (failure) {
+          emit(SenVisitDocErrorState(failure: failure, planId: event.planId));
+        }, (data) async {
+          visitDoc = data;
+          if (data.isEmpty) {
+            emit(SenVisitDocEmptyState());
+          } else {
+            emit(SenVisitDocsState(data));
+          }
+        });
+      } else if (event is VisitHosEvent) {
+        emit(SenVisitDocLoadingState());
+        (await visitHosUsecase.execute(event.planId)).fold((failure) {
           emit(SenVisitDocErrorState(failure: failure, planId: event.planId));
         }, (data) async {
           visitDoc = data;

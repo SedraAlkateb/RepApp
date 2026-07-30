@@ -61,8 +61,7 @@ class BrandSpPlanModel {
 
       // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
       print("  🔹 Brand ID: ${mainItem.brandModel.id}");
-      print(
-          "  🔹 Brand Title: ${mainItem.brandModel.title}");
+      print("  🔹 Brand Title: ${mainItem.brandModel.title}");
 
       // طباعة مصفوفة الـ SpPlan الداخلية
       print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan.length}");
@@ -79,7 +78,7 @@ class BrandSpPlanModel {
         print(
             "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
       }
-        }
+    }
     print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
   }
 }
@@ -1165,6 +1164,9 @@ class LoginModel {
   String? otherEndDate;
   int flag1;
   RepType repType;
+  int totalReci;
+  int usedReci;
+  int remainReci;
   LoginModel(
       this.samplesCount,
       this.token,
@@ -1183,6 +1185,9 @@ class LoginModel {
       this.cityId,
       this.cityTitle,
       this.repType,
+      this.totalReci,
+      this.usedReci,
+      this.remainReci,
       {this.otherStartDate,
       this.otherEndDate});
   Map<String, dynamic> toMap() {
@@ -1197,7 +1202,7 @@ class LoginModel {
       'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
-      'isLogin': 1,
+      'isLogin': UserInfo.isLogging,
       'endDate': endDate,
       'startDate': startDate,
       'flag': flag,
@@ -1205,7 +1210,10 @@ class LoginModel {
       'recipesCount': recipesCount,
       'otherStartDate': otherStartDate,
       'otherEndDate': otherEndDate,
-      'repType': repType.i.toString()
+      'repType': repType.i.toString(),
+      'totalReci': totalReci,
+      'usedReci': usedReci,
+      'remainReci': remainReci
     };
   }
 
@@ -1228,6 +1236,9 @@ class LoginModel {
       map['cityId'] ?? 0,
       map['cityTitle'],
       RepType.fromIntS(map['repType']),
+      map['totalReci'] ?? 0,
+      map['usedReci'] ?? 0,
+      map['remainReci'],
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );
@@ -1249,9 +1260,9 @@ class Type {
       _ => Type(3, "غير متوفر", color: Colors.grey),
     };
   }
-  static  Widget buildBadge(Type brandType) {
-    return
-      Container(
+
+  static Widget buildBadge(Type brandType) {
+    return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: brandType.color.withOpacity(0.12),
@@ -1259,9 +1270,12 @@ class Type {
       ),
       child: Text(brandType.name,
           style: TextStyle(
-              color: brandType.color, fontSize: 10.sp, fontWeight: FontWeight.bold)),
+              color: brandType.color,
+              fontSize: 10.sp,
+              fontWeight: FontWeight.bold)),
     );
   }
+
   static Type fromIntS(String? value) {
     return switch (value) {
       "1" => Type(1, "هدف", color: Colors.blue),
@@ -1284,6 +1298,7 @@ class Type {
     return this.i;
   }
 }
+
 class RepType {
   int i;
   String name;
@@ -1296,30 +1311,38 @@ class RepType {
     return switch (value) {
       4 => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
       5 => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
-      6 => RepType(6, "senior",     color: const Color(0xFF4A7FA7)), // splash1
-      7 => RepType(7, "مندوب",      color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other",      color: const Color(0xFF94A3B8)), // رمادي ناعم
+      6 => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
+      7 => RepType(7, "مندوب",
+          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
 
   static RepType fromIntS(String? value) {
     return switch (value) {
-      "4" => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
-      "5" => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
-      "6" => RepType(6, "senior",     color: const Color(0xFF4A7FA7)), // splash1
-      "7" => RepType(7, "مندوب",      color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other",      color: const Color(0xFF94A3B8)), // رمادي ناعم
+      "4" =>
+        RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+      "5" =>
+        RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      "6" => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
+      "7" => RepType(7, "مندوب",
+          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
 
   // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
   static RepType fromName(String name) {
     return switch (name) {
-      "supervisor" => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
-      "teamleader" => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
-      "senior" => RepType(6, "senior",     color: const Color(0xFF4A7FA7)), // splash1
-      "مندوب" => RepType(7, "مندوب",      color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other",      color: const Color(0xFF94A3B8)), // رمادي ناعم
+      "supervisor" =>
+        RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+      "teamleader" =>
+        RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      "senior" =>
+        RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
+      "مندوب" => RepType(7, "مندوب",
+          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
 
@@ -1438,8 +1461,14 @@ class PlanBrandsSp {
   }
 
   factory PlanBrandsSp.fromMap(Map<String, dynamic> map) {
-    return PlanBrandsSp(map['id'], map['spId'], map['brandId'],
-        Type.fromInt(map['brandType']), map['titleAr'], map['phTitle'], map['totalAmount']);
+    return PlanBrandsSp(
+        map['id'],
+        map['spId'],
+        map['brandId'],
+        Type.fromInt(map['brandType']),
+        map['titleAr'],
+        map['phTitle'],
+        map['totalAmount']);
   }
 }
 
@@ -1625,6 +1654,14 @@ class BrandRes {
   int id;
   String title_en;
   BrandRes(this.id, this.title_en);
+}
+
+class InsertRecResponse {
+  int totalReci;
+  int usedReci;
+  int remainReci;
+
+  InsertRecResponse(this.totalReci, this.usedReci,this.remainReci);
 }
 
 class StatePlan {
@@ -1852,13 +1889,14 @@ class FlagModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FlagModel &&
-              runtimeType == other.runtimeType &&
-              flag == other.flag;
+      other is FlagModel &&
+          runtimeType == other.runtimeType &&
+          flag == other.flag;
 
   @override
   int get hashCode => flag.hashCode;
 }
+
 class InventoryModel {
   String title;
   String used;
@@ -1882,6 +1920,7 @@ class ChangePlanBrandType {
 
   ChangePlanBrandType(this.id, this.brandType);
 }
+
 class InfoRep {
   int id;
   String name;
@@ -1891,12 +1930,13 @@ class InfoRep {
   String recipesCount;
   int repPlanId;
   int totalVisit;
-  String totDocVisit;     // حقل جديد
-  String totHosVisit;     // حقل جديد
+  String totDocVisit; // حقل جديد
+  String totHosVisit; // حقل جديد
   int visitDon;
-  String visitDonDoc;     // حقل جديد
-  String visitDonHos;     // حقل جديد
+  String visitDonDoc; // حقل جديد
+  String visitDonHos; // حقل جديد
   int visitNoteYet;
+  int repType;
 
   InfoRep(
       this.id,
@@ -1912,8 +1952,10 @@ class InfoRep {
       this.visitDon,
       this.visitDonDoc,
       this.visitDonHos,
-      this.visitNoteYet);
+      this.visitNoteYet,
+      this.repType);
 }
+
 class VisitRepSen {
   int repId;
   int userId;
@@ -2204,32 +2246,31 @@ class SearchHospitalNoteModel {
   SearchHospitalNoteModel(
       this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);
 }
- List<FlagModel> getAllFlags(int repType){
-  List<FlagModel> allFlag=[];
-  if(repType==7){
-    allFlag.addAll(  [
+
+List<FlagModel> getAllFlags(int repType) {
+  List<FlagModel> allFlag = [];
+  if (repType == 7) {
+    allFlag.addAll([
       FlagModel(1),
       FlagModel(5),
       FlagModel(0),
     ]);
-
-  }else
-  if(repType==6){
-    allFlag.addAll(  [
+  } else if (repType == 6) {
+    allFlag.addAll([
       FlagModel(1),
       FlagModel(5),
       FlagModel(6),
     ]);
-
-  }else if(repType==5){
-    allFlag.addAll(  [
+  } else if (repType == 5) {
+    allFlag.addAll([
       FlagModel(5),
       FlagModel(1),
     ]);
-
   }
-  if(UserInfo.repType.i==4){
-    allFlag.add(   FlagModel(4),);
+  if (UserInfo.repType.i == 4) {
+    allFlag.add(
+      FlagModel(4),
+    );
   }
   return allFlag;
 }
@@ -2237,38 +2278,39 @@ class SearchHospitalNoteModel {
 Color getColor(int flag) {
   switch (flag) {
     case 0:
-    // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
+      // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
       return const Color(0xFF0288D1);
 
     case 1:
-    // بانتظار موافقة المشرف: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
+      // بانتظار موافقة المشرف: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
       return const Color(0xFFE53935);
 
     case 2:
-    // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
+      // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
       return const Color(0xFF43A047);
 
     case 3:
-    // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
+      // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
       return const Color(0xFF37474F);
 
     case 4:
-    // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
+      // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
       return const Color(0xFF00897B);
 
     case 5:
-    // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
+      // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
       return const Color(0xFFFB8C00);
 
     case 6:
-    // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
+      // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
       return const Color(0xFF5E35B1);
 
     default:
-    // الحالة الافتراضية: الكحلي الأساسي للتطبيق
+      // الحالة الافتراضية: الكحلي الأساسي للتطبيق
       return const Color(0xFF0D47A1);
   }
 }
+
 class StatusPlanModel {
   String name;
   int id;

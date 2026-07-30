@@ -52,7 +52,6 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => instance<PlanManagementBloc>()),
-
         BlocProvider(create: (_) => instance<FinishedPlanBloc>()),
         BlocProvider(create: (_) => instance<AuthBloc>()),
         BlocProvider(create: (_) => instance<ReportVisitDoctorBloc>()),
@@ -71,7 +70,6 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-
         BlocProvider<RecipesBrandBloc>(
           create: (context) {
             final bloc = instance<RecipesBrandBloc>();
@@ -97,7 +95,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SeniorRepsBloc>(
           create: (context) {
             final bloc = instance<SeniorRepsBloc>();
-          //  bloc.add(AllSeniorRepEvent(UserInfo.cityId,UserInfo.repId));
+            //  bloc.add(AllSeniorRepEvent(UserInfo.cityId,UserInfo.repId));
             //   bloc.add(AllNumEvent());
             return bloc;
           },
@@ -181,11 +179,10 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(create: (_) => instance<AsyncBloc>()),
         BlocProvider(create: (_) => instance<SearchDoctorsBloc>()),
-
         BlocProvider<ManageFutureBloc>(
           create: (context) {
             final bloc = instance<ManageFutureBloc>();
-            bloc.add(AllSeniorRepFutureEvent());
+
             return bloc;
           },
         ),
@@ -199,7 +196,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<GeneralReportsBloc>(
           create: (context) {
             final bloc = instance<GeneralReportsBloc>();
-         //   bloc.add(const TeamLeaderAndCityEvent());
+            //   bloc.add(const TeamLeaderAndCityEvent());
             return bloc;
           },
         ),
@@ -244,19 +241,23 @@ class _MyAppState extends State<MyApp> {
 }
 
 String _getInitialRoute() {
+
   if (UserInfo.isLogging == 0) return Routes.login;
+  if (UserInfo.isLogging == 2) {
+    if (UserInfo.repType.i == 4 || UserInfo.repType.i == 5) {
+      return Routes.adminControl;
+    }
+    if (UserInfo.repType.i == 7) {
+      return Routes.places;
+    }
+    if (UserInfo.repType.i == 6) {
+      return Routes.AllRepSenior;
+    }
+  }
   if (UserInfo.isLogging == 1) return Routes.syncData;
   if (UserInfo.isLogging == 4) return Routes.syncData;
   if (UserInfo.isLogging == 5) return Routes.asyncIn;
-  if (UserInfo.isLogging == 2) {
-    if(UserInfo.repType.i==7){
-      return Routes.places;
 
-    }else if( UserInfo.repType.i==6){
-      return Routes.AllRepSenior;
-    }else{
-      return Routes.adminControl;
-    }
-  };
+  ;
   return Routes.places;
 }

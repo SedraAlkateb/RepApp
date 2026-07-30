@@ -22,7 +22,8 @@ class Hospital extends StatelessWidget {
           buildWhen: (previous, current) =>
           current is AllHospitalsState ||
               current is AllHospitalEmptyState ||
-              current is AllHospitalErrorState,
+              current is AllHospitalErrorState||
+          current is AllHospitalLoadingState,
           builder: (context, state) {
             List<HospitalSpAllModel> hospitalModel = context.read<DoctorsBloc>().hospital;
 
@@ -53,7 +54,17 @@ class Hospital extends StatelessWidget {
                 ],
               );
             }
-
+            if (state is AllHospitalLoadingState) {
+              return CustomScrollView(
+                slivers: [
+                  _buildSearchHeader(context),
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: loadingFullScreen(context)),
+                  ),
+                ],
+              );
+            }
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [

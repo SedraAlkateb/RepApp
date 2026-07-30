@@ -56,6 +56,8 @@ final class AllNumLoadingState extends RecipesBrandState {
 }
 //
 final class InsertRecipesState extends RecipesBrandState {
+ final InsertRecResponse num;
+ InsertRecipesState(this.num);
   List<Object?> get props => [];
 }
 final class InsertRecipesErrorState extends RecipesBrandState {

@@ -19,20 +19,22 @@ class PlacesArchive extends StatefulWidget {
 class _PlacesArchiveState extends State<PlacesArchive> {
   @override
   void initState() {
-  BlocProvider.of<PlaceBloc>(context).add(NumEvent());
+    BlocProvider.of<PlaceBloc>(context).add(NumEvent());
     super.initState();
   }
+
   final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: AppBar
-        (leading:IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.arrow_back)) ,
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back)),
         title: Text('ارشيف المناطق'),
       ),
-      body:    bodyBuild(context),
+      body: bodyBuild(context),
     );
   }
 
@@ -70,9 +72,8 @@ class _PlacesArchiveState extends State<PlacesArchive> {
                   ],
                 ))
             : SizedBox(),
-
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
           child: SearchField(
             //
             searchController: searchController,
@@ -113,29 +114,30 @@ class _PlacesArchiveState extends State<PlacesArchive> {
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child:
-                placeModel.isEmpty?emptyFullScreen(context):
-                ListView.builder(
-                  itemCount: placeModel.length,
-                  itemBuilder: (context, index) {
-                    return AnimatedPlaceCard(
-                      place: placeModel[index],
-                      onTap: () {
-                        print(placeModel[index].placeId);
-                        Navigator.pushNamed(
-                          context,
-                          Routes.doctorAndHospitalArchive,
-                          arguments: placeModel[index].placeId, // نرسل الـ ID هنا
-                        );
-                        BlocProvider.of<PlaceBloc>(context).add(
-                          DoctorArchiveByPlace(placeModel[index].placeId, 0),
-                        );
-                      },
-                    );
-                  },
-                ),
+                child: placeModel.isEmpty
+                    ? emptyFullScreen(context)
+                    : ListView.builder(
+                        itemCount: placeModel.length,
+                        itemBuilder: (context, index) {
+                          return AnimatedPlaceCard(
+                            place: placeModel[index],
+                            onTap: () {
+                              print(placeModel[index].placeId);
+                              Navigator.pushNamed(
+                                context,
+                                Routes.doctorAndHospitalArchive,
+                                arguments: placeModel[index]
+                                    .placeId, // نرسل الـ ID هنا
+                              );
+                              BlocProvider.of<PlaceBloc>(context).add(
+                                DoctorArchiveByPlace(
+                                    placeModel[index].placeId, 0),
+                              );
+                            },
+                          );
+                        },
+                      ),
               );
-
             },
           ),
         ),

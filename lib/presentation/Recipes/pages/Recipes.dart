@@ -920,6 +920,8 @@ class _RecipesPageState extends State<RecipesPage> {
                             // 3. الآن يمكنك إغلاق الشاشة الحالية بأمان بعد اختفاء الـ Dialog 🚀
                             Navigator.of(context).pop();
                           }
+                          BlocProvider.of<RecipesBrandBloc>(context).add(EditeRecNumEvent(state.num));
+
                         } else if (state is InsertRecipesErrorState) {
 
                           error(context, state.failure.massage,

@@ -80,12 +80,16 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllSpcBaseResponse> allSpecializations(int repDet) async {
+  Future<AllSpcBaseResponse> allSpecializations(int repDet, int? planId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', repDet.toString()));
+    if (planId != null) {
+      _data.fields.add(MapEntry('planId', planId.toString()));
+    }
     final _options = _setStreamType<AllSpcBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -763,7 +767,7 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> insertReci(
+  Future<InsertRecipeBaseResponse> insertReci(
     String recipeType,
     String repId,
     String type,
@@ -844,7 +848,7 @@ class _AppServiceClient implements AppServiceClient {
     if (note_emp != null) {
       _data.fields.add(MapEntry('note_emp', note_emp));
     }
-    final _options = _setStreamType<Message1Response>(
+    final _options = _setStreamType<InsertRecipeBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -855,9 +859,9 @@ class _AppServiceClient implements AppServiceClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Message1Response _value;
+    late InsertRecipeBaseResponse _value;
     try {
-      _value = Message1Response.fromJson(_result.data!);
+      _value = InsertRecipeBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -1080,6 +1084,96 @@ class _AppServiceClient implements AppServiceClient {
           .compose(
             _dio.options,
             '/admin/visitDoc.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllNoVisitDoctorBaseResponse _value;
+    try {
+      _value = AllNoVisitDoctorBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllNoVisitDoctorBaseResponse> noVisitHos(
+    int repDet,
+    int planId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    _data.fields.add(MapEntry('planId', planId.toString()));
+    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/noVisitHos.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllNoVisitDoctorBaseResponse _value;
+    try {
+      _value = AllNoVisitDoctorBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllNoVisitDoctorBaseResponse> getUnfinishedHosVisits(
+    int repPlanId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getUnfinishedHosVisits.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AllNoVisitDoctorBaseResponse _value;
+    try {
+      _value = AllNoVisitDoctorBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AllNoVisitDoctorBaseResponse> visitHos(int repPlanId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    final _options = _setStreamType<AllNoVisitDoctorBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/visitHos.php',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1633,12 +1727,16 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id) async {
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
+    int id,
+    int placeId,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', id.toString()));
+    _data.fields.add(MapEntry('placeId', placeId.toString()));
     final _options = _setStreamType<AllRepresentativeFutureBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1693,6 +1791,7 @@ class _AppServiceClient implements AppServiceClient {
   Future<AllReadResponse> getVisitReadStatus(
     String visitId,
     String visitType,
+    int repType,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -1700,6 +1799,7 @@ class _AppServiceClient implements AppServiceClient {
     final _data = FormData();
     _data.fields.add(MapEntry('VisitId', visitId));
     _data.fields.add(MapEntry('visitType', visitType));
+    _data.fields.add(MapEntry('repType', repType.toString()));
     final _options = _setStreamType<AllReadResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

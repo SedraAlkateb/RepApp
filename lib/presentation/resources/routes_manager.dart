@@ -22,6 +22,7 @@ import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
+import 'package:domina_app/presentation/senior/manage_future/page/future_place_page.dart';
 import 'package:domina_app/presentation/senior/plan_management/page/plan_help_goal_tap.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -34,8 +35,10 @@ import 'package:domina_app/presentation/senior/representative/page/place_senior.
 import 'package:domina_app/presentation/senior/representative/page/remaining_visits.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
+import 'package:domina_app/presentation/senior/representative/page/sen_visit_hospital.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/view_recipe.dart';
+import 'package:domina_app/presentation/senior/representative/widget/visits_type_page.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/doctor_info.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/main_search.dart';
 import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
@@ -80,10 +83,12 @@ class Routes {
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String AllRepSenior = "/AllRepSenior";
- // static const String cities = "/cities";
+  // static const String cities = "/cities";
 
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
+  static const String seniorFuturePlaces = "/seniorFuturePlaces";
+
   static const String seniorSpec = "/seniorSpec";
   static const String seniorHos = "/seniorHos";
   static const String seniorDoc = "/seniorDoc";
@@ -91,6 +96,9 @@ class Routes {
   static const String noVisitDoctor = "/noVisitDoctor";
   static const String remainingVisitsDoctor = "/remainingVisitsDoctor";
   static const String senVisitDoctor = "/senVisitDoctor";
+  static const String senVisitHospital = "/senVisitHospital";
+  static const String senVisit = "/senVisit";
+
   static const String EditingPlan = "/EditingPlan";
   static const String RepPlanBrandSp = "/RepPlanBrandSp";
   static const String allRecip = "/allRecip";
@@ -104,25 +112,25 @@ class Routes {
   static const String doctorDetails = "/doctorDetails";
 
   static const String infoVisitHospital = "/infoVisitHospital";
-  static const String infoVisitDoctor= "/infoVisitDoctor";
+  static const String infoVisitDoctor = "/infoVisitDoctor";
   static const String recipesHospital = "/recipesHospital";
-  static const String recipesDoctor= "/recipesDoctor";
+  static const String recipesDoctor = "/recipesDoctor";
 
   static const String createOrder = "/createOrder";
   static const String recipeDH = "/recipeDH";
+
   static const String allRepWithFuture = "/allRepWithFuture";
   static const String seniorByCityId = "/seniorByCityId";
   static const String adminControl = "/adminControl";
 
-  static const String allCitySeniors = "/allCitySeniors";/////////ToDo
+  static const String allCitySeniors = "/allCitySeniors"; /////////ToDo
   static const String teamLeader = "/teamLeader";
   static const String doctorAndHospitalArchive = "/doctorAndHospitalArchive";
   static const String finishedPlan = "/finishedPlan";
   static const String planReps = "/planReps";
   static const String createCurrentPlan = "/createCurrentPlan";
   static const String cityPlan = "/cityPlan";
-  static const String allCitySupervisor = "/allCitySupervisor";/////////ToDo
-
+  static const String allCitySupervisor = "/allCitySupervisor"; /////////ToDo
 }
 
 class RouteGenerator {
@@ -143,40 +151,37 @@ class RouteGenerator {
           PlaceVisitPage(placeId: args),
         );
       case Routes.visitDoctor:
-        final args = settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ Integer
+        final args =
+            settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ Integer
         return _animatedRoute(
           VisitDoctor(doctorModel: args),
         );
       case Routes.hospitalDetails:
-        final args = settings.arguments as HospitalSpAllModel; // ننتظر الـ ID هنا كـ
+        final args =
+            settings.arguments as HospitalSpAllModel; // ننتظر الـ ID هنا كـ
         return _animatedRoute(
-          HospitalDetails(
-
-              hospital: args),
+          HospitalDetails(hospital: args),
         );
       case Routes.doctorDetails:
         final args = settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ
         return _animatedRoute(
-          DoctorDetails(
-
-              doctor: args),
+          DoctorDetails(doctor: args),
         );
       case Routes.infoVisitHospital:
-        final args = settings.arguments as VisitHospitalAndHospital; // ننتظر الـ ID هنا كـ Integer
+        final args = settings.arguments
+            as VisitHospitalAndHospital; // ننتظر الـ ID هنا كـ Integer
         return _animatedRoute(
-          InfoVisitHospital(
-
-              hospitalModel: args),
+          InfoVisitHospital(hospitalModel: args),
         );
       case Routes.infoVisitDoctor:
-        final args = settings.arguments as VisitDoctorAndDoctor; // ننتظر الـ ID هنا كـ Integer
+        final args = settings.arguments
+            as VisitDoctorAndDoctor; // ننتظر الـ ID هنا كـ Integer
         return _animatedRoute(
-          InfoVisitDoctor(
-
-              doctorModel: args),
+          InfoVisitDoctor(doctorModel: args),
         );
       case Routes.visitHospital:
-        final args = settings.arguments as HospitalModel; // ننتظر الـ ID هنا كـ Integer
+        final args =
+            settings.arguments as HospitalModel; // ننتظر الـ ID هنا كـ Integer
         return _animatedRoute(
           VisitHospital(hospitalModel: args),
         );
@@ -190,7 +195,7 @@ class RouteGenerator {
         return _animatedRoute(Places());
       case Routes.placesArchive:
         initPlacesModule();
-       // initPlaceVisitModule();
+        // initPlaceVisitModule();
         initDoctorAndHospitalModule();
         return _animatedRoute(PlacesArchive());
       case Routes.spec:
@@ -242,28 +247,26 @@ class RouteGenerator {
         initBrandRecModule();
         return _animatedRoute(AllRecip());
 
-        case Routes.Recipes:
+      case Routes.Recipes:
         initBrandRecModule();
-        return _animatedRoute(
-            RecipesPage(
-                  docId: 0,
-                  st: 433,
-                ));
+        return _animatedRoute(RecipesPage(
+          docId: 0,
+          st: 433,
+        ));
       case Routes.repProfile:
         initSeniorProfModule();
-        return _animatedRoute(
-           RepProfile(
-                  id: 3,
-                  repPlanId: 3,
-                  index: 3,
-            //      cityId: 1,
-                ));
+        return _animatedRoute(RepProfile(
+          id: 3,
+          repPlanId: 3,
+          index: 3,
+          //      cityId: 1,
+        ));
       case Routes.AllRepSenior:
         initSeniorModule();
         final args = settings.arguments as int?; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute( AllRepSenior(
-          cityId:args!=null?args: UserInfo.cityId,
+        return _animatedRoute(AllRepSenior(
+          cityId: args != null ? args : UserInfo.cityId,
           cityname: UserInfo.cityTitle,
           repId: UserInfo.repId,
         ));
@@ -272,88 +275,108 @@ class RouteGenerator {
       //   return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
-        return _animatedRoute( PlaceSenior());
+        return _animatedRoute(PlaceSenior(
+        ));
+      case Routes.seniorFuturePlaces:
+        return _animatedRoute(FuturePlacePage(
+        ));
       case Routes.seniorSpec:
-        return _animatedRoute( SpecSeniorPage());
+        return _animatedRoute(SpecSeniorPage());
       case Routes.seniorHos:
-        return _animatedRoute( HospitalSenior());
+        return _animatedRoute(HospitalSenior());
       case Routes.seniorDoc:
-        return _animatedRoute( DoctorSenior());
+        return _animatedRoute(DoctorSenior());
       // case Routes.seniorNoteDoc:
       //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
         return _animatedRoute(NoVisitDoctor());
       case Routes.remainingVisitsDoctor:
-        return _animatedRoute( RemainingVisits());
+        return _animatedRoute(RemainingVisits());
       case Routes.senVisitDoctor:
-        return _animatedRoute( SenVisitDoctor());
+        return _animatedRoute(SenVisitDoctor());
+      case Routes.senVisitHospital:
+        return _animatedRoute(SenVisitHospital());
+      case Routes.senVisit:
+        final args = settings.arguments as Map<String, dynamic>;
+
+        final Function onTapDoctor = args['onTapDoctor'];
+        final Function onTapHospital = args['onTapHospital'];
+        final String title = args['title'];
+        final Widget doctor = args['doctor'];
+        final Widget hospital = args['hospital'];
+        return _animatedRoute(
+          VisitsTypePage(
+            title: title,
+            doctor: doctor,
+            hospital: hospital,
+            onTapDoctor: onTapDoctor,
+            onTapHospital: onTapHospital,
+          ),
+        );
 
       case Routes.searchdoctors:
         iniSearchDoctorsModule();
-        return _animatedRoute(
-           MainSearchPage()
-        );
+        return _animatedRoute(MainSearchPage());
       case Routes.RepPlanBrandSp:
         iniFutureModule();
         final args = settings.arguments as Map<String, dynamic>?;
         final title = args?['title'];
         final flag = args?['flag'];
-        return _animatedRoute(
-           RepPlanBrandSpPage(
-            title: title,
-            flag: flag,
-          )
-        );
+        return _animatedRoute(RepPlanBrandSpPage(
+          title: title,
+          flag: flag,
+        ));
       case Routes.deleteLogout:
         initDeleteModule();
         return _animatedRoute(DeleteLogoutPage());
       case Routes.doctorInfo:
-        return _animatedRoute( DoctorInfo());
+        return _animatedRoute(DoctorInfo());
       case Routes.allRecipe:
         initBrandRecModule();
 
-        return _animatedRoute( AllRecipesForView());
+        return _animatedRoute(AllRecipesForView());
       case Routes.viewRecipe:
-        return _animatedRoute( ViewRecipePage());
+        return _animatedRoute(ViewRecipePage());
       case Routes.recipeDH:
-        initDoctorAndHospitalModule() ;
-        return _animatedRoute( RecipeDH());
+        initDoctorAndHospitalModule();
+        return _animatedRoute(RecipeDH());
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
-        return _animatedRoute( AllRepWithFuture());
+        return _animatedRoute(AllRepWithFuture(
+
+        ));
       case Routes.seniorByCityId:
         initGeneralReportsModule();
-        return _animatedRoute( AllRepWithFuture());
+        return _animatedRoute(AllRepWithFuture(
+        ));
       case Routes.adminControl:
-        return _animatedRoute( AdminDashboardPage());
+        return _animatedRoute(AdminDashboardPage());
       case Routes.doctorAndHospitalArchive:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute( PlaceVisitArchivePage(placeId: args));
+        return _animatedRoute(PlaceVisitArchivePage(placeId: args));
       case Routes.teamLeader:
         initGeneralReportsModule();
-        return _animatedRoute( TeamLeader());
+        return _animatedRoute(TeamLeader());
       case Routes.allCitySeniors:
         iniAllCityModule();
-        return _animatedRoute( AllCitySeniors());
+        return _animatedRoute(AllCitySeniors());
       case Routes.allCitySupervisor:
         iniAllCityModule();
-        return _animatedRoute( AllCityForRepSuper());
+        return _animatedRoute(AllCityForRepSuper());
       case Routes.finishedPlan:
         initFinishedPlan();
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute( FinishedPlanPage(cityId: args));
+        return _animatedRoute(FinishedPlanPage(cityId: args));
       case Routes.planReps:
-
-        return _animatedRoute( PlanRepsPage());
+        return _animatedRoute(PlanRepsPage());
       case Routes.createCurrentPlan:
         initCurrentPlanModule();
-        return _animatedRoute( PlanHelpGoalTap());
+        return _animatedRoute(PlanHelpGoalTap());
       case Routes.cityPlan:
         iniAllCityModule();
         return _animatedRoute(AllCityPlan());
-
 
       default:
         return unDefinedRoute();

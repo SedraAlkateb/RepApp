@@ -21,7 +21,8 @@ class FutureSpecializationsPage extends StatefulWidget {
     required this.flag,
     required this.sampleCount,
     required this.repName,
-    required this.repType
+    required this.repType,
+    required this.placeId
   });
   final String repName;
   final int id;
@@ -29,6 +30,7 @@ class FutureSpecializationsPage extends StatefulWidget {
   final FlagModel flag;
   final int sampleCount;
   final RepType repType;
+  final int placeId;
   @override
   State<FutureSpecializationsPage> createState() => _FutureSpecializationsPageState();
 }
@@ -37,7 +39,7 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
   final TextEditingController searchController = TextEditingController();
 @override
   void initState() {
-  BlocProvider.of<FutureRepBloc>(context).add(FutureSpEvent(widget.id));
+  BlocProvider.of<FutureRepBloc>(context).add(FutureSpEvent(widget.id,widget.repPlanId));
 
   super.initState();
   }
@@ -47,7 +49,7 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
     final bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
     Future<bool> onWillPop() async {
-      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
+      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent(widget.placeId));
       return true;
     }
 
@@ -67,7 +69,7 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
             } else if (state is EditeStatusFailureState) {
               error(context, state.failure.massage, state.failure.code);
             } else if (state is EditeStatusState) {
-              BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
+              BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent(widget.placeId));
               success(context);
               Navigator.pop(context);
             }
@@ -124,7 +126,7 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
                           return errorFullScreen(
                             context,
                             mes: state.failure.massage,
-                            func: () => BlocProvider.of<FutureRepBloc>(context).add(FutureSpEvent(widget.id)),
+                            func: () => BlocProvider.of<FutureRepBloc>(context).add(FutureSpEvent(widget.id,widget.repPlanId)),
                           );
                         }
 

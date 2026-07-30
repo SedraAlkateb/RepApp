@@ -129,7 +129,7 @@ extension FlowStateExtension on FlowState {
     try {
       if (_isCurrentDialogShowing(context)) {
         Navigator.of(context, rootNavigator: true).pop(true);
-        print("Dialog dismissed successfully.");
+        print("Dialog dismissed successfully22.");
       }
       return true;
     } catch (e) {

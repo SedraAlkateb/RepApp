@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
+import 'package:domina_app/data/mapper/mapper.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_doctor_sql_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_doctor_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospital_sp_n_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/check_reci_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -14,24 +17,43 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
   AllDoctorsSqlUsecase allDoctorsqlUsecase;
   CheckReciUsecase checkReciUsecase;
   AllHospitalSpNSqlUsecase allHospitalSpNSqlUsecase;
+  AllDoctorUsecase allDoctorUsecase;
+  AllHospialSpUsecase allHospitalUsecase;
   List<HospitalSpAllModel> hospital = [];
   List<DoctorModel> doctor = [];
 
-  DoctorsBloc(this.allDoctorsqlUsecase, this.checkReciUsecase,this.allHospitalSpNSqlUsecase)
+  DoctorsBloc(
+      this.allDoctorsqlUsecase, this.checkReciUsecase,this.allHospitalSpNSqlUsecase,this.allDoctorUsecase,this.allHospitalUsecase)
       : super(DoctorsInitial()) {
     on<DoctorsEvent>((event, emit) async {
       if (event is AllDoctorEvent) {
-        (await allDoctorsqlUsecase.execute()).fold((failure) {
-          emit(AllDoctorErrorState(failure: failure));
-          print(failure.massage);
-        }, (data) async {
-          doctor = data;
-          if (doctor.isNotEmpty) {
-            emit(AllDoctorState(data));
-          } else {
-            emit(AllDoctorEmptyState());
-          }
-        });
+        emit(AllDoctorLoadingState());
+        if(UserInfo.repType.i==6||UserInfo.repType.i==7){
+          (await allDoctorsqlUsecase.execute()).fold((failure) {
+            emit(AllDoctorErrorState(failure: failure));
+            print(failure.massage);
+          }, (data) async {
+            doctor = data;
+            if (doctor.isNotEmpty) {
+              emit(AllDoctorState(data));
+            } else {
+              emit(AllDoctorEmptyState());
+            }
+          });
+        }else{
+          (await allDoctorUsecase.execute(UserInfo.repId)).fold((failure) {
+            emit(AllDoctorErrorState(failure: failure));
+            print(failure.massage);
+          }, (data) async {
+            doctor = data;
+            if (doctor.isNotEmpty) {
+              emit(AllDoctorState(data));
+            } else {
+              emit(AllDoctorEmptyState());
+            }
+          });
+        }
+
       } else if (event is SearchDocEvent) {
         List<DoctorModel> doctorList;
         String search = normalizeText(event.contant);
@@ -64,6 +86,8 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
         });
       }
       if (event is AllHospitalEvent) {
+        emit(AllHospitalLoadingState());
+        if(UserInfo.repType.i==6||UserInfo.repType.i==7){
         (await allHospitalSpNSqlUsecase.execute()).fold((failure) {
           emit(AllHospitalErrorState(failure: failure));
         }, (data) async {
@@ -74,6 +98,19 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
             emit(AllHospitalEmptyState());
           }
         });
+
+        }else{
+          (await allHospitalUsecase.execute(UserInfo.repId)).fold((failure) {
+            emit(AllHospitalErrorState(failure: failure));
+          }, (data) async {
+            hospital = data.toDomain();
+            if (hospital.isNotEmpty) {
+              emit(AllHospitalsState(hospital));
+            } else {
+              emit(AllHospitalEmptyState());
+            }
+          });
+        }
       }
       else if (event is SearchhosEvent) {
         List<HospitalSpAllModel> hospitallist;

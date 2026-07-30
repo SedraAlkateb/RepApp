@@ -1,7 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
-
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/analytics/analytics_events.dart';
 import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
@@ -501,6 +499,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           UserInfo.recipesCount = data.recipesCount;
           UserInfo.startDate = data.startDate;
           UserInfo.endDate = data.endDate;
+          UserInfo.totalReci = data.totalReci;
+          UserInfo.remainReci = data.remainReci;
+          UserInfo.usedReci = data.usedReci;
           UserInfo.otherStartDate = data.otherStartDate ?? null;
           UserInfo.otherEndDate = data.otherEndDate ?? null;
           if (UserInfo.otherstatus == -1) {

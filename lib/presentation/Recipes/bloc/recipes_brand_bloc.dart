@@ -5,6 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
+import 'package:domina_app/domain/usecase/edit_recipe_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
@@ -27,9 +28,11 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   GetRepReciUsecase getRepReciUsecase;
   UpdateReciUsecase updateReciUsecase;
   AllReciUsecase allReciUsecase;
+  EditRecipeUsecase editRecipeUsecase;
   int isChecked1 = 3;
   int isChecked2 = 3;
   final _picker = ImagePicker();
+  int totalNum = 0;
   InsertRecipesObject insertRecipesObject = InsertRecipesObject(
       UserInfo.repId.toString(),
       "0",
@@ -76,6 +79,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   }
 
   void updateRecipes(CopyReciRequest recipes) {
+    totalNum=int.parse(recipes.total);
     final updatedUser = insertRecipesObject.copyWith(
         create_date: recipes.create_date,
         print_date: recipes.print_date,
@@ -121,7 +125,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       this.copyReciUsecase,
       this.updateReciUsecase,
       this.allReciUsecase,
-      this.getRepReciUsecase)
+      this.getRepReciUsecase,
+      this.editRecipeUsecase)
       : super(RecipesBrandInitial()) {
     on<RecipesBrandEvent>((event, emit) async {
       if (event is AllReciEvent) {
@@ -212,7 +217,8 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
-          emit(InsertRecipesState());
+          emit(InsertRecipesState(data));
+
         });
       }
       if (event is InsertReciHospitalEvent) {
@@ -248,12 +254,11 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
-          emit(InsertRecipesState());
+          emit(InsertRecipesState(data));
         });
       }
       if (event is UpdateReciSEvent) {
@@ -281,12 +286,14 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.phone,
           insertRecipesObject.total,
           DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          flagImage1: ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
-              ? "1"
-              : "3"),
-          flagImage2: ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
-              ? "1"
-              : "3"),
+          flagImage1:
+              ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+                  ? "1"
+                  : "3"),
+          flagImage2:
+              ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+                  ? "1"
+                  : "3"),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,
@@ -299,8 +306,14 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
-          emit(InsertRecipesState());
+        //  emit(InsertRecipesState(data));
         });
+      }
+      ///////////////////////editRecipeUsecase
+      if (event is EditeRecNumEvent) {
+        (await editRecipeUsecase.execute(event.num)).fold((failure) {
+          emit(InsertRecipesErrorState(failure: failure));
+        }, (data) async {});
       }
       if (event is UpdateReciSHospitalEvent) {
         print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
@@ -329,12 +342,14 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           insertRecipesObject.phone,
           insertRecipesObject.total,
           DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          flagImage1: ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
-              ? "1"
-              : "3"),
-          flagImage2: ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
-              ? "1"
-              : "3"),
+          flagImage1:
+              ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+                  ? "1"
+                  : "3"),
+          flagImage2:
+              ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+                  ? "1"
+                  : "3"),
           note_emp: insertRecipesObject.note_emp,
           note2: insertRecipesObject.note2,
           note1: insertRecipesObject.note1,
@@ -343,13 +358,11 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
           brand_3: insertRecipesObject.brand_3?.id.toString(),
           brand_4: insertRecipesObject.brand_4?.id.toString(),
           image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-
-
         )))
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
-          emit(InsertRecipesState());
+       //   emit(InsertRecipesState(data));
         });
       }
       if (event is SelectTypeEvent) {
@@ -361,6 +374,7 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
         updateBrandValue(event.index, event.brandRecipeModel);
       }
       if (event is SelectNumRecEvent) {
+        totalNum = int.parse(event.num);
         final updatedUser =
             insertRecipesObject.copyWith(total: event.num.toString());
         insertRecipesObject = updatedUser;

@@ -243,3 +243,14 @@ class UpdateReciSHospitalEvent extends RecipesBrandEvent {
 
   List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
 }
+
+class EditeRecNumEvent extends RecipesBrandEvent {
+  final  InsertRecResponse num;
+
+
+  EditeRecNumEvent(
+      this.num
+      );
+
+  List<Object?> get props => [num];
+}

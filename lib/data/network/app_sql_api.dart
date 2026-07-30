@@ -3,6 +3,7 @@ import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
+
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
       List<BrandModel> brands,
@@ -82,6 +83,7 @@ abstract class AppSqlApiAbs {
     String? newNote,
   });
   Future<void> editIsLogin(int repId, int isLogin);
+
   ///////////////////////////////////clear
   Future<void> clearDatabase();
   Future<void> clearDatabaseAll();
@@ -99,7 +101,7 @@ abstract class AppSqlApiAbs {
   Future<List<ExceptionModel>> allException();
   Future<NumVisit> numVisit();
   Future<void> numDocAndHos();
-
+  Future<void> editRecipe(InsertRecResponse recNum);
 }
 
 class AppSqlApi extends AppSqlApiAbs {
@@ -551,6 +553,7 @@ class AppSqlApi extends AppSqlApiAbs {
       return HospitalSpAllModel.fromMap(maps[i]);
     });
   }
+
   Future<List<DoctorModel>> getDoctorByPlaceId(int placeId) async {
     final db = await databaseHelper.database;
 
@@ -718,7 +721,7 @@ class AppSqlApi extends AppSqlApiAbs {
     return List.generate(maps.length, (i) {
       VisitDoctorModel visitDoctorModel = VisitDoctorModel.fromMap1(maps[i]);
       DoctorModel doctorModel = DoctorModel.fromMap1(maps[i]);
-      visitDoctorModel.data= visitDoctorModel.data.toString().split('T')[0];
+      visitDoctorModel.data = visitDoctorModel.data.toString().split('T')[0];
       VisitDoctorAndDoctor visitDoctorAndDoctor =
           VisitDoctorAndDoctor(doctorModel, visitDoctorModel);
       return visitDoctorAndDoctor;
@@ -757,7 +760,8 @@ class AppSqlApi extends AppSqlApiAbs {
       VisitHospitalModel visitHospitalModel =
           VisitHospitalModel.fromMap1(maps[i]);
       HospitalModel hospitalModel = HospitalModel.fromMap1(maps[i]);
-      visitHospitalModel.data= visitHospitalModel.data.toString().split('T')[0];
+      visitHospitalModel.data =
+          visitHospitalModel.data.toString().split('T')[0];
       SpecDModel specModel = SpecDModel.fromMap2(maps[i]);
       VisitHospitalAndHospital visitHospitalAndHospital =
           VisitHospitalAndHospital(
@@ -1318,7 +1322,7 @@ class AppSqlApi extends AppSqlApiAbs {
                 row['plan_id'],
                 int.parse(convertArabicNumberToEnglish(row['amount'])),
                 row['specialization_title'] as String,
-                 Type.fromIntS(row['brandType']) ,
+                Type.fromIntS(row['brandType']),
                 row['specialization_id'],
                 row['specialization_flag'],
                 row['sumDoctor'],
@@ -1407,7 +1411,8 @@ class AppSqlApi extends AppSqlApiAbs {
     List<OtherBrandSpPlanModel> sortedList = SpMap.values.toList()
       ..sort((a, b) {
         if (a.brands.isNotEmpty && b.brands.isNotEmpty) {
-          return a.brands.first.brandType.i.compareTo(b.brands.first.brandType.i);
+          return a.brands.first.brandType.i
+              .compareTo(b.brands.first.brandType.i);
         }
         return 0;
       });
@@ -1424,7 +1429,6 @@ class AppSqlApi extends AppSqlApiAbs {
       String endDate,
       String otherStartDate,
       String otherEndDate) async {
-
     Database? mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
@@ -1642,16 +1646,29 @@ class AppSqlApi extends AppSqlApiAbs {
     Database? mydb = await databaseHelper.database;
     // استعلام لجلب عدد السجلات من جدول الأطباء
     final List<Map<String, dynamic>> doctorCountResult =
-    await mydb.rawQuery('SELECT COUNT(*) as total FROM doctor');
+        await mydb.rawQuery('SELECT COUNT(*) as total FROM doctor');
 
     // استعلام لجلب عدد السجلات من جدول المستشفيات
     final List<Map<String, dynamic>> hospitalCountResult =
-    await mydb.rawQuery('SELECT COUNT(*) as total FROM hospital');
+        await mydb.rawQuery('SELECT COUNT(*) as total FROM hospital');
 
     // استخراج الأرقام من النتائج (الافتراضي 0 في حال كانت القائمة فارغة)
-     UserInfo.numDoctor = Sqflite.firstIntValue(doctorCountResult) ?? 0;
+    UserInfo.numDoctor = Sqflite.firstIntValue(doctorCountResult) ?? 0;
     UserInfo.numHospital = Sqflite.firstIntValue(hospitalCountResult) ?? 0;
-     // initDoctorModule();
+    // initDoctorModule();
   }
 
+  @override
+  Future<void> editRecipe(InsertRecResponse recNum) async {
+    UserInfo.remainReci = recNum.remainReci; // انخفاض المتبقي
+    UserInfo.usedReci = recNum.usedReci; // زيادة المستهلك/المستخدم
+    final mydb = await databaseHelper.database;
+    await mydb.update(
+      'rep',
+      {'remainReci': UserInfo.remainReci,
+        "usedReci": UserInfo.usedReci},
+      where: 'repId = ?',
+      whereArgs: [UserInfo.repId],
+    );
+  }
 }

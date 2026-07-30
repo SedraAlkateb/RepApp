@@ -912,4 +912,16 @@ class RepositroySqlImp extends RepositorySql {
       return Left(failure);
     }
   }
+
+  @override
+  Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum)   async {
+    try {
+      final response = await _databaseHelper.editRecipe(recNum);
+      return Right(response);
+    } catch (e) {
+      Failure failure = ErrorHandler.handle(e).failure;
+      excRepository.exceptionApi(ExceptionModel(failure.massage, "editRecipe"));
+      return Left(failure);
+    }
+  }
 }

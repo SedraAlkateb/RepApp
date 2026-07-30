@@ -84,7 +84,7 @@ Future<bool> dismissDialog(BuildContext context) async {
     // نتحقق مباشرة من الـ rootNavigator إذا كان لديه أي Dialog مفتوح يمكن إغلاقه
     if (Navigator.of(context, rootNavigator: true).canPop()) {
       Navigator.of(context, rootNavigator: true).pop(true);
-      print("Dialog dismissed successfully.");
+      print("Dialog dismissed successfully33.");
 
       // نمنح المعالج 50 ملي ثانية لإنهاء حركة الإغلاق والتأكد من استقرار الـ Context
       await Future.delayed(const Duration(milliseconds: 50));

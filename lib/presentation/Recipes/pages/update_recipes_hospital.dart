@@ -842,11 +842,14 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
                         } else if (state is InsertRecipesState) {
+
                           await dismissDialog(context);
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                           );
+                          BlocProvider.of<RecipesBrandBloc>(context).add(EditeRecNumEvent(state.num));
+
                         } else if (state is InsertRecipesErrorState) {
                           success(context);
                           error(context, state.failure.massage,

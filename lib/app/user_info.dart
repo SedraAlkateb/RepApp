@@ -30,6 +30,9 @@ class UserInfo {
   static int numDoctor = 0;
   static int numHospital = 0;
   static int statusPlan =  -1;
+  static int totalReci = 0;
+  static int remainReci = 0;
+  static int usedReci = 0;
   static void initializeUserPlan() {
     statusPlan = UserInfo.repType.i == 5
         ? 5
@@ -63,7 +66,9 @@ class UserInfo {
     samplesCount = data.samplesCount;
     repType = data.repType;
     flag = data.flag;
-
+    usedReci=data.usedReci;
+    remainReci=data.remainReci;
+    totalReci=data.totalReci;
     // منطق التحقق من الـ Flag كما كان في ملف المين
     flag1 = otherstatus == -1 ? 0 : (data.flag1 ?? 0);
     UserInfo.initializeUserPlan();

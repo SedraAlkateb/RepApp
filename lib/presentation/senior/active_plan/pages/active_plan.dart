@@ -54,25 +54,25 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 20.h),
-                      _buildFluidAnimation(
-                        index: 0,
-                        child: Text(
-                          'منتجات الخطة الفعالة',
-                          style: TextStyle(
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF0F172A),
-                          ),
-                        ),
-                      ),
-                      _buildFluidAnimation(
-                        index: 1,
-                        child: Text(
-                          'عرض جميع المنتجات المدرجة في الخطة الحالية مع امكانية البحث عن منتج معين',
-                          style: TextStyle(fontSize: 14.sp, color: const Color(0xFF64748B)),
-                        ),
-                      ),
-                      SizedBox(height: 20.h),
+                      // _buildFluidAnimation(
+                      //   index: 0,
+                      //   child: Text(
+                      //     'منتجات الخطة الفعالة',
+                      //     style: TextStyle(
+                      //       fontSize: 22.sp,
+                      //       fontWeight: FontWeight.bold,
+                      //       color: const Color(0xFF0F172A),
+                      //     ),
+                      //   ),
+                      // ),
+                      // _buildFluidAnimation(
+                      //   index: 1,
+                      //   child: Text(
+                      //     'عرض جميع المنتجات المدرجة في الخطة الحالية مع امكانية البحث عن منتج معين',
+                      //     style: TextStyle(fontSize: 14.sp, color: const Color(0xFF64748B)),
+                      //   ),
+                      // ),
+                    //  SizedBox(height: 20.h),
 
                       // حقل البحث
                       _buildFluidAnimation(

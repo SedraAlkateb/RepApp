@@ -5,7 +5,8 @@ sealed class FutureRepEvent extends Equatable {}
 
 class FutureSpEvent extends FutureRepEvent {
   final int id;
-  FutureSpEvent(this.id);
+  final int planId;
+  FutureSpEvent(this.id,this.planId);
   @override
   List<Object?> get props => [];
 }

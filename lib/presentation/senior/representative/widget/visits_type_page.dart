@@ -1,37 +1,43 @@
-import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
-import 'package:domina_app/presentation/doctors/pages/doctor_page/doctors.dart';
-import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RecipeDH extends StatelessWidget {
-  const RecipeDH({super.key});
+class VisitsTypePage extends StatelessWidget {
+  const VisitsTypePage({super.key,
+    required this.title,
+  required this.doctor,
+    required this.hospital,
+    required this.onTapDoctor,
+    required this.onTapHospital
+  });
+  final String title;
 
+  final Widget doctor;
+ final Widget hospital;
+  final  Function onTapDoctor;
+  final  Function onTapHospital;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FB), // لون الخلفية الموحد للتطبيق
+
         body: NestedScrollView(
+          // هذا الجزء يسمح للـ Header (الـ AppBar والـ TabBar) بالتحرك مع السكرول
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
                 elevation: 0,
-                pinned: true,
-                floating: true,
-                snap: true,
-                backgroundColor: Colors.white,
+                pinned: false, // اجعله false ليختفي الـ AppBar عند السكرول
+                floating: true, // يظهر بمجرد السحب لأسفل قليلاً
+                snap: true, // يكمل الظهور تلقائياً
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),
                   onPressed: () => Navigator.pop(context),
                 ),
                 title: Text(
-                  "إنشاء وصفة ", // أو أي عنوان تفضله
+                  title,
                   style: TextStyle(
                     color: const Color(0xFF0D47A1),
                     fontWeight: FontWeight.bold,
@@ -39,12 +45,11 @@ class RecipeDH extends StatelessWidget {
                   ),
                 ),
               ),
-              // تصميم الـ TabBar العائم داخل الحاوية البيضاء
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
                   child: Container(
-                    height: 55.h,
+                    height: 60,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15.r),
@@ -58,47 +63,42 @@ class RecipeDH extends StatelessWidget {
                       ],
                     ),
                     child: TabBar(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(3),
                       dividerColor: Colors.transparent,
                       labelColor: Colors.white,
-                      unselectedLabelColor: Colors.grey.shade400,
+                      unselectedLabelColor: Colors.grey,
                       labelStyle: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14.sp),
+                      labelPadding: EdgeInsets.zero,
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
+                        color: ColorManager.medicalPrimary,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       onTap: (value) {
                         if (value == 0) {
-                            BlocProvider.of<DoctorsBloc>(context)
-                                .add(AllDoctorEvent());
+                         onTapDoctor();
                         } else {
-                          BlocProvider.of<DoctorsBloc>(context)
-                              .add(AllHospitalEvent());
+                          onTapHospital();
                         }
                       },
                       tabs: [
                         Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.groups_outlined),
-                              SizedBox(width: 8.w),
-                              const Text('الأطباء'),
-                            ],
-                          ),
-                        ),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.groups_outlined),
+                                  SizedBox(width: 8.w),
+                                  const Text('الأطباء'),
+                                ])),
                         Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.local_hospital_outlined),
-                              SizedBox(width: 8.w),
-                              const Text('المشافي'),
-                            ],
-                          ),
-                        ),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.local_hospital_outlined),
+                                  SizedBox(width: 8.w),
+                                  const Text('المشافي'),
+                                ])),
                       ],
                     ),
                   ),
@@ -106,11 +106,12 @@ class RecipeDH extends StatelessWidget {
               ),
             ];
           },
-          // محتوى الصفحات
+          // محتوى الصفحات تحت الـ TabBar
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),            children: [
-              Doctors(),
-              Hospital(),
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              doctor,
+              hospital,
             ],
           ),
         ),

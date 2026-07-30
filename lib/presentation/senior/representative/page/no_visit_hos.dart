@@ -7,67 +7,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-class NoVisitDoctor extends StatelessWidget {
-  NoVisitDoctor({super.key});
+class NoVisitHos extends StatelessWidget {
+  NoVisitHos({super.key});
   final TextEditingController searchNoteDoctorController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        title: const Text('أطباء لم يتم زيارتهم'),
-      ),
-      body: Column(
+    return  Column(
 
-        children: [
-          // حقل البحث
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: SearchField(
-              searchController: searchNoteDoctorController,
-              onPressed: (value) {
-                BlocProvider.of<SeniorProfBloc>(context).add(SenSearchNoVisitDoctorEvent(value));
-              },
-            ),
+      children: [
+        // حقل البحث
+        Padding(
+          padding: EdgeInsets.all(16.w),
+          child: SearchField(
+            searchController: searchNoteDoctorController,
+            onPressed: (value) {
+              BlocProvider.of<SeniorProfBloc>(context).add(SenSearchNoVisitDoctorEvent(value));
+            },
           ),
+        ),
 
-          // القائمة
-          Expanded(
-            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-              builder: (context, state) {
-                List<NoVisitDocModel> noVisitDoc = context.watch<SeniorProfBloc>().noVisitDoc;
+        // القائمة
+        Expanded(
+          child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+            builder: (context, state) {
+              List<NoVisitDocModel> noVisitDoc = context.watch<SeniorProfBloc>().noVisitDoc;
 
-                if (state is SenNoVisitDocLoadingState) return loadingFullScreen(context);
-                if (state is SenNoVisitDocEmptyState || noVisitDoc.isEmpty) return emptyFullScreen(context);
-                if (state is SenNoVisitDocErrorState) return errorFullScreen(context, func: () {
-                  BlocProvider.of<SeniorProfBloc>(context).add(NoVisitDocEvent(156,state.planId));
-                });
+              if (state is SenNoVisitDocLoadingState) return loadingFullScreen(context);
+              if (state is SenNoVisitDocEmptyState || noVisitDoc.isEmpty) return emptyFullScreen(context);
+              if (state is SenNoVisitDocErrorState) return errorFullScreen(context, func: () {
+                BlocProvider.of<SeniorProfBloc>(context).add(NoVisitDocEvent(156,state.planId));
+              });
 
-                return ListView.builder(
-                  padding: EdgeInsets.only(bottom: 20.h),
-                  itemCount: noVisitDoc.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 12.h),
-                        child: Row(
-                          children: [
-                            Text("عدد الأطباء:", style: TextStyle(fontSize: 14.sp, color: Colors.blueGrey)),
-                            SizedBox(width: 8.w),
-                            CircleNumberWidget(number: noVisitDoc.length),
-                          ],
-                        ),
-                      );
-                    }
-                    return NoVisitDoctorCard(data: noVisitDoc[index - 1]);
-                  },
-                );
-              },
-            ),
+              return ListView.builder(
+                padding: EdgeInsets.only(bottom: 20.h),
+                itemCount: noVisitDoc.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 12.h),
+                      child: Row(
+                        children: [
+                          Text("عدد الأطباء:", style: TextStyle(fontSize: 14.sp, color: Colors.blueGrey)),
+                          SizedBox(width: 8.w),
+                          CircleNumberWidget(number: noVisitDoc.length),
+                        ],
+                      ),
+                    );
+                  }
+                  return NoVisitDoctorCard(data: noVisitDoc[index - 1]);
+                },
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

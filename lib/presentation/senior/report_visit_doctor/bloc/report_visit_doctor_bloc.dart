@@ -69,7 +69,7 @@ class ReportVisitDoctorBloc
       }
       if (event is WhoAllReadEvent) {
         emit(AllWhoAllReadLoadingState());
-        (await visitReadStatus.execute(event.visitId,event.visitType))
+        (await visitReadStatus.execute(event.visitId,event.visitType,event.repType))
             .fold(
                 (failure) {
               emit(AllWhoAllReadErrorState(failure: failure));

@@ -10,16 +10,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditingPlan extends StatelessWidget {
-  EditingPlan({super.key, required this.repPlan,required this.repName});
+  EditingPlan({super.key, required this.repPlan,required this.repName,required this.placeId});
   final int repPlan;
   final String repName;
+  final int placeId;
+
   final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     // منطق الرجوع للخلف لتحديث القائمة السابقة
     Future<bool> _onWillPop() async {
-      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent());
+      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent(placeId));
       return true;
     }
 

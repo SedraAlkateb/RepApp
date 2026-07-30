@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_reps_future_usecase.dart';
 import 'package:domina_app/domain/usecase/change_rep_plan_status.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -15,17 +16,17 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
   List<AllRepresentativeFuture> allRepresentative = [];
   AllRepsFutureUsecase allRepsFutureUsecase;
   ChangeRepPlanStatus changeRepPlanStatus;
+  AllPlaceUsecase allPlaceUsecase;
 
-  ManageFutureBloc(this.allRepsFutureUsecase,
-      this.changeRepPlanStatus
+  ManageFutureBloc(this.allRepsFutureUsecase, 
+      this.changeRepPlanStatus,this.allPlaceUsecase
       ) : super(ManageFutureInitial()) {
     on<ManageFutureEvent>((event, emit) async {
 
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
-
-        (await allRepsFutureUsecase.execute(UserInfo.repId)).fold((failure) {
-          emit(AllSeniorRepErrorState(failure: failure));
+        (await allRepsFutureUsecase.execute(UserInfo.repId,event.placeId)).fold((failure) {
+          emit(AllSeniorRepErrorState(failure: failure,placeId: event.placeId));
         }, (data) async {
           data.sort((a, b) {
             // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
@@ -66,7 +67,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           });
 
           allRepresentative = data;
-          emit(AllSeniorRepState(data));
+          emit(AllSeniorRepState(data,event.placeId));
         });
       }
       else if (event is SenSearchRepFutureEvent) {
@@ -78,15 +79,23 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           }
           return false;
         }).toList();
-        emit(AllSeniorRepState(allRepresentativeModel));
+        emit(AllSeniorRepState(allRepresentativeModel,0));
       }
       else if (event is ChangPlanStatusEvent) {
         emit(ChangPlanStatusLoadingState());
         (await changeRepPlanStatus.execute(event.id,event.brandType)).fold((failure) {
           emit(ChangPlanStatusErrorState(failure: failure));
         }, (data) async {
-              allRepresentative[event.index].flag=FlagModel(event.brandType);
+          allRepresentative[event.index].flag=FlagModel(event.brandType);
           emit(ChangPlanStatusState(allRepresentative));
+        });
+      }
+      else if (event is GetPlaceEvent) {
+        emit(GetPlaceStatusLoadingState());
+        (await allPlaceUsecase.execute(event.id)).fold((failure) {
+          emit(GetPlaceStatusErrorState(failure: failure));
+        }, (data) async {
+          emit(GetPlaceStatusState(data));
         });
       }
     });
