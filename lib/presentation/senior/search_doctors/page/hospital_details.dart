@@ -19,22 +19,22 @@ class HospitalDetails extends StatefulWidget {
 class _HospitalDetailsState extends State<HospitalDetails>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController searchNoteHospitalController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA), // خلفية فاتحة ومريحة للعين تبرز الكروت
+      backgroundColor:
+          const Color(0xFFF8F9FA), // خلفية فاتحة ومريحة للعين تبرز الكروت
       appBar: null,
       body: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
         buildWhen: (previous, current) =>
-        current is FutureDocHospitalsState ||
+            current is FutureDocHospitalsState ||
             current is FutureDocHospitalsErrorState ||
             current is FutureDocHospitalsLoadingState ||
             current is FutureDocHospitalsEmptyState,
         builder: (context, state) {
-
           // 1. حالة الخطأ البرمجي
           if (state is FutureDocHospitalsErrorState) {
             return CustomScrollView(
@@ -73,19 +73,18 @@ class _HospitalDetailsState extends State<HospitalDetails>
 
           // 4. حالة النجاح وعرض التقارير تدريجياً وبأناقة بصرية
           if (state is FutureDocHospitalsState) {
-
             // 🌟 خطوة استخراج أول حرف آمن [0] من اسم المستشفى مع تنظيف المسافات المخفية
             final String cleanName = widget.searchHospitalModel.name.trim();
-            final String firstLetter = cleanName.isNotEmpty
-                ? cleanName[0].toUpperCase()
-                : "?";
+            final String firstLetter =
+                cleanName.isNotEmpty ? cleanName[0].toUpperCase() : "?";
 
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
                 // هيدر الشاشة المتجاوب والملون بلغة الهوية البصرية للشركة
                 SliverAppBar(
-                  expandedHeight: 310.h, // تم تعديل الطول ليتناسب مع تصميم الكارت والمحتوى الجديد الهرمي
+                  expandedHeight: 310
+                      .h, // تم تعديل الطول ليتناسب مع تصميم الكارت والمحتوى الجديد الهرمي
                   automaticallyImplyLeading: false,
                   pinned: true,
                   backgroundColor: ColorManager.secondaryColor1,
@@ -102,7 +101,8 @@ class _HospitalDetailsState extends State<HospitalDetails>
                           top: 40.h,
                           right: 10.w,
                           child: IconButton(
-                            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.white, size: 30),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),
@@ -153,7 +153,8 @@ class _HospitalDetailsState extends State<HospitalDetails>
 
                                 // اسم المستشفى الكامل
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 4.h),
                                   child: Text(
                                     widget.searchHospitalModel.name,
                                     textAlign: TextAlign.center,
@@ -188,10 +189,11 @@ class _HospitalDetailsState extends State<HospitalDetails>
 
                 // قائمة التقارير والملاحظات المدمجة مباشرة وثابتة دون BottomSheet
                 SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                      (context, index) {
                         return Container(
                           margin: EdgeInsets.only(bottom: 15.h),
                           decoration: BoxDecoration(
@@ -204,7 +206,8 @@ class _HospitalDetailsState extends State<HospitalDetails>
                                 offset: const Offset(0, 4),
                               ),
                             ],
-                            border: Border.all(color: ColorManager.hintGrey.withOpacity(0.3)),
+                            border: Border.all(
+                                color: ColorManager.hintGrey.withOpacity(0.3)),
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(16.w),
@@ -241,29 +244,42 @@ class _HospitalDetailsState extends State<HospitalDetails>
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFF8F9FA),
                                     borderRadius: BorderRadius.circular(10.r),
-                                    border: Border.all(color: Colors.grey.shade100),
+                                    border:
+                                        Border.all(color: Colors.grey.shade100),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.rate_review_outlined, color: ColorManager.secondaryColor1, size: 16.sp),
+                                          Icon(Icons.rate_review_outlined,
+                                              color:
+                                                  ColorManager.secondaryColor1,
+                                              size: 16.sp),
                                           SizedBox(width: 6.w),
                                           Text(
                                             "ملاحظات المكتب العلمي:",
                                             style: TextStyle(
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.bold,
-                                              color: ColorManager.secondaryColor1,
+                                              color:
+                                                  ColorManager.secondaryColor1,
                                             ),
                                           ),
                                         ],
                                       ),
                                       SizedBox(height: 6.h),
                                       Text(
-                                        state.allNote[index].note.toString().trim().isNotEmpty && state.allNote[index].note.toString() != "null"
-                                            ? state.allNote[index].note.toString()
+                                        state.allNote[index].note
+                                                    .toString()
+                                                    .trim()
+                                                    .isNotEmpty &&
+                                                state.allNote[index].note
+                                                        .toString() !=
+                                                    "null"
+                                            ? state.allNote[index].note
+                                                .toString()
                                             : "لا توجد ملاحظات مسجلة.",
                                         style: TextStyle(
                                           fontSize: 12.sp,

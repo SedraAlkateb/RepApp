@@ -23,15 +23,20 @@ class ReportFinishedPlanUserPage extends StatefulWidget {
   });
 
   @override
-  State<ReportFinishedPlanUserPage> createState() => _ReportFinishedPlanUserPageState();
+  State<ReportFinishedPlanUserPage> createState() =>
+      _ReportFinishedPlanUserPageState();
 }
 
-class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage> {
+class _ReportFinishedPlanUserPageState
+    extends State<ReportFinishedPlanUserPage> {
   @override
   void initState() {
-    context.read<SeniorProfBloc>().add(getInfoRepEvent(widget.id,widget.repPlanId));
+    context
+        .read<SeniorProfBloc>()
+        .add(getInfoRepEvent(widget.id, widget.repPlanId));
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -44,64 +49,61 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
         // }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("ملف المندوب ${widget.name}",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.sp,
-                  color: const Color(0xFF1F4E79))),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: Color(0xFF1F4E79)),
-            onPressed: () => Navigator.pop(context),
+          appBar: AppBar(
+            title: Text("ملف المندوب ${widget.name}",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.sp,
+                    color: const Color(0xFF1F4E79))),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                  color: Color(0xFF1F4E79)),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
-        ),
-        body:BlocBuilder<SeniorProfBloc, SeniorProfState>(
-            buildWhen: (previous, current) =>
-            current is RepInfoState || current is RepInfoLoadingState,
-            builder: (context, state) {
-              if (state is RepInfoLoadingState)
-                return loadingFullScreen(context);
-              if (state is RepInfoErrorState) return errorFullScreen(context);
+          body: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              buildWhen: (previous, current) =>
+                  current is RepInfoState || current is RepInfoLoadingState,
+              builder: (context, state) {
+                if (state is RepInfoLoadingState)
+                  return loadingFullScreen(context);
+                if (state is RepInfoErrorState) return errorFullScreen(context);
 
-              if (state is RepInfoState) {
-                final rep = state.infoRep;
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 25.h),
-                      _buildHeroHeader(rep),
-                      AnimationLimiter(
-                        child: Column(
-                          children: AnimationConfiguration.toStaggeredList(
-                            duration: const Duration(milliseconds: 500),
-                            childAnimationBuilder: (widget) =>
-                                SlideAnimation(
-                                  verticalOffset: 40.0,
-                                  child: FadeInAnimation(child: widget),
-                                ),
-                            children: [
-                              SizedBox(height: 25.h),
-                              _buildStatsGrid(rep),
-                              SizedBox(height: 25.h),
-                              SizedBox(height: 25.h),
-                              //  _buildQuickActions(context),
-                              // SizedBox(height: 25.h),
-                              _buildCoverageSection(context),
-                              SizedBox(height: 50.h),
-                            ],
+                if (state is RepInfoState) {
+                  final rep = state.infoRep;
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 25.h),
+                        _buildHeroHeader(rep),
+                        AnimationLimiter(
+                          child: Column(
+                            children: AnimationConfiguration.toStaggeredList(
+                              duration: const Duration(milliseconds: 500),
+                              childAnimationBuilder: (widget) => SlideAnimation(
+                                verticalOffset: 40.0,
+                                child: FadeInAnimation(child: widget),
+                              ),
+                              children: [
+                                SizedBox(height: 25.h),
+                                _buildStatsGrid(rep),
+                                SizedBox(height: 25.h),
+                                SizedBox(height: 25.h),
+                                //  _buildQuickActions(context),
+                                // SizedBox(height: 25.h),
+                                _buildCoverageSection(context),
+                                SizedBox(height: 50.h),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return SizedBox();
-            }
-)
-      ),
+                      ],
+                    ),
+                  );
+                }
+                return SizedBox();
+              })),
     );
   }
 
@@ -143,7 +145,7 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
               width: 100.r,
               height: 100.r,
               decoration: BoxDecoration(
-                //  shape: BoxShape.circle,
+                  //  shape: BoxShape.circle,
                   color: Colors.white.withOpacity(0.2),
                   border: Border.all(
                       color: Colors.white.withOpacity(0.3), width: 1.5),
@@ -196,7 +198,8 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
     );
   }
 
-  Widget _buildStatsGrid(dynamic rep) { // يفضل استبدال dynamic بنوع الكلاس الصريح InfoRep
+  Widget _buildStatsGrid(dynamic rep) {
+    // يفضل استبدال dynamic بنوع الكلاس الصريح InfoRep
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: GridView.count(
@@ -205,7 +208,8 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
         crossAxisCount: 2,
         mainAxisSpacing: 15.h,
         crossAxisSpacing: 15.w,
-        childAspectRatio: 1.3, // تعديل النسبة لتناسب التصميم الجديد ومنع الـ Overflow
+        childAspectRatio:
+            1.3, // تعديل النسبة لتناسب التصميم الجديد ومنع الـ Overflow
         children: [
           // --- إجمالي الزيارات الكلية والوصفات ---
           _buildStatCard(
@@ -267,9 +271,11 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
     );
   }
 
-  Widget _buildStatCard(String title, String val, Color color, {required IconData icon}) {
+  Widget _buildStatCard(String title, String val, Color color,
+      {required IconData icon}) {
     return Container(
-      padding: EdgeInsets.all(12.w), // تقليل البادينغ قليلاً ليعطي مساحة مريحة للنصوص الطويلة
+      padding: EdgeInsets.all(
+          12.w), // تقليل البادينغ قليلاً ليعطي مساحة مريحة للنصوص الطويلة
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.r),
@@ -281,11 +287,13 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
           )
         ],
       ),
-      child: Row( // استخدام Row لوضع الأيقونة في طرف والبيانات في طرف
+      child: Row(
+        // استخدام Row لوضع الأيقونة في طرف والبيانات في طرف
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // محاذاة النصوص لليمين (أو اليسار حسب اتجاه التطبيق)
+              crossAxisAlignment: CrossAxisAlignment
+                  .start, // محاذاة النصوص لليمين (أو اليسار حسب اتجاه التطبيق)
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -328,7 +336,6 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
     );
   }
 
-
   Widget _buildCoverageSection(BuildContext context) {
     return _buildSectionLayout("إحصائيات التغطية", [
       InteractiveActionTile(
@@ -336,7 +343,9 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
           icon: Icons.check_circle_outline,
           color: const Color(0xFF2D947A),
           onTap: () {
-            context.read<SeniorProfBloc>().add(VisitDocEvent(widget.id,widget.repPlanId));
+            context
+                .read<SeniorProfBloc>()
+                .add(VisitDocEvent(widget.id, widget.repPlanId));
             Navigator.pushNamed(context, Routes.senVisitDoctor);
           }),
       InteractiveActionTile(
@@ -344,7 +353,9 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
           icon: Icons.cancel_outlined,
           color: const Color(0xFFE74C3C),
           onTap: () {
-            context.read<SeniorProfBloc>().add(NoVisitDocEvent(widget.id,widget.repPlanId));
+            context
+                .read<SeniorProfBloc>()
+                .add(NoVisitDocEvent(widget.id, widget.repPlanId));
             Navigator.pushNamed(context, Routes.noVisitDoctor);
           }),
       InteractiveActionTile(
@@ -352,7 +363,9 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
           icon: Icons.hourglass_empty_rounded,
           color: const Color(0xFFF39C12),
           onTap: () {
-            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(widget.id,widget.repPlanId));
+            context
+                .read<SeniorProfBloc>()
+                .add(RemainingVisitsDocEvent(widget.id, widget.repPlanId));
             Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
           }),
       InteractiveActionTile(
@@ -362,7 +375,9 @@ class _ReportFinishedPlanUserPageState extends State<ReportFinishedPlanUserPage>
           onTap: () {
             initSeniorReportInventoryModule();
             Navigator.push(context, MaterialPageRoute(builder: (c) {
-              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(widget.id,widget.repPlanId));
+              context
+                  .read<ReportInventoryBloc>()
+                  .add(SenAllInventoryEvent(widget.id, widget.repPlanId));
               return ReportInventory();
             }));
           }),
@@ -398,10 +413,10 @@ class InteractiveActionTile extends StatefulWidget {
 
   const InteractiveActionTile(
       {super.key,
-        required this.title,
-        required this.icon,
-        required this.color,
-        required this.onTap});
+      required this.title,
+      required this.icon,
+      required this.color,
+      required this.onTap});
 
   @override
   State<InteractiveActionTile> createState() => _InteractiveActionTileState();
@@ -446,16 +461,16 @@ class _InteractiveActionTileState extends State<InteractiveActionTile> {
               padding: EdgeInsets.all(10.r),
               decoration: BoxDecoration(
                 color:
-                isPressed ? widget.color : widget.color.withOpacity(0.08),
+                    isPressed ? widget.color : widget.color.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(15.r),
               ),
               child: widget.icon is IconData
                   ? Icon(widget.icon,
-                  color: isPressed ? Colors.white : widget.color,
-                  size: 18.sp)
+                      color: isPressed ? Colors.white : widget.color,
+                      size: 18.sp)
                   : FaIcon(widget.icon as FaIconData,
-                  color: isPressed ? Colors.white : widget.color,
-                  size: 16.sp),
+                      color: isPressed ? Colors.white : widget.color,
+                      size: 16.sp),
             ),
             SizedBox(width: 15.w),
             Text(widget.title,
@@ -467,7 +482,7 @@ class _InteractiveActionTileState extends State<InteractiveActionTile> {
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
               style:
-              TextStyle(color: isPressed ? widget.color : Colors.grey[300]),
+                  TextStyle(color: isPressed ? widget.color : Colors.grey[300]),
               child: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp),
             ),
           ],

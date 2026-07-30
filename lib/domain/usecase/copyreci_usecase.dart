@@ -7,8 +7,9 @@ import 'package:equatable/equatable.dart';
 class CopyReciUsecase extends Equatable {
   final Repository _repository;
   CopyReciUsecase(this._repository);
-  Future<Either<Failure, CopyReciRequest>> execute(int docId,int recipeType) async {
-    return await _repository.copyReci(docId,recipeType.toString());
+  Future<Either<Failure, CopyReciRequest>> execute(
+      int docId, int recipeType) async {
+    return await _repository.copyReci(docId, recipeType.toString());
   }
 
   @override

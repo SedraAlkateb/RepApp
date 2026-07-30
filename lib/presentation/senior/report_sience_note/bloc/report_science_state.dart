@@ -1,50 +1,56 @@
 part of 'report_science_bloc.dart';
 
 @immutable
-sealed class ReportScienceState extends Equatable{}
+sealed class ReportScienceState extends Equatable {}
 
 final class ReportScienceInitial extends ReportScienceState {
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
+
 final class SenAllNoteDoctorsState extends ReportScienceState {
   final List<DoctorNoteModel> doctorNoteModel;
   SenAllNoteDoctorsState(this.doctorNoteModel);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props => [doctorNoteModel];
 }
-final class  SenAllNoteDoctorErrorState extends ReportScienceState {
+
+final class SenAllNoteDoctorErrorState extends ReportScienceState {
   final Failure failure;
   SenAllNoteDoctorErrorState({required this.failure});
   @override
-
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
-final class  SenAllNoteDoctorLoadingState extends ReportScienceState {
+
+final class SenAllNoteDoctorLoadingState extends ReportScienceState {
   SenAllNoteDoctorLoadingState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
-final class  SenAllNoteDoctorEmptyState extends ReportScienceState {
+
+final class SenAllNoteDoctorEmptyState extends ReportScienceState {
   SenAllNoteDoctorEmptyState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
+
 final class SenAsReadState extends ReportScienceState {
   final List<DoctorNoteModel> doctorNoteModel;
   SenAsReadState(this.doctorNoteModel);
   @override
-  List<Object?> get props =>[doctorNoteModel];
+  List<Object?> get props => [doctorNoteModel];
 }
+
 final class IsExpandedNoteState extends ReportScienceState {
   final DoctorNoteModel doctorNoteModel;
   final int index;
-  IsExpandedNoteState(this.doctorNoteModel,this.index);
+  IsExpandedNoteState(this.doctorNoteModel, this.index);
   @override
-  List<Object?> get props =>[doctorNoteModel,index];
+  List<Object?> get props => [doctorNoteModel, index];
 }
-final class   NoIsExpandedNoteState extends ReportScienceState {
+
+final class NoIsExpandedNoteState extends ReportScienceState {
   NoIsExpandedNoteState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }

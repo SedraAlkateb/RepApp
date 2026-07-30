@@ -1,4 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
+
 class UserInfo {
   static int percentage = 0;
   static int repId = 0;
@@ -22,14 +23,14 @@ class UserInfo {
   static int visited = -1;
   static int flag1 = 0;
   static int version = 4;
-  static RepType  repType = RepType(8, "other");
+  static RepType repType = RepType(8, "other");
   static int numOfDoctorVisit = -1;
   static int numOfHospitalVisit = -1;
   static bool isScreenWidth = false;
   static bool isChange = false;
   static int numDoctor = 0;
   static int numHospital = 0;
-  static int statusPlan =  -1;
+  static int statusPlan = -1;
   static int totalReci = 0;
   static int remainReci = 0;
   static int usedReci = 0;
@@ -37,14 +38,13 @@ class UserInfo {
     statusPlan = UserInfo.repType.i == 5
         ? 5
         : UserInfo.repType.i == 4
-        ? 1
-        : UserInfo.repType.i == 6
-        ? 6
-        : UserInfo.repType.i == 7
-        ? 0
-        : -1;
+            ? 1
+            : UserInfo.repType.i == 6
+                ? 6
+                : UserInfo.repType.i == 7
+                    ? 0
+                    : -1;
   }
-
 
   /// 🔹 الدالة الجديدة لتعبئة البيانات من الموديل مباشرة
   static void fillFromModel(dynamic data) {
@@ -66,9 +66,9 @@ class UserInfo {
     samplesCount = data.samplesCount;
     repType = data.repType;
     flag = data.flag;
-    usedReci=data.usedReci;
-    remainReci=data.remainReci;
-    totalReci=data.totalReci;
+    usedReci = data.usedReci;
+    remainReci = data.remainReci;
+    totalReci = data.totalReci;
     // منطق التحقق من الـ Flag كما كان في ملف المين
     flag1 = otherstatus == -1 ? 0 : (data.flag1 ?? 0);
     UserInfo.initializeUserPlan();

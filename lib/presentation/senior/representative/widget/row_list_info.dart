@@ -11,7 +11,7 @@ class RowListInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding:  EdgeInsets.symmetric(vertical: AppPaddingH.p8),
+        padding: EdgeInsets.symmetric(vertical: AppPaddingH.p8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

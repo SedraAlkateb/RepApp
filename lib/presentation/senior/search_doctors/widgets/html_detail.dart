@@ -15,23 +15,16 @@ Widget buildHtmlDetailRow(
           textAlign: TextAlign.start,
           '$title: ',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         Expanded(
           child: Html(
             shrinkWrap: true,
-
             data: value,
             style: {
-              "body": Style(
-
-                  fontSize: FontSize(18),
-
-                  textAlign: TextAlign.start
-              ),
+              "body": Style(fontSize: FontSize(18), textAlign: TextAlign.start),
             },
-
           ),
         ),
       ],

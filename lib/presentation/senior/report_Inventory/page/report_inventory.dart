@@ -14,8 +14,8 @@ class InventoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int total = int.parse(data.total);
-    final int used =  int.parse(data.used);
-    final int rest =  data.rest;
+    final int used = int.parse(data.used);
+    final int rest = data.rest;
 
     // نسبة التوزيع
     double usePercent = total == 0 ? 0 : used / total;
@@ -53,7 +53,8 @@ class InventoryCard extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        Icon(Icons.medication_liquid, color: ColorManager.medicalSecondary, size: 22.sp),
+                        Icon(Icons.medication_liquid,
+                            color: ColorManager.medicalSecondary, size: 22.sp),
                         SizedBox(width: 8.w),
                         Expanded(
                           child: Text(
@@ -69,8 +70,6 @@ class InventoryCard extends StatelessWidget {
                     ),
                   ),
                   Type.buildBadge(data.type),
-
-
                 ],
               ),
             ),
@@ -100,14 +99,18 @@ class InventoryCard extends StatelessWidget {
                             value: usePercent,
                             minHeight: 8.h,
                             backgroundColor: Colors.grey[200],
-                            valueColor: AlwaysStoppedAnimation<Color>(ColorManager.medicalSecondary),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                ColorManager.medicalSecondary),
                           ),
                         ),
                       ),
                       SizedBox(width: 10.w),
                       Text(
                         "${(usePercent * 100).toInt()}%",
-                        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[700]),
                       ),
                     ],
                   ),
@@ -148,9 +151,11 @@ class InventoryCard extends StatelessWidget {
     );
   }
 }
+
 class ReportInventory extends StatelessWidget {
   ReportInventory({super.key});
-  final TextEditingController searchInventoryController = TextEditingController();
+  final TextEditingController searchInventoryController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -184,27 +189,28 @@ class ReportInventory extends StatelessWidget {
 
               // القائمة باستخدام البطاقات الجديدة
 
-              inventoryModel.isEmpty?emptyFullScreen(context):
-              Expanded(
-                child:
-
-                ListView.builder(
-                  padding: EdgeInsets.only(bottom: 20.h),
-                  itemCount: inventoryModel.length,
-                  itemBuilder: (context, index) {
-                    return InventoryCard(data: inventoryModel[index]);
-                  },
-                ),
-              ),
+              inventoryModel.isEmpty
+                  ? emptyFullScreen(context)
+                  : Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(bottom: 20.h),
+                        itemCount: inventoryModel.length,
+                        itemBuilder: (context, index) {
+                          return InventoryCard(data: inventoryModel[index]);
+                        },
+                      ),
+                    ),
             ],
           );
         }
 
-        if (state is SenAllInventoryLoadingState) return loadingFullScreen(context);
+        if (state is SenAllInventoryLoadingState)
+          return loadingFullScreen(context);
 
         if (state is SenAllInventoryErrorState) {
-          return errorFullScreen(context, func: () =>
-              BlocProvider.of<ReportInventoryBloc>(context).add(SenAllInventoryEvent(203,state.planId)));
+          return errorFullScreen(context,
+              func: () => BlocProvider.of<ReportInventoryBloc>(context)
+                  .add(SenAllInventoryEvent(203, state.planId)));
         }
 
         return const SizedBox();

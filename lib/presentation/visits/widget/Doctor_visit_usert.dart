@@ -28,9 +28,13 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SearchField(searchController: searchController,onPressed: (value) {
-              BlocProvider.of<VisitBloc>(context).add(SearchDoctorVisitEvent(value: value));},),
-
+            SearchField(
+              searchController: searchController,
+              onPressed: (value) {
+                BlocProvider.of<VisitBloc>(context)
+                    .add(SearchDoctorVisitEvent(value: value));
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: BlocConsumer<VisitBloc, VisitState>(
@@ -50,12 +54,15 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                  */
                 },
                 builder: (context, state) {
-                  List<VisitDoctorAndDoctor> doctors=context.watch<VisitBloc>().doctors;
-                  if(state is VisitDoctorState){doctors=state.doctors;}
+                  List<VisitDoctorAndDoctor> doctors =
+                      context.watch<VisitBloc>().doctors;
+                  if (state is VisitDoctorState) {
+                    doctors = state.doctors;
+                  }
                   if (state is SearchVisitDoctorState) {
                     doctors = state.doctors;
                   }
-                  if(state is EmptyVisitHospitalState){
+                  if (state is EmptyVisitHospitalState) {
                     return emptyFullScreen(context);
                   }
 
@@ -86,29 +93,32 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w, vertical: 4.h),
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade50,
                                       borderRadius: BorderRadius.circular(8.r),
                                     ),
-                                    child: Text(doctors[index]
-                                        .doctorModel
-                                        .spTitle , style
-                                        : TextStyle(color: Colors.blue, fontSize: 12.sp)),
+                                    child: Text(
+                                        doctors[index].doctorModel.spTitle,
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 12.sp)),
                                   ),
                                   Expanded(
                                     child: Text(
                                         textAlign: TextAlign.end,
-                                        doctors[index]
-                                            .doctorModel
-                                            .title,
+                                        doctors[index].doctorModel.title,
                                         style: TextStyle(
-                                            fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                ColorManager.medicalPrimary)),
                                   ),
-
                                 ],
                               ),
                               SizedBox(height: 16.h),
@@ -116,56 +126,63 @@ class _DoctorVisitUserState extends State<DoctorVisitUser>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
-                                  SizedBox(width: 8.w,),
+                                  Icon(Icons.location_on_outlined,
+                                      size: 22.sp, color: Colors.grey),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
                                   Expanded(
                                     child: Text(
-
-                                        "${doctors[index]
-                                            .doctorModel.placeTitle} - ${doctors[index]
-                                            .doctorModel.address}",
-                                        style: TextStyle
-                                          (color: Colors.grey,
+                                        "${doctors[index].doctorModel.placeTitle} - ${doctors[index].doctorModel.address}",
+                                        style: TextStyle(
+                                            color: Colors.grey,
                                             fontSize: 15.sp)),
                                   ),
                                 ],
                               ),
                               SizedBox(height: 16.h),
-                              Divider(color:  Colors.grey,thickness: 0.1,),
+                              Divider(
+                                color: Colors.grey,
+                                thickness: 0.1,
+                              ),
                               SizedBox(height: 8.h),
                               // أزرار الأكشن
                               Row(
                                 children: [
-                                  Icon(Icons.access_time,size: 18.sp,color: Colors.grey,  fontWeight: FontWeight.bold),
-                                  SizedBox(width: 4.w,),
-                                  Text(doctors[index]
-                                      .visitDoctorModel.data,
-                                      style: TextStyle
-                                        (color: Colors.grey,
+                                  Icon(Icons.access_time,
+                                      size: 18.sp,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(doctors[index].visitDoctorModel.data,
+                                      style: TextStyle(
+                                          color: Colors.grey,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14.sp)),
-
                                   const Spacer(),
-                                  InkWell
-                                    (
+                                  InkWell(
                                     onTap: () {
-                                      Navigator.pushNamed(context,Routes.infoVisitDoctor,
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.infoVisitDoctor,
                                         arguments: doctors[index],
                                       );
                                     },
-                                    child: buildCardButton("عرض التفاصيل",
+                                    child: buildCardButton(
+                                        "عرض التفاصيل",
                                         ColorManager.medicalPrimary,
-                                        Colors.white, Icons.directions_run),
+                                        Colors.white,
+                                        Icons.directions_run),
                                   ),
-
                                 ],
                               ),
                             ],
                           ),
                         );
                       },
-                      itemCount:
-                      doctors.length);
+                      itemCount: doctors.length);
                 },
               ),
             ),

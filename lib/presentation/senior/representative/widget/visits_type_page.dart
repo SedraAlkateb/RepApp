@@ -3,26 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VisitsTypePage extends StatelessWidget {
-  const VisitsTypePage({super.key,
-    required this.title,
-  required this.doctor,
-    required this.hospital,
-    required this.onTapDoctor,
-    required this.onTapHospital
-  });
+  const VisitsTypePage(
+      {super.key,
+      required this.title,
+      required this.doctor,
+      required this.hospital,
+      required this.onTapDoctor,
+      required this.onTapHospital});
   final String title;
 
   final Widget doctor;
- final Widget hospital;
-  final  Function onTapDoctor;
-  final  Function onTapHospital;
+  final Widget hospital;
+  final Function onTapDoctor;
+  final Function onTapHospital;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-
         body: NestedScrollView(
           // هذا الجزء يسمح للـ Header (الـ AppBar والـ TabBar) بالتحرك مع السكرول
           headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -77,7 +76,7 @@ class VisitsTypePage extends StatelessWidget {
                       ),
                       onTap: (value) {
                         if (value == 0) {
-                         onTapDoctor();
+                          onTapDoctor();
                         } else {
                           onTapHospital();
                         }
@@ -87,18 +86,18 @@ class VisitsTypePage extends StatelessWidget {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.groups_outlined),
-                                  SizedBox(width: 8.w),
-                                  const Text('الأطباء'),
-                                ])),
+                              const Icon(Icons.groups_outlined),
+                              SizedBox(width: 8.w),
+                              const Text('الأطباء'),
+                            ])),
                         Tab(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.local_hospital_outlined),
-                                  SizedBox(width: 8.w),
-                                  const Text('المشافي'),
-                                ])),
+                              const Icon(Icons.local_hospital_outlined),
+                              SizedBox(width: 8.w),
+                              const Text('المشافي'),
+                            ])),
                       ],
                     ),
                   ),

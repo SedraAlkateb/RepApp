@@ -26,7 +26,7 @@ class HospitalArchive extends StatelessWidget {
             slivers: [
               BlocBuilder<PlaceBloc, PlaceState>(
                 buildWhen: (previous, current) =>
-                current is AllHospitalArchiveByPlaceErrorState ||
+                    current is AllHospitalArchiveByPlaceErrorState ||
                     current is EmptyArchiveState ||
                     current is AllHospitalArchiveByPlaceState,
                 builder: (context, state) {
@@ -45,7 +45,8 @@ class HospitalArchive extends StatelessWidget {
                                 searchController: searchhosController,
                                 onPressed: (value) {
                                   BlocProvider.of<PlaceBloc>(context).add(
-                                      SearchHospitalArchive(value, state.baseData));
+                                      SearchHospitalArchive(
+                                          value, state.baseData));
                                 },
                               ),
                             ],
@@ -91,7 +92,7 @@ class HospitalArchive extends StatelessWidget {
                         // قائمة الكروت (الأفضل استخدام SliverList للتعامل مع العناصر الكثيرة)
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
-                                (context, index) {
+                            (context, index) {
                               final hospital = hospitals[index];
                               return _buildHospitalCard(context, hospital);
                             },
@@ -156,10 +157,9 @@ class HospitalArchive extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-
               Expanded(
                 child: Text(
-                  hospital.title??"" ,
+                  hospital.title ?? "",
                   textAlign: TextAlign.end,
                   style: TextStyle(
                       fontSize: 18.sp,
@@ -167,14 +167,12 @@ class HospitalArchive extends StatelessWidget {
                       color: ColorManager.medicalPrimary),
                 ),
               ),
-
             ],
           ),
           SizedBox(height: 10.h),
-          _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle??""),
-          _buildInfoRow(Icons.map_outlined, hospital.address??""),
-          _buildInfoRow(Icons.folder_special_outlined, hospital.titleSp??""),
-
+          _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle ?? ""),
+          _buildInfoRow(Icons.map_outlined, hospital.address ?? ""),
+          _buildInfoRow(Icons.folder_special_outlined, hospital.titleSp ?? ""),
           SizedBox(height: 16.h),
           const Divider(thickness: 0.1, color: Colors.grey),
           Row(
@@ -182,7 +180,8 @@ class HospitalArchive extends StatelessWidget {
               const Spacer(),
               InkWell(
                 onTap: () => Navigator.pushNamed(
-                    context, Routes.hospitalDetails, arguments: hospital),
+                    context, Routes.hospitalDetails,
+                    arguments: hospital),
                 child: buildCardButton(
                     "عرض التفاصيل",
                     ColorManager.medicalPrimary,
@@ -196,7 +195,8 @@ class HospitalArchive extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text, {Color color = Colors.grey}) {
+  Widget _buildInfoRow(IconData icon, String text,
+      {Color color = Colors.grey}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 2.h),
       child: Row(
@@ -204,8 +204,7 @@ class HospitalArchive extends StatelessWidget {
           Icon(icon, size: 20.sp, color: color),
           SizedBox(width: 8.w),
           Expanded(
-            child: Text(text,
-                style: TextStyle(color: color, fontSize: 14.sp)),
+            child: Text(text, style: TextStyle(color: color, fontSize: 14.sp)),
           ),
         ],
       ),

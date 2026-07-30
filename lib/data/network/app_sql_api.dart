@@ -1665,8 +1665,7 @@ class AppSqlApi extends AppSqlApiAbs {
     final mydb = await databaseHelper.database;
     await mydb.update(
       'rep',
-      {'remainReci': UserInfo.remainReci,
-        "usedReci": UserInfo.usedReci},
+      {'remainReci': UserInfo.remainReci, "usedReci": UserInfo.usedReci},
       where: 'repId = ?',
       whereArgs: [UserInfo.repId],
     );

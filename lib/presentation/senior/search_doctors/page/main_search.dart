@@ -7,15 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainSearchPage extends StatelessWidget {
-  const MainSearchPage({super.key,});
-
+  const MainSearchPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-
         backgroundColor: const Color(0xFFF8F9FB), // لون الخلفية الموحد للتطبيق
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -67,11 +67,13 @@ class MainSearchPage extends StatelessWidget {
                           fontWeight: FontWeight.bold, fontSize: 14.sp),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
+                        color:
+                            ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       onTap: (value) {
-                        BlocProvider.of<SearchDoctorsBloc>(context).value=value;
+                        BlocProvider.of<SearchDoctorsBloc>(context).value =
+                            value;
                       },
                       tabs: [
                         Tab(

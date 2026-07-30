@@ -8,7 +8,8 @@ Future<File> convertToPng(File inputFile) async {
       throw Exception("الملف ليس صورة صالحة أو غير مدعوم.");
     }
     final pngBytes = img.encodePng(image);
-    final outputFile = File('${inputFile.parent.path}/${inputFile.uri.pathSegments.last.split('.').first}.png');
+    final outputFile = File(
+        '${inputFile.parent.path}/${inputFile.uri.pathSegments.last.split('.').first}.png');
     await outputFile.writeAsBytes(pngBytes);
 
     return outputFile;

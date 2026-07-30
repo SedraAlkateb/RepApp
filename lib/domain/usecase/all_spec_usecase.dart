@@ -9,8 +9,9 @@ import 'package:equatable/equatable.dart';
 class AllSpeUsecase extends Equatable {
   Repository _repository;
   AllSpeUsecase(this._repository);
-  Future<Either<Failure, List<SpecDModel>>> execute(int repDet,{ int? planId}) async {
-    return await _repository.allSpec(repDet,planId: planId);
+  Future<Either<Failure, List<SpecDModel>>> execute(int repDet,
+      {int? planId}) async {
+    return await _repository.allSpec(repDet, planId: planId);
   }
 
   @override

@@ -19,7 +19,8 @@ class AsyncLogoutPage extends StatefulWidget {
   State<AsyncLogoutPage> createState() => _AsyncLogoutPageState();
 }
 
-class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderStateMixin {
+class _AsyncLogoutPageState extends State<AsyncLogoutPage>
+    with TickerProviderStateMixin {
   late AnimationController _rotateCtrl;
   late AnimationController _bounceCtrl;
 
@@ -27,9 +28,13 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
   void initState() {
     super.initState();
     // أنيميشن الدوران لأيقونة المزامنة
-    _rotateCtrl = AnimationController(duration: const Duration(seconds: 2), vsync: this)..repeat();
+    _rotateCtrl =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this)
+          ..repeat();
     // أنيميشن القفز الخفيف للمندوب
-    _bounceCtrl = AnimationController(duration: const Duration(milliseconds: 1500), vsync: this)..repeat(reverse: true);
+    _bounceCtrl = AnimationController(
+        duration: const Duration(milliseconds: 1500), vsync: this)
+      ..repeat(reverse: true);
   }
 
   @override
@@ -55,7 +60,8 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
               width: 8.w,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.horizontal(left: Radius.circular(10.r)),
+                borderRadius:
+                    BorderRadius.horizontal(left: Radius.circular(10.r)),
               ),
             ),
           ),
@@ -91,7 +97,8 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
                                   animation: _bounceCtrl,
                                   builder: (context, _) => Transform.translate(
                                     offset: Offset(0, -12 * _bounceCtrl.value),
-                                    child: const Icon(LucideIcons.user, size: 80, color: Color(0xFF1A3E62)),
+                                    child: const Icon(LucideIcons.user,
+                                        size: 80, color: Color(0xFF1A3E62)),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -104,7 +111,8 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
                               left: 110,
                               child: RotationTransition(
                                 turns: _rotateCtrl,
-                                child: const Icon(LucideIcons.refreshCw, size: 28, color: Colors.blue),
+                                child: const Icon(LucideIcons.refreshCw,
+                                    size: 28, color: Colors.blue),
                               ),
                             ),
                           ],
@@ -131,11 +139,13 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
                     // 4. البلوك كونسيومر مع الحفاظ على اللوجيك الخاص بالـ Logout
                     BlocConsumer<AsyncInBloc, AsyncInState>(
                       buildWhen: (previous, current) {
-                        return current is SyncData0LoadingState || current is SyncData1ErrorState ;
+                        return current is SyncData0LoadingState ||
+                            current is SyncData1ErrorState;
                       },
                       listener: (context, state) {
                         if (state is SyncData1ErrorState) {
-                          error(context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                         if (state is SyncData1State) {
                           Navigator.pushReplacementNamed(
@@ -147,7 +157,7 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
                           showDialog(
                             context: context,
                             barrierDismissible: false,
-                            builder: (_) => dialogChangePlan(context,true),
+                            builder: (_) => dialogChangePlan(context, true),
                           );
                         }
                         if (state is GetState) {
@@ -175,10 +185,13 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage> with TickerProviderSt
                             onPressed: state is SyncData0LoadingState
                                 ? null
                                 : () {
-                              BlocProvider.of<AsyncInBloc>(context).add(Async0DataEvent());
-                            },
+                                    BlocProvider.of<AsyncInBloc>(context)
+                                        .add(Async0DataEvent());
+                                  },
                             child: Text(
-                              state is SyncData0LoadingState ? "جاري الرفع..." : " رفع البيانات ",
+                              state is SyncData0LoadingState
+                                  ? "جاري الرفع..."
+                                  : " رفع البيانات ",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

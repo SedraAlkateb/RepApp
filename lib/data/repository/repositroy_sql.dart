@@ -527,11 +527,19 @@ class RepositroySqlImp extends RepositorySql {
 
   @override
   Future<Either<Failure, Null>> updateVisitDoctorFields(
-      {required int id, String? kaswn, String? science, String? target, List<PharmacyBrandModel>? selectBrand}) async {
+      {required int id,
+      String? kaswn,
+      String? science,
+      String? target,
+      List<PharmacyBrandModel>? selectBrand}) async {
     try {
       ;
       await _databaseHelper.updateVisitDoctorFields(
-          id: id, kaswn: kaswn, science: science, target: target,selectBrand: selectBrand);
+          id: id,
+          kaswn: kaswn,
+          science: science,
+          target: target,
+          selectBrand: selectBrand);
       return Right(null);
     } catch (e) {
       Failure failure = ErrorHandler.handle(e).failure;
@@ -542,16 +550,19 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, Null>> updateVisitHospitalFields({
-    required int id,
-    String? kaswn,
-    String? science,
-    String? target,
-    List<PharmacyBrandModel>? selectBrand
-  }) async {
+  Future<Either<Failure, Null>> updateVisitHospitalFields(
+      {required int id,
+      String? kaswn,
+      String? science,
+      String? target,
+      List<PharmacyBrandModel>? selectBrand}) async {
     try {
       await _databaseHelper.updateVisitHospitalFields(
-          id: id, kaswn: kaswn, science: science, target: target,selectBrand:selectBrand );
+          id: id,
+          kaswn: kaswn,
+          science: science,
+          target: target,
+          selectBrand: selectBrand);
       return Right(null);
     } catch (e) {
       Failure failure = ErrorHandler.handle(e).failure;
@@ -797,6 +808,7 @@ class RepositroySqlImp extends RepositorySql {
       return Left(failure);
     }
   }
+
   @override
   Future<Either<Failure, Null>> updateOtherStatus(
       int repId, int status, List<OtherBrandSpPlanModel> planBrands) async {
@@ -840,6 +852,7 @@ class RepositroySqlImp extends RepositorySql {
       return Left(failure);
     }
   }
+
   @override
   Future<Either<Failure, Null>> editIsPlan(int repId, int flag) async {
     try {
@@ -878,7 +891,7 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<ExceptionModel>>> allException()  async {
+  Future<Either<Failure, List<ExceptionModel>>> allException() async {
     try {
       final response = await _databaseHelper.allException();
       return Right(response);
@@ -902,19 +915,20 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, void>> numDocAndHos()  async {
+  Future<Either<Failure, void>> numDocAndHos() async {
     try {
       final response = await _databaseHelper.numDocAndHos();
       return Right(response);
     } catch (e) {
       Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "numDocAndHos"));
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "numDocAndHos"));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum)   async {
+  Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum) async {
     try {
       final response = await _databaseHelper.editRecipe(recNum);
       return Right(response);

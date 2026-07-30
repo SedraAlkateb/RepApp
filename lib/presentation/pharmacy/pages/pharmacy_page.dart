@@ -79,7 +79,7 @@ class PharmacyPage extends StatelessWidget {
                                 ]),
                                 color: ColorManager.white,
 
-                                borderRadius:  BorderRadius.all(
+                                borderRadius: BorderRadius.all(
                                     Radius.circular(AppSize.s8)),
                                 //        color: ColorManager.card,
                               ),

@@ -2,13 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget buildStatCard(
-    String title, String value, IconData icon, Color color) {
+Widget buildStatCard(String title, String value, IconData icon, Color color) {
   return Container(
     width: 105.w,
     padding: EdgeInsets.symmetric(vertical: 15.h),
-    transform: Matrix4.translationValues(
-        0, -25.h, 0), // لجعل الكروت تتداخل مع الهيدر
+    transform:
+        Matrix4.translationValues(0, -25.h, 0), // لجعل الكروت تتداخل مع الهيدر
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20.r),

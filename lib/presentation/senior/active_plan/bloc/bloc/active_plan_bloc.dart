@@ -30,7 +30,8 @@ class ActivePlanBloc extends Bloc<ActivePlanEvent, ActivePlanState> {
         activePlanSearch = activePlan.where((value) {
           if (normalizeText(value.title).contains(search)) {
             return true;
-          } else if (normalizeText(value.pharmaceuticalFormTitle).contains(search)) {
+          } else if (normalizeText(value.pharmaceuticalFormTitle)
+              .contains(search)) {
             return true;
           }
           return false;

@@ -139,7 +139,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           );
         }
 
-
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -269,9 +268,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           error(context, state.failure.massage, state.failure.code);
         } else if (state is PharmacyOrderState) {
           success(context);
-         Navigator.pop(context);
+          Navigator.pop(context);
         }
-
       },
       builder: (context, state) {
         return SizedBox(

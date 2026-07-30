@@ -12,16 +12,15 @@ class AllRecipesEvent extends RecipesBrandEvent {
 class CopyRecipesEvent extends RecipesBrandEvent {
   final int docId;
   final int recipeType;
-  CopyRecipesEvent(this.docId,this.recipeType);
+  CopyRecipesEvent(this.docId, this.recipeType);
   @override
-
   List<Object?> get props => [docId];
 }
+
 class GetRepReciEvent extends RecipesBrandEvent {
   final int reciId;
   GetRepReciEvent(this.reciId);
   @override
-
   List<Object?> get props => [reciId];
 }
 
@@ -33,97 +32,104 @@ class BrandRecipesEvent extends RecipesBrandEvent {
 
 class InsertReciEvent extends RecipesBrandEvent {
   final int docId;
-  final String doctorSp ;
+  final String doctorSp;
 
-  final String firstNote ;
+  final String firstNote;
 
-  final String secondNote ;
+  final String secondNote;
 
-  final String address ;
+  final String address;
 
-  final String connect ;
+  final String connect;
 
-  final String specialNotes ;
-  final String phone ;
+  final String specialNotes;
+  final String phone;
 
   InsertReciEvent(this.doctorSp, this.firstNote, this.secondNote, this.address,
-      this.connect, this.specialNotes,this.docId,this.phone);
+      this.connect, this.specialNotes, this.docId, this.phone);
 
-  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+  List<Object?> get props =>
+      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
+
 class UpdateReciEvent extends RecipesBrandEvent {
   final int docId;
-  final String doctorSp ;
+  final String doctorSp;
 
-  final String firstNote ;
+  final String firstNote;
 
-  final String secondNote ;
+  final String secondNote;
 
-  final String address ;
+  final String address;
 
-  final String connect ;
+  final String connect;
 
-  final String specialNotes ;
-  final String phone ;
+  final String specialNotes;
+  final String phone;
 
   UpdateReciEvent(this.doctorSp, this.firstNote, this.secondNote, this.address,
-      this.connect, this.specialNotes,this.docId,this.phone);
+      this.connect, this.specialNotes, this.docId, this.phone);
 
-  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+  List<Object?> get props =>
+      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
+
 class InsertReciHospitalEvent extends RecipesBrandEvent {
   final int docId;
-  final String doctorSp ;
+  final String doctorSp;
 
-  final String firstNote ;
+  final String firstNote;
 
-  final String secondNote ;
+  final String secondNote;
 
-  final String address ;
+  final String address;
 
-  final String connect ;
+  final String connect;
 
-  final String specialNotes ;
+  final String specialNotes;
 
   InsertReciHospitalEvent(
-      this.docId,
-      this.doctorSp,
-      this.firstNote,
-      this.secondNote,
-      this.address,
-      this.connect,
-      this.specialNotes,
-      );
+    this.docId,
+    this.doctorSp,
+    this.firstNote,
+    this.secondNote,
+    this.address,
+    this.connect,
+    this.specialNotes,
+  );
 
-  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+  List<Object?> get props =>
+      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
 
 class UpdateReciHospitalEvent extends RecipesBrandEvent {
   final int docId;
-  final String doctorSp ;
+  final String doctorSp;
 
-  final String firstNote ;
+  final String firstNote;
 
-  final String secondNote ;
+  final String secondNote;
 
-  final String address ;
+  final String address;
 
-  final String connect ;
+  final String connect;
 
-  final String specialNotes ;
+  final String specialNotes;
 
   UpdateReciHospitalEvent(
-      this.docId,
-      this.doctorSp,
-      this.firstNote,
-      this.secondNote,
-      this.address,
-      this.connect,
-      this.specialNotes,
-   );
+    this.docId,
+    this.doctorSp,
+    this.firstNote,
+    this.secondNote,
+    this.address,
+    this.connect,
+    this.specialNotes,
+  );
 
-  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+  List<Object?> get props =>
+      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
+
 class SelectTypeEvent extends RecipesBrandEvent {
   final String selectedTypeDoctor;
 
@@ -149,86 +155,91 @@ class Checkbox1Event extends RecipesBrandEvent {
   Checkbox1Event(this.isChecked);
 
   @override
-
-  List<Object?> get props =>[isChecked];
+  List<Object?> get props => [isChecked];
 }
+
 class Checkbox2Event extends RecipesBrandEvent {
   final int isChecked;
 
   Checkbox2Event(this.isChecked);
 
   @override
-
-  List<Object?> get props =>[isChecked];
+  List<Object?> get props => [isChecked];
 }
+
 class SelectBrandEvent extends RecipesBrandEvent {
   final int index;
   final BrandRes brandRecipeModel;
-  SelectBrandEvent({required this.index,required this.brandRecipeModel});
-  List<Object?> get props => [index,brandRecipeModel];
+  SelectBrandEvent({required this.index, required this.brandRecipeModel});
+  List<Object?> get props => [index, brandRecipeModel];
 }
+
 class SelectNumRecEvent extends RecipesBrandEvent {
   final String num;
   SelectNumRecEvent({required this.num});
   List<Object?> get props => [num];
 }
+
 class AllNumEvent extends RecipesBrandEvent {
   @override
   AllNumEvent();
   List<Object?> get props => [];
 }
-class RestartEvent extends RecipesBrandEvent {
 
+class RestartEvent extends RecipesBrandEvent {
   List<Object?> get props => [];
 }
-class AllReciEvent extends RecipesBrandEvent{
+
+class AllReciEvent extends RecipesBrandEvent {
   @override
   AllReciEvent();
   List<Object?> get props => [];
-
 }
-class GetReciEvent extends RecipesBrandEvent{
+
+class GetReciEvent extends RecipesBrandEvent {
   final String id;
   @override
   GetReciEvent(this.id);
   List<Object?> get props => [];
-
 }
+
 class UpdateReciSEvent extends RecipesBrandEvent {
-  final  int reciId;
+  final int reciId;
   final int docId;
-  final String doctorSp ;
+  final String doctorSp;
 
-  final String firstNote ;
+  final String firstNote;
 
-  final String secondNote ;
+  final String secondNote;
 
-  final String address ;
+  final String address;
 
-  final String connect ;
+  final String connect;
 
-  final String specialNotes ;
-  final String phone ;
+  final String specialNotes;
+  final String phone;
 
-  UpdateReciSEvent(this.reciId,this.doctorSp, this.firstNote, this.secondNote, this.address,
-      this.connect, this.specialNotes,this.docId,this.phone);
+  UpdateReciSEvent(this.reciId, this.doctorSp, this.firstNote, this.secondNote,
+      this.address, this.connect, this.specialNotes, this.docId, this.phone);
 
-  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+  List<Object?> get props =>
+      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
+
 class UpdateReciSHospitalEvent extends RecipesBrandEvent {
-  final  int reciId;
+  final int reciId;
   final int docId;
-  final String doctorSp ;
+  final String doctorSp;
 
-  final String firstNote ;
+  final String firstNote;
 
-  final String secondNote ;
+  final String secondNote;
 
-  final String address ;
+  final String address;
 
-  final String connect ;
+  final String connect;
 
-  final String specialNotes ;
+  final String specialNotes;
 
   UpdateReciSHospitalEvent(
       this.docId,
@@ -238,19 +249,16 @@ class UpdateReciSHospitalEvent extends RecipesBrandEvent {
       this.address,
       this.connect,
       this.specialNotes,
-      this.reciId
-      );
+      this.reciId);
 
-  List<Object?> get props => [doctorSp,firstNote,secondNote,address,connect,specialNotes];
+  List<Object?> get props =>
+      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
 
 class EditeRecNumEvent extends RecipesBrandEvent {
-  final  InsertRecResponse num;
+  final InsertRecResponse num;
 
-
-  EditeRecNumEvent(
-      this.num
-      );
+  EditeRecNumEvent(this.num);
 
   List<Object?> get props => [num];
 }

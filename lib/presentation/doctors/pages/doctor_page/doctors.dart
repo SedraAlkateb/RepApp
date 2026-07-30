@@ -32,7 +32,7 @@ class _DoctorsState extends State<Doctors> {
         padding: EdgeInsets.symmetric(horizontal: 8.w),
         child: BlocBuilder<DoctorsBloc, DoctorsState>(
           buildWhen: (previous, current) =>
-          current is AllDoctorState ||
+              current is AllDoctorState ||
               current is AllDoctorEmptyState ||
               current is AllDoctorErrorState ||
               current is AllDoctorLoadingState,
@@ -41,11 +41,12 @@ class _DoctorsState extends State<Doctors> {
             List<DoctorModel> doctorModel = context.read<DoctorsBloc>().doctor;
 
             if (state is AllDoctorLoadingState) {
-              return  loadingFullScreen(context);
+              return loadingFullScreen(context);
             }
 
             if (state is AllDoctorErrorState) {
-              return errorFullScreen(context, mes: state.failure.massage, func: () {});
+              return errorFullScreen(context,
+                  mes: state.failure.massage, func: () {});
             }
 
             if (state is AllDoctorEmptyState || doctorModel.isEmpty) {
@@ -68,27 +69,32 @@ class _DoctorsState extends State<Doctors> {
                         searchController: searchDocController,
                         onPressed: (value) {
                           // البحث هنا سيكون فوري وسريع جداً لأنه فلترة محليّة بالـ Bloc
-                          BlocProvider.of<DoctorsBloc>(context).add(SearchDocEvent(value));
+                          BlocProvider.of<DoctorsBloc>(context)
+                              .add(SearchDocEvent(value));
                         },
                       ),
 
                       // عنوان القسم والعدد الاجمالي
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 16.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "قائمة الأطباء المسجلين",
                               style: TextStyle(
-                                  color: ColorManager.medicalText.withOpacity(0.8),
+                                  color:
+                                      ColorManager.medicalText.withOpacity(0.8),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.sp),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w, vertical: 4.h),
                               decoration: BoxDecoration(
-                                color: ColorManager.medicalPrimary.withOpacity(0.1),
+                                color: ColorManager.medicalPrimary
+                                    .withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               child: Text(

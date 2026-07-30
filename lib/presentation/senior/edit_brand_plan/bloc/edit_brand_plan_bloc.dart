@@ -17,7 +17,8 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
   int loadingItemId = -1;
   int current = 0;
   ChangeRepPlanStatus changeRepPlanStatus;
-  EditBrandPlanBloc(this.changePlanBrandTypeUsecase, this.allPlanBrandsUsecase,this.changeRepPlanStatus)
+  EditBrandPlanBloc(this.changePlanBrandTypeUsecase, this.allPlanBrandsUsecase,
+      this.changeRepPlanStatus)
       : super(EditBrandPlanInitial()) {
     on<EditBrandPlanEvent>((event, emit) async {
       if (event is FutureSearchSpecEvent) {
@@ -30,8 +31,7 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
           return false;
         }).toList();
         emit(FuturePlanBrandState(planBrand2));
-      }
-      else if (event is FutureGetPlanBrandEvent) {
+      } else if (event is FutureGetPlanBrandEvent) {
         planBrands = [];
         emit(FutureSpRepLoadingState());
         (await allPlanBrandsUsecase.execute(event.rep)).fold((failure) {
@@ -41,8 +41,7 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
 
           emit(FuturePlanBrandState(data));
         });
-      }
-      else if (event is FutureChangePlanBrandTypeEvent) {
+      } else if (event is FutureChangePlanBrandTypeEvent) {
         emit(FutureChangePlanBrandTypeLoadingState());
         (await changePlanBrandTypeUsecase
                 .execute(ChangePlanBrandType(event.id, event.brandType)))
@@ -58,7 +57,7 @@ class EditBrandPlanBloc extends Bloc<EditBrandPlanEvent, EditBrandPlanState> {
       }
       if (event is EditePlanStatusEvent) {
         emit(EditeStatusLoadingState());
-        (await changeRepPlanStatus.execute(event.id,0)).fold((failure) {
+        (await changeRepPlanStatus.execute(event.id, 0)).fold((failure) {
           emit(EditeStatusFailureState(failure: failure));
         }, (data) async {
           emit(EditeStatusState());

@@ -47,15 +47,14 @@ class DialogFilter extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding:
-                                 EdgeInsets.only(right: AppPaddingW.p8),
-                            child: Text(text,
-                                style:  TextStyle(fontSize: 20.sp)),
+                            padding: EdgeInsets.only(right: AppPaddingW.p8),
+                            child:
+                                Text(text, style: TextStyle(fontSize: 20.sp)),
                           ),
                           TextFormField(
                             keyboardType: TextInputType.number,
                             validator: (val) =>
-                                val==null? "حقل الاسم مطلوب " : null,
+                                val == null ? "حقل الاسم مطلوب " : null,
                             controller: numController,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -69,8 +68,9 @@ class DialogFilter extends StatelessWidget {
                           ElevatedButton(
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
-                                 BlocProvider.of<VisitPlaceBloc>(context).add(SelectNumBrandAddEvent
-                                   (numController.text));
+                                  BlocProvider.of<VisitPlaceBloc>(context).add(
+                                      SelectNumBrandAddEvent(
+                                          numController.text));
                                   Navigator.pop(context);
                                 }
                               },

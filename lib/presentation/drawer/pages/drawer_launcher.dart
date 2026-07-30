@@ -19,45 +19,42 @@ class DrawerPage extends StatelessWidget {
 
     if (type == 4) {
       initDeleteModule();
-   return    BlocBuilder<DeleteBloc, DeleteState>(
-
-      builder: (context, state) {
-   if(state is DeleteAllState){
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-       Navigator.pushNamedAndRemoveUntil(context, Routes.login
-       ,
-         (route) => true,
-
-       );
-     });
-   }
-   if(state is DeleteAllErrorState){
-   error(context,state.failure.massage , state.failure.code);
-   }
- return  CustomAppDrawer(
-     roleTitle: "Supervisor",
-     menuItems: _getSupervisorItems(context),
-     showStats: false,
-   );
-  },
-
-);
-    } else if (type == 5) {
-      initDeleteModule();
-      return    BlocBuilder<DeleteBloc, DeleteState>(
-
+      return BlocBuilder<DeleteBloc, DeleteState>(
         builder: (context, state) {
-          if(state is DeleteAllState){
+          if (state is DeleteAllState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushNamedAndRemoveUntil(context, Routes.login
-                ,
-                    (route) => true,
-
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                Routes.login,
+                (route) => true,
               );
             });
           }
-          if(state is DeleteAllErrorState){
-            error(context,state.failure.massage , state.failure.code);
+          if (state is DeleteAllErrorState) {
+            error(context, state.failure.massage, state.failure.code);
+          }
+          return CustomAppDrawer(
+            roleTitle: "Supervisor",
+            menuItems: _getSupervisorItems(context),
+            showStats: false,
+          );
+        },
+      );
+    } else if (type == 5) {
+      initDeleteModule();
+      return BlocBuilder<DeleteBloc, DeleteState>(
+        builder: (context, state) {
+          if (state is DeleteAllState) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                Routes.login,
+                (route) => true,
+              );
+            });
+          }
+          if (state is DeleteAllErrorState) {
+            error(context, state.failure.massage, state.failure.code);
           }
           return CustomAppDrawer(
             roleTitle: "TeamLeader",
@@ -65,8 +62,7 @@ class DrawerPage extends StatelessWidget {
             showStats: false,
           );
         },
-
-);
+      );
     } else if (type == 6) {
       return CustomAppDrawer(
         roleTitle: "senior",
@@ -194,10 +190,9 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
           onTap: () => Navigator.pushNamed(
-            context,
-            Routes.placesArchive,
-
-          )),
+                context,
+                Routes.placesArchive,
+              )),
       DrawerMenuItem(
           icon: Icons.edit_note_sharp,
           title: "إنشاء وصفة",
@@ -228,10 +223,7 @@ class DrawerPage extends StatelessWidget {
         icon: Icons.list_alt_outlined,
         title: "إدارة الخطة",
         onTap: () {
-          Navigator.pushNamed(
-              context,
-              Routes.createCurrentPlan
-          );
+          Navigator.pushNamed(context, Routes.createCurrentPlan);
         },
       ),
       DrawerMenuItem(
@@ -259,7 +251,6 @@ class DrawerPage extends StatelessWidget {
     initSeniorProfModule();
 
     return [
-
       DrawerMenuItem(
         icon: Icons.list_alt_outlined,
         title: "لوحة التحكم",
@@ -275,10 +266,10 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
           onTap: () {
-
-            context.read<SeniorProfBloc>().add(SenAllPlaceEvent(UserInfo.repId));
+            context
+                .read<SeniorProfBloc>()
+                .add(SenAllPlaceEvent(UserInfo.repId));
             Navigator.pushNamed(context, Routes.seniorPlaces);
-
           }),
       DrawerMenuItem(
         icon: Icons.person_search_outlined,
@@ -294,26 +285,27 @@ class DrawerPage extends StatelessWidget {
         icon: Icons.list_alt_outlined,
         title: "إدارة الخطة",
         onTap: () {
-          Navigator.pushNamed(
-            context,
-              Routes.createCurrentPlan
-          );
+          Navigator.pushNamed(context, Routes.createCurrentPlan);
         },
       ),
       DrawerMenuItem(
           icon: Icons.grid_view_outlined,
           title: "الإختصاصات",
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read<SeniorProfBloc>().add(SenAllSpecEvent(UserInfo.repId));
-            Navigator.pushNamed(context, Routes.seniorSpec);
-          })),
+                context
+                    .read<SeniorProfBloc>()
+                    .add(SenAllSpecEvent(UserInfo.repId));
+                Navigator.pushNamed(context, Routes.seniorSpec);
+              })),
       DrawerMenuItem(
           icon: Icons.medication_outlined,
           title: "الأصناف الدوائية",
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read<SeniorProfBloc>().add(SenAllBrandEvent(UserInfo.activePlanId));
-            Navigator.pushNamed(context, Routes.allBrand);
-          })),
+                context
+                    .read<SeniorProfBloc>()
+                    .add(SenAllBrandEvent(UserInfo.activePlanId));
+                Navigator.pushNamed(context, Routes.allBrand);
+              })),
       DrawerMenuItem(
           icon: Icons.edit_note_sharp,
           title: "إنشاء وصفة",
@@ -342,7 +334,6 @@ class DrawerPage extends StatelessWidget {
       //     }),
 
       ///////////
-
     ];
   }
 
@@ -364,10 +355,11 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.location_city_outlined,
           title: "ارشيف المناطق",
           onTap: () {
-            context.read<SeniorProfBloc>().add(SenAllPlaceEvent(UserInfo.repId));
+            context
+                .read<SeniorProfBloc>()
+                .add(SenAllPlaceEvent(UserInfo.repId));
             Navigator.pushNamed(context, Routes.seniorPlaces);
           }),
-
       DrawerMenuItem(
         icon: Icons.person_search_outlined,
         title: "البحث عن طبيب او مشفى",
@@ -382,18 +374,19 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.grid_view_outlined,
           title: "الإختصاصات",
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-
-            context.read<SeniorProfBloc>().add(SenAllSpecEvent(UserInfo.repId));
-            Navigator.pushNamed(context, Routes.seniorSpec);
-
+                context
+                    .read<SeniorProfBloc>()
+                    .add(SenAllSpecEvent(UserInfo.repId));
+                Navigator.pushNamed(context, Routes.seniorSpec);
               })),
       DrawerMenuItem(
           icon: Icons.medication_outlined,
           title: "الأصناف الدوائية",
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read<SeniorProfBloc>().add(SenAllBrandEvent(UserInfo.activePlanId));
-            Navigator.pushNamed(context, Routes.allBrand);
-
+                context
+                    .read<SeniorProfBloc>()
+                    .add(SenAllBrandEvent(UserInfo.activePlanId));
+                Navigator.pushNamed(context, Routes.allBrand);
               })),
     ];
   }
@@ -405,9 +398,7 @@ class DrawerPage extends StatelessWidget {
 }
 
 List<DrawerMenuItem> getLogoutItem(BuildContext context) {
-  return
-
-    [
+  return [
     DrawerMenuItem(
         icon: Icons.sync_outlined,
         title: "مزامنة البيانات",
@@ -415,8 +406,7 @@ List<DrawerMenuItem> getLogoutItem(BuildContext context) {
         onTap: () {
           initAsyncInModule();
           WidgetsBinding.instance.addPostFrameCallback(
-                (_) {
-
+            (_) {
               Navigator.pushNamed(
                 context,
                 Routes.asyncIn,
@@ -435,20 +425,15 @@ List<DrawerMenuItem> getLogoutItem(BuildContext context) {
         }),
   ];
 }
+
 List<DrawerMenuItem> getAdminLogoutItem(BuildContext context) {
- 
-  return
-
-    [
-      DrawerMenuItem(
-          icon: Icons.logout_outlined,
-          title: "تسجيل خروج",
-          color: Colors.red,
-          
-          onTap: () {
-            context.read<DeleteBloc>().add(DeleteAllEvent());
-          
-          }),
-    ];
+  return [
+    DrawerMenuItem(
+        icon: Icons.logout_outlined,
+        title: "تسجيل خروج",
+        color: Colors.red,
+        onTap: () {
+          context.read<DeleteBloc>().add(DeleteAllEvent());
+        }),
+  ];
 }
-

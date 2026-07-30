@@ -32,7 +32,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
           isPressed = false;
         });
         // تنفيذ الأكشن الفعلي بعد رفع الإصبع
-   //     widget.onTap();
+        //     widget.onTap();
       },
       // --- في حال سحب الإصبع للخارج أو إلغاء اللمس ---
       onTapCancel: () {

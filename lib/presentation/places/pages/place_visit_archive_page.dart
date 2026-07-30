@@ -15,7 +15,6 @@ class PlaceVisitArchivePage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-
         body: NestedScrollView(
           // هذا الجزء يسمح للـ Header (الـ AppBar والـ TabBar) بالتحرك مع السكرول
           headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -82,18 +81,18 @@ class PlaceVisitArchivePage extends StatelessWidget {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.groups_outlined),
-                                  SizedBox(width: 8.w),
-                                  const Text('الأطباء'),
-                                ])),
+                              const Icon(Icons.groups_outlined),
+                              SizedBox(width: 8.w),
+                              const Text('الأطباء'),
+                            ])),
                         Tab(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.local_hospital_outlined),
-                                  SizedBox(width: 8.w),
-                                  const Text('المشافي'),
-                                ])),
+                              const Icon(Icons.local_hospital_outlined),
+                              SizedBox(width: 8.w),
+                              const Text('المشافي'),
+                            ])),
                       ],
                     ),
                   ),

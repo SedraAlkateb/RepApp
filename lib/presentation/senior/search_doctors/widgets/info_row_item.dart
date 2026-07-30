@@ -36,7 +36,8 @@ class InfoRowItem extends StatelessWidget {
             child: Text(
               value,
               maxLines: 1,
-              overflow: TextOverflow.ellipsis, // يقص النص الطويل جداً بنقاط منعاً للـ Overflow
+              overflow: TextOverflow
+                  .ellipsis, // يقص النص الطويل جداً بنقاط منعاً للـ Overflow
               style: TextStyle(
                 fontSize: 13.sp,
                 color: Colors.black87,

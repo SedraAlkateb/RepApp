@@ -25,10 +25,12 @@ class ViewRecipePage extends StatelessWidget {
           padding: const EdgeInsets.only(right: 15),
           icon: Icon(Icons.arrow_back_sharp, color: ColorManager.white),
         ),
-        title:  Text('تفاصيل الوصفة',style: TextStyle(
-          color: ColorManager.white
-        ),),
-        backgroundColor: ColorManager.secondaryColor7, // Background color matching branding
+        title: Text(
+          'تفاصيل الوصفة',
+          style: TextStyle(color: ColorManager.white),
+        ),
+        backgroundColor:
+            ColorManager.secondaryColor7, // Background color matching branding
       ),
       body: BlocBuilder<SeniorProfBloc, SeniorProfState>(
         builder: (context, state) {
@@ -51,41 +53,46 @@ class ViewRecipePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
-                    _buildCardContent( state.name),
-
+                    _buildCardContent(state.name),
                     const SizedBox(height: 20),
-                    _buildRecipeDetail(isDoctor ? 'اختصاص الطبيب' : 'الإختصاص'
-                        , recipe.spName),
-                    _buildRecipeDetail('المستحضر الأول', recipe.brand_1.title_en),
-                    _buildRecipeDetail('المستحضر الثاني', recipe.brand_2?.title_en),
-                    _buildRecipeDetail('المستحضر الثالث', recipe.brand_3?.title_en),
-                    _buildRecipeDetail('المستحضر الرابع', recipe.brand_4?.title_en),
-
+                    _buildRecipeDetail(
+                        isDoctor ? 'اختصاص الطبيب' : 'الإختصاص', recipe.spName),
+                    _buildRecipeDetail(
+                        'المستحضر الأول', recipe.brand_1.title_en),
+                    _buildRecipeDetail(
+                        'المستحضر الثاني', recipe.brand_2?.title_en),
+                    _buildRecipeDetail(
+                        'المستحضر الثالث', recipe.brand_3?.title_en),
+                    _buildRecipeDetail(
+                        'المستحضر الرابع', recipe.brand_4?.title_en),
                     const SizedBox(height: 15),
-                    _buildRecipeDetail('الملاحظة الأولى', recipe.note1 ?? "يرجى عدم تبديل الدواء"),
+                    _buildRecipeDetail('الملاحظة الأولى',
+                        recipe.note1 ?? "يرجى عدم تبديل الدواء"),
                     _buildRecipeDetail('الملاحظة الثانية', recipe.note2 ?? ""),
                     _buildRecipeDetail('العنوان', recipe.address),
                     _buildRecipeDetail('التواصل', recipe.phone),
                     _buildRecipeDetail('عدد الوصفات المطبوعة', recipe.total),
-                    _buildRecipeDetail('ملاحظات خاصة للمندوب', recipe.note_emp ?? ""),
-
-                    Divider(color: ColorManager.secondaryColor,),
+                    _buildRecipeDetail(
+                        'ملاحظات خاصة للمندوب', recipe.note_emp ?? ""),
+                    Divider(
+                      color: ColorManager.secondaryColor,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (recipe.image1 != null && recipe.image1!.isNotEmpty)
+                          if (recipe.image1 != null &&
+                              recipe.image1!.isNotEmpty)
                             _buildRecipeImage("صورة الوصفة 1 ", recipe.image1),
-
-                          if (recipe.image2 != null && recipe.image2!.isNotEmpty)
+                          if (recipe.image2 != null &&
+                              recipe.image2!.isNotEmpty)
                             _buildRecipeImage("صورة الوصفة 2", recipe.image2),
-                        ],),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
-
                   ],
                 ),
               ),
@@ -98,14 +105,13 @@ class ViewRecipePage extends StatelessWidget {
     );
   }
 
-
   Widget _buildCardContent(String? content) {
     return Card(
-
       color: ColorManager.secondaryColor1,
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12), // Increased border radius for a softer look
+        borderRadius: BorderRadius.circular(
+            12), // Increased border radius for a softer look
       ),
       elevation: 5,
       child: Padding(
@@ -113,11 +119,13 @@ class ViewRecipePage extends StatelessWidget {
         child: Text(
           content ?? 'غير متوفر', // Default text when content is null
           style: TextStyle(
-            fontSize: 18.sp, // Slightly increased font size for better readability
+            fontSize:
+                18.sp, // Slightly increased font size for better readability
             fontWeight: FontWeight.w600, // Make text a bit bolder for emphasis
             color: ColorManager.white, // Text color remains white
           ),
-          textAlign: TextAlign.center, // Align text to the center for a cleaner look
+          textAlign:
+              TextAlign.center, // Align text to the center for a cleaner look
         ),
       ),
     );
@@ -125,7 +133,8 @@ class ViewRecipePage extends StatelessWidget {
 
   Widget _buildRecipeDetail(String label, String? value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12), // زيادة المسافة بين العناصر
+      padding:
+          const EdgeInsets.symmetric(vertical: 12), // زيادة المسافة بين العناصر
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,7 +142,6 @@ class ViewRecipePage extends StatelessWidget {
           // العنوان مع بعض التنسيق
           Text(
             label,
-
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600, // زيادة الوزن لزيادة وضوح العنوان
@@ -179,9 +187,11 @@ class ViewRecipePage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildRecipeImage(String label, String? value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12), // زيادة المسافة بين العناصر
+      padding:
+          const EdgeInsets.symmetric(vertical: 12), // زيادة المسافة بين العناصر
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -189,12 +199,12 @@ class ViewRecipePage extends StatelessWidget {
           // العنوان مع بعض التنسيق
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Image.network("${Constants.imageUrl}${value}", height: 200, fit: BoxFit.cover),
+            child: Image.network("${Constants.imageUrl}${value}",
+                height: 200, fit: BoxFit.cover),
           ),
           const SizedBox(width: 15),
           Text(
             label,
-
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600, // زيادة الوزن لزيادة وضوح العنوان
@@ -205,5 +215,4 @@ class ViewRecipePage extends StatelessWidget {
       ),
     );
   }
-
 }

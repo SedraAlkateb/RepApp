@@ -21,7 +21,6 @@
 
 // }
 
-
 // class AnimatedDropdownButtonFormField extends StatefulWidget {
 //   @override
 //   _AnimatedDropdownButtonFormFieldState createState() => _AnimatedDropdownButtonFormFieldState();
@@ -72,8 +71,6 @@
 //     );
 //   }
 // }
-
-
 
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:domina_app/presentation/ss.dart'; // عدل الاسم حسب مشروعك

@@ -20,22 +20,22 @@ class DoctorDetails extends StatefulWidget {
 class _DoctorDetailsState extends State<DoctorDetails>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController searchNoteDoctorController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA), // خلفية هادئة لإبراز كروت التقارير
+      backgroundColor:
+          const Color(0xFFF8F9FA), // خلفية هادئة لإبراز كروت التقارير
       appBar: null,
       body: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
         buildWhen: (previous, current) =>
-        current is FutureDocDoctorsState ||
+            current is FutureDocDoctorsState ||
             current is FutureDocDoctorsErrorState ||
             current is FutureDocDoctorsLoadingState ||
             current is FutureDocDoctorsEmptyState,
         builder: (context, state) {
-
           // 1. حالة الخطأ
           if (state is FutureDocDoctorsErrorState) {
             return CustomScrollView(
@@ -75,9 +75,8 @@ class _DoctorDetailsState extends State<DoctorDetails>
           // 4. حالة نجاح جلب البيانات (الهيدر المطور مع عرض كروت التقارير بالملاحظات المدمجة)
           if (state is FutureDocDoctorsState) {
             final String cleanName = widget.doctorModel.name.trim();
-            final String firstLetter = cleanName.isNotEmpty
-                ? cleanName[0].toUpperCase()
-                : "?";
+            final String firstLetter =
+                cleanName.isNotEmpty ? cleanName[0].toUpperCase() : "?";
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
@@ -100,7 +99,8 @@ class _DoctorDetailsState extends State<DoctorDetails>
                           top: 40.h,
                           right: 10.w,
                           child: IconButton(
-                            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.white, size: 30),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),
@@ -124,8 +124,10 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                   borderRadius: BorderRadius.circular(12.r),
                                   onTap: () {
                                     BlocProvider.of<SearchDoctorsBloc>(context)
-                                        .add(DoctorInfoEvent(widget.doctorModel.id));
-                                    Navigator.pushNamed(context, Routes.doctorInfo);
+                                        .add(DoctorInfoEvent(
+                                            widget.doctorModel.id));
+                                    Navigator.pushNamed(
+                                        context, Routes.doctorInfo);
                                   },
                                   child: Container(
                                     width: 60.r,
@@ -140,9 +142,11 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                     ),
                                     child: Center(
                                       child: FittedBox(
-                                        fit: BoxFit.contain, // 🌟 يجبر الحرف على البقاء داخل الحدود مهما كان حجم الشاشة
+                                        fit: BoxFit
+                                            .contain, // 🌟 يجبر الحرف على البقاء داخل الحدود مهما كان حجم الشاشة
                                         child: Padding(
-                                          padding: EdgeInsets.all(4.r), // مسافة أمان صغيرة حول الحرف
+                                          padding: EdgeInsets.all(4
+                                              .r), // مسافة أمان صغيرة حول الحرف
                                           child: Text(
                                             firstLetter,
                                             style: const TextStyle(
@@ -163,11 +167,14 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                   borderRadius: BorderRadius.circular(12.r),
                                   onTap: () {
                                     BlocProvider.of<SearchDoctorsBloc>(context)
-                                        .add(DoctorInfoEvent(widget.doctorModel.id));
-                                    Navigator.pushNamed(context, Routes.doctorInfo);
+                                        .add(DoctorInfoEvent(
+                                            widget.doctorModel.id));
+                                    Navigator.pushNamed(
+                                        context, Routes.doctorInfo);
                                   },
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8.w, vertical: 4.h),
                                     child: Text(
                                       widget.doctorModel.name,
                                       textAlign: TextAlign.center,
@@ -219,10 +226,11 @@ class _DoctorDetailsState extends State<DoctorDetails>
 
                 // القائمة التدريجية لكروت التقارير (SliverList) مع الملاحظة المدمجة مباشرة
                 SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                      (context, index) {
                         return Container(
                           margin: EdgeInsets.only(bottom: 15.h),
                           decoration: BoxDecoration(
@@ -235,7 +243,8 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                 offset: const Offset(0, 4),
                               ),
                             ],
-                            border: Border.all(color: ColorManager.hintGrey.withOpacity(0.3)),
+                            border: Border.all(
+                                color: ColorManager.hintGrey.withOpacity(0.3)),
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(16.w),
@@ -244,7 +253,8 @@ class _DoctorDetailsState extends State<DoctorDetails>
                               children: [
                                 // 1. استخدام الويدجت الجديد لعرض اسم المندوب
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     InfoRowItem(
@@ -253,7 +263,8 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                     ),
                                     InfoRowItem(
                                       icon: Icons.calendar_month_outlined,
-                                      value: state.doctordetails[index].visitDate,
+                                      value:
+                                          state.doctordetails[index].visitDate,
                                     ),
                                   ],
                                 ),
@@ -266,36 +277,47 @@ class _DoctorDetailsState extends State<DoctorDetails>
                                   width: double.infinity,
                                   padding: EdgeInsets.all(12.w),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFF8F9FA), // لون هادئ لتمييز الملاحظة
+                                    color: const Color(
+                                        0xFFF8F9FA), // لون هادئ لتمييز الملاحظة
                                     borderRadius: BorderRadius.circular(10.r),
-                                    border: Border.all(color: Colors.grey.shade100),
+                                    border:
+                                        Border.all(color: Colors.grey.shade100),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.rate_review_outlined, color: ColorManager.secondaryColor1, size: 16.sp),
+                                          Icon(Icons.rate_review_outlined,
+                                              color:
+                                                  ColorManager.secondaryColor1,
+                                              size: 16.sp),
                                           SizedBox(width: 6.w),
                                           Text(
                                             "ملاحظات المكتب العلمي:",
                                             style: TextStyle(
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.bold,
-                                              color: ColorManager.secondaryColor1,
+                                              color:
+                                                  ColorManager.secondaryColor1,
                                             ),
                                           ),
                                         ],
                                       ),
                                       SizedBox(height: 6.h),
                                       Text(
-                                        state.doctordetails[index].note.toString().isNotEmpty
-                                            ? state.doctordetails[index].note.toString()
+                                        state.doctordetails[index].note
+                                                .toString()
+                                                .isNotEmpty
+                                            ? state.doctordetails[index].note
+                                                .toString()
                                             : "لا توجد ملاحظات مسجلة.",
                                         style: TextStyle(
                                           fontSize: 12.sp,
                                           color: Colors.black87,
-                                          height: 1.4, // تباعد سطري مريح للقراءة
+                                          height:
+                                              1.4, // تباعد سطري مريح للقراءة
                                         ),
                                       ),
                                     ],

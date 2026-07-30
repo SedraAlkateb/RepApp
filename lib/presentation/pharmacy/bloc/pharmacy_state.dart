@@ -4,18 +4,21 @@ part of 'pharmacy_bloc.dart';
 sealed class PharmacyState {}
 
 final class PharmacyInitial extends PharmacyState {}
+
 final class AllPharmacyState extends PharmacyState {
   final List<PharmacyModel> pharmacy;
   AllPharmacyState(this.pharmacy);
-  List<Object?> get props =>[pharmacy];
+  List<Object?> get props => [pharmacy];
 }
+
 final class AllPharmacyErrorState extends PharmacyState {
   final Failure failure;
   AllPharmacyErrorState({required this.failure});
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
+
 final class AllPharmacyLoadingState extends PharmacyState {
   @override
   AllPharmacyLoadingState();
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }

@@ -30,8 +30,6 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F6F9),
-
-
       floatingActionButton: FloatingActionButton.extended(
         label: const Text("حفظ التعديلات",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -154,9 +152,9 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
   // تصميم البطاقة الفاخر
   Widget _buildModernCard(int index, FutureRepState state) {
     final item = planBrandsp[index];
-    bool isEditable = widget.flag == UserInfo.statusPlan ;
-   // &&
-      //  ( state is! SumErrorState);
+    bool isEditable = widget.flag == UserInfo.statusPlan;
+    // &&
+    //  ( state is! SumErrorState);
 
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
@@ -199,7 +197,6 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                         ),
                       ),
                       Type.buildBadge(item.brandType),
-
                     ],
                   ),
                   SizedBox(height: 12.h),
@@ -238,7 +235,8 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                             }
                           },
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: item.brandType.color),
+                              fontWeight: FontWeight.bold,
+                              color: item.brandType.color),
                           decoration: InputDecoration(
                             hintText: item.totalAmount.toString(),
                             border: InputBorder.none,
@@ -256,8 +254,6 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
       ),
     );
   }
-
-
 
   @override
   bool get wantKeepAlive => true;

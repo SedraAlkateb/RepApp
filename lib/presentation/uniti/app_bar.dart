@@ -3,11 +3,13 @@ import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 
-PreferredSizeWidget appBarShow(String title,BuildContext context){
-
+PreferredSizeWidget appBarShow(String title, BuildContext context) {
   return AppBar(
     backgroundColor: ColorManager.primary,
-    title: Text(title,style: Theme.of(context).textTheme.titleLarge,),
+    title: Text(
+      title,
+      style: Theme.of(context).textTheme.titleLarge,
+    ),
     leading: Builder(
       builder: (BuildContext context) {
         return IconButton(

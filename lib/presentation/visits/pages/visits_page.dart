@@ -69,14 +69,17 @@ class VisitsPage extends StatelessWidget {
                           fontWeight: FontWeight.bold, fontSize: 14.sp),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
+                        color:
+                            ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       onTap: (value) {
                         if (value == 0) {
-                          BlocProvider.of<VisitBloc>(context).add(VisitDoctorEvent());
+                          BlocProvider.of<VisitBloc>(context)
+                              .add(VisitDoctorEvent());
                         } else {
-                          BlocProvider.of<VisitBloc>(context).add(VisitHospitalEvent());
+                          BlocProvider.of<VisitBloc>(context)
+                              .add(VisitHospitalEvent());
                         }
                       },
                       tabs: [
@@ -110,7 +113,8 @@ class VisitsPage extends StatelessWidget {
 
           // محتوى التبويبات
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),            children: [
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
               DoctorVisitUser(),
               HospitalVisitUser(),
             ],
@@ -131,7 +135,8 @@ class VisitsPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat, // لليسار كما في التصميم
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.startFloat, // لليسار كما في التصميم
       ),
     );
   }

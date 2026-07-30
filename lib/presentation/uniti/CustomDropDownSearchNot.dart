@@ -12,7 +12,6 @@ class CustomDropDownSearchNot extends StatelessWidget {
     required this.hintText,
     required this.errorText,
   }) : super(key: key);
-  
 
   final FormFieldValidator<dynamic> validator;
   final ValueSetter<dynamic> onChanged;
@@ -29,8 +28,7 @@ class CustomDropDownSearchNot extends StatelessWidget {
       ),
       width: MediaQuery.of(context).size.width,
       child: DropdownSearch<dynamic>(
-        itemAsString: (dynamic item) =>
-            '${item.name}',
+        itemAsString: (dynamic item) => '${item.name}',
         validator: validator,
         popupProps: PopupProps.menu(
           itemBuilder: (context, item, isSelected) {
@@ -57,7 +55,7 @@ class CustomDropDownSearchNot extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               hintText: 'ابحث هنا',
               hintStyle: TextStyle(
-                fontSize:  12.sp,
+                fontSize: 12.sp,
                 overflow: TextOverflow.fade,
               ),
               prefixIcon: Icon(Icons.search, size: 12),
@@ -67,13 +65,13 @@ class CustomDropDownSearchNot extends StatelessWidget {
         items: items,
         dropdownDecoratorProps: DropDownDecoratorProps(
           baseStyle: TextStyle(
-            fontSize:  14.sp,
+            fontSize: 14.sp,
             overflow: TextOverflow.fade,
           ),
           dropdownSearchDecoration: InputDecoration(
             icon: icon,
             labelStyle: TextStyle(
-              fontSize:  14.sp,
+              fontSize: 14.sp,
               overflow: TextOverflow.fade,
             ),
             hintText: hintText,

@@ -16,22 +16,21 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   OrderBloc(this.pharmacyOrderUsecase, this.allBrandsSqlUsecase)
       : super(OrderInitial()) {
-
     // 1. معالجة إرسال الطلبية النهائية
     on<PharmacyOrderEvent>((event, emit) async {
       emit(PharmacyOrderLoadingState());
       final result = await pharmacyOrderUsecase.execute(event.order);
       result.fold(
-            (failure) => emit(PharmacyOrderErrorState(failure: failure)),
-            (data) => emit(PharmacyOrderState(data)),
+        (failure) => emit(PharmacyOrderErrorState(failure: failure)),
+        (data) => emit(PharmacyOrderState(data)),
       );
     });
     // 2. معالجة جلب البراندات عند فتح الصفحة
     on<BrandOrderEvent>((event, emit) async {
       final result = await allBrandsSqlUsecase.execute();
       result.fold(
-            (failure) => emit(BrandOrderErrorState(failure: failure)),
-            (data) => emit(BrandOrderState(data, selectedItems: const [])),
+        (failure) => emit(BrandOrderErrorState(failure: failure)),
+        (data) => emit(BrandOrderState(data, selectedItems: const [])),
       );
     });
 
@@ -42,8 +41,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
         // إنشاء نسخة جديدة من القائمة وإضافة العنصر
         // ملاحظة: يمكنك هنا إضافة منطق للتحقق إذا كان المنتج مضافاً مسبقاً لزيادة الكمية فقط
-        final List<OrderDetails> updatedList = List.from(currentState.selectedItems)
-          ..add(event.item);
+        final List<OrderDetails> updatedList =
+            List.from(currentState.selectedItems)..add(event.item);
 
         emit(BrandOrderState(currentState.brands, selectedItems: updatedList));
       }
@@ -54,8 +53,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       if (state is BrandOrderState) {
         final currentState = state as BrandOrderState;
 
-        final List<OrderDetails> updatedList = List.from(currentState.selectedItems)
-          ..removeAt(event.index);
+        final List<OrderDetails> updatedList =
+            List.from(currentState.selectedItems)..removeAt(event.index);
 
         emit(BrandOrderState(currentState.brands, selectedItems: updatedList));
       }

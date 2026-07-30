@@ -66,7 +66,8 @@ class SpecDH extends StatelessWidget {
                           fontWeight: FontWeight.bold, fontSize: 14.sp),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
+                        color:
+                            ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       onTap: (value) {
@@ -108,7 +109,8 @@ class SpecDH extends StatelessWidget {
           },
           // محتوى الصفحات
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),            children: [
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
               DoctorSp(),
               HospitalSp(),
             ],

@@ -28,7 +28,9 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 12.h,),
+          SizedBox(
+            height: 12.h,
+          ),
           SearchField(
             searchController: searchController,
             onPressed: (value) {
@@ -36,7 +38,6 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                   .add(SearchHospitalVisitEvent(value: value));
             },
           ),
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -94,22 +95,25 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w, vertical: 4.h),
                                   decoration: BoxDecoration(
                                     color: Colors.blue.shade50,
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
-                                  child: Text(hospitals[index].specModel.title , style
-                                      : TextStyle(color: Colors.blue, fontSize: 12.sp)),
+                                  child: Text(hospitals[index].specModel.title,
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 12.sp)),
                                 ),
                                 Expanded(
                                   child: Text(
                                       textAlign: TextAlign.end,
-                                      hospitals[index].hospitalModel.title ,
+                                      hospitals[index].hospitalModel.title,
                                       style: TextStyle(
-                                          fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorManager.medicalPrimary)),
                                 ),
-
                               ],
                             ),
                             SizedBox(height: 16.h),
@@ -117,45 +121,55 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
-                                SizedBox(width: 8.w,),
+                                Icon(Icons.location_on_outlined,
+                                    size: 22.sp, color: Colors.grey),
+                                SizedBox(
+                                  width: 8.w,
+                                ),
                                 Expanded(
                                   child: Text(
-
                                       "${hospitals[index].hospitalModel.placeTitle} - ${hospitals[index].hospitalModel.address}",
-                                      style: TextStyle
-                                        (color: Colors.grey,
-                                          fontSize: 15.sp)),
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 15.sp)),
                                 ),
                               ],
                             ),
                             SizedBox(height: 16.h),
-                            Divider(color:  Colors.grey,thickness: 0.1,),
+                            Divider(
+                              color: Colors.grey,
+                              thickness: 0.1,
+                            ),
                             SizedBox(height: 8.h),
                             // أزرار الأكشن
                             Row(
                               children: [
-                                Icon(Icons.access_time,size: 18.sp,color: Colors.grey,  fontWeight: FontWeight.bold),
-                                SizedBox(width: 4.w,),
+                                Icon(Icons.access_time,
+                                    size: 18.sp,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
                                 Text(hospitals[index].visitHospitalModel.data,
-                                    style: TextStyle
-                                      (color: Colors.grey,
+                                    style: TextStyle(
+                                        color: Colors.grey,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14.sp)),
-
                                 const Spacer(),
-                                InkWell
-                                  (
+                                InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(context,Routes.infoVisitHospital,
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.infoVisitHospital,
                                       arguments: hospitals[index],
                                     );
                                   },
-                                  child: buildCardButton("عرض التفاصيل",
+                                  child: buildCardButton(
+                                      "عرض التفاصيل",
                                       ColorManager.medicalPrimary,
-                                      Colors.white, Icons.directions_run),
+                                      Colors.white,
+                                      Icons.directions_run),
                                 ),
-
                               ],
                             ),
                           ],

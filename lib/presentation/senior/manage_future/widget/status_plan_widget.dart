@@ -3,7 +3,7 @@ import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void showStatusBottomSheet(BuildContext context,int repTypeI,int repPlanId) {
+void showStatusBottomSheet(BuildContext context, int repTypeI, int repPlanId) {
   List<FlagModel> statusPlan = getAllFlags(repTypeI);
 
   showModalBottomSheet(
@@ -24,14 +24,14 @@ void showStatusBottomSheet(BuildContext context,int repTypeI,int repPlanId) {
             ),
             const SizedBox(height: 20),
             ...statusPlan.map((status) => ListTile(
-              title: Text(status.name),
-              onTap: () {
-                Navigator.pop(context);
-                BlocProvider.of<FutureRepBloc>(context).add(
-                  EditePlanStatusEvent(repPlanId, status.flag),
-                );
-              },
-            )),
+                  title: Text(status.name),
+                  onTap: () {
+                    Navigator.pop(context);
+                    BlocProvider.of<FutureRepBloc>(context).add(
+                      EditePlanStatusEvent(repPlanId, status.flag),
+                    );
+                  },
+                )),
           ],
         ),
       );

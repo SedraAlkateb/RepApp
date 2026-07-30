@@ -73,7 +73,6 @@ class CustomDropDownSearch extends StatelessWidget {
             overflow: TextOverflow.fade,
           ),
           dropdownSearchDecoration: InputDecoration(
-
             icon: icon,
             labelStyle: TextStyle(
               fontSize: tablet ? 19.sp : 14.sp,

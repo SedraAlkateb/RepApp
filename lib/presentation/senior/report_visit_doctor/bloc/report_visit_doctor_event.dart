@@ -5,25 +5,27 @@ sealed class ReportVisitDoctorEvent extends Equatable {}
 
 class AllReportVisitDoctorEvent extends ReportVisitDoctorEvent {
   final VisitRepSen visitRepSen;
-  final bool isSen;//true genReport // false myReport
+  final bool isSen; //true genReport // false myReport
   @override
-  AllReportVisitDoctorEvent(this.visitRepSen,this.isSen);
-  List<Object?> get props => [visitRepSen,isSen];
+  AllReportVisitDoctorEvent(this.visitRepSen, this.isSen);
+  List<Object?> get props => [visitRepSen, isSen];
 }
+
 class WhoAllReadEvent extends ReportVisitDoctorEvent {
   final String visitId;
   final String visitType;
   final int repType;
   @override
-  WhoAllReadEvent(this.visitId,this.visitType,this.repType);
-  List<Object?> get props => [visitId,visitType,repType];
+  WhoAllReadEvent(this.visitId, this.visitType, this.repType);
+  List<Object?> get props => [visitId, visitType, repType];
 }
+
 class AllReportVisitHospitalEvent extends ReportVisitDoctorEvent {
   final VisitRepSen visitRepSen;
-  final bool isSen;//true genReport // false myReport
+  final bool isSen; //true genReport // false myReport
   @override
-  AllReportVisitHospitalEvent(this.visitRepSen,this.isSen);
-  List<Object?> get props => [visitRepSen,isSen];
+  AllReportVisitHospitalEvent(this.visitRepSen, this.isSen);
+  List<Object?> get props => [visitRepSen, isSen];
 }
 
 class SenSearchNoteVisitDoctorEvent extends ReportVisitDoctorEvent {
@@ -59,22 +61,30 @@ class ChangeReadDocNoteEvent extends ReportVisitDoctorEvent {
   final indexBook;
   final int index;
   @override
-  ChangeReadDocNoteEvent({required this.repVisitsModel,required this.index,required this.indexBook});
+  ChangeReadDocNoteEvent(
+      {required this.repVisitsModel,
+      required this.index,
+      required this.indexBook});
   List<Object?> get props => [repVisitsModel, index];
 }
+
 class AllReadDocNoteEvent extends ReportVisitDoctorEvent {
   final ReadAll readAll;
   @override
   AllReadDocNoteEvent({required this.readAll});
   List<Object?> get props => [readAll];
 }
+
 class ChangeReadHosNoteEvent extends ReportVisitDoctorEvent {
   final RepVisitsModel repVisitsModel;
   final indexBook;
   final int index;
   @override
-  ChangeReadHosNoteEvent({required this.repVisitsModel,required this.index, required this.indexBook});
-  List<Object?> get props => [repVisitsModel, index,indexBook];
+  ChangeReadHosNoteEvent(
+      {required this.repVisitsModel,
+      required this.index,
+      required this.indexBook});
+  List<Object?> get props => [repVisitsModel, index, indexBook];
 }
 
 class ExpandedBorder extends ReportVisitDoctorEvent {

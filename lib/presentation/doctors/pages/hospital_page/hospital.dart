@@ -20,12 +20,13 @@ class Hospital extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 8.w),
         child: BlocBuilder<DoctorsBloc, DoctorsState>(
           buildWhen: (previous, current) =>
-          current is AllHospitalsState ||
+              current is AllHospitalsState ||
               current is AllHospitalEmptyState ||
-              current is AllHospitalErrorState||
-          current is AllHospitalLoadingState,
+              current is AllHospitalErrorState ||
+              current is AllHospitalLoadingState,
           builder: (context, state) {
-            List<HospitalSpAllModel> hospitalModel = context.read<DoctorsBloc>().hospital;
+            List<HospitalSpAllModel> hospitalModel =
+                context.read<DoctorsBloc>().hospital;
 
             if (state is AllHospitalsState) {
               hospitalModel = state.hospital;
@@ -116,7 +117,8 @@ class Hospital extends StatelessWidget {
                         fontSize: 16.sp),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                     decoration: BoxDecoration(
                       color: ColorManager.medicalPrimary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),

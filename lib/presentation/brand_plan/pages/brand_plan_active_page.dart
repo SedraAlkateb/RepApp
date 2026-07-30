@@ -54,22 +54,24 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                         index: 0,
                         child: Center(
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.w, vertical: 12.h),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15.r),
                                 border: Border.all(color: Colors.grey.shade100),
                                 boxShadow: [
-                                  BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 10, offset: const Offset(0, 2))
-                                ]
-                            ),
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.01),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 2))
+                                ]),
                             child: Text(
                               "تاريخ الخطة: ${UserInfo.startDate} - ${UserInfo.endDate}",
                               style: TextStyle(
                                   fontSize: 14.sp,
                                   color: ColorManager.medicalPrimary,
-                                  fontWeight: FontWeight.w900
-                              ),
+                                  fontWeight: FontWeight.w900),
                             ),
                           ),
                         ),
@@ -113,23 +115,24 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
               ),
               planBrandModel.isEmpty
                   ? SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: emptyFullScreen(context)),
-              )
+                      hasScrollBody: false,
+                      child: Center(child: emptyFullScreen(context)),
+                    )
                   : SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                      return _buildFluidAnimation(
-                        index: index + 4,
-                        child: ActiveBrandPlanCard(model: planBrandModel[index]),
-                      );
-                    },
-                    childCount: planBrandModel.length,
-                  ),
-                ),
-              ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return _buildFluidAnimation(
+                              index: index + 4,
+                              child: ActiveBrandPlanCard(
+                                  model: planBrandModel[index]),
+                            );
+                          },
+                          childCount: planBrandModel.length,
+                        ),
+                      ),
+                    ),
               SliverToBoxAdapter(child: SizedBox(height: 100.h)),
             ],
           );
@@ -229,7 +232,6 @@ class ActiveBrandPlanCard extends StatelessWidget {
                   ),
                 ),
                 Type.buildBadge(model.spPlan[0].brandType),
-
               ],
             ),
           ),
@@ -260,7 +262,6 @@ class ActiveBrandPlanCard extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: model.spPlan.length,
                   itemBuilder: (context, i) {
-
                     return Container(
                       margin: EdgeInsets.only(bottom: 8.h),
                       padding: EdgeInsets.symmetric(

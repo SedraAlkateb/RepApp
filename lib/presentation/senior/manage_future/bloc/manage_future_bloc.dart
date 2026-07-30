@@ -18,39 +18,52 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
   ChangeRepPlanStatus changeRepPlanStatus;
   AllPlaceUsecase allPlaceUsecase;
 
-  ManageFutureBloc(this.allRepsFutureUsecase, 
-      this.changeRepPlanStatus,this.allPlaceUsecase
-      ) : super(ManageFutureInitial()) {
+  ManageFutureBloc(
+      this.allRepsFutureUsecase, this.changeRepPlanStatus, this.allPlaceUsecase)
+      : super(ManageFutureInitial()) {
     on<ManageFutureEvent>((event, emit) async {
-
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
-        (await allRepsFutureUsecase.execute(UserInfo.repId,event.placeId)).fold((failure) {
-          emit(AllSeniorRepErrorState(failure: failure,placeId: event.placeId));
+        (await allRepsFutureUsecase.execute(UserInfo.repId, event.placeId))
+            .fold((failure) {
+          emit(
+              AllSeniorRepErrorState(failure: failure, placeId: event.placeId));
         }, (data) async {
           data.sort((a, b) {
             // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
             int getTeamLeaderWeight(int flagValue) {
               switch (flagValue) {
-                case 5: return 1;
-                case 0: return 2;
-                case 6: return 3;
-                case 1: return 4;
-                default: return 99;
+                case 5:
+                  return 1;
+                case 0:
+                  return 2;
+                case 6:
+                  return 3;
+                case 1:
+                  return 4;
+                default:
+                  return 99;
               }
             }
 
             // أوزان السوبرفايزر (1 -> 5 -> 0 -> 6 -> 4)
             int getSupervisorWeight(int flagValue) {
               switch (flagValue) {
-                case 1: return 1;
-                case 5: return 2;
-                case 0: return 3;
-                case 6: return 4;
-                case 4: return 5;
-                default: return 99;
+                case 1:
+                  return 1;
+                case 5:
+                  return 2;
+                case 0:
+                  return 3;
+                case 6:
+                  return 4;
+                case 4:
+                  return 5;
+                default:
+                  return 99;
               }
             }
+
             int weightA = 0;
             int weightB = 0;
             if (UserInfo.repType.i == 5) {
@@ -67,10 +80,9 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           });
 
           allRepresentative = data;
-          emit(AllSeniorRepState(data,event.placeId));
+          emit(AllSeniorRepState(data, event.placeId));
         });
-      }
-      else if (event is SenSearchRepFutureEvent) {
+      } else if (event is SenSearchRepFutureEvent) {
         List<AllRepresentativeFuture> allRepresentativeModel = [];
         String search = normalizeText(event.contant);
         allRepresentativeModel = allRepresentative.where((value) {
@@ -79,18 +91,17 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           }
           return false;
         }).toList();
-        emit(AllSeniorRepState(allRepresentativeModel,0));
-      }
-      else if (event is ChangPlanStatusEvent) {
+        emit(AllSeniorRepState(allRepresentativeModel, 0));
+      } else if (event is ChangPlanStatusEvent) {
         emit(ChangPlanStatusLoadingState());
-        (await changeRepPlanStatus.execute(event.id,event.brandType)).fold((failure) {
+        (await changeRepPlanStatus.execute(event.id, event.brandType)).fold(
+            (failure) {
           emit(ChangPlanStatusErrorState(failure: failure));
         }, (data) async {
-          allRepresentative[event.index].flag=FlagModel(event.brandType);
+          allRepresentative[event.index].flag = FlagModel(event.brandType);
           emit(ChangPlanStatusState(allRepresentative));
         });
-      }
-      else if (event is GetPlaceEvent) {
+      } else if (event is GetPlaceEvent) {
         emit(GetPlaceStatusLoadingState());
         (await allPlaceUsecase.execute(event.id)).fold((failure) {
           emit(GetPlaceStatusErrorState(failure: failure));

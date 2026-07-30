@@ -14,27 +14,25 @@ class CustomShimmerWidget extends StatelessWidget {
     this.width = double.infinity,
     required this.height,
   }) : shapeBorder = const RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(15))
-  );
+            borderRadius: BorderRadius.all(Radius.circular(15)));
 
   const CustomShimmerWidget.circular(
       {super.key,
-        required this.width,
-        required this.height,
-        this.shapeBorder = const CircleBorder()});
+      required this.width,
+      required this.height,
+      this.shapeBorder = const CircleBorder()});
 
   @override
   Widget build(BuildContext context) => Shimmer.fromColors(
-    baseColor: Colors.grey[350] as Color,
-    highlightColor: ColorManager.grey,
-    child: Container(
-      width: width,
-      height: height,
-      decoration: ShapeDecoration(
-        
-        shape: shapeBorder,
-        color: ColorManager.grey,
-      ),
-    ),
-  );
+        baseColor: Colors.grey[350] as Color,
+        highlightColor: ColorManager.grey,
+        child: Container(
+          width: width,
+          height: height,
+          decoration: ShapeDecoration(
+            shape: shapeBorder,
+            color: ColorManager.grey,
+          ),
+        ),
+      );
 }

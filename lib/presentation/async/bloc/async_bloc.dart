@@ -80,8 +80,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       Future<bool> setData() async {
         emit(LoadingState(12));
 
-
-
         final result = await asyncDataSqlUsecase.execute(
           brands,
           // pharmacies,
@@ -97,7 +95,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         );
 
         return result.fold(
-              (failure) {
+          (failure) {
             FirebaseCrashlytics.instance.recordError(
               Exception("Database Save Failed"),
               StackTrace.current,
@@ -107,7 +105,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             emit(SyncDataErrorState(failure: failure));
             return false;
           },
-              (data) {
+          (data) {
             print("brand");
             brands = [];
             // pharmacies = [];
@@ -131,8 +129,10 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       Future<bool> getData() async {
         try {
           // 1. ربط هوية المندوب والتتبع قبل البدء
-          await FirebaseCrashlytics.instance.setUserIdentifier(UserInfo.repId.toString());
-          await FirebaseCrashlytics.instance.setCustomKey("sync_mode", "getData");
+          await FirebaseCrashlytics.instance
+              .setUserIdentifier(UserInfo.repId.toString());
+          await FirebaseCrashlytics.instance
+              .setCustomKey("sync_mode", "getData");
 
           // تهيئة القوائم
           brands = [];
@@ -149,9 +149,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
 
           // 1. All Brands Usecase
           final brandsStopwatch = Stopwatch()..start();
-          final brandsResult = await allBrandsUsecase.execute(UserInfo.activePlanId);
+          final brandsResult =
+              await allBrandsUsecase.execute(UserInfo.activePlanId);
           brandsStopwatch.stop();
-          final brandsFailureOrSuccess = brandsResult.fold((failure) => failure, (data) => data);
+          final brandsFailureOrSuccess =
+              brandsResult.fold((failure) => failure, (data) => data);
           if (brandsFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "brands",
@@ -178,7 +180,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           final visitDoctorResult = await getVisitDoctorUsecase.execute(
               UserInfo.activePlanId.toString(), UserInfo.repId.toString());
           visitDoctorStopwatch.stop();
-          final visitDoctorFailureOrSuccess = visitDoctorResult.fold((failure) => failure, (data) => data);
+          final visitDoctorFailureOrSuccess =
+              visitDoctorResult.fold((failure) => failure, (data) => data);
           if (visitDoctorFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "visit_doctor",
@@ -201,9 +204,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
 
           // 3. Get Visit Hospital Usecase
           final visitHospitalStopwatch = Stopwatch()..start();
-          final visitHospitalResult = await getVisitHospitalUsecase.execute(UserInfo.activePlanId, UserInfo.repId);
+          final visitHospitalResult = await getVisitHospitalUsecase.execute(
+              UserInfo.activePlanId, UserInfo.repId);
           visitHospitalStopwatch.stop();
-          final visitHospitalFailureOrSuccess = visitHospitalResult.fold((failure) => failure, (data) => data);
+          final visitHospitalFailureOrSuccess =
+              visitHospitalResult.fold((failure) => failure, (data) => data);
           if (visitHospitalFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "visit_hospital",
@@ -226,10 +231,12 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           // 4. All Plan Brands Usecase (Conditional)
           if (UserInfo.flag1 == 0) {
             final planBrandsStopwatch = Stopwatch()..start();
-            final planBrandsResult = await allPlanBrandsUsecase.execute(
-                Rep(UserInfo.activePlanId, 0, otherRepId: UserInfo.otherPlanId));
+            final planBrandsResult = await allPlanBrandsUsecase.execute(Rep(
+                UserInfo.activePlanId, 0,
+                otherRepId: UserInfo.otherPlanId));
             planBrandsStopwatch.stop();
-            final planBrandsFailureOrSuccess = planBrandsResult.fold((failure) => failure, (data) => data);
+            final planBrandsFailureOrSuccess =
+                planBrandsResult.fold((failure) => failure, (data) => data);
             if (planBrandsFailureOrSuccess is Failure) {
               await logSyncStep(
                 stepName: "plan_brands",
@@ -255,10 +262,12 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           emit(LoadingState(4));
           final doctorsStopwatch = Stopwatch()..start();
           try {
-            final doctorsResult = await allDoctorUsecase.execute(UserInfo.repId);
+            final doctorsResult =
+                await allDoctorUsecase.execute(UserInfo.repId);
             doctorsStopwatch.stop();
 
-            final doctorsFailureOrSuccess = doctorsResult.fold((failure) => failure, (data) => data);
+            final doctorsFailureOrSuccess =
+                doctorsResult.fold((failure) => failure, (data) => data);
 
             if (doctorsFailureOrSuccess is Failure) {
               await logSyncStep(
@@ -284,14 +293,15 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
             doctorsStopwatch.stop();
 
             final customFailure = Failure(
-              -5, e.toString(),
+              -5,
+              e.toString(),
             );
 
             // تسجيل الخطأ المباشر في Crashlytics
             await FirebaseCrashlytics.instance.recordError(
               e,
               stackTrace,
-              reason:  " doctors",
+              reason: " doctors",
               fatal: false,
             );
 
@@ -311,9 +321,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           // 6. All Hospital Usecase
           emit(LoadingState(5));
           final hospitalsStopwatch = Stopwatch()..start();
-          final hospitalsResult = await allHospitalUsecase.execute(UserInfo.repId);
+          final hospitalsResult =
+              await allHospitalUsecase.execute(UserInfo.repId);
           hospitalsStopwatch.stop();
-          final hospitalsFailureOrSuccess = hospitalsResult.fold((failure) => failure, (data) => data);
+          final hospitalsFailureOrSuccess =
+              hospitalsResult.fold((failure) => failure, (data) => data);
           if (hospitalsFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "hospitals",
@@ -339,7 +351,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           final placesStopwatch = Stopwatch()..start();
           final placesResult = await allPlaceUsecase.execute(UserInfo.repId);
           placesStopwatch.stop();
-          final placesFailureOrSuccess = placesResult.fold((failure) => failure, (data) => data);
+          final placesFailureOrSuccess =
+              placesResult.fold((failure) => failure, (data) => data);
           if (placesFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "places",
@@ -365,7 +378,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           final specStopwatch = Stopwatch()..start();
           final specResult = await allSpeUsecase.execute(UserInfo.repId);
           specStopwatch.stop();
-          final specFailureOrSuccess = specResult.fold((failure) => failure, (data) => data);
+          final specFailureOrSuccess =
+              specResult.fold((failure) => failure, (data) => data);
           if (specFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "spec",
@@ -389,9 +403,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
 
           // 9. All Hospital Sp Usecase
           final hospitalSpsStopwatch = Stopwatch()..start();
-          final hospitalSpsResult = await allHospialSpUsecase.execute(UserInfo.repId);
+          final hospitalSpsResult =
+              await allHospialSpUsecase.execute(UserInfo.repId);
           hospitalSpsStopwatch.stop();
-          final hospitalSpsFailureOrSuccess = hospitalSpsResult.fold((failure) => failure, (data) => data);
+          final hospitalSpsFailureOrSuccess =
+              hospitalSpsResult.fold((failure) => failure, (data) => data);
           if (hospitalSpsFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "hospital_sps",
@@ -415,9 +431,11 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
 
           // 10. All Brands Sp Usecase
           final brandSpsStopwatch = Stopwatch()..start();
-          final brandSpsResult = await allBrandsSpUsecase.execute(UserInfo.repId);
+          final brandSpsResult =
+              await allBrandsSpUsecase.execute(UserInfo.repId);
           brandSpsStopwatch.stop();
-          final brandSpFailureOrSuccess = brandSpsResult.fold((failure) => failure, (data) => data);
+          final brandSpFailureOrSuccess =
+              brandSpsResult.fold((failure) => failure, (data) => data);
           if (brandSpFailureOrSuccess is Failure) {
             await logSyncStep(
               stepName: "brand_sps",
@@ -440,10 +458,10 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           emit(LoadingState(10));
 
           // اكتملت جميع الخطوات بنجاح
-          FirebaseCrashlytics.instance.log("✅ [SYNC DOWNLOAD COMPLETED SUCCESSFULLY]");
+          FirebaseCrashlytics.instance
+              .log("✅ [SYNC DOWNLOAD COMPLETED SUCCESSFULLY]");
           emit(getDataSucState());
           return true;
-
         } catch (error, stackTrace) {
           // Catch عام لأي Exception غير متوقع
           await FirebaseCrashlytics.instance.recordError(
@@ -458,7 +476,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       }
 
       if (event is AsyncDataEvent) {
-
         await getData();
       }
       if (event is SetDataSEvent) {
@@ -483,9 +500,12 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         });
       }
       if (event is PlanIsActiveEvent) {
-        FirebaseCrashlytics.instance.log("💾 Starting asyncDataSqlUsecase.execute local saving...");
-        await FirebaseCrashlytics.instance.setUserIdentifier("${UserInfo.repId}${UserInfo.name}"); // رقم المندوب
-        await FirebaseCrashlytics.instance.setCustomKey("sync_mode", "PlanIsActiveEvent");
+        FirebaseCrashlytics.instance
+            .log("💾 Starting asyncDataSqlUsecase.execute local saving...");
+        await FirebaseCrashlytics.instance.setUserIdentifier(
+            "${UserInfo.repId}${UserInfo.name}"); // رقم المندوب
+        await FirebaseCrashlytics.instance
+            .setCustomKey("sync_mode", "PlanIsActiveEvent");
         emit(SyncDataLoadingState(0));
         (await checkActiveBrandPlanUsecase.execute(UserInfo.repId)).fold(
             (failure) {
@@ -513,7 +533,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         });
       }
       if (event is UpdateRepEvent) {
-        await FirebaseCrashlytics.instance.setCustomKey("sync_mode", "UpdateRepEvent");
+        await FirebaseCrashlytics.instance
+            .setCustomKey("sync_mode", "UpdateRepEvent");
         (await updateActiveSqlUsecase.execute(
                 UserInfo.repId,
                 checkActiveModel!.otherPlanId ?? 9,
@@ -555,7 +576,8 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       final crashlytics = FirebaseCrashlytics.instance;
 
       // 1️⃣ Crashlytics: تسجيل Log نصي في كل الأحوال (نجاح أو فشل)
-      final logMessage = "🔄 [SYNC STEP $loadingNumber: $stepName] | Success: $success | Duration: ${durationMs}ms | Items: ${count ?? 0}";
+      final logMessage =
+          "🔄 [SYNC STEP $loadingNumber: $stepName] | Success: $success | Duration: ${durationMs}ms | Items: ${count ?? 0}";
       crashlytics.log(logMessage);
 
       if (success) {
@@ -579,14 +601,13 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
 
         // 3️⃣ حالة النجاح: Crashlytics Custom Key لتتبع آخر خطوة نجحت
         await crashlytics.setCustomKey("last_successful_sync_step", stepName);
-
       } else {
         // 2️⃣ حالة الفشل: Analytics Event
         await analyticsService.logEvent(
           name: "sync_step_failed",
           parameters: {
             "step_name": stepName,
-            "items_count": count.toString() ,
+            "items_count": count.toString(),
             "loading_number": loadingNumber.toString(),
             "duration_ms": durationMs,
             "error_code": failure?.code.toString() ?? "unknown",
@@ -598,9 +619,9 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         await crashlytics.recordError(
           Exception("Sync Step Failed: $stepName"),
           StackTrace.current,
-          reason: "Step: $stepName failed with Code: ${failure?.code} - Msg: ${failure?.massage}",
+          reason:
+              "Step: $stepName failed with Code: ${failure?.code} - Msg: ${failure?.massage}",
           fatal: false,
-
         );
       }
     } catch (e) {
@@ -608,5 +629,4 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
       print("Logging Error (Crashlytics/Analytics): $e");
     }
   }
-
 }

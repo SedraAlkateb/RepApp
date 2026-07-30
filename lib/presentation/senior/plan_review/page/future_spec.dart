@@ -14,16 +14,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FutureSpecializationsPage extends StatefulWidget {
-  FutureSpecializationsPage({
-    super.key,
-    required this.id,
-    required this.repPlanId,
-    required this.flag,
-    required this.sampleCount,
-    required this.repName,
-    required this.repType,
-    required this.placeId
-  });
+  FutureSpecializationsPage(
+      {super.key,
+      required this.id,
+      required this.repPlanId,
+      required this.flag,
+      required this.sampleCount,
+      required this.repName,
+      required this.repType,
+      required this.placeId});
   final String repName;
   final int id;
   final int repPlanId;
@@ -32,31 +31,36 @@ class FutureSpecializationsPage extends StatefulWidget {
   final RepType repType;
   final int placeId;
   @override
-  State<FutureSpecializationsPage> createState() => _FutureSpecializationsPageState();
+  State<FutureSpecializationsPage> createState() =>
+      _FutureSpecializationsPageState();
 }
 
 class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
   final TextEditingController searchController = TextEditingController();
-@override
+  @override
   void initState() {
-  BlocProvider.of<FutureRepBloc>(context).add(FutureSpEvent(widget.id,widget.repPlanId));
+    BlocProvider.of<FutureRepBloc>(context)
+        .add(FutureSpEvent(widget.id, widget.repPlanId));
 
-  super.initState();
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     // تحديد ما إذا كان الجهاز تابلت
     final bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
     Future<bool> onWillPop() async {
-      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent(widget.placeId));
+      BlocProvider.of<ManageFutureBloc>(context)
+          .add(AllSeniorRepFutureEvent(widget.placeId));
       return true;
     }
 
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
-        backgroundColor: ColorManager.background, // تغيير الخلفية لتطابق الصفحة المطلوبة
+        backgroundColor:
+            ColorManager.background, // تغيير الخلفية لتطابق الصفحة المطلوبة
         appBar: AppBar(
           title: Text(
             'اختصاصات ${widget.repName}',
@@ -69,15 +73,18 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
             } else if (state is EditeStatusFailureState) {
               error(context, state.failure.massage, state.failure.code);
             } else if (state is EditeStatusState) {
-              BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent(widget.placeId));
+              BlocProvider.of<ManageFutureBloc>(context)
+                  .add(AllSeniorRepFutureEvent(widget.placeId));
               success(context);
               Navigator.pop(context);
             }
           },
           builder: (context, state) {
             return FloatingActionButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-              onPressed: () => showStatusBottomSheet(context,widget.repType.i,widget.repPlanId),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              onPressed: () => showStatusBottomSheet(
+                  context, widget.repType.i, widget.repPlanId),
               backgroundColor: ColorManager.secondaryColor1,
               child: Icon(Icons.check, color: ColorManager.white),
             );
@@ -96,7 +103,8 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: isTablet ? 30.w : 8.w),
+                padding:
+                    EdgeInsets.symmetric(horizontal: isTablet ? 30.w : 8.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -104,12 +112,14 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
                     SearchField(
                       searchController: searchController,
                       onPressed: (value) {
-                        BlocProvider.of<FutureRepBloc>(context).add(FutureSearchSpecEvent(value));
+                        BlocProvider.of<FutureRepBloc>(context)
+                            .add(FutureSearchSpecEvent(value));
                       },
                     ),
                     BlocBuilder<FutureRepBloc, FutureRepState>(
                       builder: (context, state) {
-                        List<SpecDModel> spModel = context.watch<FutureRepBloc>().specialization;
+                        List<SpecDModel> spModel =
+                            context.watch<FutureRepBloc>().specialization;
 
                         if (state is FutureSpRepState) {
                           spModel = state.Specs;
@@ -126,12 +136,15 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
                           return errorFullScreen(
                             context,
                             mes: state.failure.massage,
-                            func: () => BlocProvider.of<FutureRepBloc>(context).add(FutureSpEvent(widget.id,widget.repPlanId)),
+                            func: () => BlocProvider.of<FutureRepBloc>(context)
+                                .add(
+                                    FutureSpEvent(widget.id, widget.repPlanId)),
                           );
                         }
 
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 8),
                           child: SpecGridWidget(
                             items: spModel,
                             crossAxisCount: crossAxisCount,
@@ -168,5 +181,4 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage> {
   }
 
   // دالة منفصلة لعرض الـ Bottom Sheet للحفاظ على نظافة الكود
-
 }

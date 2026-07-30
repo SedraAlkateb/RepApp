@@ -24,8 +24,12 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _rotateCtrl = AnimationController(duration: const Duration(seconds: 2), vsync: this)..repeat();
-    _bounceCtrl = AnimationController(duration: const Duration(milliseconds: 1500), vsync: this)..repeat(reverse: true);
+    _rotateCtrl =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this)
+          ..repeat();
+    _bounceCtrl = AnimationController(
+        duration: const Duration(milliseconds: 1500), vsync: this)
+      ..repeat(reverse: true);
   }
 
   @override
@@ -51,7 +55,8 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
               width: 8.w,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.horizontal(left: Radius.circular(10.r)),
+                borderRadius:
+                    BorderRadius.horizontal(left: Radius.circular(10.r)),
               ),
             ),
           ),
@@ -87,7 +92,8 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
                                   animation: _bounceCtrl,
                                   builder: (context, _) => Transform.translate(
                                     offset: Offset(0, -12 * _bounceCtrl.value),
-                                    child: const Icon(LucideIcons.user, size: 80, color: Color(0xFF1A3E62)),
+                                    child: const Icon(LucideIcons.user,
+                                        size: 80, color: Color(0xFF1A3E62)),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -100,7 +106,8 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
                               left: 110,
                               child: RotationTransition(
                                 turns: _rotateCtrl,
-                                child: const Icon(LucideIcons.refreshCw, size: 28, color: Colors.blue),
+                                child: const Icon(LucideIcons.refreshCw,
+                                    size: 28, color: Colors.blue),
                               ),
                             ),
                           ],
@@ -127,14 +134,17 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
                     // 4. البلوك كونسيومر مع الحفاظ على اللوجيك الأصلي
                     BlocConsumer<AsyncInBloc, AsyncInState>(
                       buildWhen: (previous, current) {
-                        return current is SyncData1LoadingState || current is SyncData1ErrorState;
+                        return current is SyncData1LoadingState ||
+                            current is SyncData1ErrorState;
                       },
                       listener: (context, state) {
                         if (state is SyncData1ErrorState) {
-                          error(context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                         if (state is SyncData1State) {
-                          Navigator.pushReplacementNamed(context, Routes.delete);
+                          Navigator.pushReplacementNamed(
+                              context, Routes.delete);
                         }
                         if (state is IsActiveState) {
                           showDialog(
@@ -162,10 +172,13 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
                             onPressed: state is SyncData1LoadingState
                                 ? null
                                 : () {
-                              BlocProvider.of<AsyncInBloc>(context).add(Async1DataEvent());
-                            },
+                                    BlocProvider.of<AsyncInBloc>(context)
+                                        .add(Async1DataEvent());
+                                  },
                             child: Text(
-                              state is SyncData1LoadingState ? "جاري الرفع..." : " رفع البيانات ",
+                              state is SyncData1LoadingState
+                                  ? "جاري الرفع..."
+                                  : " رفع البيانات ",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -187,4 +200,3 @@ class _AsyncPageState extends State<AsyncPage> with TickerProviderStateMixin {
     );
   }
 }
-

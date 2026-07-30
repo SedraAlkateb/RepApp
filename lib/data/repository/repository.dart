@@ -79,10 +79,12 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<SpecDModel>>> allSpec(int repDet,{ int? planId}) async {
+  Future<Either<Failure, List<SpecDModel>>> allSpec(int repDet,
+      {int? planId}) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.allSpecializations(repDet,planId: planId);
+        final response =
+            await _remoteDataSource.allSpecializations(repDet, planId: planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -160,7 +162,6 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
-
 
   @override
   Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(
@@ -441,7 +442,6 @@ class RepositoryImp implements Repository {
     }
   }
 
-
   @override
   Future<Either<Failure, LoginModel>> checkActivePlanBrand(int repDe) async {
     try {
@@ -669,9 +669,9 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
+
   @override
-  Future<Either<Failure, CopyReciRequest>> getRepReci(
-      int reciId) async {
+  Future<Either<Failure, CopyReciRequest>> getRepReci(int reciId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getRepReci(reciId);
@@ -691,11 +691,12 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepReci")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getRepReci")]));
       return Left(failure);
     }
   }
+
   @override
   Future<Either<Failure, CheckRepResponse>> checkRep(int repId) async {
     try {
@@ -781,10 +782,11 @@ class RepositoryImp implements Repository {
 
   //
   @override
-  Future<Either<Failure, List<AllRepresentative>>> getReps(int id,int cityId) async {
+  Future<Either<Failure, List<AllRepresentative>>> getReps(
+      int id, int cityId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getReps(id,cityId);
+        final response = await _remoteDataSource.getReps(id, cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -806,11 +808,14 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
+
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(int repDet,int planId ) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(
+      int repDet, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getUnfinishedDoctorVisits(repDet,planId);
+        final response =
+            await _remoteDataSource.getUnfinishedDoctorVisits(repDet, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -834,10 +839,11 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(int repDet,int planId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(
+      int repDet, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.noVisitDoc(repDet,planId);
+        final response = await _remoteDataSource.noVisitDoc(repDet, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -861,10 +867,11 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(int repDet,int planId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(
+      int repDet, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitDoc(repDet,planId);
+        final response = await _remoteDataSource.visitDoc(repDet, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -912,10 +919,11 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<InventoryModel>>> getInventory(int repDet,int planId ) async {
+  Future<Either<Failure, List<InventoryModel>>> getInventory(
+      int repDet, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getInventory(repDet,planId);
+        final response = await _remoteDataSource.getInventory(repDet, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -939,10 +947,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, InfoRep>> getInfoRep(int repDet,int planId) async {
+  Future<Either<Failure, InfoRep>> getInfoRep(int repDet, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepInfo(repDet,planId);
+        final response = await _remoteDataSource.getRepInfo(repDet, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1045,11 +1053,14 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
-    @override
-  Future<Either<Failure, Message1Response>> changePlanBrandType(ChangePlanBrandType changePlanBrandType) async {
+
+  @override
+  Future<Either<Failure, Message1Response>> changePlanBrandType(
+      ChangePlanBrandType changePlanBrandType) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.changePlanBrandType(changePlanBrandType);
+        final response =
+            await _remoteDataSource.changePlanBrandType(changePlanBrandType);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1057,8 +1068,8 @@ class RepositoryImp implements Repository {
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
-          excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "changePlanBrandType"));
+          excRepository.exceptionApi(
+              ExceptionModel(failure.massage, "changePlanBrandType"));
           return Left(failure);
         }
       } else {
@@ -1066,17 +1077,18 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "changePlanBrandType"));
+      excRepository
+          .exceptionApi(ExceptionModel(failure.massage, "changePlanBrandType"));
       return Left(failure);
     }
   }
-  
+
   @override
   Future<Either<Failure, AllPlanBrandSp?>> getRepPlanBrandSp(RepSp rep) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.
-        getRepPlanBrandSp(rep.repPlanId,rep.spId,rep.repId);
+        final response = await _remoteDataSource.getRepPlanBrandSp(
+            rep.repPlanId, rep.spId, rep.repId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1093,17 +1105,20 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepPlanBrandSp")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getRepPlanBrandSp")]));
       return Left(failure);
     }
   }
+
   @override
-  Future<Either<Failure,List<doctorsModel> >> docSearch(int cityId,
-      String name,) async {
+  Future<Either<Failure, List<doctorsModel>>> docSearch(
+    int cityId,
+    String name,
+  ) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.docSearch(cityId,name );
+        final response = await _remoteDataSource.docSearch(cityId, name);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1127,7 +1142,8 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, Message1Response>> readAllVisits(ReadAll readAll) async {
+  Future<Either<Failure, Message1Response>> readAllVisits(
+      ReadAll readAll) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.readAllVisits(readAll);
@@ -1147,18 +1163,20 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "readAllVisits")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "readAllVisits")]));
       return Left(failure);
     }
   }
-  
+
   @override
-  Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrandsType(Rep rep)  async {
+  Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrandsType(
+      Rep rep) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource
-            .getAllPlanBrandsType(rep.activeRepId,rep.flag, repPlanIdOther: rep.otherRepId);
+        final response = await _remoteDataSource.getAllPlanBrandsType(
+            rep.activeRepId, rep.flag,
+            repPlanIdOther: rep.otherRepId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1180,12 +1198,12 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
-  
+
   @override
   Future<Either<Failure, List<DocdoctorsModel>>> docReport(int docId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.docReport(docId );
+        final response = await _remoteDataSource.docReport(docId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1209,10 +1227,10 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<ReciModel>>> getAllRepReci(int repDet)  async {
+  Future<Either<Failure, List<ReciModel>>> getAllRepReci(int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllRepReci(repDet );
+        final response = await _remoteDataSource.getAllRepReci(repDet);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1229,19 +1247,19 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getAllRepReci")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getAllRepReci")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, Message1Response>> updateReci(UpdateReciRequest reciReq) async {
+  Future<Either<Failure, Message1Response>> updateReci(
+      UpdateReciRequest reciReq) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.updateReci(reciReq);
-        if (
-            response.message == ApiInternalStatus.SUCCESS ||
+        if (response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
           return Right(response);
         } else {
@@ -1249,7 +1267,6 @@ class RepositoryImp implements Repository {
               response.message ?? ResponseMassage.DEFAULT);
           insertLog(ExceptionRequestBody(
               [ExceptionModel(failure.massage, "updateReci")]));
-
 
           return Left(failure);
         }
@@ -1265,13 +1282,11 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, DoctorModel>> getDocInfo(int docId)  async {
+  Future<Either<Failure, DoctorModel>> getDocInfo(int docId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getDocInfo(docId);
-        if (
-
-        response.status == ApiInternalStatus.SUCCESS ||
+        if (response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
           return Right(response.toDomain());
@@ -1294,13 +1309,12 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(int repPlan)  async {
+  Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(
+      int repPlan) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getinfoPlanBrandsType(repPlan);
-        if (
-
-        response.status == ApiInternalStatus.SUCCESS ||
+        if (response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
           return Right(response.toDomain());
@@ -1323,13 +1337,12 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, Message1Response>> pharmacyOrder(PharmacyOrderRequestBody order)  async {
+  Future<Either<Failure, Message1Response>> pharmacyOrder(
+      PharmacyOrderRequestBody order) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.pharmacyOrder(order);
-        if (
-
-        response.status == ApiInternalStatus.SUCCESS ||
+        if (response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
           return Right(response);
@@ -1352,10 +1365,12 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, Message1Response>> changeRepPlanStatus(int id, int status)async {
+  Future<Either<Failure, Message1Response>> changeRepPlanStatus(
+      int id, int status) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.changeRepPlanStatus(id,status );
+        final response =
+            await _remoteDataSource.changeRepPlanStatus(id, status);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1377,8 +1392,6 @@ class RepositoryImp implements Repository {
       return Left(failure);
     }
   }
-
-
 
   @override
   Future<Either<Failure, List<SeniorCityModel>>> getCityAndTeamleader() async {
@@ -1401,18 +1414,18 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getCityAndTeamleader")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getCityAndTeamleader")]));
       return Left(failure);
     }
   }
 
-
   @override
-  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id,int planId)  async {
+  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(
+      int id, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepsFuture(id,planId);
+        final response = await _remoteDataSource.getRepsFuture(id, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1429,14 +1442,15 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepsFuture")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getRepsFuture")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(String name)async {
+  Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(
+      String name) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getSearchHospitals(name);
@@ -1456,18 +1470,19 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepReci")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getRepReci")]));
       return Left(failure);
     }
   }
 
-
   @override
-  Future<Either<Failure, List<SearchHospitalNoteModel>>> getSearchHospitalsNotes(int hosId, int spId) async {
+  Future<Either<Failure, List<SearchHospitalNoteModel>>>
+      getSearchHospitalsNotes(int hosId, int spId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getSearchHospitalsNotes(hosId,spId);
+        final response =
+            await _remoteDataSource.getSearchHospitalsNotes(hosId, spId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1484,14 +1499,15 @@ class RepositoryImp implements Repository {
       }
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getRepReci")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getRepReci")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<SeniorCityModel>>> getSeniorByCityid(int cityId) async {
+  Future<Either<Failure, List<SeniorCityModel>>> getSeniorByCityid(
+      int cityId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getSeniorByCityid(cityId);
@@ -1512,17 +1528,22 @@ class RepositoryImp implements Repository {
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
 
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getSeniorByCityid")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getSeniorByCityid")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<WhoReadModel>>> getVisitReadStatus(String visitId, String visitType,int repType,) async {
+  Future<Either<Failure, List<WhoReadModel>>> getVisitReadStatus(
+    String visitId,
+    String visitType,
+    int repType,
+  ) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getVisitReadStatus(visitId,visitType,repType);
+        final response = await _remoteDataSource.getVisitReadStatus(
+            visitId, visitType, repType);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1540,17 +1561,18 @@ class RepositoryImp implements Repository {
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
 
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getSeniorByCityid")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getSeniorByCityid")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(BrandAmountRequestBody list) async {
+  Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(
+      BrandAmountRequestBody list) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.updateRepPlanBrandAmount(list );
+        final response = await _remoteDataSource.updateRepPlanBrandAmount(list);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1574,10 +1596,11 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<FinishedPlanModel>>> getFinishedPlans(int cityId) async {
+  Future<Either<Failure, List<FinishedPlanModel>>> getFinishedPlans(
+      int cityId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getFinishedPlans(cityId );
+        final response = await _remoteDataSource.getFinishedPlans(cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1601,7 +1624,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<PlanRepsModel>>> getPlanReps(int planId)async {
+  Future<Either<Failure, List<PlanRepsModel>>> getPlanReps(int planId) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.getPlanReps(planId);
@@ -1622,17 +1645,19 @@ class RepositoryImp implements Repository {
     } catch (error) {
       Failure failure = ErrorHandler.handle(error).failure;
 
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getSeniorByCityid")]));
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "getSeniorByCityid")]));
       return Left(failure);
     }
   }
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedHosVisits(int repPlanId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedHosVisits(
+      int repPlanId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getUnfinishedHosVisits(repPlanId);
+        final response =
+            await _remoteDataSource.getUnfinishedHosVisits(repPlanId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1656,10 +1681,11 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> noVisitHos(int repDet, int planId) async {
+  Future<Either<Failure, List<NoVisitDocModel>>> noVisitHos(
+      int repDet, int planId) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.noVisitHos(repDet,planId);
+        final response = await _remoteDataSource.noVisitHos(repDet, planId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

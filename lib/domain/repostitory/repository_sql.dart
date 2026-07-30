@@ -21,15 +21,16 @@ abstract class RepositorySql {
   Future<Either<Failure, LoginModel?>> getRep();
   Future<Either<Failure, String>> asyncData(
       List<BrandModel> brands,
-    //  List<PharmacyModel> pharmacies,
+      //  List<PharmacyModel> pharmacies,
       List<PlaceModel> places,
       List<SpecDModel> specs,
       List<DoctorModel> doctors,
       List<HospitalModel> hospitals,
       List<HospitalSpModel> hospitalSps,
       List<BrandSpModel> brandSps,
-      VisitHospitalBase visitHospital ,VisitDoctorBase visitDoctor,{List<PlanBrandModel>? planBrands}
-      );
+      VisitHospitalBase visitHospital,
+      VisitDoctorBase visitDoctor,
+      {List<PlanBrandModel>? planBrands});
   Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag();
   Future<Either<Failure, Null>> insertDoctor(List<DoctorModel> doctorModel);
   Future<Either<Failure, List<DoctorModel>>> getDoctorSql();
@@ -79,20 +80,18 @@ abstract class RepositorySql {
     required int visitId,
     String? newNote,
   });
-  Future<Either<Failure, Null>> updateVisitDoctorFields({
-    required int id,
-    String? kaswn,
-    String? science,
-    String? target,
-    List<PharmacyBrandModel>? selectBrand
-  });
-  Future<Either<Failure, Null>> updateVisitHospitalFields({
-    required int id,
-    String? kaswn,
-    String? science,
-    String? target,
-    List<PharmacyBrandModel>? selectBrand
-  });
+  Future<Either<Failure, Null>> updateVisitDoctorFields(
+      {required int id,
+      String? kaswn,
+      String? science,
+      String? target,
+      List<PharmacyBrandModel>? selectBrand});
+  Future<Either<Failure, Null>> updateVisitHospitalFields(
+      {required int id,
+      String? kaswn,
+      String? science,
+      String? target,
+      List<PharmacyBrandModel>? selectBrand});
 
   Future<Either<Failure, List<HospitalModel>>> getHospitalBySpec(int spId);
   Future<Either<Failure, List<DoctorModel>>> getDoctorBySpec(int spId);
@@ -107,28 +106,32 @@ abstract class RepositorySql {
   Future<Either<Failure, List<VisitBrandPharmacyModel>>> visitBrandPharmacyAs();
   Future<Either<Failure, List<PlanBrandModel>>> planBrandsAs();
   Future<Either<Failure, Null>> updateRep(
-      int repId, int otherPlanId, int activePlanId, int otherstatus,
-      String startDate,String endDate,String otherStartDate,String otherEndDate
-      );
+      int repId,
+      int otherPlanId,
+      int activePlanId,
+      int otherstatus,
+      String startDate,
+      String endDate,
+      String otherStartDate,
+      String otherEndDate);
   Future<Either<Failure, List<HospitalSpAllModel>>>
       getAllHospitalSpecialization();
   Future<Either<Failure, Null>> updateAmounts(
       List<OtherBrandSpPlanModel> planBrands);
-  Future<Either<Failure, bool>>   updateFlagsToDoctor();
-  Future<Either<Failure, bool>>updateFlagsToHospital();
+  Future<Either<Failure, bool>> updateFlagsToDoctor();
+  Future<Either<Failure, bool>> updateFlagsToHospital();
 
   Future<Either<Failure, Null>> updateOtherStatus(
-      int repId , int status ,List<OtherBrandSpPlanModel> planBrands);
+      int repId, int status, List<OtherBrandSpPlanModel> planBrands);
   Future<Either<Failure, List<BrandSpPlanModel>>> planBrandByRepPlanId(
       int repPlanId);
   Future<Either<Failure, List<OtherBrandSpPlanModel>>>
       otherPlanBrandByRepPlanId(int repPlanId);
-  Future<Either<Failure, Null>> editIsPlan(int repId, int flag) ;
-  Future<Either<Failure, Null>> updateSave(int repId, int flag1) ;
-  Future<Either<Failure, Null>>exceptionApi(ExceptionModel exceptionModel);
+  Future<Either<Failure, Null>> editIsPlan(int repId, int flag);
+  Future<Either<Failure, Null>> updateSave(int repId, int flag1);
+  Future<Either<Failure, Null>> exceptionApi(ExceptionModel exceptionModel);
   Future<Either<Failure, List<ExceptionModel>>> allException();
   Future<Either<Failure, NumVisit>> numVisit();
   Future<Either<Failure, void>> numDocAndHos();
   Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum);
-
 }

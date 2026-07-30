@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
+
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {
@@ -19,6 +20,7 @@ class ErrorHandler implements Exception {
     }
   }
 }
+
 Failure _handleError(DioError error) {
   switch (error.type) {
     case DioErrorType.connectionTimeout:
@@ -48,6 +50,7 @@ Failure _handleError(DioError error) {
       return Failure(200, error.message ?? "unknown ${error.error}");
   }
 }
+
 Failure _handleErrorSql(DatabaseException error) {
   String errorMessage = error.result.toString();
   if (errorMessage.contains("no such table")) {
@@ -64,6 +67,7 @@ Failure _handleErrorSql(DatabaseException error) {
     return Failure(4, errorMessage);
   }
 }
+
 enum DataSource {
   TABLE_NOT_FOUND,
   SYNTAX_ERROR,
@@ -205,6 +209,7 @@ class ResponseMassage {
       "يرجى التأكد من اتصالك بالانترنت";
   static const String DEFAULT = "حدث خطأ, يرجى إعادة المحاولة";
 }
+
 class ApiInternalStatus {
   static const String SUCCESS = "success";
   static const int FAILURE = 0;

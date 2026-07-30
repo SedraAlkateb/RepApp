@@ -4,32 +4,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget hospitalWidget({
- required String spTitle,
-  required String title,
-  required String placeTitle,
-   String? address,
-   String? rate,
-  required int id,
-  required BuildContext context,
-  required VoidCallback function,
-  required String text
-}){
-  return  Container(
-    margin: EdgeInsets.only(
-        bottom: 16.h, right: 8.w, left: 8.w),
+Widget hospitalWidget(
+    {required String spTitle,
+    required String title,
+    required String placeTitle,
+    String? address,
+    String? rate,
+    required int id,
+    required BuildContext context,
+    required VoidCallback function,
+    required String text}) {
+  return Container(
+    margin: EdgeInsets.only(bottom: 16.h, right: 8.w, left: 8.w),
     padding: EdgeInsets.all(16.w),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(15.r),
       boxShadow: [
         BoxShadow(
-          color: Colors.black
-              .withOpacity(0.08), // درجة غمق الظل
+          color: Colors.black.withOpacity(0.08), // درجة غمق الظل
           blurRadius: 15, // مدى نعومة الظل
           spreadRadius: 0, // مدى انتشار الظل
-          offset: const Offset(0,
-              6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
+          offset: const Offset(
+              0, 6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
         ),
       ],
     ),
@@ -41,15 +38,13 @@ Widget hospitalWidget({
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 12.w, vertical: 4.h),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: Colors.blue.shade50,
                 borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Text(spTitle ,
-                  style: TextStyle(
-                      color: Colors.blue, fontSize: 12.sp)),
+              child: Text(spTitle,
+                  style: TextStyle(color: Colors.blue, fontSize: 12.sp)),
             ),
             Expanded(
               child: Text(
@@ -67,15 +62,13 @@ Widget hospitalWidget({
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.location_on_outlined,
-                size: 22.sp, color: Colors.grey),
+            Icon(Icons.location_on_outlined, size: 22.sp, color: Colors.grey),
             SizedBox(
               width: 8.w,
             ),
             Expanded(
               child: Text(placeTitle,
-                  style: TextStyle(
-                      color: Colors.grey, fontSize: 15.sp)),
+                  style: TextStyle(color: Colors.grey, fontSize: 15.sp)),
             ),
           ],
         ),
@@ -83,15 +76,13 @@ Widget hospitalWidget({
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.location_on_outlined,
-                size: 22.sp, color: Colors.grey),
+            Icon(Icons.location_on_outlined, size: 22.sp, color: Colors.grey),
             SizedBox(
               width: 8.w,
             ),
             Expanded(
               child: Text(address ?? "",
-                  style: TextStyle(
-                      color: Colors.grey, fontSize: 15.sp)),
+                  style: TextStyle(color: Colors.grey, fontSize: 15.sp)),
             ),
           ],
         ),
@@ -100,16 +91,14 @@ Widget hospitalWidget({
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.star_rate_outlined,
-                size: 22.sp,
-                color: ColorManager.medicalSecondary),
+                size: 22.sp, color: ColorManager.medicalSecondary),
             SizedBox(
               width: 8.w,
             ),
             Expanded(
               child: Text(rate ?? "",
                   style: TextStyle(
-                      color: ColorManager.medicalSecondary,
-                      fontSize: 15.sp)),
+                      color: ColorManager.medicalSecondary, fontSize: 15.sp)),
             ),
           ],
         ),
@@ -124,12 +113,9 @@ Widget hospitalWidget({
           children: [
             const Spacer(),
             InkWell(
-              onTap:function,
-              child: buildCardButton(
-                  text,
-                  ColorManager.medicalPrimary,
-                  Colors.white,
-                  Icons.directions_run),
+              onTap: function,
+              child: buildCardButton(text, ColorManager.medicalPrimary,
+                  Colors.white, Icons.directions_run),
             ),
           ],
         ),

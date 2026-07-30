@@ -50,7 +50,7 @@ class AllRecipesForView extends StatelessWidget {
                       sliver: AnimationLimiter(
                         child: SliverList(
                           delegate: SliverChildBuilderDelegate(
-                                (context, index) {
+                            (context, index) {
                               final item = recis[index];
                               bool isClinic = item.recipeType == "1";
 
@@ -61,7 +61,8 @@ class AllRecipesForView extends StatelessWidget {
                                 child: SlideAnimation(
                                   verticalOffset: 30.0,
                                   child: FadeInAnimation(
-                                    child: _buildSmartCard(context, item, isClinic),
+                                    child: _buildSmartCard(
+                                        context, item, isClinic),
                                   ),
                                 ),
                               );
@@ -91,8 +92,6 @@ class AllRecipesForView extends StatelessWidget {
   }
 }
 
-
-
 Widget _buildTitleSection(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(16, 25, 16, 15),
@@ -103,7 +102,10 @@ Widget _buildTitleSection(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("قائمة الوصفات",
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w900, color: ColorManager.medicalText)),
+                style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w900,
+                    color: ColorManager.medicalText)),
             const SizedBox(height: 4),
             Text("استعراض كافة الوصفات الصادرة لهذا المندوب",
                 style: TextStyle(color: Colors.grey.shade600, fontSize: 13.sp)),
@@ -111,7 +113,8 @@ Widget _buildTitleSection(BuildContext context) {
         ),
         // الخط الأزرق الجمالي الموجود في الصورة
         Container(
-          height: 5, width: 45,
+          height: 5,
+          width: 45,
           decoration: BoxDecoration(
             color: const Color(0xFF42A5F5),
             borderRadius: BorderRadius.circular(10),
@@ -128,7 +131,8 @@ Widget _buildSmartCard(BuildContext context, ReciModel item, bool isClinic) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(22),
-      border: Border.all(color: ColorManager.black.withOpacity(0.09), width: 1.5),
+      border:
+          Border.all(color: ColorManager.black.withOpacity(0.09), width: 1.5),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.04),
@@ -141,11 +145,8 @@ Widget _buildSmartCard(BuildContext context, ReciModel item, bool isClinic) {
       borderRadius: BorderRadius.circular(22),
       child: InkWell(
         onTap: () {
-          BlocProvider.of<SeniorProfBloc>(context).add(
-              GetRepReciEvent(
-                  int.parse(item.id ?? "0"),
-                  isClinic,
-                  item.docName ?? ""));
+          BlocProvider.of<SeniorProfBloc>(context).add(GetRepReciEvent(
+              int.parse(item.id ?? "0"), isClinic, item.docName ?? ""));
           Navigator.pushNamed(context, Routes.viewRecipe);
         },
         child: Padding(
@@ -165,28 +166,43 @@ Widget _buildSmartCard(BuildContext context, ReciModel item, bool isClinic) {
               // 3. المصدر (طبيب أو مشفى)
               Row(
                 children: [
-                  Icon(isClinic ? Icons.person_outline : Icons.apartment_outlined,
-                      size: 18, color: Colors.grey.shade400),
+                  Icon(
+                      isClinic
+                          ? Icons.person_outline
+                          : Icons.apartment_outlined,
+                      size: 18,
+                      color: Colors.grey.shade400),
                   const SizedBox(width: 8),
                   Text(isClinic ? "د. ${item.docName}" : item.docName ?? "",
-                      style: TextStyle(fontSize: 15.sp, color: Colors.blueGrey.shade600, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontSize: 15.sp,
+                          color: Colors.blueGrey.shade600,
+                          fontWeight: FontWeight.w600)),
                 ],
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
-                child: Divider(height: 1, thickness: 0.3,color: ColorManager.medicalPrimary.withOpacity(0.5),),
+                child: Divider(
+                  height: 1,
+                  thickness: 0.3,
+                  color: ColorManager.medicalPrimary.withOpacity(0.5),
+                ),
               ),
 
               // 4. السطر السفلي (الملاحظات والكمية)
               Row(
                 children: [
                   Expanded(
-                    child: Text("ملاحظات مدونة : ${item.note_emp?? "لا توجد ملاحظات مدونة"}" ,
-
-                        style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500, fontStyle: FontStyle.italic)),
+                    child: Text(
+                        "ملاحظات مدونة : ${item.note_emp ?? "لا توجد ملاحظات مدونة"}",
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.grey.shade500,
+                            fontStyle: FontStyle.italic)),
                   ),
                   const SizedBox(width: 8),
-                   Text("وحدة", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                  Text("وحدة",
+                      style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
                   const SizedBox(width: 8),
                   _buildQuantityBubble(item.total ?? "0"),
                 ],
@@ -220,9 +236,14 @@ Widget _buildTypeBadge(bool isClinic) {
 Widget _buildDateSection(String date) {
   return Row(
     children: [
-      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey.shade500),
+      Icon(Icons.calendar_today_outlined,
+          size: 14, color: Colors.grey.shade500),
       const SizedBox(width: 6),
-      Text(date, style: TextStyle(color: Colors.grey.shade600, fontSize: 12.sp, fontWeight: FontWeight.w500)),
+      Text(date,
+          style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500)),
     ],
   );
 }
@@ -234,10 +255,14 @@ Widget _buildQuantityBubble(String quantity) {
       color: ColorManager.medicalPrimary,
       borderRadius: BorderRadius.circular(10),
       boxShadow: [
-        BoxShadow(color: ColorManager.primary.withOpacity(0.3), blurRadius: 6, offset: const Offset(0, 3))
+        BoxShadow(
+            color: ColorManager.primary.withOpacity(0.3),
+            blurRadius: 6,
+            offset: const Offset(0, 3))
       ],
     ),
     child: Text(quantity,
-        style:  TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.sp)),
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.sp)),
   );
 }

@@ -17,19 +17,18 @@ class SaveSendBottom extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                print( UserInfo.otherstatus);
+                print(UserInfo.otherstatus);
                 UserInfo.otherstatus == 0
                     ? showDialog(
-                  context: context,
-                  builder: (dialogContext) {
-                    return dialogPlan(
-                        dialogContext,
-                        fun: () => BlocProvider.of<
-                            BrandPlanBloc>(context)
-                            .add(UpdateAmountSucEvent()),
-                        "هل أنت متأكد من حفظ التغيرات");
-                  },
-                )
+                        context: context,
+                        builder: (dialogContext) {
+                          return dialogPlan(
+                              dialogContext,
+                              fun: () => BlocProvider.of<BrandPlanBloc>(context)
+                                  .add(UpdateAmountSucEvent()),
+                              "هل أنت متأكد من حفظ التغيرات");
+                        },
+                      )
                     : null;
               },
               child: SizedBox(
@@ -62,17 +61,15 @@ class SaveSendBottom extends StatelessWidget {
                 print("UserInfo.flag1${UserInfo.flag1}");
                 UserInfo.otherstatus == 0
                     ? showDialog(
-                  context: context,
-                  builder: (dialogContext) {
-                    return dialogPlan(
-                        dialogContext,
-                        fun: () =>
-                            BlocProvider.of<BrandPlanBloc>(
-                                context)
-                                .add(SendToS()),
-                        "هل أنت متأكد من إرسال التغيرات");
-                  },
-                )
+                        context: context,
+                        builder: (dialogContext) {
+                          return dialogPlan(
+                              dialogContext,
+                              fun: () => BlocProvider.of<BrandPlanBloc>(context)
+                                  .add(SendToS()),
+                              "هل أنت متأكد من إرسال التغيرات");
+                        },
+                      )
                     : null;
               },
               child: SizedBox(

@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget buildHeaderSection(TextEditingController searchController,BuildContext context) {
+Widget buildHeaderSection(
+    TextEditingController searchController, BuildContext context) {
   return Container(
     padding: EdgeInsets.all(16.w),
     decoration: BoxDecoration(
@@ -35,12 +36,11 @@ Widget buildHeaderSection(TextEditingController searchController,BuildContext co
         GestureDetector(
           onTap: () {
             if (searchController.text.isNotEmpty) {
-              BlocProvider.of<SearchDoctorsBloc>(context).value==0?
-              BlocProvider.of<SearchDoctorsBloc>(context)
-                  .add(FutureSearchDocEvent(searchController.text)):
-              BlocProvider.of<SearchDoctorsBloc>(context)
-                  .add(FutureSearchHosEvent(searchController.text))
-              ;
+              BlocProvider.of<SearchDoctorsBloc>(context).value == 0
+                  ? BlocProvider.of<SearchDoctorsBloc>(context)
+                      .add(FutureSearchDocEvent(searchController.text))
+                  : BlocProvider.of<SearchDoctorsBloc>(context)
+                      .add(FutureSearchHosEvent(searchController.text));
             }
           },
           child: Container(

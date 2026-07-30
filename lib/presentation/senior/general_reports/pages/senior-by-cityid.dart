@@ -14,7 +14,8 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 class SeniorByCityId extends StatelessWidget {
   final String cityname;
   final int cityid;
-  const SeniorByCityId({super.key, required this.cityid, required this.cityname});
+  const SeniorByCityId(
+      {super.key, required this.cityid, required this.cityname});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,8 @@ class SeniorByCityId extends StatelessWidget {
               // حل مشكلة الـ Overflow أثناء التحميل بوضع الشيمر داخل Expanded
               if (state is SeniorByCityIdLoadingState) {
                 return Expanded(
-                  child: loadingShimmer(context, 10, 20, 20, BorderRadius.circular(20)),
+                  child: loadingShimmer(
+                      context, 10, 20, 20, BorderRadius.circular(20)),
                 );
               }
 
@@ -56,7 +58,8 @@ class SeniorByCityId extends StatelessWidget {
               return Expanded(
                 child: AnimationLimiter(
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     physics: const BouncingScrollPhysics(),
                     itemCount: seniors.length,
                     itemBuilder: (context, index) {
@@ -98,11 +101,13 @@ class SeniorByCityId extends StatelessWidget {
                       color: ColorManager.medicalPrimary)),
               const SizedBox(height: 4),
               Text("قائمة السينيور المتاحين في $cityname",
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 13.sp)),
+                  style:
+                      TextStyle(color: Colors.grey.shade500, fontSize: 13.sp)),
             ],
           ),
           Container(
-            height: 5, width: 45,
+            height: 5,
+            width: 45,
             decoration: BoxDecoration(
               color: const Color(0xFF42A5F5),
               borderRadius: BorderRadius.circular(10),
@@ -143,11 +148,8 @@ class SeniorByCityId extends StatelessWidget {
               },
             ));
             print("rep_id:${senior.rep_id}");
-            BlocProvider.of<SeniorRepsBloc>(context).add(
-                AllSeniorRepEvent(
-                    int.parse(senior.city_id),
-                    int.parse(senior.rep_id)
-                ));
+            BlocProvider.of<SeniorRepsBloc>(context).add(AllSeniorRepEvent(
+                int.parse(senior.city_id), int.parse(senior.rep_id)));
           },
           child: Padding(
             padding: const EdgeInsets.all(18.0),
@@ -159,7 +161,8 @@ class SeniorByCityId extends StatelessWidget {
                     color: ColorManager.secondaryColor1.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.person_pin_rounded, color: ColorManager.secondaryColor1),
+                  child: Icon(Icons.person_pin_rounded,
+                      color: ColorManager.secondaryColor1),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -177,7 +180,8 @@ class SeniorByCityId extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         "اضغط لاستعراض تقارير المندوبين",
-                        style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade400),
+                        style: TextStyle(
+                            fontSize: 11.sp, color: Colors.grey.shade400),
                       ),
                     ],
                   ),

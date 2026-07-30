@@ -12,7 +12,8 @@ class CustomDropDown extends StatelessWidget {
       required this.validator,
       this.width,
       this.value,
-      this.onTap, required String errorText});
+      this.onTap,
+      required String errorText});
   final String hintText;
   final List<dynamic> items;
   final Icon? prefixIcon;
@@ -25,17 +26,16 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
     return DropdownButtonFormField<dynamic>(
-
       elevation: 3,
       validator: validator,
       hint: Text(
         hintText,
-        style: TextStyle(fontSize:  12.sp, color: Colors.black),
+        style: TextStyle(fontSize: 12.sp, color: Colors.black),
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor:  ColorManager.inputBorder,
+        fillColor: ColorManager.inputBorder,
         prefixIcon: prefixIcon,
         //  focusedBorder:InputBorder.none,
         border: InputBorder.none,
@@ -46,7 +46,6 @@ class CustomDropDown extends StatelessWidget {
       isExpanded: true,
       items: items.map((dynamic val) {
         return DropdownMenuItem(
-          
           value: val,
           onTap: onTap ?? () {},
           child: Text(

@@ -25,9 +25,16 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   List<PlaceModel> placeModel = [];
   List<PlaceModel> placeSearchModel = [];
   int k = 0;
-  bool isOpen=false;
-  String data= formatDateTime(DateTime.now().toIso8601String());
-  PlaceBloc(this.doctorsByPlaceUsecase,this.hospitalsByPlaceUsecase,this.allPlaceUsecase,this.checkRepUsecase,this.numVisitSqlUsecase,this.numDocHasSqlUsecase) : super(PlaceInitial()) {
+  bool isOpen = false;
+  String data = formatDateTime(DateTime.now().toIso8601String());
+  PlaceBloc(
+      this.doctorsByPlaceUsecase,
+      this.hospitalsByPlaceUsecase,
+      this.allPlaceUsecase,
+      this.checkRepUsecase,
+      this.numVisitSqlUsecase,
+      this.numDocHasSqlUsecase)
+      : super(PlaceInitial()) {
     on<PlaceEvent>((event, emit) async {
       //  VisitPharmacyRequestBody  v=VisitPharmacyRequestBody(vi.toDomain(), list2);
       if (event is AllPlaceEvent) {
@@ -45,28 +52,24 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
         (await numVisitSqlUsecase.execute()).fold((failure) {
           emit(NumVisitErrorState(failure: failure));
         }, (data) async {
-          UserInfo.numOfHospitalVisit=data.visitHospital;
-          UserInfo.numOfDoctorVisit=data.visitDoctor;
+          UserInfo.numOfHospitalVisit = data.visitHospital;
+          UserInfo.numOfDoctorVisit = data.visitDoctor;
           emit(NumVisitState());
         });
-      }
-   else   if ((event is NumEvent)&& (isOpen==false)) {
+      } else if ((event is NumEvent) && (isOpen == false)) {
         (await numDocHasSqlUsecase.execute()).fold((failure) {
           emit(NumVisitErrorState(failure: failure));
         }, (data) async {
-          isOpen=true;
+          isOpen = true;
         });
-      }
-     else if (event is CheckRepEvent) {
+      } else if (event is CheckRepEvent) {
         //   emit(CheckRepLoadingState());
         (await checkRepUsecase.execute(UserInfo.repId)).fold((failure) {
           emit(CheckRepErrorState(failure: failure));
         }, (data) async {
-          emit(CheckRepState(data.accepted??true));
+          emit(CheckRepState(data.accepted ?? true));
         });
-      }
-      else
-        if (event is SearchPlaceEvent) {
+      } else if (event is SearchPlaceEvent) {
         String search = normalizeText(event.value);
         placeSearchModel = placeModel.where((value) {
           if (normalizeText(value.title).contains(search)) {
@@ -82,18 +85,19 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
           emit(AllHospitalArchiveByPlaceErrorState(failure: failure));
         }, (data) async {
           if (data.isNotEmpty) {
-            emit(AllHospitalArchiveByPlaceState(searchData: data,baseData: data));
+            emit(AllHospitalArchiveByPlaceState(
+                searchData: data, baseData: data));
           } else {
             emit(EmptyArchiveState());
           }
         });
-      }
-      else if (event is DoctorArchiveByPlace) {
+      } else if (event is DoctorArchiveByPlace) {
         (await doctorsByPlaceUsecase.execute(event.placeId)).fold((failure) {
           emit(AllDoctorArchiveByPlaceErrorState(failure: failure));
         }, (data) async {
           if (data.isNotEmpty) {
-            emit(AllDoctorArchiveByPlaceState(BaseData: data,searchData: data));
+            emit(
+                AllDoctorArchiveByPlaceState(BaseData: data, searchData: data));
           } else {
             emit(EmptyArchiveState());
           }
@@ -101,30 +105,30 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       } else if (event is SearchHospitalArchive) {
         String search = normalizeText(event.search);
         List<HospitalSpAllModel> hospital = event.hospital.where((value) {
-          if (normalizeText(value.title??"").contains(search)) {
+          if (normalizeText(value.title ?? "").contains(search)) {
             return true;
-          }
-         else if (normalizeText(value.titleSp??"").contains(search)){
-            return true;
-          }
-          else {
-            return false;
-          }
-        }).toList();
-        emit(AllHospitalArchiveByPlaceState(baseData: event.hospital,searchData: hospital));
-      }else if (event is SearchDoctorArchive) {
-        String search = normalizeText(event.search);
-        List<DoctorModel> doctors = event.doctors.where((value) {
-          if (normalizeText(value.title).contains(search)) {
-            return true;
-          }else if (normalizeText(value.spTitle).contains(search)){
+          } else if (normalizeText(value.titleSp ?? "").contains(search)) {
             return true;
           } else {
             return false;
           }
         }).toList();
-        emit(AllDoctorArchiveByPlaceState(searchData: doctors,BaseData: event.doctors));
+        emit(AllHospitalArchiveByPlaceState(
+            baseData: event.hospital, searchData: hospital));
+      } else if (event is SearchDoctorArchive) {
+        String search = normalizeText(event.search);
+        List<DoctorModel> doctors = event.doctors.where((value) {
+          if (normalizeText(value.title).contains(search)) {
+            return true;
+          } else if (normalizeText(value.spTitle).contains(search)) {
+            return true;
+          } else {
+            return false;
+          }
+        }).toList();
+        emit(AllDoctorArchiveByPlaceState(
+            searchData: doctors, BaseData: event.doctors));
       }
     });
   }
-} 
+}

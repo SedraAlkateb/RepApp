@@ -72,18 +72,21 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
               borderRadius: BorderRadius.circular(25.r),
               // تغيير لون البوردر عند اللمس
               border: Border.all(
-                color: _isPressed ? widget.iconColor : Colors.black.withOpacity(0.1),
+                color: _isPressed
+                    ? widget.iconColor
+                    : Colors.black.withOpacity(0.1),
                 width: 0.5,
               ),
               // تغيير لون البوردر عند اللمس
               boxShadow: [
                 BoxShadow(
-                  color: _isPressed ? widget.iconColor.withOpacity(0.1) : Colors.black.withOpacity(0.1),
+                  color: _isPressed
+                      ? widget.iconColor.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 8),
                 ),
               ],
-
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(25.r),
@@ -103,10 +106,7 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
                           bottomLeft: Radius.circular(10.r),
                           bottomRight: Radius.circular(10.r),
                         ),
-
                       ),
-
-
                     ),
                   ),
 
@@ -125,12 +125,10 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
                                 : widget.iconColor.withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
-
-                          child: Icon(
-                              widget.icon,
-                              color: _isPressed ? Colors.white : widget.iconColor,
-                              size: 32.sp
-                          ),
+                          child: Icon(widget.icon,
+                              color:
+                                  _isPressed ? Colors.white : widget.iconColor,
+                              size: 32.sp),
                         ),
                         SizedBox(height: 12.h),
                         Text(
@@ -138,13 +136,16 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
-                            color: _isPressed ? widget.iconColor : const Color(0xFF2C3E50),
+                            color: _isPressed
+                                ? widget.iconColor
+                                : const Color(0xFF2C3E50),
                           ),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           widget.subtitle,
-                          style: TextStyle(fontSize: 11.sp, color: Colors.grey[500]),
+                          style: TextStyle(
+                              fontSize: 11.sp, color: Colors.grey[500]),
                         ),
                       ],
                     ),

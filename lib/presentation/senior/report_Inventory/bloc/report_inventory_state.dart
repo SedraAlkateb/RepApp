@@ -1,33 +1,36 @@
 part of 'report_inventory_bloc.dart';
 
 @immutable
-sealed class ReportInventoryState extends Equatable{}
+sealed class ReportInventoryState extends Equatable {}
 
 final class ReportInventoryInitial extends ReportInventoryState {
   @override
-  List<Object?> get props =>[];}
-final class  SenAllInventoryErrorState extends ReportInventoryState {
+  List<Object?> get props => [];
+}
+
+final class SenAllInventoryErrorState extends ReportInventoryState {
   final Failure failure;
   final int planId;
-  SenAllInventoryErrorState({required this.failure,required this.planId});
+  SenAllInventoryErrorState({required this.failure, required this.planId});
   @override
-
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
-final class  SenAllInventoryLoadingState extends ReportInventoryState {
+
+final class SenAllInventoryLoadingState extends ReportInventoryState {
   SenAllInventoryLoadingState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
-final class  SenAllInventoryEmptyState extends ReportInventoryState {
+
+final class SenAllInventoryEmptyState extends ReportInventoryState {
   SenAllInventoryEmptyState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
 
 final class SenAllInventoryState extends ReportInventoryState {
   final List<InventoryModel> inventoryModel;
   SenAllInventoryState(this.inventoryModel);
   @override
-  List<Object?> get props =>[inventoryModel];
+  List<Object?> get props => [inventoryModel];
 }

@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class DoctorSenior extends StatelessWidget {
   DoctorSenior({super.key});
   final TextEditingController searchDocController = TextEditingController();
@@ -33,30 +34,34 @@ class DoctorSenior extends StatelessWidget {
             child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
               // أضفنا الحالات التي يجب أن يحدث فيها إعادة بناء للواجهة
               buildWhen: (previous, current) =>
-              current is SenAllDoctorsState ||
+                  current is SenAllDoctorsState ||
                   current is SenAllDoctorEmptyState ||
                   current is SenAllDoctorLoadingState ||
                   current is SenAllDoctorErrorState,
               builder: (context, state) {
-
                 // 1. تحديد أي قائمة سنعرض (المفلترة من السيرش أم الكاملة)
                 List<DoctorModel> doctorsList = [];
 
                 if (state is SenAllDoctorsState) {
-                  doctorsList = state.doctor; // القائمة المفلترة القادمة من البحث
+                  doctorsList =
+                      state.doctor; // القائمة المفلترة القادمة من البحث
                 } else {
                   // القائمة الكاملة الموجودة في الـ Bloc (نستخدم read وليس watch هنا)
                   doctorsList = context.read<SeniorProfBloc>().doctor;
                 }
 
                 // 2. حالات الواجهة
-                if (state is SenAllDoctorLoadingState) return loadingFullScreen(context);
-                if (state is SenAllDoctorEmptyState || doctorsList.isEmpty) return emptyFullScreen(context);
-                if (state is SenAllDoctorErrorState) return errorFullScreen(context);
+                if (state is SenAllDoctorLoadingState)
+                  return loadingFullScreen(context);
+                if (state is SenAllDoctorEmptyState || doctorsList.isEmpty)
+                  return emptyFullScreen(context);
+                if (state is SenAllDoctorErrorState)
+                  return errorFullScreen(context);
 
                 // 3. عرض النتائج
                 return ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                   itemCount: doctorsList.length,
                   itemBuilder: (context, index) {
                     return AdminRepDoctorCard(doctor: doctorsList[index]);
@@ -69,7 +74,9 @@ class DoctorSenior extends StatelessWidget {
       ),
     );
   }
-}class AdminRepDoctorCard extends StatelessWidget {
+}
+
+class AdminRepDoctorCard extends StatelessWidget {
   final DoctorModel doctor;
 
   const AdminRepDoctorCard({super.key, required this.doctor});
@@ -94,7 +101,6 @@ class DoctorSenior extends StatelessWidget {
         child: IntrinsicHeight(
           child: Row(
             children: [
-
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(16.w),
@@ -105,7 +111,6 @@ class DoctorSenior extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           SizedBox(width: 10.w),
                           Expanded(
                             child: Column(
@@ -121,7 +126,8 @@ class DoctorSenior extends StatelessWidget {
                                 ),
                                 Text(
                                   doctor.spTitle,
-                                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
+                                  style: TextStyle(
+                                      fontSize: 14.sp, color: Colors.grey[600]),
                                 ),
                               ],
                             ),
@@ -134,16 +140,19 @@ class DoctorSenior extends StatelessWidget {
                       // شبكة المعلومات: المكان والزيارات
                       Row(
                         children: [
-                          _buildInfoBox("المكان", doctor.placeTitle, Icons.location_on_outlined),
+                          _buildInfoBox("المكان", doctor.placeTitle,
+                              Icons.location_on_outlined),
                           SizedBox(width: 10.w),
-                          _buildInfoBox("الزيارات", "${doctor.visits} زيارة", Icons.calendar_month_outlined),
+                          _buildInfoBox("الزيارات", "${doctor.visits} زيارة",
+                              Icons.calendar_month_outlined),
                         ],
                       ),
                       SizedBox(height: 12.h),
 
                       // تفاصيل العنوان والوقت
                       _buildDetailRow(Icons.map_outlined, doctor.address),
-                      if (doctor.workHours != null && doctor.workHours!.isNotEmpty)
+                      if (doctor.workHours != null &&
+                          doctor.workHours!.isNotEmpty)
                         _buildDetailRow(Icons.access_time, doctor.workHours!),
 
                       SizedBox(height: 15.h),
@@ -158,14 +167,21 @@ class DoctorSenior extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.info_outline, color: Color(0xFF1976D2), size: 20),
+                              const Icon(Icons.info_outline,
+                                  color: Color(0xFF1976D2), size: 20),
                               SizedBox(width: 8.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text("ملاحظات المدير", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1976D2))),
-                                    Text(doctor.note!, style: TextStyle(fontSize: 12.sp, color: Colors.blueGrey[800])),
+                                    const Text("ملاحظات المدير",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF1976D2))),
+                                    Text(doctor.note!,
+                                        style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: Colors.blueGrey[800])),
                                   ],
                                 ),
                               ),
@@ -186,22 +202,29 @@ class DoctorSenior extends StatelessWidget {
   Widget _buildRatingBadge(String? rate) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(color: const Color(0xFFFFECB3), borderRadius: BorderRadius.circular(8.r)),
-      child: Text(rate ?? "A", style: const TextStyle(color: Color(0xFFFFA000), fontWeight: FontWeight.bold)),
+      decoration: BoxDecoration(
+          color: const Color(0xFFFFECB3),
+          borderRadius: BorderRadius.circular(8.r)),
+      child: Text(rate ?? "A",
+          style: const TextStyle(
+              color: Color(0xFFFFA000), fontWeight: FontWeight.bold)),
     );
   }
-
-
 
   Widget _buildInfoBox(String label, String value, IconData icon) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(10.w),
-        decoration: BoxDecoration(color: const Color(0xFFF5F7FA), borderRadius: BorderRadius.circular(12.r)),
+        decoration: BoxDecoration(
+            color: const Color(0xFFF5F7FA),
+            borderRadius: BorderRadius.circular(12.r)),
         child: Column(
           children: [
             Text(label, style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF263238)), textAlign: TextAlign.center),
+            Text(value,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Color(0xFF263238)),
+                textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -215,7 +238,9 @@ class DoctorSenior extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: Colors.blue[300]),
           SizedBox(width: 8.w),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 12.sp, color: Colors.grey[700]))),
+          Expanded(
+              child: Text(text,
+                  style: TextStyle(fontSize: 12.sp, color: Colors.grey[700]))),
         ],
       ),
     );

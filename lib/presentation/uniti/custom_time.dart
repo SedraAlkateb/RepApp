@@ -1,27 +1,31 @@
 // ignore_for_file: must_be_immutable
 
-
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/decoration.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTime extends StatelessWidget {
-   CustomTime({Key? key,required this.timeInput,required this.width,required this.onTap,this.hint='HH/MM'}) : super(key: key);
-TextEditingController timeInput ;
-final double width;
-var onTap;
-String? hint;
+  CustomTime(
+      {Key? key,
+      required this.timeInput,
+      required this.width,
+      required this.onTap,
+      this.hint = 'HH/MM'})
+      : super(key: key);
+  TextEditingController timeInput;
+  final double width;
+  var onTap;
+  String? hint;
   @override
   Widget build(BuildContext context) {
-    return       SizedBox(
+    return SizedBox(
       width: width,
       // height: 35,
       child: TextFormField(
-         controller: timeInput,
-        style:  TextStyle(
-            color: ColorManager.secondaryColor, fontSize: 14.sp),
-        cursorColor:ColorManager.secondaryColor,
+        controller: timeInput,
+        style: TextStyle(color: ColorManager.secondaryColor, fontSize: 14.sp),
+        cursorColor: ColorManager.secondaryColor,
         keyboardType: TextInputType.none,
         textAlign: TextAlign.start,
         validator: (value) {
@@ -36,12 +40,12 @@ String? hint;
           filled: true,
           fillColor: ColorManager.filedColor,
           hintText: hint,
-          prefixIcon:  Icon(
+          prefixIcon: Icon(
             Icons.access_time,
             color: ColorManager.secondaryColor,
             size: 17,
           ),
-          hintStyle:  TextStyle(
+          hintStyle: TextStyle(
             fontSize: 14.sp,
             color: Color(0xFFD2D1D1),
             fontFamily: 'Manrope',

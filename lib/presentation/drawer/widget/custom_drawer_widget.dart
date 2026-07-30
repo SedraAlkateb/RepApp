@@ -21,7 +21,7 @@ class CustomAppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return     Drawer(
+    return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: Column(
         children: [
@@ -30,14 +30,15 @@ class CustomAppDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.only(top: 10.h),
               children: [
-
                 ...menuItems.map((item) => _buildListTile(context, item)),
                 const Divider(color: Colors.black12, thickness: 0.5),
 
                 if (UserInfo.repType.i == 6 || UserInfo.repType.i == 7)
-                  ...getLogoutItem(context).map((item) => _buildListTile(context, item))
+                  ...getLogoutItem(context)
+                      .map((item) => _buildListTile(context, item))
                 else
-                  ...getAdminLogoutItem(context).map((item) => _buildListTile(context, item)),
+                  ...getAdminLogoutItem(context)
+                      .map((item) => _buildListTile(context, item)),
 
                 _buildVersionInfo(), // إضافة معلومات الإصدار هنا
               ],
@@ -51,7 +52,8 @@ class CustomAppDrawer extends StatelessWidget {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(top: 50.h, bottom: 12.h, left: 16.w, right: 16.w),
+      padding:
+          EdgeInsets.only(top: 50.h, bottom: 12.h, left: 16.w, right: 16.w),
       decoration: BoxDecoration(
         color: ColorManager.medicalBg,
         border: const Border(bottom: BorderSide(color: Colors.black12)),
@@ -116,6 +118,7 @@ class CustomAppDrawer extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildAvatar() {
     return Container(
       width: 80.w,

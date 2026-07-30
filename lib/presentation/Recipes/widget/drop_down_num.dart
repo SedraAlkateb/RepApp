@@ -5,14 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DropDownNum extends StatelessWidget {
   const DropDownNum(
       {super.key,
-        required this.hintText,
-        required this.items,
-        required this.prefixIcon,
-        required this.onChanged,
-        required this.validator,
-        this.width,
-        this.value,
-        this.onTap});
+      required this.hintText,
+      required this.items,
+      required this.prefixIcon,
+      required this.onChanged,
+      required this.validator,
+      this.width,
+      this.value,
+      this.onTap});
   final String hintText;
   final List<dynamic> items;
   final Icon? prefixIcon;
@@ -25,7 +25,6 @@ class DropDownNum extends StatelessWidget {
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
     return DropdownButtonFormField<dynamic>(
-
       elevation: 3,
       validator: validator,
       hint: Text(
@@ -34,7 +33,6 @@ class DropDownNum extends StatelessWidget {
         overflow: TextOverflow.fade,
       ),
       decoration: InputDecoration(
-
         filled: true,
         fillColor: ColorManager.secondaryColor3,
         prefixIcon: prefixIcon,
@@ -49,8 +47,8 @@ class DropDownNum extends StatelessWidget {
         return DropdownMenuItem(
           value: val,
           onTap: onTap ?? () {},
-          child:  Text(
-            "${ val}",
+          child: Text(
+            "${val}",
             style: TextStyle(
               fontSize: tablet ? 19.sp : 14.sp,
               color: Colors.black,
@@ -58,7 +56,8 @@ class DropDownNum extends StatelessWidget {
             softWrap: false,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-          ),);
+          ),
+        );
       }).toList(),
       onChanged: onChanged,
       onTap: () {

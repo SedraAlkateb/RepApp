@@ -14,82 +14,77 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUsecase loginUsecase;
   final LoginSqlUsecase loginSqlUsecase;
   LoginModel? loginModel;
-  AuthBloc(this.loginSqlUsecase, this.loginUsecase)
-      : super(AuthInitial()) {
+  AuthBloc(this.loginSqlUsecase, this.loginUsecase) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
       if (event is ShowPasswordEvent)
         emit(ShowPasswordState(isObscured: event.isObscured));
       if (event is LoginEvent) {
         emit(LoginLoadingState());
 
-          final result = await loginUsecase.execute(
-            LoginRequest(
-              event.userName,
-              event.password,
-            ),
-          );
+        final result = await loginUsecase.execute(
+          LoginRequest(
+            event.userName,
+            event.password,
+          ),
+        );
 
-          await result.fold(
-            (failure) async {
-              emit(
-                LoginErrorState(
-                  failure: failure,
-                ),
-              );
-            },
-            (data) async {
-              loginModel = data;
+        await result.fold(
+          (failure) async {
+            emit(
+              LoginErrorState(
+                failure: failure,
+              ),
+            );
+          },
+          (data) async {
+            loginModel = data;
 
-              UserInfo.repId = loginModel!.repId;
+            UserInfo.repId = loginModel!.repId;
 
-              UserInfo.otherPlanId = loginModel!.otherPlanId;
+            UserInfo.otherPlanId = loginModel!.otherPlanId;
 
-              UserInfo.activePlanId = loginModel!.activePlanId ?? -5;
+            UserInfo.activePlanId = loginModel!.activePlanId ?? -5;
 
-              UserInfo.otherstatus = loginModel!.otherStatus;
+            UserInfo.otherstatus = loginModel!.otherStatus;
 
-              UserInfo.percentage = loginModel!.percentage;
+            UserInfo.percentage = loginModel!.percentage;
 
-              UserInfo.recipesCount = loginModel!.recipesCount;
-              UserInfo.totalReci = loginModel!.totalReci;
-              UserInfo.remainReci = loginModel!.remainReci;
-              UserInfo.usedReci = loginModel!.usedReci;
-              UserInfo.token = loginModel!.token;
+            UserInfo.recipesCount = loginModel!.recipesCount;
+            UserInfo.totalReci = loginModel!.totalReci;
+            UserInfo.remainReci = loginModel!.remainReci;
+            UserInfo.usedReci = loginModel!.usedReci;
+            UserInfo.token = loginModel!.token;
 
-              UserInfo.name = loginModel!.name;
+            UserInfo.name = loginModel!.name;
 
-              UserInfo.cityId = loginModel!.cityId;
+            UserInfo.cityId = loginModel!.cityId;
 
-              UserInfo.cityTitle = loginModel!.cityTitle;
-              if(loginModel!.repType.i==4||loginModel!.repType.i==5){
-                UserInfo.isLogging = 2;
-              }else{
-                UserInfo.isLogging = 1;
-              }
+            UserInfo.cityTitle = loginModel!.cityTitle;
+            if (loginModel!.repType.i == 4 || loginModel!.repType.i == 5) {
+              UserInfo.isLogging = 2;
+            } else {
+              UserInfo.isLogging = 1;
+            }
 
+            UserInfo.startDate = data.startDate;
 
+            UserInfo.endDate = data.endDate;
 
-              UserInfo.startDate = data.startDate;
+            UserInfo.otherStartDate = data.otherStartDate;
 
-              UserInfo.endDate = data.endDate;
+            UserInfo.otherEndDate = data.otherEndDate;
 
-              UserInfo.otherStartDate = data.otherStartDate;
+            loginModel?.flag1 = 0;
 
-              UserInfo.otherEndDate = data.otherEndDate;
+            UserInfo.flag1 = 0;
 
-              loginModel?.flag1 = 0;
+            UserInfo.repType = data.repType;
 
-              UserInfo.flag1 = 0;
+            UserInfo.initializeUserPlan();
 
-              UserInfo.repType = data.repType;
-
-              UserInfo.initializeUserPlan();
-
-
-              emit(LoginState());
-            },
-          );
-
+            emit(LoginState());
+          },
+        );
       } else if (event is LoginInsertEvent) {
         (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
           emit(InsertLoginErrorState(failure: failure));

@@ -190,7 +190,7 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                       initialValue: context
                           .watch<RecipesBrandBloc>()
                           .insertRecipesObject
-                          .brand_1 ,
+                          .brand_1,
                       validator: (value) {
                         if (value == null) {
                           return "يرجى اختيار المستحضر الأول";
@@ -209,12 +209,11 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                               hintText: (state is AllRecipesLoadingState ||
                                       state is AllNumLoadingState)
                                   ? 'loading'
-                                  :  context
-                                          .watch<RecipesBrandBloc>()
-                                          .insertRecipesObject
-                                          .brand_1
-                                          .title_en
-                                      ,
+                                  : context
+                                      .watch<RecipesBrandBloc>()
+                                      .insertRecipesObject
+                                      .brand_1
+                                      .title_en,
                               items:
                                   context.watch<RecipesBrandBloc>().brandRecs,
                               onChanged: (value) {
@@ -908,7 +907,7 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                     ),
                     SizedBox(height: 20),
                     BlocListener<RecipesBrandBloc, RecipesBrandState>(
-                      listener: (context, state) async{
+                      listener: (context, state) async {
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
                         } else if (state is InsertRecipesState) {
@@ -917,10 +916,9 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                           );
-                          BlocProvider.of<RecipesBrandBloc>(context).add(EditeRecNumEvent(state.num));
-
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(EditeRecNumEvent(state.num));
                         } else if (state is InsertRecipesErrorState) {
-
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
@@ -943,9 +941,8 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
-                                Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                backgroundColor:
-                                ColorManager.secondaryColor,
+                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                backgroundColor: ColorManager.secondaryColor,
                               ),
                             );
                           }

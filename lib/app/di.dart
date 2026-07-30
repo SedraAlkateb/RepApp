@@ -902,8 +902,8 @@ Future<void> initSeniorManageFutureModule() async {
           () => ChangeRepPlanStatus(instance()));
     }
     if (!GetIt.I.isRegistered<AllPlaceUsecase>()) {
-      instance.registerFactory<AllPlaceUsecase>(
-              () => AllPlaceUsecase(instance()));
+      instance
+          .registerFactory<AllPlaceUsecase>(() => AllPlaceUsecase(instance()));
     }
     instance.registerFactory<ManageFutureBloc>(
         () => ManageFutureBloc(instance(), instance(), instance()));

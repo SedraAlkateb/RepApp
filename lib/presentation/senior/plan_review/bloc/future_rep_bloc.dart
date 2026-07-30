@@ -20,9 +20,9 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
   ChangeRepPlanStatus changeRepPlanStatus;
   int sumBrandsAmount = 0;
   List<SpecDModel> specialization = [];
-  AllPlanBrandSp  planBrandSp = AllPlanBrandSp([], 0);
+  AllPlanBrandSp planBrandSp = AllPlanBrandSp([], 0);
   List<BrandAmountRequestModel> planBrandSpSend = [];
-  int number=0;
+  int number = 0;
   FutureRepBloc(this.allSpeUsecase, this.repPlanBrandSpUsecase,
       this.updateRepPlanBrandAmount, this.changeRepPlanStatus)
       : super(FutureRepInitial()) {
@@ -30,7 +30,8 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
       if (event is FutureSpEvent) {
         specialization = [];
         emit(FutureSpRepLoadingState());
-        (await allSpeUsecase.execute(event.id,planId: event.planId)).fold((failure) {
+        (await allSpeUsecase.execute(event.id, planId: event.planId)).fold(
+            (failure) {
           emit(FutureSpRepErrorState(failure: failure));
         }, (data) async {
           planBrandSpSend = [];
@@ -58,14 +59,14 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
         }).toList();
         emit(FutureRepPlanBrandSpState(planBrandSp2));
       } else if (event is FutureRepPlanBrandSpEvent) {
-        planBrandSp = AllPlanBrandSp([],0);
+        planBrandSp = AllPlanBrandSp([], 0);
         emit(FutureRepPlanBrandSpLoadingState());
         (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
           emit(FutureRepPlanBrandSpErrorState(failure: failure));
         }, (data) async {
           planBrandSp = data!;
-          number=data.amount;
-          data.amount=data.amount*event.sampleCount;
+          number = data.amount;
+          data.amount = data.amount * event.sampleCount;
           if (data.planBrandSps.isEmpty) {
             emit(FutureRepPlanBrandSpEmptyState(data));
           } else {
@@ -75,9 +76,9 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
           }
         });
       } else if (event is ChangeFieldEvent) {
-        if(UserInfo.repType==7){
-          int sumF =
-              sumBrandsAmount - planBrandSp.planBrandSps[event.index].totalAmount;
+        if (UserInfo.repType == 7) {
+          int sumF = sumBrandsAmount -
+              planBrandSp.planBrandSps[event.index].totalAmount;
           sumF = sumF + event.number;
           if (sumF > planBrandSp.amount) {
             emit(SumErrorState(
@@ -86,7 +87,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
             planBrandSp.planBrandSps[event.index].totalAmount = event.number;
             sumBrandsAmount = sumF;
             int existingIndex = planBrandSpSend.indexWhere(
-                  (item) => item.id == planBrandSp.planBrandSps[event.index].id,
+              (item) => item.id == planBrandSp.planBrandSps[event.index].id,
             );
             if (existingIndex == -1) {
               planBrandSpSend.add(BrandAmountRequestModel(
@@ -98,10 +99,10 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
                   planBrandSp.planBrandSps[event.index].totalAmount;
             }
           }
-        }else{
+        } else {
           planBrandSp.planBrandSps[event.index].totalAmount = event.number;
           int existingIndex = planBrandSpSend.indexWhere(
-                (item) => item.id == planBrandSp.planBrandSps[event.index].id,
+            (item) => item.id == planBrandSp.planBrandSps[event.index].id,
           );
           if (existingIndex == -1) {
             planBrandSpSend.add(BrandAmountRequestModel(
@@ -113,7 +114,6 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
                 planBrandSp.planBrandSps[event.index].totalAmount;
           }
         }
-
       }
       if (event is UpdateAmountEvent) {
         emit(UpdateAmountLoadingState());

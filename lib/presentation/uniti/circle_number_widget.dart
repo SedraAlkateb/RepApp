@@ -28,4 +28,3 @@ class CircleNumberWidget extends StatelessWidget {
     );
   }
 }
-

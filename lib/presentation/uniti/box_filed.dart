@@ -55,15 +55,17 @@ class BoxTextField extends StatelessWidget {
         style: TextStyle(fontSize: 14.sp, color: Colors.black),
         decoration: InputDecoration(
           filled: true,
-          fillColor:  ColorManager.inputBorder, // اللون الرمادي الفاتح من الصورة
+          fillColor: ColorManager.inputBorder, // اللون الرمادي الفاتح من الصورة
           hintText: hintText,
-          hintStyle: hintStyle ?? TextStyle(fontSize: 13.sp, color: Colors.grey),
+          hintStyle:
+              hintStyle ?? TextStyle(fontSize: 13.sp, color: Colors.grey),
 
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
 
           // تحسين المسافات الداخلية ليكون النص مرتاحاً
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
 
           // الحدود الدائرية المتناسقة مع صورك (borderRadius: 15.r أو 20.r)
           border: OutlineInputBorder(
@@ -72,11 +74,13 @@ class BoxTextField extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: Color(0xFFE0E0E0), width: 0.5), // حدود خفيفة جداً
+            borderSide: const BorderSide(
+                color: Color(0xFFE0E0E0), width: 0.5), // حدود خفيفة جداً
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: Color(0xFF0D47A1), width: 1), // حدود زرقاء عند التركيز
+            borderSide: const BorderSide(
+                color: Color(0xFF0D47A1), width: 1), // حدود زرقاء عند التركيز
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.r),

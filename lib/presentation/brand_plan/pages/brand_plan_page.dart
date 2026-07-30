@@ -38,7 +38,8 @@ class BrandPlanPage extends StatelessWidget {
                 title: Text(
                   "خطة المندوب", // عنوان الصفحة
                   style: TextStyle(
-                    color: const Color(0xFF0D47A1), // اللون الأزرق الداكن للعنوان
+                    color:
+                        const Color(0xFF0D47A1), // اللون الأزرق الداكن للعنوان
                     fontWeight: FontWeight.bold,
                     fontSize: 18.sp,
                   ),
@@ -67,15 +68,18 @@ class BrandPlanPage extends StatelessWidget {
                     ),
                     child: TabBar(
                       padding: const EdgeInsets.all(4), // مسافة داخلية للمؤشر
-                      dividerColor: Colors.transparent, // إخفاء الخط الفاصل الافتراضي
+                      dividerColor:
+                          Colors.transparent, // إخفاء الخط الفاصل الافتراضي
                       labelColor: Colors.white, // لون نص التبويب المحدد
-                      unselectedLabelColor: Colors.grey.shade400, // لون نص التبويب غير المحدد
+                      unselectedLabelColor:
+                          Colors.grey.shade400, // لون نص التبويب غير المحدد
                       labelStyle: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14.sp),
                       indicatorSize: TabBarIndicatorSize.tab,
                       // تصميم المؤشر الخلفي الأزرق
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // افترضت أن هذا هو اللون الأزرق الرئيسي في تطبيفك
+                        color: ColorManager
+                            .medicalPrimary, // افترضت أن هذا هو اللون الأزرق الرئيسي في تطبيفك
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       tabs: [
@@ -110,8 +114,9 @@ class BrandPlanPage extends StatelessWidget {
           },
           // 3. محتوى الصفحات
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),            // تغيير الفيزكس لتصبح ارتدادية وسلسة
-        //    physics: const BouncingScrollPhysics(),
+            physics:
+                const NeverScrollableScrollPhysics(), // تغيير الفيزكس لتصبح ارتدادية وسلسة
+            //    physics: const BouncingScrollPhysics(),
             children: [
               BrandPlanActivePage(),
               SpecPlanPage(),

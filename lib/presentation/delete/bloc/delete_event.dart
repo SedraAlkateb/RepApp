@@ -1,21 +1,21 @@
 part of 'delete_bloc.dart';
 
 @immutable
-abstract class DeleteEvent extends Equatable{}
-class DeleteAllEvent extends DeleteEvent{
-  @override
-  List<Object?> get props => [];
+abstract class DeleteEvent extends Equatable {}
 
-}
-
-class DeleteBaseEvent extends DeleteEvent{
+class DeleteAllEvent extends DeleteEvent {
   @override
   List<Object?> get props => [];
 }
-class Edit1EventIn extends DeleteEvent{
-  final  int num;
+
+class DeleteBaseEvent extends DeleteEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class Edit1EventIn extends DeleteEvent {
+  final int num;
   Edit1EventIn(this.num);
   @override
   List<Object?> get props => [];
-
 }

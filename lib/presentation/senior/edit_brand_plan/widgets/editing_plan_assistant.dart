@@ -18,7 +18,8 @@ class EditingPlanAssistant extends StatefulWidget {
   State<EditingPlanAssistant> createState() => _EditingPlanAssistantState();
 }
 
-class _EditingPlanAssistantState extends State<EditingPlanAssistant> with AutomaticKeepAliveClientMixin {
+class _EditingPlanAssistantState extends State<EditingPlanAssistant>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -34,27 +35,32 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
             child: SearchField(
               searchController: searchController,
               onPressed: (value) {
-                BlocProvider.of<EditBrandPlanBloc>(context).add(FutureSearchSpecEvent(value));
+                BlocProvider.of<EditBrandPlanBloc>(context)
+                    .add(FutureSearchSpecEvent(value));
               },
             ),
           ),
           Expanded(
             child: BlocBuilder<EditBrandPlanBloc, EditBrandPlanState>(
               builder: (context, state) {
-                List<PlanBrandModel> planBrand = context.watch<EditBrandPlanBloc>().planBrands;
+                List<PlanBrandModel> planBrand =
+                    context.watch<EditBrandPlanBloc>().planBrands;
                 if (state is FuturePlanBrandState) planBrand = state.planbrand;
 
-                if (state is FutureSpRepLoadingState) return loadingFullScreen(context);
-                if (state is FutureSpRepErrorState) return errorFullScreen(context, func: () {});
+                if (state is FutureSpRepLoadingState)
+                  return loadingFullScreen(context);
+                if (state is FutureSpRepErrorState)
+                  return errorFullScreen(context, func: () {});
 
-                return
-                  planBrand.isEmpty?emptyFullScreen(context):
-                  ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 90.h),
-                  itemCount: planBrand.length,
-                  itemBuilder: (context, index) => _buildElegantCard(index, planBrand),
-                );
+                return planBrand.isEmpty
+                    ? emptyFullScreen(context)
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 90.h),
+                        itemCount: planBrand.length,
+                        itemBuilder: (context, index) =>
+                            _buildElegantCard(index, planBrand),
+                      );
               },
             ),
           ),
@@ -100,7 +106,8 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
                   color: ColorManager.secondaryColor1.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Icon(Icons.medication_liquid_rounded, color: ColorManager.secondaryColor1, size: 24.sp),
+                child: Icon(Icons.medication_liquid_rounded,
+                    color: ColorManager.secondaryColor1, size: 24.sp),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -109,13 +116,19 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
                   children: [
                     Text(
                       planBrand[index].title,
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.sp, color: const Color(0xFF2D3142)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14.sp,
+                          color: const Color(0xFF2D3142)),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       planBrand[index].pharmaceuticalForm,
-                      style: TextStyle(color: Colors.grey.shade500, fontSize: 11.sp, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: Colors.grey.shade500,
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -131,11 +144,13 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
               }
             },
             builder: (context, state) {
-              if (state is FutureChangeLoadingItemValueState && state.index == index) {
+              if (state is FutureChangeLoadingItemValueState &&
+                  state.index == index) {
                 return SizedBox(
                   height: 45.h,
                   child: Center(
-                    child: SpinKitThreeBounce(color: ColorManager.secondaryColor1, size: 20.0),
+                    child: SpinKitThreeBounce(
+                        color: ColorManager.secondaryColor1, size: 20.0),
                   ),
                 );
               }
@@ -145,7 +160,8 @@ class _EditingPlanAssistantState extends State<EditingPlanAssistant> with Automa
                 prefixIcon: null, // تم إلغاء الأيقونة هنا لتطابق الطلب
                 onChanged: (value) {
                   BlocProvider.of<EditBrandPlanBloc>(context).add(
-                    FutureChangePlanBrandTypeEvent(planBrand[index].id, value.i),
+                    FutureChangePlanBrandTypeEvent(
+                        planBrand[index].id, value.i),
                   );
                   planBrand[index].brandType.i = value.i;
                   BlocProvider.of<EditBrandPlanBloc>(context).add(

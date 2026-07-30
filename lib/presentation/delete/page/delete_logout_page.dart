@@ -32,7 +32,8 @@ class _DeleteLogoutPageState extends State<DeleteLogoutPage> {
               width: 8.w,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.horizontal(left: Radius.circular(10.r)),
+                borderRadius:
+                    BorderRadius.horizontal(left: Radius.circular(10.r)),
               ),
             ),
           ),
@@ -59,24 +60,26 @@ class _DeleteLogoutPageState extends State<DeleteLogoutPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(LucideIcons.user, size: 70, color: Color(0xFF1A3E62)),
+                            const Icon(LucideIcons.user,
+                                size: 70, color: Color(0xFF1A3E62)),
                             Stack(
                               clipBehavior: Clip.none,
                               children: [
-                                const Icon(LucideIcons.monitor, size: 100, color: Color(0xFF1A3E62)),
+                                const Icon(LucideIcons.monitor,
+                                    size: 100, color: Color(0xFF1A3E62)),
                                 Positioned(
                                   top: 15,
                                   right: -5,
                                   child: Container(
-                                    padding:  EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w, vertical: 2.h),
                                     color: const Color(0xFF1A3E62),
-                                    child:  Text(
+                                    child: Text(
                                       "Delete",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 9.sp,
-                                          fontWeight: FontWeight.bold
-                                      ),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -107,20 +110,23 @@ class _DeleteLogoutPageState extends State<DeleteLogoutPage> {
                     BlocListener<DeleteBloc, DeleteState>(
                       listener: (context, state) {
                         if (state is DeleteAllErrorState) {
-                          error(context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                         if (state is Edit1StatusSErrorState) {
-                          error(context, state.failure.massage, state.failure.code);
+                          error(context, state.failure.massage,
+                              state.failure.code);
                         }
                         if (state is Edit1StatusState) {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             Routes.login, // التوجه لصفحة تسجيل الدخول
-                                (route) => false,
+                            (route) => false,
                           );
                         }
                         if (state is DeleteAllState) {
-                          BlocProvider.of<DeleteBloc>(context).add(Edit1EventIn(0));
+                          BlocProvider.of<DeleteBloc>(context)
+                              .add(Edit1EventIn(0));
                         }
                       },
                       child: BlocBuilder<DeleteBloc, DeleteState>(
@@ -137,15 +143,15 @@ class _DeleteLogoutPageState extends State<DeleteLogoutPage> {
                                 elevation: 5,
                               ),
                               onPressed: () {
-                                BlocProvider.of<DeleteBloc>(context).add(DeleteAllEvent());
+                                BlocProvider.of<DeleteBloc>(context)
+                                    .add(DeleteAllEvent());
                               },
                               child: Text(
-                                 " حذف البيانات ",
+                                " حذف البيانات ",
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white
-                                ),
+                                    color: Colors.white),
                               ),
                             ),
                           );

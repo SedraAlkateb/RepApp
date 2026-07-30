@@ -46,11 +46,12 @@ class ReportIssueBloc extends Bloc<ReportIssueEvent, ReportIssueState> {
         print(event.isRead);
         List<DoctorIssueModel> doctorNote = List.from(doctorIssueModel);
         DoctorIssueModel Note1 = DoctorIssueModel(
-            doctorNote[event.id].docTitle,
-            doctorNote[event.id].spTitle,
-            doctorNote[event.id].address,
-            doctorNote[event.id].visitDate,
-            doctorNote[event.id].issue,);
+          doctorNote[event.id].docTitle,
+          doctorNote[event.id].spTitle,
+          doctorNote[event.id].address,
+          doctorNote[event.id].visitDate,
+          doctorNote[event.id].issue,
+        );
         doctorIssueModel[event.id] = Note1;
         doctorNote[event.id] = Note1;
         emit(SenAsReadState(doctorNote));

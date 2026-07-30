@@ -37,12 +37,11 @@ class _SearchHospitalState extends State<SearchHospital>
   Widget _buildResultList() {
     return BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
       buildWhen: (previous, current) =>
-      current is FutureSearchHospitalsErrorState ||
+          current is FutureSearchHospitalsErrorState ||
           current is FutureSearchHospitalsLoadingState ||
           current is FutureSearchHospitalsState ||
           current is FutureSearchHospitalsEmptyState,
       builder: (context, state) {
-
         // 1. حالة الخطأ
         if (state is FutureSearchHospitalsErrorState) {
           return CustomScrollView(
@@ -64,7 +63,8 @@ class _SearchHospitalState extends State<SearchHospital>
               SliverPadding(
                 padding: EdgeInsets.all(16.w),
                 sliver: SliverToBoxAdapter(
-                  child: loadingShimmer(context, 10, 100, 100, BorderRadius.circular(15.r)),
+                  child: loadingShimmer(
+                      context, 10, 100, 100, BorderRadius.circular(15.r)),
                 ),
               ),
             ],
@@ -91,7 +91,7 @@ class _SearchHospitalState extends State<SearchHospital>
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    (context, index) {
                       // بناء العنصر فقط عندما يقترب من الظهور على الشاشة
                       return _hospitalWidget(
                         title: state.allSearch[index].name,
@@ -113,7 +113,8 @@ class _SearchHospitalState extends State<SearchHospital>
                         },
                       );
                     },
-                    childCount: state.allSearch.length, // العدد الإجمالي للمشافي
+                    childCount:
+                        state.allSearch.length, // العدد الإجمالي للمشافي
                   ),
                 ),
               ),
@@ -165,7 +166,8 @@ class _SearchHospitalState extends State<SearchHospital>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.local_hospital_outlined, color: Colors.orangeAccent),
+              const Icon(Icons.local_hospital_outlined,
+                  color: Colors.orangeAccent),
               Expanded(
                 child: Text(
                   title,
@@ -189,7 +191,8 @@ class _SearchHospitalState extends State<SearchHospital>
                 onTap: function,
                 borderRadius: BorderRadius.circular(10.r),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
                   decoration: BoxDecoration(
                     color: ColorManager.medicalPrimary,
                     borderRadius: BorderRadius.circular(10.r),
@@ -201,7 +204,8 @@ class _SearchHospitalState extends State<SearchHospital>
                         style: TextStyle(color: Colors.white, fontSize: 13.sp),
                       ),
                       SizedBox(width: 5.w),
-                      Icon(Icons.analytics_outlined, color: Colors.white, size: 18.sp),
+                      Icon(Icons.analytics_outlined,
+                          color: Colors.white, size: 18.sp),
                     ],
                   ),
                 ),

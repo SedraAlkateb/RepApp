@@ -67,122 +67,148 @@ class _HospitalSpState extends State<HospitalSp> {
                         ),
                         state.hospitals.length == 0
                             ? Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 90.h),
-                          margin: EdgeInsets.all(20)
-                          ,
-                          decoration: BoxDecoration(
-                            color: ColorManager.white,
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Column(
-
-                            children: [
-                              Icon(
-                                color: ColorManager.medicalMuted,
-                                Icons.person_outline,size: 60,fontWeight: FontWeight.w100,),
-                              SizedBox(height: 20.h,),
-                              Text(
-                                textAlign: TextAlign.center,
-                                "لا يوجد مشافي مسجلين في هذا الاختصاص",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorManager.medicalPrimary,
-                                    fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                        )
-                            : ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return
-                              Container(
-                                margin: EdgeInsets.only(
-                                    bottom: 16.h, right: 8.w, left: 8.w),
-                                padding: EdgeInsets.all(16.w),
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 90.h),
+                                margin: EdgeInsets.all(20),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15.r),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black
-                                          .withOpacity(0.08), // درجة غمق الظل
-                                      blurRadius: 15, // مدى نعومة الظل
-                                      spreadRadius: 0, // مدى انتشار الظل
-                                      offset: const Offset(0,
-                                          6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
-                                    ),
-                                  ],
+                                  color: ColorManager.white,
+                                  borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-
-                                    Text(
-                                        state.hospitals[index].title,
-                                        style: TextStyle(
-                                            fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
-                                    SizedBox(height: 10.h),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
-                                        SizedBox(width: 8.w,),
-                                        Expanded(
-                                          child: Text(state.hospitals[index].placeTitle,
-                                              style: TextStyle
-                                                (color: Colors.grey,
-                                                  fontSize: 15.sp)),
-                                        ),
-                                      ],
+                                    Icon(
+                                      color: ColorManager.medicalMuted,
+                                      Icons.person_outline,
+                                      size: 60,
+                                      fontWeight: FontWeight.w100,
                                     ),
-                                    SizedBox(height: 10.h),
-                                    state.hospitals[index].note!=null?
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.note_alt_sharp,size: 22.sp,color: Colors.grey),
-                                        SizedBox(width: 8.w,),
-                                        Expanded(
-                                          child: Text(state.hospitals[index].note??"",
-                                              style: TextStyle
-                                                (color: Colors.grey,
-                                                  fontSize: 15.sp)),
-                                        ),
-                                      ],
-                                    ):SizedBox(),
-                                    SizedBox(height: 16.h),
-                                    Divider(color:  Colors.grey,thickness: 0.1,),
-                                    SizedBox(height: 8.h),
-                                    // أزرار الأكشن
-                                    Row(
-                                      children: [
-                                        PrescriptionHospitalMenuWidget(hospitalId: state.hospitals[index].id),
-                                        const Spacer(),
-                                        // InkWell(
-                                        //   onTap: () => Navigator.pushNamed(
-                                        //       context, Routes.hospitalDetails,
-                                        //       arguments:  state.hospitals[index]),
-                                        //   child: buildCardButton(
-                                        //       "عرض التفاصيل",
-                                        //       ColorManager.medicalPrimary,
-                                        //       Colors.white,
-                                        //       Icons.directions_run),
-                                        // ),
-
-                                      ],
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      "لا يوجد مشافي مسجلين في هذا الاختصاص",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorManager.medicalPrimary,
+                                          fontSize: 20.sp),
                                     ),
                                   ],
                                 ),
-                              );
-                          },
-                          itemCount: state.hospitals.length,
-                        ),
+                              )
+                            : ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: 16.h, right: 8.w, left: 8.w),
+                                    padding: EdgeInsets.all(16.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(
+                                              0.08), // درجة غمق الظل
+                                          blurRadius: 15, // مدى نعومة الظل
+                                          spreadRadius: 0, // مدى انتشار الظل
+                                          offset: const Offset(0,
+                                              6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(state.hospitals[index].title,
+                                            style: TextStyle(
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: ColorManager
+                                                    .medicalPrimary)),
+                                        SizedBox(height: 10.h),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.location_on_outlined,
+                                                size: 22.sp,
+                                                color: Colors.grey),
+                                            SizedBox(
+                                              width: 8.w,
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                  state.hospitals[index]
+                                                      .placeTitle,
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 15.sp)),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        state.hospitals[index].note != null
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.note_alt_sharp,
+                                                      size: 22.sp,
+                                                      color: Colors.grey),
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                        state.hospitals[index]
+                                                                .note ??
+                                                            "",
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 15.sp)),
+                                                  ),
+                                                ],
+                                              )
+                                            : SizedBox(),
+                                        SizedBox(height: 16.h),
+                                        Divider(
+                                          color: Colors.grey,
+                                          thickness: 0.1,
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        // أزرار الأكشن
+                                        Row(
+                                          children: [
+                                            PrescriptionHospitalMenuWidget(
+                                                hospitalId:
+                                                    state.hospitals[index].id),
+                                            const Spacer(),
+                                            // InkWell(
+                                            //   onTap: () => Navigator.pushNamed(
+                                            //       context, Routes.hospitalDetails,
+                                            //       arguments:  state.hospitals[index]),
+                                            //   child: buildCardButton(
+                                            //       "عرض التفاصيل",
+                                            //       ColorManager.medicalPrimary,
+                                            //       Colors.white,
+                                            //       Icons.directions_run),
+                                            // ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                itemCount: state.hospitals.length,
+                              ),
                       ],
                     ),
                   );

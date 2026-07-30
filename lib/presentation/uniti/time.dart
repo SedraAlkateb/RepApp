@@ -7,9 +7,10 @@ String formatDateTime(String dateTimeString) {
   return DateFormat('MMM d, yyyy').format(dateTime);
 }
 
-String formatDateTimeFromDataTime(DateTime now){
-return DateFormat('dd-MM-yyyy').format(now);
+String formatDateTimeFromDataTime(DateTime now) {
+  return DateFormat('dd-MM-yyyy').format(now);
 }
+
 DateTime formatStringToDataTime(String dateString) {
   try {
     DateFormat format = DateFormat("dd-MM-yyyy");

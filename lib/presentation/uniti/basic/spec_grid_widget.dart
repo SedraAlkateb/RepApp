@@ -41,7 +41,8 @@ class SpecGridWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: ColorManager.white,
               borderRadius: BorderRadius.circular(AppSize.s25),
-              border: Border.all(color: ColorManager.inputBorder.withOpacity(0.5)),
+              border:
+                  Border.all(color: ColorManager.inputBorder.withOpacity(0.5)),
               boxShadow: [
                 BoxShadow(
                   color: ColorManager.black.withOpacity(0.05),
@@ -66,8 +67,9 @@ class SpecGridWidget extends StatelessWidget {
                     height: isTablet ? 50.h : 35.h,
                     color: ColorManager.medicalSecondary.withOpacity(0.8),
                     colorBlendMode: BlendMode.modulate,
-                    errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.medical_services, color: ColorManager.medicalSecondary),
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.medical_services,
+                        color: ColorManager.medicalSecondary),
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -88,7 +90,8 @@ class SpecGridWidget extends StatelessWidget {
                 if (item.sumDoctor != 0)
                   _buildStatText("زيارات الأطباء: ${item.sumDoctor}", isTablet),
                 if (item.sumHospital != 0)
-                  _buildStatText("زيارات المشافي: ${item.sumHospital}", isTablet),
+                  _buildStatText(
+                      "زيارات المشافي: ${item.sumHospital}", isTablet),
               ],
             ),
           ),

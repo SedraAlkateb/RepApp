@@ -17,10 +17,13 @@ class FinishedPlanPage extends StatefulWidget {
 class _FinishedPlanPageState extends State<FinishedPlanPage> {
   @override
   void initState() {
-    context.read<FinishedPlanBloc>().add(GetFinishedPlansEvent(cityId: widget.cityId));
+    context
+        .read<FinishedPlanBloc>()
+        .add(GetFinishedPlansEvent(cityId: widget.cityId));
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     // إرسال الحدث لجلب البيانات بناءً على معرف المدينة
@@ -43,7 +46,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
           // 2. التعامل مع حالات الـ Bloc داخل نظام الـ Slivers
           BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
             buildWhen: (previous, current) =>
-            current is FinishedPlanLoading ||
+                current is FinishedPlanLoading ||
                 current is FinishedPlanLoaded ||
                 current is FinishedPlanError,
             builder: (context, state) {
@@ -59,7 +62,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                      (context, index) {
                         return PlanCard(plan: state.plans[index]);
                       },
                       childCount: state.plans.length,
@@ -99,7 +102,8 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
               ),
             ),
             Container(
-              height: 4, width: 35,
+              height: 4,
+              width: 35,
               decoration: BoxDecoration(
                 color: const Color(0xFF42A5F5),
                 borderRadius: BorderRadius.circular(10),
@@ -116,6 +120,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
     );
   }
 }
+
 class PlanCard extends StatelessWidget {
   final FinishedPlanModel plan;
   const PlanCard({required this.plan});
@@ -139,7 +144,8 @@ class PlanCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        BlocProvider.of<FinishedPlanBloc>(context).add(GetPlanRepsEvent(planId: int.parse(plan.id)));
+        BlocProvider.of<FinishedPlanBloc>(context)
+            .add(GetPlanRepsEvent(planId: int.parse(plan.id)));
         Navigator.pushNamed(context, Routes.planReps);
       },
       child: Container(
@@ -163,40 +169,40 @@ class PlanCard extends StatelessWidget {
           ],
         ),
         padding: EdgeInsets.all(20.w),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _generatePlanTitle(plan.startDate),
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF0D47A1),
-                      ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _generatePlanTitle(plan.startDate),
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF0D47A1),
                     ),
-                    SizedBox(height: 10.h),
-                    _buildStatusBadge(statusText, mainColor),
-                    SizedBox(height: 10.h),
-                    _buildDateContainer(plan.startDate, plan.endDate),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 10.h),
+                  _buildStatusBadge(statusText, mainColor),
+                  SizedBox(height: 10.h),
+                  _buildDateContainer(plan.startDate, plan.endDate),
+                ],
               ),
-              // زر الانتقال المستدير
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0F4F8),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.arrow_forward_ios, size: 14.sp, color: Colors.blueGrey),
+            ),
+            // زر الانتقال المستدير
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0F4F8),
+                shape: BoxShape.circle,
               ),
-            ],
-          ),
-      
+              child: Icon(Icons.arrow_forward_ios,
+                  size: 14.sp, color: Colors.blueGrey),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -212,7 +218,8 @@ class PlanCard extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(color: color, fontSize: 10.sp, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            color: color, fontSize: 10.sp, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -228,7 +235,8 @@ class PlanCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(start, style: TextStyle(fontSize: 11.sp, color: Colors.blueGrey)),
+          Text(start,
+              style: TextStyle(fontSize: 11.sp, color: Colors.blueGrey)),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: Icon(Icons.arrow_back, size: 12.sp, color: Colors.grey[300]),
@@ -253,17 +261,17 @@ class PlanCard extends StatelessWidget {
 // قائمة أسماء الأشهر العربية (تستخدم في حال كان التاريخ صحيحاً)
     List<String> months = [
       "كانون الثاني", // يناير
-      "شباط",         // فبراير
-      "آذار",         // مارس
-      "نيسان",        // أبريل
-      "أيار",         // مايو
-      "حزيران",       // يونيو
-      "تموز",         // يوليو
-      "آب",           // أغسطس
-      "أيلول",        // سبتمبر
-      "تشرين الأول",  // أكتوبر
+      "شباط", // فبراير
+      "آذار", // مارس
+      "نيسان", // أبريل
+      "أيار", // مايو
+      "حزيران", // يونيو
+      "تموز", // يوليو
+      "آب", // أغسطس
+      "أيلول", // سبتمبر
+      "تشرين الأول", // أكتوبر
       "تشرين الثاني", // نوفمبر
-      "كانون الأول"   // ديسمبر
+      "كانون الأول" // ديسمبر
     ];
 
     // 4. استخراج اسم الشهر والسنة

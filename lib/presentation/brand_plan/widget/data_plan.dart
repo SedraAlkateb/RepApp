@@ -2,8 +2,8 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget dataPlan(String? startDate, String? endData){
-  return   Padding(
+Widget dataPlan(String? startDate, String? endData) {
+  return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
     child: Card(
       shadowColor: ColorManager.secondaryColor7,

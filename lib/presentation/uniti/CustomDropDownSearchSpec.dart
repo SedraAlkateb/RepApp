@@ -34,7 +34,8 @@ class Customdropdownsearchspec extends StatelessWidget {
         popupProps: PopupProps.menu(
           // 1. تحديد حد أقصى لارتفاع القائمة لكي لا تظهر طويلة جداً ومزعجة 📐
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.4, // أقصى ارتفاع 40% من حجم الشاشة
+            maxHeight: MediaQuery.of(context).size.height *
+                0.4, // أقصى ارتفاع 40% من حجم الشاشة
           ),
 
           // 2. تعديل الـ itemBuilder ليعيد الـ Widget فقط بدون onTap يدوي 🛑
@@ -43,7 +44,8 @@ class Customdropdownsearchspec extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -54,7 +56,8 @@ class Customdropdownsearchspec extends StatelessWidget {
                           SizedBox(width: 4.w),
                           Text(
                             '${item.hospitalSpModel.rate}',
-                            style: TextStyle(fontSize: 13.sp, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 13.sp, color: Colors.grey[700]),
                           ),
                         ],
                       ),
@@ -65,8 +68,12 @@ class Customdropdownsearchspec extends StatelessWidget {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             fontSize: 14.sp,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            color: isSelected ? ColorManager.medicalPrimary : Colors.black,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: isSelected
+                                ? ColorManager.medicalPrimary
+                                : Colors.black,
                           ),
                         ),
                       ),
@@ -93,7 +100,8 @@ class Customdropdownsearchspec extends StatelessWidget {
               isDense: true,
               hintText: 'ابحث هنا...',
               hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
-              prefixIcon: Icon(Icons.search, size: 20.sp, color: ColorManager.black),
+              prefixIcon:
+                  Icon(Icons.search, size: 20.sp, color: ColorManager.black),
             ),
           ),
         ),
@@ -105,7 +113,8 @@ class Customdropdownsearchspec extends StatelessWidget {
             labelStyle: TextStyle(fontSize: 14.sp, overflow: TextOverflow.fade),
             hintText: hintText,
             hintStyle: TextStyle(fontSize: 12.sp, overflow: TextOverflow.fade),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),

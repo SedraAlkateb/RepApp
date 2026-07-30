@@ -6,5 +6,9 @@ class DrawerMenuItem {
   final VoidCallback onTap;
   final Color? color;
 
-  DrawerMenuItem({required this.icon, required this.title, required this.onTap, this.color});
+  DrawerMenuItem(
+      {required this.icon,
+      required this.title,
+      required this.onTap,
+      this.color});
 }

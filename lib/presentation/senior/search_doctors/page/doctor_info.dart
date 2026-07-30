@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DoctorInfo  extends StatelessWidget {
+class DoctorInfo extends StatelessWidget {
   const DoctorInfo({super.key});
   @override
   Widget build(BuildContext context) {
@@ -29,119 +29,128 @@ class DoctorInfo  extends StatelessWidget {
           ),
           SingleChildScrollView(
             child: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
-  builder: (context, state) {
-    if(state is DoctorInfoLoadingState){
-     return loadingFullScreen(context);
-    }
-    else if(state is DoctorInfoErrorState){
-      return errorFullScreen(context);
-    }
-    else if(state is DoctorInfoState){
-      DoctorModel doctor=state.doctor;
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation: 20,
-            shadowColor: ColorManager.secondaryColor4.withOpacity(0.5),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    doctor.title,
-                    style:
-                    Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              builder: (context, state) {
+                if (state is DoctorInfoLoadingState) {
+                  return loadingFullScreen(context);
+                } else if (state is DoctorInfoErrorState) {
+                  return errorFullScreen(context);
+                } else if (state is DoctorInfoState) {
+                  DoctorModel doctor = state.doctor;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.medical_services, color: Colors.blue),
-                      const SizedBox(width: 8),
-                      Text(
-                        'الإختصاص: ${doctor.spTitle}',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        elevation: 20,
+                        shadowColor:
+                            ColorManager.secondaryColor4.withOpacity(0.5),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                doctor.title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.medical_services,
+                                      color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'الإختصاص: ${doctor.spTitle}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: [
+                                buildDetailRow(context, Icons.place, 'المنطقة',
+                                    doctor.placeTitle),
+                                const Divider(
+                                  thickness: 0.5,
+                                ),
+                                buildDetailRow(
+                                    context,
+                                    Icons.location_city_outlined,
+                                    'العنوان',
+                                    doctor.address),
+                                const Divider(
+                                  thickness: 0.5,
+                                ),
+                                buildDetailRow(context, Icons.visibility,
+                                    'عدد الزيارات', '${doctor.visits}'),
+                                const Divider(
+                                  thickness: 0.5,
+                                ),
+                                buildDetailRow(context, Icons.star, 'التصنيف',
+                                    '${doctor.rate}'),
+                                if (doctor.note != null &&
+                                    doctor.note!.isNotEmpty)
+                                  Column(
+                                    children: [
+                                      const Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      buildHtmlDetailRow(context, Icons.note,
+                                          'ملاحظات', doctor.note ?? ''),
+                                    ],
+                                  ),
+                                if (doctor.workHours != null &&
+                                    doctor.workHours!.isNotEmpty &&
+                                    doctor.workHours != " ")
+                                  Column(
+                                    children: [
+                                      const Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      buildHtmlDetailRow(
+                                          context,
+                                          Icons.work,
+                                          'أوقات العمل',
+                                          doctor.workHours ?? ''),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                ],
-              ),
+                  );
+                }
+                return const SizedBox();
+              },
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  children: [
-                    buildDetailRow(context, Icons.place, 'المنطقة',
-                        doctor.placeTitle),
-                    const Divider(
-                      thickness: 0.5,
-                    ),
-                    buildDetailRow(context, Icons.location_city_outlined,
-                        'العنوان', doctor.address),
-                    const Divider(
-                      thickness: 0.5,
-                    ),
-                    buildDetailRow(context, Icons.visibility,
-                        'عدد الزيارات', '${doctor.visits}'),
-                    const Divider(
-                      thickness: 0.5,
-                    ),
-                    buildDetailRow(
-                        context, Icons.star, 'التصنيف', '${doctor.rate}'),
-                    if (doctor.note != null && doctor.note!.isNotEmpty)
-                      Column(
-                        children: [
-                          const Divider(
-                            thickness: 0.5,
-                          ),
-                          buildHtmlDetailRow(context, Icons.note,
-                              'ملاحظات', doctor.note ?? ''),
-                        ],
-                      ),
-                    if (doctor.workHours != null &&
-                        doctor.workHours!.isNotEmpty &&
-                        doctor.workHours != " ")
-                      Column(
-                        children: [
-                          const Divider(
-                            thickness: 0.5,
-                          ),
-                          buildHtmlDetailRow(context, Icons.work,
-                              'أوقات العمل', doctor.workHours ?? ''),
-                        ],
-                      ),
-
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
-    return const SizedBox();
-  },
-),
           ),
         ],
       ),

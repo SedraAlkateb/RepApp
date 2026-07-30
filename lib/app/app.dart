@@ -241,7 +241,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 String _getInitialRoute() {
-
   if (UserInfo.isLogging == 0) return Routes.login;
   if (UserInfo.isLogging == 2) {
     if (UserInfo.repType.i == 4 || UserInfo.repType.i == 5) {

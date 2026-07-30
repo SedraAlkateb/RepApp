@@ -6,9 +6,11 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class SenVisitDoctor extends StatelessWidget {
   SenVisitDoctor({super.key});
-  final TextEditingController searchteDoctorController = TextEditingController();
+  final TextEditingController searchteDoctorController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +22,28 @@ class SenVisitDoctor extends StatelessWidget {
           child: SearchField(
             searchController: searchteDoctorController,
             onPressed: (value) {
-              BlocProvider.of<SeniorProfBloc>(context).add(SenSearchVisitDoctorEvent(value));
+              BlocProvider.of<SeniorProfBloc>(context)
+                  .add(SenSearchVisitDoctorEvent(value));
             },
           ),
         ),
-
 
         // 2. القائمة
         Expanded(
           child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
             builder: (context, state) {
-              List<NoVisitDocModel> visitDoc = context.watch<SeniorProfBloc>().visitDoc;
+              List<NoVisitDocModel> visitDoc =
+                  context.watch<SeniorProfBloc>().visitDoc;
 
-              if (state is SenVisitDocLoadingState) return loadingFullScreen(context);
-              if (state is SenVisitDocEmptyState || visitDoc.isEmpty) return emptyFullScreen(context);
-              if (state is SenVisitDocErrorState) return errorFullScreen(context, func: () {
-                BlocProvider.of<SeniorProfBloc>(context).add(VisitDocEvent(156,state.planId));
-              });
+              if (state is SenVisitDocLoadingState)
+                return loadingFullScreen(context);
+              if (state is SenVisitDocEmptyState || visitDoc.isEmpty)
+                return emptyFullScreen(context);
+              if (state is SenVisitDocErrorState)
+                return errorFullScreen(context, func: () {
+                  BlocProvider.of<SeniorProfBloc>(context)
+                      .add(VisitDocEvent(156, state.planId));
+                });
 
               return ListView.builder(
                 padding: EdgeInsets.only(bottom: 20.h),
@@ -44,10 +51,14 @@ class SenVisitDoctor extends StatelessWidget {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 18.w, vertical: 10.h),
                       child: Row(
                         children: [
-                          Text("إجمالي الزيارات الناجحة:", style: TextStyle(fontSize: 14.sp, color: Colors.blueGrey[600])),
+                          Text("إجمالي الزيارات الناجحة:",
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: Colors.blueGrey[600])),
                           SizedBox(width: 8.w),
                           CircleNumberWidget(number: visitDoc.length),
                         ],
@@ -73,7 +84,8 @@ class VisitedDoctorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 🔹 الحسابات:
-    final int total = int.tryParse(data.visits ?? '0') ?? 0; // الإجمالي (مثلاً 3)
+    final int total =
+        int.tryParse(data.visits ?? '0') ?? 0; // الإجمالي (مثلاً 3)
     final int remaining = data.remainingVisits ?? 0; // المتبقي (مثلاً 1)
 
     // الزيارات التي تمت فعلياً
@@ -128,7 +140,9 @@ class VisitedDoctorCard extends StatelessWidget {
                                   ),
                                   Text(
                                     data.spTitle,
-                                    style: TextStyle(fontSize: 12.sp, color: Colors.grey[600]),
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Colors.grey[600]),
                                   ),
                                 ],
                               ),
@@ -136,7 +150,10 @@ class VisitedDoctorCard extends StatelessWidget {
                             // عرض الزيارات التي تمت (تمت زيارتها)
                             Column(
                               children: [
-                                Text("تمت زيارته", style: TextStyle(fontSize: 10.sp, color: Colors.green[700])),
+                                Text("تمت زيارته",
+                                    style: TextStyle(
+                                        fontSize: 10.sp,
+                                        color: Colors.green[700])),
                                 Text(
                                   "$done",
                                   style: TextStyle(
@@ -145,7 +162,9 @@ class VisitedDoctorCard extends StatelessWidget {
                                     color: Colors.green[800],
                                   ),
                                 ),
-                                Text("من أصل $total", style: TextStyle(fontSize: 9.sp, color: Colors.grey)),
+                                Text("من أصل $total",
+                                    style: TextStyle(
+                                        fontSize: 9.sp, color: Colors.grey)),
                               ],
                             ),
                           ],
@@ -188,8 +207,10 @@ class VisitedDoctorCard extends StatelessWidget {
   Widget _buildProfileIcon() {
     return Container(
       padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(color: const Color(0xFFF0F4F8), shape: BoxShape.circle),
-      child: Icon(Icons.check_circle_outline, color: Colors.green[400], size: 24.sp),
+      decoration:
+          BoxDecoration(color: const Color(0xFFF0F4F8), shape: BoxShape.circle),
+      child: Icon(Icons.check_circle_outline,
+          color: Colors.green[400], size: 24.sp),
     );
   }
 

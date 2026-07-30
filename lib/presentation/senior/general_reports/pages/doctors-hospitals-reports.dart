@@ -17,8 +17,7 @@ class DoctorsHospitalsReports extends StatefulWidget {
     required this.indexRep,
     required this.repName,
     required this.phone,
-
-});
+  });
 
   final int repId;
   final int senId;
@@ -27,7 +26,8 @@ class DoctorsHospitalsReports extends StatefulWidget {
   final String phone;
 
   @override
-  State<DoctorsHospitalsReports> createState() => _DoctorsHospitalsReportsState();
+  State<DoctorsHospitalsReports> createState() =>
+      _DoctorsHospitalsReportsState();
 }
 
 class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
@@ -37,8 +37,9 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
     // استدعاء البيانات لأول مرة عند الدخول للصفحة
     initReportVisitDoctorModule();
     context.read<ReportVisitDoctorBloc>().add(
-      AllReportVisitDoctorEvent(VisitRepSen(widget.repId, widget.senId), true),
-    );
+          AllReportVisitDoctorEvent(
+              VisitRepSen(widget.repId, widget.senId), true),
+        );
   }
 
   @override
@@ -99,20 +100,23 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
                       ),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // أو اللون الأزرق المعتمد
+                        color: ColorManager
+                            .medicalPrimary, // أو اللون الأزرق المعتمد
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       onTap: (value) {
                         if (value == 0) {
                           context.read<ReportVisitDoctorBloc>().add(
-                            AllReportVisitDoctorEvent(
-                                VisitRepSen(widget.repId, widget.senId), true),
-                          );
+                                AllReportVisitDoctorEvent(
+                                    VisitRepSen(widget.repId, widget.senId),
+                                    true),
+                              );
                         } else {
                           context.read<ReportVisitDoctorBloc>().add(
-                            AllReportVisitHospitalEvent(
-                                VisitRepSen(widget.repId, widget.senId), true),
-                          );
+                                AllReportVisitHospitalEvent(
+                                    VisitRepSen(widget.repId, widget.senId),
+                                    true),
+                              );
                         }
                       },
                       tabs: [
