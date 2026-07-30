@@ -11,9 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io';
 
 class RecipesHospital extends StatefulWidget {
-  final int HospitalId;
+  final int hospitalId;
   final int st;
-  RecipesHospital({super.key, required this.HospitalId, required this.st});
+  RecipesHospital({super.key, required this.hospitalId, required this.st});
   @override
   State<RecipesHospital> createState() => _RecipesPageState();
 }
@@ -30,13 +30,13 @@ class _RecipesPageState extends State<RecipesHospital> {
   @override
   void initState() {
     print("widget.HospitalId");
-    print(widget.HospitalId);
+    print(widget.hospitalId);
     BlocProvider.of<RecipesBrandBloc>(context).add(RestartEvent());
     BlocProvider.of<RecipesBrandBloc>(context).empty();
     if (widget.st == 1) {
       print("object");
       BlocProvider.of<RecipesBrandBloc>(context)
-          .add(CopyRecipesEvent(widget.HospitalId, 2));
+          .add(CopyRecipesEvent(widget.hospitalId, 2));
       BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
       BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
@@ -851,7 +851,7 @@ class _RecipesPageState extends State<RecipesHospital> {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<RecipesBrandBloc>(context)
                                 .add(InsertReciHospitalEvent(
-                              widget.HospitalId,
+                              widget.hospitalId,
                               _doctorSpController.text,
                               firstNoteController.text,
                               _secondNoteController.text,
