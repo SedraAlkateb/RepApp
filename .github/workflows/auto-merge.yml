@@ -1,0 +1,45 @@
+name: Auto Merge to Main
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  merge:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch != 'main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch branches
+        run: git fetch origin
+
+      - name: Merge branch into main
+        run: |
+          BRANCH=${{ github.event.workflow_run.head_branch }}
+
+          git checkout main
+          git pull origin main
+
+          git merge origin/$BRANCH --no-ff -m "Auto merge $BRANCH"
+
+          git push origin main

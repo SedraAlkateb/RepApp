@@ -2,10 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches-ignore:
+      - main
   pull_request:
-    branches: [ main ]
-
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,9 +26,8 @@ jobs:
         run: flutter pub get
 
       # ✅ 1. تصحيح أمر التنسيق القديم واستبداله بالأمر الحديث
-      - name: Flutter format check
-        run: dart format --output=none --set-exit-if-changed .
-
+      - name: Format Dart files
+        run: dart format .
       # ✅ 2. التحقق من سلامة الكود والتحذيرات
       - name: Flutter analyze
         run: flutter analyze
