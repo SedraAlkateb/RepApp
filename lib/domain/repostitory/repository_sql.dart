@@ -129,5 +129,6 @@ abstract class RepositorySql {
   Future<Either<Failure, List<ExceptionModel>>> allException();
   Future<Either<Failure, NumVisit>> numVisit();
   Future<Either<Failure, void>> numDocAndHos();
+  Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum);
 
 }

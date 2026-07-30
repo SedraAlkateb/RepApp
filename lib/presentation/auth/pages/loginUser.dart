@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use
+import 'package:domina_app/app/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,7 +56,8 @@ class _MyLoginState extends State<MyLogin> {
                       // حاوية البيانات (Card-like design)
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 24.w),
-                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 30.h),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30.r),
@@ -82,7 +84,8 @@ class _MyLoginState extends State<MyLogin> {
 
                             Text(
                               "سجل دخولك للمتابعة",
-                              style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14.sp, color: Colors.grey),
                             ).animate().fadeIn(delay: 200.ms),
 
                             SizedBox(height: 35.h),
@@ -92,15 +95,22 @@ class _MyLoginState extends State<MyLogin> {
                               controller: userName,
                               hint: "اسم المستخدم",
                               icon: Icons.alternate_email_rounded,
-                              validator: (val) => val!.length < 3 ? "يرجى التحقق من الاسم" : null,
-                            ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0),
+                              validator: (val) => val!.length < 3
+                                  ? "يرجى التحقق من الاسم"
+                                  : null,
+                            )
+                                .animate()
+                                .fadeIn(delay: 400.ms)
+                                .slideY(begin: 0.1, end: 0),
 
                             SizedBox(height: 20.h),
 
                             // حقل كلمة السر
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
-                                bool isObscured = state is ShowPasswordState ? state.isObscured : true;
+                                bool isObscured = state is ShowPasswordState
+                                    ? state.isObscured
+                                    : true;
                                 return _buildModernTextField(
                                   controller: password,
                                   hint: "كلمة المرور",
@@ -108,12 +118,18 @@ class _MyLoginState extends State<MyLogin> {
                                   isPassword: true,
                                   isObscured: isObscured,
                                   onSuffixTap: () {
-                                    BlocProvider.of<AuthBloc>(context).add(ShowPasswordEvent(!isObscured));
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(ShowPasswordEvent(!isObscured));
                                   },
-                                  validator: (val) => val!.length < 2 ? "كلمة المرور قصيرة" : null,
+                                  validator: (val) => val!.length < 2
+                                      ? "كلمة المرور قصيرة"
+                                      : null,
                                 );
                               },
-                            ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0),
+                            )
+                                .animate()
+                                .fadeIn(delay: 500.ms)
+                                .slideY(begin: 0.1, end: 0),
 
                             SizedBox(height: 40.h),
 
@@ -121,7 +137,9 @@ class _MyLoginState extends State<MyLogin> {
                             _buildPremiumButton(context),
                           ],
                         ),
-                      ).animate().scale(delay: 200.ms, curve: Curves.easeOutQuad),
+                      )
+                          .animate()
+                          .scale(delay: 200.ms, curve: Curves.easeOutQuad),
 
                       SizedBox(height: 60.h),
 
@@ -165,7 +183,10 @@ class _MyLoginState extends State<MyLogin> {
         child: Image.asset(ImageAssets.domina, width: 75.w)
             .animate(onPlay: (c) => c.repeat(reverse: true))
             .shimmer(duration: 2.seconds, color: Colors.blue.shade50)
-            .scale(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 2.seconds),
+            .scale(
+                begin: const Offset(1, 1),
+                end: const Offset(1.05, 1.05),
+                duration: 2.seconds),
       ),
     );
   }
@@ -187,12 +208,17 @@ class _MyLoginState extends State<MyLogin> {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14.sp),
-        prefixIcon: Icon(icon, color: ColorManager.medicalPrimary.withOpacity(0.6), size: 22.sp),
+        prefixIcon: Icon(icon,
+            color: ColorManager.medicalPrimary.withOpacity(0.6), size: 22.sp),
         suffixIcon: isPassword
             ? IconButton(
-          icon: Icon(isObscured ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: Colors.grey),
-          onPressed: onSuffixTap,
-        )
+                icon: Icon(
+                    isObscured
+                        ? Icons.visibility_off_rounded
+                        : Icons.visibility_rounded,
+                    color: Colors.grey),
+                onPressed: onSuffixTap,
+              )
             : null,
         fillColor: const Color(0xFFF3F7FF),
         filled: true,
@@ -206,7 +232,8 @@ class _MyLoginState extends State<MyLogin> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18.r),
-          borderSide: BorderSide(color: ColorManager.medicalPrimary.withOpacity(0.2), width: 2),
+          borderSide: BorderSide(
+              color: ColorManager.medicalPrimary.withOpacity(0.2), width: 2),
         ),
         contentPadding: EdgeInsets.symmetric(vertical: 20.h),
       ),
@@ -223,19 +250,27 @@ class _MyLoginState extends State<MyLogin> {
           // 2. تأخير بسيط لضمان انتهاء أنيميشن إغلاق البوب آب قبل الانتقال الكبير
           Future.delayed(const Duration(milliseconds: 600), () {
             if (context.mounted) {
-              // 3. الانتقال النهائي وحذف السجل
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.syncData,
-                    (route) => false,
-              );
+              if (UserInfo.isLogging == 2) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.adminControl,
+                  (route) => false,
+                );
+              } else {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.syncData,
+                  (route) => false,
+                );
+              }
             }
           });
         }
         return GestureDetector(
           onTap: () {
             if (formKey.currentState!.validate()) {
-              BlocProvider.of<AuthBloc>(context).add(LoginEvent(userName.text, password.text));
+              BlocProvider.of<AuthBloc>(context)
+                  .add(LoginEvent(userName.text, password.text));
             }
           },
           child: Container(
@@ -264,7 +299,10 @@ class _MyLoginState extends State<MyLogin> {
               children: [
                 Text(
                   "تسجيل الدخول",
-                  style: TextStyle(color: Colors.white, fontSize: 17.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 12.w),
                 const Icon(Icons.login_rounded, color: Colors.white),
@@ -287,6 +325,6 @@ class _MyLoginState extends State<MyLogin> {
           error(context, errorState.failure.massage, errorState.failure.code);
         }
       },
-
     ).animate().fadeIn(delay: 700.ms);
-  }}
+  }
+}

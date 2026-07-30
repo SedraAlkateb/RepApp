@@ -82,7 +82,10 @@ class DatabaseHelper {
     endDate TEXT ,
     startDate TEXT ,
     otherStartDate TEXT ,
-    otherEndDate TEXT 
+    otherEndDate TEXT ,
+    totalReci INTEGER NOT NULL DEFAULT 0,
+    usedReci INTEGER NOT NULL DEFAULT 0,
+    remainReci INTEGER NOT NULL DEFAULT 0
     );
     ''');
     await db.execute('''

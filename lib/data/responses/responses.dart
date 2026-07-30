@@ -33,6 +33,33 @@ class MessageResponse extends BaseResponse {
 }
 
 @JsonSerializable()
+class InsertRecipeResponse {
+  @JsonKey(name: "TotalReci")
+  int? TotalReci;
+  @JsonKey(name: "usedReci")
+  int? usedReci;
+  @JsonKey(name: "remainReci")
+  int? remainReci;
+
+  InsertRecipeResponse(
+      this.TotalReci, this.usedReci, this.remainReci); // from json
+  factory InsertRecipeResponse.fromJson(Map<String, dynamic> json) =>
+      _$InsertRecipeResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$InsertRecipeResponseToJson(this);
+}
+@JsonSerializable()
+class InsertRecipeBaseResponse extends BaseResponse {
+  @JsonKey(name: "Reci Data")
+  InsertRecipeResponse? data;
+  InsertRecipeBaseResponse(this.data);
+  // from json
+  factory InsertRecipeBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$InsertRecipeBaseResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$InsertRecipeBaseResponseToJson(this);
+}
+@JsonSerializable()
 class CheckResponse {
   @JsonKey(name: "id")
   String? id;
@@ -280,6 +307,13 @@ class TokenResponse {
   String? otherStartDate;
   @JsonKey(name: "otherEndDate", defaultValue: "-9")
   String? otherEndDate;
+
+  @JsonKey(name: "TotalReci")
+  int? totalReci;
+  @JsonKey(name: "usedReci")
+  int? usedReci;
+  @JsonKey(name: "remainReci")
+  int? remainReci;
   TokenResponse(
       this.token,
       this.cityId,
@@ -1394,6 +1428,8 @@ class InventoryResponseBaseResponse extends BaseResponse {
 
 @JsonSerializable()
 class RepInfoResponse {
+  @JsonKey(name: "repType")
+  String? repType;
   @JsonKey(name: "id")
   String? id;
   @JsonKey(name: "name")

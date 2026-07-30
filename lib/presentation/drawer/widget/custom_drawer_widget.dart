@@ -34,7 +34,10 @@ class CustomAppDrawer extends StatelessWidget {
                 ...menuItems.map((item) => _buildListTile(context, item)),
                 const Divider(color: Colors.black12, thickness: 0.5),
 
-                ...getLogoutItem(context).map((item) => _buildListTile(context, item)),
+                if (UserInfo.repType.i == 6 || UserInfo.repType.i == 7)
+                  ...getLogoutItem(context).map((item) => _buildListTile(context, item))
+                else
+                  ...getAdminLogoutItem(context).map((item) => _buildListTile(context, item)),
 
                 _buildVersionInfo(), // إضافة معلومات الإصدار هنا
               ],
@@ -48,7 +51,7 @@ class CustomAppDrawer extends StatelessWidget {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(top: 50.h, bottom: 10.h),
+      padding: EdgeInsets.only(top: 50.h, bottom: 12.h, left: 16.w, right: 16.w),
       decoration: BoxDecoration(
         color: ColorManager.medicalBg,
         border: const Border(bottom: BorderSide(color: Colors.black12)),
@@ -57,19 +60,62 @@ class CustomAppDrawer extends StatelessWidget {
         children: [
           _buildAvatar(),
           SizedBox(height: 12.h),
-          Text(UserInfo.name ?? "",
-              style: TextStyle(
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.secondaryColor1)),
-          Text("$roleTitle _ ${UserInfo.cityTitle}",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey[700])),
-          if (showStats) _buildStatsSection(),
+          Text(
+            UserInfo.name ?? "",
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: ColorManager.secondaryColor1,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            "$roleTitle _ ${UserInfo.cityTitle ?? ''}",
+            style: TextStyle(fontSize: 13.sp, color: Colors.grey[700]),
+          ),
+
+          SizedBox(height: 10.h),
+
+          // 🟢 إضافة شريحة عدد الوصفات المنجزة
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+            decoration: BoxDecoration(
+              color: ColorManager.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(
+                color: ColorManager.primary1.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  size: 16.sp,
+                  color: ColorManager.primary1,
+                ),
+                SizedBox(width: 6.w),
+                Text(
+                  "الوصفات المنجزة: ${UserInfo.usedReci ?? 0}",
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                    color: ColorManager.primary1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          if (showStats) ...[
+            SizedBox(height: 12.h),
+            _buildStatsSection(),
+          ],
         ],
       ),
     );
   }
-
   Widget _buildAvatar() {
     return Container(
       width: 80.w,

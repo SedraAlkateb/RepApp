@@ -13,9 +13,10 @@ class AllReportVisitDoctorEvent extends ReportVisitDoctorEvent {
 class WhoAllReadEvent extends ReportVisitDoctorEvent {
   final String visitId;
   final String visitType;
+  final int repType;
   @override
-  WhoAllReadEvent(this.visitId,this.visitType);
-  List<Object?> get props => [visitId,visitType];
+  WhoAllReadEvent(this.visitId,this.visitType,this.repType);
+  List<Object?> get props => [visitId,visitType,repType];
 }
 class AllReportVisitHospitalEvent extends ReportVisitDoctorEvent {
   final VisitRepSen visitRepSen;

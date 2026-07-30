@@ -69,6 +69,7 @@ import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
 import 'package:domina_app/domain/usecase/doctor_info_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
+import 'package:domina_app/domain/usecase/edit_recipe_usecase.dart';
 import 'package:domina_app/domain/usecase/finished_plans_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
 import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
@@ -95,6 +96,7 @@ import 'package:domina_app/domain/usecase/inventory_usecase.dart';
 import 'package:domina_app/domain/usecase/is_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
+import 'package:domina_app/domain/usecase/no_visit_hos_usecase.dart';
 import 'package:domina_app/domain/usecase/num_doc_has_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/pharmacy_order_usecase%20.dart';
@@ -107,6 +109,7 @@ import 'package:domina_app/domain/usecase/search_doctors_usecase.dart';
 import 'package:domina_app/domain/usecase/senior_by_cityid_usecase.dart';
 import 'package:domina_app/domain/usecase/sp_hospital_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/team_leader_and_city_usecase.dart';
+import 'package:domina_app/domain/usecase/unfinished_visit_hos_usecase.dart';
 import 'package:domina_app/domain/usecase/update_active_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/update_doctor_usecase.dart';
@@ -118,6 +121,7 @@ import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/update_rep_plan_brand_amount.dart';
 import 'package:domina_app/domain/usecase/update_save_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_doctor_usecase.dart';
+import 'package:domina_app/domain/usecase/visit_hos_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_read_status.dart';
@@ -154,255 +158,100 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get_it/get_it.dart';
 
 import '../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
+
 GetIt instance = GetIt.instance;
 Future<void> initAppModule() async {
-
-
-  // ==========================
-  // Crashlytics
-  // ==========================
-
-
-  if(!instance.isRegistered<FirebaseCrashlytics>()){
-
-
+  if (!instance.isRegistered<FirebaseCrashlytics>()) {
     instance.registerLazySingleton<FirebaseCrashlytics>(
-          () =>
-      FirebaseCrashlytics.instance,
+      () => FirebaseCrashlytics.instance,
     );
-
-
   }
 
-
-
-  if(!instance.isRegistered<CrashlyticsService>()){
-
-
+  if (!instance.isRegistered<CrashlyticsService>()) {
     instance.registerLazySingleton<CrashlyticsService>(
-
-          () =>
-          FirebaseCrashlyticsService(
-
-            instance<FirebaseCrashlytics>(),
-
-          ),
-
+      () => FirebaseCrashlyticsService(
+        instance<FirebaseCrashlytics>(),
+      ),
     );
-
-
   }
 
-
-
-  if(!instance.isRegistered<ErrorReporter>()){
-
-
+  if (!instance.isRegistered<ErrorReporter>()) {
     instance.registerLazySingleton<ErrorReporter>(
-
-          () =>
-          ErrorReporter(
-
-            instance<CrashlyticsService>(),
-
-          ),
-
+      () => ErrorReporter(
+        instance<CrashlyticsService>(),
+      ),
     );
-
-
   }
-
-
-
-
 
   // ==========================
   // Analytics
   // ==========================
 
-
-  if(!instance.isRegistered<FirebaseAnalytics>()){
-
-
+  if (!instance.isRegistered<FirebaseAnalytics>()) {
     instance.registerLazySingleton<FirebaseAnalytics>(
-
-          () =>
-      FirebaseAnalytics.instance,
-
+      () => FirebaseAnalytics.instance,
     );
-
-
   }
 
-
-
-
-  if(!instance.isRegistered<AnalyticsService>()){
-
-
+  if (!instance.isRegistered<AnalyticsService>()) {
     instance.registerLazySingleton<AnalyticsService>(
-
-          () =>
-          FirebaseAnalyticsService(
-
-            instance<FirebaseAnalytics>(),
-
-          ),
-
+      () => FirebaseAnalyticsService(
+        instance<FirebaseAnalytics>(),
+      ),
     );
-
-
   }
-
-
-
-
 
   // ==========================
   // Network
   // ==========================
 
-
   instance.registerLazySingleton<NetworkInfo>(
-
-        () =>
-        NetworkInfoImpl(
-          Connectivity(),
-        ),
-
+    () => NetworkInfoImpl(
+      Connectivity(),
+    ),
   );
-
-
-
-
 
   instance.registerLazySingleton<DioFactory>(
-
-        () =>
-        DioFactory(
-
-          instance<CrashlyticsService>(),
-
-        ),
-
+    () => DioFactory(
+      instance<CrashlyticsService>(),
+    ),
   );
 
-
-
-
-  Dio dio =
-  await instance<DioFactory>()
-      .getDio();
-
-
-
-
+  Dio dio = await instance<DioFactory>().getDio();
 
   instance.registerLazySingleton<AppServiceClient>(
-
-        () =>
-        AppServiceClient(
-            dio
-        ),
-
+    () => AppServiceClient(dio),
   );
-
-
-
-
 
   instance.registerLazySingleton<RemoteDataSource>(
-
-        () =>
-        RemoteDataSourceImpl(
-            instance<AppServiceClient>()
-        ),
-
+    () => RemoteDataSourceImpl(instance<AppServiceClient>()),
   );
 
-
-
-
-
-
-  DatabaseHelper databaseHelper =
-  DatabaseHelper();
-
-
-
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   instance.registerLazySingleton<AppSqlApi>(
-
-        () =>
-        AppSqlApi(
-            databaseHelper
-        ),
-
+    () => AppSqlApi(databaseHelper),
   );
 
-
-
-  await instance<AppSqlApi>()
-      .initializeDatabase();
-
-
-
-
-
+  await instance<AppSqlApi>().initializeDatabase();
 
   instance.registerLazySingleton<ExcRepository>(
-
-        () =>
-        ExcRepository(
-            instance()
-        ),
-
+    () => ExcRepository(instance()),
   );
-
-
-
-
 
   instance.registerLazySingleton<RepositorySql>(
-
-        () =>
-        RepositroySqlImp(
-            instance(),
-            instance()
-        ),
-
+    () => RepositroySqlImp(instance(), instance()),
   );
-
-
-
-
 
   instance.registerLazySingleton<Repository>(
-
-        () =>
-        RepositoryImp(
-            instance(),
-            instance(),
-            instance()
-        ),
-
+    () => RepositoryImp(instance(), instance(), instance()),
   );
-
-
-
-
 
   instance.registerLazySingleton<InsertExceptionSqlUsecase>(
-
-        () =>
-        InsertExceptionSqlUsecase(
-            instance()
-        ),
-
+    () => InsertExceptionSqlUsecase(instance()),
   );
-
-
 }
+
 Future<void> initAsyncModule() async {
   if (!GetIt.I.isRegistered<AsyncBloc>()) {
     // instance.registerFactory<AllPharmacyUsecase>(
@@ -430,7 +279,7 @@ Future<void> initAsyncModule() async {
         () => AsyncDataSqlUsecase(instance()));
     if (!GetIt.I.isRegistered<AllHospialSpUsecase>()) {
       instance.registerFactory<AllHospialSpUsecase>(
-              () => AllHospialSpUsecase(instance()));
+          () => AllHospialSpUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<EditIsLoginSqlUsecase>()) {
       instance.registerFactory<EditIsLoginSqlUsecase>(
@@ -443,11 +292,12 @@ Future<void> initAsyncModule() async {
     instance.registerFactory<AllBrandsSpUsecase>(
         () => AllBrandsSpUsecase(instance()));
     if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
-      instance.registerFactory<AllPlanBrandsUsecase>(() => AllPlanBrandsUsecase(instance()));
+      instance.registerFactory<AllPlanBrandsUsecase>(
+          () => AllPlanBrandsUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<CheckActiveBrandPlanUsecase>()) {
       instance.registerFactory<CheckActiveBrandPlanUsecase>(
-              () => CheckActiveBrandPlanUsecase(instance()));
+          () => CheckActiveBrandPlanUsecase(instance()));
     }
 
     instance.registerFactory<UpdateActiveSqlUsecase>(
@@ -486,25 +336,25 @@ Future<void> initLoginModule() async {
     //  instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
 
     instance.registerFactory<AuthBloc>(
-          () => AuthBloc(
+      () => AuthBloc(
         instance(),
         instance(),
       ),
-    );  }
+    );
+  }
 }
 
 Future<void> initPlaceVisitModule() async {
   if (!GetIt.I.isRegistered<DoctorsByPlaceUsecase>()) {
     //  instance.registerFactory<PharmaciesByPlaceUsecase>(() =>PharmaciesByPlaceUsecase(instance()));
     instance.registerFactory<DoctorsByPlaceUsecase>(
-        () => DoctorsByPlaceUsecase(instance()));}
+        () => DoctorsByPlaceUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<HospitalsByPlaceUsecase>()) {
-
     instance.registerFactory<HospitalsByPlaceUsecase>(
         () => HospitalsByPlaceUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<InsertVisitHospitalSqlUsecase>()) {
-
     instance.registerFactory<AllBrandsFlagSqlUsecase>(
         () => AllBrandsFlagSqlUsecase(instance()));
     instance.registerFactory<InsertVisitDoctorSqlUsecase>(
@@ -538,11 +388,11 @@ Future<void> initPlacesModule() async {
   if (!GetIt.I.isRegistered<DoctorsByPlaceUsecase>()) {
     //  instance.registerFactory<PharmaciesByPlaceUsecase>(() =>PharmaciesByPlaceUsecase(instance()));
     instance.registerFactory<DoctorsByPlaceUsecase>(
-            () => DoctorsByPlaceUsecase(instance()));}
+        () => DoctorsByPlaceUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<HospitalsByPlaceUsecase>()) {
-
     instance.registerFactory<HospitalsByPlaceUsecase>(
-            () => HospitalsByPlaceUsecase(instance()));
+        () => HospitalsByPlaceUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<AllPlacesSqlUsecase>()) {
     instance.registerFactory<AllPlacesSqlUsecase>(
@@ -550,11 +400,11 @@ Future<void> initPlacesModule() async {
     instance.registerFactory<NumVisitSqlUsecase>(
         () => NumVisitSqlUsecase(instance()));
     instance.registerFactory<NumDocHasSqlUsecase>(
-            () => NumDocHasSqlUsecase(instance()));
+        () => NumDocHasSqlUsecase(instance()));
     instance
         .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
-    instance.registerFactory<PlaceBloc>(
-        () => PlaceBloc(instance(), instance(), instance(), instance(), instance(), instance()));
+    instance.registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance(),
+        instance(), instance(), instance(), instance()));
   }
 }
 
@@ -605,22 +455,32 @@ Future<void> initBrandRecModule() async {
     instance.registerFactory<InsertReciUsecase>(
         () => InsertReciUsecase(instance()));
     instance.registerFactory<UpdateReciUsecase>(
-            () => UpdateReciUsecase(instance()));
+        () => UpdateReciUsecase(instance()));
     instance.registerFactory<AllBrandsResUsecase>(
         () => AllBrandsResUsecase(instance()));
     instance
         .registerFactory<CopyReciUsecase>(() => CopyReciUsecase(instance()));
     /////////////
     if (!GetIt.I.isRegistered<AllReciUsecase>()) {
-      instance.registerFactory<AllReciUsecase>(
-              () => AllReciUsecase(instance()));
+      instance
+          .registerFactory<AllReciUsecase>(() => AllReciUsecase(instance()));
       instance.registerFactory<GetRepReciUsecase>(
-              () => GetRepReciUsecase(instance()));
+          () => GetRepReciUsecase(instance()));
     }
 
     instance.registerFactory<ReciNumUsecase>(() => ReciNumUsecase(instance()));
-    instance.registerFactory<RecipesBrandBloc>(
-        () => RecipesBrandBloc(instance(), instance(), instance(), instance(), instance(), instance(), instance()));
+    instance.registerFactory<EditRecipeUsecase>(
+        () => EditRecipeUsecase(instance()));
+
+    instance.registerFactory<RecipesBrandBloc>(() => RecipesBrandBloc(
+        instance(),
+        instance(),
+        instance(),
+        instance(),
+        instance(),
+        instance(),
+        instance(),
+        instance()));
   }
 }
 
@@ -657,8 +517,8 @@ Future<void> initAsyncInModule() async {
     instance
         .registerFactory<IsPlanSqlUsecase>(() => IsPlanSqlUsecase(instance()));
     if (!GetIt.I.isRegistered<PlanBrandUsecase>()) {
-      instance
-          .registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
+      instance.registerFactory<PlanBrandUsecase>(
+          () => PlanBrandUsecase(instance()));
     }
 
     instance.registerFactory<UpdateFlagDoctorSqlUsecase>(
@@ -672,9 +532,8 @@ Future<void> initAsyncInModule() async {
     // }
     if (!GetIt.I.isRegistered<CheckActiveBrandPlanUsecase>()) {
       instance.registerFactory<CheckActiveBrandPlanUsecase>(
-              () => CheckActiveBrandPlanUsecase(instance()));
+          () => CheckActiveBrandPlanUsecase(instance()));
     }
-
 
     instance.registerFactory<AsyncInBloc>(() => AsyncInBloc(
         instance(),
@@ -694,7 +553,7 @@ Future<void> initAsyncInModule() async {
         instance(),
         instance(),
         instance(),
-         instance()));
+        instance()));
   }
 }
 
@@ -703,7 +562,6 @@ Future<void> initDeleteModule() async {
     instance.registerFactory<DeleteAllSqlUsecase>(
         () => DeleteAllSqlUsecase(instance()));
   }
-
 
   if (!GetIt.I.isRegistered<EditIsLoginSqlUsecase>()) {
     instance.registerFactory<EditIsLoginSqlUsecase>(
@@ -720,6 +578,14 @@ Future<void> initDeleteModule() async {
 }
 
 Future<void> initDoctorAndHospitalModule() async {
+  if (!GetIt.I.isRegistered<AllHospialSpUsecase>()) {
+    instance.registerFactory<AllHospialSpUsecase>(
+        () => AllHospialSpUsecase(instance()));
+  }
+  if (!GetIt.I.isRegistered<AllDoctorUsecase>()) {
+    instance
+        .registerFactory<AllDoctorUsecase>(() => AllDoctorUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<AllDoctorsSqlUsecase>()) {
     instance.registerFactory<AllDoctorsSqlUsecase>(
         () => AllDoctorsSqlUsecase(instance()));
@@ -728,9 +594,9 @@ Future<void> initDoctorAndHospitalModule() async {
           () => CheckReciUsecase(instance()));
     }
     instance.registerFactory<AllHospitalSpNSqlUsecase>(
-            () => AllHospitalSpNSqlUsecase(instance()));
-    instance.registerFactory<DoctorsBloc>(
-        () => DoctorsBloc(instance(), instance(), instance()));
+        () => AllHospitalSpNSqlUsecase(instance()));
+    instance.registerFactory<DoctorsBloc>(() => DoctorsBloc(
+        instance(), instance(), instance(), instance(), instance()));
   }
 }
 
@@ -738,26 +604,25 @@ Future<void> initCurrentPlanModule() async {
   if (!GetIt.I.isRegistered<PlanManagementBloc>()) {
     if (!GetIt.I.isRegistered<RepPlanBrandSpUsecase>()) {
       instance.registerFactory<RepPlanBrandSpUsecase>(
-              () => RepPlanBrandSpUsecase(instance()));
+          () => RepPlanBrandSpUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<PlanBrandUsecase>()) {
-      instance
-          .registerFactory<PlanBrandUsecase>(() => PlanBrandUsecase(instance()));
+      instance.registerFactory<PlanBrandUsecase>(
+          () => PlanBrandUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<CheckActiveBrandPlanUsecase>()) {
-      instance
-          .registerFactory<CheckActiveBrandPlanUsecase>(() => CheckActiveBrandPlanUsecase(instance()));
+      instance.registerFactory<CheckActiveBrandPlanUsecase>(
+          () => CheckActiveBrandPlanUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<GetInfoPlanBrandsUsecase>()) {
-      instance
-          .registerFactory<GetInfoPlanBrandsUsecase>(() => GetInfoPlanBrandsUsecase(instance()));
+      instance.registerFactory<GetInfoPlanBrandsUsecase>(
+          () => GetInfoPlanBrandsUsecase(instance()));
     }
 
-    instance.registerFactory<PlanManagementBloc>(
-            () => PlanManagementBloc(instance(),instance(),instance(),instance()));
+    instance.registerFactory<PlanManagementBloc>(() =>
+        PlanManagementBloc(instance(), instance(), instance(), instance()));
   }
 }
-
 
 Future<void> initBrandModule() async {
   if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
@@ -812,8 +677,8 @@ Future<void> initSeniorProfModule() async {
         .registerFactory<AllDoctorUsecase>(() => AllDoctorUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<RemainingVisitsUsecase>()) {
-    instance
-        .registerFactory<RemainingVisitsUsecase>(() => RemainingVisitsUsecase(instance()));
+    instance.registerFactory<RemainingVisitsUsecase>(
+        () => RemainingVisitsUsecase(instance()));
   }
 
   if (!GetIt.I.isRegistered<AllNoVisitDoctorUsecase>()) {
@@ -822,16 +687,21 @@ Future<void> initSeniorProfModule() async {
     instance.registerFactory<AllSenVisitDoctorUsecase>(
         () => AllSenVisitDoctorUsecase(instance()));
     instance.registerFactory<InfoRepUsecase>(() => InfoRepUsecase(instance()));
+    instance.registerFactory<NoVisitHosUsecase>(
+        () => NoVisitHosUsecase(instance()));
+    instance
+        .registerFactory<VisitHosUsecase>(() => VisitHosUsecase(instance()));
+    instance.registerFactory<UnfinishedVisitHosUsecase>(
+        () => UnfinishedVisitHosUsecase(instance()));
     if (!GetIt.I.isRegistered<AllBrandsUsecase>()) {
       instance.registerFactory<AllBrandsUsecase>(
           () => AllBrandsUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<AllReciUsecase>()) {
-      instance.registerFactory<AllReciUsecase>(
-              () => AllReciUsecase(instance()));
+      instance
+          .registerFactory<AllReciUsecase>(() => AllReciUsecase(instance()));
       instance.registerFactory<GetRepReciUsecase>(
-              () => GetRepReciUsecase(instance()));
-
+          () => GetRepReciUsecase(instance()));
     }
 
     if (!GetIt.I.isRegistered<SeniorProfBloc>()) {
@@ -843,7 +713,10 @@ Future<void> initSeniorProfModule() async {
           instance(),
           instance(),
           instance(),
-                instance(),
+          instance(),
+          instance(),
+          instance(),
+          instance(),
           instance(),
           instance(),
           instance()));
@@ -888,9 +761,10 @@ Future<void> initSeniorReportInventoryModule() async {
 
 Future<void> initActivePlanModule() async {
   if (!GetIt.I.isRegistered<ActivePlanBloc>()) {
-  if (!GetIt.I.isRegistered<GetInfoPlanBrandsUsecase>()) {
-    instance.registerFactory<GetInfoPlanBrandsUsecase>(
-        () => GetInfoPlanBrandsUsecase(instance()));}
+    if (!GetIt.I.isRegistered<GetInfoPlanBrandsUsecase>()) {
+      instance.registerFactory<GetInfoPlanBrandsUsecase>(
+          () => GetInfoPlanBrandsUsecase(instance()));
+    }
     instance.registerFactory<ActivePlanBloc>(() => ActivePlanBloc(instance()));
   }
 }
@@ -898,13 +772,13 @@ Future<void> initActivePlanModule() async {
 Future<void> initReportVisitDoctorModule() async {
   if (!GetIt.I.isRegistered<AllVisitDoctorRepSenUsecase>()) {
     instance.registerFactory<AllVisitDoctorRepSenUsecase>(
-            () => AllVisitDoctorRepSenUsecase(instance()));
+        () => AllVisitDoctorRepSenUsecase(instance()));
     instance.registerFactory<AllReadSenUsecase>(
-            () => AllReadSenUsecase(instance()));
+        () => AllReadSenUsecase(instance()));
     instance
         .registerFactory<ReadVisitUsecase>(() => ReadVisitUsecase(instance()));
     instance.registerFactory<AllVisitHospitalRepSenUsecase>(
-            () => AllVisitHospitalRepSenUsecase(instance()));
+        () => AllVisitHospitalRepSenUsecase(instance()));
     instance
         .registerFactory<VisitReadStatus>(() => VisitReadStatus(instance()));
     instance.registerFactory<ReportVisitDoctorBloc>(() => ReportVisitDoctorBloc(
@@ -919,119 +793,122 @@ Future<void> iniFutureModule() async {
 
   if (!GetIt.I.isRegistered<RepPlanBrandSpUsecase>()) {
     instance.registerFactory<RepPlanBrandSpUsecase>(
-            () => RepPlanBrandSpUsecase(instance()));
+        () => RepPlanBrandSpUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<UpdateRepPlanBrandAmount>()) {
     instance.registerFactory<UpdateRepPlanBrandAmount>(
-            () => UpdateRepPlanBrandAmount(instance()));
+        () => UpdateRepPlanBrandAmount(instance()));
   }
   if (!GetIt.I.isRegistered<ChangeRepPlanStatus>()) {
     instance.registerFactory<ChangeRepPlanStatus>(
-            () => ChangeRepPlanStatus(instance()));
+        () => ChangeRepPlanStatus(instance()));
   }
   if (!GetIt.I.isRegistered<FutureRepBloc>()) {
     instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(
-      instance(),
-      instance(),
-      instance(),
-      instance(),
-    ));
+          instance(),
+          instance(),
+          instance(),
+          instance(),
+        ));
   }
 }
+
 Future<void> iniEditBrandPlanModule() async {
   if (!GetIt.I.isRegistered<AllPlanBrandsUsecase>()) {
     instance.registerFactory<AllPlanBrandsUsecase>(
-            () => AllPlanBrandsUsecase(instance()));
+        () => AllPlanBrandsUsecase(instance()));
   }
 
   if (!GetIt.I.isRegistered<AllPlanBrandsTypeUsecase>()) {
     instance.registerFactory<AllPlanBrandsTypeUsecase>(
-            () => AllPlanBrandsTypeUsecase(instance()));
+        () => AllPlanBrandsTypeUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<ChangePlanBrandTypeUsecase>()) {
     instance.registerFactory<ChangePlanBrandTypeUsecase>(
-            () => ChangePlanBrandTypeUsecase(instance()));
+        () => ChangePlanBrandTypeUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<ChangeRepPlanStatus>()) {
     instance.registerFactory<ChangeRepPlanStatus>(
-            () => ChangeRepPlanStatus(instance()));
+        () => ChangeRepPlanStatus(instance()));
   }
   if (!GetIt.I.isRegistered<EditBrandPlanBloc>()) {
     instance.registerFactory<EditBrandPlanBloc>(() => EditBrandPlanBloc(
-      instance(),
-      instance(),
-      instance(),
-    ));
+          instance(),
+          instance(),
+          instance(),
+        ));
   }
 }
+
 Future<void> iniSearchDoctorsModule() async {
   if (!GetIt.I.isRegistered<SearchDoctorsUsecase>()) {
     instance.registerFactory<SearchDoctorsUsecase>(
-            () => SearchDoctorsUsecase(instance()));
+        () => SearchDoctorsUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<DocDoctorsUseCase>()) {
     instance.registerFactory<DocDoctorsUseCase>(
-            () => DocDoctorsUseCase(instance()));
+        () => DocDoctorsUseCase(instance()));
   }
 
   if (!GetIt.I.isRegistered<DoctorInfoUsecase>()) {
     instance.registerFactory<DoctorInfoUsecase>(
-            () => DoctorInfoUsecase(instance()));
+        () => DoctorInfoUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<AllSearchHosNoteUsecase>()) {
     instance.registerFactory<AllSearchHosNoteUsecase>(
-            () => AllSearchHosNoteUsecase(instance()));
+        () => AllSearchHosNoteUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<AllSearchHosUsecase>()) {
     instance.registerFactory<AllSearchHosUsecase>(
-            () => AllSearchHosUsecase(instance()));
+        () => AllSearchHosUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<SearchDoctorsBloc>()) {
-    instance.registerFactory<SearchDoctorsBloc>(
-            () => SearchDoctorsBloc(instance(), instance(), instance(), instance(), instance()));
+    instance.registerFactory<SearchDoctorsBloc>(() => SearchDoctorsBloc(
+        instance(), instance(), instance(), instance(), instance()));
   }
 }
+
 Future<void> initOrderBradModule() async {
   if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
     instance.registerFactory<AllBrandsSqlUsecase>(
-            () => AllBrandsSqlUsecase(instance()));}
+        () => AllBrandsSqlUsecase(instance()));
+  }
   if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
     instance.registerFactory<PharmacyOrderUsecase>(
-            () => PharmacyOrderUsecase(instance()));
+        () => PharmacyOrderUsecase(instance()));
 
-    instance.registerFactory<OrderBloc>(
-            () => OrderBloc(instance(), instance()));
+    instance
+        .registerFactory<OrderBloc>(() => OrderBloc(instance(), instance()));
   }
 }
-
-
 
 Future<void> initGeneralReportsModule() async {
-
   if (!GetIt.I.isRegistered<TeamLeaderAndCityUsecase>()) {
     instance.registerFactory<TeamLeaderAndCityUsecase>(
-            () => TeamLeaderAndCityUsecase(instance()));
+        () => TeamLeaderAndCityUsecase(instance()));
     instance.registerFactory<GeneralReportsBloc>(
-            () => GeneralReportsBloc(instance(), instance()));
+        () => GeneralReportsBloc(instance(), instance()));
     instance.registerFactory<SeniorByCityIdUsecase>(
-            () => SeniorByCityIdUsecase(instance()));
+        () => SeniorByCityIdUsecase(instance()));
   }
 }
-
 
 Future<void> initSeniorManageFutureModule() async {
   if (!GetIt.I.isRegistered<AllRepsFutureUsecase>()) {
     instance.registerFactory<AllRepsFutureUsecase>(
-            () => AllRepsFutureUsecase(instance()));
+        () => AllRepsFutureUsecase(instance()));
     if (!GetIt.I.isRegistered<ChangeRepPlanStatus>()) {
       instance.registerFactory<ChangeRepPlanStatus>(
-              () => ChangeRepPlanStatus(instance()));
+          () => ChangeRepPlanStatus(instance()));
     }
-    instance
-        .registerFactory<ManageFutureBloc>(() => ManageFutureBloc(instance(),instance()));
+    if (!GetIt.I.isRegistered<AllPlaceUsecase>()) {
+      instance.registerFactory<AllPlaceUsecase>(
+              () => AllPlaceUsecase(instance()));
+    }
+    instance.registerFactory<ManageFutureBloc>(
+        () => ManageFutureBloc(instance(), instance(), instance()));
   }
 }
-
 
 Future<void> iniAllCityModule() async {
   if (!GetIt.I.isRegistered<AllCityUsecase>()) {
@@ -1039,13 +916,16 @@ Future<void> iniAllCityModule() async {
     instance.registerFactory<AllCityBloc>(() => AllCityBloc(instance()));
   }
 }
+
 Future<void> initFinishedPlan() async {
   if (!GetIt.I.isRegistered<FinishedPlansUsecase>()) {
-    instance.registerFactory<FinishedPlansUsecase>(() => FinishedPlansUsecase(instance()));
-    instance.registerFactory<GetPanRepsUsecase>(() => GetPanRepsUsecase(instance()));
-
+    instance.registerFactory<FinishedPlansUsecase>(
+        () => FinishedPlansUsecase(instance()));
+    instance.registerFactory<GetPanRepsUsecase>(
+        () => GetPanRepsUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<FinishedPlanBloc>()) {
-    instance.registerFactory<FinishedPlanBloc>(() => FinishedPlanBloc(instance(),instance()));
+    instance.registerFactory<FinishedPlanBloc>(
+        () => FinishedPlanBloc(instance(), instance()));
   }
 }

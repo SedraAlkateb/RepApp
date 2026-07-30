@@ -287,7 +287,8 @@ class ReportVisitHospital extends StatelessWidget {
                             icon: Icons.visibility,
                             onPressed: () {
                               whoReadDialog(context, BlocProvider.of<ReportVisitDoctorBloc>(context));
-                              BlocProvider.of<ReportVisitDoctorBloc>(context).add(WhoAllReadEvent(doctorNoteModel.visitId, "2"));
+                              BlocProvider.of<ReportVisitDoctorBloc>(context)
+                                  .add(WhoAllReadEvent(doctorNoteModel.visitId, "1",UserInfo.repType.i));
                             },
                           ),
                           SizedBox(width: 8.w),

@@ -6,8 +6,8 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-class SenVisitDoctor extends StatelessWidget {
-  SenVisitDoctor({super.key});
+class SenVisitHospital extends StatelessWidget {
+  SenVisitHospital({super.key});
   final TextEditingController searchteDoctorController = TextEditingController();
 
   @override

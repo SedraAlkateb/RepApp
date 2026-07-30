@@ -10,6 +10,12 @@ import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_v
 import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/page/report_visit_hospital.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
+import 'package:domina_app/presentation/senior/representative/page/no_visit_hos.dart';
+import 'package:domina_app/presentation/senior/representative/page/remaining_visits.dart';
+import 'package:domina_app/presentation/senior/representative/page/remaining_visits_hos.dart';
+import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
+import 'package:domina_app/presentation/senior/representative/page/sen_visit_hospital.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,8 +94,8 @@ class RepProfile extends StatelessWidget {
                             SizedBox(height: 25.h),
                             _buildQuickActions(context),
                             SizedBox(height: 30.h),
-                            _buildDetailsList(
-                                context, rep, currentRepName, currentRepPlan,rep.mobile),
+                            _buildDetailsList(context, rep, currentRepName,
+                                currentRepPlan, rep.mobile),
                             SizedBox(height: 25.h),
                             _buildCoverageSection(context),
                             SizedBox(height: 50.h),
@@ -199,7 +205,8 @@ class RepProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsGrid(InfoRep rep) { // تم استبدال dynamic بنوع الكلاس الصريح للـ Clean Code
+  Widget _buildStatsGrid(InfoRep rep) {
+    // تم استبدال dynamic بنوع الكلاس الصريح للـ Clean Code
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: GridView.count(
@@ -208,23 +215,31 @@ class RepProfile extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 15.h,
         crossAxisSpacing: 15.w,
-        childAspectRatio: 1.25, // تعديل بسيط ليعطي مساحة رأسية مريحة للعناوين الطويلة
+        childAspectRatio:
+            1.25, // تعديل بسيط ليعطي مساحة رأسية مريحة للعناوين الطويلة
         children: [
           // الكروت الأساسية السابقة
-          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(), const Color(0xFF1F4E79)),
+          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
+              const Color(0xFF1F4E79)),
           _buildStatCard("الوصفات", rep.recipesCount, const Color(0xFF8E44AD)),
 
           // زيارات الأطباء (المحققة والمتبقية)
-          _buildStatCard("زيارات الأطباء المحققة", rep.visitDonDoc, const Color(0xFF2D947A)),
-          _buildStatCard("زيارات الأطباء المتبقية", rep.totDocVisit, const Color(0xFFE67E22)),
+          _buildStatCard("زيارات الأطباء المحققة", rep.visitDonDoc,
+              const Color(0xFF2D947A)),
+          _buildStatCard("زيارات الأطباء المتبقية", rep.totDocVisit,
+              const Color(0xFFE67E22)),
 
           // زيارات المشافي (المحققة والمتبقية)
-          _buildStatCard("زيارات المشافي المحققة", rep.visitDonHos, const Color(0xFF2D947A)),
-          _buildStatCard("زيارات المشافي المتبقية", rep.totHosVisit, const Color(0xFFE67E22)),
+          _buildStatCard("زيارات المشافي المحققة", rep.visitDonHos,
+              const Color(0xFF2D947A)),
+          _buildStatCard("زيارات المشافي المتبقية", rep.totHosVisit,
+              const Color(0xFFE67E22)),
 
           // الإجمالي الكلي للمحققة والمتبقية
-          _buildStatCard("إجمالي المحققة", rep.visitDon.toString(), const Color(0xFF1F4E79)),
-          _buildStatCard("إجمالي المتبقية", rep.visitNoteYet.toString(), const Color(0xFFE67E22)),
+          _buildStatCard("إجمالي المحققة", rep.visitDon.toString(),
+              const Color(0xFF1F4E79)),
+          _buildStatCard("إجمالي المتبقية", rep.visitNoteYet.toString(),
+              const Color(0xFFE67E22)),
         ],
       ),
     );
@@ -232,7 +247,9 @@ class RepProfile extends StatelessWidget {
 
   Widget _buildStatCard(String title, String val, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h), // توزيع البادينغ ليتناسب مع النصوص الطويلة
+      padding: EdgeInsets.symmetric(
+          horizontal: 12.w,
+          vertical: 16.h), // توزيع البادينغ ليتناسب مع النصوص الطويلة
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25.r),
@@ -249,7 +266,8 @@ class RepProfile extends StatelessWidget {
         children: [
           Text(
             title,
-            textAlign: TextAlign.center, // لضمان مظهر متناسق إذا انقسم النص على سطرين
+            textAlign:
+                TextAlign.center, // لضمان مظهر متناسق إذا انقسم النص على سطرين
             maxLines: 2, // يسمح بنزول العنوان لسطرين دون حدوث Overflow
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -261,14 +279,13 @@ class RepProfile extends StatelessWidget {
           Text(
             val,
             style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.w900,
-                color: color),
+                fontSize: 22.sp, fontWeight: FontWeight.w900, color: color),
           ),
         ],
       ),
     );
   }
+
   Widget _buildQuickActions(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.w),
@@ -340,28 +357,72 @@ class RepProfile extends StatelessWidget {
   Widget _buildCoverageSection(BuildContext context) {
     return _buildSectionLayout("إحصائيات التغطية", [
       InteractiveActionTile(
-          title: "الأطباء الذين تمت زيارتهم",
+          title: "لزيارات التي تمت مباشرتها",
           icon: Icons.check_circle_outline,
           color: const Color(0xFF2D947A),
           onTap: () {
-            context.read<SeniorProfBloc>().add(VisitDocEvent(id,repPlanId));
-            Navigator.pushNamed(context, Routes.senVisitDoctor);
+            context.read<SeniorProfBloc>().add(VisitDocEvent(id, repPlanId));
+            Navigator.pushNamed(
+              context,
+              Routes.senVisit,
+              arguments: {
+                'onTapDoctor': () => context
+                    .read<SeniorProfBloc>()
+                    .add(VisitDocEvent(id, repPlanId)),
+                'onTapHospital': () => context
+                    .read<SeniorProfBloc>()
+                    .add(VisitHosEvent(id, repPlanId)),
+                'title': "الزيارات التي تمت مباشرتها",
+                'doctor': SenVisitDoctor(),
+                'hospital': SenVisitHospital(),
+              },
+            );
           }),
       InteractiveActionTile(
-          title: "الأطباء الذين لم تتم زيارتهم",
+          title: "الزيارات التي لم تتم بعد",
           icon: Icons.cancel_outlined,
           color: const Color(0xFFE74C3C),
           onTap: () {
-            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id,repPlanId));
-            Navigator.pushNamed(context, Routes.noVisitDoctor);
+            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id, repPlanId));
+            Navigator.pushNamed(
+              context,
+              Routes.senVisit,
+              arguments: {
+                'onTapDoctor': () => context
+                    .read<SeniorProfBloc>()
+                    .add(NoVisitDocEvent(id, repPlanId)),
+                'onTapHospital': () => context
+                    .read<SeniorProfBloc>()
+                    .add(NoVisitHosEvent(id, repPlanId)),
+                'title': "الزيارات التي لم تتم بعد",
+                'doctor': NoVisitDoctor(),
+                'hospital': NoVisitHos(),
+              },
+            );
           }),
       InteractiveActionTile(
-          title: "زيارات الأطباء المتبقية",
+          title: "الزيارات التي تمت ولم تكتمل",
           icon: Icons.hourglass_empty_rounded,
           color: const Color(0xFFF39C12),
           onTap: () {
-            context.read<SeniorProfBloc>().add(RemainingVisitsDocEvent(id,repPlanId));
-            Navigator.pushNamed(context, Routes.remainingVisitsDoctor);
+            context
+                .read<SeniorProfBloc>()
+                .add(RemainingVisitsDocEvent(id, repPlanId));
+            Navigator.pushNamed(
+              context,
+              Routes.senVisit,
+              arguments: {
+                'onTapDoctor': () => context
+                    .read<SeniorProfBloc>()
+                    .add(RemainingVisitsDocEvent(id, repPlanId)),
+                'onTapHospital': () => context
+                    .read<SeniorProfBloc>()
+                    .add(RemainingVisitsHosEvent(id, repPlanId)),
+                'title': "الزيارات التي تمت ولم تكتمل",
+                'doctor': RemainingVisits(),
+                'hospital': RemainingVisitsHos(),
+              },
+            );
           }),
       InteractiveActionTile(
           title: "تقرير توزيع العينات (الجرد)",
@@ -370,7 +431,9 @@ class RepProfile extends StatelessWidget {
           onTap: () {
             initSeniorReportInventoryModule();
             Navigator.push(context, MaterialPageRoute(builder: (c) {
-              context.read<ReportInventoryBloc>().add(SenAllInventoryEvent(id,repPlanId));
+              context
+                  .read<ReportInventoryBloc>()
+                  .add(SenAllInventoryEvent(id, repPlanId));
               return ReportInventory();
             }));
           }),
@@ -378,7 +441,7 @@ class RepProfile extends StatelessWidget {
   }
 
   Widget _buildDetailsList(
-      BuildContext context, dynamic rep, String name, int plan,String phone) {
+      BuildContext context, dynamic rep, String name, int plan, String phone) {
     return _buildSectionLayout("التقارير التفصيلية", [
       InteractiveActionTile(
           title: "تقرير زيارات الأطباء",
@@ -394,7 +457,7 @@ class RepProfile extends StatelessWidget {
                         repId: id,
                         userId: UserInfo.repId,
                         repName: name,
-                        phone:phone,
+                        phone: phone,
                         indexRep: index,
                         repPlan: plan)));
             context.read<ReportVisitDoctorBloc>().add(AllReportVisitDoctorEvent(
@@ -414,7 +477,7 @@ class RepProfile extends StatelessWidget {
                         repId: id,
                         userId: UserInfo.repId,
                         repName: name,
-                        phone:phone,
+                        phone: phone,
                         indexRep: index,
                         repPlan: plan)));
             context.read<ReportVisitDoctorBloc>().add(

@@ -917,6 +917,8 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                           );
+                          BlocProvider.of<RecipesBrandBloc>(context).add(EditeRecNumEvent(state.num));
+
                         } else if (state is InsertRecipesErrorState) {
 
                           error(context, state.failure.massage,

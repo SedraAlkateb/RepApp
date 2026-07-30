@@ -323,7 +323,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                               // دالة من يقرأ
                               whoReadDialog(context,BlocProvider.of<ReportVisitDoctorBloc>(context));
                               BlocProvider.of<ReportVisitDoctorBloc>(context)
-                                  .add(WhoAllReadEvent(doctorNoteModel.visitId, "2"));
+                                  .add(WhoAllReadEvent(doctorNoteModel.visitId, "2",UserInfo.repType.i));
                             },
                           ),
                           SizedBox(width: 8.w),

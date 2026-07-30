@@ -4,11 +4,11 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:equatable/equatable.dart';
-class VisitReadStatus extends Equatable {
+class VisitHosUsecase extends Equatable {
   final  Repository _repository;
-  const VisitReadStatus(this._repository);
-  Future<Either<Failure, List<WhoReadModel>>> execute(String visitId, String visitType,int repType,) async{
-    return await _repository.getVisitReadStatus(visitId,visitType,repType);
+  const VisitHosUsecase(this._repository);
+  Future<Either<Failure, List<NoVisitDocModel>>> execute(int repPlanId) async{
+    return await _repository.visitHos(repPlanId);
   }
 
   @override

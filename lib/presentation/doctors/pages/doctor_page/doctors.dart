@@ -41,7 +41,7 @@ class _DoctorsState extends State<Doctors> {
             List<DoctorModel> doctorModel = context.read<DoctorsBloc>().doctor;
 
             if (state is AllDoctorLoadingState) {
-              return const Center(child: CircularProgressIndicator(color: Colors.blue));
+              return  loadingFullScreen(context);
             }
 
             if (state is AllDoctorErrorState) {

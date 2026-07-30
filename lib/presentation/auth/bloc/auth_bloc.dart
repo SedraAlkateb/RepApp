@@ -1,8 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/analytics/analytics_service.dart';
-import 'package:domina_app/analytics/analytics_events.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/crashlytics/crashlytics_service.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
@@ -54,7 +51,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               UserInfo.percentage = loginModel!.percentage;
 
               UserInfo.recipesCount = loginModel!.recipesCount;
-
+              UserInfo.totalReci = loginModel!.totalReci;
+              UserInfo.remainReci = loginModel!.remainReci;
+              UserInfo.usedReci = loginModel!.usedReci;
               UserInfo.token = loginModel!.token;
 
               UserInfo.name = loginModel!.name;
@@ -62,8 +61,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               UserInfo.cityId = loginModel!.cityId;
 
               UserInfo.cityTitle = loginModel!.cityTitle;
+              if(loginModel!.repType.i==4||loginModel!.repType.i==5){
+                UserInfo.isLogging = 2;
+              }else{
+                UserInfo.isLogging = 1;
+              }
 
-              UserInfo.isLogging = 1;
+
 
               UserInfo.startDate = data.startDate;
 

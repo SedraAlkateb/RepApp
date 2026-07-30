@@ -1,3 +1,4 @@
+import 'package:domina_app/app/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -6,6 +7,8 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/admin/widget/interactive_admin_card.dart';
 import 'package:domina_app/presentation/senior/admin/widget/square_interactive_card.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
+import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,7 +42,10 @@ class AdminDashboardPage extends StatelessWidget {
           ),
           title: Text(
             'لوحة التحكم الإدارية',
-          style: TextStyle(color: ColorManager.primaryText, fontWeight: FontWeight.bold, fontSize: 20.sp),
+            style: TextStyle(
+                color: ColorManager.primaryText,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.sp),
           ),
         ),
         body: Directionality(
@@ -49,7 +55,8 @@ class AdminDashboardPage extends StatelessWidget {
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -72,70 +79,72 @@ class AdminDashboardPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-
                     InteractiveAdminCard(
                       icon: Icons.bar_chart_rounded,
                       title: 'إدارة تقارير المندوبين',
                       subtitle: 'متابعة أداء المندوبين والزيارات اليومية',
                       iconColor: ColorManager.primaryBlue,
                       onTap: () {
-                        if(UserInfo.repType.i==4||UserInfo.repType.i==5){
-                          Navigator.pushNamed(context, Routes.allCitySupervisor);
-                        }
-                        else{
+                        if (UserInfo.repType.i == 4 ||
+                            UserInfo.repType.i == 5) {
+                          Navigator.pushNamed(
+                              context, Routes.allCitySupervisor);
+                        } else {
                           Navigator.pushNamed(
                             context,
                             Routes.AllRepSenior,
                           );
                         }
-
                       },
                     ),
-                    (UserInfo.repType.i==4||UserInfo.repType.i==5)?
-                    InteractiveAdminCard(
-                      icon: Icons.assignment_outlined,
-                      title: 'إدارة التقارير العامة الخاصة بالسينيور',
-                      subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                      iconColor: Colors.purple,
-                      onTap: () {
+                    (UserInfo.repType.i == 4 || UserInfo.repType.i == 5)
+                        ? InteractiveAdminCard(
+                            icon: Icons.assignment_outlined,
+                            title: 'إدارة التقارير العامة الخاصة بالسينيور',
+                            subtitle:
+                                'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                            iconColor: Colors.purple,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, Routes.allCitySeniors);
+                            },
+                          )
+                        : SizedBox(),
+                    // ( UserInfo.repType.i == 5)?
+                    //  InteractiveAdminCard(
+                    //    icon: Icons.assignment_outlined,
+                    //    title: 'إدارة التقارير العامة الخاصة بالسينيور',
+                    //    subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                    //    iconColor: Colors.purple,
+                    //    onTap: () {
+                    //      initGeneralReportsModule();
+                    //      Navigator.push(context, MaterialPageRoute(
+                    //        builder: (context) => SeniorByCityId(
+                    //          cityname: UserInfo.cityTitle,
+                    //          cityid: UserInfo.cityId,
+                    //        ),
+                    //      ));
+                    //      BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
+                    //    },
+                    //  ):SizedBox(),
 
-                        Navigator.pushNamed(context, Routes.allCitySeniors);
-                      },
-                    ):SizedBox(),
-                   // ( UserInfo.repType.i == 5)?
-                   //  InteractiveAdminCard(
-                   //    icon: Icons.assignment_outlined,
-                   //    title: 'إدارة التقارير العامة الخاصة بالسينيور',
-                   //    subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                   //    iconColor: Colors.purple,
-                   //    onTap: () {
-                   //      initGeneralReportsModule();
-                   //      Navigator.push(context, MaterialPageRoute(
-                   //        builder: (context) => SeniorByCityId(
-                   //          cityname: UserInfo.cityTitle,
-                   //          cityid: UserInfo.cityId,
-                   //        ),
-                   //      ));
-                   //      BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
-                   //    },
-                   //  ):SizedBox(),
-                    UserInfo.repType.i == 4?
-                    InteractiveAdminCard(
-                      icon: Icons.assignment_outlined,
-                      title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
-                      subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                      iconColor: Colors.purple,
-                      onTap: () {
-
-                        Navigator.pushNamed(
-                          context,
-                          Routes.teamLeader,
-
-                        );
-                        BlocProvider.of<GeneralReportsBloc>(context)
-                            .add(const TeamLeaderAndCityEvent());
-                      },
-                    ):SizedBox(),
+                    UserInfo.repType.i == 4
+                        ? InteractiveAdminCard(
+                            icon: Icons.assignment_outlined,
+                            title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
+                            subtitle:
+                                'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                            iconColor: Colors.purple,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.teamLeader,
+                              );
+                              BlocProvider.of<GeneralReportsBloc>(context)
+                                  .add(const TeamLeaderAndCityEvent());
+                            },
+                          )
+                        : SizedBox(),
                     SizedBox(height: 10.h),
                     Row(
                       children: [
@@ -145,9 +154,13 @@ class AdminDashboardPage extends StatelessWidget {
                           subtitle: 'متابعة النشاط',
                           iconColor: Colors.green,
                           onTap: () {
+                            initSeniorProfModule();
+                            context
+                                .read<SeniorProfBloc>()
+                                .add(SenAllPlaceEvent(UserInfo.repId));
                             Navigator.pushNamed(
                               context,
-                              Routes.allRepWithFuture,
+                              Routes.seniorFuturePlaces,
                             );
                           },
                         ),
@@ -157,16 +170,11 @@ class AdminDashboardPage extends StatelessWidget {
                           title: 'الخطط المنتهية',
                           subtitle: 'أرشيف الخطط',
                           iconColor: Colors.grey,
-                          onTap: () { //TODO
-                            UserInfo.repType.i!=4?
+                          onTap: () {
                             Navigator.pushNamed(
-                              context,
-                                Routes.finishedPlan,
-                                arguments:UserInfo.cityId
-                            ):Navigator.pushNamed(
-                                context,
-                                Routes.cityPlan,
-                            );
+                                    context,
+                                    Routes.cityPlan,
+                                  );
                           },
                         ),
                       ],
@@ -178,7 +186,8 @@ class AdminDashboardPage extends StatelessWidget {
               // 3. ملخص الأداء العام (أصبح الآن داخل السكرول)
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
                   child: _buildPerformanceSummaryCard(),
                 ),
               ),

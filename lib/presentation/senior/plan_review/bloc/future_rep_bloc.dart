@@ -30,7 +30,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
       if (event is FutureSpEvent) {
         specialization = [];
         emit(FutureSpRepLoadingState());
-        (await allSpeUsecase.execute(event.id)).fold((failure) {
+        (await allSpeUsecase.execute(event.id,planId: event.planId)).fold((failure) {
           emit(FutureSpRepErrorState(failure: failure));
         }, (data) async {
           planBrandSpSend = [];
