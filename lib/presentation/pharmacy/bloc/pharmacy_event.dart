@@ -2,12 +2,11 @@ part of 'pharmacy_bloc.dart';
 
 @immutable
 sealed class PharmacyEvent extends Equatable {}
-class AllPharmacyEvent extends PharmacyEvent{
 
+class AllPharmacyEvent extends PharmacyEvent {
   @override
   AllPharmacyEvent();
   List<Object?> get props => [];
-
 }
 
 class SearchphEvent extends PharmacyEvent {
@@ -15,7 +14,4 @@ class SearchphEvent extends PharmacyEvent {
   SearchphEvent(this.contant);
   @override
   List<Object?> get props => [contant];
-
-
-
 }

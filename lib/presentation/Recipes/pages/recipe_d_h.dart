@@ -10,7 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class RecipeDH extends StatelessWidget {
   const RecipeDH({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -66,13 +65,14 @@ class RecipeDH extends StatelessWidget {
                           fontWeight: FontWeight.bold, fontSize: 14.sp),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
+                        color:
+                            ColorManager.medicalPrimary, // اللون الأزرق الرئيسي
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       onTap: (value) {
                         if (value == 0) {
-                            BlocProvider.of<DoctorsBloc>(context)
-                                .add(AllDoctorEvent());
+                          BlocProvider.of<DoctorsBloc>(context)
+                              .add(AllDoctorEvent());
                         } else {
                           BlocProvider.of<DoctorsBloc>(context)
                               .add(AllHospitalEvent());
@@ -108,7 +108,8 @@ class RecipeDH extends StatelessWidget {
           },
           // محتوى الصفحات
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),            children: [
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
               Doctors(),
               Hospital(),
             ],

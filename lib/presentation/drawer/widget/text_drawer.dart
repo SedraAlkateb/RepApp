@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+
 class TextDrawer extends StatelessWidget {
-  const TextDrawer({super.key,required this.s1,required this.s2,this.c1,this.c2,this.size1,this.size2
-    , this.textStyle
-  });
+  const TextDrawer(
+      {super.key,
+      required this.s1,
+      required this.s2,
+      this.c1,
+      this.c2,
+      this.size1,
+      this.size2,
+      this.textStyle});
   final String s1;
   final String s2;
-  final   double? size1;
-  final  double? size2;
+  final double? size1;
+  final double? size2;
   final Color? c1;
   final Color? c2;
   final TextStyle? textStyle;
@@ -21,18 +28,16 @@ class TextDrawer extends StatelessWidget {
             textAlign: TextAlign.start,
             softWrap: false,
             maxLines: 3,
-            overflow:
-            TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
             TextSpan(
-              text:
-              s1,
-              style: textStyle!=null?textStyle:Theme.of(context).textTheme.labelLarge,
+              text: s1,
+              style: textStyle != null
+                  ? textStyle
+                  : Theme.of(context).textTheme.labelLarge,
               children: <TextSpan>[
                 TextSpan(
                   text: s2,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ],
             ),

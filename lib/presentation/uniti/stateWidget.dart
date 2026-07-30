@@ -4,18 +4,24 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+
 Widget loadingFullScreen(BuildContext context) {
- return LoadingState(stateRendererType: StateRendererType.fullScreenLoadingState)
-      .getScreenWidget(context, SizedBox(), (){});
+  return LoadingState(
+          stateRendererType: StateRendererType.fullScreenLoadingState)
+      .getScreenWidget(context, SizedBox(), () {});
 }
-Widget errorFullScreen(BuildContext context,{Function? func,String? mes}) {
-  return ErrorState(StateRendererType.fullScreenErrorState, mes??"")
-      .getScreenWidget(context, SizedBox(), func??(){});
+
+Widget errorFullScreen(BuildContext context, {Function? func, String? mes}) {
+  return ErrorState(StateRendererType.fullScreenErrorState, mes ?? "")
+      .getScreenWidget(context, SizedBox(), func ?? () {});
 }
-Widget emptyFullScreen(BuildContext context,{String ? message}) {
-  return ErrorState(StateRendererType.fullScreenEmptyState,message?? "لا يوجد بيانات")
-      .getScreenWidget(context, SizedBox(),(){});
+
+Widget emptyFullScreen(BuildContext context, {String? message}) {
+  return ErrorState(
+          StateRendererType.fullScreenEmptyState, message ?? "لا يوجد بيانات")
+      .getScreenWidget(context, SizedBox(), () {});
 }
+
 Widget loadingShimmer(BuildContext context, int count, double? width,
     double? height, BorderRadiusGeometry? borderRadius) {
   return ListView.builder(
@@ -26,8 +32,8 @@ Widget loadingShimmer(BuildContext context, int count, double? width,
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Container(
-        margin:  EdgeInsets.all(AppPaddingH.p8),
-        padding:  EdgeInsets.all(AppPaddingH.p16),
+        margin: EdgeInsets.all(AppPaddingH.p8),
+        padding: EdgeInsets.all(AppPaddingH.p16),
         decoration: BoxDecoration(
           border: Border.all(color: ColorManager.secondaryColor22),
           color: const Color.fromARGB(255, 250, 254, 255),
@@ -56,29 +62,33 @@ Widget loadingShimmer(BuildContext context, int count, double? width,
     ),
   );
 }
-void error(BuildContext context, String massage, int code)async {
+
+void error(BuildContext context, String massage, int code) async {
   await dismissDialog(context);
   ErrorState(StateRendererType.popupErrorState, massage)
       .showPopup(context, StateRendererType.popupErrorState, massage);
 }
+
 void loading(BuildContext context, {String? text}) {
   LoadingState(stateRendererType: StateRendererType.popupLoadingState)
       .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
 }
-Future<bool> success(BuildContext context) async{
 
+Future<bool> success(BuildContext context) async {
   try {
-   dismissDialog(context);
+    dismissDialog(context);
     return true;
   } catch (e) {
     print("ssssssssssssssssss: $e");
     return false;
   }
 }
+
 void successWithMessage(BuildContext context, String message) {
-  SuccessState(message)//
+  SuccessState(message) //
       .showPopup(context, StateRendererType.popupSuccess, message);
 }
+
 Future<bool> dismissDialog(BuildContext context) async {
   try {
     // نتحقق مباشرة من الـ rootNavigator إذا كان لديه أي Dialog مفتوح يمكن إغلاقه

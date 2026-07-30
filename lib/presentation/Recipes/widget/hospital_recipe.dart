@@ -14,14 +14,14 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DoctorsBloc, DoctorsState>(
-        listenWhen: (previous, current) {
-          if (current is CheckRecipesState && current.docId == hospitalId) return true;
-          if (current is CheckRecipesErrorState && current.docId == hospitalId) return true;
-          return false;
-
-        },
+      listenWhen: (previous, current) {
+        if (current is CheckRecipesState && current.docId == hospitalId)
+          return true;
+        if (current is CheckRecipesErrorState && current.docId == hospitalId)
+          return true;
+        return false;
+      },
       listener: (context, state) {
-
         if (state is CheckRecipesState) {
           if (state.isCheck == true) {
             initBrandRecModule();
@@ -38,11 +38,12 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
 
             // 💡 نصيحة احترافية: يفضل إرسال حدث للـ Bloc لتصفير الحالة (Reset State) هنا
             // لمنع تكرار فتح الشاشة عند العودة بـ Back (مثال: context.read<DoctorsBloc>().add(ResetCheckRecEvent());)
-
           } else {
-            ScaffoldMessenger.of(context).clearSnackBars(); // تنظيف السناكبbars السابقة
+            ScaffoldMessenger.of(context)
+                .clearSnackBars(); // تنظيف السناكبbars السابقة
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
+              const SnackBar(
+                  content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
             );
           }
         }
@@ -52,19 +53,25 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
       },
       // 2. الفحص الصارم للبناء: لا تعد بناء الـ Widget (حالة التحميل) إلا للمشفى المطلوب فقط
       buildWhen: (previous, current) {
-        final bool isCurrentLoading = current is CheckRecipesLoadingState && current.docId == hospitalId;
-        final bool isPreviousLoading = previous is CheckRecipesLoadingState && previous.docId == hospitalId;
-        return isCurrentLoading || isPreviousLoading || current is AllHospitalsState;
+        final bool isCurrentLoading =
+            current is CheckRecipesLoadingState && current.docId == hospitalId;
+        final bool isPreviousLoading = previous is CheckRecipesLoadingState &&
+            previous.docId == hospitalId;
+        return isCurrentLoading ||
+            isPreviousLoading ||
+            current is AllHospitalsState;
       },
       builder: (context, state) {
-        bool isLoading = (state is CheckRecipesLoadingState && state.docId == hospitalId);
+        bool isLoading =
+            (state is CheckRecipesLoadingState && state.docId == hospitalId);
 
         return PopupMenuButton<int>(
           onSelected: (value) {
             context.read<DoctorsBloc>().add(CheckReciEvent(hospitalId, value));
           },
           enabled: !isLoading,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
           offset: Offset(0, 40.h),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -75,7 +82,8 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
                   SizedBox(
                     width: 15.sp,
                     height: 15.sp,
-                    child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.blue),
+                    child: const CircularProgressIndicator(
+                        strokeWidth: 2, color: Colors.blue),
                   )
                 else ...[
                   Text(
@@ -87,21 +95,25 @@ class PrescriptionHospitalMenuWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 4.w),
-                  Icon(Icons.keyboard_arrow_down, color: Colors.blue, size: 18.sp),
+                  Icon(Icons.keyboard_arrow_down,
+                      color: Colors.blue, size: 18.sp),
                 ],
               ],
             ),
           ),
           itemBuilder: (context) => [
-            _buildPopupItem(value: 0, label: "إنشاء وصفة", icon: Icons.add_box_outlined),
-            _buildPopupItem(value: 1, label: "تكرار وصفة", icon: Icons.history_rounded),
+            _buildPopupItem(
+                value: 0, label: "إنشاء وصفة", icon: Icons.add_box_outlined),
+            _buildPopupItem(
+                value: 1, label: "تكرار وصفة", icon: Icons.history_rounded),
           ],
         );
       },
     );
   }
 
-  PopupMenuItem<int> _buildPopupItem({required int value, required String label, required IconData icon}) {
+  PopupMenuItem<int> _buildPopupItem(
+      {required int value, required String label, required IconData icon}) {
     return PopupMenuItem<int>(
       value: value,
       child: Row(

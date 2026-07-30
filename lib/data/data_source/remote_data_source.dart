@@ -6,7 +6,7 @@ import 'package:domina_app/domain/models/models.dart';
 abstract class RemoteDataSource {
   Future<LoginResponse> login(LoginRequest loginRequest);
   Future<AllPlaceBaseResponse> allPlaces(int id);
-  Future<AllSpcBaseResponse> allSpecializations(int repDet,{int? planId});
+  Future<AllSpcBaseResponse> allSpecializations(int repDet, {int? planId});
   Future<CheckRepResponse> checkRep(int repDet);
   Future<AllCityBaseResponse> allCity();
   Future<AllBrandBaseResponse> allBrand(int id);
@@ -53,21 +53,16 @@ abstract class RemoteDataSource {
   Future<CheckReResponse> checkRe(int repDet);
   Future<ReciNumResponse> reciNum();
   Future<AllVisitNotesBaseResponse> visitNotes(int repDet);
-  Future<AllRepresentativeBaseResponse> getReps(int id,int cityId);
-  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(
-      int repDet,int planId
-  );
+  Future<AllRepresentativeBaseResponse> getReps(int id, int cityId);
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int repDet, int planId);
   Future<AllNoVisitDoctorBaseResponse> getUnfinishedDoctorVisits(
-      int repDet,int planId
-      );
-  Future<AllNoVisitDoctorBaseResponse> visitDoc(
-      int repDet,int planId
-  );
+      int repDet, int planId);
+  Future<AllNoVisitDoctorBaseResponse> visitDoc(int repDet, int planId);
   Future<AllVisitIssueBaseResponse> getVisitIssue(int repDet);
   Future<Message1Response> insertLog(ExceptionRequestBody list);
 
-  Future<InventoryResponseBaseResponse> getInventory(int repDet,int planId );
-  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id,int planId);
+  Future<InventoryResponseBaseResponse> getInventory(int repDet, int planId);
+  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id, int planId);
   Future<AllRepVisitsResponseBaseResponse> getRepVisits(
       VisitRepSen visitRepSen);
   Future<Message1Response> readVisit(AsRead asRead);
@@ -81,10 +76,9 @@ abstract class RemoteDataSource {
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     int repPlanId,
   );
-  Future<Message1Response> pharmacyOrder(
-  PharmacyOrderRequestBody list);
+  Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list);
 
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id,int planId);
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id, int planId);
 
   Future<Message1Response> updateRepPlanBrandAmount(
       BrandAmountRequestBody list);
@@ -92,35 +86,36 @@ abstract class RemoteDataSource {
   Future<Message1Response> changeRepPlanStatus(int id, int status);
 
   Future<AllReadResponse> getVisitReadStatus(
-      String visitId,
-      String visitType,
-      int repType,
-      );
+    String visitId,
+    String visitType,
+    int repType,
+  );
   Future<SeniorByCityidBaseResponse> getSeniorByCityid(int cityId);
   Future<SeniorByCityidBaseResponse> getCityAndTeamleader();
   Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(
-      int hosId,
-      int spId,
-      );
+    int hosId,
+    int spId,
+  );
   Future<AllSearchHospitalBaseResponse> getSearchHospitals(
-      String name,
-      );
-  Future<FinishedPlansBaseResponse> getFinishedPlans(int cityId,
-      );
-  Future<PlanRepsBaseResponse> getPlanReps(int planId,
-      );
-
+    String name,
+  );
+  Future<FinishedPlansBaseResponse> getFinishedPlans(
+    int cityId,
+  );
+  Future<PlanRepsBaseResponse> getPlanReps(
+    int planId,
+  );
 
   Future<AllNoVisitDoctorBaseResponse> noVisitHos(
-     int repDet, int planId,
-      );
+    int repDet,
+    int planId,
+  );
   Future<AllNoVisitDoctorBaseResponse> getUnfinishedHosVisits(
     int repPlanId,
-      );
+  );
   Future<AllNoVisitDoctorBaseResponse> visitHos(
-   int repPlanId,
-      );
-
+    int repPlanId,
+  );
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -140,8 +135,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllSpcBaseResponse> allSpecializations(int repDet,{ int? planId}) async {
-    return await _appServiceClient.allSpecializations(repDet,planId);
+  Future<AllSpcBaseResponse> allSpecializations(int repDet,
+      {int? planId}) async {
+    return await _appServiceClient.allSpecializations(repDet, planId);
   }
 
   @override
@@ -228,7 +224,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return await _appServiceClient.repPlanBrand(list);
   }
 
-
   @override
   Future<LoginResponse> checkActivePlanBrand(int repDet) async {
     return await _appServiceClient.checkActivePlanBrand(
@@ -307,24 +302,25 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllRepresentativeBaseResponse> getReps(int id,int cityId) async {
-    return await _appServiceClient.getReps(id,cityId);
+  Future<AllRepresentativeBaseResponse> getReps(int id, int cityId) async {
+    return await _appServiceClient.getReps(id, cityId);
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(int repDet,int planId ) async {
-    return await _appServiceClient.noVisitDoc(repDet,planId);
+  Future<AllNoVisitDoctorBaseResponse> noVisitDoc(
+      int repDet, int planId) async {
+    return await _appServiceClient.noVisitDoc(repDet, planId);
   }
 
   @override
   Future<AllNoVisitDoctorBaseResponse> getUnfinishedDoctorVisits(
-      int repDet,int planId ) async {
-    return await _appServiceClient.getUnfinishedDoctorVisits(repDet,planId);
+      int repDet, int planId) async {
+    return await _appServiceClient.getUnfinishedDoctorVisits(repDet, planId);
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> visitDoc(int repDet,int planId) async {
-    return await _appServiceClient.visitDoc(repDet,planId);
+  Future<AllNoVisitDoctorBaseResponse> visitDoc(int repDet, int planId) async {
+    return await _appServiceClient.visitDoc(repDet, planId);
   }
 
   @override
@@ -338,13 +334,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<InventoryResponseBaseResponse> getInventory(int repDet,int planId ) async {
-    return await _appServiceClient.getInventory(repDet,planId);
+  Future<InventoryResponseBaseResponse> getInventory(
+      int repDet, int planId) async {
+    return await _appServiceClient.getInventory(repDet, planId);
   }
 
   @override
-  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id,int planId) async {
-    return await _appServiceClient.getRepInfo(id,planId);
+  Future<AllRepInfoResponseBaseResponse> getRepInfo(int id, int planId) async {
+    return await _appServiceClient.getRepInfo(id, planId);
   }
 
   @override
@@ -373,7 +370,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return await _appServiceClient.changePlanBrandType(
         changePlanBrandType.id, changePlanBrandType.brandType);
   }
-
 
   @override
   Future<Message1Response> readAllVisits(ReadAll readAll) async {
@@ -431,7 +427,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list)async {
+  Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list) async {
     return await _appServiceClient.pharmacyOrder(list);
   }
 
@@ -446,28 +442,35 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id,int planId) async {
-    return await _appServiceClient.getRepsFuture(id,planId);
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
+      int id, int planId) async {
+    return await _appServiceClient.getRepsFuture(id, planId);
   }
 
   @override
-  Future<AllSearchHospitalBaseResponse> getSearchHospitals(String name)async {
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(String name) async {
     return await _appServiceClient.getSearchHospitals(name);
   }
+
   @override
-  Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(int hosId, int spId)async {
-    return await _appServiceClient.getSearchHospitalsNotes(hosId,spId);
+  Future<AllSearchHospitalNoteBaseResponse> getSearchHospitalsNotes(
+      int hosId, int spId) async {
+    return await _appServiceClient.getSearchHospitalsNotes(hosId, spId);
   }
+
   @override
   Future<SeniorByCityidBaseResponse> getSeniorByCityid(int cityId) async {
     return await _appServiceClient.getSeniorByCityid(cityId);
   }
 
-
   @override
   Future<AllReadResponse> getVisitReadStatus(
-      String visitId, String visitType,int repType,) async {
-    return await _appServiceClient.getVisitReadStatus(visitId, visitType,repType);
+    String visitId,
+    String visitType,
+    int repType,
+  ) async {
+    return await _appServiceClient.getVisitReadStatus(
+        visitId, visitType, repType);
   }
 
   @override
@@ -482,26 +485,24 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<PlanRepsBaseResponse> getPlanReps(int planId)async {
+  Future<PlanRepsBaseResponse> getPlanReps(int planId) async {
     return await _appServiceClient.getPlanReps(planId);
   }
 
   @override
-  Future<AllNoVisitDoctorBaseResponse> getUnfinishedHosVisits(int repPlanId) async {
+  Future<AllNoVisitDoctorBaseResponse> getUnfinishedHosVisits(
+      int repPlanId) async {
     return await _appServiceClient.getUnfinishedHosVisits(repPlanId);
   }
 
-
   @override
-  Future<AllNoVisitDoctorBaseResponse> noVisitHos(int repDet, int planId) async {
-    return await _appServiceClient.noVisitHos(repDet,planId);
+  Future<AllNoVisitDoctorBaseResponse> noVisitHos(
+      int repDet, int planId) async {
+    return await _appServiceClient.noVisitHos(repDet, planId);
   }
-
 
   @override
   Future<AllNoVisitDoctorBaseResponse> visitHos(int repPlanId) async {
     return await _appServiceClient.visitHos(repPlanId);
   }
-
-
 }

@@ -50,11 +50,12 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              child:
-              SearchField(
+              child: SearchField(
                   searchController: _searchController,
                   onPressed: (value) {
-                    context.read<FinishedPlanBloc>().add(SearchPlanRepsEvent(value));
+                    context
+                        .read<FinishedPlanBloc>()
+                        .add(SearchPlanRepsEvent(value));
                   }),
             ),
           ),
@@ -62,7 +63,7 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
           // 3. قائمة المندوبين المستمدة من الـ Bloc
           BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
             buildWhen: (previous, current) =>
-            current is PlanRepsLoading ||
+                current is PlanRepsLoading ||
                 current is PlanRepsLoaded ||
                 current is PlanRepsError,
             builder: (context, state) {
@@ -90,7 +91,7 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                      (context, index) {
                         return RepCard(
                           repName: state.reps[index],
                           repPlanId: int.parse(state.reps[index].repPlan),
@@ -179,7 +180,8 @@ class RepCard extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
         leading: CircleAvatar(
           backgroundColor: ColorManager.medicalPrimary.withOpacity(0.1),
-          child: Icon(Icons.person, color: ColorManager.medicalPrimary, size: 20.sp),
+          child: Icon(Icons.person,
+              color: ColorManager.medicalPrimary, size: 20.sp),
         ),
         title: Text(
           repName.name,
@@ -200,7 +202,9 @@ class RepCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ReportFinishedPlanUserPage(
-                    id: int.parse(repName.id), repPlanId: repPlanId, name: repName.name),
+                    id: int.parse(repName.id),
+                    repPlanId: repPlanId,
+                    name: repName.name),
               ));
         },
       ),

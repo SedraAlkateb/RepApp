@@ -46,7 +46,7 @@ class PersonalOrder extends StatelessWidget {
           errorText: '',
         ),
         Padding(
-          padding:  EdgeInsets.only(top: AppPaddingH.p12),
+          padding: EdgeInsets.only(top: AppPaddingH.p12),
           child: BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
             buildWhen: (previous, current) {
               return current is BoxState ||
@@ -62,7 +62,9 @@ class PersonalOrder extends StatelessWidget {
                       "اكتب ملاحظاتك:",
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    SizedBox(height: 8,),
+                    SizedBox(
+                      height: 8,
+                    ),
                     BoxTextField(
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
@@ -114,7 +116,8 @@ class PersonalOrder extends StatelessWidget {
                         return current is SelectBrandAddState;
                       },
                       buildWhen: (previous, current) {
-                        return current is SelectBrandAddNumState|| current is DeleteBrandAddState;
+                        return current is SelectBrandAddNumState ||
+                            current is DeleteBrandAddState;
                       },
                       listener: (context, state) {
                         if (state is SelectBrandAddState) {
@@ -135,7 +138,7 @@ class PersonalOrder extends StatelessWidget {
                         if (state is SelectBrandAddNumState) {
                           selectBrand = state.brands;
                         }
-                        if(state is DeleteBrandAddState){
+                        if (state is DeleteBrandAddState) {
                           selectBrand = state.brands;
                         }
                         return selectBrand.isNotEmpty

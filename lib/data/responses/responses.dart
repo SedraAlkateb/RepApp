@@ -48,6 +48,7 @@ class InsertRecipeResponse {
   // to json
   Map<String, dynamic> toJson() => _$InsertRecipeResponseToJson(this);
 }
+
 @JsonSerializable()
 class InsertRecipeBaseResponse extends BaseResponse {
   @JsonKey(name: "Reci Data")
@@ -59,6 +60,7 @@ class InsertRecipeBaseResponse extends BaseResponse {
   // to json
   Map<String, dynamic> toJson() => _$InsertRecipeBaseResponseToJson(this);
 }
+
 @JsonSerializable()
 class CheckResponse {
   @JsonKey(name: "id")

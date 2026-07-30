@@ -2,12 +2,11 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 
-
 class SnackBarMessage {
   void showSuccessSnackBar(
       {required String message,
-        required BuildContext context,
-        required var btnOkOnPress}) {
+      required BuildContext context,
+      required var btnOkOnPress}) {
     // AwesomeDialog(
     //   context: context,
     //   dialogType: DialogType.success,
@@ -20,8 +19,8 @@ class SnackBarMessage {
 
   void showErrorSnackBar(
       {required String message,
-        required BuildContext context,
-        required var btnOkOnPress}) {
+      required BuildContext context,
+      required var btnOkOnPress}) {
     // AwesomeDialog(
     //   context: context,
     //   dialogType: DialogType.error,
@@ -68,7 +67,10 @@ class SnackBarMessage {
     ));
   }
 
-  void showBottomSheetMessage({required BuildContext context, required var onPressedConfirm, required var onPressedCancel }){
+  void showBottomSheetMessage(
+      {required BuildContext context,
+      required var onPressedConfirm,
+      required var onPressedCancel}) {
     final size = MediaQuery.of(context).size;
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -78,56 +80,69 @@ class SnackBarMessage {
         isScrollControlled: true,
         builder: (context) {
           return Container(
-              height: size.height*0.3,
+              height: size.height * 0.3,
               decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.horizontal(left: Radius.circular(15),right:  Radius.circular(15))
-              ),
+                  borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(15), right: Radius.circular(15))),
               child: Column(
-
                 children: [
                   Container(
-                      height: size.height*0.3,
-                      child:Column(
+                      height: size.height * 0.3,
+                      child: Column(
                         children: [
-                          SizedBox(height: size.height*0.05,),
-                          Text("We_will_contact_you_as_soon_as_possible",style: TextStyle(color:  ColorManager.shadow),),
-                          SizedBox(height: size.height*0.05,),
+                          SizedBox(
+                            height: size.height * 0.05,
+                          ),
+                          Text(
+                            "We_will_contact_you_as_soon_as_possible",
+                            style: TextStyle(color: ColorManager.shadow),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.05,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(size.width*0.35,size.height*0.05),
+                                  fixedSize: Size(
+                                      size.width * 0.35, size.height * 0.05),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0), // Set the border radius
-                                  ),// Change the button color
+                                    borderRadius: BorderRadius.circular(
+                                        15.0), // Set the border radius
+                                  ), // Change the button color
                                 ),
                                 onPressed: onPressedConfirm,
-                                child: Text("Confirm_Click",style: TextStyle(color: ColorManager.shadow),),
+                                child: Text(
+                                  "Confirm_Click",
+                                  style: TextStyle(color: ColorManager.shadow),
+                                ),
                               ),
-                              SizedBox(width: 20,),
+                              SizedBox(
+                                width: 20,
+                              ),
                               ElevatedButton(
-
                                 style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(size.width*0.35,size.height*0.05),
+                                  fixedSize: Size(
+                                      size.width * 0.35, size.height * 0.05),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0), // Set the border radius
+                                    borderRadius: BorderRadius.circular(
+                                        15.0), // Set the border radius
                                   ),
                                 ),
                                 onPressed: onPressedCancel,
-                                child: Text("Cancel",style: TextStyle(color: ColorManager.shadow),),
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(color: ColorManager.shadow),
+                                ),
                               ),
                             ],
                           ),
                         ],
-                      )
-                  ),
+                      )),
                 ],
-              )
-          );
-
+              ));
         });
   }
 }
-

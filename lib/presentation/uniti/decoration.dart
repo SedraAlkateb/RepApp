@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const KTextField1Decoration = InputDecoration(
   filled: true,
-
   fillColor: Color(0xFFE6E9E6),
   contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
   border: OutlineInputBorder(

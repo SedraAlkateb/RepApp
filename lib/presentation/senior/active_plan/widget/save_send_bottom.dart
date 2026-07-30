@@ -3,7 +3,6 @@ import 'package:domina_app/presentation/brand_plan/widget/dialog_plan.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:flutter/material.dart';
 
-
 class SaveSendBottom extends StatelessWidget {
   const SaveSendBottom({super.key});
 
@@ -18,18 +17,18 @@ class SaveSendBottom extends StatelessWidget {
               onTap: () {
                 UserInfo.otherstatus == 0
                     ? showDialog(
-                  context: context,
-                  builder: (context) {
-                    return dialogPlan(
-                        context,
-                        fun: () {} 
-                        // BlocProvider.of<
-                        //     BrandPlanBloc>(context)
-                        //     .add(UpdateAmountSucEvent())
-                            ,
-                        "هل أنت متأكد من حفظ التغيرات");
-                  },
-                )
+                        context: context,
+                        builder: (context) {
+                          return dialogPlan(
+                              context,
+                              fun: () {}
+                              // BlocProvider.of<
+                              //     BrandPlanBloc>(context)
+                              //     .add(UpdateAmountSucEvent())
+                              ,
+                              "هل أنت متأكد من حفظ التغيرات");
+                        },
+                      )
                     : null;
               },
               child: SizedBox(
@@ -59,18 +58,18 @@ class SaveSendBottom extends StatelessWidget {
               onTap: () {
                 UserInfo.otherstatus == 0
                     ? showDialog(
-                  context: context,
-                  builder: (context) {
-                    return dialogPlan(
-                        context,
-                        fun: () {}
-                            // BlocProvider.of<BrandPlanBloc>(
-                            //     context)
-                            //     .add(SendToS())
-                                ,
-                        "هل أنت متأكد من إرسال التغيرات");
-                  },
-                )
+                        context: context,
+                        builder: (context) {
+                          return dialogPlan(
+                              context,
+                              fun: () {}
+                              // BlocProvider.of<BrandPlanBloc>(
+                              //     context)
+                              //     .add(SendToS())
+                              ,
+                              "هل أنت متأكد من إرسال التغيرات");
+                        },
+                      )
                     : null;
               },
               child: SizedBox(

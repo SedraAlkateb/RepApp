@@ -1,4 +1,3 @@
-
 import 'package:domina_app/presentation/doctors/widget/bottom.dart';
 import 'package:domina_app/presentation/doctors/widget/card.dart';
 import 'package:domina_app/presentation/doctors/widget/header.dart';
@@ -18,9 +17,8 @@ class DoctorDetails extends StatelessWidget {
         title: Text("معلومات الطبيب"),
         centerTitle: true,
       ),
-      body:        Stack(
+      body: Stack(
         children: [
-
           SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -32,23 +30,26 @@ class DoctorDetails extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildStatCard("الزيارات", doctor.visits.toString(), Icons.visibility_outlined,
-                          Colors.blue),
+                      buildStatCard("الزيارات", doctor.visits.toString(),
+                          Icons.visibility_outlined, Colors.blue),
+                      buildStatCard("التصنيف", doctor.rate ?? "",
+                          Icons.star_border, Colors.orange),
                       buildStatCard(
-                          "التصنيف", doctor.rate??"", Icons.star_border, Colors.orange),
-                      buildStatCard(
-                          "المزارة", doctor.visited==null?"0": doctor.visited.toString(), Icons.group_outlined, Colors.green),
+                          "المزارة",
+                          doctor.visited == null
+                              ? "0"
+                              : doctor.visited.toString(),
+                          Icons.group_outlined,
+                          Colors.green),
                     ],
                   ),
                 ),
                 _buildDetailsCard(),
-
                 SizedBox(height: 15.h),
                 buildNotesCard(doctor.note),
                 SizedBox(
                   height: 150,
                 ),
-
               ],
             ),
           ),
@@ -57,6 +58,7 @@ class DoctorDetails extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildDetailsCard() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),
@@ -65,14 +67,24 @@ class DoctorDetails extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(25.r)),
       child: Column(
         children: [
-          buildInfoRow(Icons.location_on_outlined, "المنطقة", doctor.placeTitle),
-          const Divider(height: 30,thickness: 0.1,),
+          buildInfoRow(
+              Icons.location_on_outlined, "المنطقة", doctor.placeTitle),
+          const Divider(
+            height: 30,
+            thickness: 0.1,
+          ),
           buildInfoRow(Icons.business_outlined, "العنوان", doctor.address),
-          const Divider(height: 30,thickness: 0.1,),
-          buildInfoRow(Icons.medical_services_outlined, "الإختصاص", doctor.spTitle),
-          const Divider(height: 30,thickness: 0.1,),
-          buildInfoRow(Icons.work, "أوقات العمل", doctor.workHours??""),
-
+          const Divider(
+            height: 30,
+            thickness: 0.1,
+          ),
+          buildInfoRow(
+              Icons.medical_services_outlined, "الإختصاص", doctor.spTitle),
+          const Divider(
+            height: 30,
+            thickness: 0.1,
+          ),
+          buildInfoRow(Icons.work, "أوقات العمل", doctor.workHours ?? ""),
         ],
       ),
     );

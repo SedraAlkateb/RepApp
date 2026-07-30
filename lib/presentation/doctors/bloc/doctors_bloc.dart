@@ -23,12 +23,16 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
   List<DoctorModel> doctor = [];
 
   DoctorsBloc(
-      this.allDoctorsqlUsecase, this.checkReciUsecase,this.allHospitalSpNSqlUsecase,this.allDoctorUsecase,this.allHospitalUsecase)
+      this.allDoctorsqlUsecase,
+      this.checkReciUsecase,
+      this.allHospitalSpNSqlUsecase,
+      this.allDoctorUsecase,
+      this.allHospitalUsecase)
       : super(DoctorsInitial()) {
     on<DoctorsEvent>((event, emit) async {
       if (event is AllDoctorEvent) {
         emit(AllDoctorLoadingState());
-        if(UserInfo.repType.i==6||UserInfo.repType.i==7){
+        if (UserInfo.repType.i == 6 || UserInfo.repType.i == 7) {
           (await allDoctorsqlUsecase.execute()).fold((failure) {
             emit(AllDoctorErrorState(failure: failure));
             print(failure.massage);
@@ -40,7 +44,7 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
               emit(AllDoctorEmptyState());
             }
           });
-        }else{
+        } else {
           (await allDoctorUsecase.execute(UserInfo.repId)).fold((failure) {
             emit(AllDoctorErrorState(failure: failure));
             print(failure.massage);
@@ -53,7 +57,6 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
             }
           });
         }
-
       } else if (event is SearchDocEvent) {
         List<DoctorModel> doctorList;
         String search = normalizeText(event.contant);
@@ -79,27 +82,26 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
       if (event is CheckReciEvent) {
         emit(CheckRecipesLoadingState(event.docId));
         (await checkReciUsecase.execute(UserInfo.repId)).fold((failure) {
-
-          emit(CheckRecipesErrorState(failure: failure,event.docId));
+          emit(CheckRecipesErrorState(failure: failure, event.docId));
         }, (data) async {
-          emit(CheckRecipesState(data.accepted ?? false,event.st,event.docId));
+          emit(
+              CheckRecipesState(data.accepted ?? false, event.st, event.docId));
         });
       }
       if (event is AllHospitalEvent) {
         emit(AllHospitalLoadingState());
-        if(UserInfo.repType.i==6||UserInfo.repType.i==7){
-        (await allHospitalSpNSqlUsecase.execute()).fold((failure) {
-          emit(AllHospitalErrorState(failure: failure));
-        }, (data) async {
-          hospital = data;
-          if (hospital.isNotEmpty) {
-            emit(AllHospitalsState(data));
-          } else {
-            emit(AllHospitalEmptyState());
-          }
-        });
-
-        }else{
+        if (UserInfo.repType.i == 6 || UserInfo.repType.i == 7) {
+          (await allHospitalSpNSqlUsecase.execute()).fold((failure) {
+            emit(AllHospitalErrorState(failure: failure));
+          }, (data) async {
+            hospital = data;
+            if (hospital.isNotEmpty) {
+              emit(AllHospitalsState(data));
+            } else {
+              emit(AllHospitalEmptyState());
+            }
+          });
+        } else {
           (await allHospitalUsecase.execute(UserInfo.repId)).fold((failure) {
             emit(AllHospitalErrorState(failure: failure));
           }, (data) async {
@@ -111,8 +113,7 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
             }
           });
         }
-      }
-      else if (event is SearchhosEvent) {
+      } else if (event is SearchhosEvent) {
         List<HospitalSpAllModel> hospitallist;
         String search = normalizeText(event.contant);
         hospitallist = hospital.where((value) {
@@ -131,7 +132,6 @@ class DoctorsBloc extends Bloc<DoctorsEvent, DoctorsState> {
 
         emit(AllHospitalsState(hospitallist));
       }
-
     });
   }
 }

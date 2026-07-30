@@ -19,7 +19,6 @@ ThemeData getApplicationTheme() {
     colorScheme: ColorScheme.light(
       primary: ColorManager.background,
     ),
-
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: ColorManager.primaryField,
     ),
@@ -35,12 +34,11 @@ ThemeData getApplicationTheme() {
         color: ColorManager.secondaryColor1,
       ),
       toolbarHeight: 60.h,
-
       backgroundColor: ColorManager.white,
       elevation: 9,
       shadowColor: ColorManager.secondaryColor3,
-      titleTextStyle: getBoldStyle(
-          fontSize: 20.sp, color: ColorManager.secondaryColor1),
+      titleTextStyle:
+          getBoldStyle(fontSize: 20.sp, color: ColorManager.secondaryColor1),
     ),
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),
@@ -99,7 +97,6 @@ ThemeData getApplicationTheme() {
               color: ColorManager.medicalBorder, width: AppSize.s1_5),
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
         ),
-
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
               color: ColorManager.medicalSecondary, width: AppSize.s1_5),
@@ -115,7 +112,7 @@ ThemeData getApplicationTheme() {
               BorderSide(color: ColorManager.primaryField, width: AppSize.s1_5),
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
         ),
-    fillColor:ColorManager.medicalBorder.withOpacity(0.3),
+        fillColor: ColorManager.medicalBorder.withOpacity(0.3),
         filled: true),
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: Colors.black,

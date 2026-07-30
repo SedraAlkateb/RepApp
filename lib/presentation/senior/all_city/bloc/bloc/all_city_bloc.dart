@@ -8,15 +8,13 @@ part 'all_city_event.dart';
 part 'all_city_state.dart';
 
 class AllCityBloc extends Bloc<AllCityEvent, AllCityState> {
-        List<CityModel> cities = [];
-      AllCityUsecase allcityUsecase;
-  AllCityBloc( this.allcityUsecase) : super(AllCityInitial()) {
-  
+  List<CityModel> cities = [];
+  AllCityUsecase allcityUsecase;
+  AllCityBloc(this.allcityUsecase) : super(AllCityInitial()) {
     on<AllCityEvent>((event, emit) async {
-         if (event is GetAllCityEvent) {
-           emit(const AllCityLoadingState());
-        (await allcityUsecase.execute()).fold(
-            (failure) {
+      if (event is GetAllCityEvent) {
+        emit(const AllCityLoadingState());
+        (await allcityUsecase.execute()).fold((failure) {
           emit(AllCityErrorState(failure: failure));
           return false;
         }, (data) async {
@@ -24,7 +22,6 @@ class AllCityBloc extends Bloc<AllCityEvent, AllCityState> {
           emit(GetAllCityState(data));
         });
       }
-    }
-    );
+    });
   }
 }

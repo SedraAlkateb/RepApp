@@ -24,10 +24,11 @@ class AlarmAndNotifications {
       requestSoundPermission: true,
     );
 
-    const initSettings = InitializationSettings(android: androidInit, iOS: iosInit);
+    const initSettings =
+        InitializationSettings(android: androidInit, iOS: iosInit);
 
     await flutterLocalNotificationsPlugin.initialize(
-   settings:   initSettings, // تم تصحيح استدعاء الباراميتر هنا
+      settings: initSettings, // تم تصحيح استدعاء الباراميتر هنا
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         _onNotificationTap(response);
       },
@@ -47,20 +48,24 @@ class AlarmAndNotifications {
 
   /// دالة جدولة إشعار يوم الخطة (الساعة 9 صباحاً)
   static Future<void> scheduleExpirationNotification() async {
-    if (UserInfo.endDate != null && UserInfo.endDate != "" && UserInfo.endDate != "0") {
+    if (UserInfo.endDate != null &&
+        UserInfo.endDate != "" &&
+        UserInfo.endDate != "0") {
       try {
         // تحويل تاريخ النهاية (dd-MM-yyyy)
         DateTime endDay = formatStringToDataTime(UserInfo.endDate!);
 
         // ضبط الوقت ليوم انتهاء الخطة - الساعة 9 صباحاً
-        DateTime scheduledTime = DateTime(endDay.year, endDay.month, endDay.day, 9, 0);
+        DateTime scheduledTime =
+            DateTime(endDay.year, endDay.month, endDay.day, 9, 0);
 
         // التحقق من أن الوقت المجدول في المستقبل
         if (scheduledTime.isAfter(DateTime.now())) {
           await flutterLocalNotificationsPlugin.zonedSchedule(
             id: 1001,
             title: '🔔 شركة دومِنا - تذكير هام',
-            body: 'اليوم هو اليوم الأخير في خطتك الحالية، يرجى مزامنة البيانات قبل نهاية اليوم.',
+            body:
+                'اليوم هو اليوم الأخير في خطتك الحالية، يرجى مزامنة البيانات قبل نهاية اليوم.',
             payload: 'go_to_sync',
             scheduledDate: tz.TZDateTime.from(scheduledTime, tz.local),
             notificationDetails: const NotificationDetails(
@@ -81,6 +86,7 @@ class AlarmAndNotifications {
       }
     }
   }
+
   @pragma('vm:entry-point')
   static Future<void> showNotification() async {
     const androidDetails = AndroidNotificationDetails(

@@ -9,8 +9,7 @@ Widget buildInfoRow(IconData icon, String label, String value) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label,
-                style: TextStyle(color: Colors.grey, fontSize: 12.sp)),
+            Text(label, style: TextStyle(color: Colors.grey, fontSize: 12.sp)),
             Text(value,
                 style: TextStyle(
                     color: const Color(0xFF0D47A1),

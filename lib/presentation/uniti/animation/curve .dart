@@ -4,6 +4,7 @@ class FadeInWidget extends StatefulWidget {
   @override
   _FadeInWidgetState createState() => _FadeInWidgetState();
 }
+
 class _FadeInWidgetState extends State<FadeInWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
@@ -20,16 +21,18 @@ class _FadeInWidgetState extends State<FadeInWidget>
       curve: Curves.easeOut,
     );
     alpha = ColorTween(begin: Colors.red, end: Colors.black54).animate(curve)
-     ..addListener(() {
-       setState(() {});
-     });
+      ..addListener(() {
+        setState(() {});
+      });
     controller.forward().orCancel;
   }
+
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

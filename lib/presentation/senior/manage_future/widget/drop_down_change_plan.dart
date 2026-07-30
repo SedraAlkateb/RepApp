@@ -32,16 +32,16 @@ class DropDownChangePlan extends StatelessWidget {
 
     // 🛡️ خطوة الحماية الذهبية:
     // نتحقق بمطابقة الـ flag الرقمي الداخلي حتى لو تم إنشاء مصفوفة جديدة في الذاكرة
-    final FlagModel? safelySelectedValue = value != null &&
-        items.any((element) => element.flag == value!.flag)
-        ? items.firstWhere((element) => element.flag == value!.flag)
-        : null;
+    final FlagModel? safelySelectedValue =
+        value != null && items.any((element) => element.flag == value!.flag)
+            ? items.firstWhere((element) => element.flag == value!.flag)
+            : null;
 
     return DropdownButtonFormField<FlagModel>(
       elevation: 8,
       validator: validator,
-      icon: Icon(Icons.keyboard_arrow_down_rounded, color: contentColor, size: 20),
-
+      icon: Icon(Icons.keyboard_arrow_down_rounded,
+          color: contentColor, size: 20),
       selectedItemBuilder: (BuildContext context) {
         return items.map<Widget>((FlagModel item) {
           return Text(
@@ -54,7 +54,6 @@ class DropDownChangePlan extends StatelessWidget {
           );
         }).toList();
       },
-
       hint: Text(
         hintText,
         style: TextStyle(
@@ -84,9 +83,9 @@ class DropDownChangePlan extends StatelessWidget {
       dropdownColor: Colors.white,
       borderRadius: BorderRadius.circular(15),
       isExpanded: true,
-
       items: items.map((FlagModel val) {
-        final bool isSelected = safelySelectedValue != null && safelySelectedValue.flag == val.flag;
+        final bool isSelected =
+            safelySelectedValue != null && safelySelectedValue.flag == val.flag;
 
         return DropdownMenuItem<FlagModel>(
           value: val,

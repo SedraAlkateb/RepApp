@@ -838,25 +838,24 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
                     ),
                     SizedBox(height: 20),
                     BlocListener<RecipesBrandBloc, RecipesBrandState>(
-                      listener: (context, state) async{
+                      listener: (context, state) async {
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
                         } else if (state is InsertRecipesState) {
-
                           await dismissDialog(context);
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                           );
-                          BlocProvider.of<RecipesBrandBloc>(context).add(EditeRecNumEvent(state.num));
-
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(EditeRecNumEvent(state.num));
                         } else if (state is InsertRecipesErrorState) {
                           success(context);
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
                       },
-                      child:   ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<RecipesBrandBloc>(context).add(
@@ -873,9 +872,8 @@ class _UpdateRecipesHospitalState extends State<UpdateRecipesHospital> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
-                                Text('يرجى تعبئة جميع الحقول المطلوبة'),
-                                backgroundColor:
-                                ColorManager.secondaryColor,
+                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                backgroundColor: ColorManager.secondaryColor,
                               ),
                             );
                           }

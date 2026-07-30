@@ -85,10 +85,13 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
 
       if (event is ChangeFieldEvent) {
         // 1. فحص الحسابات الرياضية بشكل فوري ومباشر وسريع
-        final currentAmount = planBrand[event.index].brands[event.indexBr].amount;
-        final sampleCoast = planBrand[event.index].brands[event.indexBr].sampleCoast;
+        final currentAmount =
+            planBrand[event.index].brands[event.indexBr].amount;
+        final sampleCoast =
+            planBrand[event.index].brands[event.indexBr].sampleCoast;
 
-        int sum1 = sum - (currentAmount * sampleCoast) + (event.number * sampleCoast);
+        int sum1 =
+            sum - (currentAmount * sampleCoast) + (event.number * sampleCoast);
         int sum2 = sumS - currentAmount + event.number;
 
         // 2. تحديث البيانات محلياً أولاً لحفظ الحالة في الذاكرة
@@ -102,14 +105,15 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
             // إطلاق حالة النجاح صامتة للـ UI بالخلفية دون الحاجة لإعادة بناء الحقول
             emit(SumState(List.from(planBrand)));
           } else {
-            emit(SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح ميزانياً")));
+            emit(SumErrorState(
+                failure: Failure(100, "لقد تجاوزت الحد المسموح ميزانياً")));
           }
         } else {
-          emit(SumErrorState(failure: Failure(100, "لقد تجاوزت الحد المسموح للعينات في هذا الإختصاص")));
+          emit(SumErrorState(
+              failure: Failure(
+                  100, "لقد تجاوزت الحد المسموح للعينات في هذا الإختصاص")));
         }
-      }
-
-      else if (event is UpdateEvent) {
+      } else if (event is UpdateEvent) {
         // تحسين استهلاك الذاكرة عبر تمرير مرجع سريع بدلاً من تكرار عمل كتل برمجية ثقيلة
         emit(SumState(planBrand));
       }

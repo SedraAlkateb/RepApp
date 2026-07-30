@@ -5,14 +5,15 @@ enum PlanStatus { initial, loading, success, error, submitting, submitSuccess }
 class PlanManagementState extends Equatable {
   // ======= 🟢 أولاً: الحالات الخاصة بالخطة المستقبلية (Create / Future Plan) =======
   final PlanStatus futureStatus;
-  final List<PlanBrandSp> futureBrands;       // القائمة الأصلية المستقبلية
+  final List<PlanBrandSp> futureBrands; // القائمة الأصلية المستقبلية
   final List<PlanBrandSp> searchFutureBrands; // قائمة البحث المستقبلية للمستقبل
   final Failure? futureFailure;
-  final bool isEnable;                        // متغير قفل وفتح الحقول
+  final bool isEnable; // متغير قفل وفتح الحقول
 
   // ======= 🔵 ثانياً: الحالات الخاصة بالخطة الفعالة (View Active Plan) =======
   final PlanStatus activeStatus;
-  final List<ActivePlanBrandModel> activeBrands;       // 👈 الموديل المخصص للخطة الفعالة
+  final List<ActivePlanBrandModel>
+      activeBrands; // 👈 الموديل المخصص للخطة الفعالة
   final List<ActivePlanBrandModel> searchActiveBrands; // قائمة البحث الفعالة
   final Failure? activeFailure;
 
@@ -22,7 +23,6 @@ class PlanManagementState extends Equatable {
     this.searchFutureBrands = const [],
     this.futureFailure,
     this.isEnable = true,
-
     this.activeStatus = PlanStatus.initial,
     this.activeBrands = const [],
     this.searchActiveBrands = const [],
@@ -36,7 +36,6 @@ class PlanManagementState extends Equatable {
     List<PlanBrandSp>? searchFutureBrands,
     Failure? futureFailure,
     bool? isEnable,
-
     PlanStatus? activeStatus,
     List<ActivePlanBrandModel>? activeBrands,
     List<ActivePlanBrandModel>? searchActiveBrands,
@@ -48,7 +47,6 @@ class PlanManagementState extends Equatable {
       searchFutureBrands: searchFutureBrands ?? this.searchFutureBrands,
       futureFailure: futureFailure ?? this.futureFailure,
       isEnable: isEnable ?? this.isEnable,
-
       activeStatus: activeStatus ?? this.activeStatus,
       activeBrands: activeBrands ?? this.activeBrands,
       searchActiveBrands: searchActiveBrands ?? this.searchActiveBrands,
@@ -58,14 +56,14 @@ class PlanManagementState extends Equatable {
 
   @override
   List<Object?> get props => [
-    futureStatus,
-    futureBrands,
-    searchFutureBrands,
-    futureFailure,
-    isEnable,
-    activeStatus,
-    activeBrands,
-    searchActiveBrands,
-    activeFailure,
-  ];
+        futureStatus,
+        futureBrands,
+        searchFutureBrands,
+        futureFailure,
+        isEnable,
+        activeStatus,
+        activeBrands,
+        searchActiveBrands,
+        activeFailure,
+      ];
 }

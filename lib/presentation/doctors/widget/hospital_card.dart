@@ -36,7 +36,8 @@ class HospitalCardItem extends StatelessWidget {
             children: [
               if (hospital.titleSp != null && hospital.titleSp!.isNotEmpty)
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: Colors.blue.shade50,
                     borderRadius: BorderRadius.circular(8.r),
@@ -61,7 +62,8 @@ class HospitalCardItem extends StatelessWidget {
           SizedBox(height: 10.h),
           _buildInfoRow(Icons.location_on_outlined, hospital.placeTitle),
           _buildInfoRow(Icons.map_outlined, hospital.address),
-          _buildInfoRow(Icons.star_rate_outlined, hospital.rate, iconColor: ColorManager.medicalSecondary),
+          _buildInfoRow(Icons.star_rate_outlined, hospital.rate,
+              iconColor: ColorManager.medicalSecondary),
           SizedBox(height: 12.h),
           const Divider(color: Colors.grey, thickness: 0.2),
           SizedBox(height: 8.h),
@@ -91,7 +93,8 @@ class HospitalCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String? text, {Color iconColor = Colors.grey}) {
+  Widget _buildInfoRow(IconData icon, String? text,
+      {Color iconColor = Colors.grey}) {
     if (text == null || text.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),

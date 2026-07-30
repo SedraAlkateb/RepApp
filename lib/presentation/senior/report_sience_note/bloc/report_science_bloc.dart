@@ -34,11 +34,9 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
           return false;
         }).toList();
         emit(SenAllNoteDoctorsState(doctorNote));
-      }
-      else if (event is IsExpandedNoteEvent) {
+      } else if (event is IsExpandedNoteEvent) {
         emit(IsExpandedNoteState(event.doctorNoteModel, event.index));
-      }
-      else if (event is SenAllNoteDoctorEvent) {
+      } else if (event is SenAllNoteDoctorEvent) {
         emit(SenAllNoteDoctorLoadingState());
         (await allVisitNotesUsecase.execute(event.id)).fold((failure) {
           emit(SenAllNoteDoctorErrorState(failure: failure));
@@ -50,21 +48,19 @@ class ReportScienceBloc extends Bloc<ReportScienceEvent, ReportScienceState> {
             emit(SenAllNoteDoctorsState(data));
           }
         });
-      }
-      else if (event is NoIsExpandedNoteEvent) {
+      } else if (event is NoIsExpandedNoteEvent) {
         print("object");
         emit(NoIsExpandedNoteState());
-      }
-      else if (event is ChangeReadScienceNoteEvent) {
+      } else if (event is ChangeReadScienceNoteEvent) {
         print(event.isRead);
         List<DoctorNoteModel> doctorNote = List.from(doctorNoteModel);
         DoctorNoteModel doctorNote1 = DoctorNoteModel(
-            doctorNote[event.id].docTitle,
-            doctorNote[event.id].spTitle,
-            doctorNote[event.id].address,
-            doctorNote[event.id].visitDate,
-            doctorNote[event.id].note,
-           );
+          doctorNote[event.id].docTitle,
+          doctorNote[event.id].spTitle,
+          doctorNote[event.id].address,
+          doctorNote[event.id].visitDate,
+          doctorNote[event.id].note,
+        );
         doctorNoteModel[event.id] = doctorNote1;
         doctorNote[event.id] = doctorNote1;
         emit(SenAsReadState(doctorNote));

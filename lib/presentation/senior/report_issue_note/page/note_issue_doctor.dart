@@ -121,16 +121,14 @@ class NoteIssueDoctor extends StatelessWidget {
                                 children: [
                                   Text(
                                     doctorNoteModel.docTitle,
-                                    style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "${doctorNoteModel.address}",
-                                    style:Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                   Row(
@@ -190,13 +188,9 @@ class NoteIssueDoctor extends StatelessWidget {
                                         child: Text(
                                           textAlign: TextAlign.start,
                                           " ${doctorNoteModel.issue} ",
-                                          style:
-                                          Theme.of(context)
-                                                  .textTheme
-
-                                                  .bodySmall
-                                          ,
-
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
                                         ),
                                       ),
                                     ],

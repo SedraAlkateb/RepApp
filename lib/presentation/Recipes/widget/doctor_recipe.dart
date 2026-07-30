@@ -16,8 +16,10 @@ class PrescriptionMenuWidget extends StatelessWidget {
     return BlocConsumer<DoctorsBloc, DoctorsState>(
       // التحقق من أن الانتقال يخص هذا الطبيب فقط
       listenWhen: (previous, current) {
-        if (current is CheckRecipesState && current.docId == doctorId) return true;
-        if (current is CheckRecipesErrorState && current.docId == doctorId) return true;
+        if (current is CheckRecipesState && current.docId == doctorId)
+          return true;
+        if (current is CheckRecipesErrorState && current.docId == doctorId)
+          return true;
         return false;
       },
       listener: (context, state) {
@@ -27,12 +29,14 @@ class PrescriptionMenuWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RecipesPage(docId: doctorId, st: state.st),
+                builder: (context) =>
+                    RecipesPage(docId: doctorId, st: state.st),
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
+              const SnackBar(
+                  content: Text('لقد تجاوزت الحد المسموح لعدد الوصفات')),
             );
           }
         }
@@ -43,18 +47,21 @@ class PrescriptionMenuWidget extends StatelessWidget {
       },
       // التحقق من أن التحميل يخص هذا الطبيب فقط لتغيير شكل الزر
       buildWhen: (previous, current) {
-        return (current is CheckRecipesLoadingState || previous is CheckRecipesLoadingState);
+        return (current is CheckRecipesLoadingState ||
+            previous is CheckRecipesLoadingState);
       },
       builder: (context, state) {
         // هنا نفترض أن الـ LoadingState يحتوي على ID الطبيب الحالي
-        bool isLoading = (state is CheckRecipesLoadingState && state.docId == doctorId);
+        bool isLoading =
+            (state is CheckRecipesLoadingState && state.docId == doctorId);
 
         return PopupMenuButton<int>(
           onSelected: (value) {
             context.read<DoctorsBloc>().add(CheckReciEvent(doctorId, value));
           },
           enabled: !isLoading,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
           offset: Offset(0, 40.h),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -65,7 +72,8 @@ class PrescriptionMenuWidget extends StatelessWidget {
                   SizedBox(
                     width: 15.sp,
                     height: 15.sp,
-                    child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.blue),
+                    child: const CircularProgressIndicator(
+                        strokeWidth: 2, color: Colors.blue),
                   )
                 else ...[
                   Text(
@@ -77,21 +85,25 @@ class PrescriptionMenuWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 4.w),
-                  Icon(Icons.keyboard_arrow_down, color: Colors.blue, size: 18.sp),
+                  Icon(Icons.keyboard_arrow_down,
+                      color: Colors.blue, size: 18.sp),
                 ],
               ],
             ),
           ),
           itemBuilder: (context) => [
-            _buildPopupItem(value: 0, label: "إنشاء وصفة", icon: Icons.add_box_outlined),
-            _buildPopupItem(value: 1, label: "تكرار وصفة", icon: Icons.history_rounded),
+            _buildPopupItem(
+                value: 0, label: "إنشاء وصفة", icon: Icons.add_box_outlined),
+            _buildPopupItem(
+                value: 1, label: "تكرار وصفة", icon: Icons.history_rounded),
           ],
         );
       },
     );
   }
 
-  PopupMenuItem<int> _buildPopupItem({required int value, required String label, required IconData icon}) {
+  PopupMenuItem<int> _buildPopupItem(
+      {required int value, required String label, required IconData icon}) {
     return PopupMenuItem<int>(
       value: value,
       child: Row(

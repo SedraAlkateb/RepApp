@@ -14,7 +14,6 @@ class RemainingVisits extends StatelessWidget {
   final TextEditingController searchNoteDoctorController =
       TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

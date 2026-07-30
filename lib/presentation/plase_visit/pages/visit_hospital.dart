@@ -70,7 +70,6 @@ class _VisitHospitalState extends State<VisitHospital>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildFullHeader(),
-
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 18.w),
                 child: Column(
@@ -96,7 +95,6 @@ class _VisitHospitalState extends State<VisitHospital>
                         specialization = state.specialization;
                       }
                       return Customdropdownsearchspec(
-
                         hintText: "الإختصاصات",
                         items: specialization,
                         onChanged: (value) {
@@ -377,12 +375,11 @@ class _VisitHospitalState extends State<VisitHospital>
                                                     BlocProvider.of<
                                                                 VisitPlaceBloc>(
                                                             context)
-                                                        .add(
-                                                            EditAmountBrandEvent(
-                                                                index,
-                                                                int.parse(convertArabicNumberToEnglish(value))
-
-                                                            ));
+                                                        .add(EditAmountBrandEvent(
+                                                            index,
+                                                            int.parse(
+                                                                convertArabicNumberToEnglish(
+                                                                    value))));
                                                   }
                                                 },
                                                 keyboardType:
@@ -480,14 +477,12 @@ class _VisitHospitalState extends State<VisitHospital>
                           Navigator.pop(context);
                         }
                       },
-                      child:
-
-                      ButtonWidget( () {
+                      child: ButtonWidget(() {
                         if (_formKey.currentState!.validate()) {
                           DateTime now = DateTime.now();
                           // String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
                           VisitHospitalModel visitHospitalModel =
-                          VisitHospitalModel(
+                              VisitHospitalModel(
                             0,
                             now.toIso8601String(),
                             _issueController.text,
@@ -522,8 +517,9 @@ class _VisitHospitalState extends State<VisitHospital>
       ),
     );
   }
-  Widget _buildFullHeader(){
-    return    Container(
+
+  Widget _buildFullHeader() {
+    return Container(
       margin: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -544,18 +540,19 @@ class _VisitHospitalState extends State<VisitHospital>
           SizedBox(height: 20.h),
 
           // قائمة المعلومات
-        //  buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.hospitalModel.placeTitle),
-        //  buildDivider(),
-          buildDetailRow(Icons.business_outlined, "العنوان:", widget.hospitalModel.address),
-         // buildDivider(),
-        //  buildDetailRow(Icons.assignment_outlined, "ملاحظة:",
-       //       widget.hospitalModel.note),
+          //  buildDetailRow(Icons.location_on_outlined, "المنطقة:", widget.hospitalModel.placeTitle),
+          //  buildDivider(),
+          buildDetailRow(Icons.business_outlined, "العنوان:",
+              widget.hospitalModel.address),
+          // buildDivider(),
+          //  buildDetailRow(Icons.assignment_outlined, "ملاحظة:",
+          //       widget.hospitalModel.note),
           SizedBox(height: 20.h),
         ],
       ),
     );
-
   }
+
   // الهيدر الأزرق المنحني
   Widget _buildBlueHeader() {
     return Container(
@@ -580,9 +577,8 @@ class _VisitHospitalState extends State<VisitHospital>
                   MaterialPageRoute(
                     builder: (context) => HospitalViewDetails(
                         hospital: widget.hospitalModel,
-                        hospitalsp: context
-                            .read<VisitPlaceBloc>()
-                            .specialization),
+                        hospitalsp:
+                            context.read<VisitPlaceBloc>().specialization),
                   ));
             },
             child: Container(
@@ -592,11 +588,19 @@ class _VisitHospitalState extends State<VisitHospital>
                 borderRadius: BorderRadius.circular(15.r),
                 border: Border.all(color: Colors.white.withOpacity(0.3)),
               ),
-              child: Text( widget.hospitalModel.title.substring(0, 1), style: TextStyle(color: Colors.white, fontSize: 30.sp, fontWeight: FontWeight.bold)),
+              child: Text(widget.hospitalModel.title.substring(0, 1),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.sp,
+                      fontWeight: FontWeight.bold)),
             ),
           ),
           SizedBox(height: 12.h),
-          Text( widget.hospitalModel.title, style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+          Text(widget.hospitalModel.title,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );

@@ -29,20 +29,13 @@ Widget buildNotesCard(String? note) {
           decoration: BoxDecoration(
               color: Colors.grey.shade50,
               borderRadius: BorderRadius.circular(15.r)),
-          child:
-          Html(
+          child: Html(
             shrinkWrap: true,
-
-            data: note??"لا يوجد ملاحظة",
+            data: note ?? "لا يوجد ملاحظة",
             style: {
-              "body": Style(
-                  color: Colors.blueGrey,
-                  textAlign: TextAlign.right
-              ),
+              "body": Style(color: Colors.blueGrey, textAlign: TextAlign.right),
             },
-
           ),
-
         ),
       ],
     ),

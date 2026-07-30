@@ -1,4 +1,3 @@
-
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -11,15 +10,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EditingPlanTarget extends StatefulWidget {
-  EditingPlanTarget({super.key, required this.repPlan, required this.planBrand});
+  EditingPlanTarget(
+      {super.key, required this.repPlan, required this.planBrand});
   final int repPlan;
- List<PlanBrandModel> planBrand;
+  List<PlanBrandModel> planBrand;
 
   @override
   State<EditingPlanTarget> createState() => _EditingPlanTargetState();
 }
 
-class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKeepAliveClientMixin{
+class _EditingPlanTargetState extends State<EditingPlanTarget>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -42,7 +43,7 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
       // appBar: AppBar(
       //   title: Text("تعديل أصناف الخطة"),
       // )
-   //   ,
+      //   ,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,95 +71,103 @@ class _EditingPlanTargetState extends State<EditingPlanTarget>  with AutomaticKe
                 return errorFullScreen(context, func: () {});
               }
 
-              return
-                widget.planBrand.isEmpty?emptyFullScreen(context):
-                Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
+              return widget.planBrand.isEmpty
+                  ? emptyFullScreen(context)
+                  : Expanded(
+                      child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 8),
+                      child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.all(AppPaddingH.p8),
+                              padding: EdgeInsets.all(AppPaddingH.p16),
+                              decoration: BoxDecoration(
+                                color: ColorManager.white,
+                                border:
+                                    Border.all(color: ColorManager.hintGrey),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(AppSize.s8)),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    widget.planBrand[index].title,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  SizedBox(
+                                    height: AppSize.s8,
+                                  ),
+                                  BlocConsumer<EditBrandPlanBloc,
+                                      EditBrandPlanState>(
+                                    builder: (context, state) {
+                                      if (state
+                                          is FutureChangeLoadingItemValueState) {
+                                        if (state.index == index) {
+                                          return SpinKitThreeInOut(
+                                            color: ColorManager.secondaryColor1,
+                                            size: 30.0,
+                                          );
+                                        }
+                                      }
 
-                      return Container(
-                        margin: EdgeInsets.all(AppPaddingH.p8),
-                        padding: EdgeInsets.all(AppPaddingH.p16),
-                        decoration: BoxDecoration(
-                          color: ColorManager.white,
-                          border: Border.all(color: ColorManager.hintGrey),
-                          borderRadius:  BorderRadius.all(
-                              Radius.circular(AppSize.s8)),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              widget.planBrand[index].title,
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                            SizedBox(
-                              height: AppSize.s8,
-                            ),
-                            BlocConsumer<EditBrandPlanBloc, EditBrandPlanState>(
-                              builder: (context, state) {
-                                if (state
-                                    is FutureChangeLoadingItemValueState) {
-                                  if (state.index == index) {
-                                    return SpinKitThreeInOut(
-                                      color: ColorManager.secondaryColor1,
-                                      size: 30.0,
-                                    );
-                                  }
-                                }
-
-                                return CustomDropDown(
-                                  hintText: widget.planBrand[index].brandType.name,
-                                  items: brandType,
-                                  prefixIcon: null,
-                                  onChanged: (value) {
-                                    BlocProvider.of<EditBrandPlanBloc>(context)
-                                        .add(
-                                      FutureChangePlanBrandTypeEvent(
-                                        widget.planBrand[index].id,
-                                        value.i,
-                                      ),
-                                    );
-                                    widget.planBrand[index].brandType.i =
-                                        value.i;
-                                    BlocProvider.of<EditBrandPlanBloc>(context)
-                                        .add(
-                                      FutureChangeLoadingItemValueEvent(index),
-                                    );
-                                  },
-                                  validator: (value) {
-                                    return null;
-                                  },
-                                  errorText: '',
-                                );
-                              },
-                              listener: (BuildContext context,
-                                  EditBrandPlanState state) {
-                                if (state
-                                    is FutureChangePlanBrandTypeErrorState) {
-                                  error(
-                                    context,
-                                    state.failure.massage,
-                                    state.failure.code,
-                                  );
-                                }
-                              },
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    itemCount: widget.planBrand.length),
-              ));
+                                      return CustomDropDown(
+                                        hintText: widget
+                                            .planBrand[index].brandType.name,
+                                        items: brandType,
+                                        prefixIcon: null,
+                                        onChanged: (value) {
+                                          BlocProvider.of<EditBrandPlanBloc>(
+                                                  context)
+                                              .add(
+                                            FutureChangePlanBrandTypeEvent(
+                                              widget.planBrand[index].id,
+                                              value.i,
+                                            ),
+                                          );
+                                          widget.planBrand[index].brandType.i =
+                                              value.i;
+                                          BlocProvider.of<EditBrandPlanBloc>(
+                                                  context)
+                                              .add(
+                                            FutureChangeLoadingItemValueEvent(
+                                                index),
+                                          );
+                                        },
+                                        validator: (value) {
+                                          return null;
+                                        },
+                                        errorText: '',
+                                      );
+                                    },
+                                    listener: (BuildContext context,
+                                        EditBrandPlanState state) {
+                                      if (state
+                                          is FutureChangePlanBrandTypeErrorState) {
+                                        error(
+                                          context,
+                                          state.failure.massage,
+                                          state.failure.code,
+                                        );
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: widget.planBrand.length),
+                    ));
             },
           ),
         ],
       ),
     );
   }
-    @override
+
+  @override
   bool get wantKeepAlive => true;
 }

@@ -24,15 +24,16 @@ class PlaceSenior extends StatelessWidget {
         if (state is SenAllPlaceState) {
           final List<PlaceModel> placeModel = state.places;
 
-          return
-            placeModel.isEmpty?emptyFullScreen(context):
-            ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            itemCount: placeModel.length,
-            itemBuilder: (context, index) {
-              return _buildPlaceCard(context, placeModel[index]);
-            },
-          );
+          return placeModel.isEmpty
+              ? emptyFullScreen(context)
+              : ListView.builder(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  itemCount: placeModel.length,
+                  itemBuilder: (context, index) {
+                    return _buildPlaceCard(context, placeModel[index]);
+                  },
+                );
         }
 
         if (state is SenAllPlaceLoadingState) {
@@ -42,7 +43,8 @@ class PlaceSenior extends StatelessWidget {
         if (state is SenAllPlaceErrorState) {
           return errorFullScreen(
             context,
-            func: () => BlocProvider.of<SeniorProfBloc>(context).add(SenAllPlaceEvent(203)),
+            func: () => BlocProvider.of<SeniorProfBloc>(context)
+                .add(SenAllPlaceEvent(203)),
           );
         }
 
@@ -66,7 +68,8 @@ class PlaceSenior extends StatelessWidget {
         ],
         border: Border.all(color: Colors.grey.withOpacity(0.1)),
       ),
-      child: Material( // إضافة تأثير الضغط (InkWell)
+      child: Material(
+        // إضافة تأثير الضغط (InkWell)
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16.r),
@@ -115,7 +118,6 @@ class PlaceSenior extends StatelessWidget {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),

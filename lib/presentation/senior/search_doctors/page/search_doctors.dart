@@ -37,12 +37,11 @@ class _SearchDoctorsState extends State<SearchDoctors>
           Expanded(
             child: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
               buildWhen: (previous, current) =>
-              current is FutureSearchDoctorsErrorState ||
+                  current is FutureSearchDoctorsErrorState ||
                   current is FutureSearchDoctorsLoadingState ||
                   current is FutureSearchDoctorsState ||
                   current is FutureSearchDoctorsEmptyState,
               builder: (context, state) {
-
                 // 1. حالة الخطأ: تم تغليفها بـ SliverToBoxAdapter لتتوافق مع CustomScrollView
                 if (state is FutureSearchDoctorsErrorState) {
                   return CustomScrollView(
@@ -91,16 +90,18 @@ class _SearchDoctorsState extends State<SearchDoctors>
                     physics: const BouncingScrollPhysics(), // تمرير مرن وسلس
                     slivers: [
                       SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 10.h),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
-                                (context, index) {
+                            (context, index) {
                               // يتم رندرة الطبيب فقط عندما يقترب من الظهور على الشاشة
                               return doctorWidget(
                                 text: "عرض التقارير",
                                 spTitle: state.representative[index].spTitle,
                                 title: state.representative[index].name,
-                                placeTitle: state.representative[index].placeTitle,
+                                placeTitle:
+                                    state.representative[index].placeTitle,
                                 id: state.representative[index].id,
                                 context: context,
                                 function: () {
@@ -108,12 +109,14 @@ class _SearchDoctorsState extends State<SearchDoctors>
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => DoctorDetails(
-                                        doctorModel: state.representative[index],
+                                        doctorModel:
+                                            state.representative[index],
                                       ),
                                     ),
                                   );
                                   BlocProvider.of<SearchDoctorsBloc>(context)
-                                      .add(FutureDocDoctorsEvent(state.representative[index].id));
+                                      .add(FutureDocDoctorsEvent(
+                                          state.representative[index].id));
                                 },
                               );
                             },

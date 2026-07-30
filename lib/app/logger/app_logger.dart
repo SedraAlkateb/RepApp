@@ -7,9 +7,9 @@ class AppLogger {
     Logger.root.onRecord.listen((record) {
       print(
         '[${record.level.name}] '
-            '${record.time} '
-            '${record.loggerName}: '
-            '${record.message}',
+        '${record.time} '
+        '${record.loggerName}: '
+        '${record.message}',
       );
 
       if (record.error != null) {

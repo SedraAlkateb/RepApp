@@ -10,8 +10,7 @@ class DeleteDataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body:
-      Padding(
+      body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -20,17 +19,25 @@ class DeleteDataPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(LucideIcons.user, size: 70, color: Color(0xFF1A3E62)),
+                  const Icon(LucideIcons.user,
+                      size: 70, color: Color(0xFF1A3E62)),
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      const Icon(LucideIcons.monitor, size: 100, color: Color(0xFF1A3E62)),
+                      const Icon(LucideIcons.monitor,
+                          size: 100, color: Color(0xFF1A3E62)),
                       Positioned(
-                        top: 15, right: -5,
+                        top: 15,
+                        right: -5,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 2),
                           color: const Color(0xFF1A3E62),
-                          child:  Text("Delete", style: TextStyle(color: Colors.white, fontSize: 9.sp, fontWeight: FontWeight.bold)),
+                          child: Text("Delete",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 9.sp,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
@@ -39,10 +46,13 @@ class DeleteDataPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-             Text(
+            Text(
               "سوف نحذف الداتا لاعادة تنزيلها",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: Color(0xFF0D47A1)),
+              style: TextStyle(
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0D47A1)),
             ),
             const SizedBox(height: 50),
           ],
@@ -58,21 +68,28 @@ class DatabaseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 70, height: 90,
+      width: 70,
+      height: 90,
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xFF1A3E62), width: 3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(2, (index) => Container(
-          width: 45, height: 22,
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF1A3E62), width: 2),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: const Center(child: Icon(Icons.circle, size: 5, color: Color(0xFF1A3E62))),
-        )),
+        children: List.generate(
+            2,
+            (index) => Container(
+                  width: 45,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: const Color(0xFF1A3E62), width: 2),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Center(
+                      child: Icon(Icons.circle,
+                          size: 5, color: Color(0xFF1A3E62))),
+                )),
       ),
     );
   }
@@ -81,12 +98,13 @@ class DatabaseWidget extends StatelessWidget {
 // 2. الحاوية الدائرية الخلفية للرسومات
 Widget buildIllustrationContainer({required Widget child}) {
   return Container(
-    width: 260, height: 260,
-    decoration: const BoxDecoration(color: Color(0xFFF8F9FB), shape: BoxShape.circle),
+    width: 260,
+    height: 260,
+    decoration:
+        const BoxDecoration(color: Color(0xFFF8F9FB), shape: BoxShape.circle),
     child: Center(child: child),
   );
 }
-
 
 /*
  ║ [h3=":443"; ma=2592000, h3-29=":443"; ma=2592000, h3-Q050=":443"; ma=2592000, h3-Q046=":44

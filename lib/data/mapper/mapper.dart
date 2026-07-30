@@ -62,14 +62,13 @@ extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
       responseItem?.recipesCount ?? Constants.empty,
       responseItem?.repPlanId ?? Constants.zero,
       responseItem?.totalVisit ?? Constants.zero,
-      responseItem?.totDocVisit ?? Constants.empty,    // المابر الجديد
-      responseItem?.totHosVisit ?? Constants.empty,    // المابر الجديد
+      responseItem?.totDocVisit ?? Constants.empty, // المابر الجديد
+      responseItem?.totHosVisit ?? Constants.empty, // المابر الجديد
       responseItem?.visitDon ?? Constants.zero,
-      responseItem?.visitDonDoc ?? Constants.empty,    // المابر الجديد
-      responseItem?.visitDonHos ?? Constants.empty,    // المابر الجديد
+      responseItem?.visitDonDoc ?? Constants.empty, // المابر الجديد
+      responseItem?.visitDonHos ?? Constants.empty, // المابر الجديد
       responseItem?.visitnotYet ?? Constants.zero,
-      int.parse(responseItem?.repType?? "0"),
-
+      int.parse(responseItem?.repType ?? "0"),
     );
   }
 }
@@ -95,11 +94,10 @@ extension CheckActiveResposeMapper on CheckActiveBaseResponse? {
 extension BrandsSpRequestMapper on BrandSpResponse? {
   BrandSpModel toDomain() {
     return BrandSpModel(
-      int.parse(this?.id ?? "0"),
-      int.parse(this?.spId ?? "0"),
-      int.parse(this?.brandId ?? "0"),
-      Type.fromIntS(this?.brandType)
-    );
+        int.parse(this?.id ?? "0"),
+        int.parse(this?.spId ?? "0"),
+        int.parse(this?.brandId ?? "0"),
+        Type.fromIntS(this?.brandType));
   }
 }
 
@@ -260,15 +258,17 @@ extension AllCityResponseMapper on AllCityBaseResponse? {
     return City;
   }
 }
+
 extension InsertRecMapper on InsertRecipeBaseResponse? {
   InsertRecResponse toDomain() {
     return InsertRecResponse(
-        this?.data?.TotalReci ?? Constants.zero,
-        this?.data?.usedReci ?? Constants.zero,
-        this?.data?.remainReci ?? Constants.zero,
-        );
+      this?.data?.TotalReci ?? Constants.zero,
+      this?.data?.usedReci ?? Constants.zero,
+      this?.data?.remainReci ?? Constants.zero,
+    );
   }
 }
+
 extension LoginResponseMapper on LoginResponse? {
   LoginModel toDomain() {
     return LoginModel(
@@ -289,7 +289,6 @@ extension LoginResponseMapper on LoginResponse? {
       int.parse(this?.data?.cityId ?? "0"),
       this?.data?.cityTitle ?? Constants.empty,
       RepType.fromIntS(this?.data?.repType),
-
       otherEndDate: this?.data?.otherEndDate ?? Constants.empty,
       otherStartDate: this?.data?.otherStartDate ?? Constants.empty,
       this?.data?.totalReci ?? Constants.zero,
@@ -392,7 +391,7 @@ extension ActivePlanMapper on PlanBrandModel? {
     return PlanBrandSp(
       this?.id ?? Constants.zero,
       this?.brandId ?? Constants.zero,
-      this?.brandType??Type.fromIntS(null),
+      this?.brandType ?? Type.fromIntS(null),
       this?.title ?? Constants.empty,
       this?.spId ?? Constants.zero,
       "",
@@ -418,25 +417,27 @@ extension CurrentPlanMapper on PlanBrandSp? {
       this?.spId ?? Constants.zero,
       this?.brandId ?? Constants.zero,
       planId,
-      this?.brandType??Type.fromIntS(null),
+      this?.brandType ?? Type.fromIntS(null),
       this?.titleAr ?? Constants.empty,
       this?.totalAmount.toString() ?? Constants.empty,
       this?.phTitle ?? Constants.empty,
     );
   }
 }
+
 extension HospitalMapper on HospitalSpAllModel? {
   HospitalModel toDomain() {
     return HospitalModel(
       this?.hospitalId ?? Constants.zero,
       this?.title ?? Constants.empty,
-     -1,
+      -1,
       this?.address ?? Constants.empty,
       this?.note ?? Constants.empty,
       this?.placeTitle.toString() ?? Constants.empty,
     );
   }
 }
+
 extension HospitalSpMapper on HospitalSpModel? {
   HospitalSpAllModel toDomain() {
     return HospitalSpAllModel(
@@ -446,7 +447,7 @@ extension HospitalSpMapper on HospitalSpModel? {
       this?.placeTitle.toString() ?? Constants.empty,
       this?.note ?? Constants.empty,
       this?.rate ?? Constants.empty,
-      this?.totalDocs?? Constants.zero,
+      this?.totalDocs ?? Constants.zero,
       this?.visit ?? Constants.zero,
       this?.SpName ?? Constants.empty,
       this?.flag ?? Constants.zero,
@@ -464,16 +465,17 @@ extension AllCurrentPlansMapper on List<PlanBrandSp>? {
     return planBrands;
   }
 }
+
 extension HospitalSpsMapper on List<HospitalSpModel>? {
   List<HospitalSpAllModel> toDomain() {
     List<HospitalSpAllModel> data =
-    (this?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<HospitalSpAllModel>()
-        .toList();
+        (this?.map((response) => response.toDomain()) ?? const Iterable.empty())
+            .cast<HospitalSpAllModel>()
+            .toList();
     return data;
   }
 }
+
 extension AllPlanBrandMapper on AllPlanBrandsBaseResponse? {
   List<PlanBrandModel> toDomain() {
     List<PlanBrandModel> planBrands =
@@ -971,14 +973,12 @@ extension AllRepresentativeFutureMapper
 extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
   AllRepresentativeFuture toDomain() {
     return AllRepresentativeFuture(
-      int.parse(this?.id ?? "0"),
-      this?.name ?? Constants.empty,
-      FlagModel(int.parse(this?.flag ?? "0")),
-      int.parse(this?.futurePlan ?? "0"),
-      int.parse(this?.samplesCount ?? "0"),
-        RepType.fromIntS(this?.reptype)
-
-    );
+        int.parse(this?.id ?? "0"),
+        this?.name ?? Constants.empty,
+        FlagModel(int.parse(this?.flag ?? "0")),
+        int.parse(this?.futurePlan ?? "0"),
+        int.parse(this?.samplesCount ?? "0"),
+        RepType.fromIntS(this?.reptype));
   }
 }
 

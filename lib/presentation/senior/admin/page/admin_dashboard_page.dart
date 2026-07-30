@@ -172,9 +172,9 @@ class AdminDashboardPage extends StatelessWidget {
                           iconColor: Colors.grey,
                           onTap: () {
                             Navigator.pushNamed(
-                                    context,
-                                    Routes.cityPlan,
-                                  );
+                              context,
+                              Routes.cityPlan,
+                            );
                           },
                         ),
                       ],

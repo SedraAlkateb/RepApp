@@ -9,6 +9,7 @@ class ReciNumUsecase extends Equatable {
   Future<Either<Failure, List<int>>> execute() async {
     return await _repository.reciNum();
   }
+
   @override
   List<Object?> get props => [_repository];
 }

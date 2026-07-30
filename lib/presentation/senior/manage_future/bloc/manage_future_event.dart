@@ -1,7 +1,8 @@
 part of 'manage_future_bloc.dart';
 
 @immutable
-sealed class ManageFutureEvent extends Equatable{}
+sealed class ManageFutureEvent extends Equatable {}
+
 class AllSeniorRepFutureEvent extends ManageFutureEvent {
   final int placeId;
   AllSeniorRepFutureEvent(this.placeId);
@@ -9,23 +10,23 @@ class AllSeniorRepFutureEvent extends ManageFutureEvent {
   List<Object?> get props => [];
 }
 
-class SenSearchRepFutureEvent extends ManageFutureEvent{
+class SenSearchRepFutureEvent extends ManageFutureEvent {
   final String contant;
   SenSearchRepFutureEvent(this.contant);
   @override
   List<Object?> get props => [contant];
 }
 
-
-class ChangPlanStatusEvent extends ManageFutureEvent{
+class ChangPlanStatusEvent extends ManageFutureEvent {
   final int id;
   final int brandType;
   final int index;
-  ChangPlanStatusEvent(this.id,this.brandType,this.index);
+  ChangPlanStatusEvent(this.id, this.brandType, this.index);
   @override
-  List<Object?> get props => [id,brandType,index];
+  List<Object?> get props => [id, brandType, index];
 }
-class GetPlaceEvent extends ManageFutureEvent{
+
+class GetPlaceEvent extends ManageFutureEvent {
   final int id;
   GetPlaceEvent(this.id);
   @override

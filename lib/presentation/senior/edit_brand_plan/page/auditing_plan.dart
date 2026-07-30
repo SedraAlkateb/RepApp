@@ -10,7 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditingPlan extends StatelessWidget {
-  EditingPlan({super.key, required this.repPlan,required this.repName,required this.placeId});
+  EditingPlan(
+      {super.key,
+      required this.repPlan,
+      required this.repName,
+      required this.placeId});
   final int repPlan;
   final String repName;
   final int placeId;
@@ -21,7 +25,8 @@ class EditingPlan extends StatelessWidget {
   Widget build(BuildContext context) {
     // منطق الرجوع للخلف لتحديث القائمة السابقة
     Future<bool> _onWillPop() async {
-      BlocProvider.of<ManageFutureBloc>(context).add(AllSeniorRepFutureEvent(placeId));
+      BlocProvider.of<ManageFutureBloc>(context)
+          .add(AllSeniorRepFutureEvent(placeId));
       return true;
     }
 
@@ -30,9 +35,8 @@ class EditingPlan extends StatelessWidget {
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
-
-
-          backgroundColor: const Color(0xFFF8F9FB), // خلفية ناعمة لإبراز العناصر
+          backgroundColor:
+              const Color(0xFFF8F9FB), // خلفية ناعمة لإبراز العناصر
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
@@ -44,7 +48,8 @@ class EditingPlan extends StatelessWidget {
                   snap: true,
                   backgroundColor: Colors.white,
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back_ios_new, color: ColorManager.secondaryColor1, size: 22.sp),
+                    icon: Icon(Icons.arrow_back_ios_new,
+                        color: ColorManager.secondaryColor1, size: 22.sp),
                     onPressed: () {
                       _onWillPop();
                       Navigator.pop(context);
@@ -86,7 +91,8 @@ class EditingPlan extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 14.sp),
                         indicatorSize: TabBarIndicatorSize.tab,
                         indicator: BoxDecoration(
-                          color: ColorManager.secondaryColor1, // اللون الرئيسي المعتمد
+                          color: ColorManager
+                              .secondaryColor1, // اللون الرئيسي المعتمد
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         onTap: (value) {
@@ -129,7 +135,8 @@ class EditingPlan extends StatelessWidget {
             },
             // المحتوى الذي يتغير بناءً على الـ Tabs
             body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),              children: [
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
                 EditingPlanTarget(repPlan: repPlan),
                 EditingPlanAssistant(repPlan: repPlan),
               ],

@@ -25,13 +25,12 @@ class _DoctorVisitState extends State<DoctorVisit>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             SearchField(
+            SearchField(
               searchController: searchController,
               onPressed: (value) {
                 BlocProvider.of<VisitPlaceBloc>(context)
@@ -61,45 +60,49 @@ class _DoctorVisitState extends State<DoctorVisit>
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: ListView.builder(
-
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Container(
-                        margin: EdgeInsets.only(bottom: 16.h,right: 8.w,left: 8.w),
+                        margin: EdgeInsets.only(
+                            bottom: 16.h, right: 8.w, left: 8.w),
                         padding: EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15.r),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.08), // درجة غمق الظل
+                              color: Colors.black
+                                  .withOpacity(0.08), // درجة غمق الظل
                               blurRadius: 15, // مدى نعومة الظل
                               spreadRadius: 0, // مدى انتشار الظل
-                              offset: const Offset(0, 6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
+                              offset: const Offset(0,
+                                  6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
                             ),
-                          ],                          ),
+                          ],
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w, vertical: 4.h),
                                   decoration: BoxDecoration(
                                     color: Colors.blue.shade50,
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
-                                  child: Text(doctors[index].spTitle, style
-                                      : TextStyle(color: Colors.blue, fontSize: 12.sp)),
+                                  child: Text(doctors[index].spTitle,
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 12.sp)),
                                 ),
-                                Text(
-                                  doctors[index].title,
+                                Text(doctors[index].title,
                                     style: TextStyle(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold, color: ColorManager.medicalPrimary)),
-
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorManager.medicalPrimary)),
                               ],
                             ),
                             SizedBox(height: 10.h),
@@ -108,41 +111,47 @@ class _DoctorVisitState extends State<DoctorVisit>
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(Icons.location_on_outlined,size: 22.sp,color: Colors.grey),
-                                SizedBox(width: 8.w,),
+                                Icon(Icons.location_on_outlined,
+                                    size: 22.sp, color: Colors.grey),
+                                SizedBox(
+                                  width: 8.w,
+                                ),
                                 Expanded(
                                   child: Text(doctors[index].address,
-                                      style: TextStyle
-                                        (color: Colors.grey,
-                                          fontSize: 15.sp)),
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 15.sp)),
                                 ),
                               ],
                             ),
                             SizedBox(height: 16.h),
-                            Divider(color:  Colors.grey,thickness: 0.1,),
+                            Divider(
+                              color: Colors.grey,
+                              thickness: 0.1,
+                            ),
                             SizedBox(height: 8.h),
                             // أزرار الأكشن
                             Row(
                               children: [
-                                PrescriptionMenuWidget(doctorId:  doctors[index].id),
+                                PrescriptionMenuWidget(
+                                    doctorId: doctors[index].id),
                                 const Spacer(),
                                 InkWell(
                                   onTap: () {
                                     Navigator.pushNamed(
                                       context,
                                       Routes.visitDoctor,
-                                      arguments:doctors[index], // نرسل الـ ID هنا
+                                      arguments:
+                                          doctors[index], // نرسل الـ ID هنا
                                     );
-
                                   },
-                                  child: buildCardButton("بدء زيارة",
+                                  child: buildCardButton(
+                                      "بدء زيارة",
                                       ColorManager.medicalPrimary,
-                                      Colors.white, Icons.directions_run),
+                                      Colors.white,
+                                      Icons.directions_run),
                                 ),
-
                               ],
                             ),
-
                           ],
                         ),
                       );
@@ -157,5 +166,4 @@ class _DoctorVisitState extends State<DoctorVisit>
       ),
     );
   }
-
 }

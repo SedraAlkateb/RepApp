@@ -17,40 +17,37 @@ class SpecSeniorPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-
         title: Text('الإختصاصات'),
       ),
-      body:OrientationBuilder(
-          builder: (context, orientation) {
-            int crossAxisCount;
-            if (isTablet) {
-              crossAxisCount = orientation == Orientation.landscape ? 4 : 3;
-            } else {
-              crossAxisCount = orientation == Orientation.landscape ? 3 : 2;
-            }
+      body: OrientationBuilder(builder: (context, orientation) {
+        int crossAxisCount;
+        if (isTablet) {
+          crossAxisCount = orientation == Orientation.landscape ? 4 : 3;
+        } else {
+          crossAxisCount = orientation == Orientation.landscape ? 3 : 2;
+        }
 
-            return SingleChildScrollView(
-            child: Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: isTablet ? 30.w : 16.w,
-              vertical: 12.h
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  SearchField(
-                    searchController: searchController,
-                    onPressed: (value) {
-                      BlocProvider.of<SeniorProfBloc>(context)
-                          .add(SenSearchSpecEvent(value));
-                    },
-                  ),
-                  SizedBox(height: 12.h,),
-                  BlocConsumer<SeniorProfBloc, SeniorProfState>(
-                    listener: (context, state) {
-                      /*
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: isTablet ? 30.w : 16.w, vertical: 12.h),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchField(
+                  searchController: searchController,
+                  onPressed: (value) {
+                    BlocProvider.of<SeniorProfBloc>(context)
+                        .add(SenSearchSpecEvent(value));
+                  },
+                ),
+                SizedBox(
+                  height: 12.h,
+                ),
+                BlocConsumer<SeniorProfBloc, SeniorProfState>(
+                  listener: (context, state) {
+                    /*
                             if (state is AllSpecLoadingState) {
                               loading(context);
                             }
@@ -58,30 +55,28 @@ class SpecSeniorPage extends StatelessWidget {
                               success(context);
                             }
                             */
-                      if (state is SenAllSpecErrorState) {
-                        error(context, state.failure.massage, state.failure.code);
-                      }
-                    },
-                    builder: (context, state) {
-                      List<SpecDModel> placeModel =
-                          context.watch<SeniorProfBloc>().specialization;
-                      if (state is SenAllSpecState) {
-                        placeModel = state.Specs;
-                      }
-                      if(state is SenAllSpecLoadingState){
-                        return loadingFullScreen(context);
-                      }
-                      return SpecGridWidget(items: placeModel, crossAxisCount: crossAxisCount);
-
-
-                    },
-                  ),
-                ],
-              ),
+                    if (state is SenAllSpecErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                    }
+                  },
+                  builder: (context, state) {
+                    List<SpecDModel> placeModel =
+                        context.watch<SeniorProfBloc>().specialization;
+                    if (state is SenAllSpecState) {
+                      placeModel = state.Specs;
+                    }
+                    if (state is SenAllSpecLoadingState) {
+                      return loadingFullScreen(context);
+                    }
+                    return SpecGridWidget(
+                        items: placeModel, crossAxisCount: crossAxisCount);
+                  },
+                ),
+              ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }

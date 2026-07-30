@@ -275,11 +275,9 @@ class RouteGenerator {
       //   return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
-        return _animatedRoute(PlaceSenior(
-        ));
+        return _animatedRoute(PlaceSenior());
       case Routes.seniorFuturePlaces:
-        return _animatedRoute(FuturePlacePage(
-        ));
+        return _animatedRoute(FuturePlacePage());
       case Routes.seniorSpec:
         return _animatedRoute(SpecSeniorPage());
       case Routes.seniorHos:
@@ -342,13 +340,10 @@ class RouteGenerator {
         return _animatedRoute(RecipeDH());
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
-        return _animatedRoute(AllRepWithFuture(
-
-        ));
+        return _animatedRoute(AllRepWithFuture());
       case Routes.seniorByCityId:
         initGeneralReportsModule();
-        return _animatedRoute(AllRepWithFuture(
-        ));
+        return _animatedRoute(AllRepWithFuture());
       case Routes.adminControl:
         return _animatedRoute(AdminDashboardPage());
       case Routes.doctorAndHospitalArchive:

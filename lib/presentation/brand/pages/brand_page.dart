@@ -17,13 +17,15 @@ class BrandPage extends StatelessWidget {
           title: Text(' الأصناف'),
         ),
         body: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 8.w),
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 12.h,),
+                SizedBox(
+                  height: 12.h,
+                ),
                 SearchField(
                     searchController: searchbrandController,
                     onPressed: (value) {
@@ -46,12 +48,12 @@ class BrandPage extends StatelessWidget {
                                 success(context);}
 
                    */
-                },
-                              builder: (context, state) {
-                                if(state is AllBrandState){
-                List<BrandModel> brandModel=state.brand;
-                return BrandListWidget(brands: brandModel);
-                                }
+                  },
+                  builder: (context, state) {
+                    if (state is AllBrandState) {
+                      List<BrandModel> brandModel = state.brand;
+                      return BrandListWidget(brands: brandModel);
+                    }
 
                     return SizedBox();
                   },

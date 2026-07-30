@@ -56,7 +56,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   buildEditableSection(
                     title: "الهدف من الزيارة",
                     controller: _targetController,
@@ -118,7 +117,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                   SizedBox(height: 15.h),
                   _buildFloatingEditButton(isEditable),
                   SizedBox(height: 100.h), // مساحة للزر العائم
-
                 ],
               ),
             ),
@@ -216,7 +214,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
 // دالة مساعدة لتجنب تكرار الكود وتنسيق أيقونة + نص
   Widget _buildHeaderInfo({required IconData icon, required String label}) {
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 10.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -225,7 +223,8 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
           Icon(icon, color: Colors.white70, size: 14.sp),
           SizedBox(width: 4.w),
           Expanded(
-            child: Text(textAlign: TextAlign.center,
+            child: Text(
+              textAlign: TextAlign.center,
               label,
               style: TextStyle(color: Colors.white70, fontSize: 13.sp),
             ),
@@ -256,7 +255,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
   }
 
   Widget _buildSamplesSection(bool isEditable) {
-
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -309,101 +307,92 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
               : SizedBox(),
           context.read<VisitBloc>().isBrand == false
               ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: AppSize.s8,
-              ),
-              widget.doctorModel.visitDoctorModel.flag == 1
-                  ?
-              ///////////////////////////////ss
-              BlocBuilder<VisitBloc, VisitState>(
-                buildWhen: (previous, current) {
-                  return current is SelectBrandState ||
-                      current is DeleteBrandState ||
-                      current is BrandPharmacyVisitState ||
-                      current is EditAmountBrandState;
-                },
-                builder: (context, state) {
-                  print("sssssssssssssssss: ${context.watch<VisitBloc>().brands}");
-                  List<PharmacyBrandModel> selectBrand =
-                      context.watch<VisitBloc>().brands;
-                  if (state is BrandPharmacyVisitState) {
-                    selectBrand = state.brands;
-                  }
-                  if (state is DeleteBrandState) {
-                    selectBrand = state.brands;
-                  }
-                  return TableVisitStatic(
-                      selectBrand: selectBrand);
-                },
-              )
-                  : Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 8,
-                  ),
-                  BlocListener<VisitBloc, VisitState>(
-                    listener: (context, state) {
-                      if (state is BrandFlagErrorState) {
-                        error(
-                            context,
-                            state.failure.massage,
-                            state.failure.code);
-                      }
-                    },
-                    child: CustomDropDownSearch(
-                      hintText: "العينات",
-                      items: context
-                          .watch<VisitBloc>()
-                          .bandFlag,
-                      onChanged: (value) {
-                        BrandModel brand = value;
-                        BlocProvider.of<VisitBloc>(context)
-                            .add(SelectBrandEvent(brand));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "اختر نوع الطلب";
-                        }
-                        return null;
-                      },
-                      errorText: 'لايوجد نتيجة',
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: AppSize.s8,
                     ),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-
-                  BlocBuilder<VisitBloc, VisitState>(
-                    buildWhen: (previous, current) {
-                      return current is SelectBrandState ||
-                          current is DeleteBrandState ||
-                          current
-                          is BrandPharmacyVisitState ||
-                          current is EditAmountBrandState;
-                    },
-                    builder: (context, state) {
-
-                      List<PharmacyBrandModel> selectBrand =
-                          context.watch<VisitBloc>().brands;
-                      if (state
-                      is BrandPharmacyVisitState) {
-                        selectBrand = state.brands;
-                      }
-                      return TableVisitDynamic(
-                        selectBrand: selectBrand,
-                      );
-                    },
-                  )
-                ],
-              ),
-            ],
-          ):SizedBox(),
-
+                    widget.doctorModel.visitDoctorModel.flag == 1
+                        ?
+                        ///////////////////////////////ss
+                        BlocBuilder<VisitBloc, VisitState>(
+                            buildWhen: (previous, current) {
+                              return current is SelectBrandState ||
+                                  current is DeleteBrandState ||
+                                  current is BrandPharmacyVisitState ||
+                                  current is EditAmountBrandState;
+                            },
+                            builder: (context, state) {
+                              print(
+                                  "sssssssssssssssss: ${context.watch<VisitBloc>().brands}");
+                              List<PharmacyBrandModel> selectBrand =
+                                  context.watch<VisitBloc>().brands;
+                              if (state is BrandPharmacyVisitState) {
+                                selectBrand = state.brands;
+                              }
+                              if (state is DeleteBrandState) {
+                                selectBrand = state.brands;
+                              }
+                              return TableVisitStatic(selectBrand: selectBrand);
+                            },
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 8,
+                              ),
+                              BlocListener<VisitBloc, VisitState>(
+                                listener: (context, state) {
+                                  if (state is BrandFlagErrorState) {
+                                    error(context, state.failure.massage,
+                                        state.failure.code);
+                                  }
+                                },
+                                child: CustomDropDownSearch(
+                                  hintText: "العينات",
+                                  items: context.watch<VisitBloc>().bandFlag,
+                                  onChanged: (value) {
+                                    BrandModel brand = value;
+                                    BlocProvider.of<VisitBloc>(context)
+                                        .add(SelectBrandEvent(brand));
+                                  },
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "اختر نوع الطلب";
+                                    }
+                                    return null;
+                                  },
+                                  errorText: 'لايوجد نتيجة',
+                                ),
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              BlocBuilder<VisitBloc, VisitState>(
+                                buildWhen: (previous, current) {
+                                  return current is SelectBrandState ||
+                                      current is DeleteBrandState ||
+                                      current is BrandPharmacyVisitState ||
+                                      current is EditAmountBrandState;
+                                },
+                                builder: (context, state) {
+                                  List<PharmacyBrandModel> selectBrand =
+                                      context.watch<VisitBloc>().brands;
+                                  if (state is BrandPharmacyVisitState) {
+                                    selectBrand = state.brands;
+                                  }
+                                  return TableVisitDynamic(
+                                    selectBrand: selectBrand,
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                  ],
+                )
+              : SizedBox(),
         ],
       ),
     );

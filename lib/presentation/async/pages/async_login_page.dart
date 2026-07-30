@@ -18,16 +18,16 @@ class AsyncLoginPage extends StatefulWidget {
   State<AsyncLoginPage> createState() => _AsyncLoginPageState();
 }
 
-class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProviderStateMixin {
+class _AsyncLoginPageState extends State<AsyncLoginPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _arrowCtrl;
 
   @override
   void initState() {
     super.initState();
-    _arrowCtrl = AnimationController(
-        duration: const Duration(seconds: 1),
-        vsync: this
-    )..repeat(reverse: true);
+    _arrowCtrl =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this)
+          ..repeat(reverse: true);
   }
 
   @override
@@ -52,7 +52,7 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.login,
-                      (route) => false,
+                  (route) => false,
                 );
                 BlocProvider.of<AsyncBloc>(context).add(DeleteAllEvent());
               },
@@ -71,7 +71,8 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                 width: 8.w,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.horizontal(left: Radius.circular(10.r)),
+                  borderRadius:
+                      BorderRadius.horizontal(left: Radius.circular(10.r)),
                 ),
               ),
             ),
@@ -88,21 +89,22 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                       BlocBuilder<AsyncBloc, AsyncState>(
                         builder: (context, state) => state is LoadingState
                             ? CircleNumberWidget(number: state.loading)
-                            : SizedBox(height: 60.h), // مسافة ثابتة للمحافظة على التوازن
+                            : SizedBox(
+                                height:
+                                    60.h), // مسافة ثابتة للمحافظة على التوازن
                       ),
                       Container(
                         width: 250.w,
                         height: 250.w,
                         decoration: const BoxDecoration(
-                            color: Color(0xFFF8F9FB),
-                            shape: BoxShape.circle
-                        ),
+                            color: Color(0xFFF8F9FB), shape: BoxShape.circle),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Icon(LucideIcons.user, size: 80, color: Color(0xFF1A3E62)),
+                              const Icon(LucideIcons.user,
+                                  size: 80, color: Color(0xFF1A3E62)),
                               SizedBox(width: 15.w),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -112,8 +114,7 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                                     builder: (context, _) => Icon(
                                         Icons.keyboard_arrow_up,
                                         color: Colors.blue,
-                                        size: 25.sp + (10 * _arrowCtrl.value)
-                                    ),
+                                        size: 25.sp + (10 * _arrowCtrl.value)),
                                   ),
                                   const DatabaseWidget(), // الويدجت التي رسمناها يدوياً للسيرفر
                                   AnimatedBuilder(
@@ -121,8 +122,7 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                                     builder: (context, _) => Icon(
                                         Icons.keyboard_arrow_down,
                                         color: Colors.blue,
-                                        size: 25.sp + (10 * _arrowCtrl.value)
-                                    ),
+                                        size: 25.sp + (10 * _arrowCtrl.value)),
                                   ),
                                 ],
                               ),
@@ -133,15 +133,14 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
 
                       SizedBox(height: 40.h),
 
-                       Text(
+                      Text(
                         "تأكد من اتصالك بالإنترنت واضغط على زر تحميل البيانات لبدء العمل على التطبيق",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF0D47A1),
-                            height: 1.5
-                        ),
+                            height: 1.5),
                       ),
 
                       SizedBox(height: 50.h),
@@ -150,34 +149,43 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                       BlocConsumer<AsyncBloc, AsyncState>(
                         listener: (context, state) {
                           if (state is DeleteAllErrorState) {
-                            error(context, state.failure.massage, state.failure.code);
+                            error(context, state.failure.massage,
+                                state.failure.code);
                           }
                           if (state is SyncDataErrorState) {
-                            error(context, state.failure.massage, state.failure.code);
+                            error(context, state.failure.massage,
+                                state.failure.code);
                           }
                           if (state is IsActiveErrorState) {
-                            error(context, state.failure.massage, state.failure.code);
+                            error(context, state.failure.massage,
+                                state.failure.code);
                           }
                           if (state is UpdateIsActiveErrorState) {
-                            error(context, state.failure.massage, state.failure.code);
+                            error(context, state.failure.massage,
+                                state.failure.code);
                           }
                           if (state is getDataSucState) {
-                            BlocProvider.of<AsyncBloc>(context).add(SetDataSEvent());
+                            BlocProvider.of<AsyncBloc>(context)
+                                .add(SetDataSEvent());
                           }
                           if (state is IsActiveState) {
-                            BlocProvider.of<AsyncBloc>(context).add(UpdateRepEvent());
+                            BlocProvider.of<AsyncBloc>(context)
+                                .add(UpdateRepEvent());
                           }
                           if (state is UpdateIsActiveState) {
-                            BlocProvider.of<AsyncBloc>(context).add(AsyncDataEvent());
+                            BlocProvider.of<AsyncBloc>(context)
+                                .add(AsyncDataEvent());
                           }
                           if (state is SyncDataLoadingState) {
                             loading(context, text: state.loading.toString());
                           }
                           if (state is SyncDataState) {
-                            BlocProvider.of<AsyncBloc>(context).add(EditEvent(2));
+                            BlocProvider.of<AsyncBloc>(context)
+                                .add(EditEvent(2));
                           }
                           if (state is EditStatusDErrorState) {
-                            error(context, state.failure.massage, state.failure.code);
+                            error(context, state.failure.massage,
+                                state.failure.code);
                           }
                           if (state is EditStatusDState) {
                             success(context);
@@ -193,24 +201,26 @@ class _AsyncLoginPageState extends State<AsyncLoginPage> with SingleTickerProvid
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF0D47A1),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.r)
-                                  ),
+                                      borderRadius:
+                                          BorderRadius.circular(15.r)),
                                   elevation: 5,
                                 ),
-                                onPressed: state is SyncDataLoadingState || state is LoadingState
+                                onPressed: state is SyncDataLoadingState ||
+                                        state is LoadingState
                                     ? null // تعطيل الزر أثناء التحميل
                                     : () {
-                                  BlocProvider.of<AsyncBloc>(context).add(PlanIsActiveEvent());
-                                },
+                                        BlocProvider.of<AsyncBloc>(context)
+                                            .add(PlanIsActiveEvent());
+                                      },
                                 child: Text(
-                                  state is SyncDataLoadingState || state is LoadingState
+                                  state is SyncDataLoadingState ||
+                                          state is LoadingState
                                       ? "جاري التحميل..."
                                       : "تحميل البيانات",
-                                  style:  TextStyle(
+                                  style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white
-                                  ),
+                                      color: Colors.white),
                                 )),
                           );
                         },
@@ -242,17 +252,20 @@ class DatabaseWidget extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(2, (index) => Container(
-          width: 45.w,
-          height: 22.h,
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF1A3E62), width: 2),
-            borderRadius: BorderRadius.circular(4.r),
-          ),
-          child: const Center(
-              child: Icon(Icons.circle, size: 6, color: Color(0xFF1A3E62))
-          ),
-        )),
+        children: List.generate(
+            2,
+            (index) => Container(
+                  width: 45.w,
+                  height: 22.h,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: const Color(0xFF1A3E62), width: 2),
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                  child: const Center(
+                      child: Icon(Icons.circle,
+                          size: 6, color: Color(0xFF1A3E62))),
+                )),
       ),
     );
   }

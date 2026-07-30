@@ -11,7 +11,8 @@ class ViewActivePlanBrandPage extends StatefulWidget {
   const ViewActivePlanBrandPage({super.key});
 
   @override
-  State<ViewActivePlanBrandPage> createState() => _ViewActivePlanBrandPageState();
+  State<ViewActivePlanBrandPage> createState() =>
+      _ViewActivePlanBrandPageState();
 }
 
 class _ViewActivePlanBrandPageState extends State<ViewActivePlanBrandPage> {
@@ -28,13 +29,13 @@ class _ViewActivePlanBrandPageState extends State<ViewActivePlanBrandPage> {
     // 💡 استخدام الـ BlocBuilder للاستماع للحالات المعزولة الخاصة بالخطة الفعالة فقط
     return BlocBuilder<PlanManagementBloc, PlanManagementState>(
       buildWhen: (previous, current) =>
-      previous.activeStatus != current.activeStatus ||
+          previous.activeStatus != current.activeStatus ||
           previous.searchActiveBrands != current.searchActiveBrands,
       builder: (context, state) {
-
         // 1️⃣ حالة التحميل المخصصة للخطة الفعالة (Active Loading)
         if (state.activeStatus == PlanStatus.loading) {
-          return loadingShimmer(context, 20, 25, 150, BorderRadius.circular(20.r));
+          return loadingShimmer(
+              context, 20, 25, 150, BorderRadius.circular(20.r));
         }
 
         // 2️⃣ حالة الخطأ المخصصة للخطة الفعالة (Active Error)
@@ -55,15 +56,16 @@ class _ViewActivePlanBrandPageState extends State<ViewActivePlanBrandPage> {
         }
 
         // 3️⃣ جلب القائمة المفلترة المستقلة من الـ State المطور
-        final List<ActivePlanBrandModel> planBrandModel = state.searchActiveBrands;
+        final List<ActivePlanBrandModel> planBrandModel =
+            state.searchActiveBrands;
 
         // استبدال الـ Scaffold بـ غلاف مرن ليناسب الـ TabBarView
         return Container(
-          color: const Color(0xFFF8FAFC), // رمادي فاتح جداً هادئ نفس التصميم الجديد
+          color: const Color(
+              0xFFF8FAFC), // رمادي فاتح جداً هادئ نفس التصميم الجديد
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-
               // --- قسم العنوان وحقل البحث ---
               SliverToBoxAdapter(
                 child: Padding(
@@ -113,28 +115,30 @@ class _ViewActivePlanBrandPageState extends State<ViewActivePlanBrandPage> {
               // --- قائمة الكروت المطورة الفخمة مع حماية الـ Empty ---
               planBrandModel.isEmpty
                   ? SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(
-                  child: emptyFullScreen(
-                    context,
-                    message: 'لا توجد نتائج مطابقة للبحث في الخطة الفعالة',
-                  ),
-                ),
-              )
+                      hasScrollBody: false,
+                      child: Center(
+                        child: emptyFullScreen(
+                          context,
+                          message:
+                              'لا توجد نتائج مطابقة للبحث في الخطة الفعالة',
+                        ),
+                      ),
+                    )
                   : SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                      return _buildFluidAnimation(
-                        index: index + 3,
-                        child: BrandPlanCard(model: planBrandModel[index]),
-                      );
-                    },
-                    childCount: planBrandModel.length,
-                  ),
-                ),
-              ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return _buildFluidAnimation(
+                              index: index + 3,
+                              child:
+                                  BrandPlanCard(model: planBrandModel[index]),
+                            );
+                          },
+                          childCount: planBrandModel.length,
+                        ),
+                      ),
+                    ),
 
               // مساحة أمان سفلية لمنع تداخل الكروت مع الأطراف
               SliverToBoxAdapter(child: SizedBox(height: 40.h)),
@@ -239,7 +243,8 @@ class BrandPlanCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.bar_chart_rounded, size: 16.sp, color: const Color(0xFF94A3B8)),
+                    Icon(Icons.bar_chart_rounded,
+                        size: 16.sp, color: const Color(0xFF94A3B8)),
                     SizedBox(width: 8.w),
                     Text(
                       "توزيع الأهداف حسب الاختصاص",
@@ -262,7 +267,8 @@ class BrandPlanCard extends StatelessWidget {
                   itemBuilder: (context, i) {
                     return Container(
                       margin: EdgeInsets.only(bottom: 8.h),
-                      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 14.w, vertical: 12.h),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.r),

@@ -21,11 +21,10 @@ class DoctorArchive extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: BlocBuilder<PlaceBloc, PlaceState>(
             buildWhen: (previous, current) =>
-            current is AllDoctorArchiveByPlaceState ||
+                current is AllDoctorArchiveByPlaceState ||
                 current is AllDoctorArchiveByPlaceErrorState ||
                 current is EmptyArchiveState,
             builder: (context, state) {
-
               // 1. حالة النجاح وعرض البيانات
               if (state is AllDoctorArchiveByPlaceState) {
                 List<DoctorModel> doctorModel = state.searchData;
@@ -41,8 +40,8 @@ class DoctorArchive extends StatelessWidget {
                           SearchField(
                             searchController: searchDocController,
                             onPressed: (value) {
-                              BlocProvider.of<PlaceBloc>(context)
-                                  .add(SearchDoctorArchive(value, state.BaseData));
+                              BlocProvider.of<PlaceBloc>(context).add(
+                                  SearchDoctorArchive(value, state.BaseData));
                             },
                           ),
                           SizedBox(height: 16.h),
@@ -100,7 +99,8 @@ class DoctorArchive extends StatelessWidget {
                 slivers: [
                   SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator(color: Colors.blue)),
+                    child: Center(
+                        child: CircularProgressIndicator(color: Colors.blue)),
                   ),
                 ],
               );

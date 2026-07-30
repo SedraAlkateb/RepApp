@@ -60,7 +60,8 @@ class DoctorCardItem extends StatelessWidget {
           SizedBox(height: 10.h),
           _buildInfoRow(Icons.location_on_outlined, doctor.placeTitle),
           _buildInfoRow(Icons.map_outlined, doctor.address),
-          _buildInfoRow(Icons.star_rate_outlined, doctor.rate ?? "", iconColor: ColorManager.medicalSecondary),
+          _buildInfoRow(Icons.star_rate_outlined, doctor.rate ?? "",
+              iconColor: ColorManager.medicalSecondary),
           SizedBox(height: 12.h),
           const Divider(color: Colors.grey, thickness: 0.2),
           SizedBox(height: 8.h),
@@ -90,7 +91,8 @@ class DoctorCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text, {Color iconColor = Colors.grey}) {
+  Widget _buildInfoRow(IconData icon, String text,
+      {Color iconColor = Colors.grey}) {
     if (text.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),

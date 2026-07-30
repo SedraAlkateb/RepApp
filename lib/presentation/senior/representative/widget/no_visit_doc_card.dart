@@ -55,10 +55,10 @@ class RemainingVisitCard extends StatelessWidget {
                         // 2. الهيدر (تم عكسه: الاسم يمين، العداد يسار)
                         _buildHeaderRow(doneVisits),
 
-                     //   SizedBox(height: 12.h),
+                        //   SizedBox(height: 12.h),
 
                         // 3. العنوان (أيقونة الموقع يمين النص)
-                     //   _buildAddressRow(),
+                        //   _buildAddressRow(),
 
                         SizedBox(height: 20.h),
 
@@ -162,7 +162,8 @@ class RemainingVisitCard extends StatelessWidget {
           child: LinearProgressIndicator(
             value: percent,
             backgroundColor: const Color(0xFFF1F4F8),
-            valueColor: AlwaysStoppedAnimation<Color>(ColorManager.medicalSecondary),
+            valueColor:
+                AlwaysStoppedAnimation<Color>(ColorManager.medicalSecondary),
             minHeight: 10.h,
           ),
         ),

@@ -42,6 +42,7 @@ class DatabaseHelper {
 
     return storedKey;
   }
+
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database1.db');
@@ -52,14 +53,14 @@ class DatabaseHelper {
     return await openDatabase(
       path,
       version: 5,
-      password: encryptionKey, // 👈 هنا يكمن السحر: يتم تشفير البيانات بالكامل بـ AES-256
+      password:
+          encryptionKey, // 👈 هنا يكمن السحر: يتم تشفير البيانات بالكامل بـ AES-256
       onCreate: _onCreate,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
       },
     );
   }
-
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''

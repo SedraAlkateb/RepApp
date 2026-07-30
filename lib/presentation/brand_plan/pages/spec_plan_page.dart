@@ -46,9 +46,11 @@ class SpecPlanPage extends StatelessWidget {
                   // تحديد عدد الأعمدة بناءً على نوع الجهاز والوضعية
                   int crossAxisCount;
                   if (isTablet) {
-                    crossAxisCount = orientation == Orientation.landscape ? 4 : 3;
+                    crossAxisCount =
+                        orientation == Orientation.landscape ? 4 : 3;
                   } else {
-                    crossAxisCount = orientation == Orientation.landscape ? 3 : 2;
+                    crossAxisCount =
+                        orientation == Orientation.landscape ? 3 : 2;
                   }
 
                   return CustomScrollView(
@@ -65,14 +67,17 @@ class SpecPlanPage extends StatelessWidget {
                               // حاوية التاريخ البيضاء
                               Center(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 30.w, vertical: 12.h),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15.r),
-                                      border: Border.all(color: Colors.grey.shade100),
+                                      border: Border.all(
+                                          color: Colors.grey.shade100),
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Colors.black.withOpacity(0.01),
+                                            color:
+                                                Colors.black.withOpacity(0.01),
                                             blurRadius: 10,
                                             offset: const Offset(0, 2))
                                       ]),
@@ -115,15 +120,15 @@ class SpecPlanPage extends StatelessWidget {
                             horizontal: 16.w, vertical: 10.h),
                         sliver: SliverGrid(
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: crossAxisCount,
                             crossAxisSpacing: 12.w,
                             mainAxisSpacing: 12.h,
                             childAspectRatio:
-                            0.65, // لتكبير الارتفاع قليلاً ليناسب النصوص
+                                0.65, // لتكبير الارتفاع قليلاً ليناسب النصوص
                           ),
                           delegate: SliverChildBuilderDelegate(
-                                (context, index) {
+                            (context, index) {
                               final item = planBrandModel[index];
 
                               // الحفاظ على شرط الفلترة الأصلي
@@ -149,27 +154,29 @@ class SpecPlanPage extends StatelessWidget {
           // 3. زر الحفظ والإرسال
           context.watch<BrandPlanBloc>().planBrand.isNotEmpty
               ? BlocListener<BrandPlanBloc, BrandPlanState>(
-            listener: (context, state) {
-              if (state is UpdateAmountErrorState) {
-                error(context, state.failure.massage, state.failure.code);
-              }
-              if (state is UpdateAmountState) {
-                BlocProvider.of<BrandPlanBloc>(context).add(UpdateSaveEvent());
-                dismissDialog(context);
-                successWithMessage(context, "تم حفظ التغيرات");
-              }
-              if (state is UpdateAmountSendState) {
-                dismissDialog(context);
-                successWithMessage(context, "تم الارسال يرجى المزامنة ");
-              }
-            },
-            child: SaveSendBottom(),
-          )
+                  listener: (context, state) {
+                    if (state is UpdateAmountErrorState) {
+                      error(context, state.failure.massage, state.failure.code);
+                    }
+                    if (state is UpdateAmountState) {
+                      BlocProvider.of<BrandPlanBloc>(context)
+                          .add(UpdateSaveEvent());
+                      dismissDialog(context);
+                      successWithMessage(context, "تم حفظ التغيرات");
+                    }
+                    if (state is UpdateAmountSendState) {
+                      dismissDialog(context);
+                      successWithMessage(context, "تم الارسال يرجى المزامنة ");
+                    }
+                  },
+                  child: SaveSendBottom(),
+                )
               : const SizedBox(),
         ],
       ),
     );
   }
+
   // بناء العنصر الواحد بتصميم عصري (يشبه المثال الجديد)
   Widget _buildSpecItem(
       BuildContext context, OtherBrandSpPlanModel model, int index) {
@@ -178,12 +185,10 @@ class SpecPlanPage extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                BrandPlanOtherPage(
-                  otherBrandSpPlanModel:
-                  model,
-                  index1: index,
-                ),
+            builder: (context) => BrandPlanOtherPage(
+              otherBrandSpPlanModel: model,
+              index1: index,
+            ),
           ),
         );
       },
@@ -206,7 +211,7 @@ class SpecPlanPage extends StatelessWidget {
             // الأيقونة بخلفية ملونة خفيفة
             Container(
               padding: EdgeInsets.all(10.w),
-              margin:  EdgeInsets.all(10.w),
+              margin: EdgeInsets.all(10.w),
               decoration: BoxDecoration(
                 color: ColorManager.medicalSecondary.withOpacity(0.1),
                 shape: BoxShape.circle,
@@ -217,8 +222,9 @@ class SpecPlanPage extends StatelessWidget {
                 height: 35.h,
                 color: ColorManager.medicalSecondary.withOpacity(0.8),
                 colorBlendMode: BlendMode.modulate,
-                errorBuilder: (context, error, stackTrace) =>
-                    Icon(Icons.medical_services, color: ColorManager.medicalSecondary),
+                errorBuilder: (context, error, stackTrace) => Icon(
+                    Icons.medical_services,
+                    color: ColorManager.medicalSecondary),
               ),
             ),
             SizedBox(height: 10.h),
@@ -238,18 +244,20 @@ class SpecPlanPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: Column(
                 children: [
-                  _buildStatItem("زيارات أطباء", "${model.specModel.sumDoctor}"),
+                  _buildStatItem(
+                      "زيارات أطباء", "${model.specModel.sumDoctor}"),
                   Divider(
                       height: 12.h,
                       color: Colors.grey.withOpacity(0.1),
                       thickness: 1),
-                  _buildStatItem("زيارات المشافي", "${model.specModel.sumHospital}"),
+                  _buildStatItem(
+                      "زيارات المشافي", "${model.specModel.sumHospital}"),
                   Divider(
                       height: 12.h,
                       color: Colors.grey.withOpacity(0.1),
                       thickness: 1),
-                  _buildStatItem("عينات",
-                      "${(model.brandk / UserInfo.samplesCount)}"),
+                  _buildStatItem(
+                      "عينات", "${(model.brandk / UserInfo.samplesCount)}"),
                 ],
               ),
             ),

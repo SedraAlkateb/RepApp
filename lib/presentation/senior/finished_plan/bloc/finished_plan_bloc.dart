@@ -13,20 +13,20 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
   final FinishedPlansUsecase finishedPlansUsecase;
   final GetPanRepsUsecase getPanRepsUsecase;
 
-  FinishedPlanBloc(this.finishedPlansUsecase,this.getPanRepsUsecase) : super(FinishedPlanInitial()) {
+  FinishedPlanBloc(this.finishedPlansUsecase, this.getPanRepsUsecase)
+      : super(FinishedPlanInitial()) {
     // تسجيل الأحداث: هنا نربط الحدث بالدالة المسؤولة عنه فقط
     on<GetFinishedPlansEvent>(_onGetFinishedPlans);
     on<GetPlanRepsEvent>(_onGetPlanReps);
     on<SearchPlanRepsEvent>(_onSearchReps);
-
   }
 
   /// الدالة المسؤولة عن معالجة جلب الخطط المنتهية
   /// تم فصلها لسهولة القراءة والصيانة
   Future<void> _onGetFinishedPlans(
-      GetFinishedPlansEvent event,
-      Emitter<FinishedPlanState> emit,
-      ) async {
+    GetFinishedPlansEvent event,
+    Emitter<FinishedPlanState> emit,
+  ) async {
     // 1. تغيير الحالة إلى "تحميل" لإبلاغ الواجهة
     emit(FinishedPlanLoading());
 
@@ -35,11 +35,11 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
 
     // 3. معالجة النتيجة القادمة (إما فشل Failure أو نجاح Success)
     result.fold(
-          (failure) {
+      (failure) {
         // في حال حدوث خطأ، نرسل حالة الخطأ مع الرسالة
         emit(FinishedPlanError(message: failure.massage));
       },
-          (plans) {
+      (plans) {
         // في حال النجاح، نرسل البيانات المستلمة للواجهة
         emit(FinishedPlanLoaded(plans: plans));
       },
@@ -47,9 +47,9 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
   }
 
   Future<void> _onGetPlanReps(
-      GetPlanRepsEvent event,
-      Emitter<FinishedPlanState> emit,
-      ) async {
+    GetPlanRepsEvent event,
+    Emitter<FinishedPlanState> emit,
+  ) async {
     // 1. تغيير الحالة إلى "تحميل" لإبلاغ الواجهة
     emit(PlanRepsLoading());
 
@@ -58,33 +58,30 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
 
     // 3. معالجة النتيجة القادمة (إما فشل Failure أو نجاح Success)
     result.fold(
-          (failure) {
+      (failure) {
         // في حال حدوث خطأ، نرسل حالة الخطأ مع الرسالة
         emit(PlanRepsError(message: failure.massage));
       },
-          (data) {
+      (data) {
         // في حال النجاح، نرسل البيانات المستلمة للواجهة
-        emit(PlanRepsLoaded(allOriginalReps: data,reps: data));
+        emit(PlanRepsLoaded(allOriginalReps: data, reps: data));
       },
     );
   }
-  void _onSearchReps(SearchPlanRepsEvent event, Emitter<FinishedPlanState> emit) {
 
+  void _onSearchReps(
+      SearchPlanRepsEvent event, Emitter<FinishedPlanState> emit) {
     if (state is PlanRepsLoaded) {
-
       final currentState = state as PlanRepsLoaded;
-      final originalList = currentState.allOriginalReps; // 🌟 سحب النسخة النظيفة من الـ State
+      final originalList =
+          currentState.allOriginalReps; // 🌟 سحب النسخة النظيفة من الـ State
 
       if (event.query.isEmpty) {
-
         emit(PlanRepsLoaded(reps: originalList, allOriginalReps: originalList));
       } else {
-
-        final filteredList = originalList
-            .where((rep) {
-         return rep.name.toLowerCase().contains(event.query.toLowerCase());
-        })
-            .toList();
+        final filteredList = originalList.where((rep) {
+          return rep.name.toLowerCase().contains(event.query.toLowerCase());
+        }).toList();
         print("filteredList.length");
 
         print(filteredList.length);
@@ -92,5 +89,4 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
       }
     }
   }
-
 }

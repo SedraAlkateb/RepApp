@@ -12,26 +12,20 @@ Widget buildBottomButtonsDoctor(int id) {
         color: Colors.white,
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
-      child:  BlocBuilder<DoctorsBloc, DoctorsState>(
-
+      child: BlocBuilder<DoctorsBloc, DoctorsState>(
         builder: (context, state) {
           return Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed:
-                  state
-                  is CheckRecipesLoadingState
+                  onPressed: state is CheckRecipesLoadingState
                       ? null
                       : () {
-                    WidgetsBinding.instance
-                        .addPostFrameCallback((_) {
-                      BlocProvider.of<DoctorsBloc>(
-                          context)
-                          .add(CheckReciEvent(
-                          id, 1));
-                    });
-                  },
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            BlocProvider.of<DoctorsBloc>(context)
+                                .add(CheckReciEvent(id, 1));
+                          });
+                        },
                   icon: const Icon(Icons.refresh),
                   label: const Text("تكرار وصفة"),
                   style: OutlinedButton.styleFrom(
@@ -47,19 +41,14 @@ Widget buildBottomButtonsDoctor(int id) {
               // زر إنشاء
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed:
-                  state
-                  is CheckRecipesLoadingState
+                  onPressed: state is CheckRecipesLoadingState
                       ? null
                       : () {
-                    WidgetsBinding.instance
-                        .addPostFrameCallback((_) {
-                      BlocProvider.of<DoctorsBloc>(
-                          context)
-                          .add(CheckReciEvent(
-                          id, 0));
-                    });
-                  },
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            BlocProvider.of<DoctorsBloc>(context)
+                                .add(CheckReciEvent(id, 0));
+                          });
+                        },
                   icon: const Icon(Icons.add_box_outlined, color: Colors.white),
                   label: const Text("إنشاء وصفة",
                       style: TextStyle(color: Colors.white)),
@@ -78,6 +67,7 @@ Widget buildBottomButtonsDoctor(int id) {
     ),
   );
 }
+
 Widget buildBottomButtons(int hospitalId) {
   return Align(
     alignment: Alignment.bottomCenter,
@@ -87,29 +77,21 @@ Widget buildBottomButtons(int hospitalId) {
         color: Colors.white,
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
-      child:   BlocBuilder<DoctorsBloc, DoctorsState>(
+      child: BlocBuilder<DoctorsBloc, DoctorsState>(
         builder: (context, state) {
           return Row(
             children: [
               // زر تكرار
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed:
-                  state is CheckRecipesLoadingState
+                  onPressed: state is CheckRecipesLoadingState
                       ? null
                       : () {
-                    WidgetsBinding.instance
-                        .addPostFrameCallback(
-                            (_) {
-                          BlocProvider.of<
-                              DoctorsBloc>(
-                              context)
-                              .add(CheckReciEvent(
-                              hospitalId
-                              ,
-                              1));
-                        });
-                  },
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            BlocProvider.of<DoctorsBloc>(context)
+                                .add(CheckReciEvent(hospitalId, 1));
+                          });
+                        },
                   icon: const Icon(Icons.refresh),
                   label: const Text("تكرار وصفة"),
                   style: OutlinedButton.styleFrom(
@@ -125,21 +107,14 @@ Widget buildBottomButtons(int hospitalId) {
               // زر إنشاء
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed:
-                  state is CheckRecipesLoadingState
+                  onPressed: state is CheckRecipesLoadingState
                       ? null
                       : () {
-                    WidgetsBinding.instance
-                        .addPostFrameCallback(
-                            (_) {
-                          BlocProvider.of<
-                              DoctorsBloc>(
-                              context)
-                              .add(CheckReciEvent(
-                              hospitalId ,
-                              0));
-                        });
-                  },
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            BlocProvider.of<DoctorsBloc>(context)
+                                .add(CheckReciEvent(hospitalId, 0));
+                          });
+                        },
                   icon: const Icon(Icons.add_box_outlined, color: Colors.white),
                   label: const Text("إنشاء وصفة",
                       style: TextStyle(color: Colors.white)),

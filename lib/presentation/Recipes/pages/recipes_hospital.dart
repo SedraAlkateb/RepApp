@@ -64,8 +64,8 @@ class _RecipesPageState extends State<RecipesHospital> {
         builder: (context, state) {
           if ((state is RecipesRecipesErrorState) && (widget.st == 1)) {
             return Center(
-                child: emptyFullScreen(
-                    context,message:  " لم يتم ادخال وصفات لهذا المشفى من قبل"));
+                child: emptyFullScreen(context,
+                    message: " لم يتم ادخال وصفات لهذا المشفى من قبل"));
           }
           if (state is RecipesRecipesState) {
             _doctorSpController.text =
@@ -830,7 +830,7 @@ class _RecipesPageState extends State<RecipesHospital> {
                     ),
                     SizedBox(height: 20),
                     BlocListener<RecipesBrandBloc, RecipesBrandState>(
-                      listener: (context, state)async {
+                      listener: (context, state) async {
                         if (state is InsertRecipesLoadingState) {
                           loading(context);
                         } else if (state is InsertRecipesState) {
@@ -839,15 +839,14 @@ class _RecipesPageState extends State<RecipesHospital> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('تم إرسال البيانات بنجاح')),
                           );
-                          BlocProvider.of<RecipesBrandBloc>(context).add(EditeRecNumEvent(state.num));
-
+                          BlocProvider.of<RecipesBrandBloc>(context)
+                              .add(EditeRecNumEvent(state.num));
                         } else if (state is InsertRecipesErrorState) {
-
                           error(context, state.failure.massage,
                               state.failure.code);
                         }
                       },
-                      child:   ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<RecipesBrandBloc>(context)
@@ -864,7 +863,7 @@ class _RecipesPageState extends State<RecipesHospital> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
-                                Text('يرجى تعبئة جميع الحقول المطلوبة'),
+                                    Text('يرجى تعبئة جميع الحقول المطلوبة'),
                                 backgroundColor: ColorManager.secondaryColor,
                               ),
                             );

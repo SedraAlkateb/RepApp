@@ -21,14 +21,12 @@ class SpecializationsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorManager.background,
       appBar: AppBar(
-
         title: Text(
           'الإختصاصات',
           style: TextStyle(fontSize: isTablet ? 28.sp : 20.sp),
         ),
       ),
       body: OrientationBuilder(
-
         builder: (context, orientation) {
           // 🔹 إذا كانت الشاشة أفقية (landscape) على التابلت → 4 أعمدة
           // 🔹 إذا كانت عمودية (portrait) → 2 أو 3 حسب نوع الجهاز
@@ -41,12 +39,13 @@ class SpecializationsPage extends StatelessWidget {
 
           return SingleChildScrollView(
             child: Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: isTablet ? 30.w : 8.w),
+              padding: EdgeInsets.symmetric(horizontal: isTablet ? 30.w : 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 12.h,),
+                  SizedBox(
+                    height: 12.h,
+                  ),
                   SearchField(
                     searchController: searchController,
                     onPressed: (value) {
@@ -57,8 +56,8 @@ class SpecializationsPage extends StatelessWidget {
                   BlocConsumer<SpecializationBloc, SpecializationState>(
                     listener: (context, state) {
                       if (state is AllSpecErrorState) {
-                        error(context, state.failure.massage,
-                            state.failure.code);
+                        error(
+                            context, state.failure.massage, state.failure.code);
                       }
                     },
                     builder: (context, state) {
@@ -69,20 +68,23 @@ class SpecializationsPage extends StatelessWidget {
                       }
 
                       return Padding(
-                        padding:  EdgeInsets.symmetric(vertical: 12,horizontal: 8),
-                        child: SpecGridWidget(items: placeModel, crossAxisCount: crossAxisCount,      onTap: (model) {
-                          initDoctorAndHospitalModule();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  SpecDH(spId: model.id),
-                            ),
-                          );
-                          BlocProvider.of<SpecializationBloc>(context)
-                              .add(
-                              DoctorSpEvent(model.id));
-                        },),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                        child: SpecGridWidget(
+                          items: placeModel,
+                          crossAxisCount: crossAxisCount,
+                          onTap: (model) {
+                            initDoctorAndHospitalModule();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SpecDH(spId: model.id),
+                              ),
+                            );
+                            BlocProvider.of<SpecializationBloc>(context)
+                                .add(DoctorSpEvent(model.id));
+                          },
+                        ),
                       );
                     },
                   ),

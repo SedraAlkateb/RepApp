@@ -17,7 +17,7 @@ class DropDownRecipesSearch extends StatelessWidget {
   final List<dynamic> items;
   final String hintText;
   final Icon? icon;
-   final brandRes;
+  final brandRes;
   @override
   Widget build(BuildContext context) {
     bool tablet = MediaQuery.of(context).size.width > 800;
@@ -35,7 +35,7 @@ class DropDownRecipesSearch extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  title:Text( item.title_en),
+                  title: Text(item.title_en),
                   onTap: () {
                     onChanged(item);
                   },

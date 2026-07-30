@@ -18,7 +18,6 @@ class GetPlanRepsEvent extends FinishedPlanEvent {
   GetPlanRepsEvent({required this.planId});
 }
 
-
 class SearchPlanRepsEvent extends FinishedPlanEvent {
   final String query;
   SearchPlanRepsEvent(this.query);

@@ -25,7 +25,9 @@ class AllBrand extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 12.h,),
+                  SizedBox(
+                    height: 12.h,
+                  ),
                   SearchField(
                     searchController: searchDocController,
                     onPressed: (value) {
@@ -77,7 +79,13 @@ class AllBrand extends StatelessWidget {
                   ]));
                 }
                 return SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) =>    BrandListWidget(brands: brandModel,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),),),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => BrandListWidget(
+                      brands: brandModel,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                    ),
+                  ),
                 );
               },
             ),

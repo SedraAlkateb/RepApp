@@ -18,7 +18,6 @@ class AllCitySeniors extends StatefulWidget {
 }
 
 class _AllCityState extends State<AllCitySeniors> {
-
   @override
   void initState() {
     BlocProvider.of<AllCityBloc>(context).add(const GetAllCityEvent());
@@ -48,35 +47,38 @@ class _AllCityState extends State<AllCitySeniors> {
             builder: (context, state) {
               if (state is GetAllCityState) {
                 final List<CityModel> cities = state.cities;
-                return
-                  cities.isEmpty?emptyFullScreen(context):
-                  AnimationLimiter(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-                    itemCount: cities.length,
-                    itemBuilder: (context, index) {
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        duration: const Duration(milliseconds: 500),
-                        delay: const Duration(milliseconds: 50),
-                        child: SlideAnimation(
-                          verticalOffset: 30.0,
-                          child: FadeInAnimation(
-                            child: _buildCitySmartCard(cities[index], index),
-                          ),
+                return cities.isEmpty
+                    ? emptyFullScreen(context)
+                    : AnimationLimiter(
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+                          itemCount: cities.length,
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 500),
+                              delay: const Duration(milliseconds: 50),
+                              child: SlideAnimation(
+                                verticalOffset: 30.0,
+                                child: FadeInAnimation(
+                                  child:
+                                      _buildCitySmartCard(cities[index], index),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
-                );
               }
               if (state is AllCityLoadingState) {
-                return loadingShimmer(context, 20, 25, 70, BorderRadius.circular(20));
+                return loadingShimmer(
+                    context, 20, 25, 70, BorderRadius.circular(20));
               }
               if (state is AllCityErrorState) {
                 return errorFullScreen(context,
-                    func: () => BlocProvider.of<AllCityBloc>(context).add(const GetAllCityEvent()));
+                    func: () => BlocProvider.of<AllCityBloc>(context)
+                        .add(const GetAllCityEvent()));
               }
               return const SizedBox();
             },
@@ -102,7 +104,8 @@ class _AllCityState extends State<AllCitySeniors> {
                       color: ColorManager.medicalPrimary)),
               const SizedBox(height: 4),
               Text("اختر المنطقة لاستعراض السينيور فيها",
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 13.sp)),
+                  style:
+                      TextStyle(color: Colors.grey.shade600, fontSize: 13.sp)),
             ],
           ),
           // الخط الجمالي الأزرق المميز
@@ -138,13 +141,16 @@ class _AllCityState extends State<AllCitySeniors> {
         borderRadius: BorderRadius.circular(18),
         onTap: () {
           initGeneralReportsModule();
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => SeniorByCityId(
-              cityname: city.title,
-              cityid: city.id,
-            ),
-          ));
-          BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(city.id));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SeniorByCityId(
+                  cityname: city.title,
+                  cityid: city.id,
+                ),
+              ));
+          BlocProvider.of<GeneralReportsBloc>(context)
+              .add(GetSeniorByCityIdEvent(city.id));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -157,7 +163,8 @@ class _AllCityState extends State<AllCitySeniors> {
                   color: ColorManager.secondaryColor1.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.location_city, color: ColorManager.secondaryColor1),
+                child: Icon(Icons.location_city,
+                    color: ColorManager.secondaryColor1),
               ),
               const SizedBox(width: 16),
               // اسم المدينة

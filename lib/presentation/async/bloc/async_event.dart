@@ -1,38 +1,35 @@
 part of 'async_bloc.dart';
 
 @immutable
-sealed class AsyncEvent extends Equatable{}
-class AsyncDataEvent extends AsyncEvent{
-  @override
+sealed class AsyncEvent extends Equatable {}
 
-  List<Object?> get props => [];
-
-
-}
-class DeleteAllEvent extends AsyncEvent{
+class AsyncDataEvent extends AsyncEvent {
   @override
   List<Object?> get props => [];
-
 }
 
-class EditEvent extends AsyncEvent{
+class DeleteAllEvent extends AsyncEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EditEvent extends AsyncEvent {
   final int num;
   EditEvent(this.num);
-  List<Object?> get props =>[num];
-}
-class SetDataSEvent extends AsyncEvent{
-  @override
-  List<Object?> get props => [];
-
-}
-class PlanIsActiveEvent extends AsyncEvent{
-  @override
-  List<Object?> get props => [];
-
+  List<Object?> get props => [num];
 }
 
-class UpdateRepEvent extends AsyncEvent{
+class SetDataSEvent extends AsyncEvent {
   @override
   List<Object?> get props => [];
+}
 
+class PlanIsActiveEvent extends AsyncEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateRepEvent extends AsyncEvent {
+  @override
+  List<Object?> get props => [];
 }

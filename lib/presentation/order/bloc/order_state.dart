@@ -35,7 +35,7 @@ final class BrandOrderLoadingState extends OrderState {
 }
 
 final class BrandOrderState extends OrderState {
-  final List<BrandModel> brands;           // قائمة الدروب داون الثابتة
+  final List<BrandModel> brands; // قائمة الدروب داون الثابتة
   final List<OrderDetails> selectedItems; // القائمة التي تظهر في الـ ListView
 
   // نمرر قائمة فارغة كقيمة افتراضية للـ selectedItems

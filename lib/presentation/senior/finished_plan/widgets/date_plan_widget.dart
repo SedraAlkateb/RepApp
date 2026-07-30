@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class DateHelper {
-
   // دالة لجلب اسم الشهر من التاريخ
   static String getMonthName(String dateString) {
     // تحويل النص إلى تاريخ
@@ -9,8 +8,18 @@ class DateHelper {
 
     // قائمة بأسماء الأشهر العربية
     List<String> months = [
-      "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-      "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+      "يناير",
+      "فبراير",
+      "مارس",
+      "أبريل",
+      "مايو",
+      "يونيو",
+      "يوليو",
+      "أغسطس",
+      "سبتمبر",
+      "أكتوبر",
+      "نوفمبر",
+      "ديسمبر"
     ];
 
     // إرجاع الاسم (نطرح 1 لأن القائمة تبدأ من الصفر والشهر يبدأ من 1)
@@ -32,14 +41,13 @@ class DateHelper {
       return "خريف";
     }
   }
-
-
 }
-Widget dataPlanWidget(String dateString){
+
+Widget dataPlanWidget(String dateString) {
   // مثال للاستخدام داخل الواجهة:
   String monthName = DateHelper.getMonthName(dateString); // سيعطيك "مارس"
-  String season = DateHelper.getSeasonName(dateString);    // سيعطيك "ربيع"
+  String season = DateHelper.getSeasonName(dateString); // سيعطيك "ربيع"
 
 // ثم يمكنك عرضها في التكست:
-return  Text("خطة شهر $monthName - فصل $season");
+  return Text("خطة شهر $monthName - فصل $season");
 }

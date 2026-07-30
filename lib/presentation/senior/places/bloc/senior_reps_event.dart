@@ -4,9 +4,9 @@ part of 'senior_reps_bloc.dart';
 abstract class SeniorRepsEvent extends Equatable {}
 
 class AllSeniorRepEvent extends SeniorRepsEvent {
- final  int cityId;
- final int repId;
-  AllSeniorRepEvent(this.cityId,this.repId);
+  final int cityId;
+  final int repId;
+  AllSeniorRepEvent(this.cityId, this.repId);
   @override
   List<Object?> get props => [];
 }

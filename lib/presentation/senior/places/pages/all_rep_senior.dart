@@ -51,6 +51,7 @@ class _AllRepSeniorState extends State<AllRepSenior> {
         .add(AllSeniorRepEvent(widget.cityId, widget.repId));
     _refreshController.refreshCompleted();
   }
+
   @override
   void initState() {
     context
@@ -70,30 +71,27 @@ class _AllRepSeniorState extends State<AllRepSenior> {
         leading: Builder(
           builder: (BuildContext context) {
             return Center(
-              child:
-              UserInfo.repType.i == 6?
-              IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-
-                  Icons.menu,
-                  color: ColorManager.secondaryColor,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ):
-              IconButton(
-                icon: Icon(
-                  size: AppSize.s30,
-                  
-                  Icons.arrow_back_ios_new,
-                  color: ColorManager.secondaryColor,
-                ),
-                onPressed: () {
-                 Navigator.pop(context);
-                },
-              ),
+              child: UserInfo.repType.i == 6
+                  ? IconButton(
+                      icon: Icon(
+                        size: AppSize.s30,
+                        Icons.menu,
+                        color: ColorManager.secondaryColor,
+                      ),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        size: AppSize.s30,
+                        Icons.arrow_back_ios_new,
+                        color: ColorManager.secondaryColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
             );
           },
         ),
@@ -216,7 +214,7 @@ class _AllRepSeniorState extends State<AllRepSenior> {
 
                     // 2. إرسال حدث جلب بيانات المندوب المحدد
                     context.read<SeniorProfBloc>().add(
-                          getInfoRepEvent(rep.id,rep.activePlan),
+                          getInfoRepEvent(rep.id, rep.activePlan),
                         );
 
                     // 3. الانتقال لصفحة البروفايل مع تمرير البيانات المطلوبة

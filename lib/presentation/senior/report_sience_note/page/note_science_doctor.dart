@@ -113,13 +113,12 @@ class NoteScienceDoctor extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: AppPaddingW.p8,
                                 vertical: AppPaddingH.p12),
-                            decoration:  BoxDecoration(
-                                    color: ColorManager.white,
-                                    border: Border.all(
-                                        color: ColorManager.hintGrey),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(AppSize.s14)),
-                                  ),
+                            decoration: BoxDecoration(
+                              color: ColorManager.white,
+                              border: Border.all(color: ColorManager.hintGrey),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(AppSize.s14)),
+                            ),
                             child: Column(
                               children: [
                                 InkWell(
@@ -130,16 +129,16 @@ class NoteScienceDoctor extends StatelessWidget {
                                     children: [
                                       Text(
                                         doctorNoteModel.docTitle,
-                                        style:  Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
                                         textAlign: TextAlign.center,
                                       ),
                                       Text(
                                         "${doctorNoteModel.address}",
                                         style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
+                                            .textTheme
+                                            .labelLarge,
                                         textAlign: TextAlign.center,
                                       ),
                                       Row(
@@ -195,12 +194,11 @@ class NoteScienceDoctor extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-
-
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             textAlign: TextAlign.start,
@@ -224,10 +222,8 @@ class NoteScienceDoctor extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-
                                     ],
                                   ),
-
                                 ),
                               ],
                             ),

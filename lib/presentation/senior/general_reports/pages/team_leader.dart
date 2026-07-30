@@ -42,7 +42,8 @@ class _TeamLeaderState extends State<TeamLeader>
               List<SeniorCityModel> seniors =
                   context.read<GeneralReportsBloc>().dataseniors;
 
-              final double availableHeight = MediaQuery.of(context).size.height * 0.6;
+              final double availableHeight =
+                  MediaQuery.of(context).size.height * 0.6;
 
               // 🟢 حالة التحميل: استخدام SliverToBoxAdapter بدلاً من SliverFillRemaining
               if (state is TeamLeaderAndCityLoadingState) {
@@ -50,7 +51,8 @@ class _TeamLeaderState extends State<TeamLeader>
                   child: SizedBox(
                     height: availableHeight,
                     child: Center(
-                      child: loadingShimmer(context, 8, 25, 25, BorderRadius.circular(20)),
+                      child: loadingShimmer(
+                          context, 8, 25, 25, BorderRadius.circular(20)),
                     ),
                   ),
                 );
@@ -78,11 +80,12 @@ class _TeamLeaderState extends State<TeamLeader>
 
               // حالة عرض البيانات الطبيعية
               return SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 sliver: AnimationLimiter(
                   child: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                      (context, index) {
                         return AnimationConfiguration.staggeredList(
                           position: index,
                           duration: const Duration(milliseconds: 500),
@@ -90,7 +93,8 @@ class _TeamLeaderState extends State<TeamLeader>
                           child: SlideAnimation(
                             verticalOffset: 30.0,
                             child: FadeInAnimation(
-                              child: _buildRepSmartCard(context, seniors[index]),
+                              child:
+                                  _buildRepSmartCard(context, seniors[index]),
                             ),
                           ),
                         );
@@ -126,11 +130,13 @@ class _TeamLeaderState extends State<TeamLeader>
                       color: ColorManager.medicalPrimary)),
               const SizedBox(height: 4),
               Text("قائمة التيم ليدر المتاحين في دومنا ",
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 13.sp)),
+                  style:
+                      TextStyle(color: Colors.grey.shade500, fontSize: 13.sp)),
             ],
           ),
           Container(
-            height: 5, width: 45,
+            height: 5,
+            width: 45,
             decoration: BoxDecoration(
               color: const Color(0xFF42A5F5),
               borderRadius: BorderRadius.circular(10),
@@ -171,11 +177,8 @@ class _TeamLeaderState extends State<TeamLeader>
               },
             ));
             print("rep_id:${senior.rep_id}");
-            BlocProvider.of<SeniorRepsBloc>(context).add(
-                AllSeniorRepEvent(
-                    int.parse(senior.city_id),
-                    int.parse(senior.rep_id)
-                ));
+            BlocProvider.of<SeniorRepsBloc>(context).add(AllSeniorRepEvent(
+                int.parse(senior.city_id), int.parse(senior.rep_id)));
             // ملاحظة: تفعيل الـ Module مسبقاً قبل التوجيه لمنع مشاكل الـ GetIt
             // initGeneralReportsModule();
             // Navigator.push(context, MaterialPageRoute(
@@ -216,7 +219,8 @@ class _TeamLeaderState extends State<TeamLeader>
                       const SizedBox(height: 4),
                       Text(
                         "اضغط لاستعراض السينيور في ${senior.city_name}",
-                        style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade400),
+                        style: TextStyle(
+                            fontSize: 11.sp, color: Colors.grey.shade400),
                       ),
                     ],
                   ),

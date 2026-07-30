@@ -1661,7 +1661,7 @@ class InsertRecResponse {
   int usedReci;
   int remainReci;
 
-  InsertRecResponse(this.totalReci, this.usedReci,this.remainReci);
+  InsertRecResponse(this.totalReci, this.usedReci, this.remainReci);
 }
 
 class StatePlan {

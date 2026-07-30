@@ -1,25 +1,18 @@
 import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-class FirebaseAnalyticsService
-    implements AnalyticsService {
-
-
+class FirebaseAnalyticsService implements AnalyticsService {
   final FirebaseAnalytics _analytics;
 
-
   FirebaseAnalyticsService(
-      this._analytics,
-      );
-
-
+    this._analytics,
+  );
 
   @override
   Future<void> logEvent({
     required String name,
     Map<String, Object>? parameters,
   }) async {
-
     try {
       /*
         final Map<String, Object> parameters = {
@@ -32,66 +25,49 @@ class FirebaseAnalyticsService
       print("📌 Event Name: $name");
       print("📦 Parameters: $parameters");
 
-
       await _analytics.logEvent(
         name: name,
         parameters: parameters,
       );
 
-
       print("✅ Analytics Event Sent Successfully: $name");
-
-
     } catch (e, stackTrace) {
-
       print("❌ Analytics Event Failed: $name");
       print("Error: $e");
       print(stackTrace);
-
     }
-
   }
-
-
 
   @override
   Future<void> setUserId(
-      String userId,
-      ) async {
-
+    String userId,
+  ) async {
     await _analytics.setUserId(
-      id:userId,
+      id: userId,
     );
-
   }
-
-
 
   @override
   Future<void> setUserProperty({
     required String name,
     required String value,
   }) async {
-
-    await _analytics. setUserProperty(
-      name:name,
-      value:value,
+    await _analytics.setUserProperty(
+      name: name,
+      value: value,
     );
-
   }
-
-
 
   @override
   Future<void> clearUser() async {
-
     await _analytics.setUserId(
-      id:null,
+      id: null,
     );
-
   }
+
   // 1. حدث تسجيل دخول مستخدم
-  Future<void> logUserLogin({required String userId, required String loginMethod}) async {
+  Future<void> logUserLogin(
+      {required String userId, required String loginMethod}) async {
     await _analytics.logLogin(
       loginMethod: loginMethod,
     );

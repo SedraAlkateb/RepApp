@@ -1,6 +1,3 @@
-
-class StringsManager{
-  static const noRouteFound ="No Route Found";
-
-
+class StringsManager {
+  static const noRouteFound = "No Route Found";
 }

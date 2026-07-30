@@ -43,12 +43,15 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
           borderRadius: BorderRadius.circular(25.r),
           // تغيير لون البوردر عند اللمس
           border: Border.all(
-            color: _isPressed ? widget.iconColor : Colors.black.withOpacity(0.05),
+            color:
+                _isPressed ? widget.iconColor : Colors.black.withOpacity(0.05),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: _isPressed ? widget.iconColor.withOpacity(0.12) : Colors.black.withOpacity(0.04),
+              color: _isPressed
+                  ? widget.iconColor.withOpacity(0.12)
+                  : Colors.black.withOpacity(0.04),
               blurRadius: 15,
               offset: const Offset(0, 8),
             ),
@@ -62,7 +65,9 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
               // 1. الخط الملون العلوي (جديد)
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 200),
-                top: _isPressed ? -22.h : -30.h, // ينزلق للحافة العلوية عند الضغط
+                top: _isPressed
+                    ? -22.h
+                    : -30.h, // ينزلق للحافة العلوية عند الضغط
                 left: 60.w,
                 right: 60.w,
                 child: Container(
@@ -100,7 +105,9 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
                     duration: const Duration(milliseconds: 200),
                     padding: EdgeInsets.all(12.w),
                     decoration: BoxDecoration(
-                      color: _isPressed ? widget.iconColor : widget.iconColor.withOpacity(0.1),
+                      color: _isPressed
+                          ? widget.iconColor
+                          : widget.iconColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15.r),
                     ),
                     child: Icon(
@@ -125,7 +132,8 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
                         SizedBox(height: 4.h),
                         Text(
                           widget.subtitle,
-                          style: TextStyle(fontSize: 12.sp, color: Colors.grey[500]),
+                          style: TextStyle(
+                              fontSize: 12.sp, color: Colors.grey[500]),
                         ),
                       ],
                     ),
@@ -134,11 +142,9 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
                   AnimatedPadding(
                     duration: const Duration(milliseconds: 200),
                     padding: EdgeInsets.only(left: _isPressed ? 5.w : 0),
-                    child: Icon(
-                        Icons.arrow_forward_ios,
+                    child: Icon(Icons.arrow_forward_ios,
                         color: _isPressed ? widget.iconColor : Colors.grey[300],
-                        size: 16.sp
-                    ),
+                        size: 16.sp),
                   ),
                 ],
               ),

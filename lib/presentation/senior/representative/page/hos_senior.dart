@@ -27,36 +27,34 @@ class HospitalSenior extends StatelessWidget {
               child: SearchField(
                 searchController: searchHosController,
                 onPressed: (value) {
-                  BlocProvider.of<SeniorProfBloc>(context).add(SenSearchHospEvent(value));
+                  BlocProvider.of<SeniorProfBloc>(context)
+                      .add(SenSearchHospEvent(value));
                 },
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w,vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "قائمة المشافي المسجين",
                     style: TextStyle(
-                        color: ColorManager.medicalText
-                            .withOpacity(0.8),
+                        color: ColorManager.medicalText.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                         fontSize: 18.sp),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 12.w, vertical: 4.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                     decoration: BoxDecoration(
-                      color: ColorManager.medicalPrimary
-                          .withOpacity(0.1),
+                      color: ColorManager.medicalPrimary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
                       " ${context.watch<SeniorProfBloc>().hospital.length} مشفى",
                       style: TextStyle(
-                          color: ColorManager.medicalPrimary,
-                          fontSize: 11.sp),
+                          color: ColorManager.medicalPrimary, fontSize: 11.sp),
                     ),
                   ),
                 ],
@@ -66,19 +64,23 @@ class HospitalSenior extends StatelessWidget {
             BlocBuilder<SeniorProfBloc, SeniorProfState>(
               builder: (context, state) {
                 // جلب البيانات من الـ Bloc
-                List<HospitalSpModel> hospitalModel = context.watch<SeniorProfBloc>().hospital;
+                List<HospitalSpModel> hospitalModel =
+                    context.watch<SeniorProfBloc>().hospital;
 
                 if (state is SenAllHospitalsState) {
                   hospitalModel = state.hospital;
                 }
-                if (state is SenAllHospitalLoadingState) return loadingFullScreen(context);
-                if (state is SenAllHospitalEmptyState) return emptyFullScreen(context);
-                if (state is SenAllHospitalErrorState) return errorFullScreen(context);
+                if (state is SenAllHospitalLoadingState)
+                  return loadingFullScreen(context);
+                if (state is SenAllHospitalEmptyState)
+                  return emptyFullScreen(context);
+                if (state is SenAllHospitalErrorState)
+                  return errorFullScreen(context);
                 return ListView.builder(
                   padding: EdgeInsets.all(16.w),
-                   physics: NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: hospitalModel.length ,
+                  itemCount: hospitalModel.length,
                   itemBuilder: (context, index) {
                     return HospitalCardWidget(hospital: hospitalModel[index]);
                   },

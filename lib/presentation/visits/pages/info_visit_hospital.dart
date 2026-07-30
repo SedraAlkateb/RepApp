@@ -51,8 +51,9 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEditable=widget.hospitalModel.visitHospitalModel.flag == 0?true:false;
-     return Scaffold(
+    bool isEditable =
+        widget.hospitalModel.visitHospitalModel.flag == 0 ? true : false;
+    return Scaffold(
       appBar: null,
       body: SingleChildScrollView(
         child: Column(
@@ -110,7 +111,7 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                       controller: _noteeController,
                       icon: Icons.person_outline,
                       isEditable: isEditable,
-                      iconColor: Colors.redAccent ,
+                      iconColor: Colors.redAccent,
                       validator: (value) {
                         return null;
                       },
@@ -127,13 +128,12 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                 ],
               ),
             ),
-
-
           ],
         ),
       ),
     );
   }
+
   Widget _buildHeader(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -166,8 +166,7 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 22.sp,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
 
                 SizedBox(height: 12.h),
@@ -176,7 +175,8 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                 // وضعناهما في صف واحد لتقليل التكدس الرأسي
                 _buildHeaderInfo(
                   icon: Icons.medical_services_outlined,
-                  label: widget.hospitalModel.specModel.title, // نص مباشر بدون format
+                  label: widget
+                      .hospitalModel.specModel.title, // نص مباشر بدون format
                 ),
                 SizedBox(height: 10.w),
                 _buildHeaderInfo(
@@ -188,7 +188,8 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
 
                 // 3. كبسولة التاريخ (منفصلة لتعطي أهمية للوقت)
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(20.r),
@@ -200,12 +201,12 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                       Icon(Icons.access_time, color: Colors.white, size: 14.sp),
                       SizedBox(width: 6.w),
                       Text(
-                        formatDateTime(widget.hospitalModel.visitHospitalModel.data),
+                        formatDateTime(
+                            widget.hospitalModel.visitHospitalModel.data),
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 12.sp,
-                            fontWeight: FontWeight.w600
-                        ),
+                            fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -232,6 +233,7 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
       ],
     );
   }
+
   Widget _buildFloatingEditButton(bool isEditable) {
     if (!isEditable) return const SizedBox();
 
@@ -239,23 +241,17 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
       listener: (context, state) {
         if (state is UpdateVisitHospitalState) {
           Navigator.pop(context);
-          BlocProvider.of<VisitBloc>(context)
-              .add(VisitHospitalEvent());
+          BlocProvider.of<VisitBloc>(context).add(VisitHospitalEvent());
         }
       },
-      child:
-      ButtonWidget(() {
-        BlocProvider.of<VisitBloc>(context).add(
-            UpdateVisitHospitalEvent(
-                kas: _issueController.text,
-                sc: _noteController.text,
-                id: widget.hospitalModel
-                    .visitHospitalModel.id,
-                target: _targetController.text,
-                selectBrand:context.read<VisitBloc>().brands
-            ));
+      child: ButtonWidget(() {
+        BlocProvider.of<VisitBloc>(context).add(UpdateVisitHospitalEvent(
+            kas: _issueController.text,
+            sc: _noteController.text,
+            id: widget.hospitalModel.visitHospitalModel.id,
+            target: _targetController.text,
+            selectBrand: context.read<VisitBloc>().brands));
       }, "تعديل"),
-
     );
   }
 
@@ -265,161 +261,155 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)
+        ],
       ),
-      child:      Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
                 padding: EdgeInsets.all(6.w),
-                decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), borderRadius: BorderRadius.circular(8.r)),
+                decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.r)),
                 child: Icon(Icons.link, color: Colors.green, size: 20.sp),
               ),
               SizedBox(width: 10.w),
-              Text("العينات المقدمة", style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: const Color(0xFF0D47A1))),
+              Text("العينات المقدمة",
+                  style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF0D47A1))),
             ],
           ),
           SizedBox(height: 10.h),
           isEditable
               ? BlocBuilder<VisitBloc, VisitState>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  Checkbox(
-                    focusColor: ColorManager.secondaryColor,
-                    activeColor: ColorManager.secondaryColor2,
-                    value: context.read<VisitBloc>().isBrand,
-                    onChanged: (value) {
-                      BlocProvider.of<VisitBloc>(context)
-                          .add(IsBrandEvent());
-                    },
-                  ),
-                  Text('لم يتم توزيع العينات'),
-                ],
-              );
-            },
-          )
+                  builder: (context, state) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                          focusColor: ColorManager.secondaryColor,
+                          activeColor: ColorManager.secondaryColor2,
+                          value: context.read<VisitBloc>().isBrand,
+                          onChanged: (value) {
+                            BlocProvider.of<VisitBloc>(context)
+                                .add(IsBrandEvent());
+                          },
+                        ),
+                        Text('لم يتم توزيع العينات'),
+                      ],
+                    );
+                  },
+                )
               : SizedBox(),
           context.read<VisitBloc>().isBrand == false
               ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: AppSize.s8,
-              ),
-              ( !isEditable&&context.watch<VisitBloc>().brands.isNotEmpty)
-                  ?
-              ///////////////////////////////ss
-              BlocBuilder<VisitBloc, VisitState>(
-                buildWhen: (previous, current) {
-                  return current is SelectBrandState ||
-                      current is DeleteBrandState ||
-                      current is BrandPharmacyVisitState ||
-                      current is EditAmountBrandState;
-                },
-                builder: (context, state) {
-                  List<PharmacyBrandModel> selectBrand =
-                      context.watch<VisitBloc>().brands;
-                  if (state is BrandPharmacyVisitState) {
-                    selectBrand = state.brands;
-                  }
-                  return TableVisitStatic(
-                      selectBrand: selectBrand);
-                },
-              )
-                  :
-              (! isEditable&&context.watch<VisitBloc>().brands.isEmpty)  ?
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.circle,
-                    color: ColorManager.secondaryColor1,
-                  ),
-                  Text(
-                    " لم يتم توزيع عينات ",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ],
-              ):
-              Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 8,
-                  ),
-                  BlocListener<VisitBloc, VisitState>(
-                    listener: (context, state) {
-                      if (state is BrandFlagErrorState) {
-                        error(
-                            context,
-                            state.failure.massage,
-                            state.failure.code);
-                      }
-                    },
-                    child: CustomDropDownSearch(
-                      hintText: "العينات",
-                      items: context
-                          .watch<VisitBloc>()
-                          .bandFlag,
-                      onChanged: (value) {
-                        BrandModel brand = value;
-                        BlocProvider.of<VisitBloc>(context)
-                            .add(SelectBrandEvent(brand));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "اختر نوع الطلب";
-                        }
-                        return null;
-                      },
-                      errorText: 'لايوجد نتيجة',
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: AppSize.s8,
                     ),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-
-                  BlocBuilder<VisitBloc, VisitState>(
-                    buildWhen: (previous, current) {
-                      return current is SelectBrandState ||
-                          current is DeleteBrandState ||
-                          current
-                          is BrandPharmacyVisitState ||
-                          current is EditAmountBrandState;
-                    },
-                    builder: (context, state) {
-                      List<PharmacyBrandModel> selectBrand =
-                          context.watch<VisitBloc>().brands;
-                      if (state
-                      is BrandPharmacyVisitState) {
-                        selectBrand = state.brands;
-                      }
-                      return TableVisitDynamic(
-                        selectBrand: selectBrand,
-                      );
-                    },
-                  )
-                ],
-              )
-
-            ],
-          )
+                    (!isEditable &&
+                            context.watch<VisitBloc>().brands.isNotEmpty)
+                        ?
+                        ///////////////////////////////ss
+                        BlocBuilder<VisitBloc, VisitState>(
+                            buildWhen: (previous, current) {
+                              return current is SelectBrandState ||
+                                  current is DeleteBrandState ||
+                                  current is BrandPharmacyVisitState ||
+                                  current is EditAmountBrandState;
+                            },
+                            builder: (context, state) {
+                              List<PharmacyBrandModel> selectBrand =
+                                  context.watch<VisitBloc>().brands;
+                              if (state is BrandPharmacyVisitState) {
+                                selectBrand = state.brands;
+                              }
+                              return TableVisitStatic(selectBrand: selectBrand);
+                            },
+                          )
+                        : (!isEditable &&
+                                context.watch<VisitBloc>().brands.isEmpty)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    color: ColorManager.secondaryColor1,
+                                  ),
+                                  Text(
+                                    " لم يتم توزيع عينات ",
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  BlocListener<VisitBloc, VisitState>(
+                                    listener: (context, state) {
+                                      if (state is BrandFlagErrorState) {
+                                        error(context, state.failure.massage,
+                                            state.failure.code);
+                                      }
+                                    },
+                                    child: CustomDropDownSearch(
+                                      hintText: "العينات",
+                                      items:
+                                          context.watch<VisitBloc>().bandFlag,
+                                      onChanged: (value) {
+                                        BrandModel brand = value;
+                                        BlocProvider.of<VisitBloc>(context)
+                                            .add(SelectBrandEvent(brand));
+                                      },
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return "اختر نوع الطلب";
+                                        }
+                                        return null;
+                                      },
+                                      errorText: 'لايوجد نتيجة',
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  BlocBuilder<VisitBloc, VisitState>(
+                                    buildWhen: (previous, current) {
+                                      return current is SelectBrandState ||
+                                          current is DeleteBrandState ||
+                                          current is BrandPharmacyVisitState ||
+                                          current is EditAmountBrandState;
+                                    },
+                                    builder: (context, state) {
+                                      List<PharmacyBrandModel> selectBrand =
+                                          context.watch<VisitBloc>().brands;
+                                      if (state is BrandPharmacyVisitState) {
+                                        selectBrand = state.brands;
+                                      }
+                                      return TableVisitDynamic(
+                                        selectBrand: selectBrand,
+                                      );
+                                    },
+                                  )
+                                ],
+                              )
+                  ],
+                )
               : SizedBox()
-
-
-
         ],
       ),
     );
   }
-
-
 }
-
-

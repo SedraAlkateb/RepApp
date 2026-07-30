@@ -13,15 +13,14 @@ Widget buildDetailRow(
         Text(
           '$title: ',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         Expanded(
           child: Text(
             value,
             style: Theme.of(context).textTheme.bodyLarge,
             maxLines: 3,
-
           ),
         ),
       ],

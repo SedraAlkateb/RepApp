@@ -23,15 +23,15 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
   AllSearchHosNoteUsecase allSearchHosNoteUsecase;
   DocDoctorsUseCase docDoctorsUseCase;
   DoctorInfoUsecase doctorInfoUsecase;
-  int value=0;
+  int value = 0;
   String name1 = ' ';
   SearchDoctorsBloc(
-    this.searchDoctorsUsecase,
-    this.docDoctorsUseCase,
+      this.searchDoctorsUsecase,
+      this.docDoctorsUseCase,
       this.doctorInfoUsecase,
       this.allSearchHosUsecase,
-      this.allSearchHosNoteUsecase
-  ) : super(EditBrandPlanInitial()) {
+      this.allSearchHosNoteUsecase)
+      : super(EditBrandPlanInitial()) {
     on<SearchDoctorsEvent>((event, emit) async {
       if (event is FutureSearchDocEvent) {
         representative = [];
@@ -41,54 +41,45 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
           emit(FutureSearchDoctorsErrorState(failure: failure));
         }, (data) async {
           representative = data;
-          if(data.isEmpty){
+          if (data.isEmpty) {
             emit(FutureSearchDoctorsEmptyState());
-
-          }else{
+          } else {
             emit(FutureSearchDoctorsState(data));
-
           }
         });
-      }
-      else if (event is FutureDocDoctorsEvent) {
+      } else if (event is FutureDocDoctorsEvent) {
         doctorDetails = [];
         emit(FutureDocDoctorsLoadingState());
         (await docDoctorsUseCase.execute(event.docId)).fold((failure) {
           emit(FutureDocDoctorsErrorState(failure: failure));
         }, (data) async {
-             emit(FutureDocDoctorsState(data));
-        
-         if (data.isEmpty) {
-              emit(FutureDocDoctorsEmptyState());
-            } else {
+          emit(FutureDocDoctorsState(data));
+
+          if (data.isEmpty) {
+            emit(FutureDocDoctorsEmptyState());
+          } else {
             doctorDetails = data;
-              emit(FutureDocDoctorsState(data));
-            }
-         }
-         );
-      }
-
-     else if (event is FutureSearchHosEvent) {
-        allSearchHospital = [];
-        emit(FutureSearchHospitalsLoadingState());
-        (await allSearchHosUsecase.execute( event.name)).fold(
-                (failure) {
-              emit(FutureSearchHospitalsErrorState(failure: failure));
-            }, (data) async {
-          allSearchHospital = data;
-          if(data.isEmpty){
-            emit(FutureSearchHospitalsEmptyState());
-
-          }else{
-            emit(FutureSearchHospitalsState(data));
-
+            emit(FutureDocDoctorsState(data));
           }
         });
-      }
-      else if (event is FutureDocHospitalEvent) {
+      } else if (event is FutureSearchHosEvent) {
+        allSearchHospital = [];
+        emit(FutureSearchHospitalsLoadingState());
+        (await allSearchHosUsecase.execute(event.name)).fold((failure) {
+          emit(FutureSearchHospitalsErrorState(failure: failure));
+        }, (data) async {
+          allSearchHospital = data;
+          if (data.isEmpty) {
+            emit(FutureSearchHospitalsEmptyState());
+          } else {
+            emit(FutureSearchHospitalsState(data));
+          }
+        });
+      } else if (event is FutureDocHospitalEvent) {
         allSearchHospitalNote = [];
         emit(FutureDocHospitalsLoadingState());
-        (await allSearchHosNoteUsecase.execute(event.hosId,event.spId)).fold((failure) {
+        (await allSearchHosNoteUsecase.execute(event.hosId, event.spId)).fold(
+            (failure) {
           emit(FutureDocHospitalsErrorState(failure: failure));
         }, (data) async {
           emit(FutureDocHospitalsState(data));
@@ -99,39 +90,28 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
             allSearchHospitalNote = data;
             emit(FutureDocHospitalsState(data));
           }
-        }
-        );
-      }
-
-
-      else if(event is ToggleSheetEvent){
-   emit( DocIsExpandedNoteState(index: event.index));
-} else if (event is DocNoIsExpandedNoteEvent) {
-  emit( DocNoIsExpandedNoteState());
-}
-      
-  else if (event is DoctorInfoEvent) {
-
+        });
+      } else if (event is ToggleSheetEvent) {
+        emit(DocIsExpandedNoteState(index: event.index));
+      } else if (event is DocNoIsExpandedNoteEvent) {
+        emit(DocNoIsExpandedNoteState());
+      } else if (event is DoctorInfoEvent) {
         emit(DoctorInfoLoadingState());
         (await doctorInfoUsecase.execute(event.docId)).fold((failure) {
           emit(DoctorInfoErrorState(failure: failure));
         }, (data) async {
           emit(DoctorInfoState(data));
-        }
-        );
+        });
       }
-  ///////////////////////////////////////
+      ///////////////////////////////////////
       else if (event is DoctorInfoEvent) {
-
         emit(DoctorInfoLoadingState());
         (await doctorInfoUsecase.execute(event.docId)).fold((failure) {
           emit(DoctorInfoErrorState(failure: failure));
         }, (data) async {
           emit(DoctorInfoState(data));
-        }
-        );
-      }
-      else if (event is SearchNoteDoctorEvent) {
+        });
+      } else if (event is SearchNoteDoctorEvent) {
         List<DocdoctorsModel> doctorNote;
         String search = normalizeText(event.contant);
         doctorNote = doctorDetails.where((value) {
@@ -147,8 +127,7 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
           return false;
         }).toList();
         emit(FutureDocDoctorsState(doctorNote));
-      }
-      else if (event is SearchNoteHosEvent) {
+      } else if (event is SearchNoteHosEvent) {
         List<SearchHospitalNoteModel> hospitalNote;
         String search = normalizeText(event.contant);
         hospitalNote = allSearchHospitalNote.where((value) {

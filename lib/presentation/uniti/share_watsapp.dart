@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 /// تابع رسمي ومستقر لمشاركة التقرير الإداري عبر الواتساب وفتح قائمة المجموعات أو المحادثات مباشرة.
 Future<void> shareReportToWhatsApp({
   required BuildContext context,
-  required String doctorName,           // اسم الطبيب
-  required String specialty,            // اختصاص الطبيب
+  required String doctorName, // اسم الطبيب
+  required String specialty, // اختصاص الطبيب
   required String scientificOfficeNote, // ملاحظات المكتب العلمي
-  required String visitDate,            // تاريخ الزيارة
-  required String phoneNumber,          // رقم جوال الطبيب أو الشخص المعني
-  required String repName,              // اسم المندوب
+  required String visitDate, // تاريخ الزيارة
+  required String phoneNumber, // رقم جوال الطبيب أو الشخص المعني
+  required String repName, // اسم المندوب
 }) async {
-
   // 1. صياغة النص وتنسيقه بأسلوب تقرير إداري رسمي خالٍ من الرموز التعبيرية
-  final String reportText =
-      "تقرير زيارة طبيب - تطبيق دومينا\n"
+  final String reportText = "تقرير زيارة طبيب - تطبيق دومينا\n"
       "===================================\n"
       "اسم الطبيب: $doctorName\n"
       "الاختصاص الطبي: $specialty\n"
@@ -33,7 +31,8 @@ Future<void> shareReportToWhatsApp({
   final String encodedText = Uri.encodeComponent(reportText);
 
   // 4. تنظيف رقم الهاتف برمجياً وإزالة الأصفار الدولية أو إشارة (+) لاستخدامه في الرابط البديل
-  final String cleanPhone = phoneNumber.replaceAll('+', '').replaceFirst('00', '').trim();
+  final String cleanPhone =
+      phoneNumber.replaceAll('+', '').replaceFirst('00', '').trim();
 
   // 5. رابط المجموعات والمحادثات العام ليفتح قائمة الاختيار والبحث في واتساب
   final Uri whatsappUri = Uri.parse("whatsapp://send?text=$encodedText");
@@ -48,19 +47,24 @@ Future<void> shareReportToWhatsApp({
     // إشعار المستخدم بنجاح العملية وتوجيهه لاختيار الجروب
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("جاري فتح واتساب... يرجى اختيار جهة الإرسال المستهدفة.")),
+        const SnackBar(
+            content:
+                Text("جاري فتح واتساب... يرجى اختيار جهة الإرسال المستهدفة.")),
       );
     }
   } catch (e) {
     // 6. الخطة البديلة (Fallback): إذا فشل الرابط المباشر، يتم توجيهه لرابط الويب الآمن باستخدام الرقم المنظف
-    final Uri webWhatsappUri = Uri.parse("https://wa.me/$cleanPhone?text=$encodedText");
+    final Uri webWhatsappUri =
+        Uri.parse("https://wa.me/$cleanPhone?text=$encodedText");
 
     if (await canLaunchUrl(webWhatsappUri)) {
       await launchUrl(webWhatsappUri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("تعذر فتح التطبيق، تم نسخ التقرير النصي للحافظة بنجاح.")),
+          const SnackBar(
+              content: Text(
+                  "تعذر فتح التطبيق، تم نسخ التقرير النصي للحافظة بنجاح.")),
         );
       }
     }

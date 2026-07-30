@@ -11,24 +11,23 @@ part 'senior_reps_state.dart';
 class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
   AllSeinor_Rep_Usecase allSeinor_Rep_Usecase;
   List<AllRepresentative> allRepresentative = [];
- // List<CityModel> cities=[];
-  SeniorRepsBloc(this.allSeinor_Rep_Usecase) : super(SeniorRepsInitial())
-  {
+  // List<CityModel> cities=[];
+  SeniorRepsBloc(this.allSeinor_Rep_Usecase) : super(SeniorRepsInitial()) {
     on<SeniorRepsEvent>((event, emit) async {
       if (event is AllSeniorRepEvent) {
         emit(AllSeniorRepLoadingState());
-        (await allSeinor_Rep_Usecase.execute(event.repId,event.cityId)).fold((failure) {
+        (await allSeinor_Rep_Usecase.execute(event.repId, event.cityId)).fold(
+            (failure) {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
-          if(data.isEmpty){
+          if (data.isEmpty) {
             emit(AllSeniorRepEmptyState());
-          }else{
+          } else {
             data.sort((a, b) => b.number.compareTo(a.number));
-            allRepresentative=data;
+            allRepresentative = data;
 
             emit(AllSeniorRepState(data));
           }
-
         });
       }
       // if (event is AllCityEvent) {
@@ -41,7 +40,7 @@ class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
       //   });
       // }
       else if (event is SenSearchRepEvent) {
-        List<AllRepresentative> allRepresentativeModel=[];
+        List<AllRepresentative> allRepresentativeModel = [];
         String search = normalizeText(event.contant);
         allRepresentativeModel = allRepresentative.where((value) {
           if (normalizeText(value.name).contains(search)) {

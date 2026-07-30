@@ -48,18 +48,21 @@ final class VisitDoctorState extends VisitState {
   @override
   List<Object?> get props => [doctors];
 }
+
 final class SearchVisitDoctorState extends VisitState {
   final List<VisitDoctorAndDoctor> doctors;
   SearchVisitDoctorState(this.doctors);
   @override
   List<Object?> get props => [doctors];
 }
+
 final class SearchVisitHospitalState extends VisitState {
   final List<VisitHospitalAndHospital> hospitals;
   SearchVisitHospitalState(this.hospitals);
   @override
   List<Object?> get props => [hospitals];
 }
+
 final class VisitHospitalState extends VisitState {
   final List<VisitHospitalAndHospital> hospitals;
   @override
@@ -97,86 +100,91 @@ final class BrandHospitalVisitState extends VisitState {
   @override
   List<Object?> get props => [brands];
 }
+
 final class EmptyVisitHospitalState extends VisitState {
   @override
   EmptyVisitHospitalState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
-
 
 final class UpdateVisitDoctorErrorState extends VisitState {
   final Failure failure;
   UpdateVisitDoctorErrorState({required this.failure});
   @override
-
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
+
 final class UpdateVisitDoctorState extends VisitState {
   @override
   UpdateVisitDoctorState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
 
 final class UpdateVisitHospitalErrorState extends VisitState {
   final Failure failure;
   UpdateVisitHospitalErrorState({required this.failure});
   @override
-
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
+
 final class UpdateVisitHospitalState extends VisitState {
   @override
   UpdateVisitHospitalState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
 
 final class UpdateVisitPharmacyErrorState extends VisitState {
   final Failure failure;
   UpdateVisitPharmacyErrorState({required this.failure});
   @override
-
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
+
 final class UpdateVisitPharmacyState extends VisitState {
   @override
   UpdateVisitPharmacyState();
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
-class DeleteBrandState extends VisitState{
+
+class DeleteBrandState extends VisitState {
   final List<PharmacyBrandModel> brands;
   DeleteBrandState(this.brands);
   @override
   List<Object?> get props => [brands];
 }
 
-class EditAmountBrandState extends VisitState{
+class EditAmountBrandState extends VisitState {
   final List<PharmacyBrandModel> brands;
   EditAmountBrandState(this.brands);
   List<Object?> get props => [brands];
 }
+
 class IsBrandState extends VisitState {
-  final  bool isBrand;
+  final bool isBrand;
   IsBrandState(this.isBrand);
   @override
   List<Object?> get props => [isBrand];
 }
+
 final class BrandFlagErrorState extends VisitState {
   final Failure failure;
   BrandFlagErrorState({required this.failure});
   @override
-  List<Object?> get props =>[failure];
+  List<Object?> get props => [failure];
 }
+
 final class BrandFlagState extends VisitState {
   final List<BrandModel> brands;
   BrandFlagState(this.brands);
   @override
-  List<Object?> get props =>[brands];
+  List<Object?> get props => [brands];
 }
-class SelectBrandState extends VisitState{
+
+class SelectBrandState extends VisitState {
   final List<PharmacyBrandModel> brands;
   SelectBrandState(this.brands);
   List<Object?> get props => [brands];

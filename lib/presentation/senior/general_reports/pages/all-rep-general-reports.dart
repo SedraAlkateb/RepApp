@@ -23,12 +23,14 @@ class AllRepSeniorGenerlReports extends StatefulWidget {
   });
 
   @override
-  State<AllRepSeniorGenerlReports> createState() => _AllRepSeniorGenerlReportsState();
+  State<AllRepSeniorGenerlReports> createState() =>
+      _AllRepSeniorGenerlReportsState();
 }
 
 class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
   final TextEditingController _searchController = TextEditingController();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void dispose() {
@@ -72,11 +74,14 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
               // 2. حقل البحث
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
                   child: SearchField(
                     searchController: _searchController,
                     onPressed: (value) {
-                      context.read<SeniorRepsBloc>().add(SenSearchRepEvent(value));
+                      context
+                          .read<SeniorRepsBloc>()
+                          .add(SenSearchRepEvent(value));
                     },
                   ),
                 ),
@@ -113,7 +118,8 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
               ),
             ),
             Container(
-              height: 4, width: 35,
+              height: 4,
+              width: 35,
               decoration: BoxDecoration(
                 color: const Color(0xFF42A5F5),
                 borderRadius: BorderRadius.circular(10),
@@ -133,11 +139,14 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
   Widget _buildRepsList() {
     return BlocBuilder<SeniorRepsBloc, SeniorRepsState>(
       builder: (context, state) {
-        List<AllRepresentative> list = context.watch<SeniorRepsBloc>().allRepresentative;
+        List<AllRepresentative> list =
+            context.watch<SeniorRepsBloc>().allRepresentative;
 
         if (state is AllSeniorRepLoadingState) {
           return SliverToBoxAdapter(
-            child: Center(child: loadingShimmer(context, 5, 100, 20, BorderRadius.circular(20))),
+            child: Center(
+                child: loadingShimmer(
+                    context, 5, 100, 20, BorderRadius.circular(20))),
           );
         }
 
@@ -161,7 +170,7 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
         return AnimationLimiter(
           child: SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 final rep = list[index];
                 return AnimationConfiguration.staggeredList(
                   position: index,
@@ -228,7 +237,8 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                     color: ColorManager.medicalPrimary.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.assessment_outlined, color: ColorManager.medicalPrimary),
+                  child: Icon(Icons.assessment_outlined,
+                      color: ColorManager.medicalPrimary),
                 ),
                 SizedBox(width: 15.w),
                 // بيانات المندوب
@@ -253,7 +263,8 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                   ),
                 ),
                 // أيقونة السهم
-                Icon(Icons.arrow_forward_ios_rounded, size: 18.sp, color: Colors.grey.shade400),
+                Icon(Icons.arrow_forward_ios_rounded,
+                    size: 18.sp, color: Colors.grey.shade400),
               ],
             ),
           ),

@@ -1,6 +1,4 @@
 abstract class CrashlyticsService {
-
-
   Future<void> recordError({
     required Object error,
     StackTrace? stackTrace,
@@ -8,17 +6,11 @@ abstract class CrashlyticsService {
     bool fatal,
   });
 
-
-
   Future<void> log(
-      String message,
-      );
-
-
+    String message,
+  );
 
   Future<void> setUserId(
-      String userId,
-      );
-
-
+    String userId,
+  );
 }

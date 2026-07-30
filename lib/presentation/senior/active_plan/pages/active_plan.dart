@@ -16,14 +16,14 @@ class ActivePlanPage extends StatefulWidget {
 
 class _BrandPlanActivePageState extends State<ActivePlanPage>
     with AutomaticKeepAliveClientMixin {
-
   final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC), // خلفية الصفحة رمادي فاتح جداً هادئ
+      backgroundColor:
+          const Color(0xFFF8FAFC), // خلفية الصفحة رمادي فاتح جداً هادئ
       appBar: AppBar(
         title: const Text('الخطة الفعالة'),
         elevation: 0,
@@ -40,7 +40,8 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
               context.watch<ActivePlanBloc>().activePlanSearch;
 
           if (state is AllActivePlanLoadingState) {
-            return loadingShimmer(context, 20, 25, 150, BorderRadius.circular(20));
+            return loadingShimmer(
+                context, 20, 25, 150, BorderRadius.circular(20));
           }
 
           return CustomScrollView(
@@ -72,7 +73,7 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
                       //     style: TextStyle(fontSize: 14.sp, color: const Color(0xFF64748B)),
                       //   ),
                       // ),
-                    //  SizedBox(height: 20.h),
+                      //  SizedBox(height: 20.h),
 
                       // حقل البحث
                       _buildFluidAnimation(
@@ -94,23 +95,24 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
               // --- قائمة الكروت ---
               planBrandModel.isEmpty
                   ? SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: emptyFullScreen(context)),
-              )
+                      hasScrollBody: false,
+                      child: Center(child: emptyFullScreen(context)),
+                    )
                   : SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                      return _buildFluidAnimation(
-                        index: index + 3,
-                        child: BrandPlanCard(model: planBrandModel[index]),
-                      );
-                    },
-                    childCount: planBrandModel.length,
-                  ),
-                ),
-              ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return _buildFluidAnimation(
+                              index: index + 3,
+                              child:
+                                  BrandPlanCard(model: planBrandModel[index]),
+                            );
+                          },
+                          childCount: planBrandModel.length,
+                        ),
+                      ),
+                    ),
 
               SliverToBoxAdapter(child: SizedBox(height: 100.h)),
             ],
@@ -204,8 +206,6 @@ class BrandPlanCard extends StatelessWidget {
                   ),
                 ),
                 Type.buildBadge(model.type),
-
-
               ],
             ),
           ),
@@ -218,7 +218,8 @@ class BrandPlanCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.bar_chart_rounded, size: 16.sp, color: const Color(0xFF94A3B8)),
+                    Icon(Icons.bar_chart_rounded,
+                        size: 16.sp, color: const Color(0xFF94A3B8)),
                     SizedBox(width: 8.w),
                     Text(
                       "توزيع الأهداف حسب الاختصاص",
@@ -231,46 +232,48 @@ class BrandPlanCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 12.h),
-
-            model.spPlan.isEmpty?emptyFullScreen(context):
-                ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: model.spPlan.length,
-                  itemBuilder: (context, i) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 8.h),
-                      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(color: const Color(0xFFF1F5F9)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            model.spPlan[i].name,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: const Color(0xFF334155),
-                              fontWeight: FontWeight.w500,
+                model.spPlan.isEmpty
+                    ? emptyFullScreen(context)
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: model.spPlan.length,
+                        itemBuilder: (context, i) {
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 8.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 14.w, vertical: 12.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.r),
+                              border:
+                                  Border.all(color: const Color(0xFFF1F5F9)),
                             ),
-                          ),
-                          Text(
-                            model.spPlan[i].amount,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF1E3A8A),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  model.spPlan[i].name,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: const Color(0xFF334155),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  model.spPlan[i].amount,
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1E3A8A),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ],
             ),
           ),
