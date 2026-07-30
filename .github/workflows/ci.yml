@@ -18,7 +18,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.0' # يمكنك تعديل الإصدار حسب مشروعك (أو استبدال السطر بـ channel: 'stable' لاستخدام أحدث إصدار)
+          flutter-version: '3.41.6' # يمكنك تعديل الإصدار حسب مشروعك (أو استبدال السطر بـ channel: 'stable' لاستخدام أحدث إصدار)
           cache: true # تفعيل التخزين المؤقت لتسريع عملية البناء
 
       - name: Get dependencies
