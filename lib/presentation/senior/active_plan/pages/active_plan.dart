@@ -1,3 +1,4 @@
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
@@ -8,7 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ActivePlanPage extends StatefulWidget {
-  const ActivePlanPage({super.key});
+  const ActivePlanPage({super.key, required this.planId});
+  final int planId;
 
   @override
   State<ActivePlanPage> createState() => _BrandPlanActivePageState();
@@ -21,108 +23,92 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      backgroundColor:
-          const Color(0xFFF8FAFC), // خلفية الصفحة رمادي فاتح جداً هادئ
-      appBar: AppBar(
-        title: const Text('الخطة الفعالة'),
-        elevation: 0,
-      ),
-      body: BlocConsumer<ActivePlanBloc, ActivePlanState>(
-        listener: (context, state) {
-          if (state is AllActivePlanErrorState) {
-            error(context, state.failure.massage, state.failure.code);
-          }
-        },
-        builder: (context, state) {
-          // جلب القائمة المفلترة من الـ Bloc
-          List<ActivePlanBrandModel> planBrandModel =
-              context.watch<ActivePlanBloc>().activePlanSearch;
+    return BlocProvider<ActivePlanBloc>(
+      // 💡 إنشاء الـ Bloc وإرسال حدث الجلب فوراً مع تفعيل lazy: false
+      lazy: false,
+      create: (context) =>
+      instance<ActivePlanBloc>()..add(GetActivePlanEvent(widget.planId)),
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          title: const Text('الخطة الفعالة'),
+          elevation: 0,
+        ),
+        body: BlocConsumer<ActivePlanBloc, ActivePlanState>(
+          listener: (context, state) {
+            if (state is AllActivePlanErrorState) {
+              error(context, state.failure.massage, state.failure.code);
+            }
+          },
+          builder: (context, state) {
+            // 💡 الوصول للـ Bloc بأمان باستخدام السياق المحلي المتاح للـ BlocConsumer
+            final activePlanBloc = BlocProvider.of<ActivePlanBloc>(context);
+            List<ActivePlanBrandModel> planBrandModel =
+                activePlanBloc.activePlanSearch;
 
-          if (state is AllActivePlanLoadingState) {
-            return loadingShimmer(
-                context, 20, 25, 150, BorderRadius.circular(20));
-          }
+            if (state is AllActivePlanLoadingState) {
+              return loadingShimmer(
+                  context, 20, 25, 150, BorderRadius.circular(20));
+            }
 
-          return CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              // --- قسم العنوان والبحث ---
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20.h),
-                      // _buildFluidAnimation(
-                      //   index: 0,
-                      //   child: Text(
-                      //     'منتجات الخطة الفعالة',
-                      //     style: TextStyle(
-                      //       fontSize: 22.sp,
-                      //       fontWeight: FontWeight.bold,
-                      //       color: const Color(0xFF0F172A),
-                      //     ),
-                      //   ),
-                      // ),
-                      // _buildFluidAnimation(
-                      //   index: 1,
-                      //   child: Text(
-                      //     'عرض جميع المنتجات المدرجة في الخطة الحالية مع امكانية البحث عن منتج معين',
-                      //     style: TextStyle(fontSize: 14.sp, color: const Color(0xFF64748B)),
-                      //   ),
-                      // ),
-                      //  SizedBox(height: 20.h),
-
-                      // حقل البحث
-                      _buildFluidAnimation(
-                        index: 2,
-                        child: SearchField(
-                          searchController: searchController,
-                          onPressed: (value) {
-                            BlocProvider.of<ActivePlanBloc>(context)
-                                .add(SearchActivePlanEvent(value));
-                          },
+            return CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                // --- قسم البحث ---
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20.h),
+                        _buildFluidAnimation(
+                          index: 2,
+                          child: SearchField(
+                            searchController: searchController,
+                            onPressed: (value) {
+                              BlocProvider.of<ActivePlanBloc>(context)
+                                  .add(SearchActivePlanEvent(value));
+                            },
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 15.h),
-                    ],
+                        SizedBox(height: 15.h),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              // --- قائمة الكروت ---
-              planBrandModel.isEmpty
-                  ? SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Center(child: emptyFullScreen(context)),
-                    )
-                  : SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
+                // --- قائمة الكروت ---
+                planBrandModel.isEmpty
+                    ? SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(child: emptyFullScreen(context)),
+                )
+                    : SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            return _buildFluidAnimation(
-                              index: index + 3,
-                              child:
-                                  BrandPlanCard(model: planBrandModel[index]),
-                            );
-                          },
-                          childCount: planBrandModel.length,
-                        ),
-                      ),
+                        return _buildFluidAnimation(
+                          index: index + 3,
+                          child:
+                          BrandPlanCard(model: planBrandModel[index]),
+                        );
+                      },
+                      childCount: planBrandModel.length,
                     ),
+                  ),
+                ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 100.h)),
-            ],
-          );
-        },
+                SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  // ويدجيت الأنيميشن الانسيابي مع إصلاح مشكلة الـ Opacity
   Widget _buildFluidAnimation({required Widget child, required int index}) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
@@ -144,7 +130,6 @@ class _BrandPlanActivePageState extends State<ActivePlanPage>
   bool get wantKeepAlive => true;
 }
 
-// ويدجيت الـ Card المطور
 class BrandPlanCard extends StatelessWidget {
   final ActivePlanBrandModel model;
 
@@ -169,11 +154,10 @@ class BrandPlanCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9), // خلفية فاتحة جداً للهيدر
+              color: const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25.r),
                 topRight: Radius.circular(25.r),
@@ -209,8 +193,6 @@ class BrandPlanCard extends StatelessWidget {
               ],
             ),
           ),
-
-          // Content
           Padding(
             padding: EdgeInsets.all(16.w),
             child: Column(
@@ -235,45 +217,45 @@ class BrandPlanCard extends StatelessWidget {
                 model.spPlan.isEmpty
                     ? emptyFullScreen(context)
                     : ListView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: model.spPlan.length,
-                        itemBuilder: (context, i) {
-                          return Container(
-                            margin: EdgeInsets.only(bottom: 8.h),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 14.w, vertical: 12.h),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border:
-                                  Border.all(color: const Color(0xFFF1F5F9)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  model.spPlan[i].name,
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: const Color(0xFF334155),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  model.spPlan[i].amount,
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF1E3A8A),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: model.spPlan.length,
+                  itemBuilder: (context, i) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 8.h),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 14.w, vertical: 12.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                        border:
+                        Border.all(color: const Color(0xFFF1F5F9)),
                       ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            model.spPlan[i].name,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: const Color(0xFF334155),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            model.spPlan[i].amount,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF1E3A8A),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),

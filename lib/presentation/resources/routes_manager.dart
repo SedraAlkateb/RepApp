@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/pages/all_recip.dart';
@@ -14,6 +14,7 @@ import 'package:domina_app/presentation/places/pages/place_visit_archive_page.da
 import 'package:domina_app/presentation/places/pages/places_archive.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
+import 'package:domina_app/presentation/senior/active_plan/pages/active_plan.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
 import 'package:domina_app/presentation/senior/all_city/pages/all_city_for_rep_super.dart';
 import 'package:domina_app/presentation/senior/all_city/pages/all_city-plan.dart';
@@ -116,7 +117,7 @@ class Routes {
   static const String recipesHospital = "/recipesHospital";
   static const String recipesDoctor = "/recipesDoctor";
 
-  static const String createOrder = "/createOrder";
+ // static const String createOrder = "/createOrder";
   static const String recipeDH = "/recipeDH";
 
   static const String allRepWithFuture = "/allRepWithFuture";
@@ -131,6 +132,8 @@ class Routes {
   static const String createCurrentPlan = "/createCurrentPlan";
   static const String cityPlan = "/cityPlan";
   static const String allCitySupervisor = "/allCitySupervisor"; /////////ToDo
+  static const String activePlanPage = "/activePlanPage";
+
 }
 
 class RouteGenerator {
@@ -141,9 +144,9 @@ class RouteGenerator {
         return _animatedRoute(const MyLogin());
       case Routes.allBrand:
         return _animatedRoute(AllBrand());
-      case Routes.createOrder:
-        initOrderBradModule();
-        return _animatedRoute(CreateOrderPage());
+      // case Routes.createOrder:
+      //   initOrderBradModule();
+      //   return _animatedRoute(CreateOrderPage());
       case Routes.placeVisitPage:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
@@ -372,6 +375,11 @@ class RouteGenerator {
       case Routes.cityPlan:
         iniAllCityModule();
         return _animatedRoute(AllCityPlan());
+      case Routes.activePlanPage:
+        initActivePlanModule();
+        final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
+
+        return _animatedRoute(ActivePlanPage(planId: args,));
 
       default:
         return unDefinedRoute();

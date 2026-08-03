@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -497,10 +497,8 @@ class RepProfile extends StatelessWidget {
           icon: FontAwesomeIcons.calendarCheck,
           color: const Color(0xFF1F4E79),
           onTap: () {
-            initActivePlanModule();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (c) => ActivePlanPage()));
-            context.read<ActivePlanBloc>().add(GetActivePlanEvent(plan));
+            Navigator.pushNamed(context, Routes.activePlanPage,arguments: plan);
+
           }),
     ]);
   }

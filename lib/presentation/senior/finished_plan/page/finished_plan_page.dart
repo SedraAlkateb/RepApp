@@ -1,3 +1,4 @@
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -28,60 +29,63 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
   Widget build(BuildContext context) {
     // إرسال الحدث لجلب البيانات بناءً على معرف المدينة
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("سجل الخطط"),
-      ),
-      // استخدام CustomScrollView هو المفتاح لتفعيل تأثيرات الـ Sliver
-      body: CustomScrollView(
-        slivers: [
-          // 1. الجزء العلوي (الهيدر) الذي سيرتفع عند التمرير
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25.w, 20.h, 25.w, 10.h),
-              child: _buildHeader(),
+    return BlocProvider<FinishedPlanBloc>(
+      create: (context) => instance<FinishedPlanBloc>(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("سجل الخطط"),
+        ),
+        // استخدام CustomScrollView هو المفتاح لتفعيل تأثيرات الـ Sliver
+        body: CustomScrollView(
+          slivers: [
+            // 1. الجزء العلوي (الهيدر) الذي سيرتفع عند التمرير
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(25.w, 20.h, 25.w, 10.h),
+                child: _buildHeader(),
+              ),
             ),
-          ),
 
-          // 2. التعامل مع حالات الـ Bloc داخل نظام الـ Slivers
-          BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
-            buildWhen: (previous, current) =>
-                current is FinishedPlanLoading ||
-                current is FinishedPlanLoaded ||
-                current is FinishedPlanError,
-            builder: (context, state) {
-              if (state is FinishedPlanLoading) {
-                // نستخدم SliverFillRemaining لوضع مؤشر التحميل في وسط المساحة المتبقية
-                return const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (state is FinishedPlanLoaded) {
-                // عرض قائمة الخطط باستخدام SliverList
-                return SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return PlanCard(plan: state.plans[index]);
-                      },
-                      childCount: state.plans.length,
+            // 2. التعامل مع حالات الـ Bloc داخل نظام الـ Slivers
+            BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
+              buildWhen: (previous, current) =>
+              current is FinishedPlanLoading ||
+                  current is FinishedPlanLoaded ||
+                  current is FinishedPlanError,
+              builder: (context, state) {
+                if (state is FinishedPlanLoading) {
+                  // نستخدم SliverFillRemaining لوضع مؤشر التحميل في وسط المساحة المتبقية
+                  return const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (state is FinishedPlanLoaded) {
+                  // عرض قائمة الخطط باستخدام SliverList
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                          return PlanCard(plan: state.plans[index]);
+                        },
+                        childCount: state.plans.length,
+                      ),
                     ),
-                  ),
-                );
-              } else if (state is FinishedPlanError) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: Text(state.message)),
-                );
-              }
-              return const SliverToBoxAdapter(child: SizedBox());
-            },
-          ),
+                  );
+                } else if (state is FinishedPlanError) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: Text(state.message)),
+                  );
+                }
+                return const SliverToBoxAdapter(child: SizedBox());
+              },
+            ),
 
-          // مساحة إضافية في الأسفل لراحة التمرير
-          SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-        ],
+            // مساحة إضافية في الأسفل لراحة التمرير
+            SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+          ],
+        ),
       ),
     );
   }
@@ -123,6 +127,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
 
 class PlanCard extends StatelessWidget {
   final FinishedPlanModel plan;
+
   const PlanCard({required this.plan});
 
   @override

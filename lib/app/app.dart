@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
@@ -16,12 +16,9 @@ import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
-import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
-import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
-import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/brand/bloc/brand_bloc.dart';
 import 'package:domina_app/presentation/pharmacy/bloc/pharmacy_bloc.dart';
@@ -52,18 +49,10 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => instance<PlanManagementBloc>()),
-        BlocProvider(create: (_) => instance<FinishedPlanBloc>()),
-        BlocProvider(create: (_) => instance<AuthBloc>()),
+        BlocProvider(create: (_) => instance<DeleteBloc>()),
+
         BlocProvider(create: (_) => instance<ReportVisitDoctorBloc>()),
-        BlocProvider(create: (_) => instance<AsyncInBloc>()),
-        BlocProvider(create: (_) => instance<ActivePlanBloc>()),
-        BlocProvider<PharmacyBloc>(
-          create: (context) {
-            final bloc = instance<PharmacyBloc>();
-            bloc.add(AllPharmacyEvent());
-            return bloc;
-          },
-        ),
+     //   BlocProvider(create: (_) => instance<ActivePlanBloc>()),
         BlocProvider<EditBrandPlanBloc>(
           create: (context) {
             final bloc = instance<EditBrandPlanBloc>();
@@ -86,12 +75,7 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-        BlocProvider<OrderBloc>(
-          create: (context) {
-            final bloc = instance<OrderBloc>();
-            return bloc;
-          },
-        ),
+
         BlocProvider<SeniorRepsBloc>(
           create: (context) {
             final bloc = instance<SeniorRepsBloc>();
@@ -117,13 +101,13 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-        BlocProvider<BrandBloc>(
-          create: (context) {
-            final bloc = instance<BrandBloc>();
-            bloc.add(AllBrandEvent());
-            return bloc;
-          },
-        ),
+        // BlocProvider<BrandBloc>(
+        //   create: (context) {
+        //     final bloc = instance<BrandBloc>();
+        //
+        //     return bloc;
+        //   },
+        // ),
         BlocProvider<DoctorsBloc>(
           create: (context) {
             final bloc = instance<DoctorsBloc>();
@@ -131,12 +115,12 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
-        BlocProvider<ReportScienceBloc>(
-          create: (context) {
-            final bloc = instance<ReportScienceBloc>();
-            return bloc;
-          },
-        ),
+        // BlocProvider<ReportScienceBloc>(
+        //   create: (context) {
+        //     final bloc = instance<ReportScienceBloc>();
+        //     return bloc;
+        //   },
+        // ),
         BlocProvider<ReportIssueBloc>(
           create: (context) {
             final bloc = instance<ReportIssueBloc>();
@@ -146,12 +130,6 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<ReportInventoryBloc>(
           create: (context) {
             final bloc = instance<ReportInventoryBloc>();
-            return bloc;
-          },
-        ),
-        BlocProvider<DeleteBloc>(
-          create: (context) {
-            final bloc = instance<DeleteBloc>();
             return bloc;
           },
         ),
@@ -206,6 +184,22 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
         ),
+        // BlocProvider<OrderBloc>(
+        //   create: (context) {
+        //     final bloc = instance<OrderBloc>();
+        //     return bloc;
+        //   },
+        // ),
+        // BlocProvider<PharmacyBloc>(
+        //   create: (context) {
+        //     final bloc = instance<PharmacyBloc>();
+        //     bloc.add(AllPharmacyEvent());
+        //     return bloc;
+        //   },
+        // ),
+        // BlocProvider(create: (_) => instance<AsyncInBloc>()),
+        //  BlocProvider(create: (_) => instance<FinishedPlanBloc>()),
+        // BlocProvider(create: (_) => instance<AuthBloc>()),
       ],
       child: MaterialApp(
         //  navigatorKey: navigatorKey,
