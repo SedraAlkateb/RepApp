@@ -1,9 +1,7 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
-import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
-import 'package:domina_app/presentation/senior/active_plan/pages/active_plan.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
@@ -497,10 +495,8 @@ class RepProfile extends StatelessWidget {
           icon: FontAwesomeIcons.calendarCheck,
           color: const Color(0xFF1F4E79),
           onTap: () {
-            initActivePlanModule();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (c) => ActivePlanPage()));
-            context.read<ActivePlanBloc>().add(GetActivePlanEvent(plan));
+            Navigator.pushNamed(context, Routes.activePlanPage,arguments: plan);
+
           }),
     ]);
   }

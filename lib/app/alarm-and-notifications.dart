@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/main.dart';
 import 'package:domina_app/presentation/uniti/time.dart';

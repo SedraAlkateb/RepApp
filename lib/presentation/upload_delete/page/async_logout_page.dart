@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/presentation/ss.dart';
 import 'package:domina_app/presentation/upload_delete/bloc/async_in_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
@@ -47,7 +48,9 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage>
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage(ImageAssets.upload), context);
-    return Scaffold(
+    return BlocProvider<AsyncInBloc>(
+      create: (context) => instance<AsyncInBloc>(),
+  child: Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -210,6 +213,7 @@ class _AsyncLogoutPageState extends State<AsyncLogoutPage>
           ),
         ],
       ),
-    );
+    ),
+);
   }
 }

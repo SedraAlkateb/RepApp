@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,139 +27,137 @@ class _MyLoginState extends State<MyLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFF), // لون خلفية مريح جداً للعين
-      body: WillPopScope(
-        onWillPop: () async => false,
-        child: Stack(
-          children: [
-            // خلفية فنية انسيابية
-            CustomWavyBackground()
-                .animate()
-                .fadeIn(duration: 1.seconds)
-                .slideY(begin: -0.1, end: 0),
+    // 💡 إنشاء الـ AuthBloc محلياً هنا في نطاق هذه الشاشة فقط
+    return BlocProvider<AuthBloc>(
+      create: (context) => instance<AuthBloc>(),
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFF),
+        body: WillPopScope(
+          onWillPop: () async => false,
+          child: Stack(
+            children: [
+              CustomWavyBackground()
+                  .animate()
+                  .fadeIn(duration: 1.seconds)
+                  .slideY(begin: -0.1, end: 0),
 
-            Center(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 60.h),
+              Center(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 60.h),
 
-                      // شعار احترافي مع تأثير "النبض" الخفيف
-                      _buildProfessionalLogo(),
+                        _buildProfessionalLogo(),
 
-                      SizedBox(height: 50.h),
+                        SizedBox(height: 50.h),
 
-                      // حاوية البيانات (Card-like design)
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 24.w),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 30.h),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.withOpacity(0.05),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              "مرحباً بك مجدداً",
-                              style: TextStyle(
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.w800,
-                                color: ColorManager.medicalPrimary,
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 24.w),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 30.h),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.blue.withOpacity(0.05),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
                               ),
-                            ).animate().fadeIn().moveY(begin: 10, end: 0),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                "مرحباً بك مجدداً",
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: ColorManager.medicalPrimary,
+                                ),
+                              ).animate().fadeIn().moveY(begin: 10, end: 0),
 
-                            SizedBox(height: 10.h),
+                              SizedBox(height: 10.h),
 
-                            Text(
-                              "سجل دخولك للمتابعة",
-                              style: TextStyle(
-                                  fontSize: 14.sp, color: Colors.grey),
-                            ).animate().fadeIn(delay: 200.ms),
+                              Text(
+                                "سجل دخولك للمتابعة",
+                                style: TextStyle(
+                                    fontSize: 14.sp, color: Colors.grey),
+                              ).animate().fadeIn(delay: 200.ms),
 
-                            SizedBox(height: 35.h),
+                              SizedBox(height: 35.h),
 
-                            // حقل الإسم
-                            _buildModernTextField(
-                              controller: userName,
-                              hint: "اسم المستخدم",
-                              icon: Icons.alternate_email_rounded,
-                              validator: (val) => val!.length < 3
-                                  ? "يرجى التحقق من الاسم"
-                                  : null,
-                            )
-                                .animate()
-                                .fadeIn(delay: 400.ms)
-                                .slideY(begin: 0.1, end: 0),
+                              _buildModernTextField(
+                                controller: userName,
+                                hint: "اسم المستخدم",
+                                icon: Icons.alternate_email_rounded,
+                                validator: (val) => val!.length < 3
+                                    ? "يرجى التحقق من الاسم"
+                                    : null,
+                              )
+                                  .animate()
+                                  .fadeIn(delay: 400.ms)
+                                  .slideY(begin: 0.1, end: 0),
 
-                            SizedBox(height: 20.h),
+                              SizedBox(height: 20.h),
 
-                            // حقل كلمة السر
-                            BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, state) {
-                                bool isObscured = state is ShowPasswordState
-                                    ? state.isObscured
-                                    : true;
-                                return _buildModernTextField(
-                                  controller: password,
-                                  hint: "كلمة المرور",
-                                  icon: Icons.lock_open_rounded,
-                                  isPassword: true,
-                                  isObscured: isObscured,
-                                  onSuffixTap: () {
-                                    BlocProvider.of<AuthBloc>(context)
-                                        .add(ShowPasswordEvent(!isObscured));
-                                  },
-                                  validator: (val) => val!.length < 2
-                                      ? "كلمة المرور قصيرة"
-                                      : null,
-                                );
-                              },
-                            )
-                                .animate()
-                                .fadeIn(delay: 500.ms)
-                                .slideY(begin: 0.1, end: 0),
+                              BlocBuilder<AuthBloc, AuthState>(
+                                builder: (context, state) {
+                                  bool isObscured = state is ShowPasswordState
+                                      ? state.isObscured
+                                      : true;
+                                  return _buildModernTextField(
+                                    controller: password,
+                                    hint: "كلمة المرور",
+                                    icon: Icons.lock_open_rounded,
+                                    isPassword: true,
+                                    isObscured: isObscured,
+                                    onSuffixTap: () {
+                                      BlocProvider.of<AuthBloc>(context)
+                                          .add(ShowPasswordEvent(!isObscured));
+                                    },
+                                    validator: (val) => val!.length < 2
+                                        ? "كلمة المرور قصيرة"
+                                        : null,
+                                  );
+                                },
+                              )
+                                  .animate()
+                                  .fadeIn(delay: 500.ms)
+                                  .slideY(begin: 0.1, end: 0),
 
-                            SizedBox(height: 40.h),
+                              SizedBox(height: 40.h),
 
-                            // زر الدخول
-                            _buildPremiumButton(context),
-                          ],
-                        ),
-                      )
-                          .animate()
-                          .scale(delay: 200.ms, curve: Curves.easeOutQuad),
+                              _buildPremiumButton(),
+                            ],
+                          ),
+                        )
+                            .animate()
+                            .scale(delay: 200.ms, curve: Curves.easeOutQuad),
 
-                      SizedBox(height: 60.h),
+                        SizedBox(height: 60.h),
 
-                      Text(
-                        "DOMINA PHARMACEUTICALS",
-                        style: TextStyle(
-                          color: Colors.grey.withOpacity(0.6),
-                          letterSpacing: 1.5,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ).animate().fadeIn(delay: 1.seconds),
-                      SizedBox(height: 20.h),
-                    ],
+                        Text(
+                          "DOMINA PHARMACEUTICALS",
+                          style: TextStyle(
+                            color: Colors.grey.withOpacity(0.6),
+                            letterSpacing: 1.5,
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ).animate().fadeIn(delay: 1.seconds),
+                        SizedBox(height: 20.h),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -184,9 +183,9 @@ class _MyLoginState extends State<MyLogin> {
             .animate(onPlay: (c) => c.repeat(reverse: true))
             .shimmer(duration: 2.seconds, color: Colors.blue.shade50)
             .scale(
-                begin: const Offset(1, 1),
-                end: const Offset(1.05, 1.05),
-                duration: 2.seconds),
+            begin: const Offset(1, 1),
+            end: const Offset(1.05, 1.05),
+            duration: 2.seconds),
       ),
     );
   }
@@ -212,13 +211,13 @@ class _MyLoginState extends State<MyLogin> {
             color: ColorManager.medicalPrimary.withOpacity(0.6), size: 22.sp),
         suffixIcon: isPassword
             ? IconButton(
-                icon: Icon(
-                    isObscured
-                        ? Icons.visibility_off_rounded
-                        : Icons.visibility_rounded,
-                    color: Colors.grey),
-                onPressed: onSuffixTap,
-              )
+          icon: Icon(
+              isObscured
+                  ? Icons.visibility_off_rounded
+                  : Icons.visibility_rounded,
+              color: Colors.grey),
+          onPressed: onSuffixTap,
+        )
             : null,
         fillColor: const Color(0xFFF3F7FF),
         filled: true,
@@ -240,32 +239,45 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
-  Widget _buildPremiumButton(BuildContext context) {
+  Widget _buildPremiumButton() {
     return BlocConsumer<AuthBloc, AuthState>(
-      builder: (context, state) {
-        if (state is InsertLoginState) {
-          // 1. استدعاء دالة النجاح (التي تحتوي على pop بداخلها كما ذكرت)
-          success(context);
+      listener: (context, state) {
+        if (state is LoginLoadingState) {
+          loading(context);
+        }
 
-          // 2. تأخير بسيط لضمان انتهاء أنيميشن إغلاق البوب آب قبل الانتقال الكبير
+        if (state is LoginState) {
+          BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
+        }
+
+        // 💡 تم نقل معالجة نجاح تسجيل الدخول والانتقال إلى listener لتجنب الأخطاء أثناء بناء الواجهة
+        if (state is InsertLoginState) {
+          success(context);
           Future.delayed(const Duration(milliseconds: 600), () {
             if (context.mounted) {
               if (UserInfo.isLogging == 2) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.adminControl,
-                  (route) => false,
+                      (route) => false,
                 );
               } else {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.syncData,
-                  (route) => false,
+                      (route) => false,
                 );
               }
             }
           });
         }
+
+        if (state is LoginErrorState || state is InsertLoginErrorState) {
+          dynamic errorState = state;
+          error(context, errorState.failure.massage, errorState.failure.code);
+        }
+      },
+      builder: (context, state) {
         return GestureDetector(
           onTap: () {
             if (formKey.currentState!.validate()) {
@@ -310,20 +322,6 @@ class _MyLoginState extends State<MyLogin> {
             ),
           ),
         );
-      },
-      listener: (context, state) {
-        if (state is LoginLoadingState) loading(context);
-
-        if (state is LoginState) {
-          BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
-        }
-
-        // --- هذا هو المكان الأصح للإضافة ---
-
-        if (state is LoginErrorState || state is InsertLoginErrorState) {
-          dynamic errorState = state;
-          error(context, errorState.failure.massage, errorState.failure.code);
-        }
       },
     ).animate().fadeIn(delay: 700.ms);
   }

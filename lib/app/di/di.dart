@@ -99,7 +99,6 @@ import 'package:domina_app/domain/usecase/login_usecase.dart';
 import 'package:domina_app/domain/usecase/no_visit_hos_usecase.dart';
 import 'package:domina_app/domain/usecase/num_doc_has_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/num_visit_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/pharmacy_order_usecase%20.dart';
 import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/read_visit_usecase%20.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
@@ -130,7 +129,6 @@ import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan
 import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
-import 'package:domina_app/presentation/order/bloc/order_bloc.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
@@ -157,9 +155,45 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get_it/get_it.dart';
 
-import '../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
+import '../../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 
 GetIt instance = GetIt.instance;
+//
+// Future<void> initAppModule() async {
+//   // 1. Core Module (Crashlytics, Analytics, NetworkInfo)
+//   await initCoreModule();
+//
+//   // 2. Local Module (SQLite Database & Local Repositories)
+//   await initLocalModule();
+//
+//   // 3. Network Module (Dio, Api Client & Remote Data Source)
+//   await initNetworkModule();
+//
+//   // =========================================================
+//   // Data Sources & General Repositories / UseCases
+//   // =========================================================
+//
+//   // Remote Data Source
+//   if (!instance.isRegistered<RemoteDataSource>()) {
+//     instance.registerLazySingleton<RemoteDataSource>(
+//           () => RemoteDataSourceImpl(instance<AppServiceClient>()),
+//     );
+//   }
+//
+//   // Main Repository (Combines Remote + Local + NetworkInfo)
+//   if (!instance.isRegistered<Repository>()) {
+//     instance.registerLazySingleton<Repository>(
+//           () => RepositoryImp(instance(), instance(), instance()),
+//     );
+//   }
+//
+//   // Common UseCases
+//   if (!instance.isRegistered<InsertExceptionSqlUsecase>()) {
+//     instance.registerLazySingleton<InsertExceptionSqlUsecase>(
+//           () => InsertExceptionSqlUsecase(instance<RepositorySql>()),
+//     );
+//   }
+//}
 Future<void> initAppModule() async {
   if (!instance.isRegistered<FirebaseCrashlytics>()) {
     instance.registerLazySingleton<FirebaseCrashlytics>(
@@ -868,19 +902,19 @@ Future<void> iniSearchDoctorsModule() async {
   }
 }
 
-Future<void> initOrderBradModule() async {
-  if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
-    instance.registerFactory<AllBrandsSqlUsecase>(
-        () => AllBrandsSqlUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
-    instance.registerFactory<PharmacyOrderUsecase>(
-        () => PharmacyOrderUsecase(instance()));
-
-    instance
-        .registerFactory<OrderBloc>(() => OrderBloc(instance(), instance()));
-  }
-}
+// Future<void> initOrderBradModule() async {
+//   if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
+//     instance.registerFactory<AllBrandsSqlUsecase>(
+//         () => AllBrandsSqlUsecase(instance()));
+//   }
+//   if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
+//     instance.registerFactory<PharmacyOrderUsecase>(
+//         () => PharmacyOrderUsecase(instance()));
+//
+//     instance
+//         .registerFactory<OrderBloc>(() => OrderBloc(instance(), instance()));
+//   }
+// }
 
 Future<void> initGeneralReportsModule() async {
   if (!GetIt.I.isRegistered<TeamLeaderAndCityUsecase>()) {

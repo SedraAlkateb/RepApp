@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/crashlytics/app_bloc_observer.dart';
 import 'package:domina_app/crashlytics/crashlytics_service.dart';
@@ -224,7 +224,12 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        // التجاوز فقط لسيرفر التطوير الخاص بك (Localhost أو IP معين)
+        if (host == '192.168.1.50' || host == 'localhost') {
+          return true;
+        }
+        return false; // رفض باقي السيرفرات غير الموثوقة
+      };
   }
 }
