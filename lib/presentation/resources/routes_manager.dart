@@ -9,7 +9,6 @@ import 'package:domina_app/presentation/doctors/pages/doctor_page/doctor_details
 import 'package:domina_app/presentation/doctors/pages/doctor_page/doctors.dart';
 import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital.dart';
 import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital_details.dart';
-import 'package:domina_app/presentation/order/page/add_order_page.dart';
 import 'package:domina_app/presentation/places/pages/place_visit_archive_page.dart';
 import 'package:domina_app/presentation/places/pages/places_archive.dart';
 import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';

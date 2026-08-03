@@ -108,7 +108,7 @@ void main() {
     expect(result, equals(''));
 
     // التحقق من نجاح إدراج البيانات داخل قاعدة البيانات
-    final db = await (api.databaseHelper.database as Future<Database>);
+    final db = await (api.databaseHelper.database);
     final placesRows = await db.query('place');
     expect(placesRows.length, equals(1));
     expect(placesRows.first['title'], equals('Place 1'));
