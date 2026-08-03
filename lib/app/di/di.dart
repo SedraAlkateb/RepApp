@@ -2,6 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/analytics/firebase_analytics_service.dart';
+import 'package:domina_app/app/di/di_core.dart';
+import 'package:domina_app/app/di/di_local.dart';
+import 'package:domina_app/app/di/di_network.dart';
 import 'package:domina_app/app/logger/error_reporter.dart';
 import 'package:domina_app/crashlytics/crashlytics_service.dart';
 import 'package:domina_app/crashlytics/firebase_crashlytics_service.dart';
@@ -157,9 +160,45 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get_it/get_it.dart';
 
-import '../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
+import '../../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 
 GetIt instance = GetIt.instance;
+//
+// Future<void> initAppModule() async {
+//   // 1. Core Module (Crashlytics, Analytics, NetworkInfo)
+//   await initCoreModule();
+//
+//   // 2. Local Module (SQLite Database & Local Repositories)
+//   await initLocalModule();
+//
+//   // 3. Network Module (Dio, Api Client & Remote Data Source)
+//   await initNetworkModule();
+//
+//   // =========================================================
+//   // Data Sources & General Repositories / UseCases
+//   // =========================================================
+//
+//   // Remote Data Source
+//   if (!instance.isRegistered<RemoteDataSource>()) {
+//     instance.registerLazySingleton<RemoteDataSource>(
+//           () => RemoteDataSourceImpl(instance<AppServiceClient>()),
+//     );
+//   }
+//
+//   // Main Repository (Combines Remote + Local + NetworkInfo)
+//   if (!instance.isRegistered<Repository>()) {
+//     instance.registerLazySingleton<Repository>(
+//           () => RepositoryImp(instance(), instance(), instance()),
+//     );
+//   }
+//
+//   // Common UseCases
+//   if (!instance.isRegistered<InsertExceptionSqlUsecase>()) {
+//     instance.registerLazySingleton<InsertExceptionSqlUsecase>(
+//           () => InsertExceptionSqlUsecase(instance<RepositorySql>()),
+//     );
+//   }
+//}
 Future<void> initAppModule() async {
   if (!instance.isRegistered<FirebaseCrashlytics>()) {
     instance.registerLazySingleton<FirebaseCrashlytics>(
@@ -868,19 +907,19 @@ Future<void> iniSearchDoctorsModule() async {
   }
 }
 
-Future<void> initOrderBradModule() async {
-  if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
-    instance.registerFactory<AllBrandsSqlUsecase>(
-        () => AllBrandsSqlUsecase(instance()));
-  }
-  if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
-    instance.registerFactory<PharmacyOrderUsecase>(
-        () => PharmacyOrderUsecase(instance()));
-
-    instance
-        .registerFactory<OrderBloc>(() => OrderBloc(instance(), instance()));
-  }
-}
+// Future<void> initOrderBradModule() async {
+//   if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
+//     instance.registerFactory<AllBrandsSqlUsecase>(
+//         () => AllBrandsSqlUsecase(instance()));
+//   }
+//   if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
+//     instance.registerFactory<PharmacyOrderUsecase>(
+//         () => PharmacyOrderUsecase(instance()));
+//
+//     instance
+//         .registerFactory<OrderBloc>(() => OrderBloc(instance(), instance()));
+//   }
+// }
 
 Future<void> initGeneralReportsModule() async {
   if (!GetIt.I.isRegistered<TeamLeaderAndCityUsecase>()) {
