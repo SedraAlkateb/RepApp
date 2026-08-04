@@ -151,13 +151,9 @@ import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
-
-GetIt instance = GetIt.instance;
 //
 // Future<void> initAppModule() async {
 //   // 1. Core Module (Crashlytics, Analytics, NetworkInfo)
@@ -194,97 +190,115 @@ GetIt instance = GetIt.instance;
 //     );
 //   }
 //}
+import 'di_core.dart';
+import 'di_local.dart';
+import 'di_network.dart';
+
+final GetIt instance = GetIt.instance;
+
 Future<void> initAppModule() async {
-  if (!instance.isRegistered<FirebaseCrashlytics>()) {
-    instance.registerLazySingleton<FirebaseCrashlytics>(
-      () => FirebaseCrashlytics.instance,
-    );
-  }
-
-  if (!instance.isRegistered<CrashlyticsService>()) {
-    instance.registerLazySingleton<CrashlyticsService>(
-      () => FirebaseCrashlyticsService(
-        instance<FirebaseCrashlytics>(),
-      ),
-    );
-  }
-
-  if (!instance.isRegistered<ErrorReporter>()) {
-    instance.registerLazySingleton<ErrorReporter>(
-      () => ErrorReporter(
-        instance<CrashlyticsService>(),
-      ),
-    );
-  }
-
-  // ==========================
-  // Analytics
-  // ==========================
-
-  if (!instance.isRegistered<FirebaseAnalytics>()) {
-    instance.registerLazySingleton<FirebaseAnalytics>(
-      () => FirebaseAnalytics.instance,
-    );
-  }
-
-  if (!instance.isRegistered<AnalyticsService>()) {
-    instance.registerLazySingleton<AnalyticsService>(
-      () => FirebaseAnalyticsService(
-        instance<FirebaseAnalytics>(),
-      ),
-    );
-  }
-
-  // ==========================
-  // Network
-  // ==========================
-
-  instance.registerLazySingleton<NetworkInfo>(
-    () => NetworkInfoImpl(
-      Connectivity(),
-    ),
-  );
-
-  instance.registerLazySingleton<DioFactory>(
-    () => DioFactory(
-      instance<CrashlyticsService>(),
-    ),
-  );
-
-  Dio dio = await instance<DioFactory>().getDio();
-
-  instance.registerLazySingleton<AppServiceClient>(
-    () => AppServiceClient(dio),
-  );
-
-  instance.registerLazySingleton<RemoteDataSource>(
-    () => RemoteDataSourceImpl(instance<AppServiceClient>()),
-  );
-
-  DatabaseHelper databaseHelper = DatabaseHelper();
-
-  instance.registerLazySingleton<AppSqlApi>(
-    () => AppSqlApi(databaseHelper),
-  );
-
-  await instance<AppSqlApi>().initializeDatabase();
-
-  instance.registerLazySingleton<ExcRepository>(
-    () => ExcRepository(instance()),
-  );
-
-  instance.registerLazySingleton<RepositorySql>(
-    () => RepositroySqlImp(instance(), instance()),
-  );
-
-  instance.registerLazySingleton<Repository>(
-    () => RepositoryImp(instance(), instance(), instance()),
-  );
-
-  instance.registerLazySingleton<InsertExceptionSqlUsecase>(
-    () => InsertExceptionSqlUsecase(instance()),
-  );
+  await initCoreModule();
+  await initLocalModule();
 }
+
+// helper to initialize network parts when needed
+Future<void> ensureNetworkModule() async {
+  await initNetworkModule();
+}
+
+
+//GetIt instance = GetIt.instance;
+// Future<void> initAppModule() async {
+//   if (!instance.isRegistered<FirebaseCrashlytics>()) {
+//     instance.registerLazySingleton<FirebaseCrashlytics>(
+//       () => FirebaseCrashlytics.instance,
+//     );
+//   }
+//
+//   if (!instance.isRegistered<CrashlyticsService>()) {
+//     instance.registerLazySingleton<CrashlyticsService>(
+//       () => FirebaseCrashlyticsService(
+//         instance<FirebaseCrashlytics>(),
+//       ),
+//     );
+//   }
+//
+//   if (!instance.isRegistered<ErrorReporter>()) {
+//     instance.registerLazySingleton<ErrorReporter>(
+//       () => ErrorReporter(
+//         instance<CrashlyticsService>(),
+//       ),
+//     );
+//   }
+//
+//   // ==========================
+//   // Analytics
+//   // ==========================
+//
+//   if (!instance.isRegistered<FirebaseAnalytics>()) {
+//     instance.registerLazySingleton<FirebaseAnalytics>(
+//       () => FirebaseAnalytics.instance,
+//     );
+//   }
+//
+//   if (!instance.isRegistered<AnalyticsService>()) {
+//     instance.registerLazySingleton<AnalyticsService>(
+//       () => FirebaseAnalyticsService(
+//         instance<FirebaseAnalytics>(),
+//       ),
+//     );
+//   }
+//
+//   // ==========================
+//   // Network
+//   // ==========================
+//
+//   instance.registerLazySingleton<NetworkInfo>(
+//     () => NetworkInfoImpl(
+//       Connectivity(),
+//     ),
+//   );
+//
+//   instance.registerLazySingleton<DioFactory>(
+//     () => DioFactory(
+//       instance<CrashlyticsService>(),
+//     ),
+//   );
+//
+//   Dio dio = await instance<DioFactory>().getDio();
+//
+//   instance.registerLazySingleton<AppServiceClient>(
+//     () => AppServiceClient(dio),
+//   );
+//
+//   instance.registerLazySingleton<RemoteDataSource>(
+//     () => RemoteDataSourceImpl(instance<AppServiceClient>()),
+//   );
+//
+//   DatabaseHelper databaseHelper = DatabaseHelper();
+//
+//   instance.registerLazySingleton<AppSqlApi>(
+//     () => AppSqlApi(databaseHelper),
+//   );
+//
+//   await instance<AppSqlApi>().initializeDatabase();
+//
+//   instance.registerLazySingleton<ExcRepository>(
+//     () => ExcRepository(instance()),
+//   );
+//
+//   instance.registerLazySingleton<RepositorySql>(
+//     () => RepositroySqlImp(instance(), instance()),
+//   );
+//
+//   instance.registerLazySingleton<Repository>(
+//     () => RepositoryImp(instance(), instance(), instance()),
+//   );
+//
+//   instance.registerLazySingleton<InsertExceptionSqlUsecase>(
+//     () => InsertExceptionSqlUsecase(instance()),
+//   );
+// }
 
 Future<void> initAsyncModule() async {
   if (!GetIt.I.isRegistered<AsyncBloc>()) {

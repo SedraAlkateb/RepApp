@@ -27,12 +27,11 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 Future<void> main() async {
@@ -41,38 +40,32 @@ Future<void> main() async {
   try {
     await Firebase.initializeApp();
 
-// 1️⃣ تفعيل Analytics صراحة للعمل في الـ Debug والـ Release
     await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
-
-// 2️⃣ تفعيل Crashlytics صراحة
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-// 3️⃣ التقاط أخطاء Flutter Fatal (الواجهات والـ UI)
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-// 4️⃣ التقاط أخطاء الـ Async / Uncaught
     PlatformDispatcher.instance.onError = (error, stackTrace) {
-      FirebaseCrashlytics.instance.recordError(
-        error,
-        stackTrace,
-        fatal: true,
-      );
+      try {
+        FirebaseCrashlytics.instance.recordError(
+          error,
+          stackTrace,
+          fatal: true,
+        );
+      } catch (_) {}
       return true;
     };
   } catch (e, stack) {
     debugPrint("Firebase initialization error: $e");
-    FirebaseCrashlytics.instance.recordError(
-      e,
-      stack,
-      fatal: false,
-    );
+    try {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+    } catch (_) {}
   }
 
-  FlutterNativeSplash.remove();
-
   await _setupAppRequirements();
-
   await _prepareUserData();
+
+  FlutterNativeSplash.remove();
 
   runApp(
     Phoenix(
@@ -84,30 +77,46 @@ Future<void> main() async {
 Future<void> _setupAppRequirements() async {
   await ScreenUtil.ensureScreenSize();
 
-// Dependency Injection
+  // init light DI (core + local)
   await initAppModule();
 
-// Bloc Crash Monitoring
-  Bloc.observer = AppBlocObserver(
-    instance<CrashlyticsService>(),
-  );
+  // تهيئة شبكة الاتصالات هنا أماناً بدلاً من initState
+  try {
+    await ensureNetworkModule();
+  } catch (_) {}
+
+  // Bloc Crash Monitoring
+  try {
+    Bloc.observer = AppBlocObserver(instance<CrashlyticsService>());
+  } catch (_) {}
 
   HttpOverrides.global = MyHttpOverrides();
 
   await _initNotifications();
-
   await requestNotificationPermission();
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  final physical = WidgetsBinding.instance.window.physicalSize;
+  final devicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
+  final logicalWidth = physical.width / devicePixelRatio;
+  final bool isTablet = logicalWidth >= 600;
+
+  if (isTablet) {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  } else {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
 }
 
 class MyResponsiveApp extends StatelessWidget {
-  const MyResponsiveApp({
-    super.key,
-  });
+  const MyResponsiveApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -119,18 +128,8 @@ class MyResponsiveApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return ResponsiveBreakpoints.builder(
-          breakpoints: const [
-            Breakpoint(start: 0, end: 450, name: MOBILE),
-            Breakpoint(start: 451, end: 1023, name: TABLET),
-            Breakpoint(start: 1024, end: double.infinity, name: DESKTOP),
-          ],
-          child: MaterialApp(
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            home: const MyApp(),
-          ),
-        );
+        // نمرر تطبيق MyApp الأصلي الذي يحتوي على MultiBlocProvider و MaterialApp الوحيدة!
+        return const MyApp();
       },
     );
   }
@@ -141,28 +140,22 @@ Future<void> _prepareUserData() async {
   final result = await usecase.execute();
 
   await result.fold(
-    (failure) {
+        (failure) {
       UserInfo.isLogging = 0;
     },
-    (data) async {
+        (data) async {
       if (data != null && data.isLogin > 0) {
         UserInfo.fillFromModel(data);
-
         final String repIdStr = UserInfo.repId.toString();
-
-// 🆔 1. تعيين معرف المندوب في Crashlytics لربط الكراشات برقم المندوب مباشرة للفلترة
-        await FirebaseCrashlytics.instance.setUserIdentifier(repIdStr);
-        await instance<CrashlyticsService>().setUserId(repIdStr);
-
-// 🆔 2. تعيين معرف المندوب والـ User Property في Analytics
-        await instance<AnalyticsService>().setUserId(repIdStr);
-        await FirebaseAnalytics.instance.setUserProperty(
-          name: 'rep_id',
-          value: repIdStr,
-        );
-
+        try {
+          await FirebaseCrashlytics.instance.setUserIdentifier(repIdStr);
+          await instance<CrashlyticsService>().setUserId(repIdStr);
+        } catch (_) {}
+        try {
+          await instance<AnalyticsService>().setUserId(repIdStr);
+          await FirebaseAnalytics.instance.setUserProperty(name: 'rep_id', value: repIdStr);
+        } catch (_) {}
         await _checkPlanExpiration();
-
         await AlarmAndNotifications.scheduleExpirationNotification();
       } else {
         UserInfo.isLogging = 0;
@@ -173,49 +166,31 @@ Future<void> _prepareUserData() async {
 
 Future<void> _initNotifications() async {
   const AndroidInitializationSettings androidSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+  AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  const InitializationSettings settings =
-      InitializationSettings(android: androidSettings);
+  const InitializationSettings settings = InitializationSettings(android: androidSettings);
 
-  await flutterLocalNotificationsPlugin.initialize(
-    settings: settings,
-  );
-
+  await flutterLocalNotificationsPlugin.initialize(settings: settings);
   await AlarmAndNotifications.initialize();
 }
 
 Future<void> requestNotificationPermission() async {
-  if (Platform.isAndroid) {
-    await Permission.notification.request();
-  }
+  if (Platform.isAndroid) await Permission.notification.request();
 }
 
 Future<void> _checkPlanExpiration() async {
-  if (UserInfo.isLogging != 0 &&
-      UserInfo.endDate != null &&
-      UserInfo.endDate != "") {
+  if (UserInfo.isLogging != 0 && UserInfo.endDate != null && UserInfo.endDate != "") {
     try {
       final today = DateFormat("dd-MM-yyyy").format(DateTime.now());
-
       DateTime endDate = formatStringToDataTime(UserInfo.endDate!);
-
-      String nextDay =
-          DateFormat("dd-MM-yyyy").format(endDate.add(const Duration(days: 1)));
-
+      String nextDay = DateFormat("dd-MM-yyyy").format(endDate.add(const Duration(days: 1)));
       if (UserInfo.isLogging != 5 && today == nextDay) {
         final edit = EditIsLoginSqlUsecase(instance());
-
         await edit.execute(UserInfo.repId, 5);
-
         UserInfo.isLogging = 5;
       }
     } catch (e, stack) {
-      await instance<CrashlyticsService>().recordError(
-        error: e,
-        stackTrace: stack,
-        reason: "Check Plan Expiration",
-      );
+      await instance<CrashlyticsService>().recordError(error: e, stackTrace: stack, reason: "Check Plan Expiration");
     }
   }
 }
@@ -225,11 +200,8 @@ class MyHttpOverrides extends HttpOverrides {
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback = (X509Certificate cert, String host, int port) {
-        // التجاوز فقط لسيرفر التطوير الخاص بك (Localhost أو IP معين)
-        if (host == '192.168.1.50' || host == 'localhost') {
-          return true;
-        }
-        return false; // رفض باقي السيرفرات غير الموثوقة
+        if (host == '192.168.1.50' || host == 'localhost') return true;
+        return false;
       };
   }
 }

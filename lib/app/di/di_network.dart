@@ -1,26 +1,36 @@
-// name=lib/app/di_network.dart
+// lib/app/di/di_network.dart
+import 'package:domina_app/crashlytics/crashlytics_service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:dio/dio.dart';
 import 'package:domina_app/data/network/dio_factory.dart';
 import 'package:domina_app/data/network/app_api.dart';
-import 'package:dio/dio.dart';
-import 'package:domina_app/crashlytics/crashlytics_service.dart';
+import 'package:domina_app/data/data_source/remote_data_source.dart';
+import 'package:domina_app/data/repository/repository.dart';
+import 'package:domina_app/domain/repostitory/repository.dart' as domain_repo;
 
-final GetIt getIt = GetIt.instance;
+final GetIt instance = GetIt.instance;
 
 Future<void> initNetworkModule() async {
-  if (!getIt.isRegistered<DioFactory>()) {
-    getIt.registerLazySingleton<DioFactory>(() => DioFactory(getIt<CrashlyticsService>()));
-  }
+  if (instance.isRegistered<AppServiceClient>()) return;
 
-  if (!getIt.isRegistered<Dio>()) {
-    final dio = await getIt<DioFactory>().getDio();
-    getIt.registerLazySingleton<Dio>(() => dio);
-  }
+  instance.registerLazySingleton<DioFactory>(
+    () => DioFactory(
+      instance<CrashlyticsService>(),
+    ),
+  );
 
-  if (!getIt.isRegistered<AppServiceClient>()) {
-    getIt.registerLazySingleton<AppServiceClient>(() => AppServiceClient(getIt<Dio>()));
-  }
+  Dio dio = await instance<DioFactory>().getDio();
 
-  // RemoteDataSource etc. (register if you have)
-  // if (!getIt.isRegistered<RemoteDataSource>()) {...}
+  instance.registerLazySingleton<AppServiceClient>(
+    () => AppServiceClient(dio),
+  );
+
+  instance.registerLazySingleton<RemoteDataSource>(
+    () => RemoteDataSourceImpl(instance<AppServiceClient>()),
+  );
+
+
+  instance.registerLazySingleton<domain_repo.Repository>(
+    () => RepositoryImp(instance(), instance(), instance()),
+  );
 }
