@@ -120,10 +120,8 @@ class StateRenderer extends StatelessWidget {
   }
 
   Widget _getPopupDialog(BuildContext context, List<Widget> children) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s14),

@@ -6,10 +6,8 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 
 Widget dialogChangePlan(BuildContext context, bool isOut) {
-  return WillPopScope(
-    onWillPop: () async {
-      return false;
-    },
+  return PopScope(
+    canPop: false,
     child: Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSize.s14),

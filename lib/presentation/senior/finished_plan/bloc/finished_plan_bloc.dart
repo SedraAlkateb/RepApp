@@ -63,8 +63,9 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
         emit(PlanRepsError(message: failure.massage));
       },
       (data) {
-        // في حال النجاح، نرسل البيانات المستلمة للواجهة
+
         emit(PlanRepsLoaded(allOriginalReps: data, reps: data));
+        print("ssssssssssssss");
       },
     );
   }

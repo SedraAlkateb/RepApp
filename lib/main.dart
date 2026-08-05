@@ -80,7 +80,7 @@ Future<void> _setupAppRequirements() async {
   // init light DI (core + local)
   await initAppModule();
 
-  // تهيئة شبكة الاتصالات هنا أماناً بدلاً من initState
+  // تهيئة شبكة الاتصالات هنا بدلاً من initState
   try {
     await ensureNetworkModule();
   } catch (_) {}
@@ -95,19 +95,25 @@ Future<void> _setupAppRequirements() async {
   await _initNotifications();
   await requestNotificationPermission();
 
-  final physical = WidgetsBinding.instance.window.physicalSize;
-  final devicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
-  final logicalWidth = physical.width / devicePixelRatio;
+  // جلب قياسات الشاشة بالطريقة الحديثة المعتمدة في Flutter
+  final view = WidgetsBinding.instance.platformDispatcher.views.first;
+  final physicalWidth = view.physicalSize.width;
+  final devicePixelRatio = view.devicePixelRatio;
+  final logicalWidth = physicalWidth / devicePixelRatio;
+
+  // فحص هل الجهاز تابلت (العرض المنطقي أكبر من أو يساوي 600)
   final bool isTablet = logicalWidth >= 600;
 
   if (isTablet) {
+    // التابلت: مسموح التدوير بالطول والعرض (Portrait + Landscape)
     await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
   } else {
+    // الموبايل: بالطول فقط (Portrait)
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -120,13 +126,28 @@ class MyResponsiveApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.width;
+    final mq = MediaQuery.of(context);
+    final double deviceWidth = mq.size.width;
     final bool isTabletDevice = deviceWidth > 450;
 
+    // 🌟 فحص ما إذا كان الجهاز تابلت وفي الوضع العرضي حصراً
+    final bool isTabletLandscape = isTabletDevice && mq.orientation == Orientation.landscape;
+
     return ScreenUtilInit(
-      designSize: isTabletDevice ? const Size(400, 800) : const Size(360, 690),
+      designSize: isTabletDevice ? const Size(500, 800) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
+
+      // 🌟 تطبيق تعديل الخط فقط إذا كان تابلت وفي الوضع العرضي
+      fontSizeResolver: (fontSize, instance) {
+        if (isTabletLandscape) {
+          // تصغير الخط بنسبة 10% فقط في الوضع العرضي للتابلت
+          return (fontSize * instance.scaleText) * 2;
+        }
+        // في بقية الحالات (طولي أو موابيل) يبعد الخط كالمعتاد
+        return fontSize * instance.scaleText;
+      },
+
       builder: (context, child) {
         // نمرر تطبيق MyApp الأصلي الذي يحتوي على MultiBlocProvider و MaterialApp الوحيدة!
         return const MyApp();
@@ -134,7 +155,6 @@ class MyResponsiveApp extends StatelessWidget {
     );
   }
 }
-
 Future<void> _prepareUserData() async {
   final usecase = IsLoginSqlUsecase(instance());
   final result = await usecase.execute();

@@ -7,10 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget dialogPlan(BuildContext context, String text,
     {required VoidCallback fun}) {
-  return WillPopScope(
-    onWillPop: () async {
-      return false;
-    },
+  return PopScope(
+    canPop: false,
     child: Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSize.s14),

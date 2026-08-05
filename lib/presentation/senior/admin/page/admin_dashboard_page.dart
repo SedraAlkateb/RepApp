@@ -17,8 +17,8 @@ class AdminDashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // منع الرجوع للخلف أثناء المزامنة
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         drawer: DrawerPage(),
         backgroundColor: ColorManager.bgGrey,

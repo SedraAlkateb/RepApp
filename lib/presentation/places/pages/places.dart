@@ -130,8 +130,8 @@ class _PlacesState extends State<Places> {
         ),
         title: Text('المناطق'),
       ),
-      body: WillPopScope(
-        onWillPop: () async => false,
+      body: PopScope(
+        canPop: false,
         child: Stack(
           children: [
             bodyBuild(context),

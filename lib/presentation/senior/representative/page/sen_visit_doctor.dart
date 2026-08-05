@@ -14,64 +14,67 @@ class SenVisitDoctor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // 1. حقل البحث
-        Padding(
-          padding: EdgeInsets.all(16.w),
-          child: SearchField(
-            searchController: searchteDoctorController,
-            onPressed: (value) {
-              BlocProvider.of<SeniorProfBloc>(context)
-                  .add(SenSearchVisitDoctorEvent(value));
-            },
+    return Scaffold(
+      appBar: AppBar(title: Text("الاطباء الذين تمتن زيارتهم")),
+      body: Column(
+        children: [
+          // 1. حقل البحث
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: SearchField(
+              searchController: searchteDoctorController,
+              onPressed: (value) {
+                BlocProvider.of<SeniorProfBloc>(context)
+                    .add(SenSearchVisitDoctorEvent(value));
+              },
+            ),
           ),
-        ),
 
-        // 2. القائمة
-        Expanded(
-          child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-            builder: (context, state) {
-              List<NoVisitDocModel> visitDoc =
-                  context.watch<SeniorProfBloc>().visitDoc;
+          // 2. القائمة
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              builder: (context, state) {
+                List<NoVisitDocModel> visitDoc =
+                    context.watch<SeniorProfBloc>().visitDoc;
 
-              if (state is SenVisitDocLoadingState)
-                return loadingFullScreen(context);
-              if (state is SenVisitDocEmptyState || visitDoc.isEmpty)
-                return emptyFullScreen(context);
-              if (state is SenVisitDocErrorState)
-                return errorFullScreen(context, func: () {
-                  BlocProvider.of<SeniorProfBloc>(context)
-                      .add(VisitDocEvent(156, state.planId));
-                });
+                if (state is SenVisitDocLoadingState)
+                  return loadingFullScreen(context);
+                if (state is SenVisitDocEmptyState || visitDoc.isEmpty)
+                  return emptyFullScreen(context);
+                if (state is SenVisitDocErrorState)
+                  return errorFullScreen(context, func: () {
+                    BlocProvider.of<SeniorProfBloc>(context)
+                        .add(VisitDocEvent(156, state.planId));
+                  });
 
-              return ListView.builder(
-                padding: EdgeInsets.only(bottom: 20.h),
-                itemCount: visitDoc.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 18.w, vertical: 10.h),
-                      child: Row(
-                        children: [
-                          Text("إجمالي الزيارات الناجحة:",
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: Colors.blueGrey[600])),
-                          SizedBox(width: 8.w),
-                          CircleNumberWidget(number: visitDoc.length),
-                        ],
-                      ),
-                    );
-                  }
-                  return VisitedDoctorCard(data: visitDoc[index - 1]);
-                },
-              );
-            },
+                return ListView.builder(
+                  padding: EdgeInsets.only(bottom: 20.h),
+                  itemCount: visitDoc.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 18.w, vertical: 10.h),
+                        child: Row(
+                          children: [
+                            Text("إجمالي الزيارات الناجحة:",
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.blueGrey[600])),
+                            SizedBox(width: 8.w),
+                            CircleNumberWidget(number: visitDoc.length),
+                          ],
+                        ),
+                      );
+                    }
+                    return VisitedDoctorCard(data: visitDoc[index - 1]);
+                  },
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
