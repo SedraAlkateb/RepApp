@@ -17,8 +17,8 @@ class AdminDashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // منع الرجوع للخلف أثناء المزامنة
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         drawer: DrawerPage(),
         backgroundColor: ColorManager.bgGrey,
@@ -182,14 +182,14 @@ class AdminDashboardPage extends StatelessWidget {
                 ),
               ),
 
-              // 3. ملخص الأداء العام (أصبح الآن داخل السكرول)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
-                  child: _buildPerformanceSummaryCard(),
-                ),
-              ),
+              // // 3. ملخص الأداء العام (أصبح الآن داخل السكرول)
+              // SliverToBoxAdapter(
+              //   child: Padding(
+              //     padding:
+              //         EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+              //     child: _buildPerformanceSummaryCard(),
+              //   ),
+              // ),
 
               SliverToBoxAdapter(child: SizedBox(height: 30.h)),
             ],
@@ -199,63 +199,63 @@ class AdminDashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPerformanceSummaryCard() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-        color: ColorManager.darkBlueCard,
-        borderRadius: BorderRadius.circular(
-            25.r), // دائرية بالكامل لأنها ليست ملتصقة بالأسفل
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 15,
-              offset: const Offset(0, 10))
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'ملخص الأداء العام',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(width: 10.w),
-              Icon(Icons.analytics_outlined, color: Colors.white, size: 24.sp),
-            ],
-          ),
-          SizedBox(height: 20.h),
-          Container(height: 0.8, color: Colors.white24),
-          SizedBox(height: 20.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildStatItem('الإنجاز', '82%'),
-              _buildStatItem('الوصفات', '45'),
-              _buildStatItem('الزيارات', '124'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(value,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold)),
-        Text(label, style: TextStyle(color: Colors.white70, fontSize: 13.sp)),
-      ],
-    );
-  }
+  // Widget _buildPerformanceSummaryCard() {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: EdgeInsets.all(24.w),
+  //     decoration: BoxDecoration(
+  //       color: ColorManager.darkBlueCard,
+  //       borderRadius: BorderRadius.circular(
+  //           25.r), // دائرية بالكامل لأنها ليست ملتصقة بالأسفل
+  //       boxShadow: [
+  //         BoxShadow(
+  //             color: Colors.black.withOpacity(0.1),
+  //             blurRadius: 15,
+  //             offset: const Offset(0, 10))
+  //       ],
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             Text(
+  //               'ملخص الأداء العام',
+  //               style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontSize: 18.sp,
+  //                   fontWeight: FontWeight.bold),
+  //             ),
+  //             SizedBox(width: 10.w),
+  //             Icon(Icons.analytics_outlined, color: Colors.white, size: 24.sp),
+  //           ],
+  //         ),
+  //         SizedBox(height: 20.h),
+  //         Container(height: 0.8, color: Colors.white24),
+  //         SizedBox(height: 20.h),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //           children: [
+  //             _buildStatItem('الإنجاز', '82%'),
+  //             _buildStatItem('الوصفات', '45'),
+  //             _buildStatItem('الزيارات', '124'),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _buildStatItem(String label, String value) {
+  //   return Column(
+  //     children: [
+  //       Text(value,
+  //           style: TextStyle(
+  //               color: Colors.white,
+  //               fontSize: 22.sp,
+  //               fontWeight: FontWeight.bold)),
+  //       Text(label, style: TextStyle(color: Colors.white70, fontSize: 13.sp)),
+  //     ],
+  //   );
+  // }
 }

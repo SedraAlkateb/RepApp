@@ -1,20 +1,5 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
+
 import 'package:domina_app/analytics/analytics_service.dart';
-import 'package:domina_app/analytics/firebase_analytics_service.dart';
-import 'package:domina_app/app/logger/error_reporter.dart';
-import 'package:domina_app/crashlytics/crashlytics_service.dart';
-import 'package:domina_app/crashlytics/firebase_crashlytics_service.dart';
-import 'package:domina_app/data/data_source/remote_data_source.dart';
-import 'package:domina_app/data/network/app_api.dart';
-import 'package:domina_app/data/network/app_sql_api.dart';
-import 'package:domina_app/data/network/dio_factory.dart';
-import 'package:domina_app/data/network/network_info.dart';
-import 'package:domina_app/data/network/sqlite_factory.dart';
-import 'package:domina_app/data/repository/repository.dart';
-import 'package:domina_app/data/repository/repositroy_sql.dart';
-import 'package:domina_app/domain/ex.dart';
-import 'package:domina_app/domain/repostitory/repository.dart';
 import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_doctor_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
@@ -29,7 +14,6 @@ import 'package:domina_app/domain/usecase/all_exception_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_exception_usecase.dart';
 import 'package:domina_app/domain/usecase/all_hospial_sp_usecase%20.dart';
 import 'package:domina_app/domain/usecase/all_hospial_usecase%20.dart';
-import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:domina_app/domain/usecase/all_brands_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/all_hospital_sp_n_sql_usecase.dart';
@@ -86,7 +70,6 @@ import 'package:domina_app/domain/usecase/insert_as/get_hospital_sp_visits_sql_u
 import 'package:domina_app/domain/usecase/insert_as/get_hospital_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_pharmacy_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_plan_brand_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/insert_exception_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_visit_brand_hospital_sql_usecase.dart';

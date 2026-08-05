@@ -38,8 +38,8 @@ class _AsyncLoginPageState extends State<AsyncLoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // منع الرجوع للخلف أثناء المزامنة
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
