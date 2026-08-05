@@ -1,7 +1,5 @@
 // lib/app/di/di_core.dart
 import 'package:domina_app/crashlytics/firebase_crashlytics_service.dart';
-import 'package:domina_app/data/repository/repositroy_sql.dart';
-import 'package:domina_app/domain/repostitory/repository_sql.dart';
 import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
