@@ -23,7 +23,7 @@ class SpecializationsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'الإختصاصات',
-          style: TextStyle(fontSize: isTablet ? 28.sp : 20.sp),
+
         ),
       ),
       body: OrientationBuilder(

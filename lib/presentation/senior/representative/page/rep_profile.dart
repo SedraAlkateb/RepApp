@@ -14,6 +14,7 @@ import 'package:domina_app/presentation/senior/representative/page/remaining_vis
 import 'package:domina_app/presentation/senior/representative/page/remaining_visits_hos.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_hospital.dart';
+import 'package:domina_app/presentation/senior/representative/widget/rep_profile_widget/build_stats_grid_widget.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,20 +41,10 @@ class RepProfile extends StatelessWidget {
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) {
-        // if (didPop) {
-        //   context.read<SeniorRepsBloc>().add(AllSeniorRepEvent(
-        //
-        //   ));
-        // }
-      },
+      onPopInvoked: (didPop) {},
       child: Scaffold(
         appBar: AppBar(
-          title: Text("ملف المندوب",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.sp,
-                  color: const Color(0xFF1F4E79))),
+          title: Text("ملف المندوب",),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded,
                 color: Color(0xFF1F4E79)),
@@ -72,37 +63,18 @@ class RepProfile extends StatelessWidget {
               currentRepName = rep.name;
               currentRepPlan = rep.repPlanId;
 
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    SizedBox(height: 25.h),
-                    _buildHeroHeader(rep),
-                    AnimationLimiter(
-                      child: Column(
-                        children: AnimationConfiguration.toStaggeredList(
-                          duration: const Duration(milliseconds: 500),
-                          childAnimationBuilder: (widget) => SlideAnimation(
-                            verticalOffset: 40.0,
-                            child: FadeInAnimation(child: widget),
-                          ),
-                          children: [
-                            SizedBox(height: 25.h),
-                            _buildStatsGrid(rep),
-                            SizedBox(height: 25.h),
-                            _buildQuickActions(context),
-                            SizedBox(height: 30.h),
-                            _buildDetailsList(context, rep, currentRepName,
-                                currentRepPlan, rep.mobile),
-                            SizedBox(height: 25.h),
-                            _buildCoverageSection(context),
-                            SizedBox(height: 50.h),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              return OrientationBuilder(
+                builder: (context, orientation) {
+                  // إذا كان الاتجاه أفقياً (Landscape / Tablet Wide)
+                  if (orientation == Orientation.landscape) {
+                    return _buildTabletLandscapeLayout(
+                        context, rep, currentRepName, currentRepPlan);
+                  }
+
+                  // الوضع الرأسي الحالي (كما هو بدون تغيير)
+                  return _buildPortraitLayout(
+                      context, rep, currentRepName, currentRepPlan);
+                },
               );
             }
             return const SizedBox();
@@ -112,28 +84,133 @@ class RepProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroHeader(dynamic rep) {
+  // =========================================================
+  // 1. التصميم الخاص بالتابلت بالوضع الأفقي (Landscape Layout)
+  // =========================================================
+  Widget _buildTabletLandscapeLayout(BuildContext context, InfoRep rep,
+      String currentRepName, int currentRepPlan) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // القسم الأيسر: الهيدر والأزرار السريعة الثابتة
+          Expanded(
+            flex: 4,
+            child: _buildHeroHeaderTablet(rep, context),
+          ),
+
+          SizedBox(width: 15.w),
+
+          // القسم الأيمن: الإحصائيات، التغطية والتقارير التفصيلية
+          Expanded(
+            flex: 6,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: AnimationLimiter(
+                child: Column(
+                  children: AnimationConfiguration.toStaggeredList(
+                    duration: const Duration(milliseconds: 500),
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                      horizontalOffset: 50.0,
+                      child: FadeInAnimation(child: widget),
+                    ),
+                    children: [
+                      buildStatsGridTablet(rep),
+                      SizedBox(height: 20.h),
+                      buildQuickActions(context),
+                      SizedBox(height: 20.h),
+                      _buildCoverageSection(context),
+                      SizedBox(height: 20.h),
+                      _buildDetailsList(context, rep, currentRepName,
+                          currentRepPlan, rep.mobile),
+                      SizedBox(height: 30.h),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget buildQuickActions(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
+          child: Text(
+            "معلومات شخصية",
+            style: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF2C3E50)),
+          ),
+        ),
+        Container(
+          // margin: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(vertical: 20.h),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30.r),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20)
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildIconBtn(context, FontAwesomeIcons.tag, "الإختصاص",
+                  const Color(0xFFFF9F43), () {
+                context.read<SeniorProfBloc>().add(SenAllSpecEvent(id));
+                Navigator.pushNamed(context, Routes.seniorSpec);
+              }),
+              buildIconBtn(context, FontAwesomeIcons.locationDot, "المناطق",
+                  const Color(0xFF45AAF2), () {
+                context.read<SeniorProfBloc>().add(SenAllPlaceEvent(id));
+                Navigator.pushNamed(context, Routes.seniorPlaces);
+              }),
+              buildIconBtn(context, FontAwesomeIcons.userDoctor, "الأطباء",
+                  const Color(0xFFEB4D4B), () {
+                context.read<SeniorProfBloc>().add(SenAllDoctorEvent(id));
+                Navigator.pushNamed(context, Routes.seniorDoc);
+              }),
+              buildIconBtn(context, FontAwesomeIcons.hospitalUser, "المشافي",
+                  const Color(0xFFE3D909), () {
+                context.read<SeniorProfBloc>().add(SenAllHospitalEvent(id));
+                Navigator.pushNamed(context, Routes.seniorHos);
+              }),
+              buildIconBtn(context, FontAwesomeIcons.hospital, "الأصناف",
+                  const Color(0xFF26DE81), () {
+                context.read<SeniorProfBloc>().add(SenAllBrandEvent(repPlanId));
+                Navigator.pushNamed(context, Routes.allBrand);
+              }),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // الهيدر المحسّن للتابلت بالعرض
+  Widget _buildHeroHeaderTablet(InfoRep rep, BuildContext context) {
     return Hero(
       tag: 'rep_card_${rep.id}',
       child: Container(
         width: double.infinity,
-        // تقليل الهوامش الجانبية ليلتصق بالأعلى بشكل أفضل مثل الصور
-        margin: EdgeInsets.symmetric(horizontal: 15.w),
+        height: MediaQuery.of(context).size.height,
         padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
         decoration: BoxDecoration(
-          // gradient: const LinearGradient(
-          //   colors: [ Color(0xFF3B7DBF)],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
-          color: Color(0xFF164683),
-
-          // تعديل الحواف لتكون دائرية من الأسفل فقط لتعطي طابع الـ Header الحديث
+          color: const Color(0xFF164683),
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(50.r),
             bottomRight: Radius.circular(50.r),
-            topLeft: Radius.circular(35.r),
-            topRight: Radius.circular(35.r),
+            topLeft: Radius.circular(50.r),
+            topRight: Radius.circular(50.r),
           ),
           boxShadow: [
             BoxShadow(
@@ -144,22 +221,21 @@ class RepProfile extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // الدائرة التي تحتوي على الحرف الأول (تصميم زجاجي شفاف)
             Container(
               width: 100.r,
               height: 100.r,
               decoration: BoxDecoration(
-                  //  shape: BoxShape.circle,
                   color: Colors.white.withOpacity(0.2),
                   border: Border.all(
                       color: Colors.white.withOpacity(0.3), width: 1.5),
-                  borderRadius: BorderRadius.all(Radius.circular(45))),
+                  borderRadius: const BorderRadius.all(Radius.circular(30))),
               alignment: Alignment.center,
               child: Text(
                 rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
                 style: TextStyle(
-                  fontSize: 36.sp,
+                  fontSize: 26.sp,
                   color: Colors.white,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
@@ -167,7 +243,6 @@ class RepProfile extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-            // اسم المندوب
             Text(
               rep.name,
               textAlign: TextAlign.center,
@@ -184,9 +259,8 @@ class RepProfile extends StatelessWidget {
                 ],
               ),
             ),
-            // العنوان أو النص الفرعي
-            if (rep.address != null && rep.address.isNotEmpty) ...[
-              SizedBox(height: 8.h),
+            if (rep.address.isNotEmpty) ...[
+              SizedBox(height: 20.h),
               Text(
                 rep.address,
                 textAlign: TextAlign.center,
@@ -203,151 +277,124 @@ class RepProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsGrid(InfoRep rep) {
-    // تم استبدال dynamic بنوع الكلاس الصريح للـ Clean Code
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: GridView.count(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        mainAxisSpacing: 15.h,
-        crossAxisSpacing: 15.w,
-        childAspectRatio:
-            1.25, // تعديل بسيط ليعطي مساحة رأسية مريحة للعناوين الطويلة
-        children: [
-          // الكروت الأساسية السابقة
-          _buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
-              const Color(0xFF1F4E79)),
-          _buildStatCard("الوصفات", rep.recipesCount, const Color(0xFF8E44AD)),
-
-          // زيارات الأطباء (المحققة والمتبقية)
-          _buildStatCard("زيارات الأطباء المحققة", rep.visitDonDoc,
-              const Color(0xFF2D947A)),
-          _buildStatCard("زيارات الأطباء المتبقية", rep.totDocVisit,
-              const Color(0xFFE67E22)),
-
-          // زيارات المشافي (المحققة والمتبقية)
-          _buildStatCard("زيارات المشافي المحققة", rep.visitDonHos,
-              const Color(0xFF2D947A)),
-          _buildStatCard("زيارات المشافي المتبقية", rep.totHosVisit,
-              const Color(0xFFE67E22)),
-
-          // الإجمالي الكلي للمحققة والمتبقية
-          _buildStatCard("إجمالي المحققة", rep.visitDon.toString(),
-              const Color(0xFF1F4E79)),
-          _buildStatCard("إجمالي المتبقية", rep.visitNoteYet.toString(),
-              const Color(0xFFE67E22)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard(String title, String val, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: 12.w,
-          vertical: 16.h), // توزيع البادينغ ليتناسب مع النصوص الطويلة
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(25.r),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 15,
-              offset: const Offset(0, 8))
-        ],
-      ),
+  // =========================================================
+  // 2. التصميم الأصلي كما هو بدون تعديل للوضع الرأسي (Portrait)
+  // =========================================================
+  Widget _buildPortraitLayout(BuildContext context, InfoRep rep,
+      String currentRepName, int currentRepPlan) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            title,
-            textAlign:
-                TextAlign.center, // لضمان مظهر متناسق إذا انقسم النص على سطرين
-            maxLines: 2, // يسمح بنزول العنوان لسطرين دون حدوث Overflow
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: 11.sp,
-                color: Colors.grey[500],
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 6.h),
-          Text(
-            val,
-            style: TextStyle(
-                fontSize: 22.sp, fontWeight: FontWeight.w900, color: color),
+          SizedBox(height: 25.h),
+          _buildHeroHeader(rep),
+          AnimationLimiter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                children: AnimationConfiguration.toStaggeredList(
+                  duration: const Duration(milliseconds: 500),
+                  childAnimationBuilder: (widget) => SlideAnimation(
+                    verticalOffset: 40.0,
+                    child: FadeInAnimation(child: widget),
+                  ),
+                  children: [
+                    SizedBox(height: 25.h),
+                    buildStatsGrid(context, rep),
+                    SizedBox(height: 25.h),
+                    buildQuickActions(context),
+                    SizedBox(height: 30.h),
+                    _buildDetailsList(context, rep, currentRepName,
+                        currentRepPlan, rep.mobile),
+                    SizedBox(height: 25.h),
+                    _buildCoverageSection(context),
+                    SizedBox(height: 50.h),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30.r),
+  // بقية المكونات الأساسية للـ Mobile Portrait (نفس الكود الخاص بك دون أي تعديل)
+  Widget _buildHeroHeader(dynamic rep) {
+    return Hero(
+      tag: 'rep_card_${rep.id}',
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 15.w),
+        padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
+        decoration: BoxDecoration(
+          color: const Color(0xFF164683),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(50.r),
+            bottomRight: Radius.circular(50.r),
+            topLeft: Radius.circular(35.r),
+            topRight: Radius.circular(35.r),
+          ),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20)
-          ]),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildIconBtn(context, FontAwesomeIcons.tag, "الإختصاص",
-              const Color(0xFFFF9F43), () {
-            context.read<SeniorProfBloc>().add(SenAllSpecEvent(id));
-            Navigator.pushNamed(context, Routes.seniorSpec);
-          }),
-          _buildIconBtn(context, FontAwesomeIcons.locationDot, "المناطق",
-              const Color(0xFF45AAF2), () {
-            context.read<SeniorProfBloc>().add(SenAllPlaceEvent(id));
-            Navigator.pushNamed(context, Routes.seniorPlaces);
-          }),
-          _buildIconBtn(context, FontAwesomeIcons.userDoctor, "الأطباء",
-              const Color(0xFFEB4D4B), () {
-            context.read<SeniorProfBloc>().add(SenAllDoctorEvent(id));
-            Navigator.pushNamed(context, Routes.seniorDoc);
-          }),
-          _buildIconBtn(context, FontAwesomeIcons.hospitalUser, "المشافي",
-              const Color(0xFFE3D909), () {
-            context.read<SeniorProfBloc>().add(SenAllHospitalEvent(id));
-            Navigator.pushNamed(context, Routes.seniorHos);
-          }),
-          _buildIconBtn(context, FontAwesomeIcons.hospital, "الأصناف",
-              const Color(0xFF26DE81), () {
-            context.read<SeniorProfBloc>().add(SenAllBrandEvent(repPlanId));
-            Navigator.pushNamed(context, Routes.allBrand);
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIconBtn(BuildContext context, FaIconData icon, String label,
-      Color color, VoidCallback tap) {
-    return InkWell(
-      onTap: tap,
-      borderRadius: BorderRadius.circular(20.r),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(14.r),
-            decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20.r)),
-            child: FaIcon(icon, color: color, size: 20.sp),
-          ),
-          SizedBox(height: 8.h),
-          Text(label,
+            BoxShadow(
+              color: const Color(0xFF1F4E79).withOpacity(0.3),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            )
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 100.r,
+              height: 100.r,
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  border: Border.all(
+                      color: Colors.white.withOpacity(0.3), width: 1.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(45))),
+              alignment: Alignment.center,
+              child: Text(
+                rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
+                style: TextStyle(
+                  fontSize: 36.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            Text(
+              rep.name,
+              textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF4B6584))),
-        ],
+                fontSize: 24.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+            ),
+            if (rep.address != null && rep.address.isNotEmpty) ...[
+              SizedBox(height: 8.h),
+              Text(
+                rep.address,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.white.withOpacity(0.9),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -495,29 +542,26 @@ class RepProfile extends StatelessWidget {
           icon: FontAwesomeIcons.calendarCheck,
           color: const Color(0xFF1F4E79),
           onTap: () {
-            Navigator.pushNamed(context, Routes.activePlanPage,arguments: plan);
-
+            Navigator.pushNamed(context, Routes.activePlanPage,
+                arguments: plan);
           }),
     ]);
   }
 
   Widget _buildSectionLayout(String title, List<Widget> items) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: 5.w, bottom: 15.h),
-            child: Text(title,
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF2C3E50))),
-          ),
-          ...items,
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(right: 5.w, bottom: 12.h, top: 10.h),
+          child: Text(title,
+              style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF2C3E50))),
+        ),
+        ...items,
+      ],
     );
   }
 }
@@ -544,6 +588,8 @@ class _InteractiveActionTileState extends State<InteractiveActionTile> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final bool isLandscape = mediaQuery.orientation == Orientation.landscape ;
     return GestureDetector(
       onTapDown: (_) => setState(() => isPressed = true),
       onTapUp: (_) => setState(() => isPressed = false),
@@ -552,7 +598,9 @@ class _InteractiveActionTileState extends State<InteractiveActionTile> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         margin: EdgeInsets.only(bottom: 12.h),
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        padding: isLandscape
+            ? EdgeInsets.symmetric(horizontal: 12.w, vertical: 25.h)
+            : EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         decoration: BoxDecoration(
           color: isPressed ? widget.color.withOpacity(0.02) : Colors.white,
           borderRadius: BorderRadius.circular(22.r),

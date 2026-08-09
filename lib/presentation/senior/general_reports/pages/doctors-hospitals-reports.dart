@@ -34,12 +34,11 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
   @override
   void initState() {
     super.initState();
-    // استدعاء البيانات لأول مرة عند الدخول للصفحة
     initReportVisitDoctorModule();
     context.read<ReportVisitDoctorBloc>().add(
-          AllReportVisitDoctorEvent(
-              VisitRepSen(widget.repId, widget.senId), true),
-        );
+      AllReportVisitDoctorEvent(
+          VisitRepSen(widget.repId, widget.senId), true),
+    );
   }
 
   @override
@@ -51,7 +50,6 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
-              // الهيدر العلوي بنمط Sliver
               SliverAppBar(
                 elevation: 0,
                 pinned: true,
@@ -71,83 +69,104 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
                   ),
                 ),
               ),
-              // الـ TabBar العائم داخل حاوية بيضاء مع ظل
+              // الـ TabBar العائم بكامل العرض
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-                  child: Container(
-                    height: 55.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.r),
-                      border: Border.all(color: Colors.grey.shade200),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: TabBar(
-                      padding: const EdgeInsets.all(4),
-                      dividerColor: Colors.transparent,
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.grey.shade400,
-                      labelStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
+                child: Container(
+
+                 height: 80,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.all(4.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.r),
+                    border: Border.all(color: Colors.grey.shade200),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: BoxDecoration(
-                        color: ColorManager
-                            .medicalPrimary, // أو اللون الأزرق المعتمد
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      onTap: (value) {
-                        if (value == 0) {
-                          context.read<ReportVisitDoctorBloc>().add(
-                                AllReportVisitDoctorEvent(
-                                    VisitRepSen(widget.repId, widget.senId),
-                                    true),
-                              );
-                        } else {
-                          context.read<ReportVisitDoctorBloc>().add(
-                                AllReportVisitHospitalEvent(
-                                    VisitRepSen(widget.repId, widget.senId),
-                                    true),
-                              );
-                        }
-                      },
-                      tabs: [
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.groups_outlined),
-                              SizedBox(width: 8.w),
-                              const Text('الأطباء'),
-                            ],
-                          ),
-                        ),
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.local_hospital_outlined),
-                              SizedBox(width: 8.w),
-                              const Text('المشافي'),
-                            ],
-                          ),
-                        ),
-                      ],
+                    ],
+                  ),
+                  child: TabBar(
+                    
+                    labelPadding: EdgeInsets.zero,
+                    dividerColor: Colors.transparent,
+                    labelColor: Colors.white,
+
+                    unselectedLabelColor: Colors.grey.shade500,
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+
+                      fontFamily: 'Cairo', // أو الخط المعتمد لديك
                     ),
+                    unselectedLabelStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.sp,
+                      fontFamily: 'Cairo',
+                    ),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    
+                    indicator: BoxDecoration(
+                      
+                      color: ColorManager.medicalPrimary,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+
+                    onTap: (value) {
+                      if (value == 0) {
+                        context.read<ReportVisitDoctorBloc>().add(
+                          AllReportVisitDoctorEvent(
+                              VisitRepSen(widget.repId, widget.senId),
+                              true),
+                        );
+                      } else {
+                        context.read<ReportVisitDoctorBloc>().add(
+                          AllReportVisitHospitalEvent(
+                              VisitRepSen(widget.repId, widget.senId),
+                              true),
+                        );
+                      }
+                    },
+                    tabs: [
+                      Tab(
+                        height: 48.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.groups_outlined, size: 20.sp),
+                            SizedBox(width: 8.w),
+                            Text(
+                              'الأطباء',
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Tab(
+                        height: 48.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.local_hospital_outlined, size: 20.sp),
+                            SizedBox(width: 8.w),
+                            Text(
+                              'المشافي',
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ];
           },
-          // محتوى الصفحات مع فيزياء تمرير سلسة
           body: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             children: [

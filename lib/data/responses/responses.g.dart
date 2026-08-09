@@ -1170,16 +1170,20 @@ RepresentativeResponse _$RepresentativeResponseFromJson(
     RepresentativeResponse(
       json['id'] as String?,
       json['name'] as String?,
-      (json['unRead'] as num?)?.toInt(),
+      (json['TotalUnReadVisit'] as num?)?.toInt(),
       json['activePlan'] as String?,
-    );
+    )
+      ..TotalReadVisit = (json['TotalReadVisit'] as num?)?.toInt()
+      ..totalVisit = (json['totalVisit'] as num?)?.toInt();
 
 Map<String, dynamic> _$RepresentativeResponseToJson(
         RepresentativeResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'unRead': instance.unRead,
+      'TotalUnReadVisit': instance.unRead,
+      'TotalReadVisit': instance.TotalReadVisit,
+      'totalVisit': instance.totalVisit,
       'activePlan': instance.activePlan,
     };
 

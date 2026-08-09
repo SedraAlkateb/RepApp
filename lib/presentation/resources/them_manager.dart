@@ -32,13 +32,14 @@ ThemeData getApplicationTheme() {
     appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(
         color: ColorManager.secondaryColor1,
+        size: 30.h
       ),
-      toolbarHeight: 60.h,
+      toolbarHeight: 65.h,
       backgroundColor: ColorManager.white,
       elevation: 9,
       shadowColor: ColorManager.secondaryColor3,
       titleTextStyle:
-          getBoldStyle(fontSize: 20.sp, color: ColorManager.secondaryColor1),
+          getBoldStyle(fontSize: 15.sp, color: ColorManager.secondaryColor1),
     ),
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),

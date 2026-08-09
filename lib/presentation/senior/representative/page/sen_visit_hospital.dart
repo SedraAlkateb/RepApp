@@ -1,6 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -50,20 +50,7 @@ class SenVisitHospital extends StatelessWidget {
                 itemCount: visitDoc.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 18.w, vertical: 10.h),
-                      child: Row(
-                        children: [
-                          Text("إجمالي الزيارات الناجحة:",
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: Colors.blueGrey[600])),
-                          SizedBox(width: 8.w),
-                          CircleNumberWidget(number: visitDoc.length),
-                        ],
-                      ),
-                    );
+                  return  buildTotalReportsCard(visitDoc.length, 'إجمالي الزيارات الناجحة','لهذا الشهر');
                   }
                   return VisitedDoctorCard(data: visitDoc[index - 1]);
                 },

@@ -150,7 +150,10 @@ class MyResponsiveApp extends StatelessWidget {
 
       builder: (context, child) {
         // نمرر تطبيق MyApp الأصلي الذي يحتوي على MultiBlocProvider و MaterialApp الوحيدة!
-        return const MyApp();
+        return SafeArea(
+bottom: true,
+          child:  const MyApp(key: ValueKey('app_root')),
+        );
       },
     );
   }

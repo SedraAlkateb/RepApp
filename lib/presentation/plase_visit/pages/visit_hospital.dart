@@ -52,11 +52,6 @@ class _VisitHospitalState extends State<VisitHospital>
         centerTitle: true,
         title: Text(
           "إجراء زيارة",
-          style: TextStyle(
-            color: const Color(0xFF0D47A1),
-            fontWeight: FontWeight.bold,
-            fontSize: 18.sp,
-          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),

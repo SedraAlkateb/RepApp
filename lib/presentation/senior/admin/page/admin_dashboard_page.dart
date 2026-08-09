@@ -19,243 +19,191 @@ class AdminDashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        drawer: DrawerPage(),
-        backgroundColor: ColorManager.bgGrey,
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return Center(
-                child: IconButton(
-                  icon: Icon(
-                    size: AppSize.s30,
-                    Icons.menu,
-                    color: ColorManager.secondaryColor,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                ),
-              );
-            },
-          ),
-          title: Text(
-            'لوحة التحكم الإدارية',
-            style: TextStyle(
-                color: ColorManager.primaryText,
-                fontWeight: FontWeight.bold,
-                fontSize: 20.sp),
-          ),
-        ),
-        body: Directionality(
-          textDirection: TextDirection.rtl,
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('مرحباً بك مجدداً',
-                          style: TextStyle(
-                              fontSize: 28.sp,
-                              fontWeight: FontWeight.bold,
-                              color: ColorManager.medicalPrimary)),
-                      SizedBox(height: 8.h),
-                      Text('اختر القسم الذي ترغب في إدارته اليوم',
-                          style: TextStyle(
-                              fontSize: 16.sp, color: Colors.grey[600])),
-                    ],
-                  ),
-                ),
-              ),
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          final bool isLandscape = orientation == Orientation.landscape;
 
-              // 2. الكروت (جزء من السكرول)
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                    InteractiveAdminCard(
-                      icon: Icons.bar_chart_rounded,
-                      title: 'إدارة تقارير المندوبين',
-                      subtitle: 'متابعة أداء المندوبين والزيارات اليومية',
-                      iconColor: ColorManager.primaryBlue,
-                      onTap: () {
-                        if (UserInfo.repType.i == 4 ||
-                            UserInfo.repType.i == 5) {
-                          Navigator.pushNamed(
-                              context, Routes.allCitySupervisor);
-                        } else {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.AllRepSenior,
-                          );
-                        }
+          // تجهيز قائمة الكروت مع تمرير حالة isLandscape
+          final List<Widget> adminCards = [
+            InteractiveAdminCard(
+              icon: Icons.bar_chart_rounded,
+              title: 'إدارة تقارير المندوبين',
+              subtitle: 'متابعة أداء المندوبين والزيارات اليومية',
+              iconColor: ColorManager.primaryBlue,
+              isLandscape: isLandscape,
+              onTap: () {
+                if (UserInfo.repType.i == 4 || UserInfo.repType.i == 5) {
+                  Navigator.pushNamed(context, Routes.allCitySupervisor);
+                } else {
+                  Navigator.pushNamed(context, Routes.AllRepSenior);
+                }
+              },
+            ),
+            if (UserInfo.repType.i == 4 || UserInfo.repType.i == 5)
+              InteractiveAdminCard(
+                icon: Icons.assignment_outlined,
+                title: 'إدارة التقارير العامة الخاصة بالسينيور',
+                subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                iconColor: Colors.purple,
+                isLandscape: isLandscape,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.allCitySeniors);
+                },
+              ),
+            if (UserInfo.repType.i == 4)
+              InteractiveAdminCard(
+                icon: Icons.assignment_outlined,
+                title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
+                subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+                iconColor: Colors.purple,
+                isLandscape: isLandscape,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.teamLeader);
+                  BlocProvider.of<GeneralReportsBloc>(context)
+                      .add(const TeamLeaderAndCityEvent());
+                },
+              ),
+          ];
+
+          return Scaffold(
+            drawer: const DrawerPage(),
+            backgroundColor: ColorManager.bgGrey,
+            appBar: AppBar(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return Center(
+                    child: IconButton(
+                      icon: Icon(
+                        size: isLandscape ? 24.sp : AppSize.s30,
+                        Icons.menu,
+                        color: ColorManager.secondaryColor,
+                      ),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
                       },
                     ),
-                    (UserInfo.repType.i == 4 || UserInfo.repType.i == 5)
-                        ? InteractiveAdminCard(
-                            icon: Icons.assignment_outlined,
-                            title: 'إدارة التقارير العامة الخاصة بالسينيور',
-                            subtitle:
-                                'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                            iconColor: Colors.purple,
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, Routes.allCitySeniors);
-                            },
-                          )
-                        : SizedBox(),
-                    // ( UserInfo.repType.i == 5)?
-                    //  InteractiveAdminCard(
-                    //    icon: Icons.assignment_outlined,
-                    //    title: 'إدارة التقارير العامة الخاصة بالسينيور',
-                    //    subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                    //    iconColor: Colors.purple,
-                    //    onTap: () {
-                    //      initGeneralReportsModule();
-                    //      Navigator.push(context, MaterialPageRoute(
-                    //        builder: (context) => SeniorByCityId(
-                    //          cityname: UserInfo.cityTitle,
-                    //          cityid: UserInfo.cityId,
-                    //        ),
-                    //      ));
-                    //      BlocProvider.of<GeneralReportsBloc>(context).add(GetSeniorByCityIdEvent(UserInfo.cityId));
-                    //    },
-                    //  ):SizedBox(),
-
-                    UserInfo.repType.i == 4
-                        ? InteractiveAdminCard(
-                            icon: Icons.assignment_outlined,
-                            title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
-                            subtitle:
-                                'متابعة أداء المشرفين في مراقبة مندوبينهم',
-                            iconColor: Colors.purple,
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.teamLeader,
-                              );
-                              BlocProvider.of<GeneralReportsBloc>(context)
-                                  .add(const TeamLeaderAndCityEvent());
-                            },
-                          )
-                        : SizedBox(),
-                    SizedBox(height: 10.h),
-                    Row(
-                      children: [
-                        SquareInteractiveCard(
-                          icon: Icons.calendar_today_outlined,
-                          title: 'الخطط الحالية',
-                          subtitle: 'متابعة النشاط',
-                          iconColor: Colors.green,
-                          onTap: () {
-                            initSeniorProfModule();
-                            context
-                                .read<SeniorProfBloc>()
-                                .add(SenAllPlaceEvent(UserInfo.repId));
-                            Navigator.pushNamed(
-                              context,
-                              Routes.seniorFuturePlaces,
-                            );
-                          },
-                        ),
-                        SizedBox(width: 16.w),
-                        SquareInteractiveCard(
-                          icon: Icons.history_rounded,
-                          title: 'الخطط المنتهية',
-                          subtitle: 'أرشيف الخطط',
-                          iconColor: Colors.grey,
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.cityPlan,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ]),
-                ),
+                  );
+                },
               ),
+              title: const Text('لوحة التحكم الإدارية'),
+            ),
+            body: Directionality(
+              textDirection: TextDirection.rtl,
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  // 1. قسم الترحيب والترويسة
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isLandscape ? 32.w : 24.w,
+                        vertical: isLandscape ? 14.h : 30.h,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'مرحباً بك مجدداً',
+                            style: TextStyle(
+                              fontSize: isLandscape ? 20.sp : 28.sp,
+                              fontWeight: FontWeight.bold,
+                              color: ColorManager.medicalPrimary,
+                            ),
+                          ),
+                          SizedBox(height: isLandscape ? 4.h : 8.h),
+                          Text(
+                            'اختر القسم الذي ترغب في إدارته اليوم',
+                            style: TextStyle(
+                              fontSize: isLandscape ? 13.sp : 16.sp,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
-              // // 3. ملخص الأداء العام (أصبح الآن داخل السكرول)
-              // SliverToBoxAdapter(
-              //   child: Padding(
-              //     padding:
-              //         EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
-              //     child: _buildPerformanceSummaryCard(),
-              //   ),
-              // ),
+                  // 2. كروت لوحة التحكم
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isLandscape ? 32.w : 20.w,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          // التبديل بين التنسيق الأفقي (في اللاندسكيب) والتنسيق الطولي (في البورتريت)
+                          if (isLandscape) ...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: adminCards.map((card) {
+                                return SizedBox(
+                                  width: 140.w,
+                                  height: 300.h,
+                                  child: card,
+                                );
+                              }).toList(),
+                            ),
+                            SizedBox(height: 12.h),
+                          ] else ...[
+                            ...adminCards,
+                            SizedBox(height: 14.h),
+                          ],
 
-              SliverToBoxAdapter(child: SizedBox(height: 30.h)),
-            ],
-          ),
-        ),
+                          // كروت الخطط الحالية والمنتهية
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SquareInteractiveCard(
+                                  icon: Icons.calendar_today_outlined,
+                                  title: 'الخطط الحالية',
+                                  subtitle: 'متابعة النشاط',
+                                  iconColor: Colors.green,
+                                  onTap: () {
+                                    initSeniorProfModule();
+                                    context
+                                        .read<SeniorProfBloc>()
+                                        .add(SenAllPlaceEvent(UserInfo.repId));
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.seniorFuturePlaces,
+                                    );
+                                  },
+                                  isLandscape: isLandscape,
+                                ),
+                              ),
+                              SizedBox(width: isLandscape ? 12.h : 16.w),
+                              Expanded(
+                                child: SquareInteractiveCard(
+                                  icon: Icons.history_rounded,
+                                  title: 'الخطط المنتهية',
+                                  subtitle: 'أرشيف الخطط',
+                                  iconColor: Colors.grey,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.cityPlan,
+                                    );
+                                  },
+                                  isLandscape: isLandscape,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: isLandscape ? 15.h : 30.h),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
-
-  // Widget _buildPerformanceSummaryCard() {
-  //   return Container(
-  //     width: double.infinity,
-  //     padding: EdgeInsets.all(24.w),
-  //     decoration: BoxDecoration(
-  //       color: ColorManager.darkBlueCard,
-  //       borderRadius: BorderRadius.circular(
-  //           25.r), // دائرية بالكامل لأنها ليست ملتصقة بالأسفل
-  //       boxShadow: [
-  //         BoxShadow(
-  //             color: Colors.black.withOpacity(0.1),
-  //             blurRadius: 15,
-  //             offset: const Offset(0, 10))
-  //       ],
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             Text(
-  //               'ملخص الأداء العام',
-  //               style: TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 18.sp,
-  //                   fontWeight: FontWeight.bold),
-  //             ),
-  //             SizedBox(width: 10.w),
-  //             Icon(Icons.analytics_outlined, color: Colors.white, size: 24.sp),
-  //           ],
-  //         ),
-  //         SizedBox(height: 20.h),
-  //         Container(height: 0.8, color: Colors.white24),
-  //         SizedBox(height: 20.h),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //           children: [
-  //             _buildStatItem('الإنجاز', '82%'),
-  //             _buildStatItem('الوصفات', '45'),
-  //             _buildStatItem('الزيارات', '124'),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-  //
-  // Widget _buildStatItem(String label, String value) {
-  //   return Column(
-  //     children: [
-  //       Text(value,
-  //           style: TextStyle(
-  //               color: Colors.white,
-  //               fontSize: 22.sp,
-  //               fontWeight: FontWeight.bold)),
-  //       Text(label, style: TextStyle(color: Colors.white70, fontSize: 13.sp)),
-  //     ],
-  //   );
-  // }
 }

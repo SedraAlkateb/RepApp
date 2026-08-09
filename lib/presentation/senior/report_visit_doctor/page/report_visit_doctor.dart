@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/visit_detail_card.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/who_read_dialog.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/share_watsapp.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -58,173 +59,178 @@ class ReportVisitDoctorPage extends StatelessWidget {
               title: Text(repName),
             )
           : null,
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 20.h),
-                        Text(
-                          'تقارير الزيارات للأطباء',
-                          style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF0F172A)),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+      return Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20.h),
+                            Text(
+                              'تقارير الزيارات للأطباء',
+                              style: TextStyle(
+                                  fontSize: 15.sp,
+
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF0F172A)),
+                            ),
+                            Text(
+                              'مراجعة تفاصيل الزيارات للأطباء الميدانية للمندوب',
+                              style: TextStyle(
+                                  fontSize: 14.sp, color: Color(0xFF64748B)),
+                            ),
+                            SizedBox(height: 20.h),
+                          ],
                         ),
-                        Text(
-                          'مراجعة تفاصيل الزيارات للأطباء الميدانية للمندوب',
-                          style: TextStyle(
-                              fontSize: 14.sp, color: Color(0xFF64748B)),
-                        ),
-                        SizedBox(height: 20.h),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                BlocConsumer<ReportVisitDoctorBloc, ReportVisitDoctorState>(
-                  listener: (context, state) {
-                    if (state is AsReadErrorState) {
-                      error(context, state.failure.massage, state.failure.code);
-                    }
-                  },
-                  builder: (context, state) {
-                    List<RepVisitsModel> doctorNoteModel =
-                        context.watch<ReportVisitDoctorBloc>().repVisitsSearch;
-                    if (state is AllReportVisitDoctorEmptyState) {
-                      return SliverList(
+                    BlocConsumer<ReportVisitDoctorBloc, ReportVisitDoctorState>(
+                      listener: (context, state) {
+                        if (state is AsReadErrorState) {
+                          error(context, state.failure.massage, state.failure.code);
+                        }
+                      },
+                      builder: (context, state) {
+                        List<RepVisitsModel> doctorNoteModel =
+                            context.watch<ReportVisitDoctorBloc>().repVisitsSearch;
+                        if (state is AllReportVisitDoctorEmptyState) {
+                          return SliverList(
+                              delegate: SliverChildListDelegate([
+                            const SizedBox(
+                              height: 100,
+                            ),
+                            emptyFullScreen(context)
+                          ]));
+                        }
+                        if (state is SenVisitDoctorAsReadState) {
+                          doctorNoteModel = state.doctorNoteModel;
+                        }
+                        if (state is AllReportVisitDoctorsState) {
+                          doctorNoteModel = state.repVisitsModel;
+                        }
+                        if (state is AllReportVisitDoctorLoadingState) {
+                          return SliverList(
+                            delegate: SliverChildListDelegate(
+                                [loadingFullScreen(context)]),
+                          );
+                        }
+                        if (state is AllReadLoadingState) {
+                          return SliverList(
+                            delegate: SliverChildListDelegate(
+                                [loadingFullScreen(context)]),
+                          );
+                        }
+                        if (state is AllReadSucState) {
+                          BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                              AllReportVisitDoctorEvent(
+                                  VisitRepSen(repId, UserInfo.repId), iscanedite));
+                        }
+                        if (state is AllReportVisitDoctorErrorState) {
+                          return SliverList(
+                            delegate: SliverChildListDelegate([
+                              errorFullScreen(context, func: () {
+                                BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                                    AllReportVisitDoctorEvent(
+                                        VisitRepSen(repId, userId), iscanedite));
+                              })
+                            ]),
+                          );
+                        }
+                        if (state is AllReadErrorState) {
+                          return SliverList(
+                            delegate: SliverChildListDelegate([
+                              errorFullScreen(context, func: () {
+                                BlocProvider.of<ReportVisitDoctorBloc>(context).add(
+                                    AllReportVisitDoctorEvent(
+                                        VisitRepSen(repId, userId), iscanedite));
+                              })
+                            ]),
+                          );
+                        }
+                        return SliverList(
                           delegate: SliverChildListDelegate([
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        emptyFullScreen(context)
-                      ]));
-                    }
-                    if (state is SenVisitDoctorAsReadState) {
-                      doctorNoteModel = state.doctorNoteModel;
-                    }
-                    if (state is AllReportVisitDoctorsState) {
-                      doctorNoteModel = state.repVisitsModel;
-                    }
-                    if (state is AllReportVisitDoctorLoadingState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate(
-                            [loadingFullScreen(context)]),
-                      );
-                    }
-                    if (state is AllReadLoadingState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate(
-                            [loadingFullScreen(context)]),
-                      );
-                    }
-                    if (state is AllReadSucState) {
-                      BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                          AllReportVisitDoctorEvent(
-                              VisitRepSen(repId, UserInfo.repId), iscanedite));
-                    }
-                    if (state is AllReportVisitDoctorErrorState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate([
-                          errorFullScreen(context, func: () {
-                            BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                AllReportVisitDoctorEvent(
-                                    VisitRepSen(repId, userId), iscanedite));
-                          })
-                        ]),
-                      );
-                    }
-                    if (state is AllReadErrorState) {
-                      return SliverList(
-                        delegate: SliverChildListDelegate([
-                          errorFullScreen(context, func: () {
-                            BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                AllReportVisitDoctorEvent(
-                                    VisitRepSen(repId, userId), iscanedite));
-                          })
-                        ]),
-                      );
-                    }
-                    return SliverList(
-                      delegate: SliverChildListDelegate([
-                        SearchField(
-                          searchController: searchNoteDoctorController,
-                          onPressed: (value) {
-                            BlocProvider.of<ReportVisitDoctorBloc>(context)
-                                .add(SenSearchNoteVisitDoctorEvent(value));
-                          },
-                        ),
-                        SizedBox(height: 20.h),
-                        buildTotalReportsCard(doctorNoteModel.length),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 10.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .start, // محاذاة لليسار في الواجهة العربية
-                            children: [
-                              if (iscanedite) ...[
-                                // زر قراءة الكل
-                                buildActionBtn(
-                                  context: context,
-                                  label: 'قراءة الكل',
-                                  icon: Icons.bookmarks_rounded,
-                                  color: const Color(
-                                      0xFF1E3A8A), // اللون الأزرق الأساسي
-                                  onTap: () {
-                                    BlocProvider.of<ReportVisitDoctorBloc>(
-                                            context)
-                                        .add(AllReadDocNoteEvent(
-                                            readAll: ReadAll(repPlan,
-                                                UserInfo.repId, 1, 1)));
-                                  },
-                                ),
-                                SizedBox(width: 12.w),
-                                // زر إلغاء قراءة الكل
-                                buildActionBtn(
-                                  context: context,
-                                  label: 'إلغاء قراءة الكل',
-                                  icon: Icons.bookmark_remove_outlined,
-                                  color: const Color(
-                                      0xFFEF4444), // لون أحمر هادئ للإلغاء
-                                  onTap: () {
-                                    BlocProvider.of<ReportVisitDoctorBloc>(
-                                            context)
-                                        .add(AllReadDocNoteEvent(
-                                            readAll: ReadAll(repPlan,
-                                                UserInfo.repId, 1, 0)));
-                                  },
-                                ),
-                              ]
-                            ],
-                          ),
-                        ),
-                        ...doctorNoteModel.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final doctorNoteModel = entry.value;
-                          return _buildDoctorVisitCard(
-                              doctorNoteModel: doctorNoteModel,
-                              index: index,
-                              indexRep: indexRep,
-                              iscanedite: iscanedite,
-                              context: context);
-                        }),
-                      ]),
-                    );
-                  },
+                            SearchField(
+                              searchController: searchNoteDoctorController,
+                              onPressed: (value) {
+                                BlocProvider.of<ReportVisitDoctorBloc>(context)
+                                    .add(SenSearchNoteVisitDoctorEvent(value));
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            buildTotalReportsCard(doctorNoteModel.length, 'إجمالي التقارير','لهذا الشهر'),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.w, vertical: 10.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .start, // محاذاة لليسار في الواجهة العربية
+                                children: [
+                                  if (iscanedite) ...[
+                                    // زر قراءة الكل
+                                    buildActionBtn(
+                                      context: context,
+                                      label: 'قراءة الكل',
+                                      icon: Icons.bookmarks_rounded,
+                                      color: const Color(
+                                          0xFF1E3A8A), // اللون الأزرق الأساسي
+                                      onTap: () {
+                                        BlocProvider.of<ReportVisitDoctorBloc>(
+                                                context)
+                                            .add(AllReadDocNoteEvent(
+                                                readAll: ReadAll(repPlan,
+                                                    UserInfo.repId, 1, 1)));
+                                      },
+                                    ),
+                                    SizedBox(width: 12.w),
+                                    // زر إلغاء قراءة الكل
+                                    buildActionBtn(
+                                      context: context,
+                                      label: 'إلغاء قراءة الكل',
+                                      icon: Icons.bookmark_remove_outlined,
+                                      color: const Color(
+                                          0xFFEF4444), // لون أحمر هادئ للإلغاء
+                                      onTap: () {
+                                        BlocProvider.of<ReportVisitDoctorBloc>(
+                                                context)
+                                            .add(AllReadDocNoteEvent(
+                                                readAll: ReadAll(repPlan,
+                                                    UserInfo.repId, 1, 0)));
+                                      },
+                                    ),
+                                  ]
+                                ],
+                              ),
+                            ),
+                            ...doctorNoteModel.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final doctorNoteModel = entry.value;
+                              return _buildDoctorVisitCard(
+                                  doctorNoteModel: doctorNoteModel,
+                                  index: index,
+                                  indexRep: indexRep,
+                                  iscanedite: iscanedite,
+                                  context: context);
+                            }),
+                          ]),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          stackInputDoctor(indexRep: indexRep, iscanedite: iscanedite)
-        ],
+              ),
+              stackInputDoctor(indexRep: indexRep, iscanedite: iscanedite)
+            ],
+          );
+        }
       ),
     );
   }
@@ -243,12 +249,11 @@ class ReportVisitDoctorPage extends StatelessWidget {
             .add(DocIsExpandedNoteEvent(doctorNoteModel, index));
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(35.r),
           border: Border(
-            // الخط الجانبي يتغير لونه بناءً على الـ flag (مقروء أو غير مقروء)
             right: BorderSide(
               color: doctorNoteModel.flag
                   ? ColorManager.secondaryColor2
@@ -275,7 +280,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   child: Text(
                     doctorNoteModel.docTitle,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF1E3A8A),
                     ),
@@ -283,11 +288,13 @@ class ReportVisitDoctorPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(doctorNoteModel.visitDate,
-                        style: const TextStyle(color: Colors.grey)),
+                    Text(
+                      doctorNoteModel.visitDate,
+                      style: TextStyle(color: Colors.grey, fontSize: 11.sp),
+                    ),
                     SizedBox(width: 5.w),
-                    const Icon(Icons.calendar_month_outlined,
-                        size: 16, color: Colors.grey),
+                    Icon(Icons.calendar_month_outlined,
+                        size: 16.sp, color: Colors.grey),
                   ],
                 ),
               ],
@@ -301,16 +308,17 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   children: [
                     Text(
                       doctorNoteModel.spTitle,
-                      style: const TextStyle(
-                          color: Color(0xFF3B82F6),
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: const Color(0xFF3B82F6),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13.sp,
+                      ),
                     ),
                     SizedBox(width: 5.w),
-                    const Icon(Icons.local_offer_outlined,
-                        size: 16, color: Color(0xFF3B82F6)),
+                    Icon(Icons.local_offer_outlined,
+                        size: 16.sp, color: const Color(0xFF3B82F6)),
                   ],
                 ),
-                // قسم أزرار التحكم (العين والكتاب)
                 if (iscanedite)
                   BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
                     builder: (context, state) {
@@ -324,9 +332,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                 specialty: doctorNoteModel.spTitle,
                                 scientificOfficeNote: doctorNoteModel.note,
                                 visitDate: doctorNoteModel.visitDate,
-
-                                phoneNumber:
-                                    phone, // رقم الجوال من قاعدة البيانات
+                                phoneNumber: phone,
                                 repName: repName,
                               );
                             },
@@ -336,14 +342,13 @@ class ReportVisitDoctorPage extends StatelessWidget {
                             false,
                             icon: Icons.visibility,
                             onPressed: () {
-                              // دالة من يقرأ
                               whoReadDialog(
                                   context,
                                   BlocProvider.of<ReportVisitDoctorBloc>(
                                       context));
                               BlocProvider.of<ReportVisitDoctorBloc>(context)
                                   .add(WhoAllReadEvent(doctorNoteModel.visitId,
-                                      "2", UserInfo.repType.i));
+                                  "2", UserInfo.repType.i));
                             },
                           ),
                           SizedBox(width: 8.w),
@@ -367,11 +372,11 @@ class ReportVisitDoctorPage extends StatelessWidget {
                     },
                   )
                 else
-                  const SizedBox(), // فراغ إذا لم يكن مسموح التعديل
+                  const SizedBox(),
               ],
             ),
 
-            SizedBox(height: 15.h),
+            SizedBox(height: 12.h),
 
             // الموقع والتقييم
             Row(
@@ -379,25 +384,27 @@ class ReportVisitDoctorPage extends StatelessWidget {
                 buildSmallInfoBox('الموقع', doctorNoteModel.placeTitle,
                     Icons.location_on_outlined),
                 SizedBox(width: 10.w),
-                buildSmallInfoBox('التقييم', doctorNoteModel.rate, Icons.star,
+                buildSmallInfoBox('التقييم', doctorNoteModel.rate ?? "0.0", Icons.star,
                     isStar: true),
               ],
             ),
 
-            SizedBox(height: 15.h),
+            SizedBox(height: 14.h),
 
             // ملاحظة المكتب العلمي
             buildDetailBox(
               'ملاحظة المكتب العلمي',
               Text(
-                doctorNoteModel.note.isEmpty ? "لا توجد" : doctorNoteModel.note,
+                doctorNoteModel.note.isEmpty
+                    ? "لا توجد ملاحظات"
+                    : doctorNoteModel.note,
                 textAlign: TextAlign.right,
-                style: const TextStyle(color: Color(0xFF1E3A8A)),
+                style: TextStyle(color: const Color(0xFF1E3A8A), fontSize: 13.sp),
               ),
             ),
 
             if (doctorNoteModel.samples.isNotEmpty) ...[
-              SizedBox(height: 15.h),
+              SizedBox(height: 14.h),
               // الأصناف الموزعة (المستحضرات)
               buildDetailBox(
                 'المستحضرات الموزعة',
@@ -414,4 +421,6 @@ class ReportVisitDoctorPage extends StatelessWidget {
       ),
     );
   }
+
+
 }

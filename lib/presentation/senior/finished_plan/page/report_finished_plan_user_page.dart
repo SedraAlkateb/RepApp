@@ -50,11 +50,7 @@ class _ReportFinishedPlanUserPageState
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text("ملف المندوب ${widget.name}",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                    color: const Color(0xFF1F4E79))),
+            title: Text("ملف المندوب ${widget.name}",),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new_rounded,
                   color: Color(0xFF1F4E79)),

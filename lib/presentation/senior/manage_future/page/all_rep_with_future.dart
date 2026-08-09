@@ -28,6 +28,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
     with TickerProviderStateMixin {
   final TextEditingController searchController = TextEditingController();
   int selectedIndex = -1;
+  int placeId=-1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   @override
@@ -50,7 +51,9 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
               builder: (context, state) {
                 List<AllRepresentativeFuture> allRepresentative =
                     context.watch<ManageFutureBloc>().allRepresentative;
-
+                if (state is ChangPlanStatusState) {
+                  allRepresentative = state.representatives;
+                }
                 if (state is AllSeniorRepLoadingState)
                   return _buildLoadingShimmer();
                 if (state is AllSeniorRepErrorState) {
@@ -59,28 +62,28 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                           .add(AllSeniorRepFutureEvent(state.placeId)));
                 }
                 if (state is AllSeniorRepState) {
-                  return SmartRefresher(
-                    controller: _refreshController,
-                    onRefresh: () {
-                      BlocProvider.of<ManageFutureBloc>(context)
-                          .add(AllSeniorRepFutureEvent(state.placeId));
-                      _refreshController.refreshCompleted();
-                    },
-                    child: allRepresentative.isEmpty
-                        ? emptyFullScreen(context)
-                        : ListView.builder(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.w, vertical: 10.h),
-                            itemCount: allRepresentative.length,
-                            itemBuilder: (context, index) {
-                              // 1. Staggered Entrance Animation
-                              return _buildRepItem(allRepresentative[index],
-                                  index, state.placeId);
-                            },
-                          ),
-                  );
+                  placeId=state.placeId;
                 }
-
+                return SmartRefresher(
+                  controller: _refreshController,
+                  onRefresh: () {
+                    BlocProvider.of<ManageFutureBloc>(context)
+                        .add(AllSeniorRepFutureEvent(placeId));
+                    _refreshController.refreshCompleted();
+                  },
+                  child: allRepresentative.isEmpty
+                      ? emptyFullScreen(context)
+                      : ListView.builder(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 16.w, vertical: 10.h),
+                    itemCount: allRepresentative.length,
+                    itemBuilder: (context, index) {
+                      // 1. Staggered Entrance Animation
+                      return _buildRepItem(allRepresentative[index],
+                          index,placeId);
+                    },
+                  ),
+                );
                 return SizedBox();
               },
             ),
