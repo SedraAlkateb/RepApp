@@ -72,6 +72,8 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
               // الـ TabBar العائم بكامل العرض
               SliverToBoxAdapter(
                 child: Container(
+
+                 height: 80,
                   width: double.infinity,
                   margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   padding: EdgeInsets.all(4.w),
@@ -88,13 +90,16 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
                     ],
                   ),
                   child: TabBar(
+                    
                     labelPadding: EdgeInsets.zero,
                     dividerColor: Colors.transparent,
                     labelColor: Colors.white,
+
                     unselectedLabelColor: Colors.grey.shade500,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.sp,
+
                       fontFamily: 'Cairo', // أو الخط المعتمد لديك
                     ),
                     unselectedLabelStyle: TextStyle(
@@ -103,10 +108,13 @@ class _DoctorsHospitalsReportsState extends State<DoctorsHospitalsReports> {
                       fontFamily: 'Cairo',
                     ),
                     indicatorSize: TabBarIndicatorSize.tab,
+                    
                     indicator: BoxDecoration(
+                      
                       color: ColorManager.medicalPrimary,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
+
                     onTap: (value) {
                       if (value == 0) {
                         context.read<ReportVisitDoctorBloc>().add(
