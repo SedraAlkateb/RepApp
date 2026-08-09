@@ -254,7 +254,6 @@ class ReportVisitDoctorPage extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(35.r),
           border: Border(
-            // الخط الجانبي يتغير لونه بناءً على الـ flag (مقروء أو غير مقروء)
             right: BorderSide(
               color: doctorNoteModel.flag
                   ? ColorManager.secondaryColor2
@@ -281,7 +280,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   child: Text(
                     doctorNoteModel.docTitle,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF1E3A8A),
                     ),
@@ -289,11 +288,13 @@ class ReportVisitDoctorPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(doctorNoteModel.visitDate,
-                        style: const TextStyle(color: Colors.grey)),
+                    Text(
+                      doctorNoteModel.visitDate,
+                      style: TextStyle(color: Colors.grey, fontSize: 11.sp),
+                    ),
                     SizedBox(width: 5.w),
-                    const Icon(Icons.calendar_month_outlined,
-                        size: 16, color: Colors.grey),
+                    Icon(Icons.calendar_month_outlined,
+                        size: 16.sp, color: Colors.grey),
                   ],
                 ),
               ],
@@ -307,16 +308,17 @@ class ReportVisitDoctorPage extends StatelessWidget {
                   children: [
                     Text(
                       doctorNoteModel.spTitle,
-                      style: const TextStyle(
-                          color: Color(0xFF3B82F6),
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: const Color(0xFF3B82F6),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13.sp,
+                      ),
                     ),
                     SizedBox(width: 5.w),
-                    const Icon(Icons.local_offer_outlined,
-                        size: 16, color: Color(0xFF3B82F6)),
+                    Icon(Icons.local_offer_outlined,
+                        size: 16.sp, color: const Color(0xFF3B82F6)),
                   ],
                 ),
-                // قسم أزرار التحكم (العين والكتاب)
                 if (iscanedite)
                   BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
                     builder: (context, state) {
@@ -330,9 +332,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                                 specialty: doctorNoteModel.spTitle,
                                 scientificOfficeNote: doctorNoteModel.note,
                                 visitDate: doctorNoteModel.visitDate,
-
-                                phoneNumber:
-                                    phone, // رقم الجوال من قاعدة البيانات
+                                phoneNumber: phone,
                                 repName: repName,
                               );
                             },
@@ -342,14 +342,13 @@ class ReportVisitDoctorPage extends StatelessWidget {
                             false,
                             icon: Icons.visibility,
                             onPressed: () {
-                              // دالة من يقرأ
                               whoReadDialog(
                                   context,
                                   BlocProvider.of<ReportVisitDoctorBloc>(
                                       context));
                               BlocProvider.of<ReportVisitDoctorBloc>(context)
                                   .add(WhoAllReadEvent(doctorNoteModel.visitId,
-                                      "2", UserInfo.repType.i));
+                                  "2", UserInfo.repType.i));
                             },
                           ),
                           SizedBox(width: 8.w),
@@ -373,11 +372,11 @@ class ReportVisitDoctorPage extends StatelessWidget {
                     },
                   )
                 else
-                  const SizedBox(), // فراغ إذا لم يكن مسموح التعديل
+                  const SizedBox(),
               ],
             ),
 
-            SizedBox(height: 15.h),
+            SizedBox(height: 12.h),
 
             // الموقع والتقييم
             Row(
@@ -385,25 +384,27 @@ class ReportVisitDoctorPage extends StatelessWidget {
                 buildSmallInfoBox('الموقع', doctorNoteModel.placeTitle,
                     Icons.location_on_outlined),
                 SizedBox(width: 10.w),
-                buildSmallInfoBox('التقييم', doctorNoteModel.rate, Icons.star,
+                buildSmallInfoBox('التقييم', doctorNoteModel.rate ?? "0.0", Icons.star,
                     isStar: true),
               ],
             ),
 
-            SizedBox(height: 15.h),
+            SizedBox(height: 14.h),
 
             // ملاحظة المكتب العلمي
             buildDetailBox(
               'ملاحظة المكتب العلمي',
               Text(
-                doctorNoteModel.note.isEmpty ? "لا توجد" : doctorNoteModel.note,
+                doctorNoteModel.note.isEmpty
+                    ? "لا توجد ملاحظات"
+                    : doctorNoteModel.note,
                 textAlign: TextAlign.right,
-                style: const TextStyle(color: Color(0xFF1E3A8A)),
+                style: TextStyle(color: const Color(0xFF1E3A8A), fontSize: 13.sp),
               ),
             ),
 
             if (doctorNoteModel.samples.isNotEmpty) ...[
-              SizedBox(height: 15.h),
+              SizedBox(height: 14.h),
               // الأصناف الموزعة (المستحضرات)
               buildDetailBox(
                 'المستحضرات الموزعة',
@@ -420,4 +421,6 @@ class ReportVisitDoctorPage extends StatelessWidget {
       ),
     );
   }
+
+
 }

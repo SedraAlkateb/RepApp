@@ -66,7 +66,7 @@ class ReportVisitHospital extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
@@ -79,10 +79,10 @@ class ReportVisitHospital extends StatelessWidget {
                         // أنيميشن للهيدر
                         animatedEntry(
                           delay: 0,
-                          child: const Text(
+                          child: Text(
                             'تقارير الزيارات للمشافي',
                             style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0F172A)),
                           ),
@@ -160,8 +160,8 @@ class ReportVisitHospital extends StatelessWidget {
                         ),
                         animatedEntry(
                             delay: 300,
-                            child:
-                            buildTotalReportsCard(doctorNoteModel.length, 'إجمالي التقارير','لهذا الشهر')),
+                            child: buildTotalReportsCard(doctorNoteModel.length,
+                                'إجمالي التقارير', 'لهذا الشهر')),
 
                         animatedEntry(
                           delay: 400,
@@ -250,7 +250,7 @@ class ReportVisitHospital extends StatelessWidget {
             .add(DocIsExpandedNoteEvent(doctorNoteModel, index));
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(35.r),
@@ -280,7 +280,7 @@ class ReportVisitHospital extends StatelessWidget {
                   child: Text(
                     doctorNoteModel.docTitle,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF1E3A8A),
                     ),
@@ -290,7 +290,7 @@ class ReportVisitHospital extends StatelessWidget {
                   children: [
                     Text(doctorNoteModel.visitDate,
                         style:
-                            const TextStyle(color: Colors.grey, fontSize: 12)),
+                            const TextStyle(color: Colors.grey, fontSize: 10)),
                     SizedBox(width: 5.w),
                     const Icon(Icons.calendar_month_outlined,
                         size: 16, color: Colors.grey),
@@ -363,8 +363,9 @@ class ReportVisitHospital extends StatelessWidget {
                   )
               ],
             ),
-            SizedBox(height: 15.h),
+            SizedBox(height: 10.h),
             Row(
+              ////////
               children: [
                 buildSmallInfoBox('الموقع', doctorNoteModel.placeTitle,
                     Icons.location_on_outlined),
@@ -374,7 +375,7 @@ class ReportVisitHospital extends StatelessWidget {
                     isStar: true),
               ],
             ),
-            SizedBox(height: 15.h),
+            SizedBox(height: 14.h),
             buildDetailBox(
               'ملاحظة المكتب العلمي',
               Text(
@@ -386,7 +387,7 @@ class ReportVisitHospital extends StatelessWidget {
               ),
             ),
             if (doctorNoteModel.samples.isNotEmpty) ...[
-              SizedBox(height: 15.h),
+              SizedBox(height: 14.h),
               buildDetailBox(
                 'المستحضرات الموزعة',
                 Column(
