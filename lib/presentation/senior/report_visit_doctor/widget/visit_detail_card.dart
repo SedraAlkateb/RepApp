@@ -634,69 +634,6 @@ Widget buildBulletItem(String text) {
   );
 }
 
-Widget buildTotalReportsCard(int length) {
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.w),
-    child: Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(15.r),
-                ),
-                child: const Icon(Icons.description_outlined,
-                    color: Color(0xFF1E3A8A)),
-              ),
-              SizedBox(
-                width: 12.w,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'إجمالي التقارير',
-                    style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E3A8A)),
-                  ),
-                  const Text('لهذا الشهر',
-                      style: TextStyle(color: Colors.grey)),
-                ],
-              ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFFDBEAFE),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Text(
-              "${length}",
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2563EB)),
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-}
 
 Widget buildActionBtn({
   required BuildContext context,

@@ -22,6 +22,7 @@ class VisitsTypePage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+
         body: NestedScrollView(
           // هذا الجزء يسمح للـ Header (الـ AppBar والـ TabBar) بالتحرك مع السكرول
           headerSliverBuilder: (context, innerBoxIsScrolled) {

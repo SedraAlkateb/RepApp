@@ -5,6 +5,7 @@ import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/visit_detail_card.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/who_read_dialog.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/share_watsapp.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -160,7 +161,7 @@ class ReportVisitHospital extends StatelessWidget {
                         animatedEntry(
                             delay: 300,
                             child:
-                                buildTotalReportsCard(doctorNoteModel.length)),
+                            buildTotalReportsCard(doctorNoteModel.length, 'إجمالي التقارير','لهذا الشهر')),
 
                         animatedEntry(
                           delay: 400,

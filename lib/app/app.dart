@@ -28,13 +28,12 @@ import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     return MultiBlocProvider(
       providers: [
@@ -88,7 +87,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<FutureRepBloc>(create: (_) => instance<FutureRepBloc>()),
       ],
       child: MaterialApp(
-        navigatorKey: navigatorKey, // تم الربط بمفتاح الملاحة الموحد
+        navigatorKey: appNavigatorKey, // تم الربط بمفتاح الملاحة الموحد
         locale: const Locale('ar'),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,

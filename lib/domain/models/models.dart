@@ -1859,7 +1859,11 @@ class AllRepresentative {
   int activePlan;
   String name;
   int number;
-  AllRepresentative(this.id, this.name, this.number, this.activePlan);
+  int? TotalReadVisit;
+  int? totalVisit;
+  AllRepresentative(this.id, this.name, this.number,
+   this.TotalReadVisit, this.totalVisit
+     , this.activePlan);
 }
 
 class FlagModel {

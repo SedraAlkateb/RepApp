@@ -21,7 +21,8 @@ class AllRecip extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text("سجل الوصفات",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
+          )
+      ),
       body: bodyBuild(context),
     );
   }

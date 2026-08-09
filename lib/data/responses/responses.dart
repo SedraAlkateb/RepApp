@@ -1126,8 +1126,12 @@ class RepresentativeResponse {
   String? id;
   @JsonKey(name: "name")
   String? name;
-  @JsonKey(name: "unRead")
+  @JsonKey(name: "TotalUnReadVisit")
   int? unRead;
+  @JsonKey(name: "TotalReadVisit")
+  int? TotalReadVisit;
+  @JsonKey(name: "totalVisit")
+  int? totalVisit;
   @JsonKey(name: "activePlan")
   String? activePlan;
 
