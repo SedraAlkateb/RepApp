@@ -84,7 +84,6 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                     },
                   ),
                 );
-                return SizedBox();
               },
             ),
           ),
