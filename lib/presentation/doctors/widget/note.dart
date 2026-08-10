@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget buildNotesCard(String? note) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 16.w),
+
     padding: EdgeInsets.all(20.w),
     decoration: BoxDecoration(
         color: Colors.white, borderRadius: BorderRadius.circular(25.r)),
