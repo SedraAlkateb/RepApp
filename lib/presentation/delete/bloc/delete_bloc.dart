@@ -35,7 +35,14 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
           UserInfo.flag1 = 0;
           emit(DeleteAllState());
         });
-      } else if (event is Edit1EventIn) {
+      }
+
+
+
+
+
+
+      else if (event is Edit1EventIn) {
         (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
             (failure) {
           emit(Edit1StatusSErrorState(failure: failure));

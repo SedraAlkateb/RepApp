@@ -99,6 +99,7 @@ abstract class Repository {
   Future<Either<Failure, List<doctorsModel>>> docSearch(
     int cityId,
     String name,
+      int repDet
   );
   Future<Either<Failure, List<ReciModel>>> getAllRepReci(int repDet);
   Future<Either<Failure, Message1Response>> updateReci(
@@ -126,7 +127,7 @@ abstract class Repository {
   Future<Either<Failure, List<SeniorCityModel>>> getSeniorByCityid(int cityId);
   Future<Either<Failure, List<SeniorCityModel>>> getCityAndTeamleader();
   Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(
-      String name);
+      String name,int repDet);
   Future<Either<Failure, List<SearchHospitalNoteModel>>>
       getSearchHospitalsNotes(int hosId, int spId);
   Future<Either<Failure, List<FinishedPlanModel>>> getFinishedPlans(int cityId);
@@ -143,4 +144,9 @@ abstract class Repository {
   Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedHosVisits(
     int repPlanId,
   );
+  Future<Either<Failure, DocHosByPlaceAndSp>> getSpDocHos(int repDet,      {
+    int? spId,
+    int ?placeId,
+  });
+
 }

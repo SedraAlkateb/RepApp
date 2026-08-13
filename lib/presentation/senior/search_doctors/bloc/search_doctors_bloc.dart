@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_search_hos_note_usecase.dart';
@@ -36,7 +35,8 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
       if (event is FutureSearchDocEvent) {
         representative = [];
         emit(FutureSearchDoctorsLoadingState());
-        (await searchDoctorsUsecase.execute(UserInfo.cityId, event.name)).fold(
+        (await searchDoctorsUsecase.execute(
+         event.cityId , event.name,event.id)).fold(
             (failure) {
           emit(FutureSearchDoctorsErrorState(failure: failure));
         }, (data) async {
@@ -65,7 +65,9 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
       } else if (event is FutureSearchHosEvent) {
         allSearchHospital = [];
         emit(FutureSearchHospitalsLoadingState());
-        (await allSearchHosUsecase.execute(event.name)).fold((failure) {
+        (await allSearchHosUsecase.execute(
+            //event.cityId,
+            event.name,event.id)).fold((failure) {
           emit(FutureSearchHospitalsErrorState(failure: failure));
         }, (data) async {
           allSearchHospital = data;

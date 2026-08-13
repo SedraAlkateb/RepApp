@@ -1,5 +1,4 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/doctors/widget/card.dart';
 import 'package:domina_app/presentation/doctors/widget/doctor/doctor_details_card.dart';
 import 'package:domina_app/presentation/doctors/widget/doctor/doctor_stats.dart';
 import 'package:domina_app/presentation/doctors/widget/header.dart';

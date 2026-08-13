@@ -1,70 +1,143 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget buildHeaderSection(
-    TextEditingController searchController, BuildContext context) {
+    TextEditingController searchController,
+    BuildContext context,
+    ) {
+  final ui = AppUi.of(context);
+
+  // =====================================================
+  // Search Button Size
+  //
+  // قيمة خاصة بهذا العنصر فقط.
+  // باقي المقاسات من AppUi.
+  // =====================================================
+
+  final double buttonSize = ui.isMobile
+      ? 48
+      : ui.isTabletPortrait
+      ? 54
+      : 50;
+
   return Container(
-    padding: EdgeInsets.all(16.w),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(25.r),
-        bottomRight: Radius.circular(25.r),
-      ),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.03),
-          blurRadius: 10,
-          offset: const Offset(0, 5),
-        )
-      ],
+    width: double.infinity,
+
+    padding: EdgeInsets.fromLTRB(
+      ui.pagePadding,
+      ui.searchTopPadding,
+      ui.pagePadding,
+      ui.searchBottomPadding,
     ),
+
+
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        // =================================================
+        // Search Field
+        // =================================================
         Expanded(
           child: SearchField(
             searchController: searchController,
+
+            // نفس السلوك الأصلي
             isIcon: false,
           ),
         ),
-        SizedBox(width: 10.w),
-        GestureDetector(
-          onTap: () {
-            if (searchController.text.isNotEmpty) {
-              BlocProvider.of<SearchDoctorsBloc>(context).value == 0
-                  ? BlocProvider.of<SearchDoctorsBloc>(context)
-                      .add(FutureSearchDocEvent(searchController.text))
-                  : BlocProvider.of<SearchDoctorsBloc>(context)
-                      .add(FutureSearchHosEvent(searchController.text));
-            }
-          },
-          child: Container(
-            height: 50.h,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  ColorManager.secondaryColor1,
-                  ColorManager.secondaryColor1.withOpacity(0.8),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(15.r),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.secondaryColor1.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                )
-              ],
+
+        SizedBox(
+          width: ui.mediumSpacing,
+        ),
+
+        // =================================================
+        // Search Button
+        // =================================================
+        Material(
+          color: Colors.transparent,
+
+          child: InkWell(
+            borderRadius: BorderRadius.circular(
+              ui.smallRadius + 3,
             ),
-            child: const Center(
-              child: Icon(Icons.search, color: Colors.white, size: 24),
+
+            onTap: () {
+              // =============================================
+              // نفس الشرط الأصلي تماماً
+              // =============================================
+              if (searchController.text.isNotEmpty) {
+                if (BlocProvider.of<SearchDoctorsBloc>(
+                  context,
+                ).value ==
+                    0) {
+                  // =========================================
+                  // Doctors Search
+                  // =========================================
+                  BlocProvider.of<SearchDoctorsBloc>(
+                    context,
+                  ).add(
+                    FutureSearchDocEvent(
+                      UserInfo.cityId  ,
+                      searchController
+                          .text,
+                      UserInfo.repId
+                    ),
+                  );
+                } else {
+                  // =========================================
+                  // Hospitals Search
+                  // =========================================
+                  BlocProvider.of<SearchDoctorsBloc>(
+                    context,
+                  ).add(
+                    FutureSearchHosEvent(
+                        UserInfo.cityId  ,
+                        searchController
+                            .text,
+                        UserInfo.repId
+                    ),
+                  );
+                }
+              }
+            },
+
+            child: Container(
+              width: buttonSize,
+              height: buttonSize,
+
+              alignment: Alignment.center,
+
+              decoration: BoxDecoration(
+                color: ColorManager.medicalPrimary,
+
+                borderRadius: BorderRadius.circular(
+                  ui.smallRadius + 3,
+                ),
+
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorManager.medicalPrimary.withOpacity(
+                      0.16,
+                    ),
+                    blurRadius: 8,
+                    offset: const Offset(
+                      0,
+                      3,
+                    ),
+                  ),
+                ],
+              ),
+
+              child: Icon(
+                Icons.search_rounded,
+                color: Colors.white,
+                size: ui.iconSize,
+              ),
             ),
           ),
         ),

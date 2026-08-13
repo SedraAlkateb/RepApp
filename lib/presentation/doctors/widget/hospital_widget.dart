@@ -172,7 +172,7 @@ Widget hospitalWidget({
             const Spacer(),
             InkWell(
               onTap: function,
-              child: buildCardButton(
+              child: buildCardButton(context,
                 text,
                 ColorManager.medicalPrimary,
                 Colors.white,

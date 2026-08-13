@@ -10,8 +10,9 @@ class SearchDoctorsUsecase extends Equatable {
   Future<Either<Failure, List<doctorsModel>>> execute(
     int cityId,
     String name,
+      int repDet
   ) async {
-    return await _repository.docSearch(cityId, name);
+    return await _repository.docSearch(cityId, name,repDet);
   }
 
   @override

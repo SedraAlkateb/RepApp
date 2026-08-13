@@ -1,4 +1,3 @@
-import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/places/widget/place/places_first_entry_dialog.dart';

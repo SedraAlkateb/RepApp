@@ -8,8 +8,8 @@ class AllSearchHosUsecase extends Equatable {
   final Repository _repository;
   const AllSearchHosUsecase(this._repository);
   Future<Either<Failure, List<SearchHospitalModel>>> execute(
-      String name) async {
-    return await _repository.getSearchHospitals(name);
+      String name,int repDet) async {
+    return await _repository.getSearchHospitals(name,repDet);
   }
 
   @override

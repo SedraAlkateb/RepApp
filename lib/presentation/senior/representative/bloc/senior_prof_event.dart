@@ -46,6 +46,11 @@ class SenAllSpecEvent extends SeniorProfEvent {
   List<Object?> get props => [id];
 }
 
+class LogoutDeleteAllEvent extends SeniorProfEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class SenSearchSpecEvent extends SeniorProfEvent {
   final String contant;
   SenSearchSpecEvent(this.contant);
@@ -70,6 +75,13 @@ class SenSearchDoctorEvent extends SeniorProfEvent {
 class SenSearchNoVisitDoctorEvent extends SeniorProfEvent {
   final String contant;
   SenSearchNoVisitDoctorEvent(this.contant);
+  @override
+  List<Object?> get props => [contant];
+}
+
+class SenSearchRemainingVisitsDoctorEvent extends SeniorProfEvent {
+  final String contant;
+  SenSearchRemainingVisitsDoctorEvent(this.contant);
   @override
   List<Object?> get props => [contant];
 }
@@ -153,4 +165,14 @@ class GetRepReciEvent extends SeniorProfEvent {
   GetRepReciEvent(this.reciId, this.isDoctor, this.name);
   @override
   List<Object?> get props => [reciId, isDoctor, name];
+}
+
+class DocHosEvent extends SeniorProfEvent {
+  final int repDet;
+  final int? spId;
+  final int? placeId;
+
+  DocHosEvent(this.repDet, {this.spId, this.placeId});
+  @override
+  List<Object?> get props => [repDet, spId,placeId];
 }

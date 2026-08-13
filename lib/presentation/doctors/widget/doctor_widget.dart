@@ -1,130 +1,238 @@
 import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget doctorWidget(
-    {required String spTitle,
-    required String title,
-    required String placeTitle,
-    String? address,
-    String? rate,
-    required int id,
-    required BuildContext context,
-    required VoidCallback function,
-    required String text}) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 16.h, right: 8.w, left: 8.w),
-    padding: EdgeInsets.all(16.w),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(15.r),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.08), // درجة غمق الظل
-          blurRadius: 15, // مدى نعومة الظل
-          spreadRadius: 0, // مدى انتشار الظل
-          offset: const Offset(
-              0, 6), // إزاحة الظل للأسفل ليعطي عمقاً (Shadow Offset)
-        ),
-      ],
+Widget doctorWidget({
+  required String spTitle,
+  required String title,
+  required String placeTitle,
+  String? address,
+  String? rate,
+  required int id,
+  required BuildContext context,
+  required VoidCallback function,
+  required String text,
+}) {
+  final ui = AppUi.of(context);
+
+  return Padding(
+    padding: EdgeInsets.only(
+      bottom: ui.cardSpacing,
     ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Text(spTitle,
-                  style: TextStyle(color: Colors.blue, fontSize: 12.sp)),
-            ),
-            Expanded(
-              child: Text(
-                  textAlign: TextAlign.end,
-                  title,
-                  style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorManager.medicalPrimary)),
-            ),
-          ],
+    child: Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(
+          ui.cardRadius,
         ),
-        SizedBox(height: 10.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.location_on_outlined, size: 22.sp, color: Colors.grey),
-            SizedBox(
-              width: 8.w,
-            ),
-            Expanded(
-              child: Text(placeTitle,
-                  style: TextStyle(color: Colors.grey, fontSize: 15.sp)),
-            ),
-          ],
+        border: Border.all(
+          color: const Color(0xFFE2E8F0),
         ),
-        address != null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.location_on_outlined,
-                      size: 22.sp, color: Colors.grey),
-                  SizedBox(
-                    width: 8.w,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.025),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(
+          ui.cardPadding,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // =================================================
+            // Header
+            // =================================================
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Doctor Icon
+                Container(
+                  width: ui.iconBoxSize,
+                  height: ui.iconBoxSize,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: ColorManager.medicalPrimary.withOpacity(0.07),
+                    borderRadius: BorderRadius.circular(
+                      ui.smallRadius + 2,
+                    ),
                   ),
-                  Expanded(
-                    child: Text(address,
-                        style: TextStyle(color: Colors.grey, fontSize: 15.sp)),
+                  child: Icon(
+                    Icons.person_outline_rounded,
+                    color: ColorManager.medicalPrimary,
+                    size: ui.iconSize,
                   ),
-                ],
-              )
-            : SizedBox(),
-        rate != null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.star_rate_outlined,
-                      size: 22.sp, color: ColorManager.medicalSecondary),
-                  SizedBox(
-                    width: 8.w,
-                  ),
-                  Expanded(
-                    child: Text(rate,
+                ),
+
+                SizedBox(
+                  width: ui.sectionSpacing,
+                ),
+
+                // Name + specialization
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: ColorManager.medicalSecondary,
-                            fontSize: 15.sp)),
+                          fontSize: ui.cardTitleSize,
+                          fontWeight: FontWeight.w700,
+                          color: ColorManager.medicalPrimary,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: ui.smallSpacing / 2,
+                      ),
+
+                      Text(
+                        spTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: const Color(0xFF64748B),
+                          fontSize: ui.smallTextSize,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              )
-            : SizedBox(),
-        SizedBox(height: 16.h),
-        Divider(
-          color: Colors.grey,
-          thickness: 0.1,
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            // PrescriptionMenuWidget(doctorId:  id),
-            const Spacer(),
-            InkWell(
-              onTap: function,
-              child: buildCardButton(text, ColorManager.medicalPrimary,
-                  Colors.white, Icons.directions_run),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: ui.mediumSpacing,
+            ),
+
+            // =================================================
+            // Place
+            // =================================================
+            _buildDoctorInfoRow(
+              context: context,
+              icon: Icons.location_on_outlined,
+              value: placeTitle,
+              color: const Color(0xFF64748B),
+            ),
+
+            // =================================================
+            // Address
+            // =================================================
+            if (address != null) ...[
+              SizedBox(
+                height: ui.smallSpacing,
+              ),
+              _buildDoctorInfoRow(
+                context: context,
+                icon: Icons.map_outlined,
+                value: address,
+                color: const Color(0xFF64748B),
+              ),
+            ],
+
+            // =================================================
+            // Rate
+            // =================================================
+            if (rate != null) ...[
+              SizedBox(
+                height: ui.smallSpacing,
+              ),
+              _buildDoctorInfoRow(
+                context: context,
+                icon: Icons.star_rate_rounded,
+                value: rate,
+                color: ColorManager.medicalSecondary,
+              ),
+            ],
+
+            SizedBox(
+              height: ui.mediumSpacing,
+            ),
+
+            const Divider(
+              height: 1,
+              thickness: 1,
+              color: Color(0xFFF1F5F9),
+            ),
+
+            SizedBox(
+              height: ui.mediumSpacing,
+            ),
+
+            // =================================================
+            // Action
+            // =================================================
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: function,
+                  borderRadius: BorderRadius.circular(
+                    ui.smallRadius + 2,
+                  ),
+                  child: buildCardButton(
+                    context,
+                    text,
+                    ColorManager.medicalPrimary,
+                    Colors.white,
+                    Icons.directions_run,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ],
+      ),
     ),
+  );
+}
+
+// =======================================================
+// Doctor Info Row
+// =======================================================
+
+Widget _buildDoctorInfoRow({
+  required BuildContext context,
+  required IconData icon,
+  required String value,
+  required Color color,
+}) {
+  final ui = AppUi.of(context);
+
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Icon(
+        icon,
+        size: ui.smallIconSize + 1,
+        color: color,
+      ),
+
+      SizedBox(
+        width: ui.smallSpacing,
+      ),
+
+      Expanded(
+        child: Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: color,
+            fontSize: ui.bodyTextSize,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    ],
   );
 }

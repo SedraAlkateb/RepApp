@@ -1113,12 +1113,11 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<doctorsModel>>> docSearch(
-    int cityId,
-    String name,
-  ) async {
+      int cityId, String name, int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.docSearch(cityId, name);
+        final response =
+            await _remoteDataSource.docSearch(cityId, name, repDet);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1450,10 +1449,11 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(
-      String name) async {
+      String name, int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getSearchHospitals(name);
+        final response =
+            await _remoteDataSource.getSearchHospitals(name, repDet);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1713,6 +1713,34 @@ class RepositoryImp implements Repository {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.visitHos(repPlanId);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "noVisitDoc")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "noVisitDoc")]));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, DocHosByPlaceAndSp>> getSpDocHos(int repDet,
+      {int? spId, int? placeId}) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.getSpDocHos(repDet, spId: spId,placeId: placeId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

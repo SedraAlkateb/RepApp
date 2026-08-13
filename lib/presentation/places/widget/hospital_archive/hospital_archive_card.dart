@@ -121,7 +121,7 @@ class HospitalArchiveCard extends StatelessWidget {
                   arguments: hospital,
                 );
               },
-              child: buildCardButton(
+              child: buildCardButton(context,
                 'عرض التفاصيل',
                 ColorManager.medicalPrimary,
                 Colors.white,

@@ -1,6 +1,7 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
@@ -18,177 +19,1506 @@ import 'package:domina_app/presentation/senior/representative/widget/rep_profile
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RepProfile extends StatelessWidget {
-  final int id;
-  final int repPlanId;
-  final int index;
-
+class RepProfile extends StatefulWidget {
   const RepProfile({
     super.key,
     required this.id,
     required this.repPlanId,
-    required this.index,
+    this.index = 0,
+    this.isFinal = false,
   });
+
+  final int id;
+  final int repPlanId;
+
+  /// يستخدم بالتقارير التفصيلية في الملف الكامل.
+  /// بالخطة المنتهية لا نحتاجه.
+  final int index;
+
+  /// false => ملف المندوب الكامل
+  ///
+  /// true => ملف الخطة المنتهية:
+  /// Hero + Statistics + Finished Coverage
+  final bool isFinal;
+
+  @override
+  State<RepProfile> createState() =>
+      _RepProfileState();
+}
+
+class _RepProfileState
+    extends State<RepProfile> {
+  // =====================================================
+  // Shortcut Getters
+  // =====================================================
+
+  int get id =>
+      widget.id;
+
+  int get repPlanId =>
+      widget.repPlanId;
+
+  int get index =>
+      widget.index;
+
+  bool get isFinal =>
+      widget.isFinal;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // =====================================================
+    // RepProfile صار مسؤول عن تحميل بياناته بنفسه.
+    //
+    // ما عاد لازم الصفحة السابقة ترسل getInfoRepEvent.
+    // =====================================================
+    context
+        .read<SeniorProfBloc>()
+        .add(
+      getInfoRepEvent(
+        id,
+        repPlanId,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    String currentRepName = "";
-    int currentRepPlan = 0;
+    final keyboardInset =
+        MediaQuery.viewInsetsOf(
+          context,
+        ).bottom;
+
+    final ui =
+    AppUi.of(context);
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) {},
+      onPopInvoked: (_) {},
+
       child: Scaffold(
+        backgroundColor:
+        const Color(
+          0xFFF8FAFC,
+        ),
+
+        // =================================================
+        // نحافظ على Hero من الانضغاط عند ظهور Keyboard
+        // =================================================
+        resizeToAvoidBottomInset:
+        false,
+
         appBar: AppBar(
-          title: Text("ملف المندوب",),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor:
+          Colors.transparent,
+
+          title: Text(
+            isFinal
+                ? "ملف المندوب - الخطة المنتهية"
+                : "ملف المندوب",
+
+            maxLines: 1,
+
+            overflow:
+            TextOverflow.ellipsis,
+          ),
+
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: Color(0xFF1F4E79)),
-            onPressed: () => Navigator.pop(context),
+            icon:
+            const Icon(
+              Icons
+                  .arrow_back_ios_new_rounded,
+
+              color:
+              Color(
+                0xFF1F4E79,
+              ),
+            ),
+
+            onPressed: () {
+              Navigator.pop(
+                context,
+              );
+            },
           ),
         ),
-        body: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-          buildWhen: (previous, current) =>
-              current is RepInfoState || current is RepInfoLoadingState,
-          builder: (context, state) {
-            if (state is RepInfoLoadingState) return loadingFullScreen(context);
-            if (state is RepInfoErrorState) return errorFullScreen(context);
 
-            if (state is RepInfoState) {
-              final rep = state.infoRep;
-              currentRepName = rep.name;
-              currentRepPlan = rep.repPlanId;
+        body: SafeArea(
+          top: false,
 
-              return OrientationBuilder(
-                builder: (context, orientation) {
-                  // إذا كان الاتجاه أفقياً (Landscape / Tablet Wide)
-                  if (orientation == Orientation.landscape) {
+          child: AnimatedPadding(
+            duration:
+            const Duration(
+              milliseconds: 220,
+            ),
+
+            curve:
+            Curves.easeOut,
+
+            padding:
+            EdgeInsets.only(
+              bottom:
+              keyboardInset,
+            ),
+
+            child: BlocBuilder<
+                SeniorProfBloc,
+                SeniorProfState>(
+              buildWhen:
+                  (
+                  previous,
+                  current,
+                  ) {
+                return current
+                is RepInfoState ||
+                    current
+                    is RepInfoLoadingState ||
+                    current
+                    is RepInfoErrorState;
+              },
+
+              builder:
+                  (context, state) {
+                // =============================================
+                // Loading
+                // =============================================
+                if (state
+                is RepInfoLoadingState) {
+                  return loadingFullScreen(
+                    context,
+                  );
+                }
+
+                // =============================================
+                // Error
+                // =============================================
+                if (state
+                is RepInfoErrorState) {
+                  return errorFullScreen(
+                    context,
+                  );
+                }
+
+                // =============================================
+                // Loaded
+                // =============================================
+                if (state
+                is RepInfoState) {
+                  final InfoRep rep =
+                      state.infoRep;
+
+                  final String currentRepName =
+                      rep.name;
+
+                  final int currentRepPlan =
+                      rep.repPlanId;
+
+                  // ===========================================
+                  // Tablet Landscape
+                  // ===========================================
+                  if (ui
+                      .isTabletLandscape) {
                     return _buildTabletLandscapeLayout(
-                        context, rep, currentRepName, currentRepPlan);
+                      context,
+                      rep,
+                      currentRepName,
+                      currentRepPlan,
+                    );
                   }
 
-                  // الوضع الرأسي الحالي (كما هو بدون تغيير)
+                  // ===========================================
+                  // Mobile + Tablet Portrait
+                  // ===========================================
                   return _buildPortraitLayout(
-                      context, rep, currentRepName, currentRepPlan);
-                },
-              );
-            }
-            return const SizedBox();
-          },
+                    context,
+                    rep,
+                    currentRepName,
+                    currentRepPlan,
+                  );
+                }
+
+                return const SizedBox
+                    .shrink();
+              },
+            ),
+          ),
         ),
       ),
     );
   }
 
-  // =========================================================
-  // 1. التصميم الخاص بالتابلت بالوضع الأفقي (Landscape Layout)
-  // =========================================================
-  Widget _buildTabletLandscapeLayout(BuildContext context, InfoRep rep,
-      String currentRepName, int currentRepPlan) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // القسم الأيسر: الهيدر والأزرار السريعة الثابتة
-          Expanded(
-            flex: 4,
-            child: _buildHeroHeaderTablet(rep, context),
+  // =====================================================
+  // Shared Profile Content
+  //
+  // هون جوهر الدمج كله.
+  // =====================================================
+
+  List<Widget> _buildProfileContent({
+    required BuildContext context,
+    required InfoRep rep,
+    required String currentRepName,
+    required int currentRepPlan,
+    required bool tabletLandscape,
+  }) {
+    final ui =
+    AppUi.of(context);
+
+    return [
+      // =================================================
+      // Statistics
+      //
+      // موجودة بالحالتين
+      // =================================================
+      if (tabletLandscape)
+        buildStatsGridTablet(
+          rep,
+        )
+      else
+        buildStatsGrid(
+          context,
+          rep,
+        ),
+
+      SizedBox(
+        height:
+        ui.sectionSpacing,
+      ),
+
+      // =================================================
+      // Personal / Quick Actions
+      //
+      // فقط بالملف الكامل
+      // =================================================
+      if (!isFinal) ...[
+        buildQuickActions(
+          context,
+        ),
+
+        SizedBox(
+          height:
+          ui.sectionSpacing,
+        ),
+      ],
+
+      // =================================================
+      // Coverage
+      //
+      // موجودة بالحالتين
+      // لكن المحتوى يتغير حسب isFinal
+      // =================================================
+      _buildCoverageSection(
+        context,
+      ),
+
+      // =================================================
+      // Detailed Reports
+      //
+      // فقط بالملف الكامل
+      // =================================================
+      if (!isFinal) ...[
+        SizedBox(
+          height:
+          ui.sectionSpacing,
+        ),
+
+        _buildDetailsList(
+          context,
+          rep,
+          currentRepName,
+          currentRepPlan,
+          rep.mobile,
+        ),
+      ],
+    ];
+  }
+
+  // =====================================================
+  // Tablet Landscape
+  // =====================================================
+
+  Widget _buildTabletLandscapeLayout(
+      BuildContext context,
+      InfoRep rep,
+      String currentRepName,
+      int currentRepPlan,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return SingleChildScrollView(
+      physics:
+      const BouncingScrollPhysics(),
+
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior
+          .onDrag,
+
+      padding:
+      EdgeInsets.fromLTRB(
+        ui.pagePadding,
+        ui.pageTopPadding,
+        ui.pagePadding,
+        ui.pageBottomPadding,
+      ),
+
+      child: Center(
+        child: ConstrainedBox(
+          constraints:
+          BoxConstraints(
+            maxWidth:
+            ui.widePageMaxWidth,
           ),
 
-          SizedBox(width: 15.w),
+          child: Row(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
 
-          // القسم الأيمن: الإحصائيات، التغطية والتقارير التفصيلية
-          Expanded(
-            flex: 6,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: AnimationLimiter(
-                child: Column(
-                  children: AnimationConfiguration.toStaggeredList(
-                    duration: const Duration(milliseconds: 500),
-                    childAnimationBuilder: (widget) => SlideAnimation(
-                      horizontalOffset: 50.0,
-                      child: FadeInAnimation(child: widget),
+            children: [
+              // =================================================
+              // Hero
+              // =================================================
+              SizedBox(
+                width: 300,
+
+                child:
+                _buildHeroHeaderTablet(
+                  context,
+                  rep,
+                ),
+              ),
+
+              SizedBox(
+                width:
+                ui.sectionSpacing +
+                    10,
+              ),
+
+              // =================================================
+              // Content
+              // =================================================
+              Expanded(
+                child:
+                AnimationLimiter(
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment
+                        .stretch,
+
+                    children:
+                    AnimationConfiguration
+                        .toStaggeredList(
+                      duration:
+                      const Duration(
+                        milliseconds:
+                        450,
+                      ),
+
+                      childAnimationBuilder:
+                          (child) =>
+                          SlideAnimation(
+                            horizontalOffset:
+                            35,
+
+                            child:
+                            FadeInAnimation(
+                              child:
+                              child,
+                            ),
+                          ),
+
+                      children:
+                      _buildProfileContent(
+                        context:
+                        context,
+
+                        rep:
+                        rep,
+
+                        currentRepName:
+                        currentRepName,
+
+                        currentRepPlan:
+                        currentRepPlan,
+
+                        tabletLandscape:
+                        true,
+                      ),
                     ),
-                    children: [
-                      buildStatsGridTablet(rep),
-                      SizedBox(height: 20.h),
-                      buildQuickActions(context),
-                      SizedBox(height: 20.h),
-                      _buildCoverageSection(context),
-                      SizedBox(height: 20.h),
-                      _buildDetailsList(context, rep, currentRepName,
-                          currentRepPlan, rep.mobile),
-                      SizedBox(height: 30.h),
-                    ],
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
+  // =====================================================
+  // Mobile + Tablet Portrait
+  // =====================================================
 
-  Widget buildQuickActions(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
-          child: Text(
-            "معلومات شخصية",
-            style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF2C3E50)),
+  Widget _buildPortraitLayout(
+      BuildContext context,
+      InfoRep rep,
+      String currentRepName,
+      int currentRepPlan,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return SingleChildScrollView(
+      physics:
+      const BouncingScrollPhysics(),
+
+      keyboardDismissBehavior:
+      ScrollViewKeyboardDismissBehavior
+          .onDrag,
+
+      padding:
+      EdgeInsets.only(
+        top:
+        ui.pageTopPadding,
+
+        bottom:
+        ui.pageBottomPadding +
+            12,
+      ),
+
+      child: Center(
+        child: ConstrainedBox(
+          constraints:
+          BoxConstraints(
+            maxWidth:
+            ui.pageMaxWidth,
+          ),
+
+          child: Column(
+            children: [
+              // =================================================
+              // Hero
+              // =================================================
+              Padding(
+                padding:
+                EdgeInsets.symmetric(
+                  horizontal:
+                  ui.pagePadding,
+                ),
+
+                child:
+                _buildHeroHeader(
+                  context,
+                  rep,
+                ),
+              ),
+
+              // =================================================
+              // Main Content
+              // =================================================
+              AnimationLimiter(
+                child: Padding(
+                  padding:
+                  EdgeInsets.symmetric(
+                    horizontal:
+                    ui.pagePadding,
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment
+                        .stretch,
+
+                    children:
+                    AnimationConfiguration
+                        .toStaggeredList(
+                      duration:
+                      const Duration(
+                        milliseconds:
+                        450,
+                      ),
+
+                      childAnimationBuilder:
+                          (child) =>
+                          SlideAnimation(
+                            verticalOffset:
+                            28,
+
+                            child:
+                            FadeInAnimation(
+                              child:
+                              child,
+                            ),
+                          ),
+
+                      children: [
+                        SizedBox(
+                          height:
+                          ui.sectionSpacing +
+                              6,
+                        ),
+
+                        ..._buildProfileContent(
+                          context:
+                          context,
+
+                          rep:
+                          rep,
+
+                          currentRepName:
+                          currentRepName,
+
+                          currentRepPlan:
+                          currentRepPlan,
+
+                          tabletLandscape:
+                          false,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        Container(
-          // margin: EdgeInsets.symmetric(horizontal: 20.w),
-          padding: EdgeInsets.symmetric(vertical: 20.h),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30.r),
-              boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20)
-              ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      ),
+    );
+  }
+
+  // =====================================================
+  // Hero
+  // Mobile + Tablet Portrait
+  // =====================================================
+
+  Widget _buildHeroHeader(
+      BuildContext context,
+      InfoRep rep,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    // =====================================================
+    // Hero-specific dimensions.
+    //
+    // هدول خاصين بالـHero لذلك ما لازم نحول AppUi
+    // لمخزن لكل رقم بالمشروع.
+    // =====================================================
+
+    final double verticalPadding =
+    ui.isMobile
+        ? 28
+        : 34;
+
+    final double horizontalPadding =
+    ui.isMobile
+        ? 20
+        : 28;
+
+    final double avatarSize =
+    ui.isMobile
+        ? 80
+        : 92;
+
+    final double avatarRadius =
+    ui.isMobile
+        ? 22
+        : 26;
+
+    final double initialFontSize =
+    ui.isMobile
+        ? 30
+        : 34;
+
+    final double nameFontSize =
+    ui.isMobile
+        ? 22
+        : 26;
+
+    final double addressFontSize =
+    ui.isMobile
+        ? 13
+        : 15;
+
+    return Hero(
+      tag:
+      'rep_card_${rep.id}',
+
+      child: Material(
+        color:
+        Colors.transparent,
+
+        child: Container(
+          width:
+          double.infinity,
+
+          padding:
+          EdgeInsets.symmetric(
+            vertical:
+            verticalPadding,
+
+            horizontal:
+            horizontalPadding,
+          ),
+
+          decoration:
+          BoxDecoration(
+            // ===============================================
+            // الهوية الأساسية للبروفايل
+            // ===============================================
+            color:
+            const Color(
+              0xFF164683,
+            ),
+
+            borderRadius:
+            BorderRadius.circular(
+              ui.cardRadius + 6,
+            ),
+
+            boxShadow: [
+              BoxShadow(
+                color:
+                const Color(
+                  0xFF1F4E79,
+                ).withOpacity(
+                  0.14,
+                ),
+
+                blurRadius:
+                14,
+
+                offset:
+                const Offset(
+                  0,
+                  6,
+                ),
+              ),
+            ],
+          ),
+
+          child: Column(
+            mainAxisSize:
+            MainAxisSize.min,
+
             children: [
-              buildIconBtn(context, FontAwesomeIcons.tag, "الإختصاص",
-                  const Color(0xFFFF9F43), () {
-                context.read<SeniorProfBloc>().add(SenAllSpecEvent(id));
-                Navigator.pushNamed(context, Routes.seniorSpec);
-              }),
-              buildIconBtn(context, FontAwesomeIcons.locationDot, "المناطق",
-                  const Color(0xFF45AAF2), () {
-                context.read<SeniorProfBloc>().add(SenAllPlaceEvent(id));
-                Navigator.pushNamed(context, Routes.seniorPlaces);
-              }),
-              buildIconBtn(context, FontAwesomeIcons.userDoctor, "الأطباء",
-                  const Color(0xFFEB4D4B), () {
-                context.read<SeniorProfBloc>().add(SenAllDoctorEvent(id));
-                Navigator.pushNamed(context, Routes.seniorDoc);
-              }),
-              buildIconBtn(context, FontAwesomeIcons.hospitalUser, "المشافي",
-                  const Color(0xFFE3D909), () {
-                context.read<SeniorProfBloc>().add(SenAllHospitalEvent(id));
-                Navigator.pushNamed(context, Routes.seniorHos);
-              }),
-              buildIconBtn(context, FontAwesomeIcons.hospital, "الأصناف",
-                  const Color(0xFF26DE81), () {
-                context.read<SeniorProfBloc>().add(SenAllBrandEvent(repPlanId));
-                Navigator.pushNamed(context, Routes.allBrand);
-              }),
+              // =================================================
+              // Avatar
+              // =================================================
+              Container(
+                width:
+                avatarSize,
+
+                height:
+                avatarSize,
+
+                alignment:
+                Alignment.center,
+
+                decoration:
+                BoxDecoration(
+                  color:
+                  Colors.white
+                      .withOpacity(
+                    0.14,
+                  ),
+
+                  border:
+                  Border.all(
+                    color:
+                    Colors.white
+                        .withOpacity(
+                      0.25,
+                    ),
+
+                    width:
+                    1.5,
+                  ),
+
+                  borderRadius:
+                  BorderRadius.circular(
+                    avatarRadius,
+                  ),
+                ),
+
+                child: Text(
+                  rep.name.isNotEmpty
+                      ? rep.name
+                      .substring(
+                    0,
+                    1,
+                  )
+                      : "",
+
+                  style:
+                  TextStyle(
+                    fontSize:
+                    initialFontSize,
+
+                    color:
+                    Colors.white,
+
+                    fontWeight:
+                    FontWeight
+                        .w900,
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height:
+                ui.largeSpacing,
+              ),
+
+              // =================================================
+              // Name
+              // =================================================
+              Text(
+                rep.name,
+
+                textAlign:
+                TextAlign.center,
+
+                maxLines:
+                2,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                style:
+                TextStyle(
+                  fontSize:
+                  nameFontSize,
+
+                  color:
+                  Colors.white,
+
+                  fontWeight:
+                  FontWeight
+                      .w700,
+
+                  height:
+                  1.25,
+                ),
+              ),
+
+              // =================================================
+              // Address
+              // =================================================
+              if (rep
+                  .address
+                  .isNotEmpty) ...[
+                SizedBox(
+                  height:
+                  ui.mediumSpacing,
+                ),
+
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .center,
+
+                  children: [
+                    Icon(
+                      Icons
+                          .location_on_outlined,
+
+                      size:
+                      addressFontSize +
+                          3,
+
+                      color:
+                      Colors.white
+                          .withOpacity(
+                        0.75,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      width: 5,
+                    ),
+
+                    Flexible(
+                      child: Text(
+                        rep.address,
+
+                        maxLines:
+                        2,
+
+                        overflow:
+                        TextOverflow
+                            .ellipsis,
+
+                        textAlign:
+                        TextAlign
+                            .center,
+
+                        style:
+                        TextStyle(
+                          fontSize:
+                          addressFontSize,
+
+                          color:
+                          Colors.white
+                              .withOpacity(
+                            0.85,
+                          ),
+
+                          fontWeight:
+                          FontWeight
+                              .w500,
+
+                          height:
+                          1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              // =================================================
+              // Finished Plan Badge
+              // =================================================
+              if (isFinal) ...[
+                SizedBox(
+                  height:
+                  ui.sectionSpacing,
+                ),
+
+                Container(
+                  padding:
+                  const EdgeInsets
+                      .symmetric(
+                    horizontal:
+                    12,
+
+                    vertical:
+                    6,
+                  ),
+
+                  decoration:
+                  BoxDecoration(
+                    color:
+                    Colors.white
+                        .withOpacity(
+                      0.12,
+                    ),
+
+                    borderRadius:
+                    BorderRadius.circular(
+                      10,
+                    ),
+
+                    border:
+                    Border.all(
+                      color:
+                      Colors.white
+                          .withOpacity(
+                        0.20,
+                      ),
+                    ),
+                  ),
+
+                  child:
+                  const Row(
+                    mainAxisSize:
+                    MainAxisSize
+                        .min,
+
+                    children: [
+                      Icon(
+                        Icons
+                            .history_rounded,
+
+                        size: 15,
+
+                        color:
+                        Colors.white,
+                      ),
+
+                      SizedBox(
+                        width: 6,
+                      ),
+
+                      Text(
+                        'خطة منتهية',
+
+                        style:
+                        TextStyle(
+                          fontSize:
+                          11.5,
+
+                          color:
+                          Colors.white,
+
+                          fontWeight:
+                          FontWeight
+                              .w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // Hero Tablet Landscape
+  // =====================================================
+
+  Widget _buildHeroHeaderTablet(
+      BuildContext context,
+      InfoRep rep,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Hero(
+      tag:
+      'rep_card_${rep.id}',
+
+      child: Material(
+        color:
+        Colors.transparent,
+
+        child: Container(
+          width:
+          double.infinity,
+
+          padding:
+          const EdgeInsets.symmetric(
+            vertical:
+            32,
+
+            horizontal:
+            22,
+          ),
+
+          decoration:
+          BoxDecoration(
+            color:
+            const Color(
+              0xFF164683,
+            ),
+
+            borderRadius:
+            BorderRadius.circular(
+              ui.cardRadius + 8,
+            ),
+
+            boxShadow: [
+              BoxShadow(
+                color:
+                const Color(
+                  0xFF1F4E79,
+                ).withOpacity(
+                  0.14,
+                ),
+
+                blurRadius:
+                14,
+
+                offset:
+                const Offset(
+                  0,
+                  6,
+                ),
+              ),
+            ],
+          ),
+
+          child: Column(
+            mainAxisSize:
+            MainAxisSize.min,
+
+            children: [
+              Container(
+                width: 84,
+                height: 84,
+
+                alignment:
+                Alignment.center,
+
+                decoration:
+                BoxDecoration(
+                  color:
+                  Colors.white
+                      .withOpacity(
+                    0.14,
+                  ),
+
+                  border:
+                  Border.all(
+                    color:
+                    Colors.white
+                        .withOpacity(
+                      0.25,
+                    ),
+
+                    width:
+                    1.5,
+                  ),
+
+                  borderRadius:
+                  BorderRadius.circular(
+                    24,
+                  ),
+                ),
+
+                child: Text(
+                  rep.name.isNotEmpty
+                      ? rep.name
+                      .substring(
+                    0,
+                    1,
+                  )
+                      : "",
+
+                  style:
+                  const TextStyle(
+                    fontSize:
+                    30,
+
+                    color:
+                    Colors.white,
+
+                    fontWeight:
+                    FontWeight
+                        .w900,
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 18,
+              ),
+
+              Text(
+                rep.name,
+
+                maxLines:
+                2,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                textAlign:
+                TextAlign.center,
+
+                style:
+                const TextStyle(
+                  fontSize:
+                  22,
+
+                  color:
+                  Colors.white,
+
+                  fontWeight:
+                  FontWeight
+                      .w700,
+
+                  height:
+                  1.25,
+                ),
+              ),
+
+              if (rep
+                  .address
+                  .isNotEmpty) ...[
+                const SizedBox(
+                  height: 10,
+                ),
+
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .center,
+
+                  children: [
+                    Icon(
+                      Icons
+                          .location_on_outlined,
+
+                      size:
+                      16,
+
+                      color:
+                      Colors.white
+                          .withOpacity(
+                        0.75,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      width: 5,
+                    ),
+
+                    Flexible(
+                      child: Text(
+                        rep.address,
+
+                        maxLines:
+                        3,
+
+                        overflow:
+                        TextOverflow
+                            .ellipsis,
+
+                        textAlign:
+                        TextAlign
+                            .center,
+
+                        style:
+                        TextStyle(
+                          fontSize:
+                          13,
+
+                          color:
+                          Colors.white
+                              .withOpacity(
+                            0.85,
+                          ),
+
+                          fontWeight:
+                          FontWeight
+                              .w500,
+
+                          height:
+                          1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              if (isFinal) ...[
+                SizedBox(
+                  height:
+                  ui.sectionSpacing,
+                ),
+
+                Container(
+                  padding:
+                  const EdgeInsets
+                      .symmetric(
+                    horizontal:
+                    12,
+
+                    vertical:
+                    6,
+                  ),
+
+                  decoration:
+                  BoxDecoration(
+                    color:
+                    Colors.white
+                        .withOpacity(
+                      0.12,
+                    ),
+
+                    borderRadius:
+                    BorderRadius.circular(
+                      10,
+                    ),
+
+                    border:
+                    Border.all(
+                      color:
+                      Colors.white
+                          .withOpacity(
+                        0.20,
+                      ),
+                    ),
+                  ),
+
+                  child:
+                  const Row(
+                    mainAxisSize:
+                    MainAxisSize
+                        .min,
+
+                    children: [
+                      Icon(
+                        Icons
+                            .history_rounded,
+
+                        size: 15,
+
+                        color:
+                        Colors.white,
+                      ),
+
+                      SizedBox(
+                        width: 6,
+                      ),
+
+                      Text(
+                        'خطة منتهية',
+
+                        style:
+                        TextStyle(
+                          color:
+                          Colors.white,
+
+                          fontSize:
+                          11.5,
+
+                          fontWeight:
+                          FontWeight
+                              .w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // Quick Actions
+  // =====================================================
+
+  Widget buildQuickActions(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Column(
+      crossAxisAlignment:
+      CrossAxisAlignment.start,
+
+      children: [
+        _buildSectionTitle(
+          context,
+          title:
+          "معلومات شخصية",
+        ),
+
+        SizedBox(
+          height:
+          ui.sectionSpacing,
+        ),
+
+        Container(
+          width:
+          double.infinity,
+
+          padding:
+          EdgeInsets.all(
+            ui.cardPadding,
+          ),
+
+          decoration:
+          BoxDecoration(
+            color:
+            Colors.white,
+
+            borderRadius:
+            BorderRadius.circular(
+              ui.cardRadius,
+            ),
+
+            border:
+            Border.all(
+              color:
+              const Color(
+                0xFFE2E8F0,
+              ),
+            ),
+
+            boxShadow: [
+              BoxShadow(
+                color:
+                Colors.black
+                    .withOpacity(
+                  0.025,
+                ),
+
+                blurRadius:
+                12,
+
+                offset:
+                const Offset(
+                  0,
+                  4,
+                ),
+              ),
+            ],
+          ),
+
+          child: Wrap(
+            alignment:
+            WrapAlignment
+                .spaceAround,
+
+            runAlignment:
+            WrapAlignment.center,
+
+            spacing:
+            ui.sectionSpacingMobileZero,
+
+            runSpacing:
+            ui.sectionSpacingMobileZero,
+
+            children: [
+              // ===============================================
+              // Specializations
+              // ===============================================
+              buildIconBtn(
+                context,
+                FontAwesomeIcons.tag,
+                "الإختصاص",
+                const Color(
+                  0xFFFF9F43,
+                ),
+                    () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    SenAllSpecEvent(
+                      id,
+                    ),
+                  );
+
+                  Navigator.pushNamed(
+                    context,
+                    Routes.seniorSpec,
+                  );
+                },
+              ),
+
+              // ===============================================
+              // Places
+              // ===============================================
+              buildIconBtn(
+                context,
+                FontAwesomeIcons
+                    .locationDot,
+                "المناطق",
+                const Color(
+                  0xFF45AAF2,
+                ),
+                    () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    SenAllPlaceEvent(
+                      id,
+                    ),
+                  );
+
+                  Navigator.pushNamed(
+                    context,
+                    Routes.seniorPlaces,
+                  );
+                },
+              ),
+
+              // ===============================================
+              // Doctors
+              // ===============================================
+              buildIconBtn(
+                context,
+                FontAwesomeIcons
+                    .userDoctor,
+                "الأطباء",
+                const Color(
+                  0xFFEB4D4B,
+                ),
+                    () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    SenAllDoctorEvent(
+                      id,
+                    ),
+                  );
+
+                  Navigator.pushNamed(
+                    context,
+                    Routes.seniorDoc,
+                  );
+                },
+              ),
+
+              // ===============================================
+              // Hospitals
+              // ===============================================
+              buildIconBtn(
+                context,
+                FontAwesomeIcons
+                    .hospitalUser,
+                "المشافي",
+                const Color(
+                  0xFFE3D909,
+                ),
+                    () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    SenAllHospitalEvent(
+                      id,
+                    ),
+                  );
+
+                  Navigator.pushNamed(
+                    context,
+                    Routes.seniorHos,
+                  );
+                },
+              ),
+
+              // ===============================================
+              // Brands
+              // ===============================================
+              buildIconBtn(
+                context,
+                FontAwesomeIcons
+                    .hospital,
+                "الأصناف",
+                const Color(
+                  0xFF26DE81,
+                ),
+                    () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    SenAllBrandEvent(
+                      repPlanId,
+                    ),
+                  );
+
+                  Navigator.pushNamed(
+                    context,
+                    Routes.allBrand,
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -196,461 +1526,1061 @@ class RepProfile extends StatelessWidget {
     );
   }
 
-  // الهيدر المحسّن للتابلت بالعرض
-  Widget _buildHeroHeaderTablet(InfoRep rep, BuildContext context) {
-    return Hero(
-      tag: 'rep_card_${rep.id}',
-      child: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-          color: const Color(0xFF164683),
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(50.r),
-            bottomRight: Radius.circular(50.r),
-            topLeft: Radius.circular(50.r),
-            topRight: Radius.circular(50.r),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF1F4E79).withOpacity(0.3),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100.r,
-              height: 100.r,
-              decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  border: Border.all(
-                      color: Colors.white.withOpacity(0.3), width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(30))),
-              alignment: Alignment.center,
-              child: Text(
-                rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
-                style: TextStyle(
-                  fontSize: 26.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              rep.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(0, 2),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-            ),
-            if (rep.address.isNotEmpty) ...[
-              SizedBox(height: 20.h),
-              Text(
-                rep.address,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.white.withOpacity(0.9),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
+  // =====================================================
+  // Coverage Router
+  // =====================================================
+
+  Widget _buildCoverageSection(
+      BuildContext context,
+      ) {
+    if (isFinal) {
+      return _buildFullCoverageSection(
+        context,
+      );
+    }
+
+    return _buildFullCoverageSection(
+      context,
     );
   }
 
-  // =========================================================
-  // 2. التصميم الأصلي كما هو بدون تعديل للوضع الرأسي (Portrait)
-  // =========================================================
-  Widget _buildPortraitLayout(BuildContext context, InfoRep rep,
-      String currentRepName, int currentRepPlan) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          SizedBox(height: 25.h),
-          _buildHeroHeader(rep),
-          AnimationLimiter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                children: AnimationConfiguration.toStaggeredList(
-                  duration: const Duration(milliseconds: 500),
-                  childAnimationBuilder: (widget) => SlideAnimation(
-                    verticalOffset: 40.0,
-                    child: FadeInAnimation(child: widget),
-                  ),
-                  children: [
-                    SizedBox(height: 25.h),
-                    buildStatsGrid(context, rep),
-                    SizedBox(height: 25.h),
-                    buildQuickActions(context),
-                    SizedBox(height: 30.h),
-                    _buildDetailsList(context, rep, currentRepName,
-                        currentRepPlan, rep.mobile),
-                    SizedBox(height: 25.h),
-                    _buildCoverageSection(context),
-                    SizedBox(height: 50.h),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // =====================================================
+  // Full Profile Coverage
+  //
+  // Doctor + Hospital
+  // =====================================================
 
-  // بقية المكونات الأساسية للـ Mobile Portrait (نفس الكود الخاص بك دون أي تعديل)
-  Widget _buildHeroHeader(dynamic rep) {
-    return Hero(
-      tag: 'rep_card_${rep.id}',
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(horizontal: 15.w),
-        padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-          color: const Color(0xFF164683),
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(50.r),
-            bottomRight: Radius.circular(50.r),
-            topLeft: Radius.circular(35.r),
-            topRight: Radius.circular(35.r),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF1F4E79).withOpacity(0.3),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              width: 100.r,
-              height: 100.r,
-              decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  border: Border.all(
-                      color: Colors.white.withOpacity(0.3), width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(45))),
-              alignment: Alignment.center,
-              child: Text(
-                rep.name.isNotEmpty ? rep.name.substring(0, 1) : "",
-                style: TextStyle(
-                  fontSize: 36.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              rep.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(0, 2),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-            ),
-            if (rep.address != null && rep.address.isNotEmpty) ...[
-              SizedBox(height: 8.h),
-              Text(
-                rep.address,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.white.withOpacity(0.9),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _buildFullCoverageSection(
+      BuildContext context,
+      ) {
+    return _buildSectionLayout(
+      context,
+      "إحصائيات التغطية",
+      [
+        // =================================================
+        // Completed Visits
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "الزيارات التي تمت مباشرتها",
 
-  Widget _buildCoverageSection(BuildContext context) {
-    return _buildSectionLayout("إحصائيات التغطية", [
-      InteractiveActionTile(
-          title: "لزيارات التي تمت مباشرتها",
-          icon: Icons.check_circle_outline,
-          color: const Color(0xFF2D947A),
-          onTap: () {
-            context.read<SeniorProfBloc>().add(VisitDocEvent(id, repPlanId));
-            Navigator.pushNamed(
-              context,
-              Routes.senVisit,
-              arguments: {
-                'onTapDoctor': () => context
-                    .read<SeniorProfBloc>()
-                    .add(VisitDocEvent(id, repPlanId)),
-                'onTapHospital': () => context
-                    .read<SeniorProfBloc>()
-                    .add(VisitHosEvent(id, repPlanId)),
-                'title': "الزيارات التي تمت مباشرتها",
-                'doctor': SenVisitDoctor(),
-                'hospital': SenVisitHospital(),
-              },
-            );
-          }),
-      InteractiveActionTile(
-          title: "الزيارات التي لم تتم بعد",
-          icon: Icons.cancel_outlined,
-          color: const Color(0xFFE74C3C),
-          onTap: () {
-            context.read<SeniorProfBloc>().add(NoVisitDocEvent(id, repPlanId));
-            Navigator.pushNamed(
-              context,
-              Routes.senVisit,
-              arguments: {
-                'onTapDoctor': () => context
-                    .read<SeniorProfBloc>()
-                    .add(NoVisitDocEvent(id, repPlanId)),
-                'onTapHospital': () => context
-                    .read<SeniorProfBloc>()
-                    .add(NoVisitHosEvent(id, repPlanId)),
-                'title': "الزيارات التي لم تتم بعد",
-                'doctor': NoVisitDoctor(),
-                'hospital': NoVisitHos(),
-              },
-            );
-          }),
-      InteractiveActionTile(
-          title: "الزيارات التي تمت ولم تكتمل",
-          icon: Icons.hourglass_empty_rounded,
-          color: const Color(0xFFF39C12),
+          icon:
+          Icons
+              .check_circle_outline,
+
+          color:
+          const Color(
+            0xFF2D947A,
+          ),
+
           onTap: () {
             context
-                .read<SeniorProfBloc>()
-                .add(RemainingVisitsDocEvent(id, repPlanId));
+                .read<
+                SeniorProfBloc>()
+                .add(
+              VisitDocEvent(
+                id,
+                repPlanId,
+              ),
+            );
+
             Navigator.pushNamed(
               context,
               Routes.senVisit,
+
               arguments: {
-                'onTapDoctor': () => context
-                    .read<SeniorProfBloc>()
-                    .add(RemainingVisitsDocEvent(id, repPlanId)),
-                'onTapHospital': () => context
-                    .read<SeniorProfBloc>()
-                    .add(RemainingVisitsHosEvent(id, repPlanId)),
-                'title': "الزيارات التي تمت ولم تكتمل",
-                'doctor': RemainingVisits(),
-                'hospital': RemainingVisitsHos(),
+                'onTapDoctor': () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    VisitDocEvent(
+                      id,
+                      repPlanId,
+                    ),
+                  );
+                },
+
+                'onTapHospital': () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    VisitHosEvent(
+                      id,
+                      repPlanId,
+                    ),
+                  );
+                },
+
+                'title':
+                "الزيارات التي تمت مباشرتها",
+
+                'doctor':
+                SenVisitDoctor(),
+
+                'hospital':
+                SenVisitHospital(),
               },
             );
-          }),
-      InteractiveActionTile(
-          title: "تقرير توزيع العينات (الجرد)",
-          icon: FontAwesomeIcons.clipboardList,
-          color: const Color(0xFF1F4E79),
+          },
+        ),
+
+        // =================================================
+        // Not Visited
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "الزيارات التي لم تتم بعد",
+
+          icon:
+          Icons.cancel_outlined,
+
+          color:
+          const Color(
+            0xFFE74C3C,
+          ),
+
           onTap: () {
-            initSeniorReportInventoryModule();
-            Navigator.push(context, MaterialPageRoute(builder: (c) {
-              context
-                  .read<ReportInventoryBloc>()
-                  .add(SenAllInventoryEvent(id, repPlanId));
-              return ReportInventory();
-            }));
-          }),
-    ]);
+            context
+                .read<
+                SeniorProfBloc>()
+                .add(
+              NoVisitDocEvent(
+                id,
+                repPlanId,
+              ),
+            );
+
+            Navigator.pushNamed(
+              context,
+              Routes.senVisit,
+
+              arguments: {
+                'onTapDoctor': () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    NoVisitDocEvent(
+                      id,
+                      repPlanId,
+                    ),
+                  );
+                },
+
+                'onTapHospital': () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    NoVisitHosEvent(
+                      id,
+                      repPlanId,
+                    ),
+                  );
+                },
+
+                'title':
+                "الزيارات التي لم تتم بعد",
+
+                'doctor':
+                NoVisitDoctor(),
+
+                'hospital':
+                NoVisitHos(),
+              },
+            );
+          },
+        ),
+
+        // =================================================
+        // Remaining
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "الزيارات التي تمت ولم تكتمل",
+
+          icon:
+          Icons
+              .hourglass_empty_rounded,
+
+          color:
+          const Color(
+            0xFFF39C12,
+          ),
+
+          onTap: () {
+            context
+                .read<
+                SeniorProfBloc>()
+                .add(
+              RemainingVisitsDocEvent(
+                id,
+                repPlanId,
+              ),
+            );
+
+            Navigator.pushNamed(
+              context,
+              Routes.senVisit,
+
+              arguments: {
+                'onTapDoctor': () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    RemainingVisitsDocEvent(
+                      id,
+                      repPlanId,
+                    ),
+                  );
+                },
+
+                'onTapHospital': () {
+                  context
+                      .read<
+                      SeniorProfBloc>()
+                      .add(
+                    RemainingVisitsHosEvent(
+                      id,
+                      repPlanId,
+                    ),
+                  );
+                },
+
+                'title':
+                "الزيارات التي تمت ولم تكتمل",
+
+                'doctor':
+                RemainingVisits(),
+
+                'hospital':
+                RemainingVisitsHos(),
+              },
+            );
+          },
+        ),
+
+        // =================================================
+        // Inventory
+        // =================================================
+        _buildInventoryAction(
+          context,
+        ),
+      ],
+    );
   }
+
+  // =====================================================
+  // Inventory
+  //
+  // مشترك بين الملف الكامل والخطة المنتهية
+  // =====================================================
+
+  Widget _buildInventoryAction(
+      BuildContext context,
+      ) {
+    return InteractiveActionTile(
+      title:
+      "تقرير توزيع العينات (الجرد)",
+
+      icon:
+      FontAwesomeIcons
+          .clipboardList,
+
+      color:
+      const Color(
+        0xFF1F4E79,
+      ),
+
+      onTap: () {
+        initSeniorReportInventoryModule();
+
+        Navigator.push(
+          context,
+
+          MaterialPageRoute(
+            builder:
+                (routeContext) {
+              context
+                  .read<
+                  ReportInventoryBloc>()
+                  .add(
+                SenAllInventoryEvent(
+                  id,
+                  repPlanId,
+                ),
+              );
+
+              return ReportInventory();
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  // =====================================================
+  // Detailed Reports
+  //
+  // فقط Full Profile
+  // =====================================================
 
   Widget _buildDetailsList(
-      BuildContext context, dynamic rep, String name, int plan, String phone) {
-    return _buildSectionLayout("التقارير التفصيلية", [
-      InteractiveActionTile(
-          title: "تقرير زيارات الأطباء",
-          icon: FontAwesomeIcons.fileMedical,
-          color: const Color(0xFF1F4E79),
+      BuildContext context,
+      InfoRep rep,
+      String name,
+      int plan,
+      String phone,
+      ) {
+    return _buildSectionLayout(
+      context,
+      "التقارير التفصيلية",
+      [
+        // =================================================
+        // Doctor Visit Reports
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "تقرير زيارات الأطباء",
+
+          icon:
+          FontAwesomeIcons
+              .fileMedical,
+
+          color:
+          const Color(
+            0xFF1F4E79,
+          ),
+
           onTap: () {
             initReportVisitDoctorModule();
+
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (c) => ReportVisitDoctorPage(
-                        iscanedite: true,
-                        repId: id,
-                        userId: UserInfo.repId,
-                        repName: name,
-                        phone: phone,
-                        indexRep: index,
-                        repPlan: plan)));
-            context.read<ReportVisitDoctorBloc>().add(AllReportVisitDoctorEvent(
-                VisitRepSen(id, UserInfo.repId), false));
-          }),
-      InteractiveActionTile(
-          title: "تقرير زيارات المشافي",
-          icon: FontAwesomeIcons.hospitalUser,
-          color: const Color(0xFF1F4E79),
+              context,
+
+              MaterialPageRoute(
+                builder:
+                    (routeContext) =>
+                    ReportVisitDoctorPage(
+                      iscanedite:
+                      true,
+
+                      repId:
+                      id,
+
+                      userId:
+                      UserInfo.repId,
+
+                      repName:
+                      name,
+
+                      phone:
+                      phone,
+
+                      indexRep:
+                      index,
+
+                      repPlan:
+                      plan,
+                    ),
+              ),
+            );
+
+            // =============================================
+            // نفس ترتيب المنطق الأصلي
+            // =============================================
+            context
+                .read<
+                ReportVisitDoctorBloc>()
+                .add(
+              AllReportVisitDoctorEvent(
+                VisitRepSen(
+                  id,
+                  UserInfo.repId,
+                ),
+                false,
+              ),
+            );
+          },
+        ),
+
+        // =================================================
+        // Hospital Visit Reports
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "تقرير زيارات المشافي",
+
+          icon:
+          FontAwesomeIcons
+              .hospitalUser,
+
+          color:
+          const Color(
+            0xFF1F4E79,
+          ),
+
           onTap: () {
             initReportVisitDoctorModule();
+
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (c) => ReportVisitHospital(
-                        iscanedite: true,
-                        repId: id,
-                        userId: UserInfo.repId,
-                        repName: name,
-                        phone: phone,
-                        indexRep: index,
-                        repPlan: plan)));
-            context.read<ReportVisitDoctorBloc>().add(
-                AllReportVisitHospitalEvent(
-                    VisitRepSen(id, UserInfo.repId), false));
-          }),
-      InteractiveActionTile(
-          title: "سجل الوصفات الطبية",
-          icon: FontAwesomeIcons.receipt,
-          color: const Color(0xFF1F4E79),
+              context,
+
+              MaterialPageRoute(
+                builder:
+                    (routeContext) =>
+                    ReportVisitHospital(
+                      iscanedite:
+                      true,
+
+                      repId:
+                      id,
+
+                      userId:
+                      UserInfo.repId,
+
+                      repName:
+                      name,
+
+                      phone:
+                      phone,
+
+                      indexRep:
+                      index,
+
+                      repPlan:
+                      plan,
+                    ),
+              ),
+            );
+
+            // =============================================
+            // نفس ترتيب المنطق الأصلي
+            // =============================================
+            context
+                .read<
+                ReportVisitDoctorBloc>()
+                .add(
+              AllReportVisitHospitalEvent(
+                VisitRepSen(
+                  id,
+                  UserInfo.repId,
+                ),
+                false,
+              ),
+            );
+          },
+        ),
+
+        // =================================================
+        // Recipes
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "سجل الوصفات الطبية",
+
+          icon:
+          FontAwesomeIcons
+              .receipt,
+
+          color:
+          const Color(
+            0xFF7C3AED,
+          ),
+
           onTap: () {
-            Navigator.pushNamed(context, Routes.allRecipe);
-            context.read<SeniorProfBloc>().add(AllReciEvent(id));
-          }),
-      InteractiveActionTile(
-          title: "الخطة الشهرية الفعالة",
-          icon: FontAwesomeIcons.calendarCheck,
-          color: const Color(0xFF1F4E79),
+            Navigator.pushNamed(
+              context,
+              Routes.allRecipe,
+            );
+
+            context
+                .read<
+                SeniorProfBloc>()
+                .add(
+              AllReciEvent(
+                id,
+              ),
+            );
+          },
+        ),
+
+        // =================================================
+        // Active Plan
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "الخطة الشهرية الفعالة",
+
+          icon:
+          FontAwesomeIcons
+              .calendarCheck,
+
+          color:
+          const Color(
+            0xFF2D947A,
+          ),
+
           onTap: () {
-            Navigator.pushNamed(context, Routes.activePlanPage,
-                arguments: plan);
-          }),
-    ]);
+            Navigator.pushNamed(
+              context,
+              Routes.activePlanPage,
+
+              arguments:
+              plan,
+            );
+          },
+        ),
+      ],
+    );
   }
 
-  Widget _buildSectionLayout(String title, List<Widget> items) {
+  // =====================================================
+  // Unified Section Layout
+  // =====================================================
+
+  Widget _buildSectionLayout(
+      BuildContext context,
+      String title,
+      List<Widget> items,
+      ) {
+    final ui =
+    AppUi.of(context);
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+      CrossAxisAlignment.start,
+
       children: [
-        Padding(
-          padding: EdgeInsets.only(right: 5.w, bottom: 12.h, top: 10.h),
-          child: Text(title,
-              style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF2C3E50))),
+        // =================================================
+        // Section Title
+        // =================================================
+        _buildSectionTitle(
+          context,
+          title:
+          title,
         ),
-        ...items,
+
+        SizedBox(
+          height:
+          ui.sectionSpacing,
+        ),
+
+        // =================================================
+        // Tablet Landscape
+        //
+        // 2 Columns
+        // =================================================
+        if (ui
+            .isTabletLandscape) ...[
+          for (
+          int i = 0;
+          i < items.length;
+          i += 2
+          ) ...[
+            Row(
+              crossAxisAlignment:
+              CrossAxisAlignment
+                  .start,
+
+              children: [
+                Expanded(
+                  child:
+                  items[i],
+                ),
+
+                SizedBox(
+                  width:
+                  ui.sectionSpacing,
+                ),
+
+                Expanded(
+                  child: i + 1 <
+                      items.length
+                      ? items[
+                  i + 1]
+                      : const SizedBox
+                      .shrink(),
+                ),
+              ],
+            ),
+
+            if (i + 2 <
+                items.length)
+              SizedBox(
+                height:
+                ui.sectionSpacing,
+              ),
+          ],
+        ] else ...[
+          // =================================================
+          // Mobile + Tablet Portrait
+          // =================================================
+          ...items,
+        ],
+      ],
+    );
+  }
+
+  // =====================================================
+  // Section Title
+  // =====================================================
+
+  Widget _buildSectionTitle(
+      BuildContext context, {
+        required String title,
+      }) {
+    final ui =
+    AppUi.of(context);
+
+    return Row(
+      children: [
+        Container(
+          width: 4,
+
+          height:
+          ui.isMobile
+              ? 20
+              : 22,
+
+          decoration:
+          BoxDecoration(
+            color:
+            const Color(
+              0xFF1F4E79,
+            ),
+
+            borderRadius:
+            BorderRadius.circular(
+              10,
+            ),
+          ),
+        ),
+
+        SizedBox(
+          width:
+          ui.mediumSpacing,
+        ),
+
+        Expanded(
+          child: Text(
+            title,
+
+            maxLines:
+            2,
+
+            overflow:
+            TextOverflow
+                .ellipsis,
+
+            style:
+            TextStyle(
+              fontSize:
+              ui.cardTitleSize,
+
+              fontWeight:
+              FontWeight.w700,
+
+              color:
+              const Color(
+                0xFF2C3E50,
+              ),
+
+              height:
+              1.3,
+            ),
+          ),
+        ),
       ],
     );
   }
 }
 
-class InteractiveActionTile extends StatefulWidget {
+// =======================================================
+// Interactive Action Tile
+//
+// مستخدم بالملف الكامل والخطة المنتهية
+// =======================================================
+
+class InteractiveActionTile
+    extends StatefulWidget {
+  const InteractiveActionTile({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
   final String title;
   final dynamic icon;
   final Color color;
   final VoidCallback onTap;
 
-  const InteractiveActionTile(
-      {super.key,
-      required this.title,
-      required this.icon,
-      required this.color,
-      required this.onTap});
-
   @override
-  State<InteractiveActionTile> createState() => _InteractiveActionTileState();
+  State<InteractiveActionTile>
+  createState() =>
+      _InteractiveActionTileState();
 }
 
-class _InteractiveActionTileState extends State<InteractiveActionTile> {
-  bool isPressed = false;
+class _InteractiveActionTileState
+    extends State<InteractiveActionTile> {
+  bool isPressed =
+  false;
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final bool isLandscape = mediaQuery.orientation == Orientation.landscape ;
+    final ui =
+    AppUi.of(context);
+
+    final double minHeight =
+    ui.isMobile
+        ? 68
+        : ui.isTabletPortrait
+        ? 78
+        : 70;
+
+    final double tileHorizontalPadding =
+    ui.isMobile
+        ? 14
+        : ui.isTabletPortrait
+        ? 18
+        : 15;
+
+    final double tileVerticalPadding =
+    ui.isTabletPortrait
+        ? 15
+        : 12;
+
+    final double tileRadius =
+        ui.cardRadius - 2;
+
+    final double iconBoxSize =
+    ui.isTabletPortrait
+        ? 50
+        : 44;
+
+    final double actionIconSize =
+    ui.isTabletPortrait
+        ? 21
+        : 18;
+
+    final double arrowBoxSize =
+    ui.isTabletPortrait
+        ? 36
+        : 32;
+
+    final double arrowSize =
+    ui.isTabletPortrait
+        ? 14
+        : 13;
+
     return GestureDetector(
-      onTapDown: (_) => setState(() => isPressed = true),
-      onTapUp: (_) => setState(() => isPressed = false),
-      onTapCancel: () => setState(() => isPressed = false),
-      onTap: widget.onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: EdgeInsets.only(bottom: 12.h),
-        padding: isLandscape
-            ? EdgeInsets.symmetric(horizontal: 12.w, vertical: 25.h)
-            : EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-        decoration: BoxDecoration(
-          color: isPressed ? widget.color.withOpacity(0.02) : Colors.white,
-          borderRadius: BorderRadius.circular(22.r),
-          border: Border.all(
-              color: isPressed
-                  ? widget.color.withOpacity(0.3)
-                  : Colors.black.withOpacity(0.04),
-              width: 1.2),
-          boxShadow: [
-            BoxShadow(
-              color: isPressed
-                  ? widget.color.withOpacity(0.1)
-                  : Colors.black.withOpacity(0.02),
-              blurRadius: isPressed ? 10 : 15,
-              offset: const Offset(0, 5),
-            )
-          ],
+      onTapDown: (_) {
+        setState(() {
+          isPressed =
+          true;
+        });
+      },
+
+      onTapUp: (_) {
+        setState(() {
+          isPressed =
+          false;
+        });
+      },
+
+      onTapCancel: () {
+        setState(() {
+          isPressed =
+          false;
+        });
+      },
+
+      onTap:
+      widget.onTap,
+
+      child:
+      AnimatedScale(
+        duration:
+        const Duration(
+          milliseconds: 120,
         ),
-        child: Row(
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.all(10.r),
-              decoration: BoxDecoration(
-                color:
-                    isPressed ? widget.color : widget.color.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(15.r),
+
+        scale:
+        isPressed
+            ? 0.985
+            : 1,
+
+        child:
+        AnimatedContainer(
+          duration:
+          const Duration(
+            milliseconds:
+            160,
+          ),
+
+          constraints:
+          BoxConstraints(
+            minHeight:
+            minHeight,
+          ),
+
+          // =================================================
+          // بالـLandscape الصفوف نفسها مسؤولة عن المسافة
+          // =================================================
+          margin:
+          EdgeInsets.only(
+            bottom: ui
+                .isTabletLandscape
+                ? 0
+                : ui.cardSpacing,
+          ),
+
+          padding:
+          EdgeInsets.symmetric(
+            horizontal:
+            tileHorizontalPadding,
+
+            vertical:
+            tileVerticalPadding,
+          ),
+
+          decoration:
+          BoxDecoration(
+            color:
+            isPressed
+                ? widget
+                .color
+                .withOpacity(
+              0.025,
+            )
+                : Colors
+                .white,
+
+            borderRadius:
+            BorderRadius.circular(
+              tileRadius,
+            ),
+
+            border:
+            Border.all(
+              color:
+              isPressed
+                  ? widget
+                  .color
+                  .withOpacity(
+                0.22,
+              )
+                  : const Color(
+                0xFFE2E8F0,
               ),
-              child: widget.icon is IconData
-                  ? Icon(widget.icon,
-                      color: isPressed ? Colors.white : widget.color,
-                      size: 18.sp)
-                  : FaIcon(widget.icon as FaIconData,
-                      color: isPressed ? Colors.white : widget.color,
-                      size: 16.sp),
             ),
-            SizedBox(width: 15.w),
-            Text(widget.title,
-                style: TextStyle(
-                    fontSize: 13.5.sp,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF34495E))),
-            const Spacer(),
-            AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              style:
-                  TextStyle(color: isPressed ? widget.color : Colors.grey[300]),
-              child: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp),
-            ),
-          ],
+
+            boxShadow: [
+              BoxShadow(
+                color: isPressed
+                    ? widget.color
+                    .withOpacity(
+                  0.055,
+                )
+                    : Colors.black
+                    .withOpacity(
+                  0.025,
+                ),
+
+                blurRadius:
+                isPressed
+                    ? 8
+                    : 12,
+
+                offset:
+                const Offset(
+                  0,
+                  4,
+                ),
+              ),
+            ],
+          ),
+
+          child: Row(
+            children: [
+              // =============================================
+              // Icon
+              // =============================================
+              AnimatedContainer(
+                duration:
+                const Duration(
+                  milliseconds:
+                  160,
+                ),
+
+                width:
+                iconBoxSize,
+
+                height:
+                iconBoxSize,
+
+                alignment:
+                Alignment.center,
+
+                decoration:
+                BoxDecoration(
+                  color:
+                  isPressed
+                      ? widget
+                      .color
+                      : widget
+                      .color
+                      .withOpacity(
+                    0.08,
+                  ),
+
+                  borderRadius:
+                  BorderRadius
+                      .circular(
+                    ui.smallRadius +
+                        2,
+                  ),
+                ),
+
+                child: widget.icon
+                is IconData
+                    ? Icon(
+                  widget.icon,
+
+                  size:
+                  actionIconSize,
+
+                  color:
+                  isPressed
+                      ? Colors
+                      .white
+                      : widget
+                      .color,
+                )
+                    : FaIcon(
+                  widget.icon
+                  as FaIconData,
+
+                  size:
+                  actionIconSize -
+                      1,
+
+                  color:
+                  isPressed
+                      ? Colors
+                      .white
+                      : widget
+                      .color,
+                ),
+              ),
+
+              SizedBox(
+                width:
+                ui.sectionSpacing,
+              ),
+
+              // =============================================
+              // Title
+              // =============================================
+              Expanded(
+                child: Text(
+                  widget.title,
+
+                  maxLines:
+                  2,
+
+                  overflow:
+                  TextOverflow
+                      .ellipsis,
+
+                  style:
+                  TextStyle(
+                    fontSize:
+                    ui.bodyTextSize +
+                        1,
+
+                    height:
+                    1.3,
+
+                    fontWeight:
+                    FontWeight
+                        .w600,
+
+                    color:
+                    const Color(
+                      0xFF34495E,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                width:
+                ui.mediumSpacing,
+              ),
+
+              // =============================================
+              // Arrow
+              // =============================================
+              AnimatedContainer(
+                duration:
+                const Duration(
+                  milliseconds:
+                  160,
+                ),
+
+                width:
+                arrowBoxSize,
+
+                height:
+                arrowBoxSize,
+
+                alignment:
+                Alignment.center,
+
+                decoration:
+                BoxDecoration(
+                  color:
+                  isPressed
+                      ? widget
+                      .color
+                      .withOpacity(
+                    0.08,
+                  )
+                      : const Color(
+                    0xFFF8FAFC,
+                  ),
+
+                  borderRadius:
+                  BorderRadius
+                      .circular(
+                    ui.smallRadius,
+                  ),
+                ),
+
+                child: Icon(
+                  Icons
+                      .arrow_forward_ios_rounded,
+
+                  size:
+                  arrowSize,
+
+                  color:
+                  isPressed
+                      ? widget
+                      .color
+                      : const Color(
+                    0xFFCBD5E1,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

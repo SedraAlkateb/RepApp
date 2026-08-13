@@ -1,7 +1,7 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/visit_detail_card.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/who_read_dialog.dart';
@@ -11,7 +11,6 @@ import 'package:domina_app/presentation/uniti/share_watsapp.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReportVisitDoctorPage extends StatelessWidget {
   ReportVisitDoctorPage({
@@ -24,6 +23,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
     required this.repPlan,
     required this.iscanedite,
   });
+
   final int userId;
   final int repId;
   final String repName;
@@ -33,209 +33,653 @@ class ReportVisitDoctorPage extends StatelessWidget {
   final bool iscanedite;
 
   final TextEditingController searchNoteDoctorController =
-      TextEditingController();
+  TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ReportVisitDoctorBloc>(context).clear();
+    // نفس السلوك الموجود عندك
+    BlocProvider.of<ReportVisitDoctorBloc>(
+      context,
+    ).clear();
+
+    final deviceType =
+    AppResponsive.deviceType(context);
+
+    double pageMaxWidth;
+    double horizontalPadding;
+
+    double headerTopPadding;
+    double headerBottomPadding;
+
+    double titleFontSize;
+    double subtitleFontSize;
+
+    double searchBottomSpacing;
+
+    double actionsTopSpacing;
+    double actionsBottomSpacing;
+
+    double inputReservedSpace;
+
+    switch (deviceType) {
+    // =================================================
+    // Mobile
+    // =================================================
+      case AppDeviceType.mobilePortrait:
+        pageMaxWidth = 600;
+
+        horizontalPadding = 16;
+
+        headerTopPadding = 18;
+        headerBottomPadding = 16;
+
+        titleFontSize = 20;
+        subtitleFontSize = 12.5;
+
+        searchBottomSpacing = 14;
+
+        actionsTopSpacing = 8;
+        actionsBottomSpacing = 14;
+
+        inputReservedSpace =
+        iscanedite ? 100 : 28;
+        break;
+
+    // =================================================
+    // Tablet Portrait
+    // =================================================
+      case AppDeviceType.tabletPortrait:
+        pageMaxWidth = 800;
+
+        horizontalPadding = 28;
+
+        headerTopPadding = 24;
+        headerBottomPadding = 20;
+
+        titleFontSize = 24;
+        subtitleFontSize = 14;
+
+        searchBottomSpacing = 18;
+
+        actionsTopSpacing = 10;
+        actionsBottomSpacing = 18;
+
+        inputReservedSpace =
+        iscanedite ? 110 : 34;
+        break;
+
+    // =================================================
+    // Tablet Landscape
+    // =================================================
+      case AppDeviceType.tabletLandscape:
+        pageMaxWidth = 1100;
+
+        horizontalPadding = 32;
+
+        headerTopPadding = 20;
+        headerBottomPadding = 16;
+
+        titleFontSize = 23;
+        subtitleFontSize = 13.5;
+
+        searchBottomSpacing = 14;
+
+        actionsTopSpacing = 8;
+        actionsBottomSpacing = 16;
+
+        inputReservedSpace =
+        iscanedite ? 100 : 30;
+        break;
+    }
+
     return Scaffold(
-      appBar: iscanedite == true
+      backgroundColor:
+      const Color(0xFFF8FAFC),
+
+      // ===================================================
+      // مهم للكيبورد
+      //
+      // الـScaffold يصغر المساحة المتاحة عند ظهور
+      // لوحة المفاتيح، وبالتالي input السفلي يطلع فوقها
+      // ===================================================
+      resizeToAvoidBottomInset: true,
+
+      appBar: iscanedite
           ? AppBar(
-              leading: Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    icon: Icon(
-                      size: AppSize.s30,
-                      Icons.arrow_back_sharp,
-                      color: ColorManager.secondaryColor1,
-                    ),
-                    onPressed: () {
-                      BlocProvider.of<ReportVisitDoctorBloc>(context)
-                          .add(DocNoIsExpandedNoteEvent());
-                      Navigator.pop(context);
-                    },
-                  );
-                },
+        elevation: 0,
+        surfaceTintColor:
+        Colors.transparent,
+
+        leading: Builder(
+          builder:
+              (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                Icons
+                    .arrow_back_ios_new_rounded,
+                size: deviceType ==
+                    AppDeviceType
+                        .mobilePortrait
+                    ? 22
+                    : 24,
+                color: ColorManager
+                    .secondaryColor1,
               ),
-              title: Text(repName),
-            )
+              onPressed: () {
+                BlocProvider.of<
+                    ReportVisitDoctorBloc>(
+                  context,
+                ).add(
+                  DocNoIsExpandedNoteEvent(),
+                );
+
+                Navigator.pop(
+                  context,
+                );
+              },
+            );
+          },
+        ),
+
+        title: Text(
+          repName,
+          maxLines: 1,
+          overflow:
+          TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: deviceType ==
+                AppDeviceType
+                    .mobilePortrait
+                ? 18
+                : 20,
+            fontWeight:
+            FontWeight.w700,
+          ),
+        ),
+      )
           : null,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-      return Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: CustomScrollView(
+
+      body: SafeArea(
+        top: false,
+
+        child: Stack(
+          alignment:
+          Alignment.bottomCenter,
+
+          children: [
+            // =================================================
+            // Scrollable Content
+            // =================================================
+            Center(
+              child: ConstrainedBox(
+                constraints:
+                BoxConstraints(
+                  maxWidth:
+                  pageMaxWidth,
+                ),
+
+                child:
+                CustomScrollView(
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior
+                      .onDrag,
+
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    // ===========================================
+                    // Header
+                    // ===========================================
+                    SliverPadding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        horizontalPadding,
+                        headerTopPadding,
+                        horizontalPadding,
+                        headerBottomPadding,
+                      ),
+
+                      sliver:
+                      SliverToBoxAdapter(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment
+                              .start,
+
                           children: [
-                            SizedBox(height: 20.h),
                             Text(
                               'تقارير الزيارات للأطباء',
-                              style: TextStyle(
-                                  fontSize: 15.sp,
 
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF0F172A)),
+                              style:
+                              TextStyle(
+                                fontSize:
+                                titleFontSize,
+
+                                fontWeight:
+                                FontWeight
+                                    .w800,
+
+                                color:
+                                const Color(
+                                  0xFF0F172A,
+                                ),
+                              ),
                             ),
+
+                            const SizedBox(
+                              height: 5,
+                            ),
+
                             Text(
-                              'مراجعة تفاصيل الزيارات للأطباء الميدانية للمندوب',
-                              style: TextStyle(
-                                  fontSize: 14.sp, color: Color(0xFF64748B)),
+                              'مراجعة تفاصيل الزيارات الميدانية للأطباء للمندوب',
+
+                              style:
+                              TextStyle(
+                                fontSize:
+                                subtitleFontSize,
+
+                                color:
+                                const Color(
+                                  0xFF64748B,
+                                ),
+
+                                height: 1.4,
+                              ),
                             ),
-                            SizedBox(height: 20.h),
                           ],
                         ),
                       ),
                     ),
-                    BlocConsumer<ReportVisitDoctorBloc, ReportVisitDoctorState>(
-                      listener: (context, state) {
-                        if (state is AsReadErrorState) {
-                          error(context, state.failure.massage, state.failure.code);
+
+                    // ===========================================
+                    // Bloc Content
+                    // ===========================================
+                    BlocConsumer<
+                        ReportVisitDoctorBloc,
+                        ReportVisitDoctorState>(
+                      listener:
+                          (context, state) {
+                        if (state
+                        is AsReadErrorState) {
+                          error(
+                            context,
+                            state.failure.massage,
+                            state.failure.code,
+                          );
                         }
                       },
-                      builder: (context, state) {
-                        List<RepVisitsModel> doctorNoteModel =
-                            context.watch<ReportVisitDoctorBloc>().repVisitsSearch;
-                        if (state is AllReportVisitDoctorEmptyState) {
-                          return SliverList(
-                              delegate: SliverChildListDelegate([
-                            const SizedBox(
-                              height: 100,
+
+                      builder:
+                          (context, state) {
+                        List<RepVisitsModel>
+                        doctorNoteModel =
+                            context
+                                .watch<
+                                ReportVisitDoctorBloc>()
+                                .repVisitsSearch;
+
+                        // =======================================
+                        // Empty
+                        // =======================================
+                        if (state
+                        is AllReportVisitDoctorEmptyState) {
+                          return SliverFillRemaining(
+                            hasScrollBody:
+                            false,
+
+                            child:
+                            emptyFullScreen(
+                              context,
                             ),
-                            emptyFullScreen(context)
-                          ]));
-                        }
-                        if (state is SenVisitDoctorAsReadState) {
-                          doctorNoteModel = state.doctorNoteModel;
-                        }
-                        if (state is AllReportVisitDoctorsState) {
-                          doctorNoteModel = state.repVisitsModel;
-                        }
-                        if (state is AllReportVisitDoctorLoadingState) {
-                          return SliverList(
-                            delegate: SliverChildListDelegate(
-                                [loadingFullScreen(context)]),
                           );
                         }
-                        if (state is AllReadLoadingState) {
-                          return SliverList(
-                            delegate: SliverChildListDelegate(
-                                [loadingFullScreen(context)]),
+
+                        // =======================================
+                        // Read State
+                        // =======================================
+                        if (state
+                        is SenVisitDoctorAsReadState) {
+                          doctorNoteModel =
+                              state.doctorNoteModel;
+                        }
+
+                        // =======================================
+                        // Success
+                        // =======================================
+                        if (state
+                        is AllReportVisitDoctorsState) {
+                          doctorNoteModel =
+                              state.repVisitsModel;
+                        }
+
+                        // =======================================
+                        // Loading
+                        // =======================================
+                        if (state
+                        is AllReportVisitDoctorLoadingState) {
+                          return SliverFillRemaining(
+                            hasScrollBody:
+                            false,
+
+                            child:
+                            loadingFullScreen(
+                              context,
+                            ),
                           );
                         }
-                        if (state is AllReadSucState) {
-                          BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                              AllReportVisitDoctorEvent(
-                                  VisitRepSen(repId, UserInfo.repId), iscanedite));
-                        }
-                        if (state is AllReportVisitDoctorErrorState) {
-                          return SliverList(
-                            delegate: SliverChildListDelegate([
-                              errorFullScreen(context, func: () {
-                                BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                    AllReportVisitDoctorEvent(
-                                        VisitRepSen(repId, userId), iscanedite));
-                              })
-                            ]),
+
+                        if (state
+                        is AllReadLoadingState) {
+                          return SliverFillRemaining(
+                            hasScrollBody:
+                            false,
+
+                            child:
+                            loadingFullScreen(
+                              context,
+                            ),
                           );
                         }
-                        if (state is AllReadErrorState) {
-                          return SliverList(
-                            delegate: SliverChildListDelegate([
-                              errorFullScreen(context, func: () {
-                                BlocProvider.of<ReportVisitDoctorBloc>(context).add(
-                                    AllReportVisitDoctorEvent(
-                                        VisitRepSen(repId, userId), iscanedite));
-                              })
-                            ]),
+
+                        // =======================================
+                        // Refresh after Read All
+                        // نفس السلوك الموجود عندك
+                        // =======================================
+                        if (state
+                        is AllReadSucState) {
+                          BlocProvider.of<
+                              ReportVisitDoctorBloc>(
+                            context,
+                          ).add(
+                            AllReportVisitDoctorEvent(
+                              VisitRepSen(
+                                repId,
+                                UserInfo.repId,
+                              ),
+                              iscanedite,
+                            ),
                           );
                         }
-                        return SliverList(
-                          delegate: SliverChildListDelegate([
-                            SearchField(
-                              searchController: searchNoteDoctorController,
-                              onPressed: (value) {
-                                BlocProvider.of<ReportVisitDoctorBloc>(context)
-                                    .add(SenSearchNoteVisitDoctorEvent(value));
+
+                        // =======================================
+                        // Error
+                        // =======================================
+                        if (state
+                        is AllReportVisitDoctorErrorState) {
+                          return SliverFillRemaining(
+                            hasScrollBody:
+                            false,
+
+                            child:
+                            errorFullScreen(
+                              context,
+                              func: () {
+                                BlocProvider.of<
+                                    ReportVisitDoctorBloc>(
+                                  context,
+                                ).add(
+                                  AllReportVisitDoctorEvent(
+                                    VisitRepSen(
+                                      repId,
+                                      userId,
+                                    ),
+                                    iscanedite,
+                                  ),
+                                );
                               },
                             ),
-                            SizedBox(height: 20.h),
-                            buildTotalReportsCard(doctorNoteModel.length, 'إجمالي التقارير','لهذا الشهر'),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 10.h),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .start, // محاذاة لليسار في الواجهة العربية
-                                children: [
-                                  if (iscanedite) ...[
-                                    // زر قراءة الكل
-                                    buildActionBtn(
-                                      context: context,
-                                      label: 'قراءة الكل',
-                                      icon: Icons.bookmarks_rounded,
-                                      color: const Color(
-                                          0xFF1E3A8A), // اللون الأزرق الأساسي
-                                      onTap: () {
-                                        BlocProvider.of<ReportVisitDoctorBloc>(
-                                                context)
-                                            .add(AllReadDocNoteEvent(
-                                                readAll: ReadAll(repPlan,
-                                                    UserInfo.repId, 1, 1)));
-                                      },
+                          );
+                        }
+
+                        if (state
+                        is AllReadErrorState) {
+                          return SliverFillRemaining(
+                            hasScrollBody:
+                            false,
+
+                            child:
+                            errorFullScreen(
+                              context,
+                              func: () {
+                                BlocProvider.of<
+                                    ReportVisitDoctorBloc>(
+                                  context,
+                                ).add(
+                                  AllReportVisitDoctorEvent(
+                                    VisitRepSen(
+                                      repId,
+                                      userId,
                                     ),
-                                    SizedBox(width: 12.w),
-                                    // زر إلغاء قراءة الكل
-                                    buildActionBtn(
-                                      context: context,
-                                      label: 'إلغاء قراءة الكل',
-                                      icon: Icons.bookmark_remove_outlined,
-                                      color: const Color(
-                                          0xFFEF4444), // لون أحمر هادئ للإلغاء
-                                      onTap: () {
-                                        BlocProvider.of<ReportVisitDoctorBloc>(
-                                                context)
-                                            .add(AllReadDocNoteEvent(
-                                                readAll: ReadAll(repPlan,
-                                                    UserInfo.repId, 1, 0)));
-                                      },
-                                    ),
-                                  ]
-                                ],
-                              ),
+                                    iscanedite,
+                                  ),
+                                );
+                              },
                             ),
-                            ...doctorNoteModel.asMap().entries.map((entry) {
-                              final index = entry.key;
-                              final doctorNoteModel = entry.value;
-                              return _buildDoctorVisitCard(
-                                  doctorNoteModel: doctorNoteModel,
-                                  index: index,
-                                  indexRep: indexRep,
-                                  iscanedite: iscanedite,
-                                  context: context);
-                            }),
-                          ]),
+                          );
+                        }
+
+                        // =======================================
+                        // Data
+                        // =======================================
+                        return SliverPadding(
+                          padding:
+                          EdgeInsets.symmetric(
+                            horizontal:
+                            horizontalPadding,
+                          ),
+
+                          sliver:
+                          SliverList(
+                            delegate:
+                            SliverChildListDelegate(
+                              [
+                                // =================================
+                                // Search
+                                // =================================
+                                SearchField(
+                                  searchController:
+                                  searchNoteDoctorController,
+
+                                  onPressed:
+                                      (value) {
+                                    BlocProvider.of<
+                                        ReportVisitDoctorBloc>(
+                                      context,
+                                    ).add(
+                                      SenSearchNoteVisitDoctorEvent(
+                                        value,
+                                      ),
+                                    );
+                                  },
+                                ),
+
+                                SizedBox(
+                                  height:
+                                  searchBottomSpacing,
+                                ),
+
+                                // =================================
+                                // Total
+                                // =================================
+                                buildTotalReportsCard(
+                                  doctorNoteModel
+                                      .length,
+                                  'إجمالي التقارير',
+                                  'لهذا الشهر',
+                                ),
+
+                                // =================================
+                                // Read All Actions
+                                // =================================
+                                if (iscanedite)
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.only(
+                                      top:
+                                      actionsTopSpacing,
+                                      bottom:
+                                      actionsBottomSpacing,
+                                    ),
+
+                                    child:
+                                    Wrap(
+                                      spacing:
+                                      10,
+                                      runSpacing:
+                                      10,
+
+                                      children: [
+                                        // =========================
+                                        // Read All
+                                        // =========================
+                                        buildActionBtn(
+                                          context:
+                                          context,
+
+                                          label:
+                                          'قراءة الكل',
+
+                                          icon:
+                                          Icons.bookmarks_rounded,
+
+                                          color:
+                                          const Color(
+                                            0xFF1E3A8A,
+                                          ),
+
+                                          onTap:
+                                              () {
+                                            BlocProvider.of<
+                                                ReportVisitDoctorBloc>(
+                                              context,
+                                            ).add(
+                                              AllReadDocNoteEvent(
+                                                readAll:
+                                                ReadAll(
+                                                  repPlan,
+                                                  UserInfo.repId,
+                                                  1,
+                                                  1,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+
+                                        // =========================
+                                        // Unread All
+                                        // =========================
+                                        buildActionBtn(
+                                          context:
+                                          context,
+
+                                          label:
+                                          'إلغاء قراءة الكل',
+
+                                          icon:
+                                          Icons.bookmark_remove_outlined,
+
+                                          color:
+                                          const Color(
+                                            0xFFEF4444,
+                                          ),
+
+                                          onTap:
+                                              () {
+                                            BlocProvider.of<
+                                                ReportVisitDoctorBloc>(
+                                              context,
+                                            ).add(
+                                              AllReadDocNoteEvent(
+                                                readAll:
+                                                ReadAll(
+                                                  repPlan,
+                                                  UserInfo.repId,
+                                                  1,
+                                                  0,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                else
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+
+                                // =================================
+                                // Cards
+                                // =================================
+                                ...doctorNoteModel
+                                    .asMap()
+                                    .entries
+                                    .map(
+                                      (entry) {
+                                    final index =
+                                        entry.key;
+
+                                    final doctorNote =
+                                        entry.value;
+
+                                    return _buildDoctorVisitCard(
+                                      doctorNoteModel:
+                                      doctorNote,
+
+                                      index:
+                                      index,
+
+                                      indexRep:
+                                      indexRep,
+
+                                      iscanedite:
+                                      iscanedite,
+
+                                      context:
+                                      context,
+                                    );
+                                  },
+                                ),
+
+                                // =================================
+                                // Space for bottom input
+                                //
+                                // آخر كرت ما بيندفن تحت input
+                                // =================================
+                                SizedBox(
+                                  height:
+                                  inputReservedSpace,
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       },
                     ),
                   ],
                 ),
               ),
-              stackInputDoctor(indexRep: indexRep, iscanedite: iscanedite)
-            ],
-          );
-        }
+            ),
+
+            // =================================================
+            // Bottom Input
+            //
+            // ظلينا محافظين عليه بنفس الاستدعاء
+            // =================================================
+            stackInputDoctor(
+              indexRep: indexRep,
+              iscanedite: iscanedite,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-// ملاحظة: استبدل doctorNoteModel بـ repVisitsModel حسب تسمية المتغير عندك
+  // =====================================================
+  // Doctor Visit Card
+  // =====================================================
+
   Widget _buildDoctorVisitCard({
     required dynamic doctorNoteModel,
     required int index,
@@ -243,184 +687,773 @@ class ReportVisitDoctorPage extends StatelessWidget {
     required bool iscanedite,
     required BuildContext context,
   }) {
-    return InkWell(
-      onTap: () {
-        BlocProvider.of<ReportVisitDoctorBloc>(context)
-            .add(DocIsExpandedNoteEvent(doctorNoteModel, index));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(35.r),
-          border: Border(
-            right: BorderSide(
-              color: doctorNoteModel.flag
-                  ? ColorManager.secondaryColor2
-                  : ColorManager.primary1,
-              width: 8.w,
-            ),
+    final deviceType =
+    AppResponsive.deviceType(context);
+
+    double cardRadius;
+    double cardPadding;
+    double cardBottomSpacing;
+
+    double sideBarWidth;
+
+    double nameFontSize;
+    double dateFontSize;
+
+    double specializationFontSize;
+    double infoIconSize;
+
+    double sectionSpacing;
+
+    double noteFontSize;
+
+    switch (deviceType) {
+    // =================================================
+    // Mobile
+    // =================================================
+      case AppDeviceType.mobilePortrait:
+        cardRadius = 18;
+        cardPadding = 15;
+        cardBottomSpacing = 12;
+
+        sideBarWidth = 4;
+
+        nameFontSize = 16;
+        dateFontSize = 10.5;
+
+        specializationFontSize = 12;
+        infoIconSize = 15;
+
+        sectionSpacing = 12;
+
+        noteFontSize = 12;
+        break;
+
+    // =================================================
+    // Tablet Portrait
+    // =================================================
+      case AppDeviceType.tabletPortrait:
+        cardRadius = 20;
+        cardPadding = 20;
+        cardBottomSpacing = 14;
+
+        sideBarWidth = 5;
+
+        nameFontSize = 19;
+        dateFontSize = 12;
+
+        specializationFontSize = 14;
+        infoIconSize = 17;
+
+        sectionSpacing = 15;
+
+        noteFontSize = 13.5;
+        break;
+
+    // =================================================
+    // Tablet Landscape
+    // =================================================
+      case AppDeviceType.tabletLandscape:
+        cardRadius = 18;
+        cardPadding = 18;
+        cardBottomSpacing = 12;
+
+        sideBarWidth = 5;
+
+        nameFontSize = 18;
+        dateFontSize = 11.5;
+
+        specializationFontSize = 13;
+
+        infoIconSize = 16;
+
+        sectionSpacing = 13;
+
+        noteFontSize = 13;
+        break;
+    }
+
+    final Color statusColor =
+    doctorNoteModel.flag
+        ? ColorManager.secondaryColor2
+        : ColorManager.primary1;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: cardBottomSpacing,
+      ),
+
+      child: Material(
+        color: Colors.transparent,
+
+        child: InkWell(
+          borderRadius:
+          BorderRadius.circular(
+            cardRadius,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.02),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            )
-          ],
-        ),
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          children: [
-            // السطر الأول: التاريخ واسم الطبيب
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    doctorNoteModel.docTitle,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1E3A8A),
-                    ),
+
+          // =================================================
+          // نفس السلوك
+          // =================================================
+          onTap: () {
+            BlocProvider.of<
+                ReportVisitDoctorBloc>(
+              context,
+            ).add(
+              DocIsExpandedNoteEvent(
+                doctorNoteModel,
+                index,
+              ),
+            );
+          },
+
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+
+              borderRadius:
+              BorderRadius.circular(
+                cardRadius,
+              ),
+
+              // Border موحد حتى ما نرجع لمشكلة
+              // borderRadius + border مختلف
+              border: Border.all(
+                color: const Color(
+                  0xFFE2E8F0,
+                ),
+              ),
+
+              boxShadow: [
+                BoxShadow(
+                  color:
+                  Colors.black.withOpacity(
+                    0.025,
+                  ),
+
+                  blurRadius: 12,
+
+                  offset:
+                  const Offset(
+                    0,
+                    4,
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      doctorNoteModel.visitDate,
-                      style: TextStyle(color: Colors.grey, fontSize: 11.sp),
-                    ),
-                    SizedBox(width: 5.w),
-                    Icon(Icons.calendar_month_outlined,
-                        size: 16.sp, color: Colors.grey),
-                  ],
-                ),
               ],
             ),
 
-            // السطر الثاني: أيقونات التحكم والتخصص
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            clipBehavior:
+            Clip.antiAlias,
+
+            // =================================================
+            // Stack للشريط الجانبي
+            // بدون IntrinsicHeight
+            // =================================================
+            child: Stack(
               children: [
-                Row(
-                  children: [
-                    Text(
-                      doctorNoteModel.spTitle,
-                      style: TextStyle(
-                        color: const Color(0xFF3B82F6),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13.sp,
-                      ),
-                    ),
-                    SizedBox(width: 5.w),
-                    Icon(Icons.local_offer_outlined,
-                        size: 16.sp, color: const Color(0xFF3B82F6)),
-                  ],
-                ),
-                if (iscanedite)
-                  BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
-                    builder: (context, state) {
-                      return Row(
+                // ===============================================
+                // Card Content
+                // ===============================================
+                Padding(
+                  padding:
+                  EdgeInsets.fromLTRB(
+                    cardPadding,
+                    cardPadding,
+
+                    cardPadding +
+                        sideBarWidth,
+
+                    cardPadding,
+                  ),
+
+                  child: Column(
+                    mainAxisSize:
+                    MainAxisSize.min,
+
+                    crossAxisAlignment:
+                    CrossAxisAlignment
+                        .stretch,
+
+                    children: [
+                      // =========================================
+                      // Name + Date
+                      // =========================================
+                      Row(
+                        crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+
                         children: [
-                          buildIconWatsAppButton(
-                            onPressed: () {
-                              shareReportToWhatsApp(
-                                context: context,
-                                doctorName: doctorNoteModel.docTitle,
-                                specialty: doctorNoteModel.spTitle,
-                                scientificOfficeNote: doctorNoteModel.note,
-                                visitDate: doctorNoteModel.visitDate,
-                                phoneNumber: phone,
-                                repName: repName,
-                              );
-                            },
-                          ),
-                          SizedBox(width: 8.w),
-                          buildIconButton(
-                            false,
-                            icon: Icons.visibility,
-                            onPressed: () {
-                              whoReadDialog(
-                                  context,
-                                  BlocProvider.of<ReportVisitDoctorBloc>(
-                                      context));
-                              BlocProvider.of<ReportVisitDoctorBloc>(context)
-                                  .add(WhoAllReadEvent(doctorNoteModel.visitId,
-                                  "2", UserInfo.repType.i));
-                            },
-                          ),
-                          SizedBox(width: 8.w),
-                          buildIconButton(
-                            doctorNoteModel.flag,
-                            icon: Icons.book_outlined,
-                            isLoading: state is AsReadLoadingState,
-                            onPressed: () {
-                              BlocProvider.of<ReportVisitDoctorBloc>(context)
-                                  .add(
-                                ChangeReadDocNoteEvent(
-                                  repVisitsModel: doctorNoteModel,
-                                  index: indexRep,
-                                  indexBook: index,
+                          // =====================================
+                          // Doctor Name
+                          // =====================================
+                          Expanded(
+                            child: Text(
+                              doctorNoteModel
+                                  .docTitle,
+
+                              maxLines: 2,
+
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+
+                              style:
+                              TextStyle(
+                                fontSize:
+                                nameFontSize,
+
+                                fontWeight:
+                                FontWeight
+                                    .w700,
+
+                                color:
+                                const Color(
+                                  0xFF1E3A8A,
                                 ),
-                              );
-                            },
+
+                                height: 1.25,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(
+                            width: 10,
+                          ),
+
+                          // =====================================
+                          // Visit Date
+                          // =====================================
+                          Container(
+                            padding:
+                            const EdgeInsets
+                                .symmetric(
+                              horizontal: 8,
+                              vertical: 5,
+                            ),
+
+                            decoration:
+                            BoxDecoration(
+                              color:
+                              const Color(
+                                0xFFF8FAFC,
+                              ),
+
+                              borderRadius:
+                              BorderRadius
+                                  .circular(
+                                9,
+                              ),
+
+                              border:
+                              Border.all(
+                                color:
+                                const Color(
+                                  0xFFE2E8F0,
+                                ),
+                              ),
+                            ),
+
+                            child: Row(
+                              mainAxisSize:
+                              MainAxisSize
+                                  .min,
+
+                              children: [
+                                Icon(
+                                  Icons
+                                      .calendar_month_outlined,
+
+                                  size:
+                                  infoIconSize,
+
+                                  color:
+                                  const Color(
+                                    0xFF94A3B8,
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  width: 5,
+                                ),
+
+                                Text(
+                                  doctorNoteModel
+                                      .visitDate,
+
+                                  maxLines: 1,
+
+                                  style:
+                                  TextStyle(
+                                    color:
+                                    const Color(
+                                      0xFF64748B,
+                                    ),
+
+                                    fontSize:
+                                    dateFontSize,
+
+                                    fontWeight:
+                                    FontWeight
+                                        .w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
-                      );
-                    },
-                  )
-                else
-                  const SizedBox(),
-              ],
-            ),
+                      ),
 
-            SizedBox(height: 12.h),
+                      SizedBox(
+                        height:
+                        sectionSpacing,
+                      ),
 
-            // الموقع والتقييم
-            Row(
-              children: [
-                buildSmallInfoBox('الموقع', doctorNoteModel.placeTitle,
-                    Icons.location_on_outlined),
-                SizedBox(width: 10.w),
-                buildSmallInfoBox('التقييم', doctorNoteModel.rate ?? "0.0", Icons.star,
-                    isStar: true),
-              ],
-            ),
+                      // =========================================
+                      // Specialization + Actions
+                      // =========================================
+                      if (deviceType ==
+                          AppDeviceType
+                              .mobilePortrait)
+                        Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment
+                              .stretch,
 
-            SizedBox(height: 14.h),
+                          children: [
+                            _buildSpecialization(
+                              doctorNoteModel:
+                              doctorNoteModel,
 
-            // ملاحظة المكتب العلمي
-            buildDetailBox(
-              'ملاحظة المكتب العلمي',
-              Text(
-                doctorNoteModel.note.isEmpty
-                    ? "لا توجد ملاحظات"
-                    : doctorNoteModel.note,
-                textAlign: TextAlign.right,
-                style: TextStyle(color: const Color(0xFF1E3A8A), fontSize: 13.sp),
-              ),
-            ),
+                              fontSize:
+                              specializationFontSize,
 
-            if (doctorNoteModel.samples.isNotEmpty) ...[
-              SizedBox(height: 14.h),
-              // الأصناف الموزعة (المستحضرات)
-              buildDetailBox(
-                'المستحضرات الموزعة',
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: doctorNoteModel.samples.map<Widget>((sample) {
-                    return buildBulletItem(sample);
-                  }).toList(),
+                              iconSize:
+                              infoIconSize,
+                            ),
+
+                            if (iscanedite) ...[
+                              const SizedBox(
+                                height: 10,
+                              ),
+
+                              Align(
+                                alignment:
+                                Alignment
+                                    .centerLeft,
+
+                                child:
+                                _buildCardActions(
+                                  context:
+                                  context,
+
+                                  doctorNoteModel:
+                                  doctorNoteModel,
+
+                                  index:
+                                  index,
+
+                                  indexRep:
+                                  indexRep,
+                                ),
+                              ),
+                            ],
+                          ],
+                        )
+                      else
+                        Row(
+                          children: [
+                            Expanded(
+                              child:
+                              _buildSpecialization(
+                                doctorNoteModel:
+                                doctorNoteModel,
+
+                                fontSize:
+                                specializationFontSize,
+
+                                iconSize:
+                                infoIconSize,
+                              ),
+                            ),
+
+                            if (iscanedite) ...[
+                              const SizedBox(
+                                width: 12,
+                              ),
+
+                              _buildCardActions(
+                                context:
+                                context,
+
+                                doctorNoteModel:
+                                doctorNoteModel,
+
+                                index:
+                                index,
+
+                                indexRep:
+                                indexRep,
+                              ),
+                            ],
+                          ],
+                        ),
+
+                      SizedBox(
+                        height:
+                        sectionSpacing,
+                      ),
+
+                      // =========================================
+                      // Divider
+                      // =========================================
+                      Container(
+                        height: 1,
+
+                        color:
+                        const Color(
+                          0xFFF1F5F9,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height:
+                        sectionSpacing,
+                      ),
+
+                      // =========================================
+                      // Place + Rate
+                      //
+                      // نفس helpers الموجودة بالمشروع
+                      // =========================================
+                      Row(
+                        children: [
+                          buildSmallInfoBox(
+                            'الموقع',
+                            doctorNoteModel
+                                .placeTitle,
+                            Icons
+                                .location_on_outlined,
+                          ),
+
+                          const SizedBox(
+                            width: 10,
+                          ),
+
+                          buildSmallInfoBox(
+                            'التقييم',
+                            doctorNoteModel
+                                .rate ??
+                                "0.0",
+                            Icons.star,
+                            isStar: true,
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(
+                        height:
+                        sectionSpacing,
+                      ),
+
+                      // =========================================
+                      // Scientific Office Note
+                      // =========================================
+                      buildDetailBox(
+                        'ملاحظة المكتب العلمي',
+
+                        Text(
+                          doctorNoteModel
+                              .note
+                              .isEmpty
+                              ? "لا توجد ملاحظات"
+                              : doctorNoteModel
+                              .note,
+
+                          textAlign:
+                          TextAlign.right,
+
+                          style:
+                          TextStyle(
+                            color:
+                            const Color(
+                              0xFF1E3A8A,
+                            ),
+
+                            fontSize:
+                            noteFontSize,
+
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+
+                      // =========================================
+                      // Samples
+                      // =========================================
+                      if (doctorNoteModel
+                          .samples
+                          .isNotEmpty) ...[
+                        SizedBox(
+                          height:
+                          sectionSpacing,
+                        ),
+
+                        buildDetailBox(
+                          'المستحضرات الموزعة',
+
+                          Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment
+                                .start,
+
+                            children:
+                            doctorNoteModel
+                                .samples
+                                .map<Widget>(
+                                  (sample) {
+                                return buildBulletItem(
+                                  sample,
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ],
+
+                // ===============================================
+                // Status Side Bar
+                //
+                // ما في border غير موحد
+                // وما في infinite height
+                // ===============================================
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+
+                  child: Container(
+                    width:
+                    sideBarWidth,
+
+                    color:
+                    statusColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
+  // =====================================================
+  // Specialization
+  // =====================================================
 
+  Widget _buildSpecialization({
+    required dynamic doctorNoteModel,
+    required double fontSize,
+    required double iconSize,
+  }) {
+    return Row(
+      mainAxisSize:
+      MainAxisSize.min,
+
+      children: [
+        Container(
+          width: iconSize + 12,
+          height: iconSize + 12,
+
+          alignment:
+          Alignment.center,
+
+          decoration:
+          BoxDecoration(
+            color: const Color(
+              0xFFEFF6FF,
+            ),
+
+            borderRadius:
+            BorderRadius.circular(
+              8,
+            ),
+          ),
+
+          child: Icon(
+            Icons.local_offer_outlined,
+
+            size: iconSize,
+
+            color:
+            const Color(
+              0xFF3B82F6,
+            ),
+          ),
+        ),
+
+        const SizedBox(
+          width: 7,
+        ),
+
+        Flexible(
+          child: Text(
+            doctorNoteModel.spTitle,
+
+            maxLines: 1,
+
+            overflow:
+            TextOverflow.ellipsis,
+
+            style: TextStyle(
+              color:
+              const Color(
+                0xFF3B82F6,
+              ),
+
+              fontWeight:
+              FontWeight.w600,
+
+              fontSize:
+              fontSize,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // =====================================================
+  // Card Actions
+  //
+  // نفس أحداث الكود الأصلي
+  // =====================================================
+
+  Widget _buildCardActions({
+    required BuildContext context,
+    required dynamic doctorNoteModel,
+    required int index,
+    required int indexRep,
+  }) {
+    return BlocBuilder<
+        ReportVisitDoctorBloc,
+        ReportVisitDoctorState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisSize:
+          MainAxisSize.min,
+
+          children: [
+            // =============================================
+            // WhatsApp
+            // =============================================
+            buildIconWatsAppButton(
+              onPressed: () {
+                shareReportToWhatsApp(
+                  context: context,
+
+                  doctorName:
+                  doctorNoteModel
+                      .docTitle,
+
+                  specialty:
+                  doctorNoteModel
+                      .spTitle,
+
+                  scientificOfficeNote:
+                  doctorNoteModel
+                      .note,
+
+                  visitDate:
+                  doctorNoteModel
+                      .visitDate,
+
+                  phoneNumber:
+                  phone,
+
+                  repName:
+                  repName,
+                );
+              },
+            ),
+
+            const SizedBox(
+              width: 8,
+            ),
+
+            // =============================================
+            // Who Read
+            // =============================================
+            buildIconButton(
+              false,
+
+              icon:
+              Icons.visibility,
+
+              onPressed: () {
+                whoReadDialog(
+                  context,
+                  BlocProvider.of<
+                      ReportVisitDoctorBloc>(
+                    context,
+                  ),
+                );
+
+                BlocProvider.of<
+                    ReportVisitDoctorBloc>(
+                  context,
+                ).add(
+                  WhoAllReadEvent(
+                    doctorNoteModel
+                        .visitId,
+                    "2",
+                    UserInfo.repType.i,
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(
+              width: 8,
+            ),
+
+            // =============================================
+            // Read / Unread
+            // =============================================
+            buildIconButton(
+              doctorNoteModel.flag,
+
+              icon:
+              Icons.book_outlined,
+
+              isLoading:
+              state
+              is AsReadLoadingState,
+
+              onPressed: () {
+                BlocProvider.of<
+                    ReportVisitDoctorBloc>(
+                  context,
+                ).add(
+                  ChangeReadDocNoteEvent(
+                    repVisitsModel:
+                    doctorNoteModel,
+
+                    index:
+                    indexRep,
+
+                    indexBook:
+                    index,
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

@@ -1,10 +1,8 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/doctors/widget/card.dart';
 import 'package:domina_app/presentation/doctors/widget/header.dart';
 import 'package:domina_app/presentation/doctors/widget/hospital/hospital_details_card.dart';
 import 'package:domina_app/presentation/doctors/widget/hospital/hospital_state.dart';
 import 'package:domina_app/presentation/doctors/widget/note.dart';
-import 'package:domina_app/presentation/doctors/widget/start_card.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
 

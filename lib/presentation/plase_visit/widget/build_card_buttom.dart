@@ -1,23 +1,70 @@
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget buildCardButton(String label, Color bg, Color text, IconData icon) {
+Widget buildCardButton(
+    BuildContext context,
+    String label,
+    Color bg,
+    Color text,
+    IconData icon,
+    ) {
+  final ui = AppUi.of(context);
+
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-    decoration:
-        BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10.r)),
-    child:
-        Text(label, style: TextStyle(color: text, fontWeight: FontWeight.bold)),
+    padding: EdgeInsets.symmetric(
+      horizontal: ui.isMobile ? 20 : 24,
+      vertical: ui.isMobile ? 8 : 10,
+    ),
+    decoration: BoxDecoration(
+      color: bg,
+      borderRadius: BorderRadius.circular(
+        ui.smallRadius,
+      ),
+    ),
+    child: Text(
+      label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: text,
+        fontSize: ui.isMobile ? 13 : 15,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
   );
 }
 
-Widget buildCardActionText(String label, IconData icon) {
+Widget buildCardActionText(
+    BuildContext context,
+    String label,
+    IconData icon,
+    ) {
+  final ui = AppUi.of(context);
+
   return Row(
+    mainAxisSize: MainAxisSize.min,
     children: [
-      Text(label,
-          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
-      SizedBox(width: 4.w),
-      Icon(icon, color: Colors.blue, size: 18.sp),
+      Flexible(
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: ColorManager.medicalPrimary,
+            fontSize: ui.isMobile ? 13 : 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      SizedBox(
+        width: ui.smallSpacing,
+      ),
+      Icon(
+        icon,
+        color: ColorManager.medicalPrimary,
+        size: ui.smallIconSize + 2,
+      ),
     ],
   );
 }

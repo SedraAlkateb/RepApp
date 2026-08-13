@@ -250,15 +250,47 @@ final class ViewRecipeState extends SeniorProfState {
   ViewRecipeState(this.copyRecipeRequest, this.isDoctor, this.name);
   List<Object?> get props => [copyRecipeRequest, isDoctor, name];
 }
-
 final class ViewRecipeErrorState extends SeniorProfState {
   final Failure failure;
   ViewRecipeErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }
-
 final class ViewRecipeLoadingState extends SeniorProfState {
+  @override
+  List<Object?> get props => [];
+}
+final class LogoutDeleteAllState extends SeniorProfState {
+  LogoutDeleteAllState();
+  @override
+  List<Object?> get props => [];
+}
+final class LogoutDeleteAllLoadingState extends SeniorProfState {
+  LogoutDeleteAllLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+final class LogoutDeleteAllErrorState extends SeniorProfState {
+  final Failure failure;
+  LogoutDeleteAllErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class DocHosState extends SeniorProfState {
+ final List<DoctorSenModel> doctors;
+ final List<HospitalSpModel> hospitals;
+
+ DocHosState(this.doctors, this.hospitals);
+
+  List<Object?> get props => [doctors, hospitals];
+}
+final class DocHosErrorState extends SeniorProfState {
+  final Failure failure;
+  DocHosErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+final class DocHosLoadingState extends SeniorProfState {
   @override
   List<Object?> get props => [];
 }

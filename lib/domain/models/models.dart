@@ -58,8 +58,7 @@ class BrandSpPlanModel {
 
   static void printBrandPlanActive(List<BrandSpPlanModel> data) {
     print(
-        "=== 🚀 بدء طباعة مصفوفة planBrandActive (إجمالي العناصر: ${data
-            .length}) ===");
+        "=== 🚀 بدء طباعة مصفوفة planBrandActive (إجمالي العناصر: ${data.length}) ===");
 
     for (int i = 0; i < data.length; i++) {
       final mainItem = data[i];
@@ -82,8 +81,7 @@ class BrandSpPlanModel {
         print("     🔸 [$j] Amount: ${sp.amount}");
         print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
         print(
-            "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp
-                .sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
+            "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
       }
     }
     print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
@@ -174,8 +172,8 @@ class VisitBrandPharmacyModel {
   int amount = 1;
   int? flag = 0;
 
-  VisitBrandPharmacyModel(this.id, this.visitId, this.brandId, this.amount,
-      this.flag);
+  VisitBrandPharmacyModel(
+      this.id, this.visitId, this.brandId, this.amount, this.flag);
 
   Map<String, dynamic> toJson() {
     return {
@@ -376,7 +374,8 @@ class VisitDoctorRequest {
   int flag;
   String target;
 
-  VisitDoctorRequest(this.id,
+  VisitDoctorRequest(
+      this.id,
       this.visitDate,
       this.note,
       this.issue,
@@ -527,8 +526,8 @@ class VisitHospitalAndHospital {
   VisitHospitalModel visitHospitalModel;
   SpecDModel specModel;
 
-  VisitHospitalAndHospital(this.hospitalModel, this.visitHospitalModel,
-      this.specModel);
+  VisitHospitalAndHospital(
+      this.hospitalModel, this.visitHospitalModel, this.specModel);
 }
 
 class VisitDoctorBase {
@@ -786,8 +785,8 @@ class SpecDModel {
         map['specialization_flag'], 0, 0, 0);
   }
 
-  factory SpecDModel.fromMap1(Map<String, dynamic> map,
-      Map<String, dynamic> map1) {
+  factory SpecDModel.fromMap1(
+      Map<String, dynamic> map, Map<String, dynamic> map1) {
     return SpecDModel(
         map['specialization_id'],
         map['specialization_title'],
@@ -888,7 +887,8 @@ class DoctorModel {
   int? visited;
   String? workHours;
 
-  DoctorModel(this.id,
+  DoctorModel(
+      this.id,
       this.title,
       this.placeId,
       this.address,
@@ -958,8 +958,8 @@ class DoctorIssueModel {
   String visitDate;
   String? issue;
 
-  DoctorIssueModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.issue);
+  DoctorIssueModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.issue);
 
   Map<String, dynamic> toMap() {
     return {
@@ -1000,8 +1000,8 @@ class DoctorNoteModel {
   String visitDate;
   String? note;
 
-  DoctorNoteModel(this.docTitle, this.spTitle, this.address, this.visitDate,
-      this.note);
+  DoctorNoteModel(
+      this.docTitle, this.spTitle, this.address, this.visitDate, this.note);
 
   Map<String, dynamic> toMap() {
     return {
@@ -1086,20 +1086,21 @@ class HospitalSpModel {
   String? note;
   String? SpName;
 
-  HospitalSpModel(this.id,
-      this.hospitalId,
-      this.spId,
-      this.totalDocs,
-      this.rate,
-      this.visit,
-      this.flag, {
-        this.SpName,
-        this.placeTitle,
-        this.address,
-        this.title,
-        this.note,
-        this.visited,
-      });
+  HospitalSpModel(
+    this.id,
+    this.hospitalId,
+    this.spId,
+    this.totalDocs,
+    this.rate,
+    this.visit,
+    this.flag, {
+    this.SpName,
+    this.placeTitle,
+    this.address,
+    this.title,
+    this.note,
+    this.visited,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -1241,7 +1242,8 @@ class LoginModel {
   int usedReci;
   int remainReci;
 
-  LoginModel(this.samplesCount,
+  LoginModel(
+      this.samplesCount,
       this.token,
       this.repId,
       this.otherPlanId,
@@ -1262,7 +1264,7 @@ class LoginModel {
       this.usedReci,
       this.remainReci,
       {this.otherStartDate,
-        this.otherEndDate});
+      this.otherEndDate});
 
   Map<String, dynamic> toMap() {
     return {
@@ -1386,9 +1388,8 @@ class RepType {
       4 => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
       5 => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
       6 => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      7 =>
-          RepType(7, "مندوب",
-              color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      7 => RepType(7, "مندوب",
+          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
       _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
@@ -1396,13 +1397,12 @@ class RepType {
   static RepType fromIntS(String? value) {
     return switch (value) {
       "4" =>
-          RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
       "5" =>
-          RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+        RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
       "6" => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      "7" =>
-          RepType(7, "مندوب",
-              color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+      "7" => RepType(7, "مندوب",
+          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
       _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
@@ -1411,14 +1411,13 @@ class RepType {
   static RepType fromName(String name) {
     return switch (name) {
       "supervisor" =>
-          RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
       "teamleader" =>
-          RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+        RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
       "senior" =>
-          RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      "مندوب" =>
-          RepType(7, "مندوب",
-              color: const Color(0xFFD4AF37)), // secondary (الذهبي)
+        RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
+      "مندوب" => RepType(7, "مندوب",
+          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
       _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
     };
   }
@@ -1622,7 +1621,8 @@ class PlanBrandSqlModel {
   int sampleCoast;
   String specializationTitle;
 
-  PlanBrandSqlModel(this.id,
+  PlanBrandSqlModel(
+      this.id,
       this.repPlanId,
       this.brandType,
       this.amount,
@@ -1694,7 +1694,8 @@ class HospitalSpAllModel {
   String? titleSp;
   int? flagSp;
 
-  HospitalSpAllModel(this.hospitalId,
+  HospitalSpAllModel(
+      this.hospitalId,
       this.title,
       this.address,
       this.placeTitle,
@@ -1784,28 +1785,29 @@ class UpdateReciRequest {
   String? brand_4;
   String create_date;
 
-  UpdateReciRequest(this.recipeId,
-      this.recipeType,
-      this.repId,
-      this.type,
-      this.docId,
-      this.spName,
-      this.brand_1,
-      this.address,
-      this.phone,
-      this.total,
-      this.create_date, {
-        this.note1,
-        this.note2,
-        this.flagImage1,
-        this.flagImage2,
-        this.note_emp,
-        this.image1,
-        this.image2,
-        this.brand_2,
-        this.brand_3,
-        this.brand_4,
-      });
+  UpdateReciRequest(
+    this.recipeId,
+    this.recipeType,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total,
+    this.create_date, {
+    this.note1,
+    this.note2,
+    this.flagImage1,
+    this.flagImage2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -1857,26 +1859,27 @@ class ReciRequest {
   String? brand_3;
   String? brand_4;
 
-  ReciRequest(this.recipeType,
-      this.repId,
-      this.type,
-      this.docId,
-      this.spName,
-      this.brand_1,
-      this.address,
-      this.phone,
-      this.total, {
-        this.note1,
-        this.note2,
-        this.flagImage1,
-        this.flagImage2,
-        this.note_emp,
-        this.image1,
-        this.image2,
-        this.brand_2,
-        this.brand_3,
-        this.brand_4,
-      });
+  ReciRequest(
+    this.recipeType,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total, {
+    this.note1,
+    this.note2,
+    this.flagImage1,
+    this.flagImage2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
 }
 
 class CopyReciRequest {
@@ -1900,26 +1903,27 @@ class CopyReciRequest {
   String? create_date;
   String? print_date;
 
-  CopyReciRequest(this.id,
-      this.repId,
-      this.type,
-      this.docId,
-      this.spName,
-      this.brand_1,
-      this.address,
-      this.phone,
-      this.total,
-      this.create_date,
-      this.print_date, {
-        this.note1,
-        this.note2,
-        this.note_emp,
-        this.image1,
-        this.image2,
-        this.brand_2,
-        this.brand_3,
-        this.brand_4,
-      });
+  CopyReciRequest(
+    this.id,
+    this.repId,
+    this.type,
+    this.docId,
+    this.spName,
+    this.brand_1,
+    this.address,
+    this.phone,
+    this.total,
+    this.create_date,
+    this.print_date, {
+    this.note1,
+    this.note2,
+    this.note_emp,
+    this.image1,
+    this.image2,
+    this.brand_2,
+    this.brand_3,
+    this.brand_4,
+  });
 }
 
 class StateImage {
@@ -1950,9 +1954,8 @@ class AllRepresentative {
   int? TotalReadVisit;
   int? totalVisit;
 
-  AllRepresentative(this.id, this.name, this.number,
-      this.TotalReadVisit, this.totalVisit
-      , this.activePlan);
+  AllRepresentative(this.id, this.name, this.number, this.TotalReadVisit,
+      this.totalVisit, this.activePlan);
 }
 
 class FlagModel {
@@ -1982,9 +1985,9 @@ class FlagModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FlagModel &&
-              runtimeType == other.runtimeType &&
-              flag == other.flag;
+      other is FlagModel &&
+          runtimeType == other.runtimeType &&
+          flag == other.flag;
 
   @override
   int get hashCode => flag.hashCode;
@@ -2025,15 +2028,16 @@ class InfoRep {
   String recipesCount;
   int repPlanId;
   int totalVisit;
-  String totDocVisit; // حقل جديد
-  String totHosVisit; // حقل جديد
+  int totDocVisit; // حقل جديد
+  int totHosVisit; // حقل جديد
   int visitDon;
-  String visitDonDoc; // حقل جديد
-  String visitDonHos; // حقل جديد
+  int visitDonDoc; // حقل جديد
+  int visitDonHos; // حقل جديد
   int visitNoteYet;
   int repType;
 
-  InfoRep(this.id,
+  InfoRep(
+      this.id,
       this.name,
       this.mobile,
       this.address,
@@ -2080,7 +2084,8 @@ class RepVisitsModel {
   bool flag;
   List<String> samples;
 
-  RepVisitsModel(this.visitId,
+  RepVisitsModel(
+      this.visitId,
       this.visitDate,
       this.placeTitle,
       this.docTitle,
@@ -2109,7 +2114,8 @@ class RepVisitsModelSearch {
   bool flag;
   List<String> samples;
 
-  RepVisitsModelSearch(this.index,
+  RepVisitsModelSearch(
+      this.index,
       this.visitId,
       this.visitDate,
       this.placeTitle,
@@ -2232,8 +2238,8 @@ class ActivePlanBrandModel {
   String title;
   String pharmaceuticalFormTitle;
 
-  ActivePlanBrandModel(this.spPlan, this.type, this.title,
-      this.pharmaceuticalFormTitle);
+  ActivePlanBrandModel(
+      this.spPlan, this.type, this.title, this.pharmaceuticalFormTitle);
 }
 
 class Orders {
@@ -2289,7 +2295,6 @@ class AllRepresentativeFuture {
 
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan,
       this.samplesCount, this.reptype);
-
 }
 
 class WhoReadModel {
@@ -2307,10 +2312,12 @@ class SeniorCityModel {
   String city_id;
   String city_name;
 
-  SeniorCityModel(this.rep_id,
-      this.rep_name,
-      this.city_id,
-      this.city_name,);
+  SeniorCityModel(
+    this.rep_id,
+    this.rep_name,
+    this.city_id,
+    this.city_name,
+  );
 
   Map<String, dynamic> toMap() {
     return {
@@ -2347,8 +2354,8 @@ class SearchHospitalNoteModel {
   String issue;
   String visitDate;
 
-  SearchHospitalNoteModel(this.hosId, this.name, this.spId, this.note,
-      this.issue, this.visitDate);
+  SearchHospitalNoteModel(
+      this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);
 }
 
 List<FlagModel> getAllFlags(int repType) {
@@ -2382,35 +2389,35 @@ List<FlagModel> getAllFlags(int repType) {
 Color getColor(int flag) {
   switch (flag) {
     case 0:
-    // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
+      // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
       return const Color(0xFF0288D1);
 
     case 1:
-    // بانتظار موافقة المشرف: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
+      // بانتظار موافقة المشرف: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
       return const Color(0xFFE53935);
 
     case 2:
-    // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
+      // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
       return const Color(0xFF43A047);
 
     case 3:
-    // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
+      // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
       return const Color(0xFF37474F);
 
     case 4:
-    // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
+      // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
       return const Color(0xFF00897B);
 
     case 5:
-    // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
+      // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
       return const Color(0xFFFB8C00);
 
     case 6:
-    // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
+      // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
       return const Color(0xFF5E35B1);
 
     default:
-    // الحالة الافتراضية: الكحلي الأساسي للتطبيق
+      // الحالة الافتراضية: الكحلي الأساسي للتطبيق
       return const Color(0xFF0D47A1);
   }
 }
@@ -2440,14 +2447,38 @@ class FinishedPlanModel {
   String endDate;
   String active;
 
-  FinishedPlanModel(this.id, this.cityId, this.startDate, this.endDate,
-      this.active);
+  FinishedPlanModel(
+      this.id, this.cityId, this.startDate, this.endDate, this.active);
 }
 
 class PlanRepsModel {
   String id;
   String name;
   String repPlan;
+  int totalVisit;
+  int totalUnReadVisit;
+  int totalReadVisit;
 
-  PlanRepsModel(this.id, this.name, this.repPlan);
+  PlanRepsModel(this.id, this.name, this.repPlan, this.totalVisit,
+      this.totalUnReadVisit, this.totalReadVisit);
+}
+class DocHosByPlaceAndSp{
+  List<DoctorSenModel> doctors;
+  List<HospitalSpModel> hospitals;
+
+  DocHosByPlaceAndSp(this.doctors, this.hospitals);
+}
+class DoctorSenModel {
+  String? docId;
+  String? title;
+  String? address;
+  String? spId;
+  String? place;
+  String? visit;
+  String? note;
+  String? rate;
+  String? spTitle;
+
+  DoctorSenModel(this.docId, this.title, this.address, this.spId, this.place,
+      this.visit, this.note, this.rate, this.spTitle);
 }

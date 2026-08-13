@@ -38,8 +38,6 @@ import 'package:domina_app/domain/usecase/all_visit_doctor_rep_sen_usecase.dart'
 import 'package:domina_app/domain/usecase/all_visit_doctor_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_rep_sen_usecase.dart';
 import 'package:domina_app/domain/usecase/all_visit_hospital_sql_usecase.dart';
-import 'package:domina_app/domain/usecase/all_visit_issue_usecase.dart';
-import 'package:domina_app/domain/usecase/all_visit_notes_usecase.dart';
 import 'package:domina_app/domain/usecase/async_data_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/changePlanBrandType_usecase.dart';
 import 'package:domina_app/domain/usecase/change_rep_plan_status.dart';
@@ -56,6 +54,7 @@ import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_recipe_usecase.dart';
 import 'package:domina_app/domain/usecase/finished_plans_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
+import 'package:domina_app/domain/usecase/get_doc_hos_by_sp_place.dart';
 import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/get_pan_reps_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
@@ -121,7 +120,6 @@ import 'package:domina_app/presentation/senior/plan_management/bloc/plan_managem
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
-import 'package:domina_app/presentation/senior/report_sience_note/bloc/report_science_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
@@ -136,7 +134,6 @@ import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../presentation/senior/report_issue_note/bloc/report_issue_bloc.dart';
 //
 // Future<void> initAppModule() async {
 //   // 1. Core Module (Crashlytics, Analytics, NetworkInfo)
@@ -734,9 +731,18 @@ Future<void> initSeniorProfModule() async {
       instance.registerFactory<GetRepReciUsecase>(
           () => GetRepReciUsecase(instance()));
     }
-
+    if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
+      instance
+          .registerFactory<DeleteAllSqlUsecase>(() => DeleteAllSqlUsecase(instance()));
+    }
+    if (!GetIt.I.isRegistered<GetDocHosBySpPlace>()) {
+      instance
+          .registerFactory<GetDocHosBySpPlace>(() => GetDocHosBySpPlace(instance()));
+    }
     if (!GetIt.I.isRegistered<SeniorProfBloc>()) {
       instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc(
+          instance(),
+          instance(),
           instance(),
           instance(),
           instance(),
@@ -763,23 +769,8 @@ Future<void> initSeniorModule() async {
   }
 }
 
-Future<void> initSeniorReportScienceModule() async {
-  if (!GetIt.I.isRegistered<AllVisitNotesUsecase>()) {
-    instance.registerFactory<AllVisitNotesUsecase>(
-        () => AllVisitNotesUsecase(instance()));
-    instance.registerFactory<ReportScienceBloc>(
-        () => ReportScienceBloc(instance()));
-  }
-}
 
-Future<void> initSeniorReportIssueModule() async {
-  if (!GetIt.I.isRegistered<AllVisitIssueUsecase>()) {
-    instance.registerFactory<AllVisitIssueUsecase>(
-        () => AllVisitIssueUsecase(instance()));
-    instance
-        .registerFactory<ReportIssueBloc>(() => ReportIssueBloc(instance()));
-  }
-}
+
 
 Future<void> initSeniorReportInventoryModule() async {
   if (!GetIt.I.isRegistered<AllInventoryUsecase>()) {

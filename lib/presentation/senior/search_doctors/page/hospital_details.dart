@@ -1,315 +1,915 @@
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/senior/search_doctors/widgets/info_row_item.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HospitalDetails extends StatefulWidget {
+  const HospitalDetails({
+    super.key,
+    required this.searchHospitalModel,
+  });
+
   final SearchHospitalModel searchHospitalModel;
-  const HospitalDetails({super.key, required this.searchHospitalModel});
 
   @override
-  State<HospitalDetails> createState() => _HospitalDetailsState();
+  State<HospitalDetails> createState() =>
+      _HospitalDetailsState();
 }
 
-class _HospitalDetailsState extends State<HospitalDetails>
+class _HospitalDetailsState
+    extends State<HospitalDetails>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController searchNoteHospitalController =
-      TextEditingController();
+  TextEditingController();
+
+  @override
+  void dispose() {
+    searchNoteHospitalController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final ui = AppUi.of(context);
+
     return Scaffold(
-      backgroundColor:
-          const Color(0xFFF8F9FA), // خلفية فاتحة ومريحة للعين تبرز الكروت
-      appBar: null,
+      backgroundColor: const Color(0xFFF8FAFC),
       body: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
+        // =====================================================
+        // نفس buildWhen الأصلي
+        // =====================================================
         buildWhen: (previous, current) =>
-            current is FutureDocHospitalsState ||
+        current is FutureDocHospitalsState ||
             current is FutureDocHospitalsErrorState ||
             current is FutureDocHospitalsLoadingState ||
             current is FutureDocHospitalsEmptyState,
+
         builder: (context, state) {
-          // 1. حالة الخطأ البرمجي
+          // ===================================================
+          // Error
+          // ===================================================
           if (state is FutureDocHospitalsErrorState) {
-            return CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  child: Center(
-                    child: errorFullScreen(context,
-                        mes: state.failure.massage, func: () {}),
-                  ),
-                ),
-              ],
+            return _buildStatePage(
+              context,
+              child: errorFullScreen(
+                context,
+                mes: state.failure.massage,
+                func: () {},
+              ),
             );
           }
 
-          // 2. حالة التحميل والانتظار
+          // ===================================================
+          // Loading
+          // ===================================================
           if (state is FutureDocHospitalsLoadingState) {
-            return CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  child: Center(child: loadingFullScreen(context)),
-                ),
-              ],
+            return _buildStatePage(
+              context,
+              child: loadingFullScreen(context),
             );
           }
 
-          // 3. حالة البيانات الفارغة من السيرفر
+          // ===================================================
+          // Empty
+          // ===================================================
           if (state is FutureDocHospitalsEmptyState) {
-            return CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  child: Center(child: emptyFullScreen(context)),
-                ),
-              ],
+            return _buildStatePage(
+              context,
+              child: emptyFullScreen(context),
             );
           }
 
-          // 4. حالة النجاح وعرض التقارير تدريجياً وبأناقة بصرية
+          // ===================================================
+          // Success
+          // ===================================================
           if (state is FutureDocHospitalsState) {
-            // 🌟 خطوة استخراج أول حرف آمن [0] من اسم المستشفى مع تنظيف المسافات المخفية
-            final String cleanName = widget.searchHospitalModel.name.trim();
-            final String firstLetter =
-                cleanName.isNotEmpty ? cleanName[0].toUpperCase() : "?";
+            final String cleanName =
+            widget.searchHospitalModel.name.trim();
 
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
+              keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag,
+
               slivers: [
-                // هيدر الشاشة المتجاوب والملون بلغة الهوية البصرية للشركة
-                SliverAppBar(
-                  expandedHeight: 310
-                      .h, // تم تعديل الطول ليتناسب مع تصميم الكارت والمحتوى الجديد الهرمي
-                  automaticallyImplyLeading: false,
-                  pinned: true,
-                  backgroundColor: ColorManager.secondaryColor1,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(40),
+                // ===============================================
+                // AppBar
+                // ===============================================
+                _buildHospitalAppBar(context),
+
+                // ===============================================
+                // Hospital Profile
+                // ===============================================
+                _buildHospitalProfileSection(
+                  context,
+                  cleanName,
+                ),
+
+                // ===============================================
+                // Search
+                //
+                // نفس عرض الكرت الأزرق والـList
+                // ===============================================
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.searchTopPadding,
+                      ui.pagePadding,
+                      ui.searchBottomPadding,
+                    ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: ui.pageMaxWidth,
+                        ),
+                        child: SearchField(
+                          searchController:
+                          searchNoteHospitalController,
+                          onPressed: (value) {
+                            // نفس Event الأصلي
+                            BlocProvider.of<SearchDoctorsBloc>(
+                              context,
+                            ).add(
+                              SearchNoteHosEvent(value),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Stack(
+                ),
+
+                // ===============================================
+                // Reports
+                //
+                // نفس Wrapper المستخدم للكرت الأزرق والبحث
+                // ===============================================
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.listTopPadding,
+                      ui.pagePadding,
+                      ui.listBottomPadding,
+                    ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: ui.pageMaxWidth,
+                        ),
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          physics:
+                          const NeverScrollableScrollPhysics(),
+                          itemCount: state.allNote.length,
+                          itemBuilder: (context, index) {
+                            final report =
+                            state.allNote[index];
+
+                            return _buildReportCard(
+                              context,
+                              repName: report.name,
+                              visitDate: report.visitDate,
+                              note: report.note.toString(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return const SizedBox.shrink();
+        },
+      ),
+    );
+  }
+
+  // =======================================================
+  // AppBar
+  // =======================================================
+
+  SliverAppBar _buildHospitalAppBar(
+      BuildContext context,
+      ) {
+    final ui = AppUi.of(context);
+
+    return SliverAppBar(
+      pinned: true,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+
+      leading: IconButton(
+        tooltip: "رجوع",
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: ColorManager.medicalPrimary,
+          size: ui.iconSize,
+        ),
+      ),
+
+      title: Text(
+        "تقارير المشفى",
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: ColorManager.medicalPrimary,
+          fontSize: ui.cardTitleSize,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(1),
+        child: Divider(
+          height: 1,
+          thickness: 1,
+          color: Color(0xFFF1F5F9),
+        ),
+      ),
+    );
+  }
+
+  // =======================================================
+  // Hospital Profile Section
+  // =======================================================
+
+  Widget _buildHospitalProfileSection(
+      BuildContext context,
+      String firstLetter,
+      ) {
+    final ui = AppUi.of(context);
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        // مهم:
+        // Padding خارج ConstrainedBox
+        // حتى يكون نفس عرض البحث والـList
+        padding: EdgeInsets.fromLTRB(
+          ui.pagePadding,
+          ui.pageTopPadding,
+          ui.pagePadding,
+          ui.smallSpacing,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: ui.pageMaxWidth,
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth >= 600) {
+                  return _buildWideHospitalProfile(
+                    context,
+                    firstLetter,
+                  );//
+                }
+
+                return _buildCompactHospitalProfile(
+                  context,
+                  firstLetter,
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // =======================================================
+  // Mobile / Portrait
+  // =======================================================
+
+  Widget _buildCompactHospitalProfile(
+      BuildContext context,
+      String firstLetter,
+      ) {
+    final ui = AppUi.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(
+        ui.cardPadding,
+      ),
+      decoration: _hospitalProfileDecoration(ui),
+      child: Column(
+        children: [
+          // =================================================
+          // Hospital Icon / Letter
+          // =================================================
+          _buildHospitalAvatar(
+            context,
+            firstLetter,
+          ),
+
+          SizedBox(
+            height: ui.mediumSpacing,
+          ),
+
+          // =================================================
+          // Hospital Name
+          // =================================================
+          _buildHospitalName(
+            context,
+            textAlign: TextAlign.center,
+          ),
+
+          SizedBox(
+            height: ui.sectionSpacing,
+          ),
+
+          // =================================================
+          // Small hospital label
+          // =================================================
+          _buildHospitalTypeChip(
+            context,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =======================================================
+  // Tablet / Wide
+  // =======================================================
+
+  Widget _buildWideHospitalProfile(
+      BuildContext context,
+      String firstLetter,
+      ) {
+    final ui = AppUi.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(
+        ui.cardPadding,
+      ),
+      decoration: _hospitalProfileDecoration(ui),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // =================================================
+          // Avatar
+          // =================================================
+
+
+          SizedBox(
+            width: ui.sectionSpacing,
+          ),
+
+          // =================================================
+          // Hospital Name
+          // =================================================
+          Expanded(
+            child: _buildHospitalName(
+              context,
+              textAlign: TextAlign.start,
+            ),
+          ),
+
+          SizedBox(
+            width: ui.largeSpacing,
+          ),
+
+          Container(
+            width: 1,
+            height: 54,
+            color: Colors.white.withOpacity(
+              0.20,
+            ),
+          ),
+
+          SizedBox(
+            width: ui.largeSpacing,
+          ),
+
+          // =================================================
+          // Hospital Type
+          // =================================================
+          _buildHospitalTypeTile(
+            context,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =======================================================
+  // Blue Hospital Container
+  // =======================================================
+
+  BoxDecoration _hospitalProfileDecoration(
+      AppUi ui,
+      ) {
+    return BoxDecoration(
+      // نفس الهوية الزرقاء لـ DoctorDetails
+      color: ColorManager.medicalPrimary,
+
+      borderRadius: BorderRadius.circular(
+        ui.cardRadius,
+      ),
+
+      boxShadow: [
+        BoxShadow(
+          color: ColorManager.medicalPrimary.withOpacity(
+            0.16,
+          ),
+          blurRadius: 14,
+          offset: const Offset(
+            0,
+            5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // =======================================================
+  // Hospital Avatar
+  // =======================================================
+
+  Widget _buildHospitalAvatar(
+      BuildContext context,
+      String firstLetter, {
+        bool compact = false,
+      }) {
+    final ui = AppUi.of(context);
+
+    final double size = compact
+        ? ui.iconBoxSize + 8
+        : ui.iconBoxSize + 18;
+
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(
+          0.14,
+        ),
+        borderRadius: BorderRadius.circular(
+          ui.cardRadius,
+        ),
+        border: Border.all(
+          color: Colors.white.withOpacity(
+            0.25,
+          ),
+          width: 1.5,
+        ),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            firstLetter,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ui.pageTitleSize + 5,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+
+          Positioned(
+            right: 4,
+            bottom: 4,
+            child: Icon(
+              Icons.local_hospital_rounded,
+              size: ui.smallIconSize,
+              color: Colors.white.withOpacity(
+                0.65,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =======================================================
+  // Hospital Name
+  // =======================================================
+
+  Widget _buildHospitalName(
+      BuildContext context, {
+        required TextAlign textAlign,
+      }) {
+    final ui = AppUi.of(context);
+
+    return Text(
+      widget.searchHospitalModel.name,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      textAlign: textAlign,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: ui.pageTitleSize,
+        fontWeight: FontWeight.w700,
+        height: 1.25,
+      ),
+    );
+  }
+
+  // =======================================================
+  // Portrait Type Chip
+  // =======================================================
+
+  Widget _buildHospitalTypeChip(
+      BuildContext context,
+      ) {
+    final ui = AppUi.of(context);
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ui.mediumSpacing,
+        vertical: ui.smallSpacing,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(
+          0.12,
+        ),
+        borderRadius: BorderRadius.circular(
+          ui.smallRadius,
+        ),
+        border: Border.all(
+          color: Colors.white.withOpacity(
+            0.18,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.local_hospital_outlined,
+            color: Colors.white,
+            size: ui.smallIconSize,
+          ),
+
+          SizedBox(
+            width: ui.smallSpacing,
+          ),
+
+          Text(
+            "مشفى",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ui.smallTextSize,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =======================================================
+  // Landscape Type
+  // =======================================================
+
+  Widget _buildHospitalTypeTile(
+      BuildContext context,
+      ) {
+    final ui = AppUi.of(context);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: ui.smallIconSize + 14,
+          height: ui.smallIconSize + 14,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(
+              0.12,
+            ),
+            borderRadius: BorderRadius.circular(
+              ui.smallRadius,
+            ),
+          ),
+          child: Icon(
+            Icons.local_hospital_outlined,
+            color: Colors.white,
+            size: ui.smallIconSize,
+          ),
+        ),
+
+        SizedBox(
+          width: ui.mediumSpacing,
+        ),
+
+        Text(
+          "مشفى",
+          style: TextStyle(
+            color: Colors.white.withOpacity(
+              0.92,
+            ),
+            fontSize: ui.bodyTextSize,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // =======================================================
+  // Report Card
+  // =======================================================
+
+  Widget _buildReportCard(
+      BuildContext context, {
+        required String repName,
+        required String visitDate,
+        required String note,
+      }) {
+    final ui = AppUi.of(context);
+
+    // =====================================================
+    // نفس شرط الملاحظة الأصلي تماماً
+    // =====================================================
+    final bool hasNote =
+        note.trim().isNotEmpty &&
+            note != "null";
+
+    final String displayedNote = hasNote
+        ? note
+        : "لا توجد ملاحظات مسجلة.";
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: ui.cardSpacing,
+      ),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(
+            ui.cardRadius,
+          ),
+          border: Border.all(
+            color: const Color(
+              0xFFE2E8F0,
+            ),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(
+                0.025,
+              ),
+              blurRadius: 12,
+              offset: const Offset(
+                0,
+                4,
+              ),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(
+            ui.cardPadding,
+          ),
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.stretch,
+            children: [
+              // =================================================
+              // Representative + Date
+              // =================================================
+              _buildReportMeta(
+                context,
+                repName: repName,
+                visitDate: visitDate,
+              ),
+
+              SizedBox(
+                height: ui.sectionSpacing,
+              ),
+
+              // =================================================
+              // Scientific Office Note
+              // =================================================
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(
+                  ui.cardPadding - 3,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(
+                    0xFFF8FAFC,
+                  ),
+                  borderRadius:
+                  BorderRadius.circular(
+                    ui.smallRadius + 2,
+                  ),
+                  border: Border.all(
+                    color: const Color(
+                      0xFFF1F5F9,
+                    ),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        // زر العودة المثبت في الأعلى جهة اليمين المتوافق مع RTL
-                        Positioned(
-                          top: 40.h,
-                          right: 10.w,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back,
-                                color: Colors.white, size: 30),
-                            onPressed: () => Navigator.pop(context),
+                        Container(
+                          width:
+                          ui.smallIconSize + 14,
+                          height:
+                          ui.smallIconSize + 14,
+                          alignment:
+                          Alignment.center,
+                          decoration: BoxDecoration(
+                            color: ColorManager
+                                .secondaryColor1
+                                .withOpacity(
+                              0.07,
+                            ),
+                            borderRadius:
+                            BorderRadius.circular(
+                              ui.smallRadius,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons
+                                .rate_review_outlined,
+                            color: ColorManager
+                                .secondaryColor1,
+                            size: ui.smallIconSize,
                           ),
                         ),
 
-                        // محتوى البيانات المركزي للهيدر الأنيق والمربع الناعم للحرف الأول
-                        Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              top: 60.h,
-                              left: 20.w,
-                              right: 20.w,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // 🌟 مربع الحرف الأول الاحترافي المحدث والمحمي بـ FittedBox
-                                Container(
-                                  width: 60.r,
-                                  height: 60.r,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    border: Border.all(
-                                      color: Colors.white.withOpacity(0.4),
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(6.r),
-                                        child: Text(
-                                          firstLetter,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 12.h),
+                        SizedBox(
+                          width: ui.mediumSpacing,
+                        ),
 
-                                // اسم المستشفى الكامل
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8.w, vertical: 4.h),
-                                  child: Text(
-                                    widget.searchHospitalModel.name,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 22.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
+                        Expanded(
+                          child: Text(
+                            "ملاحظات المكتب العلمي",
+                            style: TextStyle(
+                              fontSize:
+                              ui.bodyTextSize,
+                              fontWeight:
+                              FontWeight.w700,
+                              color: ColorManager
+                                  .secondaryColor1,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ),
 
-                // حقل البحث كعنصر ثابت مستقل داخل الـ ScrollView
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: SearchField(
-                      searchController: searchNoteHospitalController,
-                      onPressed: (value) {
-                        BlocProvider.of<SearchDoctorsBloc>(context)
-                            .add(SearchNoteHosEvent(value));
-                      },
+                    SizedBox(
+                      height: ui.mediumSpacing,
                     ),
-                  ),
-                ),
 
-                // قائمة التقارير والملاحظات المدمجة مباشرة وثابتة دون BottomSheet
-                SliverPadding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 15.h),
-                          decoration: BoxDecoration(
-                            color: ColorManager.white,
-                            borderRadius: BorderRadius.circular(15.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                            border: Border.all(
-                                color: ColorManager.hintGrey.withOpacity(0.3)),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(16.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                // 🌟 1. استخدام ويدجت العرض الثنائي المشترك والمحمي من الـ Overflow لاسم المندوب والتاريخ
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 5,
-                                      child: InfoRowItem(
-                                        icon: Icons.person_outline_rounded,
-                                        value: state.allNote[index].name,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Expanded(
-                                      flex: 4,
-                                      child: InfoRowItem(
-                                        icon: Icons.calendar_month_outlined,
-                                        value: state.allNote[index].visitDate,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 12.h),
-
-                                // 🌟 2. حاوية ملاحظات المكتب العلمي المدمجة مباشرة داخل الكارد لتوحيد مظهر التطبيق
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(12.w),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF8F9FA),
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    border:
-                                        Border.all(color: Colors.grey.shade100),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(Icons.rate_review_outlined,
-                                              color:
-                                                  ColorManager.secondaryColor1,
-                                              size: 16.sp),
-                                          SizedBox(width: 6.w),
-                                          Text(
-                                            "ملاحظات المكتب العلمي:",
-                                            style: TextStyle(
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  ColorManager.secondaryColor1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 6.h),
-                                      Text(
-                                        state.allNote[index].note
-                                                    .toString()
-                                                    .trim()
-                                                    .isNotEmpty &&
-                                                state.allNote[index].note
-                                                        .toString() !=
-                                                    "null"
-                                            ? state.allNote[index].note
-                                                .toString()
-                                            : "لا توجد ملاحظات مسجلة.",
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: Colors.black87,
-                                          height: 1.4,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: state.allNote.length,
+                    Text(
+                      displayedNote,
+                      style: TextStyle(
+                        fontSize: ui.bodyTextSize,
+                        color: const Color(
+                          0xFF475569,
+                        ),
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            );
-          }
-          return const SizedBox();
-        },
+              ),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  // =======================================================
+  // Report Metadata
+  // =======================================================
+
+  Widget _buildReportMeta(
+      BuildContext context, {
+        required String repName,
+        required String visitDate,
+      }) {
+    final ui = AppUi.of(context);
+
+    return LayoutBuilder(
+      builder: (
+          context,
+          constraints,
+          ) {
+        // =================================================
+        // Narrow Mobile
+        // =================================================
+        if (constraints.maxWidth < 390) {
+          return Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.stretch,
+            children: [
+              InfoRowItem(
+                icon:
+                Icons.person_outline_rounded,
+                value: repName,
+              ),
+
+              SizedBox(
+                height: ui.smallSpacing,
+              ),
+
+              InfoRowItem(
+                icon:
+                Icons.calendar_month_outlined,
+                value: visitDate,
+              ),
+            ],
+          );
+        }
+
+        // =================================================
+        // Wide
+        // =================================================
+        return Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: InfoRowItem(
+                icon:
+                Icons.person_outline_rounded,
+                value: repName,
+              ),
+            ),
+
+            SizedBox(
+              width: ui.sectionSpacing,
+            ),
+
+            Expanded(
+              flex: 4,
+              child: InfoRowItem(
+                icon:
+                Icons.calendar_month_outlined,
+                value: visitDate,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // =======================================================
+  // Error / Loading / Empty
+  // =======================================================
+
+  Widget _buildStatePage(
+      BuildContext context, {
+        required Widget child,
+      }) {
+    final ui = AppUi.of(context);
+
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: ui.pageMaxWidth,
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(
+                  ui.pagePadding,
+                ),
+                child: child,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   @override
   bool get wantKeepAlive => true;
 }
-
-// 🌟 ويدجت العرض المنظم والأنيق الموحد للمشروع لضمان التناسق التام

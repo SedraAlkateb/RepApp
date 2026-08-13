@@ -343,13 +343,18 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<SearchDoctorsBaseSpResponse> docSearch(int cityId, String name) async {
+  Future<SearchDoctorsBaseSpResponse> docSearch(
+    int cityId,
+    String name,
+    int repDet,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('cityId', cityId.toString()));
     _data.fields.add(MapEntry('name', name));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
     final _options = _setStreamType<SearchDoctorsBaseSpResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1909,12 +1914,16 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllSearchHospitalBaseResponse> getSearchHospitals(String name) async {
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(
+    String name,
+    int repDet,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('name', name));
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
     final _options = _setStreamType<AllSearchHospitalBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -2015,6 +2024,45 @@ class _AppServiceClient implements AppServiceClient {
     late PlanRepsBaseResponse _value;
     try {
       _value = PlanRepsBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(
+    int repDet, {
+    int? spId,
+    int? placeId,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repDet', repDet.toString()));
+    if (spId != null) {
+      _data.fields.add(MapEntry('spId', spId.toString()));
+    }
+    if (placeId != null) {
+      _data.fields.add(MapEntry('placeId', placeId.toString()));
+    }
+    final _options = _setStreamType<GetDocHosByPlaceOrSpBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/getSpDocHos.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late GetDocHosByPlaceOrSpBaseResponse _value;
+    try {
+      _value = GetDocHosByPlaceOrSpBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

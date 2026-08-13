@@ -1876,8 +1876,15 @@ class PlanRepsResponse {
   String? name;
   @JsonKey(name: "repPlan")
   String? repPlan;
+  @JsonKey(name: "totalVisit")
+  int? totalVisit;
+  @JsonKey(name: "TotalUnReadVisit")
+  int? TotalUnReadVisit;
+  @JsonKey(name: "TotalReadVisit")
+  int? TotalReadVisit;
 
-  PlanRepsResponse(this.id, this.name, this.repPlan); // from json
+  PlanRepsResponse(this.id, this.name, this.repPlan, this.totalVisit,
+      this.TotalUnReadVisit, this.TotalReadVisit); // from json
   factory PlanRepsResponse.fromJson(Map<String, dynamic> json) =>
       _$PlanRepsResponseFromJson(json);
   // to json
@@ -1894,4 +1901,64 @@ class PlanRepsBaseResponse extends BaseResponse {
       _$PlanRepsBaseResponseFromJson(json);
   // to json
   Map<String, dynamic> toJson() => _$PlanRepsBaseResponseToJson(this);
+}
+
+@JsonSerializable()
+class GetDocHosByPlaceOrSpBaseResponse extends BaseResponse {
+  @JsonKey(name: "Representative")
+  DocHosByPlaceOrSpResponse? docHos;
+  GetDocHosByPlaceOrSpBaseResponse(this.docHos);
+  // from json
+  factory GetDocHosByPlaceOrSpBaseResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$GetDocHosByPlaceOrSpBaseResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() =>
+      _$GetDocHosByPlaceOrSpBaseResponseToJson(this);
+}
+
+@JsonSerializable()
+class DocHosByPlaceOrSpResponse {
+  @JsonKey(name: "Hospitals")
+  List<HospitalSpResponse>? hospitals;
+  @JsonKey(name: "Doctors")
+  List<DoctorSenResponse>? doctors;
+
+  DocHosByPlaceOrSpResponse(this.hospitals, this.doctors);
+  // from json
+  factory DocHosByPlaceOrSpResponse.fromJson(Map<String, dynamic> json) =>
+      _$DocHosByPlaceOrSpResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$DocHosByPlaceOrSpResponseToJson(this);
+}
+
+@JsonSerializable()
+class DoctorSenResponse {
+  @JsonKey(name: "docId")
+  String? docId;
+  @JsonKey(name: "title")
+  String? title;
+  @JsonKey(name: "address")
+  String? address;
+  @JsonKey(name: "spId")
+  String? spId;
+  @JsonKey(name: "place")
+  String? place;
+  @JsonKey(name: "visit")
+  String? visit;
+  @JsonKey(name: "note")
+  String? note;
+  @JsonKey(name: "rate")
+  String? rate;
+  @JsonKey(name: "spTitle")
+  String? spTitle;
+
+  DoctorSenResponse(this.docId, this.title, this.address, this.spId, this.place,
+      this.visit, this.note, this.rate, this.spTitle); //
+
+  // from json
+  factory DoctorSenResponse.fromJson(Map<String, dynamic> json) =>
+      _$DoctorSenResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$DoctorSenResponseToJson(this);
 }

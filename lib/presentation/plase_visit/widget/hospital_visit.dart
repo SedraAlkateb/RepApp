@@ -136,7 +136,7 @@ class _HospitalVisitState extends State<HospitalVisit>
                                               .toDomain(), // نرسل الـ ID هنا
                                         );
                                       },
-                                      child: buildCardButton(
+                                      child: buildCardButton(context,
                                           "بدء زيارة",
                                           ColorManager.medicalPrimary,
                                           Colors.white,

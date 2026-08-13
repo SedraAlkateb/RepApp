@@ -1,6 +1,7 @@
 
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/doctors/widget/card.dart';
+// ignore: unused_import
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
 

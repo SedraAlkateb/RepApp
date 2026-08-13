@@ -66,7 +66,6 @@ class SearchField extends StatelessWidget {
           onFieldSubmitted: onPressed,
 
           style: TextStyle(
-            fontFamily: 'Tajawal',
             fontSize: fontSize,
             color: ColorManager.medicalText,
             fontWeight: FontWeight.w500,
@@ -76,15 +75,12 @@ class SearchField extends StatelessWidget {
             hintText: hintText,
 
             hintStyle: TextStyle(
-              fontFamily: 'Tajawal',
               fontSize: fontSize,
               color: ColorManager.medicalMuted,
               fontWeight: FontWeight.w400,
             ),
-
             filled: true,
             fillColor: ColorManager.white,
-
             isDense: true,
 
             contentPadding: EdgeInsets.symmetric(

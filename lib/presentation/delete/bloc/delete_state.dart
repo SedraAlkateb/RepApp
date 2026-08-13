@@ -33,7 +33,6 @@ final class DeleteAllState extends DeleteState {
   @override
   List<Object?> get props => [];
 }
-
 final class DeleteAllErrorState extends DeleteState {
   final Failure failure;
   DeleteAllErrorState({required this.failure});

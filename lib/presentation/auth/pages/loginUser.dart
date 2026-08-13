@@ -1,360 +1,466 @@
 // ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:domina_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/uniti/custom-wavy-background.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyLogin extends StatefulWidget {
-  const MyLogin({Key? key}) : super(key: key);
+  const MyLogin({super.key});
 
   @override
-  _MyLoginState createState() => _MyLoginState();
+  State<MyLogin> createState() => _MyLoginState();
 }
 
 class _MyLoginState extends State<MyLogin> {
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
 
   @override
+  void dispose() {
+    userName.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // قياسات عامة
-    final mq = MediaQuery.of(context);
-    final deviceWidth = mq.size.width;
-    final orientation = mq.orientation;
+    final ui = AppUi.of(context);
+    final orientation = MediaQuery.orientationOf(context);
     final bool isLandscape = orientation == Orientation.landscape;
-
-    // الشرط: التخطيط المزدوج ينطبق فقط على التابلت وفي الوضع العرضي حصراً
-    final bool isTablet = deviceWidth >= 600;
-    final bool useTwoColumnLayout = isTablet && isLandscape;
-
-    // عرض النموذج في التابلت بالعرض
-    final double formMaxWidth = 520.w;
+    final bool useTwoColumnLayout = ui.isTabletLandscape;
+    final double keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
 
     return BlocProvider<AuthBloc>(
       create: (context) => instance<AuthBloc>(),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFF),
+        // مهم: لا نخلي الكيبورد يصغّر الشاشة كلها.
+        // فقط جهة الفورم تتعامل معه.
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color(0xFFF8FAFC),
         body: PopScope(
           canPop: false,
           child: Form(
             key: formKey,
-            child: LayoutBuilder(builder: (context, constraints) {
-              if (useTwoColumnLayout) {
-                // 🌟 تخطيط خاص فقط بالتابلت في الوضع العرضي (Tablet Landscape)
-                return Row(
-                  children: [
-                    // 👉 العمود الأيمن: الخلفية الموجية في الأعلى مع النصوص الترحيبية بدون الشعار
-                    Expanded(
-                      flex: 5,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            height: constraints.maxHeight * 0.45,
-                            child: CustomWavyBackground()
-                                .animate()
-                                .fadeIn(duration: 700.ms)
-                                .slideY(begin: -0.05, end: 0),
-                          ),
-                          Positioned(
-                              // right: 100,
-                              top: 140.h,
-                              // bottom: 50.h,
-                              left: 240.h,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (useTwoColumnLayout) {
+                  return _buildTabletLandscape(
+                    context: context,
+                    ui: ui,
+                    keyboardInset: keyboardInset,
+                  );
+                }
 
-                              //    right: 0,
-                              child: _buildProfessionalLogo(true)),
-                          // المحتوى الترحيبي في الجهة اليمنى
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 32.w),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // الشعار الدائري مستقر حصراً في اليسار فوق النموذج
-
-                                SizedBox(
-                                  height: 12.h,
-                                ),
-                                Text(
-                                  "مرحباً بك مجدداً في DOMINA",
-                                  style: TextStyle(
-                                    fontSize: 26.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: ColorManager.medicalPrimary,
-                                  ),
-                                ),
-                                SizedBox(height: 12.h),
-                                Text(
-                                  "سجّل دخولك للوصول إلى لوحة التحكم والمهام اليومية.",
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: Colors.grey.shade600,
-                                    height: 1.4,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // 👈 العمود الأيسر: يحتوي على نموذج الدخول الشاهق مع الشعار في الأعلى
-                    Expanded(
-                      flex: 6,
-                      child: Center(
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.symmetric(vertical: 20.h),
-                          child: Container(
-                            width: formMaxWidth,
-                            height: mq.size.height,
-                            //margin: EdgeInsets.symmetric(horizontal: 24.w),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 32.w,
-                              vertical: 36
-                                  .h, // زيادة الارتفاع الرأسي لإعطاء مظهر متطاول
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              //  borderRadius: BorderRadius.circular(30.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.blue.withOpacity(0.06),
-                                  blurRadius: 25,
-                                  offset: const Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: _buildFormContentsWidth(),
-                          )
-                              .animate()
-                              .scale(delay: 200.ms, curve: Curves.easeOutQuad),
-                        ),
-                      ),
-                    ),
-                  ],
+                return _buildMobileAndPortrait(
+                  context: context,
+                  ui: ui,
+                  isLandscape: isLandscape,
+                  keyboardInset: keyboardInset,
                 );
-              } else {
-                // 📱 التخطيط المعتاد (للهواتف أو التابلت بالوضع الطولي)
-                return Stack(
-                  children: [
-                    CustomWavyBackground()
-                        .animate()
-                        .fadeIn(duration: 700.ms)
-                        .slideY(begin: -0.05, end: 0),
-                    Center(
-                      child: SafeArea(
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          padding: EdgeInsets.symmetric(
-                            vertical: isLandscape ? 15.h : 30.h,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (!isLandscape) SizedBox(height: 20.h),
-                              _buildProfessionalLogo(false),
-                              SizedBox(height: isLandscape ? 20.h : 35.h),
-                              Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(horizontal: 24.w),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w,
-                                  vertical: isLandscape ? 20.h : 30.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30.r),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.blue.withOpacity(0.05),
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 10),
-                                    ),
-                                  ],
-                                ),
-                                child: _buildFormContents(
-                                    isLandscape: isLandscape),
-                              ).animate().scale(
-                                  delay: 200.ms, curve: Curves.easeOutQuad),
-                              SizedBox(height: isLandscape ? 20.h : 40.h),
-                              Text(
-                                "DOMINA PHARMACEUTICALS",
-                                style: TextStyle(
-                                  color: Colors.grey.withOpacity(0.6),
-                                  letterSpacing: 1.5,
-                                  fontSize: 11.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ).animate().fadeIn(delay: 1.seconds),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-            }),
+              },
+            ),
           ),
         ),
       ),
     );
   }
 
-  // محتويات النموذج المخصص للتابلت بالعرض (على اليسار مع الشعار المرفق والارتفاع الممتد)
-  Widget _buildFormContentsWidth() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+  // ===========================================================
+  // Tablet Landscape
+  // اليمين ثابت دائماً، والكيبورد يؤثر فقط على الفورم باليسار.
+  // ===========================================================
+  Widget _buildTabletLandscape({
+    required BuildContext context,
+    required AppUi ui,
+    required double keyboardInset,
+  }) {
+    return Row(
+      textDirection: TextDirection.rtl,
       children: [
-        SizedBox(height: 10.h),
-
-        //    SizedBox(height: 20.h),
-
-        Text(
-          "تسجيل الدخول",
-          style: TextStyle(
-            fontSize: 22.sp,
-            fontWeight: FontWeight.w800,
-            color: ColorManager.medicalPrimary,
+        Expanded(
+          flex: 5,
+          child: _buildWelcomePanel(
+            context: context,
+            ui: ui,
           ),
         ),
-
-        SizedBox(height: 30.h),
-
-        _buildModernTextField(
-          controller: userName,
-          hint: "اسم المستخدم",
-          icon: Icons.alternate_email_rounded,
-          validator: (val) => val!.length < 3 ? "يرجى التحقق من الاسم" : null,
-        ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0),
-
-        SizedBox(height: 20.h),
-
-        BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            bool isObscured =
-                state is ShowPasswordState ? state.isObscured : true;
-            return _buildModernTextField(
-              controller: password,
-              hint: "كلمة المرور",
-              icon: Icons.lock_open_rounded,
-              isPassword: true,
-              isObscured: isObscured,
-              onSuffixTap: () {
-                BlocProvider.of<AuthBloc>(context)
-                    .add(ShowPasswordEvent(!isObscured));
-              },
-              validator: (val) => val!.length < 2 ? "كلمة المرور قصيرة" : null,
-            );
-          },
-        ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0),
-
-        SizedBox(height: 35.h),
-
-        _buildPremiumButton(true),
-
-        SizedBox(height: 10.h),
+        Expanded(
+          flex: 6,
+          child: Container(
+            color: Colors.white,
+            child: AnimatedPadding(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.only(bottom: keyboardInset),
+              child: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, formConstraints) {
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ui.pagePadding + ui.mediumSpacing,
+                        vertical: ui.pageTopPadding,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: (formConstraints.maxHeight -
+                              (ui.pageTopPadding * 2))
+                              .clamp(0.0, double.infinity),
+                        ),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 520),
+                            child: _buildFormContents(
+                              context: context,
+                              ui: ui,
+                              compact: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  // محتويات النموذج القياسي للهاتف أو التابلت الطولي
-  Widget _buildFormContents({required bool isLandscape}) {
+  // ===========================================================
+  // Right Welcome Panel - ثابت ولا يتحرك مع الكيبورد
+  // ===========================================================
+  Widget _buildWelcomePanel({
+    required BuildContext context,
+    required AppUi ui,
+  }) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        const ColoredBox(color: Color(0xFFF8FAFC)),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: MediaQuery.sizeOf(context).height * 0.46,
+          child: CustomWavyBackground()
+              .animate()
+              .fadeIn(duration: 700.ms)
+              .slideY(begin: -0.05, end: 0),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ui.pagePadding + ui.largeSpacing,
+              vertical: ui.pageTopPadding,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 520),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildProfessionalLogo(
+                      ui: ui,
+                      tabletLandscape: true,
+                    ),
+                    SizedBox(height: ui.largeSpacing),
+                    Text(
+                      'مرحباً بك مجدداً في DOMINA',
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: ui.pageTitleSize + 2,
+                        fontWeight: FontWeight.w800,
+                        color: ColorManager.medicalPrimary,
+                        height: 1.3,
+                      ),
+                    ),
+                    SizedBox(height: ui.mediumSpacing),
+                    Text(
+                      'سجّل دخولك للوصول إلى لوحة التحكم والمهام اليومية.',
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: ui.pageSubtitleSize + 1,
+                        color: const Color(0xFF64748B),
+                        fontWeight: FontWeight.w500,
+                        height: 1.6,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ===========================================================
+  // Mobile + Tablet Portrait
+  // الخلفية ثابتة، والفورم فقط يتكيّف مع الكيبورد.
+  // ===========================================================
+  Widget _buildMobileAndPortrait({
+    required BuildContext context,
+    required AppUi ui,
+    required bool isLandscape,
+    required double keyboardInset,
+  }) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        CustomWavyBackground()
+            .animate()
+            .fadeIn(duration: 700.ms)
+            .slideY(begin: -0.05, end: 0),
+        SafeArea(
+          child: AnimatedPadding(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(bottom: keyboardInset),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.fromLTRB(
+                    ui.pagePadding,
+                    isLandscape ? ui.smallSpacing : ui.pageTopPadding,
+                    ui.pagePadding,
+                    ui.pageBottomPadding,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: (constraints.maxHeight -
+                          ui.pageBottomPadding -
+                          ui.pageTopPadding)
+                          .clamp(0.0, double.infinity),
+                    ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (!isLandscape) ...[
+                              _buildProfessionalLogo(
+                                ui: ui,
+                                tabletLandscape: false,
+                              ),
+                              SizedBox(height: ui.largeSpacing),
+                            ],
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(
+                                ui.cardPadding + (ui.isMobile ? 4 : 8),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                BorderRadius.circular(ui.cardRadius + 8),
+                                border: Border.all(
+                                  color: const Color(0xFFE2E8F0),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.04),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                ],
+                              ),
+                              child: _buildFormContents(
+                                context: context,
+                                ui: ui,
+                                compact: isLandscape,
+                              ),
+                            )
+                                .animate()
+                                .scale(delay: 200.ms, curve: Curves.easeOutQuad),
+                            if (!isLandscape) ...[
+                              SizedBox(height: ui.largeSpacing),
+                              Text(
+                                'DOMINA PHARMACEUTICALS',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: const Color(0xFF94A3B8),
+                                  letterSpacing: 1.4,
+                                  fontSize: ui.smallTextSize,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ).animate().fadeIn(delay: 1.seconds),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ===========================================================
+  // Shared Form Contents
+  // ===========================================================
+  Widget _buildFormContents({
+    required BuildContext context,
+    required AppUi ui,
+    required bool compact,
+  }) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "مرحباً بك مجدداً",
+          compact ? 'تسجيل الدخول' : 'مرحباً بك مجدداً',
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: isLandscape ? 20.sp : 24.sp,
+            fontSize: compact ? ui.pageTitleSize : ui.pageTitleSize + 2,
             fontWeight: FontWeight.w800,
             color: ColorManager.medicalPrimary,
+            height: 1.3,
           ),
         ).animate().fadeIn().moveY(begin: 10, end: 0),
-        SizedBox(height: 6.h),
-        Text(
-          "سجل دخولك للمتابعة",
-          style: TextStyle(
-            fontSize: isLandscape ? 12.sp : 14.sp,
-            color: Colors.grey,
-          ),
-        ).animate().fadeIn(delay: 200.ms),
-        SizedBox(height: isLandscape ? 20.h : 35.h),
+        SizedBox(height: ui.smallSpacing),
+        if (!compact)
+          Text(
+            'سجل دخولك للمتابعة',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ui.pageSubtitleSize,
+              color: const Color(0xFF64748B),
+              fontWeight: FontWeight.w500,
+            ),
+          ).animate().fadeIn(delay: 200.ms),
+        SizedBox(
+          height: compact
+              ? ui.largeSpacing
+              : ui.largeSpacing + ui.mediumSpacing,
+        ),
         _buildModernTextField(
+          ui: ui,
           controller: userName,
-          hint: "اسم المستخدم",
+          hint: 'اسم المستخدم',
           icon: Icons.alternate_email_rounded,
-          validator: (val) => val!.length < 3 ? "يرجى التحقق من الاسم" : null,
+          textInputAction: TextInputAction.next,
+          validator: (val) {
+            final value = val?.trim() ?? '';
+            return value.length < 3 ? 'يرجى التحقق من الاسم' : null;
+          },
         ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0),
-        SizedBox(height: 15.h),
+        SizedBox(height: ui.sectionSpacing),
         BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            bool isObscured =
-                state is ShowPasswordState ? state.isObscured : true;
+            final bool isObscured =
+            state is ShowPasswordState ? state.isObscured : true;
+
             return _buildModernTextField(
+              ui: ui,
               controller: password,
-              hint: "كلمة المرور",
+              hint: 'كلمة المرور',
               icon: Icons.lock_open_rounded,
               isPassword: true,
               isObscured: isObscured,
+              textInputAction: TextInputAction.done,
               onSuffixTap: () {
-                BlocProvider.of<AuthBloc>(context)
-                    .add(ShowPasswordEvent(!isObscured));
+                context.read<AuthBloc>().add(
+                  ShowPasswordEvent(!isObscured),
+                );
               },
-              validator: (val) => val!.length < 2 ? "كلمة المرور قصيرة" : null,
+              onFieldSubmitted: (_) => _submitLogin(context),
+              validator: (val) {
+                final value = val ?? '';
+                return value.length < 2 ? 'كلمة المرور قصيرة' : null;
+              },
             );
           },
         ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0),
-        SizedBox(height: isLandscape ? 25.h : 35.h),
-        _buildPremiumButton(isLandscape),
+        SizedBox(
+          height: compact
+              ? ui.largeSpacing
+              : ui.largeSpacing + ui.smallSpacing,
+        ),
+        _buildPremiumButton(
+          context: context,
+          ui: ui,
+          compact: compact,
+        ),
       ],
     );
   }
 
-  Widget _buildProfessionalLogo(bool isLandscape) {
-    final double logoSize = isLandscape ? 120.r : 120.r;
+  // ===========================================================
+  // Logo
+  // ===========================================================
+  Widget _buildProfessionalLogo({
+    required AppUi ui,
+    required bool tabletLandscape,
+  }) {
+    final double logoSize = tabletLandscape
+        ? 120
+        : ui.isMobile
+        ? 108
+        : 120;
+
     return Container(
       width: logoSize,
       height: logoSize,
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.1),
-            blurRadius: 30,
-            spreadRadius: 5,
-          )
+            color: ColorManager.medicalPrimary.withOpacity(0.10),
+            blurRadius: 24,
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: Center(
-        child: Image.asset(ImageAssets.domina, width: logoSize * 0.6)
-            .animate(onPlay: (c) => c.repeat(reverse: true))
+        child: Image.asset(
+          ImageAssets.domina,
+          width: logoSize * 0.60,
+        )
+            .animate(onPlay: (controller) => controller.repeat(reverse: true))
             .shimmer(duration: 2.seconds, color: Colors.blue.shade50)
             .scale(
-              begin: const Offset(1, 1),
-              end: const Offset(1.05, 1.05),
-              duration: 2.seconds,
-            ),
+          begin: const Offset(1, 1),
+          end: const Offset(1.04, 1.04),
+          duration: 2.seconds,
+        ),
       ),
     );
   }
 
+  // ===========================================================
+  // Text Field
+  // ===========================================================
   Widget _buildModernTextField({
+    required AppUi ui,
     required TextEditingController controller,
     required String hint,
     required IconData icon,
@@ -362,51 +468,91 @@ class _MyLoginState extends State<MyLogin> {
     bool isObscured = false,
     VoidCallback? onSuffixTap,
     String? Function(String?)? validator,
+    TextInputAction? textInputAction,
+    ValueChanged<String>? onFieldSubmitted,
   }) {
     return TextFormField(
       controller: controller,
-      obscureText: isObscured,
+      obscureText: isPassword && isObscured,
       validator: validator,
-      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
+      style: TextStyle(
+        fontSize: ui.isMobile ? 15 : 17,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1E293B),
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14.sp),
-        prefixIcon: Icon(icon,
-            color: ColorManager.medicalPrimary.withOpacity(0.6), size: 22.sp),
+        hintStyle: TextStyle(
+          color: const Color(0xFF94A3B8),
+          fontSize: ui.isMobile ? 14 : 16,
+          fontWeight: FontWeight.w500,
+        ),
+        prefixIcon: Icon(
+          icon,
+          color: ColorManager.medicalPrimary.withOpacity(0.65),
+          size: ui.iconSize,
+        ),
         suffixIcon: isPassword
             ? IconButton(
-                icon: Icon(
-                  isObscured
-                      ? Icons.visibility_off_rounded
-                      : Icons.visibility_rounded,
-                  color: Colors.grey,
-                ),
-                onPressed: onSuffixTap,
-              )
-            : null,
-        fillColor: const Color(0xFFF3F7FF),
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18.r),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18.r),
-          borderSide: BorderSide(
-            color: ColorManager.medicalPrimary.withOpacity(0.2),
-            width: 2,
+          icon: Icon(
+            isObscured
+                ? Icons.visibility_off_rounded
+                : Icons.visibility_rounded,
+            color: const Color(0xFF94A3B8),
           ),
+          onPressed: onSuffixTap,
+        )
+            : null,
+        filled: true,
+        fillColor: const Color(0xFFF8FAFC),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: ui.cardPadding,
+          vertical: ui.isMobile ? 16 : 18,
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+        border: _fieldBorder(ui),
+        enabledBorder: _fieldBorder(ui),
+        focusedBorder: _fieldBorder(
+          ui,
+          color: ColorManager.medicalPrimary.withOpacity(0.55),
+          width: 1.5,
+        ),
+        errorBorder: _fieldBorder(
+          ui,
+          color: const Color(0xFFEF4444),
+        ),
+        focusedErrorBorder: _fieldBorder(
+          ui,
+          color: const Color(0xFFEF4444),
+          width: 1.5,
+        ),
       ),
     );
   }
 
-  Widget _buildPremiumButton(bool isLandscape) {
+  OutlineInputBorder _fieldBorder(
+      AppUi ui, {
+        Color color = const Color(0xFFE2E8F0),
+        double width = 1,
+      }) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(ui.cardRadius - 2),
+      borderSide: BorderSide(
+        color: color,
+        width: width,
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Login Button + نفس Auth flow الأصلي
+  // ===========================================================
+  Widget _buildPremiumButton({
+    required BuildContext context,
+    required AppUi ui,
+    required bool compact,
+  }) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoginLoadingState) {
@@ -414,76 +560,96 @@ class _MyLoginState extends State<MyLogin> {
         }
 
         if (state is LoginState) {
-          BlocProvider.of<AuthBloc>(context).add(LoginInsertEvent());
+          context.read<AuthBloc>().add(LoginInsertEvent());
         }
 
         if (state is InsertLoginState) {
           success(context);
-          Future.delayed(const Duration(milliseconds: 600), () {
-            if (context.mounted) {
+
+          Future.delayed(
+            const Duration(milliseconds: 600),
+                () {
+              if (!context.mounted) return;
+
               if (UserInfo.isLogging == 2) {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.adminControl, (route) => false);
+                  context,
+                  Routes.adminControl,
+                      (route) => false,
+                );
               } else {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.syncData, (route) => false);
+                  context,
+                  Routes.syncData,
+                      (route) => false,
+                );
               }
-            }
-          });
+            },
+          );
         }
 
         if (state is LoginErrorState || state is InsertLoginErrorState) {
-          dynamic errorState = state;
-          error(context, errorState.failure.massage, errorState.failure.code);
+          final dynamic errorState = state;
+          error(
+            context,
+            errorState.failure.massage,
+            errorState.failure.code,
+          );
         }
       },
       builder: (context, state) {
-        return GestureDetector(
-          onTap: () {
-            if (formKey.currentState!.validate()) {
-              BlocProvider.of<AuthBloc>(context)
-                  .add(LoginEvent(userName.text, password.text));
-            }
-          },
-          child: Container(
-            width: double.infinity,
-            height: isLandscape ? 50.h : 55.h,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  ColorManager.medicalPrimary,
-                  ColorManager.medicalPrimary.withBlue(255),
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorManager.medicalPrimary,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: EdgeInsets.symmetric(
+                vertical: compact ? 14 : 16,
               ),
-              borderRadius: BorderRadius.circular(18.r),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.medicalPrimary.withOpacity(0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(ui.cardRadius - 2),
+              ),
             ),
+            onPressed: () => _submitLogin(context),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "تسجيل الدخول",
+                  'تسجيل الدخول',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: isLandscape ? 15.sp : 17.sp,
-                    fontWeight: FontWeight.bold,
+                    fontSize: ui.isMobile ? 16 : 18,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(width: 12.w),
-                const Icon(Icons.login_rounded, color: Colors.white),
+                SizedBox(width: ui.mediumSpacing),
+                Icon(
+                  Icons.login_rounded,
+                  color: Colors.white,
+                  size: ui.iconSize,
+                ),
               ],
             ),
           ),
         );
       },
     ).animate().fadeIn(delay: 700.ms);
+  }
+
+  void _submitLogin(BuildContext context) {
+    FocusScope.of(context).unfocus();
+
+    if (!(formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    context.read<AuthBloc>().add(
+      LoginEvent(
+        userName.text.trim(),
+        password.text,
+      ),
+    );
   }
 }
