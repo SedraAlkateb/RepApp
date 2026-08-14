@@ -62,11 +62,11 @@ extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
       responseItem?.recipesCount ?? Constants.empty,
       responseItem?.repPlanId ?? Constants.zero,
       responseItem?.totalVisit ?? Constants.zero,
-      responseItem?.totDocVisit ?? Constants.empty, // المابر الجديد
-      responseItem?.totHosVisit ?? Constants.empty, // المابر الجديد
+      int.parse(responseItem?.totDocVisit ?? "0"), // المابر الجديد
+      int.parse(responseItem?.totHosVisit ?? "0"), // المابر الجديد
       responseItem?.visitDon ?? Constants.zero,
-      responseItem?.visitDonDoc ?? Constants.empty, // المابر الجديد
-      responseItem?.visitDonHos ?? Constants.empty, // المابر الجديد
+      int.parse(responseItem?.visitDonDoc ?? "0"),
+      int.parse(responseItem?.visitDonHos ?? "0"),
       responseItem?.visitnotYet ?? Constants.zero,
       int.parse(responseItem?.repType ?? "0"),
     );
@@ -710,6 +710,22 @@ extension DoctorInfoResponseMapper on InfoDoctorBaseResponse? {
   }
 }
 
+extension DoctorSenResponseMapper on DoctorSenResponse? {
+  DoctorSenModel toDomain() {
+    return DoctorSenModel(
+      this?.docId ?? Constants.empty,
+      this?.title ?? Constants.empty,
+      this?.address ?? Constants.empty,
+      this?.spId ?? Constants.empty,
+      this?.place ?? Constants.empty,
+      this?.visit ?? Constants.empty,
+      this?.note ?? Constants.empty,
+      this?.rate ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+    );
+  }
+}
+
 extension CopyRecResponseMapper on CopyRecResponse {
   CopyReciRequest toDomain() {
     return CopyReciRequest(
@@ -1084,6 +1100,9 @@ extension PlanRepsMapper on PlanRepsResponse? {
       this?.id ?? Constants.empty,
       this?.name ?? Constants.empty,
       this?.repPlan ?? Constants.empty,
+      this?.totalVisit ?? Constants.zero,
+      this?.TotalUnReadVisit ?? Constants.zero,
+      this?.TotalReadVisit ?? Constants.zero,
     );
   }
 }
@@ -1096,5 +1115,20 @@ extension PlanRepsBaseMapper on PlanRepsBaseResponse? {
             .cast<PlanRepsModel>()
             .toList();
     return rep;
+  }
+}
+extension DocHosByPlaceAndSpMapper on GetDocHosByPlaceOrSpBaseResponse? {
+  DocHosByPlaceAndSp toDomain() {
+    List<DoctorSenModel> doctors =
+    (this!.docHos?.doctors?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<DoctorSenModel>()
+        .toList();
+    List<HospitalSpModel> hospitals =
+    (this!.docHos?.hospitals?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<HospitalSpModel>()
+        .toList();
+    return DocHosByPlaceAndSp(doctors, hospitals);
   }
 }

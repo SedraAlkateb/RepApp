@@ -1,7 +1,6 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/drawer_model.dart';
-import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
 import 'package:domina_app/presentation/drawer/widget/custom_drawer_widget.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
@@ -19,49 +18,49 @@ class DrawerPage extends StatelessWidget {
 
     if (type == 4) {
       initDeleteModule();
-      return BlocBuilder<DeleteBloc, DeleteState>(
-        builder: (context, state) {
-          if (state is DeleteAllState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+      return BlocListener<SeniorProfBloc, SeniorProfState>(
+
+          listener: (context, state) {
+            if (state is LogoutDeleteAllState) {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.login,
-                (route) => true,
+                    (route) => false,
               );
-            });
+
           }
-          if (state is DeleteAllErrorState) {
+          if (state is LogoutDeleteAllErrorState) {
             error(context, state.failure.massage, state.failure.code);
           }
-          return CustomAppDrawer(
+        },
+          child:  CustomAppDrawer(
             roleTitle: "Supervisor",
             menuItems: _getSupervisorItems(context),
             showStats: false,
-          );
-        },
+          )
+
       );
     } else if (type == 5) {
       initDeleteModule();
-      return BlocBuilder<DeleteBloc, DeleteState>(
-        builder: (context, state) {
-          if (state is DeleteAllState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.login,
-                (route) => true,
-              );
-            });
+      return BlocListener<SeniorProfBloc, SeniorProfState>(
+        listener: (context, state) {
+          if (state is LogoutDeleteAllState) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.login,
+                  (route) => false,
+            );
+
           }
-          if (state is DeleteAllErrorState) {
+          if (state is LogoutDeleteAllErrorState) {
             error(context, state.failure.massage, state.failure.code);
           }
-          return CustomAppDrawer(
-            roleTitle: "TeamLeader",
-            menuItems: _getTeamLeaderItems(context),
-            showStats: false,
-          );
         },
+        child:    CustomAppDrawer(
+          roleTitle: "TeamLeader",
+          menuItems: _getTeamLeaderItems(context),
+          showStats: false,
+        ),
       );
     } else if (type == 6) {
       return CustomAppDrawer(
@@ -433,7 +432,7 @@ List<DrawerMenuItem> getAdminLogoutItem(BuildContext context) {
         title: "تسجيل خروج",
         color: Colors.red,
         onTap: () {
-          context.read<DeleteBloc>().add(DeleteAllEvent());
+          context.read<SeniorProfBloc>().add(LogoutDeleteAllEvent());
         }),
   ];
 }

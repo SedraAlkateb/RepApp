@@ -23,6 +23,7 @@ import 'package:domina_app/presentation/senior/general_reports/pages/all_city-se
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/future_place_page.dart';
+import 'package:domina_app/presentation/senior/places/pages/doc_hos_by_place_or_sp.dart';
 import 'package:domina_app/presentation/senior/plan_management/page/plan_help_goal_tap.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
@@ -33,7 +34,6 @@ import 'package:domina_app/presentation/senior/representative/page/hos_senior.da
 import 'package:domina_app/presentation/senior/representative/page/no_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/place_senior.dart';
 import 'package:domina_app/presentation/senior/representative/page/remaining_visits.dart';
-import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_doctor.dart';
 import 'package:domina_app/presentation/senior/representative/page/sen_visit_hospital.dart';
 import 'package:domina_app/presentation/senior/representative/page/spec_senior.dart';
@@ -68,6 +68,8 @@ class Routes {
   static const String searchdoctors = "/searchdoctors";
   static const String spec = "/spec";
   static const String doctors = "/doctors";
+  static const String docHos = "/docHos";
+
   static const String hospital = "/hospital";
   static const String brand = "/brand";
   static const String pharmacy = "/pharmacy";
@@ -116,7 +118,7 @@ class Routes {
   static const String recipesHospital = "/recipesHospital";
   static const String recipesDoctor = "/recipesDoctor";
 
- // static const String createOrder = "/createOrder";
+  // static const String createOrder = "/createOrder";
   static const String recipeDH = "/recipeDH";
 
   static const String allRepWithFuture = "/allRepWithFuture";
@@ -132,7 +134,6 @@ class Routes {
   static const String cityPlan = "/cityPlan";
   static const String allCitySupervisor = "/allCitySupervisor"; /////////ToDo
   static const String activePlanPage = "/activePlanPage";
-
 }
 
 class RouteGenerator {
@@ -143,6 +144,9 @@ class RouteGenerator {
         return _animatedRoute(const MyLogin());
       case Routes.allBrand:
         return _animatedRoute(AllBrand());
+      case Routes.docHos:
+        return _animatedRoute(DocHosByPlaceOrSpPage(
+        ));
       // case Routes.createOrder:
       //   initOrderBradModule();
       //   return _animatedRoute(CreateOrderPage());
@@ -254,14 +258,6 @@ class RouteGenerator {
         return _animatedRoute(RecipesPage(
           docId: 0,
           st: 433,
-        ));
-      case Routes.repProfile:
-        initSeniorProfModule();
-        return _animatedRoute(RepProfile(
-          id: 3,
-          repPlanId: 3,
-          index: 3,
-          //      cityId: 1,
         ));
       case Routes.AllRepSenior:
         initSeniorModule();
@@ -378,7 +374,9 @@ class RouteGenerator {
         initActivePlanModule();
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(ActivePlanPage(planId: args,));
+        return _animatedRoute(ActivePlanPage(
+          planId: args,
+        ));
 
       default:
         return unDefinedRoute();

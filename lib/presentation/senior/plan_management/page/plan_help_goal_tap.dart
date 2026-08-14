@@ -1,134 +1,441 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/plan_management/bloc/plan_management_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_management/page/create_plan_brand_page.dart';
 import 'package:domina_app/presentation/senior/plan_management/page/view_active_plan_brand_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PlanHelpGoalTap extends StatefulWidget {
-  const PlanHelpGoalTap({super.key});
+  const PlanHelpGoalTap({
+    super.key,
+  });
 
   @override
-  State<PlanHelpGoalTap> createState() => _PlanHelpGoalTapState();
+  State<PlanHelpGoalTap> createState() =>
+      _PlanHelpGoalTapState();
 }
 
-class _PlanHelpGoalTapState extends State<PlanHelpGoalTap> {
+class _PlanHelpGoalTapState
+    extends State<PlanHelpGoalTap> {
   @override
   void initState() {
     super.initState();
+
+    // =====================================================
+    // نفس السلوك الأصلي
     // جلب معلومات المندوب عند فتح الواجهة
-    context.read<PlanManagementBloc>().add(GetRepInfoEvent());
+    // =====================================================
+    context
+        .read<PlanManagementBloc>()
+        .add(
+      GetRepInfoEvent(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final ui =
+    AppUi.of(context);
+
     return DefaultTabController(
       length: 2,
+
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FB),
+        backgroundColor:
+        const Color(
+          0xFFF8FAFC,
+        ),
+
         body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
+          physics:
+          const BouncingScrollPhysics(),
+
+          headerSliverBuilder:
+              (
+              context,
+              innerBoxIsScrolled,
+              ) {
             return [
+              // =================================================
+              // App Bar
+              // =================================================
               SliverAppBar(
-                elevation: 0,
-                pinned: true,
-                floating: true,
-                snap: true,
-                backgroundColor: Colors.white,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),
-                  onPressed: () => Navigator.pop(context),
+                pinned:
+                true,
+
+                floating:
+                true,
+
+                snap:
+                true,
+
+                elevation:
+                0,
+
+                scrolledUnderElevation:
+                0,
+
+                surfaceTintColor:
+                Colors.transparent,
+
+                backgroundColor:
+                Colors.white,
+
+                leading:
+                IconButton(
+                  tooltip:
+                  'رجوع',
+
+                  icon:
+                  Icon(
+                    Icons
+                        .arrow_back_rounded,
+
+                    color:
+                    ColorManager
+                        .medicalPrimary,
+                  ),
+
+                  onPressed:
+                      () {
+                    Navigator.pop(
+                      context,
+                    );
+                  },
                 ),
-                title: Text(
-                  "إدارة خطة ${UserInfo.name}",
-                  style: TextStyle(
-                    color: const Color(0xFF0D47A1),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
+
+                titleSpacing:
+                0,
+
+                title:
+                Padding(
+                  padding:
+                  EdgeInsets.only(
+                    right:
+                    ui.smallSpacing,
+                  ),
+
+                  child:
+                  Text(
+                    "إدارة خطة ${UserInfo.name}",
+
+                    maxLines:
+                    1,
+
+                    overflow:
+                    TextOverflow
+                        .ellipsis,
+
+                    style:
+                    TextStyle(
+                      color:
+                      ColorManager
+                          .medicalPrimary,
+
+                      fontWeight:
+                      FontWeight.w700,
+
+                      fontSize:
+                      ui.cardTitleSize,
+                    ),
                   ),
                 ),
               ),
+
+              // =================================================
+              // Tabs
+              // =================================================
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-                  child: Container(
-                    height: 55.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.r),
-                      border: Border.all(color: Colors.grey.shade200),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                child:
+                Center(
+                  child:
+                  ConstrainedBox(
+                    constraints:
+                    BoxConstraints(
+                      maxWidth:
+                      ui.pageMaxWidth,
                     ),
-                    child: TabBar(
-                      padding: const EdgeInsets.all(4),
-                      dividerColor: Colors.transparent,
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.grey.shade400,
-                      labelStyle: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 14.sp),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: BoxDecoration(
-                        color: ColorManager.medicalPrimary,
-                        borderRadius: BorderRadius.circular(12.r),
+
+                    child:
+                    Padding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.searchTopPadding,
+                        ui.pagePadding,
+                        ui.searchBottomPadding,
                       ),
-                      onTap: (value) {
-                        if (value == 0) {
-                          context.read<PlanManagementBloc>().add(
-                                RepPlanBrandSpEvent(
-                                  RepSp(UserInfo.otherPlanId ?? -1, 38,
-                                      UserInfo.repId),
-                                ),
-                              );
-                        } else {
-                          context
-                              .read<PlanManagementBloc>()
-                              .add(RepActivePlanBrandEvent());
-                        }
-                      },
-                      tabs: [
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.edit_note),
-                              SizedBox(width: 8.w),
-                              const Text('خطة مستقبلية'),
-                            ],
-                          ),
-                        ),
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.visibility),
-                              SizedBox(width: 8.w),
-                              const Text('خطة فعالة'),
-                            ],
-                          ),
-                        ),
-                      ],
+
+                      child:
+                      _buildTabBar(
+                        context,
+                        ui,
+                      ),
                     ),
                   ),
                 ),
               ),
             ];
           },
-          body: const TabBarView(
-            physics: NeverScrollableScrollPhysics(),
+
+          // =====================================================
+          // Pages
+          // =====================================================
+          body:
+          const TabBarView(
+            physics:
+            NeverScrollableScrollPhysics(),
+
             children: [
               CreatePlanBrandPage(),
               ViewActivePlanBrandPage(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Tab Bar
+  // ===========================================================
+
+  Widget _buildTabBar(
+      BuildContext context,
+      AppUi ui,
+      ) {
+    return Container(
+      padding:
+      const EdgeInsets.all(
+        4,
+      ),
+
+      decoration:
+      BoxDecoration(
+        color:
+        Colors.white,
+
+        borderRadius:
+        BorderRadius.circular(
+          ui.cardRadius,
+        ),
+
+        border:
+        Border.all(
+          color:
+          const Color(
+            0xFFE2E8F0,
+          ),
+        ),
+
+        boxShadow: [
+          BoxShadow(
+            color:
+            Colors.black
+                .withOpacity(
+              0.025,
+            ),
+
+            blurRadius:
+            12,
+
+            offset:
+            const Offset(
+              0,
+              4,
+            ),
+          ),
+        ],
+      ),
+
+      child:
+      TabBar(
+        dividerColor:
+        Colors.transparent,
+
+        indicatorSize:
+        TabBarIndicatorSize.tab,
+
+        labelPadding:
+        EdgeInsets.zero,
+
+        overlayColor:
+        WidgetStateProperty.all(
+          Colors.transparent,
+        ),
+
+        labelColor:
+        Colors.white,
+
+        unselectedLabelColor:
+        const Color(
+          0xFF64748B,
+        ),
+
+        labelStyle: TextStyle(
+          fontSize: ui.isMobile
+              ? 15
+              : 17,
+          fontWeight: FontWeight.w700,
+        ),
+
+        unselectedLabelStyle: TextStyle(
+          fontSize: ui.isMobile
+              ? 15
+              : 17,
+          fontWeight: FontWeight.w600,
+        ),
+
+
+        indicator:
+        BoxDecoration(
+          color:
+          ColorManager
+              .medicalPrimary,
+
+          borderRadius:
+          BorderRadius.circular(
+            ui.smallRadius +
+                2,
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color:
+              ColorManager
+                  .medicalPrimary
+                  .withOpacity(
+                0.16,
+              ),
+
+              blurRadius:
+              8,
+
+              offset:
+              const Offset(
+                0,
+                3,
+              ),
+            ),
+          ],
+        ),
+
+        // =====================================================
+        // نفس Bloc Events الأصلية تماماً
+        // =====================================================
+        onTap:
+            (value) {
+          if (value == 0) {
+            context
+                .read<
+                PlanManagementBloc>()
+                .add(
+              RepPlanBrandSpEvent(
+                RepSp(
+                  UserInfo.otherPlanId ??
+                      -1,
+
+                  38,
+
+                  UserInfo.repId,
+                ),
+              ),
+            );
+          } else {
+            context
+                .read<
+                PlanManagementBloc>()
+                .add(
+              RepActivePlanBrandEvent(),
+            );
+          }
+        },
+
+        tabs: [
+          _buildTab(
+            ui: ui,
+            icon:
+            Icons
+                .edit_note_rounded,
+            title:
+            'خطة مستقبلية',
+          ),
+
+          _buildTab(
+            ui: ui,
+            icon:
+            Icons
+                .visibility_outlined,
+            title:
+            'خطة فعالة',
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Single Tab
+  // ===========================================================
+
+  Widget _buildTab({
+    required AppUi ui,
+    required IconData icon,
+    required String title,
+  }) {
+    return Tab(
+      height:
+      ui.isMobile
+          ? 46
+          : 50,
+
+      child:
+      Padding(
+        padding:
+        EdgeInsets.symmetric(
+          horizontal:
+          ui.smallSpacing,
+        ),
+
+        child:
+        Row(
+          mainAxisAlignment:
+          MainAxisAlignment.center,
+
+          mainAxisSize:
+          MainAxisSize.min,
+
+          children: [
+            Icon(
+              icon,
+
+              size:
+              ui.smallIconSize +
+                  2,
+            ),
+
+            SizedBox(
+              width:
+              ui.smallSpacing,
+            ),
+
+            Flexible(
+              child:
+              Text(
+                title,
+
+                maxLines:
+                1,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
     );

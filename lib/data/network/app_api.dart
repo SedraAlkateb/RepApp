@@ -56,13 +56,14 @@ abstract class AppServiceClient {
   @POST("/getAllPlanBrands.php") //
 
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
-      /////////TODO
+
       @Part(name: "repPlanIdActive") int repPlanIdActive,
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
   @POST("/admin/docSearch.php") //
   Future<SearchDoctorsBaseSpResponse> docSearch(
     @Part(name: "cityId") int cityId,
     @Part(name: "name") String name,
+      @Part(name: "repDet") int repDet,
   );
 
   @POST("/admin/docReport.php") //
@@ -94,7 +95,7 @@ abstract class AppServiceClient {
   Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
       @Part(name: "repPlanId") int repPlanId,
       @Part(name: "spId") int? spId,
-      @Part(name: "repId") int? repId); ////////////////////////TODO
+      @Part(name: "repId") int? repId);
   @POST("/hosVisit.php") //
   Future<Message1Response> visitHospital(@Body() VisitHospitalRequestBody list);
   @POST("/docVisit.php") //
@@ -308,6 +309,7 @@ abstract class AppServiceClient {
   @POST("/admin/getHospitals.php")
   Future<AllSearchHospitalBaseResponse> getSearchHospitals(
     @Part(name: "name") String name,
+    @Part(name: "repDet") int repDet,
   );
   @POST("/admin/updateRepPlanBrandAmount.php")
   Future<Message1Response> updateRepPlanBrandAmount(
@@ -322,6 +324,13 @@ abstract class AppServiceClient {
   Future<PlanRepsBaseResponse> getPlanReps(
     @Part(name: "planId") int planId,
   );
+  @POST("/admin/getSpDocHos.php")
+  Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(
+      @Part(name: "repDet") int repDet,
+      {
+    @Part(name: "spId") int? spId,
+    @Part(name: "placeId") int? placeId,
+  });
 }
 
 ///admin/getinfoPlanBrandsType.php

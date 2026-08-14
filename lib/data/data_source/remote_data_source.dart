@@ -28,9 +28,7 @@ abstract class RemoteDataSource {
   Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
       int repPlanId, int? spId, int? repId);
   Future<SearchDoctorsBaseSpResponse> docSearch(
-    int cityId,
-    String name,
-  );
+      int cityId, String name, int repDet);
   Future<DocDoctorsBaseResponse> docReport(int docId);
   Future<Message1Response> repPlanBrand(RepPlanBrandBody list);
   Future<LoginResponse> checkActivePlanBrand(int repDet);
@@ -97,8 +95,7 @@ abstract class RemoteDataSource {
     int spId,
   );
   Future<AllSearchHospitalBaseResponse> getSearchHospitals(
-    String name,
-  );
+      String name, int repDet);
   Future<FinishedPlansBaseResponse> getFinishedPlans(
     int cityId,
   );
@@ -116,6 +113,11 @@ abstract class RemoteDataSource {
   Future<AllNoVisitDoctorBaseResponse> visitHos(
     int repPlanId,
   );
+  Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(
+    int repDet, {
+    int? spId,
+    int? placeId,
+  });
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -213,10 +215,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<SearchDoctorsBaseSpResponse> docSearch(
-    int cityId,
-    String name,
-  ) async {
-    return await _appServiceClient.docSearch(cityId, name);
+      int cityId, String name, int repDet) async {
+    return await _appServiceClient.docSearch(cityId, name, repDet);
   }
 
   @override
@@ -448,8 +448,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllSearchHospitalBaseResponse> getSearchHospitals(String name) async {
-    return await _appServiceClient.getSearchHospitals(name);
+  Future<AllSearchHospitalBaseResponse> getSearchHospitals(
+      String name, int repDet) async {
+    return await _appServiceClient.getSearchHospitals(name, repDet);
   }
 
   @override
@@ -504,5 +505,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<AllNoVisitDoctorBaseResponse> visitHos(int repPlanId) async {
     return await _appServiceClient.visitHos(repPlanId);
+  }
+
+  @override
+  Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(
+    int repDet, {
+    int? spId,
+    int? placeId,
+  }) async {
+    return await _appServiceClient.getSpDocHos(repDet,spId:  spId,placeId: placeId);
   }
 }

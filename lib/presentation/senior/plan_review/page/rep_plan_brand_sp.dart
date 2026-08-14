@@ -1,252 +1,966 @@
 // ignore_for_file: must_be_immutable
+
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
-import 'package:domina_app/presentation/uniti/circle_number_widget.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RepPlanBrandSpPage extends StatefulWidget {
+  const RepPlanBrandSpPage({
+    super.key,
+    required this.title,
+    this.flag,
+  });
+
   final String title;
   final int? flag;
-  const RepPlanBrandSpPage({super.key, required this.title, this.flag});
 
   @override
-  State<RepPlanBrandSpPage> createState() => _RepPlanBrandSpPageState();
+  State<RepPlanBrandSpPage> createState() =>
+      _RepPlanBrandSpPageState();
 }
 
-class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
+class _RepPlanBrandSpPageState
+    extends State<RepPlanBrandSpPage>
     with AutomaticKeepAliveClientMixin {
   List<PlanBrandSp> planBrandsp = [];
+
+  // =====================================================
+  // Search Controller
+  //
+  // كان ينخلق داخل build بكل rebuild.
+  // هلق صار تابع للـState ويتم تنظيفه بشكل صحيح.
+  // =====================================================
+
+  final TextEditingController searchController =
+  TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final TextEditingController searchController = TextEditingController();
+
+    final ui = AppUi.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6F9),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text("حفظ التعديلات",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        icon: const Icon(Icons.save_as_rounded, color: Colors.white),
-        onPressed: () {
-          BlocProvider.of<FutureRepBloc>(context).add(UpdateAmountEvent());
-        },
-        backgroundColor: ColorManager.secondaryColor1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor:
+      const Color(
+        0xFFF8FAFC,
       ),
+
+      // =====================================================
+      // Save Changes
+      // =====================================================
+      floatingActionButton:
+      FloatingActionButton.extended(
+        elevation: 3,
+
+        backgroundColor:
+        ColorManager.secondaryColor1,
+
+        shape:
+        RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.circular(
+            ui.cardRadius - 4,
+          ),
+        ),
+
+        icon:
+        Icon(
+          Icons.save_as_rounded,
+          color: Colors.white,
+          size: ui.iconSize,
+        ),
+
+        label:
+        Text(
+          "حفظ التعديلات",
+
+          style:
+          TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: ui.bodyTextSize,
+          ),
+        ),
+
+        // =================================================
+        // نفس الحدث الأصلي
+        // =================================================
+        onPressed: () {
+          BlocProvider.of<
+              FutureRepBloc>(
+            context,
+          ).add(
+            UpdateAmountEvent(),
+          );
+        },
+      ),
+
+      // =====================================================
+      // Nested Scroll
+      // =====================================================
       body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
+        headerSliverBuilder:
+            (
+            context,
+            innerBoxIsScrolled,
+            ) {
           return [
-            // AppBar متفاعل يختفي عند التمرير
+            // =================================================
+            // AppBar
+            // =================================================
             SliverAppBar(
               pinned: true,
               floating: true,
-              title: Text(widget.title),
+
+              elevation: 0,
+
+              scrolledUnderElevation:
+              1,
+
+              surfaceTintColor:
+              Colors.transparent,
+
+              title:
+              Text(
+                widget.title,
+
+                maxLines: 1,
+
+                overflow:
+                TextOverflow.ellipsis,
+              ),
             ),
-            // شريط البحث "يتحرك" مع التمرير
+
+            // =================================================
+            // Search
+            //
+            // ما زال يتحرك مع الـScroll مثل النسخة الأصلية
+            // =================================================
             SliverToBoxAdapter(
               child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 8.h),
-                child: SearchField(
-                  searchController: searchController,
-                  onPressed: (value) {
-                    BlocProvider.of<FutureRepBloc>(context)
-                        .add(SearchPlanBrandsEvent(value));
-                  },
+                color:
+                const Color(
+                  0xFFF8FAFC,
+                ),
+
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints:
+                    BoxConstraints(
+                      maxWidth:
+                      ui.pageMaxWidth,
+                    ),
+
+                    child: Padding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.searchTopPadding,
+                        ui.pagePadding,
+                        ui.searchBottomPadding,
+                      ),
+
+                      child:
+                      SearchField(
+                        searchController:
+                        searchController,
+
+                        onPressed:
+                            (value) {
+                          // =====================================
+                          // نفس Search Event
+                          // =====================================
+                          BlocProvider.of<
+                              FutureRepBloc>(
+                            context,
+                          ).add(
+                            SearchPlanBrandsEvent(
+                              value,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
           ];
         },
-        body: BlocConsumer<FutureRepBloc, FutureRepState>(
-          listener: (context, state) {
-            if (state is FutureRepPlanBrandSpErrorState) {
-              error(context, state.failure.massage, state.failure.code);
-            }
-            if (state is SumErrorState) {
-              error(context, state.failure.massage, state.failure.code);
-            }
-            if (state is FutureSpRepErrorState) {
-              error(context, state.failure.massage, state.failure.code);
-            }
-            if (state is UpdateAmountLoadingState) {
-              loading(context);
-            }
-            if (state is UpdateAmountState) {
-              success(context);
-              Navigator.pop(context);
-            }
-          },
-          builder: (context, state) {
-            if (state is FutureRepPlanBrandSpState) {
-              planBrandsp = state.planBrandSp;
-            }
-            if (state is FutureRepPlanBrandSpLoadingState) {
-              return loadingFullScreen(context);
-            }
-            if (state is FutureRepPlanBrandSpEmptyState) {
-              return emptyFullScreen(context);
-            }
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 80.h),
-              child: Column(
-                children: [
-                  // بطاقة الإحصائيات العلوية
-                  _buildSummaryInfo(),
-                  SizedBox(height: 16.h),
-                  // قائمة البطاقات
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: planBrandsp.length,
-                    itemBuilder: (context, index) =>
-                        _buildModernCard(index, state),
+
+        // =====================================================
+        // Page Content
+        // =====================================================
+        body: Center(
+          child: ConstrainedBox(
+            constraints:
+            BoxConstraints(
+              maxWidth:
+              ui.pageMaxWidth,
+            ),
+
+            child: BlocConsumer<
+                FutureRepBloc,
+                FutureRepState>(
+              // =================================================
+              // Listener
+              // نفس السلوك والترتيب الأصلي
+              // =================================================
+              listener:
+                  (context, state) {
+                if (state
+                is FutureRepPlanBrandSpErrorState) {
+                  error(
+                    context,
+                    state.failure.massage,
+                    state.failure.code,
+                  );
+                }
+
+                if (state
+                is SumErrorState) {
+                  error(
+                    context,
+                    state.failure.massage,
+                    state.failure.code,
+                  );
+                }
+
+                if (state
+                is FutureSpRepErrorState) {
+                  error(
+                    context,
+                    state.failure.massage,
+                    state.failure.code,
+                  );
+                }
+
+                if (state
+                is UpdateAmountLoadingState) {
+                  loading(
+                    context,
+                  );
+                }
+
+                if (state
+                is UpdateAmountState) {
+                  // =============================================
+                  // نفس الترتيب الأصلي تماماً
+                  // =============================================
+                  success(
+                    context,
+                  );
+
+                  Navigator.pop(
+                    context,
+                  );
+                }
+              },
+
+              builder:
+                  (context, state) {
+                // =================================================
+                // Loaded
+                // =================================================
+                if (state
+                is FutureRepPlanBrandSpState) {
+                  planBrandsp =
+                      state.planBrandSp;
+                }
+
+                // =================================================
+                // Loading
+                // =================================================
+                if (state
+                is FutureRepPlanBrandSpLoadingState) {
+                  return loadingFullScreen(
+                    context,
+                  );
+                }
+
+                // =================================================
+                // Empty
+                // =================================================
+                if (state
+                is FutureRepPlanBrandSpEmptyState) {
+                  return emptyFullScreen(
+                    context,
+                  );
+                }
+
+                // =================================================
+                // Content
+                // =================================================
+                return SingleChildScrollView(
+                  physics:
+                  const BouncingScrollPhysics(),
+
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior
+                      .onDrag,
+
+                  padding:
+                  EdgeInsets.fromLTRB(
+                    ui.pagePadding,
+                    ui.listTopPadding +
+                        8,
+                    ui.pagePadding,
+
+                    // مساحة للـFAB
+                    ui.pageBottomPadding +
+                        90,
                   ),
-                ],
-              ),
-            );
-          },
+
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment
+                        .stretch,
+
+                    children: [
+                      // =============================================
+                      // Summary
+                      // =============================================
+                      buildTotalReportsCard(
+                        BlocProvider.of<
+                            FutureRepBloc>(
+                          context,
+                        ).number,
+                        "إحصائيات توزيع العينات",
+                        "إجمالي العينات المحددة بالخطة",
+                      ),
+
+                      SizedBox(
+                        height:
+                        ui.sectionSpacing,
+                      ),
+
+                      // =============================================
+                      // Cards
+                      // =============================================
+                      ListView.builder(
+                        physics:
+                        const NeverScrollableScrollPhysics(),
+
+                        shrinkWrap:
+                        true,
+
+                        padding:
+                        EdgeInsets.zero,
+
+                        itemCount:
+                        planBrandsp.length,
+
+                        itemBuilder:
+                            (
+                            context,
+                            index,
+                            ) {
+                          return _buildModernCard(
+                            context,
+                            index,
+                            state,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
   }
 
-  // ملخص علوي أنيق
-  Widget _buildSummaryInfo() {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)
-        ],
-        border: Border(
-            right: BorderSide(color: ColorManager.secondaryColor1, width: 4)),
+
+
+  // =====================================================
+  // Brand Card
+  // =====================================================
+
+  Widget _buildModernCard(
+      BuildContext context,
+      int index,
+      FutureRepState state,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    final PlanBrandSp item =
+    planBrandsp[index];
+
+    // =====================================================
+    // نفس شرط التعديل الأصلي
+    // =====================================================
+    final bool isEditable =
+        widget.flag ==
+            UserInfo.statusPlan;
+
+    return Padding(
+      padding:
+      EdgeInsets.only(
+        bottom:
+        ui.cardSpacing,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "إحصائيات توزيع العينات:",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14.sp,
-                color: Colors.grey.shade700),
+
+      child: Container(
+        decoration:
+        BoxDecoration(
+          color:
+          Colors.white,
+
+          borderRadius:
+          BorderRadius.circular(
+            ui.cardRadius,
           ),
-          CircleNumberWidget(
-              number: BlocProvider.of<FutureRepBloc>(context).number),
-        ],
-      ),
-    );
-  }
 
-  // تصميم البطاقة الفاخر
-  Widget _buildModernCard(int index, FutureRepState state) {
-    final item = planBrandsp[index];
-    bool isEditable = widget.flag == UserInfo.statusPlan;
-    // &&
-    //  ( state is! SumErrorState);
+          border:
+          Border.all(
+            color:
+            const Color(
+              0xFFE2E8F0,
+            ),
+          ),
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18.r),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 12,
-              offset: const Offset(0, 4))
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18.r),
+          boxShadow: [
+            BoxShadow(
+              color:
+              Colors.black
+                  .withOpacity(
+                0.025,
+              ),
+
+              blurRadius:
+              12,
+
+              offset:
+              const Offset(
+                0,
+                4,
+              ),
+            ),
+          ],
+        ),
+
+        clipBehavior:
+        Clip.antiAlias,
+
         child: Stack(
           children: [
-            Positioned(
-                left: 0,
-                top: 0,
-                bottom: 0,
-                child: Container(width: 5, color: item.brandType.color)),
+            // =================================================
+            // Content
+            // =================================================
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding:
+              EdgeInsets.fromLTRB(
+                ui.cardPadding,
+                ui.cardPadding,
+
+                // مساحة للشريط الجانبي
+                ui.cardPadding + 5,
+
+                ui.cardPadding,
+              ),
+
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                CrossAxisAlignment
+                    .stretch,
+
                 children: [
+                  // =================================================
+                  // Header
+                  // =================================================
                   Row(
+                    crossAxisAlignment:
+                    CrossAxisAlignment
+                        .center,
+
                     children: [
-                      Icon(Icons.medication_rounded,
-                          color: item.brandType.color, size: 20.sp),
-                      SizedBox(width: 8.w),
+                      // =============================================
+                      // Medication Icon
+                      // =============================================
+                      Container(
+                        width:
+                        ui.iconBoxSize,
+
+                        height:
+                        ui.iconBoxSize,
+
+                        alignment:
+                        Alignment.center,
+
+                        decoration:
+                        BoxDecoration(
+                          color:
+                          item.brandType
+                              .color
+                              .withOpacity(
+                            0.08,
+                          ),
+
+                          borderRadius:
+                          BorderRadius
+                              .circular(
+                            ui.smallRadius +
+                                2,
+                          ),
+                        ),
+
+                        child: Icon(
+                          Icons
+                              .medication_rounded,
+
+                          color:
+                          item.brandType
+                              .color,
+
+                          size:
+                          ui.iconSize,
+                        ),
+                      ),
+
+                      SizedBox(
+                        width:
+                        ui.sectionSpacing,
+                      ),
+
+                      // =============================================
+                      // Brand Name
+                      // =============================================
                       Expanded(
                         child: Text(
                           item.titleAr,
-                          style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.bold,
-                              color: ColorManager.secondaryColor1),
+
+                          maxLines:
+                          2,
+
+                          overflow:
+                          TextOverflow
+                              .ellipsis,
+
+                          style:
+                          TextStyle(
+                            fontSize:
+                            ui.cardTitleSize,
+
+                            fontWeight:
+                            FontWeight
+                                .w700,
+
+                            color:
+                            ColorManager
+                                .secondaryColor1,
+
+                            height:
+                            1.3,
+                          ),
                         ),
                       ),
-                      Type.buildBadge(item.brandType),
+
+                      SizedBox(
+                        width:
+                        ui.mediumSpacing,
+                      ),
+
+                      // =============================================
+                      // Existing Type Badge
+                      // =============================================
+                      Type.buildBadge(
+                        item.brandType,
+                      ),
                     ],
                   ),
-                  SizedBox(height: 12.h),
+
+                  SizedBox(
+                    height:
+                    ui.sectionSpacing,
+                  ),
+
+                  // =================================================
+                  // Pharmaceutical Type
+                  // =================================================
+                  Container(
+                    padding:
+                    EdgeInsets.symmetric(
+                      horizontal:
+                      ui.mediumSpacing,
+
+                      vertical:
+                      ui.smallSpacing +
+                          2,
+                    ),
+
+                    decoration:
+                    BoxDecoration(
+                      color:
+                      const Color(
+                        0xFFF8FAFC,
+                      ),
+
+                      borderRadius:
+                      BorderRadius.circular(
+                        ui.smallRadius,
+                      ),
+
+                      border:
+                      Border.all(
+                        color:
+                        const Color(
+                          0xFFF1F5F9,
+                        ),
+                      ),
+                    ),
+
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons
+                              .category_outlined,
+
+                          size:
+                          ui.smallIconSize,
+
+                          color:
+                          const Color(
+                            0xFF94A3B8,
+                          ),
+                        ),
+
+                        SizedBox(
+                          width:
+                          ui.smallSpacing,
+                        ),
+
+                        Expanded(
+                          child: Text(
+                            "النوع: ${item.phTitle}",
+
+                            maxLines:
+                            1,
+
+                            overflow:
+                            TextOverflow
+                                .ellipsis,
+
+                            style:
+                            TextStyle(
+                              color:
+                              const Color(
+                                0xFF64748B,
+                              ),
+
+                              fontSize:
+                              ui.bodyTextSize,
+
+                              fontWeight:
+                              FontWeight
+                                  .w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height:
+                    ui.sectionSpacing,
+                  ),
+
+                  const Divider(
+                    height: 1,
+
+                    thickness:
+                    1,
+
+                    color:
+                    Color(
+                      0xFFF1F5F9,
+                    ),
+                  ),
+
+                  SizedBox(
+                    height:
+                    ui.sectionSpacing,
+                  ),
+
+                  // =================================================
+                  // Amount
+                  // =================================================
                   Row(
                     children: [
-                      Icon(Icons.category_outlined,
-                          size: 14.sp, color: Colors.grey),
-                      SizedBox(width: 6.w),
-                      Text("النوع: ${item.phTitle}",
-                          style: TextStyle(
-                              color: Colors.grey.shade600, fontSize: 12.sp)),
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Divider(height: 1, thickness: 0.5),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("العدد المطلوب:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 13.sp)),
-                      Container(
-                        width: 90.w,
-                        height: 40.h,
-                        decoration: BoxDecoration(),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment
+                              .start,
+
+                          mainAxisSize:
+                          MainAxisSize
+                              .min,
+
+                          children: [
+                            Text(
+                              "العدد المطلوب",
+
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight
+                                    .w600,
+
+                                fontSize:
+                                ui.bodyTextSize,
+
+                                color:
+                                const Color(
+                                  0xFF334155,
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height:
+                              ui.smallSpacing,
+                            ),
+
+                            Text(
+                              isEditable
+                                  ? "يمكن تعديل الكمية"
+                                  : "الكمية للعرض فقط",
+
+                              style:
+                              TextStyle(
+                                fontSize:
+                                ui.smallTextSize,
+
+                                color:
+                                const Color(
+                                  0xFF94A3B8,
+                                ),
+
+                                fontWeight:
+                                FontWeight
+                                    .w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        width:
+                        ui.sectionSpacing,
+                      ),
+
+                      // =============================================
+                      // Amount Input
+                      // =============================================
+                      SizedBox(
+                        width:
+                        ui.isMobile
+                            ? 92
+                            : 110,
+
+                        height:
+                        ui.isMobile
+                            ? 42
+                            : 46,
+
                         child: TextField(
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          enabled: isEditable,
-                          onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              BlocProvider.of<FutureRepBloc>(context).add(
-                                  ChangeFieldEvent(int.parse(value), index));
+                          keyboardType:
+                          TextInputType
+                              .number,
+
+                          textAlign:
+                          TextAlign.center,
+
+                          enabled:
+                          isEditable,
+
+                          // =========================================
+                          // نفس الـLogic الأصلي تماماً
+                          // =========================================
+                          onChanged:
+                              (value) {
+                            if (value
+                                .isNotEmpty) {
+                              BlocProvider.of<
+                                  FutureRepBloc>(
+                                context,
+                              ).add(
+                                ChangeFieldEvent(
+                                  int.parse(
+                                    value,
+                                  ),
+                                  index,
+                                ),
+                              );
                             }
                           },
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: item.brandType.color),
-                          decoration: InputDecoration(
-                            hintText: item.totalAmount.toString(),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.zero,
+
+                          style:
+                          TextStyle(
+                            fontWeight:
+                            FontWeight
+                                .w700,
+
+                            fontSize:
+                            ui.bodyTextSize +
+                                1,
+
+                            color:
+                            isEditable
+                                ? item
+                                .brandType
+                                .color
+                                : const Color(
+                              0xFF94A3B8,
+                            ),
+                          ),
+
+                          decoration:
+                          InputDecoration(
+                            hintText:
+                            item.totalAmount
+                                .toString(),
+
+                            hintStyle:
+                            TextStyle(
+                              color:
+                              item.brandType
+                                  .color
+                                  .withOpacity(
+                                isEditable
+                                    ? 0.65
+                                    : 0.4,
+                              ),
+
+                              fontWeight:
+                              FontWeight
+                                  .w700,
+                            ),
+
+                            filled:
+                            true,
+
+                            fillColor:
+                            isEditable
+                                ? item
+                                .brandType
+                                .color
+                                .withOpacity(
+                              0.055,
+                            )
+                                : const Color(
+                              0xFFF8FAFC,
+                            ),
+
+                            contentPadding:
+                            EdgeInsets.symmetric(
+                              horizontal:
+                              ui.smallSpacing,
+
+                              vertical:
+                              10,
+                            ),
+
+                            enabledBorder:
+                            OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(
+                                ui.smallRadius,
+                              ),
+
+                              borderSide:
+                              BorderSide(
+                                color:
+                                item
+                                    .brandType
+                                    .color
+                                    .withOpacity(
+                                  0.22,
+                                ),
+                              ),
+                            ),
+
+                            focusedBorder:
+                            OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(
+                                ui.smallRadius,
+                              ),
+
+                              borderSide:
+                              BorderSide(
+                                color:
+                                item
+                                    .brandType
+                                    .color,
+
+                                width:
+                                1.5,
+                              ),
+                            ),
+
+                            disabledBorder:
+                            OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(
+                                ui.smallRadius,
+                              ),
+
+                              borderSide:
+                              const BorderSide(
+                                color:
+                                Color(
+                                  0xFFE2E8F0,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ],
+              ),
+            ),
+
+            // =================================================
+            // Brand Type Side Stripe
+            //
+            // نفس دلالة اللون القديمة لكن موحدة مع كروت التطبيق
+            // =================================================
+            Positioned(
+              top: 0,
+              bottom: 0,
+              right: 0,
+
+              child: Container(
+                width: 5,
+
+                color:
+                item.brandType.color,
               ),
             ),
           ],
@@ -256,5 +970,6 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive =>
+      true;
 }

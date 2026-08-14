@@ -1,5 +1,5 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
 
 class TextInfo extends StatelessWidget {
@@ -16,7 +16,11 @@ class TextInfo extends StatelessWidget {
   final bool showDivider;
   final IconData? icon;
 
-  /// تحقق سريع ومرتب للتأكد من أن النص يحتوي على قيمة فعلية
+  // =======================================================
+  // Valid Value
+  // نفس السلوك الأصلي
+  // =======================================================
+
   bool get _isValidValue =>
       supTitle != null &&
           supTitle!.trim().isNotEmpty &&
@@ -28,54 +32,105 @@ class TextInfo extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final ui = AppUi.of(context);
+
     return Padding(
-      padding: EdgeInsets.only(bottom: AppPaddingH.p8),
+      padding: EdgeInsets.only(
+        bottom: ui.smallSpacing,
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // =====================================================
+          // Information
+          // =====================================================
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // =================================================
+              // Optional Icon
+              // =================================================
               if (icon != null) ...[
-                Padding(
-                  padding: const EdgeInsets.only(top: 2, left: 8),
+                Container(
+                  width: ui.smallIconSize + 14,
+                  height: ui.smallIconSize + 14,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: ColorManager.primary1.withOpacity(
+                      0.07,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      ui.smallRadius,
+                    ),
+                  ),
                   child: Icon(
                     icon,
-                    size: 18,
+                    size: ui.smallIconSize,
                     color: ColorManager.primary1,
                   ),
                 ),
+
+                SizedBox(
+                  width: ui.mediumSpacing,
+                ),
               ],
+
+              // =================================================
+              // Title + Value
+              // =================================================
               Expanded(
                 child: Text.rich(
-                  textAlign: TextAlign.start,
                   TextSpan(
-                    text: "$title: ",
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF334155),
-                    ),
                     children: [
                       TextSpan(
-                        text: supTitle,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          height: 1.4,
+                        text: "$title: ",
+                        style: TextStyle(
+                          fontSize: ui.bodyTextSize,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(
+                            0xFF334155,
+                          ),
+                          height: 1.45,
+                        ),
+                      ),
+                      TextSpan(
+                        text: supTitle!,
+                        style: TextStyle(
+                          fontSize: ui.bodyTextSize,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(
+                            0xFF64748B,
+                          ),
+                          height: 1.45,
                         ),
                       ),
                     ],
                   ),
+                  textAlign: TextAlign.start,
                 ),
               ),
             ],
           ),
+
+          // =====================================================
+          // Divider
+          // =====================================================
           if (showDivider) ...[
-            const SizedBox(height: 12),
-            Divider(
-              height: 1,
-              thickness: 0.8,
-              color: ColorManager.secondaryColor7.withOpacity(0.3),
+            SizedBox(
+              height: ui.mediumSpacing,
             ),
-            const SizedBox(height: 8),
+
+            const Divider(
+              height: 1,
+              thickness: 1,
+              color: Color(
+                0xFFF1F5F9,
+              ),
+            ),
+
+            SizedBox(
+              height: ui.smallSpacing,
+            ),
           ],
         ],
       ),

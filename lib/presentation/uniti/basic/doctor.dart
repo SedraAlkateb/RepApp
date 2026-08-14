@@ -1,109 +1,297 @@
 // presentation/doctors/widget/doctor_card_item.dart
+
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/widget/doctor_recipe.dart';
 import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorCardItem extends StatelessWidget {
-  final DoctorModel doctor;
+  const DoctorCardItem({
+    super.key,
+    required this.doctor,
+  });
 
-  const DoctorCardItem({super.key, required this.doctor});
+  final DoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.h, right: 8.w, left: 8.w),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: const Offset(0, 4),
+    final ui = AppUi.of(context);
+
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: ui.pageMaxWidth,
+        ),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(
+            ui.cardPadding,
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Text(
-                  doctor.spTitle,
-                  style: TextStyle(color: Colors.blue, fontSize: 12.sp),
-                ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(
+              ui.cardRadius,
+            ),
+            border: Border.all(
+              color: const Color(
+                0xFFE2E8F0,
               ),
-              Expanded(
-                child: Text(
-                  doctor.title,
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorManager.medicalPrimary),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(
+                  0.03,
+                ),
+                blurRadius: 12,
+                offset: const Offset(
+                  0,
+                  4,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10.h),
-          _buildInfoRow(Icons.location_on_outlined, doctor.placeTitle),
-          _buildInfoRow(Icons.map_outlined, doctor.address),
-          _buildInfoRow(Icons.star_rate_outlined, doctor.rate ?? "",
-              iconColor: ColorManager.medicalSecondary),
-          SizedBox(height: 12.h),
-          const Divider(color: Colors.grey, thickness: 0.2),
-          SizedBox(height: 8.h),
-          Row(
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
             children: [
-              PrescriptionMenuWidget(doctorId: doctor.id),
-              const Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.doctorDetails,
-                    arguments: doctor,
-                  );
-                },
-                child: buildCardButton(
-                  "عرض التفاصيل",
-                  ColorManager.medicalPrimary,
-                  Colors.white,
-                  Icons.directions_run,
+              // =================================================
+              // Header
+              // =================================================
+              Row(
+                crossAxisAlignment:
+                CrossAxisAlignment.start,
+                children: [
+                  // =============================================
+                  // Specialization
+                  // =============================================
+                  if (doctor.spTitle
+                      .trim()
+                      .isNotEmpty) ...[
+                    Flexible(
+                      flex: 0,
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(
+                          horizontal:
+                          ui.mediumSpacing,
+                          vertical: 5,
+                        ),
+                        decoration:
+                        BoxDecoration(
+                          color: ColorManager
+                              .medicalPrimary
+                              .withOpacity(
+                            0.08,
+                          ),
+                          borderRadius:
+                          BorderRadius.circular(
+                            ui.smallRadius,
+                          ),
+                        ),
+                        child: Text(
+                          doctor.spTitle,
+                          maxLines: 1,
+                          overflow:
+                          TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: ColorManager
+                                .medicalPrimary,
+                            fontSize:
+                            ui.smallTextSize,
+                            fontWeight:
+                            FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      width:
+                      ui.mediumSpacing,
+                    ),
+                  ],
+
+                  // =============================================
+                  // Doctor Name
+                  // =============================================
+                  Expanded(
+                    child: Text(
+                      doctor.title,
+                      textAlign:
+                      TextAlign.end,
+                      maxLines: 2,
+                      overflow:
+                      TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize:
+                        ui.cardTitleSize,
+                        fontWeight:
+                        FontWeight.w700,
+                        color: ColorManager
+                            .medicalPrimary,
+                        height: 1.35,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(
+                height:
+                ui.mediumSpacing,
+              ),
+
+              // =================================================
+              // Information
+              // =================================================
+              _buildInfoRow(
+                ui: ui,
+                icon:
+                Icons.location_on_outlined,
+                text:
+                doctor.placeTitle,
+              ),
+
+              _buildInfoRow(
+                ui: ui,
+                icon:
+                Icons.map_outlined,
+                text:
+                doctor.address,
+              ),
+
+              _buildInfoRow(
+                ui: ui,
+                icon:
+                Icons.star_rate_outlined,
+                text:
+                doctor.rate ?? '',
+                iconColor:
+                ColorManager.medicalSecondary,
+              ),
+
+              SizedBox(
+                height:
+                ui.mediumSpacing,
+              ),
+
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: Color(
+                  0xFFE9EEF3,
                 ),
+              ),
+
+              SizedBox(
+                height:
+                ui.mediumSpacing,
+              ),
+
+              // =================================================
+              // Actions
+              // =================================================
+              Row(
+                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child:
+                    PrescriptionMenuWidget(
+                      doctorId:
+                      doctor.id,
+                    ),
+                  ),
+
+                  const Spacer(),
+
+                  InkWell(
+                    borderRadius:
+                    BorderRadius.circular(
+                      ui.smallRadius,
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.doctorDetails,
+                        arguments: doctor,
+                      );
+                    },
+                    child: buildCardButton(
+                      context,
+                      'عرض التفاصيل',
+                      ColorManager
+                          .medicalPrimary,
+                      Colors.white,
+                      Icons.directions_run,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text,
-      {Color iconColor = Colors.grey}) {
-    if (text.isEmpty) return const SizedBox.shrink();
+  // ===========================================================
+  // Information Row
+  // ===========================================================
+
+  Widget _buildInfoRow({
+    required AppUi ui,
+    required IconData icon,
+    required String text,
+    Color iconColor =
+    const Color(0xFF94A3B8),
+  }) {
+    final value = text.trim();
+
+    if (value.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
+      padding: EdgeInsets.symmetric(
+        vertical:
+        ui.smallSpacing / 2,
+      ),
       child: Row(
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20.sp, color: iconColor),
-          SizedBox(width: 8.w),
+          Icon(
+            icon,
+            size:
+            ui.smallIconSize + 2,
+            color: iconColor,
+          ),
+
+          SizedBox(
+            width:
+            ui.smallSpacing,
+          ),
+
           Expanded(
             child: Text(
-              text,
-              style: TextStyle(color: Colors.grey.shade700, fontSize: 14.sp),
+              value,
+              maxLines: 3,
+              overflow:
+              TextOverflow.ellipsis,
+              style: TextStyle(
+                color: const Color(
+                  0xFF475569,
+                ),
+                fontSize:
+                ui.bodyTextSize,
+                fontWeight:
+                FontWeight.w500,
+                height: 1.4,
+              ),
             ),
           ),
         ],

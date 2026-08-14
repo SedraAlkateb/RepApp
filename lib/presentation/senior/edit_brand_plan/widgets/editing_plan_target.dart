@@ -1,173 +1,653 @@
 // ignore_for_file: must_be_immutable
+
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/custom_dropdown.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EditingPlanTarget extends StatefulWidget {
-  const EditingPlanTarget({super.key, required this.repPlan});
+  const EditingPlanTarget({
+    super.key,
+    required this.repPlan,
+  });
+
   final int repPlan;
 
   @override
-  State<EditingPlanTarget> createState() => _EditingPlanTargetState();
+  State<EditingPlanTarget> createState() =>
+      _EditingPlanTargetState();
 }
 
-class _EditingPlanTargetState extends State<EditingPlanTarget>
+class _EditingPlanTargetState
+    extends State<EditingPlanTarget>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController searchController = TextEditingController();
+  final TextEditingController searchController =
+  TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 8.h),
-            child: SearchField(
-              searchController: searchController,
-              onPressed: (value) {
-                BlocProvider.of<EditBrandPlanBloc>(context)
-                    .add(FutureSearchSpecEvent(value));
-              },
-            ),
+
+    final ui = AppUi.of(context);
+
+    return ColoredBox(
+      // الصفحة Child داخل TabBarView
+      // لذلك لا نحتاج Scaffold إضافي
+      color: Colors.transparent,
+
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: ui.pageMaxWidth,
           ),
-          Expanded(
-            child: BlocBuilder<EditBrandPlanBloc, EditBrandPlanState>(
-              builder: (context, state) {
-                List<PlanBrandModel> planBrand =
-                    context.watch<EditBrandPlanBloc>().planBrands;
-                if (state is FuturePlanBrandState) planBrand = state.planbrand;
 
-                if (state is FutureSpRepLoadingState)
-                  return loadingFullScreen(context);
-                if (state is FutureSpRepErrorState)
-                  return errorFullScreen(context, func: () {});
-
-                return planBrand.isEmpty
-                    ? emptyFullScreen(context)
-                    : ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 90.h),
-                        itemCount: planBrand.length,
-                        itemBuilder: (context, index) =>
-                            _buildElegantCard(index, planBrand),
-                      );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildElegantCard(int index, List<PlanBrandModel> planBrand) {
-    int brandTypeId = planBrand[index].brandType.i;
-    String brandTypeHintText = "غير محدد";
-    for (var type in brandType) {
-      if (type.i == brandTypeId) {
-        brandTypeHintText = type.name;
-        break;
-      }
-    }
-
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(14.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+          child: Column(
             children: [
-              Container(
-                width: 45.w,
-                height: 45.w,
-                decoration: BoxDecoration(
-                  color: ColorManager.secondaryColor1.withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(12.r),
+              // =================================================
+              // Search
+              // =================================================
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.searchTopPadding,
+                  ui.pagePadding,
+                  ui.searchBottomPadding,
                 ),
-                child: Icon(Icons.medication_liquid_rounded,
-                    color: ColorManager.secondaryColor1, size: 24.sp),
+
+                child: SearchField(
+                  searchController: searchController,
+
+                  onPressed: (value) {
+                    // =============================================
+                    // نفس Search Event الأصلي
+                    // =============================================
+                    BlocProvider.of<EditBrandPlanBloc>(
+                      context,
+                    ).add(
+                      FutureSearchSpecEvent(
+                        value,
+                      ),
+                    );
+                  },
+                ),
               ),
-              SizedBox(width: 12.w),
+
+              // =================================================
+              // Content
+              // =================================================
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      planBrand[index].title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 14.sp,
-                          color: const Color(0xFF2D3142)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      planBrand[index].pharmaceuticalForm,
-                      style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
+                child: BlocBuilder<
+                    EditBrandPlanBloc,
+                    EditBrandPlanState>(
+                  builder: (context, state) {
+                    // =============================================
+                    // نفس مصدر البيانات الأصلي
+                    // =============================================
+                    List<PlanBrandModel> planBrand =
+                        context
+                            .watch<EditBrandPlanBloc>()
+                            .planBrands;
+
+                    // =============================================
+                    // Success
+                    // =============================================
+                    if (state is FuturePlanBrandState) {
+                      planBrand = state.planbrand;
+                    }
+
+                    // =============================================
+                    // Loading
+                    // =============================================
+                    if (state
+                    is FutureSpRepLoadingState) {
+                      return loadingFullScreen(
+                        context,
+                      );
+                    }
+
+                    // =============================================
+                    // Error
+                    //
+                    // نفس السلوك الأصلي
+                    // =============================================
+                    if (state
+                    is FutureSpRepErrorState) {
+                      return errorFullScreen(
+                        context,
+                        func: () {},
+                      );
+                    }
+
+                    // =============================================
+                    // Empty
+                    // =============================================
+                    if (planBrand.isEmpty) {
+                      return emptyFullScreen(
+                        context,
+                      );
+                    }
+
+                    // =============================================
+                    // List
+                    // =============================================
+                    return ListView.builder(
+                      physics:
+                      const BouncingScrollPhysics(),
+
+                      keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior
+                          .onDrag,
+
+                      padding: EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.listTopPadding,
+                        ui.pagePadding,
+                        ui.listBottomPadding + 24,
+                      ),
+
+                      itemCount:
+                      planBrand.length,
+
+                      itemBuilder: (
+                          context,
+                          index,
+                          ) {
+                        return _buildElegantCard(
+                          context,
+                          index,
+                          planBrand,
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],
           ),
-          SizedBox(height: 15.h),
-          // منطقة اختيار النوع بدون أيقونات داخلية
-          BlocConsumer<EditBrandPlanBloc, EditBrandPlanState>(
-            listener: (context, state) {
-              if (state is FutureChangePlanBrandTypeErrorState)
-                error(context, state.failure.massage, state.failure.code);
-            },
-            builder: (context, state) {
-              if (state is FutureChangeLoadingItemValueState &&
-                  state.index == index) {
-                return SizedBox(
-                  height: 45.h,
-                  child: Center(
-                      child: SpinKitThreeBounce(
-                          color: ColorManager.secondaryColor1, size: 20.0)),
-                );
-              }
-              return CustomDropDown(
-                hintText: brandTypeHintText,
-                items: brandType,
-                prefixIcon: null, // تم إلغاء الأيقونة هنا
-                onChanged: (value) {
-                  BlocProvider.of<EditBrandPlanBloc>(context).add(
-                      FutureChangePlanBrandTypeEvent(
-                          planBrand[index].id, value.i));
-                  planBrand[index].brandType.i = value.i;
-                  BlocProvider.of<EditBrandPlanBloc>(context)
-                      .add(FutureChangeLoadingItemValueEvent(index));
-                },
-                validator: (value) => null,
-                errorText: '',
-              );
-            },
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // Brand Card
+  // =====================================================
+
+  Widget _buildElegantCard(
+      BuildContext context,
+      int index,
+      List<PlanBrandModel> planBrand,
+      ) {
+    final ui = AppUi.of(context);
+
+    final PlanBrandModel item =
+    planBrand[index];
+
+    // =====================================================
+    // نفس منطق تحديد Brand Type الحالي
+    // =====================================================
+    final int brandTypeId =
+        item.brandType.i;
+
+    String brandTypeHintText =
+        "غير محدد";
+
+    for (final type in brandType) {
+      if (type.i == brandTypeId) {
+        brandTypeHintText =
+            type.name;
+
+        break;
+      }
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: ui.cardSpacing,
+      ),
+
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+
+          borderRadius:
+          BorderRadius.circular(
+            ui.cardRadius,
           ),
-        ],
+
+          border: Border.all(
+            color: const Color(
+              0xFFE2E8F0,
+            ),
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(
+                0.025,
+              ),
+              blurRadius: 12,
+              offset: const Offset(
+                0,
+                4,
+              ),
+            ),
+          ],
+        ),
+
+        child: Padding(
+          padding: EdgeInsets.all(
+            ui.cardPadding,
+          ),
+
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.stretch,
+
+            children: [
+              // =================================================
+              // Header
+              // =================================================
+              Row(
+                crossAxisAlignment:
+                CrossAxisAlignment.center,
+
+                children: [
+                  // ===============================================
+                  // Medication Icon
+                  // ===============================================
+                  Container(
+                    width: ui.iconBoxSize,
+                    height: ui.iconBoxSize,
+
+                    alignment:
+                    Alignment.center,
+
+                    decoration: BoxDecoration(
+                      color: ColorManager
+                          .secondaryColor1
+                          .withOpacity(
+                        0.08,
+                      ),
+
+                      borderRadius:
+                      BorderRadius.circular(
+                        ui.smallRadius + 2,
+                      ),
+                    ),
+
+                    child: Icon(
+                      Icons
+                          .medication_liquid_rounded,
+
+                      color: ColorManager
+                          .secondaryColor1,
+
+                      size: ui.iconSize,
+                    ),
+                  ),
+
+                  SizedBox(
+                    width: ui.sectionSpacing,
+                  ),
+
+                  // ===============================================
+                  // Brand Information
+                  // ===============================================
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+
+                      children: [
+                        // =========================================
+                        // Brand Name
+                        // =========================================
+                        Text(
+                          item.title,
+
+                          maxLines: 1,
+
+                          overflow:
+                          TextOverflow.ellipsis,
+
+                          style: TextStyle(
+                            fontWeight:
+                            FontWeight.w700,
+
+                            fontSize:
+                            ui.cardTitleSize,
+
+                            color:
+                            const Color(
+                              0xFF1E293B,
+                            ),
+
+                            height: 1.25,
+                          ),
+                        ),
+
+                        SizedBox(
+                          height:
+                          ui.smallSpacing,
+                        ),
+
+                        // =========================================
+                        // Pharmaceutical Form
+                        // =========================================
+                        Row(
+                          children: [
+                            Icon(
+                              Icons
+                                  .category_outlined,
+
+                              size:
+                              ui.smallIconSize,
+
+                              color:
+                              const Color(
+                                0xFF94A3B8,
+                              ),
+                            ),
+
+                            SizedBox(
+                              width:
+                              ui.smallSpacing,
+                            ),
+
+                            Expanded(
+                              child: Text(
+                                item.pharmaceuticalForm,
+
+                                maxLines: 1,
+
+                                overflow:
+                                TextOverflow
+                                    .ellipsis,
+
+                                style:
+                                TextStyle(
+                                  color:
+                                  const Color(
+                                    0xFF64748B,
+                                  ),
+
+                                  fontSize:
+                                  ui.smallTextSize,
+
+                                  fontWeight:
+                                  FontWeight
+                                      .w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(
+                height: ui.sectionSpacing,
+              ),
+
+              // =================================================
+              // Divider
+              // =================================================
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: Color(
+                  0xFFF1F5F9,
+                ),
+              ),
+
+              SizedBox(
+                height: ui.sectionSpacing,
+              ),
+
+              // =================================================
+              // Brand Type Header
+              // =================================================
+              Row(
+                children: [
+                  Container(
+                    width:
+                    ui.smallIconSize + 12,
+
+                    height:
+                    ui.smallIconSize + 12,
+
+                    alignment:
+                    Alignment.center,
+
+                    decoration:
+                    BoxDecoration(
+                      color: ColorManager
+                          .secondaryColor1
+                          .withOpacity(
+                        0.07,
+                      ),
+
+                      borderRadius:
+                      BorderRadius.circular(
+                        ui.smallRadius,
+                      ),
+                    ),
+
+                    child: Icon(
+                      Icons.tune_rounded,
+
+                      size:
+                      ui.smallIconSize,
+
+                      color: ColorManager
+                          .secondaryColor1,
+                    ),
+                  ),
+
+                  SizedBox(
+                    width: ui.mediumSpacing,
+                  ),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+
+                      children: [
+                        Text(
+                          "نوع الصنف",
+
+                          style: TextStyle(
+                            fontSize:
+                            ui.bodyTextSize,
+
+                            fontWeight:
+                            FontWeight.w600,
+
+                            color:
+                            const Color(
+                              0xFF334155,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 2,
+                        ),
+
+                        Text(
+                          "اختر التصنيف المناسب للصنف",
+
+                          maxLines: 1,
+
+                          overflow:
+                          TextOverflow.ellipsis,
+
+                          style: TextStyle(
+                            fontSize:
+                            ui.smallTextSize,
+
+                            color:
+                            const Color(
+                              0xFF94A3B8,
+                            ),
+
+                            fontWeight:
+                            FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(
+                height: ui.mediumSpacing,
+              ),
+
+              // =================================================
+              // Dropdown
+              // =================================================
+              BlocConsumer<
+                  EditBrandPlanBloc,
+                  EditBrandPlanState>(
+                // =================================================
+                // Error Listener
+                // =================================================
+                listener: (
+                    context,
+                    state,
+                    ) {
+                  if (state
+                  is FutureChangePlanBrandTypeErrorState) {
+                    error(
+                      context,
+                      state.failure.massage,
+                      state.failure.code,
+                    );
+                  }
+                },
+
+                builder: (
+                    context,
+                    state,
+                    ) {
+                  // ===============================================
+                  // Loading current item only
+                  // ===============================================
+                  if (state
+                  is FutureChangeLoadingItemValueState &&
+                      state.index == index) {
+                    return Container(
+                      height: ui.isMobile
+                          ? 46
+                          : 50,
+
+                      alignment:
+                      Alignment.center,
+
+                      decoration: BoxDecoration(
+                        color: const Color(
+                          0xFFF8FAFC,
+                        ),
+
+                        borderRadius:
+                        BorderRadius.circular(
+                          ui.smallRadius + 2,
+                        ),
+
+                        border: Border.all(
+                          color: const Color(
+                            0xFFE2E8F0,
+                          ),
+                        ),
+                      ),
+
+                      child:
+                      SpinKitThreeBounce(
+                        color: ColorManager
+                            .secondaryColor1,
+
+                        size: ui.isMobile
+                            ? 18
+                            : 20,
+                      ),
+                    );
+                  }
+
+                  // ===============================================
+                  // Dropdown
+                  // ===============================================
+                  return CustomDropDown(
+                    hintText:
+                    brandTypeHintText,
+
+                    items:
+                    brandType,
+
+                    // نفس السلوك الأصلي
+                    prefixIcon:
+                    null,
+
+                    onChanged: (value) {
+                      // =============================================
+                      // الحفاظ الكامل على ترتيب السلوك الأصلي
+                      // =============================================
+
+                      // 1. إرسال Event التغيير
+                      BlocProvider.of<
+                          EditBrandPlanBloc>(
+                        context,
+                      ).add(
+                        FutureChangePlanBrandTypeEvent(
+                          item.id,
+                          value.i,
+                        ),
+                      );
+
+                      // 2. تحديث القيمة محلياً
+                      item.brandType.i =
+                          value.i;
+
+                      // 3. Loading لهذا العنصر
+                      BlocProvider.of<
+                          EditBrandPlanBloc>(
+                        context,
+                      ).add(
+                        FutureChangeLoadingItemValueEvent(
+                          index,
+                        ),
+                      );
+                    },
+
+                    validator:
+                        (value) => null,
+
+                    errorText:
+                    '',
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,8 +1,10 @@
 // ignore_for_file: must_be_immutable
+
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
@@ -14,268 +16,767 @@ import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AllRepWithFuture extends StatefulWidget {
-  const AllRepWithFuture({super.key});
+  const AllRepWithFuture({
+    super.key,
+  });
+
   @override
-  State<AllRepWithFuture> createState() => _AllRepWithFutureState();
+  State<AllRepWithFuture> createState() =>
+      _AllRepWithFutureState();
 }
 
-class _AllRepWithFutureState extends State<AllRepWithFuture>
+class _AllRepWithFutureState
+    extends State<AllRepWithFuture>
     with TickerProviderStateMixin {
-  final TextEditingController searchController = TextEditingController();
-  int selectedIndex = -1;
-  int placeId=-1;
+  final TextEditingController searchController =
+  TextEditingController();
+
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(
+    initialRefresh: false,
+  );
+
+  int selectedIndex = -1;
+  int placeId = -1;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF4F7FA),
-      appBar: AppBar(title: const Text("إدارة الخطة الفعالة")),
-      body: Column(
-        children: [
-          SizedBox(height: 12.h),
-          SearchField(
-            searchController: searchController,
-            onPressed: (value) {
-              BlocProvider.of<ManageFutureBloc>(context)
-                  .add(SenSearchRepFutureEvent(value));
-            },
-          ),
-          Expanded(
-            child: BlocBuilder<ManageFutureBloc, ManageFutureState>(
-              builder: (context, state) {
-                List<AllRepresentativeFuture> allRepresentative =
-                    context.watch<ManageFutureBloc>().allRepresentative;
-                if (state is ChangPlanStatusState) {
-                  allRepresentative = state.representatives;
-                }
-                if (state is AllSeniorRepLoadingState)
-                  return _buildLoadingShimmer();
-                if (state is AllSeniorRepErrorState) {
-                  return errorFullScreen(context,
-                      func: () => BlocProvider.of<ManageFutureBloc>(context)
-                          .add(AllSeniorRepFutureEvent(state.placeId)));
-                }
-                if (state is AllSeniorRepState) {
-                  placeId=state.placeId;
-                }
-                return SmartRefresher(
-                  controller: _refreshController,
-                  onRefresh: () {
-                    BlocProvider.of<ManageFutureBloc>(context)
-                        .add(AllSeniorRepFutureEvent(placeId));
-                    _refreshController.refreshCompleted();
-                  },
-                  child: allRepresentative.isEmpty
-                      ? emptyFullScreen(context)
-                      : ListView.builder(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 16.w, vertical: 10.h),
-                    itemCount: allRepresentative.length,
-                    itemBuilder: (context, index) {
-                      // 1. Staggered Entrance Animation
-                      return _buildRepItem(allRepresentative[index],
-                          index,placeId);
-                    },
-                  ),
-                );
-                return SizedBox();
-              },
-            ),
-          ),
-          SizedBox(height: 12.h),
-        ],
-      ),
-    );
+  void dispose() {
+    searchController.dispose();
+    _refreshController.dispose();
+
+    super.dispose();
   }
 
-  Widget _buildRepItem(AllRepresentativeFuture rep, int index, int placeId) {
-    bool isSelected = selectedIndex == index;
+  @override
+  Widget build(BuildContext context) {
+    final ui = AppUi.of(context);
 
-    return GestureDetector(
-      onTap: () => setState(() => selectedIndex = isSelected ? -1 : index),
-      child: AnimatedContainer(
-        duration: const Duration(
-            milliseconds: 400), // تقليل المدة قليلاً لسرعة استجابة بصرية أعلى
-        curve: Curves.easeInOutCubic,
-        margin: EdgeInsets.symmetric(
-            vertical: 8.h, horizontal: 4.w), // ضبط متناسق للهوامش الخارجية
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20.r), // حواف أكثر عصرية ونعومة
-          boxShadow: [
-            BoxShadow(
-              color: isSelected
-                  ? ColorManager.secondaryColor1.withOpacity(
-                      0.08) // تقليل الشفافية ليكون الظل ناعماً جداً وغير مزعج
-                  : Colors.black.withOpacity(0.02),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
-          border: Border.all(
-            color: isSelected
-                ? ColorManager.secondaryColor1
-                : const Color(
-                    0xFFE2E8F0), // إضافة حد رمادي باهت جداً في الحالة العادية
-            width: isSelected ? 1.6 : 1.0,
-          ),
+    return Scaffold(
+      backgroundColor:
+      const Color(
+        0xFFF8FAFC,
+      ),
+
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor:
+        Colors.transparent,
+
+        title:
+        const Text(
+          "إدارة الخطة الفعالة",
         ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 1️⃣ زر السهم التفاعلي المطور: بتصميم دائري مريح
+      ),
 
-                // 2️⃣ قسم المحتوى النصي المطور والمحسن بـ الكبسولات التعريفية (Badges)
+      body: SafeArea(
+        top: false,
+
+        child: Center(
+          child: ConstrainedBox(
+            constraints:
+            BoxConstraints(
+              maxWidth:
+              ui.pageMaxWidth,
+            ),
+
+            child: Column(
+              children: [
+                // =================================================
+                // Search
+                // =================================================
+                Padding(
+                  padding:
+                  EdgeInsets.fromLTRB(
+                    ui.pagePadding,
+                    ui.searchTopPadding,
+                    ui.pagePadding,
+                    ui.searchBottomPadding,
+                  ),
+
+                  child: SearchField(
+                    searchController:
+                    searchController,
+
+                    onPressed:
+                        (value) {
+                      BlocProvider.of<
+                          ManageFutureBloc>(
+                        context,
+                      ).add(
+                        SenSearchRepFutureEvent(
+                          value,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // =================================================
+                // Representatives
+                // =================================================
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              AnimatedRotation(
-                                turns: isSelected ? 0.0 : 0.5,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeOutBack,
-                                child: Container(
-                                  padding: EdgeInsets.all(8.w),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? ColorManager.secondaryColor1
-                                        : ColorManager.secondaryColor1
-                                            .withOpacity(0.08),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.keyboard_arrow_up_rounded,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : ColorManager.secondaryColor1,
-                                    size: 22.sp,
-                                  ),
-                                ),
+                  child: BlocBuilder<
+                      ManageFutureBloc,
+                      ManageFutureState>(
+                    builder:
+                        (context, state) {
+                      // ===============================================
+                      // نفس مصدر البيانات الأصلي
+                      // ===============================================
+                      List<AllRepresentativeFuture>
+                      allRepresentative =
+                          context
+                              .watch<
+                              ManageFutureBloc>()
+                              .allRepresentative;
+
+                      // ===============================================
+                      // Change Plan Status
+                      // ===============================================
+                      if (state
+                      is ChangPlanStatusState) {
+                        allRepresentative =
+                            state.representatives;
+                      }
+
+                      // ===============================================
+                      // Loading
+                      // ===============================================
+                      if (state
+                      is AllSeniorRepLoadingState) {
+                        return _buildLoadingState(
+                          context,
+                        );
+                      }
+
+                      // ===============================================
+                      // Error
+                      // ===============================================
+                      if (state
+                      is AllSeniorRepErrorState) {
+                        return errorFullScreen(
+                          context,
+
+                          func: () {
+                            BlocProvider.of<
+                                ManageFutureBloc>(
+                              context,
+                            ).add(
+                              AllSeniorRepFutureEvent(
+                                state.placeId,
                               ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                rep.name,
-                                style: TextStyle(
-                                  color: const Color(
-                                      0xFF1E293B), // لون Slate داكن فخم جداً ومريح للقراءة
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.1,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow
-                                    .ellipsis, // نقاط حماية لمنع الطفح العرضي
-                              ),
-                              Text(
-                                "   ( ${rep.reptype.name} ) ",
-                                style: TextStyle(
-                                  color: const Color(
-                                      0xFF3A5A75), // لون نص متناسق وثابت
-                                  fontSize: 11.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
+                            );
+                          },
+                        );
+                      }
+
+                      // ===============================================
+                      // Save Place
+                      // ===============================================
+                      if (state
+                      is AllSeniorRepState) {
+                        // نفس السلوك الأصلي
+                        placeId =
+                            state.placeId;
+                      }
+
+                      // ===============================================
+                      // Refresh
+                      // ===============================================
+                      return SmartRefresher(
+                        controller:
+                        _refreshController,
+
+                        onRefresh: () {
+                          // نفس ترتيب السلوك الأصلي تماماً
+                          BlocProvider.of<
+                              ManageFutureBloc>(
+                            context,
+                          ).add(
+                            AllSeniorRepFutureEvent(
+                              placeId,
+                            ),
+                          );
+
+                          _refreshController
+                              .refreshCompleted();
+                        },
+
+                        child:
+                        allRepresentative
+                            .isEmpty
+                            ? _buildEmptyState(
+                          context,
+                        )
+                            : ListView.builder(
+                          keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior
+                              .onDrag,
+
+                          physics:
+                          const BouncingScrollPhysics(),
+
+                          padding:
+                          EdgeInsets.fromLTRB(
+                            ui.pagePadding,
+                            ui.listTopPadding,
+                            ui.pagePadding,
+                            ui.listBottomPadding,
                           ),
 
-                          // نقطة الحالة النابضة
-                          _buildPulseDot(rep.flag.flag, rep.reptype),
-                        ],
-                      ),
-                      SizedBox(height: 16.h),
+                          itemCount:
+                          allRepresentative
+                              .length,
 
-                      // حقل الـ Dropdown التفاعلي لتعديل حالة الخطة
-                      DropDownChangePlan(
-                        hintText: rep.flag.name,
-                        items: getAllFlags(rep.reptype.i),
-                        statusColor: getColor(rep.flag.flag),
-                        onChanged: rep.flag.flag != 4
-                            ? (x) {
-                                FlagModel xx = x as FlagModel;
-                                // 🛡️ الحفاظ المطلق على الـ Logic والـ Behavior دون تغيير
-                                BlocProvider.of<ManageFutureBloc>(context).add(
-                                  ChangPlanStatusEvent(
-                                      rep.activePlan, xx.flag, index),
-                                );
-                              }
-                            : null,
-                        errorText: "",
-                      ),
-                    ],
+                          itemBuilder:
+                              (
+                              context,
+                              index,
+                              ) {
+                            return _buildRepItem(
+                              context,
+                              allRepresentative[
+                              index],
+                              index,
+                              placeId,
+                            );
+                          },
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
-
-            // 3️⃣ قسم الأزرار السفلية الممتدة مع حركة فتح وإغلاق انسيابية بالكامل
-            AnimatedSize(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.fastOutSlowIn,
-              child: isSelected
-                  ? Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 16.h, bottom: 12.h),
-                          child: Divider(
-                              color: const Color(0xFFF1F5F9),
-                              thickness: 1.5), // خط تقسيم ناعم وأفتح
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildMicroActionButton(
-                                title: "تدقيق الخطة",
-                                subtitle: "مراجعة شاملة",
-                                icon: Icons.fact_check_rounded,
-                                isActive: rep.flag.flag == UserInfo.statusPlan,
-                                color: ColorManager.secondaryColor1,
-                                onTap: () => _handleAuditing(rep, placeId),
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: _buildMicroActionButton(
-                                title: "الأصناف",
-                                subtitle: "تعديل القائمة",
-                                isActive: rep.flag.flag == UserInfo.statusPlan,
-                                icon: Icons.auto_awesome_motion_rounded,
-                                //isActive: true,
-                                color: const Color(
-                                    0xFF3F7FBF), // تم تحديث اللون ليتطابق مع درجة splash2 الفاخرة المعتمدة لديك
-                                onTap: () => _handleEditBrands(rep, placeId),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  // تطوير زر الأكشن ليكون أكثر حيوية (Micro-interactions)
+  // =====================================================
+  // Representative Item
+  // =====================================================
+
+  Widget _buildRepItem(
+      BuildContext context,
+      AllRepresentativeFuture rep,
+      int index,
+      int placeId,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    final bool isSelected =
+        selectedIndex == index;
+
+    return Padding(
+      padding:
+      EdgeInsets.only(
+        bottom:
+        ui.cardSpacing,
+      ),
+
+      child: GestureDetector(
+        behavior:
+        HitTestBehavior.opaque,
+
+        onTap: () {
+          setState(() {
+            selectedIndex =
+            isSelected
+                ? -1
+                : index;
+          });
+        },
+
+        child: AnimatedContainer(
+          duration:
+          const Duration(
+            milliseconds: 300,
+          ),
+
+          curve:
+          Curves.easeOutCubic,
+
+          padding:
+          EdgeInsets.all(
+            ui.cardPadding,
+          ),
+
+          decoration:
+          BoxDecoration(
+            color:
+            Colors.white,
+
+            borderRadius:
+            BorderRadius.circular(
+              ui.cardRadius,
+            ),
+
+            border:
+            Border.all(
+              color:
+              isSelected
+                  ? ColorManager
+                  .secondaryColor1
+                  : const Color(
+                0xFFE2E8F0,
+              ),
+
+              width:
+              isSelected
+                  ? 1.5
+                  : 1,
+            ),
+
+            boxShadow: [
+              BoxShadow(
+                color:
+                isSelected
+                    ? ColorManager
+                    .secondaryColor1
+                    .withOpacity(
+                  0.065,
+                )
+                    : Colors.black
+                    .withOpacity(
+                  0.025,
+                ),
+
+                blurRadius:
+                isSelected
+                    ? 16
+                    : 12,
+
+                offset:
+                const Offset(
+                  0,
+                  4,
+                ),
+              ),
+            ],
+          ),
+
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.stretch,
+
+            children: [
+              // =================================================
+              // Representative Header
+              // =================================================
+              Row(
+                crossAxisAlignment:
+                CrossAxisAlignment.center,
+
+                children: [
+                  // ===============================================
+                  // Expand Arrow
+                  // ===============================================
+                  AnimatedRotation(
+                    turns:
+                    isSelected
+                        ? 0
+                        : 0.5,
+
+                    duration:
+                    const Duration(
+                      milliseconds:
+                      300,
+                    ),
+
+                    curve:
+                    Curves.easeOutCubic,
+
+                    child:
+                    AnimatedContainer(
+                      duration:
+                      const Duration(
+                        milliseconds:
+                        200,
+                      ),
+
+                      width:
+                      ui.iconBoxSize -
+                          4,
+
+                      height:
+                      ui.iconBoxSize -
+                          4,
+
+                      alignment:
+                      Alignment.center,
+
+                      decoration:
+                      BoxDecoration(
+                        color:
+                        isSelected
+                            ? ColorManager
+                            .secondaryColor1
+                            : ColorManager
+                            .secondaryColor1
+                            .withOpacity(
+                          0.08,
+                        ),
+
+                        borderRadius:
+                        BorderRadius
+                            .circular(
+                          ui.smallRadius +
+                              2,
+                        ),
+                      ),
+
+                      child: Icon(
+                        Icons
+                            .keyboard_arrow_up_rounded,
+
+                        color:
+                        isSelected
+                            ? Colors
+                            .white
+                            : ColorManager
+                            .secondaryColor1,
+
+                        size:
+                        ui.iconSize,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    width:
+                    ui.sectionSpacing,
+                  ),
+
+                  // ===============================================
+                  // Name + Rep Type
+                  // ===============================================
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment
+                          .start,
+
+                      children: [
+                        Text(
+                          rep.name,
+
+                          maxLines:
+                          1,
+
+                          overflow:
+                          TextOverflow
+                              .ellipsis,
+
+                          style:
+                          TextStyle(
+                            color:
+                            const Color(
+                              0xFF1E293B,
+                            ),
+
+                            fontSize:
+                            ui.cardTitleSize,
+
+                            fontWeight:
+                            FontWeight
+                                .w700,
+
+                            height:
+                            1.25,
+                          ),
+                        ),
+
+                        SizedBox(
+                          height:
+                          ui.smallSpacing,
+                        ),
+
+                        Align(
+                          alignment:
+                          Alignment
+                              .centerRight,
+
+                          child:
+                          Container(
+                            padding:
+                            const EdgeInsets
+                                .symmetric(
+                              horizontal:
+                              9,
+
+                              vertical:
+                              4,
+                            ),
+
+                            decoration:
+                            BoxDecoration(
+                              color:
+                              rep.reptype
+                                  .color
+                                  .withOpacity(
+                                0.08,
+                              ),
+
+                              borderRadius:
+                              BorderRadius
+                                  .circular(
+                                ui.smallRadius,
+                              ),
+
+                              border:
+                              Border.all(
+                                color:
+                                rep.reptype
+                                    .color
+                                    .withOpacity(
+                                  0.16,
+                                ),
+                              ),
+                            ),
+
+                            child:
+                            Text(
+                              rep.reptype.name,
+
+                              maxLines:
+                              1,
+
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+
+                              style:
+                              TextStyle(
+                                color:
+                                const Color(
+                                  0xFF475569,
+                                ),
+
+                                fontSize:
+                                ui.smallTextSize,
+
+                                fontWeight:
+                                FontWeight
+                                    .w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    width:
+                    ui.mediumSpacing,
+                  ),
+
+                  // ===============================================
+                  // Status
+                  // ===============================================
+                  _buildPulseDot(
+                    context,
+                    rep.flag.flag,
+                    rep.reptype,
+                  ),
+                ],
+              ),
+
+              SizedBox(
+                height:
+                ui.sectionSpacing +
+                    2,
+              ),
+
+              // =================================================
+              // Plan Status Dropdown
+              // =================================================
+              DropDownChangePlan(
+                hintText:
+                rep.flag.name,
+
+                items:
+                getAllFlags(
+                  rep.reptype.i,
+                ),
+
+                statusColor:
+                getColor(
+                  rep.flag.flag,
+                ),
+
+                onChanged:
+                rep.flag.flag !=
+                    4
+                    ? (x) {
+                  final FlagModel
+                  xx =
+                  x as FlagModel;
+
+                  // =========================================
+                  // نفس الـLogic الأصلي تماماً
+                  // =========================================
+                  BlocProvider.of<
+                      ManageFutureBloc>(
+                    context,
+                  ).add(
+                    ChangPlanStatusEvent(
+                      rep.activePlan,
+                      xx.flag,
+                      index,
+                    ),
+                  );
+                }
+                    : null,
+
+                errorText:
+                "",
+              ),
+
+              // =================================================
+              // Expanded Actions
+              // =================================================
+              AnimatedSize(
+                duration:
+                const Duration(
+                  milliseconds: 260,
+                ),
+
+                curve:
+                Curves.fastOutSlowIn,
+
+                alignment:
+                Alignment.topCenter,
+
+                child:
+                !isSelected
+                    ? const SizedBox
+                    .shrink()
+                    : Column(
+                  children: [
+                    Padding(
+                      padding:
+                      EdgeInsets.symmetric(
+                        vertical:
+                        ui.sectionSpacing,
+                      ),
+
+                      child:
+                      const Divider(
+                        color:
+                        Color(
+                          0xFFF1F5F9,
+                        ),
+
+                        thickness:
+                        1,
+                      ),
+                    ),
+
+                    Row(
+                      children: [
+                        // =================================
+                        // Audit
+                        // =================================
+                        Expanded(
+                          child:
+                          _buildMicroActionButton(
+                            context:
+                            context,
+
+                            title:
+                            "تدقيق الخطة",
+
+                            subtitle:
+                            "مراجعة شاملة",
+
+                            icon:
+                            Icons
+                                .fact_check_rounded,
+
+                            isActive:
+                            rep.flag.flag ==
+                                UserInfo
+                                    .statusPlan,
+
+                            color:
+                            ColorManager
+                                .secondaryColor1,
+
+                            onTap: () =>
+                                _handleAuditing(
+                                  rep,
+                                  placeId,
+                                ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          width:
+                          ui.mediumSpacing,
+                        ),
+
+                        // =================================
+                        // Brands
+                        // =================================
+                        Expanded(
+                          child:
+                          _buildMicroActionButton(
+                            context:
+                            context,
+
+                            title:
+                            "الأصناف",
+
+                            subtitle:
+                            "تعديل القائمة",
+
+                            icon:
+                            Icons
+                                .auto_awesome_motion_rounded,
+
+                            isActive:
+                            rep.flag.flag ==
+                                UserInfo
+                                    .statusPlan,
+
+                            color:
+                            const Color(
+                              0xFF3F7FBF,
+                            ),
+
+                            onTap: () =>
+                                _handleEditBrands(
+                                  rep,
+                                  placeId,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // Micro Action Button
+  // =====================================================
+
   Widget _buildMicroActionButton({
+    required BuildContext context,
     required String title,
     required String subtitle,
     required IconData icon,
@@ -283,150 +784,620 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
     required Color color,
     required VoidCallback onTap,
   }) {
-    return StatefulBuilder(
-      builder: (context, setBtnState) {
-        return GestureDetector(
-          onTap: isActive ? onTap : null,
-          child: AnimatedScale(
-            scale: 1.0,
-            duration: const Duration(milliseconds: 100),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
-              decoration: BoxDecoration(
-                // لون خلفية خفيف جداً من نفس لون الزر يعطي طابعاً احترافياً
-                color: isActive ? color.withOpacity(0.05) : Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(18.r),
-                border: Border.all(
-                    color:
-                        isActive ? color.withOpacity(0.3) : Colors.transparent,
-                    width: 1.5),
-              ),
-              child: Column(
-                children: [
-                  Icon(icon,
-                      color: isActive ? color : Colors.grey, size: 22.sp),
-                  SizedBox(height: 6.h),
-                  FittedBox(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: isActive ? color : Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13.sp,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style:
-                        TextStyle(color: Colors.grey.shade500, fontSize: 9.sp),
-                  ),
-                ],
+    final ui =
+    AppUi.of(context);
+
+    return Material(
+      color:
+      Colors.transparent,
+
+      child: InkWell(
+        onTap:
+        isActive
+            ? onTap
+            : null,
+
+        borderRadius:
+        BorderRadius.circular(
+          ui.cardRadius - 2,
+        ),
+
+        child: AnimatedContainer(
+          duration:
+          const Duration(
+            milliseconds: 180,
+          ),
+
+          padding:
+          EdgeInsets.symmetric(
+            horizontal:
+            ui.mediumSpacing,
+
+            vertical:
+            ui.sectionSpacing,
+          ),
+
+          decoration:
+          BoxDecoration(
+            color:
+            isActive
+                ? color.withOpacity(
+              0.05,
+            )
+                : const Color(
+              0xFFF8FAFC,
+            ),
+
+            borderRadius:
+            BorderRadius.circular(
+              ui.cardRadius - 2,
+            ),
+
+            border:
+            Border.all(
+              color:
+              isActive
+                  ? color.withOpacity(
+                0.24,
+              )
+                  : const Color(
+                0xFFE2E8F0,
               ),
             ),
           ),
-        );
-      },
+
+          child: Column(
+            mainAxisSize:
+            MainAxisSize.min,
+
+            children: [
+              // ===============================================
+              // Icon Container
+              // ===============================================
+              Container(
+                width:
+                ui.iconBoxSize -
+                    6,
+
+                height:
+                ui.iconBoxSize -
+                    6,
+
+                alignment:
+                Alignment.center,
+
+                decoration:
+                BoxDecoration(
+                  color:
+                  isActive
+                      ? color
+                      .withOpacity(
+                    0.09,
+                  )
+                      : const Color(
+                    0xFFF1F5F9,
+                  ),
+
+                  borderRadius:
+                  BorderRadius
+                      .circular(
+                    ui.smallRadius +
+                        2,
+                  ),
+                ),
+
+                child: Icon(
+                  icon,
+
+                  color:
+                  isActive
+                      ? color
+                      : const Color(
+                    0xFF94A3B8,
+                  ),
+
+                  size:
+                  ui.iconSize,
+                ),
+              ),
+
+              SizedBox(
+                height:
+                ui.smallSpacing +
+                    2,
+              ),
+
+              // ===============================================
+              // Title
+              // ===============================================
+              Text(
+                title,
+
+                maxLines:
+                1,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                textAlign:
+                TextAlign.center,
+
+                style:
+                TextStyle(
+                  color:
+                  isActive
+                      ? color
+                      : const Color(
+                    0xFF94A3B8,
+                  ),
+
+                  fontWeight:
+                  FontWeight
+                      .w700,
+
+                  fontSize:
+                  ui.bodyTextSize,
+                ),
+              ),
+
+              const SizedBox(
+                height: 3,
+              ),
+
+              // ===============================================
+              // Subtitle
+              // ===============================================
+              Text(
+                subtitle,
+
+                maxLines:
+                1,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                textAlign:
+                TextAlign.center,
+
+                style:
+                TextStyle(
+                  color:
+                  const Color(
+                    0xFF94A3B8,
+                  ),
+
+                  fontSize:
+                  ui.smallTextSize,
+
+                  fontWeight:
+                  FontWeight
+                      .w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  // 4. Pulsing Dot Animation logic
-  Widget _buildPulseDot(int flag, RepType repType) {
+  // =====================================================
+  // Status Dot
+  // =====================================================
+
+  Widget _buildPulseDot(
+      BuildContext context,
+      int flag,
+      RepType repType,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    final double dotSize =
+    ui.isMobile
+        ? 10
+        : 11;
+
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.4, end: 1.0),
-      duration: const Duration(seconds: 1),
-      curve: Curves.easeInOut,
-      builder: (context, value, child) {
+      tween:
+      Tween(
+        begin:
+        0.4,
+        end:
+        1,
+      ),
+
+      duration:
+      const Duration(
+        seconds: 1,
+      ),
+
+      curve:
+      Curves.easeInOut,
+
+      builder:
+          (
+          context,
+          value,
+          child,
+          ) {
         return Container(
-          width: 10.w,
-          height: 10.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: getColor(flag),
+          width:
+          dotSize,
+
+          height:
+          dotSize,
+
+          decoration:
+          BoxDecoration(
+            shape:
+            BoxShape.circle,
+
+            color:
+            getColor(
+              flag,
+            ),
+
             boxShadow: [
               BoxShadow(
-                  color: repType.color.withOpacity(0.5),
-                  blurRadius: 10 * (1 - value),
-                  spreadRadius: 4 * (1 - value)),
+                color:
+                repType.color
+                    .withOpacity(
+                  0.45,
+                ),
+
+                blurRadius:
+                10 *
+                    (1 -
+                        value),
+
+                spreadRadius:
+                4 *
+                    (1 -
+                        value),
+              ),
             ],
           ),
         );
       },
-      onEnd: () => {}, // Loop handled by the builder naturally
+
+      // نفس السلوك الموجود حالياً
+      onEnd: () {},
     );
   }
 
-  // Navigation Handlers with Animation logic
-  void _handleAuditing(AllRepresentativeFuture rep, int placeId) {
+  // =====================================================
+  // Audit Navigation
+  // =====================================================
+
+  void _handleAuditing(
+      AllRepresentativeFuture rep,
+      int placeId,
+      ) {
+    // =====================================================
+    // نفس الترتيب الأصلي
+    // =====================================================
     iniFutureModule();
-    if (rep.reptype.i == 7) {
+
+    if (rep.reptype.i ==
+        7) {
       Navigator.push(
-          context,
-          _createRoute(FutureSpecializationsPage(
-              id: rep.id,
-              repPlanId: rep.activePlan,
-              flag: rep.flag,
-              sampleCount: rep.samplesCount,
-              repName: rep.name,
-              repType: rep.reptype,
-              placeId: placeId)));
+        context,
+
+        _createRoute(
+          FutureSpecializationsPage(
+            id:
+            rep.id,
+
+            repPlanId:
+            rep.activePlan,
+
+            flag:
+            rep.flag,
+
+            sampleCount:
+            rep.samplesCount,
+
+            repName:
+            rep.name,
+
+            repType:
+            rep.reptype,
+
+            placeId:
+            placeId,
+          ),
+        ),
+      );
     } else {
-      BlocProvider.of<FutureRepBloc>(context).add(
+      BlocProvider.of<
+          FutureRepBloc>(
+        context,
+      ).add(
         FutureRepPlanBrandSpEvent(
-          RepSp(rep.activePlan, 38, rep.id),
+          RepSp(
+            rep.activePlan,
+            38,
+            rep.id,
+          ),
+
           rep.samplesCount,
         ),
       );
+
       Navigator.pushNamed(
         context,
         Routes.RepPlanBrandSp,
+
         arguments: {
-          'title': "كل الاختصاصات",
-          'flag': rep.flag.flag,
+          'title':
+          "كل الاختصاصات",
+
+          'flag':
+          rep.flag.flag,
         },
       );
     }
   }
 
-  void _handleEditBrands(AllRepresentativeFuture rep, int placeId) {
+  // =====================================================
+  // Edit Brands Navigation
+  // =====================================================
+
+  void _handleEditBrands(
+      AllRepresentativeFuture rep,
+      int placeId,
+      ) {
+    // =====================================================
+    // نفس الترتيب الأصلي
+    // =====================================================
     iniEditBrandPlanModule();
-    BlocProvider.of<EditBrandPlanBloc>(context)
-        .add(FutureGetPlanBrandEvent(Rep(rep.activePlan, 1)));
+
+    BlocProvider.of<
+        EditBrandPlanBloc>(
+      context,
+    ).add(
+      FutureGetPlanBrandEvent(
+        Rep(
+          rep.activePlan,
+          1,
+        ),
+      ),
+    );
+
     Navigator.push(
-        context,
-        _createRoute(EditingPlan(
-          repPlan: rep.activePlan,
-          repName: rep.name,
-          placeId: placeId,
-        )));
+      context,
+
+      _createRoute(
+        EditingPlan(
+          repPlan:
+          rep.activePlan,
+
+          repName:
+          rep.name,
+
+          placeId:
+          placeId,
+        ),
+      ),
+    );
   }
 
-  Route _createRoute(Widget page) {
+  // =====================================================
+  // Custom Route
+  // =====================================================
+
+  Route _createRoute(
+      Widget page,
+      ) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = const Offset(1.0, 0.0);
-        var end = Offset.zero;
-        var curve = Curves.easeOutQuart;
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        return SlideTransition(position: animation.drive(tween), child: child);
+      pageBuilder:
+          (
+          context,
+          animation,
+          secondaryAnimation,
+          ) {
+        return page;
+      },
+
+      transitionsBuilder:
+          (
+          context,
+          animation,
+          secondaryAnimation,
+          child,
+          ) {
+        const begin =
+        Offset(
+          1,
+          0,
+        );
+
+        const end =
+            Offset.zero;
+
+        const curve =
+            Curves.easeOutQuart;
+
+        final tween =
+        Tween<Offset>(
+          begin:
+          begin,
+
+          end:
+          end,
+        ).chain(
+          CurveTween(
+            curve:
+            curve,
+          ),
+        );
+
+        return SlideTransition(
+          position:
+          animation.drive(
+            tween,
+          ),
+
+          child:
+          child,
+        );
       },
     );
   }
 
-  Widget _buildLoadingShimmer() {
-    return ListView.builder(
-      itemCount: 5,
-      padding: EdgeInsets.all(16.w),
-      itemBuilder: (context, index) => Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: Container(
-          height: 100.h,
-          margin: EdgeInsets.only(bottom: 15.h),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(25.r)),
+  // =====================================================
+  // Loading
+  //
+  // استخدمنا الـLoading المركزي بدل Shimmer مكرر محلياً
+  // =====================================================
+
+  Widget _buildLoadingState(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Padding(
+      padding:
+      EdgeInsets.symmetric(
+        horizontal:
+        ui.pagePadding,
+      ),
+
+      child: loadingShimmer(
+        context,
+        5,
+        100,
+        20,
+        BorderRadius.circular(
+          ui.cardRadius,
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // Empty
+  // =====================================================
+
+  Widget _buildEmptyState(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Center(
+      child: Padding(
+        padding:
+        EdgeInsets.all(
+          ui.pagePadding,
+        ),
+
+        child: Column(
+          mainAxisSize:
+          MainAxisSize.min,
+
+          children: [
+            // ===============================================
+            // Empty Icon
+            // ===============================================
+            Container(
+              width:
+              ui.iconBoxSize +
+                  20,
+
+              height:
+              ui.iconBoxSize +
+                  20,
+
+              alignment:
+              Alignment.center,
+
+              decoration:
+              BoxDecoration(
+                color: ColorManager
+                    .secondaryColor1
+                    .withOpacity(
+                  0.07,
+                ),
+
+                borderRadius:
+                BorderRadius.circular(
+                  ui.cardRadius,
+                ),
+              ),
+
+              child: Icon(
+                Icons
+                    .manage_accounts_outlined,
+
+                size:
+                ui.iconSize +
+                    10,
+
+                color: ColorManager
+                    .secondaryColor1
+                    .withOpacity(
+                  0.7,
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height:
+              ui.sectionSpacing,
+            ),
+
+            Text(
+              "لا يوجد مندوبون حالياً",
+
+              textAlign:
+              TextAlign.center,
+
+              style:
+              TextStyle(
+                fontSize:
+                ui.cardTitleSize,
+
+                color:
+                const Color(
+                  0xFF334155,
+                ),
+
+                fontWeight:
+                FontWeight.w700,
+              ),
+            ),
+
+            SizedBox(
+              height:
+              ui.smallSpacing,
+            ),
+
+            Text(
+              "ستظهر بيانات المندوبين هنا عند توفرها",
+
+              textAlign:
+              TextAlign.center,
+
+              style:
+              TextStyle(
+                fontSize:
+                ui.smallTextSize,
+
+                color:
+                const Color(
+                  0xFF94A3B8,
+                ),
+
+                fontWeight:
+                FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );

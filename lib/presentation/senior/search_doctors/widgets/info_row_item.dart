@@ -1,47 +1,77 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InfoRowItem extends StatelessWidget {
-  final IconData icon;
-  final String value;
-
   const InfoRowItem({
     super.key,
     required this.icon,
     required this.value,
   });
 
+  final IconData icon;
+  final String value;
+
   @override
   Widget build(BuildContext context) {
+    final ui = AppUi.of(context);
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
+      padding: EdgeInsets.symmetric(
+        vertical: ui.smallSpacing / 2,
+      ),
+
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+
         children: [
+          // =================================================
+          // Icon
+          // =================================================
           Container(
-            padding: EdgeInsets.all(6.r),
+            width: ui.smallIconSize + 14,
+            height: ui.smallIconSize + 14,
+
+            alignment: Alignment.center,
+
             decoration: BoxDecoration(
-              color: ColorManager.secondaryColor1.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8.r),
+              color: ColorManager.secondaryColor1.withOpacity(
+                0.08,
+              ),
+
+              borderRadius: BorderRadius.circular(
+                ui.smallRadius,
+              ),
             ),
+
             child: Icon(
               icon,
-              size: 16.sp,
+              size: ui.smallIconSize,
               color: ColorManager.secondaryColor1,
             ),
           ),
-          SizedBox(width: 8.w),
+
+          SizedBox(
+            width: ui.mediumSpacing,
+          ),
+
+          // =================================================
+          // Value
+          // =================================================
           Expanded(
             child: Text(
               value,
+
               maxLines: 1,
-              overflow: TextOverflow
-                  .ellipsis, // يقص النص الطويل جداً بنقاط منعاً للـ Overflow
+              overflow: TextOverflow.ellipsis,
+
               style: TextStyle(
-                fontSize: 13.sp,
-                color: Colors.black87,
+                fontSize: ui.bodyTextSize,
+                color: const Color(
+                  0xFF475569,
+                ),
                 fontWeight: FontWeight.w600,
+                height: 1.3,
               ),
             ),
           ),

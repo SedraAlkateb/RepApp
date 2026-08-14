@@ -4,8 +4,11 @@ part of 'search_doctors_bloc.dart';
 sealed class SearchDoctorsEvent extends Equatable {}
 
 class FutureSearchDocEvent extends SearchDoctorsEvent {
+  final int cityId;
   final String name;
-  FutureSearchDocEvent(this.name);
+  final int id;
+  FutureSearchDocEvent(this.cityId,this.name,this.id);
+
   @override
   List<Object?> get props => [name];
 }
@@ -51,8 +54,10 @@ class DoctorInfoEvent extends SearchDoctorsEvent {
 }
 
 class FutureSearchHosEvent extends SearchDoctorsEvent {
+  final int cityId;
   final String name;
-  FutureSearchHosEvent(this.name);
+  final int id;
+  FutureSearchHosEvent(this.cityId,this.name,this.id);
   @override
   List<Object?> get props => [name];
 }

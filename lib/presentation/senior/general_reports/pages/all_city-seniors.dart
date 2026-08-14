@@ -1,17 +1,19 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class AllCitySeniors extends StatefulWidget {
-  const AllCitySeniors({super.key});
+  const AllCitySeniors({
+    super.key,
+  });
 
   @override
   State<AllCitySeniors> createState() => _AllCityState();
@@ -20,67 +22,294 @@ class AllCitySeniors extends StatefulWidget {
 class _AllCityState extends State<AllCitySeniors> {
   @override
   void initState() {
-    BlocProvider.of<AllCityBloc>(context).add(const GetAllCityEvent());
+    BlocProvider.of<AllCityBloc>(context).add(
+      const GetAllCityEvent(),
+    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final deviceType = AppResponsive.deviceType(context);
+
+    double pageMaxWidth;
+
+    double headerHorizontalPadding;
+    double headerTopPadding;
+    double headerBottomPadding;
+
+    double listHorizontalPadding;
+    double listTopPadding;
+    double listBottomPadding;
+
+    double headerTitleFontSize;
+    double headerSubtitleFontSize;
+
+    double cardHorizontalPadding;
+    double cardVerticalPadding;
+    double cardBottomMargin;
+    double cardRadius;
+
+    double cityTitleFontSize;
+    double citySubtitleFontSize;
+
+    double iconContainerPadding;
+    double iconSize;
+    double iconSpacing;
+    double arrowSize;
+
+    switch (deviceType) {
+    // =================================================
+    // Mobile
+    // =================================================
+      case AppDeviceType.mobilePortrait:
+        pageMaxWidth = 600;
+
+        headerHorizontalPadding = 20;
+        headerTopPadding = 24;
+        headerBottomPadding = 10;
+
+        listHorizontalPadding = 16;
+        listTopPadding = 8;
+        listBottomPadding = 20;
+
+        headerTitleFontSize = 24;
+        headerSubtitleFontSize = 13;
+
+        cardHorizontalPadding = 16;
+        cardVerticalPadding = 20;
+        cardBottomMargin = 16;
+        cardRadius = 18;
+
+        cityTitleFontSize = 18;
+        citySubtitleFontSize = 12;
+
+        iconContainerPadding = 10;
+        iconSize = 24;
+        iconSpacing = 16;
+        arrowSize = 18;
+        break;
+
+    // =================================================
+    // Tablet Portrait
+    // =================================================
+      case AppDeviceType.tabletPortrait:
+        pageMaxWidth = 760;
+
+        headerHorizontalPadding = 28;
+        headerTopPadding = 28;
+        headerBottomPadding = 14;
+
+        listHorizontalPadding = 24;
+        listTopPadding = 10;
+        listBottomPadding = 24;
+
+        headerTitleFontSize = 28;
+        headerSubtitleFontSize = 15;
+
+        cardHorizontalPadding = 20;
+        cardVerticalPadding = 22;
+        cardBottomMargin = 18;
+        cardRadius = 20;
+
+        cityTitleFontSize = 20;
+        citySubtitleFontSize = 14;
+
+        iconContainerPadding = 12;
+        iconSize = 27;
+        iconSpacing = 18;
+        arrowSize = 20;
+        break;
+
+    // =================================================
+    // Tablet Landscape
+    // =================================================
+      case AppDeviceType.tabletLandscape:
+        pageMaxWidth = 900;
+
+        headerHorizontalPadding = 32;
+        headerTopPadding = 22;
+        headerBottomPadding = 14;
+
+        listHorizontalPadding = 28;
+        listTopPadding = 10;
+        listBottomPadding = 24;
+
+        headerTitleFontSize = 28;
+        headerSubtitleFontSize = 15;
+
+        cardHorizontalPadding = 22;
+        cardVerticalPadding = 20;
+        cardBottomMargin = 18;
+        cardRadius = 20;
+
+        cityTitleFontSize = 20;
+        citySubtitleFontSize = 14;
+
+        iconContainerPadding = 12;
+        iconSize = 28;
+        iconSpacing = 18;
+        arrowSize = 20;
+        break;
+    }
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC), // خلفية طبية باردة
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('المناطق والمدن'),
+        title: const Text(
+          'المناطق والمدن',
+        ),
       ),
-      body: bodyBuild(context),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: pageMaxWidth,
+          ),
+          child: bodyBuild(
+            context,
+            headerHorizontalPadding: headerHorizontalPadding,
+            headerTopPadding: headerTopPadding,
+            headerBottomPadding: headerBottomPadding,
+            listHorizontalPadding: listHorizontalPadding,
+            listTopPadding: listTopPadding,
+            listBottomPadding: listBottomPadding,
+            headerTitleFontSize: headerTitleFontSize,
+            headerSubtitleFontSize: headerSubtitleFontSize,
+            cardHorizontalPadding: cardHorizontalPadding,
+            cardVerticalPadding: cardVerticalPadding,
+            cardBottomMargin: cardBottomMargin,
+            cardRadius: cardRadius,
+            cityTitleFontSize: cityTitleFontSize,
+            citySubtitleFontSize: citySubtitleFontSize,
+            iconContainerPadding: iconContainerPadding,
+            iconSize: iconSize,
+            iconSpacing: iconSpacing,
+            arrowSize: arrowSize,
+          ),
+        ),
+      ),
     );
   }
 
-  Widget bodyBuild(BuildContext context) {
+  Widget bodyBuild(
+      BuildContext context, {
+        required double headerHorizontalPadding,
+        required double headerTopPadding,
+        required double headerBottomPadding,
+        required double listHorizontalPadding,
+        required double listTopPadding,
+        required double listBottomPadding,
+        required double headerTitleFontSize,
+        required double headerSubtitleFontSize,
+        required double cardHorizontalPadding,
+        required double cardVerticalPadding,
+        required double cardBottomMargin,
+        required double cardRadius,
+        required double cityTitleFontSize,
+        required double citySubtitleFontSize,
+        required double iconContainerPadding,
+        required double iconSize,
+        required double iconSpacing,
+        required double arrowSize,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 1. قسم العنوان والوصف (Header Section)
-        _buildHeader(),
-        // 3. قائمة المدن مع الأنيميشن
+        // ==============================================
+        // Header
+        // ==============================================
+        _buildHeader(
+          horizontalPadding: headerHorizontalPadding,
+          topPadding: headerTopPadding,
+          bottomPadding: headerBottomPadding,
+          titleFontSize: headerTitleFontSize,
+          subtitleFontSize: headerSubtitleFontSize,
+        ),
+
+        // ==============================================
+        // Cities
+        // ==============================================
         Expanded(
           child: BlocBuilder<AllCityBloc, AllCityState>(
             builder: (context, state) {
               if (state is GetAllCityState) {
                 final List<CityModel> cities = state.cities;
+
                 return cities.isEmpty
                     ? emptyFullScreen(context)
                     : AnimationLimiter(
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-                          itemCount: cities.length,
-                          itemBuilder: (context, index) {
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 500),
-                              delay: const Duration(milliseconds: 50),
-                              child: SlideAnimation(
-                                verticalOffset: 30.0,
-                                child: FadeInAnimation(
-                                  child:
-                                      _buildCitySmartCard(cities[index], index),
-                                ),
-                              ),
-                            );
-                          },
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.fromLTRB(
+                      listHorizontalPadding,
+                      listTopPadding,
+                      listHorizontalPadding,
+                      listBottomPadding,
+                    ),
+                    itemCount: cities.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(
+                          milliseconds: 500,
+                        ),
+                        delay: const Duration(
+                          milliseconds: 50,
+                        ),
+                        child: SlideAnimation(
+                          verticalOffset: 30,
+                          child: FadeInAnimation(
+                            child: _buildCitySmartCard(
+                              cities[index],
+                              index,
+                              horizontalPadding:
+                              cardHorizontalPadding,
+                              verticalPadding:
+                              cardVerticalPadding,
+                              bottomMargin:
+                              cardBottomMargin,
+                              radius: cardRadius,
+                              titleFontSize:
+                              cityTitleFontSize,
+                              subtitleFontSize:
+                              citySubtitleFontSize,
+                              iconContainerPadding:
+                              iconContainerPadding,
+                              iconSize: iconSize,
+                              iconSpacing: iconSpacing,
+                              arrowSize: arrowSize,
+                            ),
+                          ),
                         ),
                       );
+                    },
+                  ),
+                );
               }
+
               if (state is AllCityLoadingState) {
                 return loadingShimmer(
-                    context, 20, 25, 70, BorderRadius.circular(20));
+                  context,
+                  20,
+                  25,
+                  70,
+                  BorderRadius.circular(20),
+                );
               }
+
               if (state is AllCityErrorState) {
-                return errorFullScreen(context,
-                    func: () => BlocProvider.of<AllCityBloc>(context)
-                        .add(const GetAllCityEvent()));
+                return errorFullScreen(
+                  context,
+                  func: () {
+                    BlocProvider.of<AllCityBloc>(context).add(
+                      const GetAllCityEvent(),
+                    );
+                  },
+                );
               }
-              return const SizedBox();
+
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -88,108 +317,222 @@ class _AllCityState extends State<AllCitySeniors> {
     );
   }
 
-  Widget _buildHeader() {
+  // =====================================================
+  // Header
+  // =====================================================
+
+  Widget _buildHeader({
+    required double horizontalPadding,
+    required double topPadding,
+    required double bottomPadding,
+    required double titleFontSize,
+    required double subtitleFontSize,
+  }) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
+      padding: EdgeInsets.fromLTRB(
+        horizontalPadding,
+        topPadding,
+        horizontalPadding,
+        bottomPadding,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("دليل المناطق",
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "دليل المناطق",
                   style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorManager.medicalPrimary)),
-              const SizedBox(height: 4),
-              Text("اختر المنطقة لاستعراض السينيور فيها",
-                  style:
-                      TextStyle(color: Colors.grey.shade600, fontSize: 13.sp)),
-            ],
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: ColorManager.medicalPrimary,
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 4,
+                ),
+
+                Text(
+                  "اختر المنطقة لاستعراض السينيور فيها",
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: subtitleFontSize,
+                  ),
+                ),
+              ],
+            ),
           ),
-          // الخط الجمالي الأزرق المميز
+
+          const SizedBox(
+            width: 16,
+          ),
+
+          // الخط الجمالي الأزرق
           Container(
             height: 5,
             width: 40,
             decoration: BoxDecoration(
               color: const Color(0xFF42A5F5),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(
+                10,
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildCitySmartCard(CityModel city, int index) {
+  // =====================================================
+  // City Card
+  // =====================================================
+
+  Widget _buildCitySmartCard(
+      CityModel city,
+      int index, {
+        required double horizontalPadding,
+        required double verticalPadding,
+        required double bottomMargin,
+        required double radius,
+        required double titleFontSize,
+        required double subtitleFontSize,
+        required double iconContainerPadding,
+        required double iconSize,
+        required double iconSpacing,
+        required double arrowSize,
+      }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(
+        bottom: bottomMargin,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.blue.withOpacity(0.05), width: 1.5),
+        borderRadius: BorderRadius.circular(
+          radius,
+        ),
+        border: Border.all(
+          color: Colors.blue.withOpacity(0.05),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
             blurRadius: 15,
-            offset: const Offset(0, 8),
+            offset: const Offset(
+              0,
+              8,
+            ),
           ),
         ],
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(
+          radius,
+        ),
+
+        // ==============================================
+        // نفس السلوك الأصلي بدون أي تعديل
+        // ==============================================
         onTap: () {
           initGeneralReportsModule();
+
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SeniorByCityId(
-                  cityname: city.title,
-                  cityid: city.id,
-                ),
-              ));
-          BlocProvider.of<GeneralReportsBloc>(context)
-              .add(GetSeniorByCityIdEvent(city.id));
+            context,
+            MaterialPageRoute(
+              builder: (context) => SeniorByCityId(
+                cityname: city.title,
+                cityid: city.id,
+              ),
+            ),
+          );
+
+          BlocProvider.of<GeneralReportsBloc>(context).add(
+            GetSeniorByCityIdEvent(
+              city.id,
+            ),
+          );
         },
+
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+          ),
           child: Row(
             children: [
-              // أيقونة المنطقة بتصميم دائري
+              // ==========================================
+              // City Icon
+              // ==========================================
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(
+                  iconContainerPadding,
+                ),
                 decoration: BoxDecoration(
-                  color: ColorManager.secondaryColor1.withOpacity(0.1),
+                  color: ColorManager.secondaryColor1
+                      .withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.location_city,
-                    color: ColorManager.secondaryColor1),
+                child: Icon(
+                  Icons.location_city,
+                  size: iconSize,
+                  color: ColorManager.secondaryColor1,
+                ),
               ),
-              const SizedBox(width: 16),
-              // اسم المدينة
+
+              SizedBox(
+                width: iconSpacing,
+              ),
+
+              // ==========================================
+              // City Information
+              // ==========================================
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
                   children: [
                     Text(
                       city.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: titleFontSize,
                         fontWeight: FontWeight.bold,
-                        color: ColorManager.secondaryColor1,
+                        color:
+                        ColorManager.secondaryColor1,
                       ),
                     ),
+
+                    const SizedBox(
+                      height: 3,
+                    ),
+
                     Text(
                       "استعراض كافة البيانات",
-                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: subtitleFontSize,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
               ),
-              // سهم الانتقال
-              Icon(Icons.arrow_forward_ios_rounded,
-                  size: 18, color: Colors.grey.shade400),
+
+              const SizedBox(
+                width: 10,
+              ),
+
+              // ==========================================
+              // Arrow
+              // ==========================================
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: arrowSize,
+                color: Colors.grey.shade400,
+              ),
             ],
           ),
         ),

@@ -21,6 +21,7 @@ class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
           emit(AllSeniorRepErrorState(failure: failure));
         }, (data) async {
           if (data.isEmpty) {
+            allRepresentative = data;
             emit(AllSeniorRepEmptyState());
           } else {
             data.sort((a, b) => b.number.compareTo(a.number));

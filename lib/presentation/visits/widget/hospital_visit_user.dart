@@ -165,6 +165,7 @@ class _HospitalVisitUserState extends State<HospitalVisitUser>
                                     );
                                   },
                                   child: buildCardButton(
+                                      context,
                                       "عرض التفاصيل",
                                       ColorManager.medicalPrimary,
                                       Colors.white,

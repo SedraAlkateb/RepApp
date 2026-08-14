@@ -1,217 +1,746 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
-import 'package:domina_app/presentation/senior/finished_plan/page/report_finished_plan_user_page.dart';
+import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
+import 'package:domina_app/presentation/uniti/unread_visit_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// 🌟 تم تحويل الكلاس إلى StatefulWidget لإنشاء وإدارة الـ TextEditingController الخاص بالبحث
 class PlanRepsPage extends StatefulWidget {
-  const PlanRepsPage({Key? key}) : super(key: key);
+  const PlanRepsPage({
+    super.key,
+  });
 
   @override
-  State<PlanRepsPage> createState() => _PlanRepsPageState();
+  State<PlanRepsPage> createState() =>
+      _PlanRepsPageState();
 }
 
-class _PlanRepsPageState extends State<PlanRepsPage> {
-  // 🔍 متحكم حقل إدخال البحث لمراقبة النص ومسحه عند الحاجة
-  final TextEditingController _searchController = TextEditingController();
+class _PlanRepsPageState
+    extends State<PlanRepsPage> {
+  final TextEditingController _searchController =
+  TextEditingController();
 
   @override
   void dispose() {
-    // 🛡️ تنظيف الـ Controller من الذاكرة فور إغلاق الصفحة لمنع تسريب الذاكرة (Memory Leak)
     _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // =====================================================
+    // كل Responsive/UI المشترك صار مركزي
+    // =====================================================
+    final ui = AppUi.of(context);
 
     return Scaffold(
-      // لون خلفية خفيف لإبراز البطاقات البيضاء
-      backgroundColor: const Color(0xFFF8FAFD),
-      appBar: AppBar(
-        title: const Text("سجل المندوبين"),
-        elevation: 0,
+      backgroundColor:
+      const Color(
+        0xFFF8FAFC,
       ),
-      body: CustomScrollView(
-        slivers: [
-          // 1. هيدر الصفحة الرئيسي
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25.w, 20.h, 25.w, 10.h),
-              child: _buildHeader(),
-            ),
+
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor:
+        Colors.transparent,
+
+        title:
+        const Text(
+          "سجل المندوبين",
+        ),
+      ),
+
+      body: Center(
+        child: ConstrainedBox(
+          constraints:
+          BoxConstraints(
+            maxWidth:
+            ui.pageMaxWidth,
           ),
 
-          // 🌟 2. شريط البحث الجديد (تم إضافته كـ Sliver مخصص)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              child: SearchField(
-                  searchController: _searchController,
-                  onPressed: (value) {
-                    context
-                        .read<FinishedPlanBloc>()
-                        .add(SearchPlanRepsEvent(value));
-                  }),
-            ),
-          ),
+          child:
+          CustomScrollView(
+            physics:
+            const BouncingScrollPhysics(),
 
-          // 3. قائمة المندوبين المستمدة من الـ Bloc
-          BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
-            buildWhen: (previous, current) =>
-            current is PlanRepsLoading ||
-                current is PlanRepsLoaded ||
-                current is PlanRepsError,
-            builder: (context, state) {
-              print("object");
-              if (state is PlanRepsLoading) {
-                return const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (state is PlanRepsLoaded) {
-                print("dddddddddddddddddddddddddddddddd");
-                if (state.reps.isEmpty) {
+            keyboardDismissBehavior:
+            ScrollViewKeyboardDismissBehavior
+                .onDrag,
 
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Text(
-                        'لا يوجد نتائج تطابق البحث',
-                        style: TextStyle(color: Colors.grey, fontSize: 14.sp),
-                      ),
-                    ),
-                  );
-                }
+            slivers: [
+              // =================================================
+              // Header
+              // =================================================
+              SliverPadding(
+                padding:
+                EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.headerTopPadding,
+                  ui.pagePadding,
+                  ui.headerBottomPadding,
+                ),
 
-                // عرض القائمة الحالية (المفلترة تلقائياً عبر الـ State)
-                return SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                        return RepCard(
-                          repName: state.reps[index],
-                          repPlanId: int.parse(state.reps[index].repPlan),
-                        );
-                      },
-                      childCount: state.reps.length,
-                    ),
+                sliver:
+                SliverToBoxAdapter(
+                  child:
+                  _buildHeader(
+                    context,
                   ),
-                );
-              } else if (state is PlanRepsError) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: Text(state.message)),
-                );
-              }
-              return const SliverToBoxAdapter(child: SizedBox());
-            },
-          ),
+                ),
+              ),
 
-          // مساحة تباعد سفلية
-          SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-        ],
+              // =================================================
+              // Search
+              // =================================================
+              SliverPadding(
+                padding:
+                EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.searchTopPadding,
+                  ui.pagePadding,
+                  ui.searchBottomPadding,
+                ),
+
+                sliver:
+                SliverToBoxAdapter(
+                  child:
+                  SearchField(
+                    searchController:
+                    _searchController,
+
+                    onPressed:
+                        (value) {
+                      context
+                          .read<
+                          FinishedPlanBloc>()
+                          .add(
+                        SearchPlanRepsEvent(
+                          value,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              // =================================================
+              // Bloc Content
+              // =================================================
+              BlocBuilder<
+                  FinishedPlanBloc,
+                  FinishedPlanState>(
+                buildWhen:
+                    (
+                    previous,
+                    current,
+                    ) {
+                  return current
+                  is PlanRepsLoading ||
+                      current
+                      is PlanRepsLoaded ||
+                      current
+                      is PlanRepsError;
+                },
+
+                builder:
+                    (context, state) {
+                  // ===============================================
+                  // Loading
+                  // ===============================================
+                  if (state
+                  is PlanRepsLoading) {
+                    return SliverFillRemaining(
+                      hasScrollBody:
+                      false,
+
+                      child:
+                      _buildLoadingState(
+                        context,
+                      ),
+                    );
+                  }
+
+                  // ===============================================
+                  // Loaded
+                  // ===============================================
+                  if (state
+                  is PlanRepsLoaded) {
+                    // =============================================
+                    // Empty Search Result
+                    // =============================================
+                    if (state.reps.isEmpty) {
+                      return SliverFillRemaining(
+                        hasScrollBody:
+                        false,
+
+                        child:
+                        _buildEmptyState(
+                          context,
+                        ),
+                      );
+                    }
+
+                    // =============================================
+                    // Reps List
+                    // =============================================
+                    return SliverPadding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.listTopPadding,
+                        ui.pagePadding,
+                        ui.listBottomPadding,
+                      ),
+
+                      sliver:
+                      SliverList(
+                        delegate:
+                        SliverChildBuilderDelegate(
+                              (
+                              context,
+                              index,
+                              ) {
+                            final rep =
+                            state.reps[
+                            index];
+
+                            return RepCard(
+                              repName:
+                              rep,
+
+                              repPlanId:
+                              int.parse(
+                                rep.repPlan,
+                              ),
+                            );
+                          },
+
+                          childCount:
+                          state.reps.length,
+                        ),
+                      ),
+                    );
+                  }
+
+                  // ===============================================
+                  // Error
+                  // ===============================================
+                  if (state
+                  is PlanRepsError) {
+                    return SliverFillRemaining(
+                      hasScrollBody:
+                      false,
+
+                      child:
+                      _buildErrorState(
+                        context,
+                        state.message,
+                      ),
+                    );
+                  }
+
+                  return const SliverToBoxAdapter(
+                    child:
+                    SizedBox.shrink(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  // ويدجت الهيدر الموثق
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  // =====================================================
+  // Header
+  // =====================================================
+
+  Widget _buildHeader(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Row(
+      crossAxisAlignment:
+      CrossAxisAlignment.center,
+
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'سجل المندوبين',
-              style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.medicalPrimary,
+        // =================================================
+        // Header Text
+        // =================================================
+        Expanded(
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+            children: [
+              Text(
+                'سجل المندوبين',
+
+                maxLines: 1,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+                style:
+                TextStyle(
+                  fontSize:
+                  ui.pageTitleSize,
+
+                  fontWeight:
+                  FontWeight.w800,
+
+                  color:
+                  ColorManager
+                      .medicalPrimary,
+
+                  height: 1.25,
+                ),
               ),
-            ),
-            Container(
-              height: 4.h,
-              width: 30.w,
-              decoration: BoxDecoration(
-                color: const Color(0xFF42A5F5),
-                borderRadius: BorderRadius.circular(10.r),
+
+              SizedBox(
+                height:
+                ui.smallSpacing,
               ),
-            )
-          ],
+
+              Text(
+                'عرض أسماء المندوبين المشاركين في هذه الخطة',
+
+                maxLines: 2,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+                style:
+                TextStyle(
+                  fontSize:
+                  ui.pageSubtitleSize,
+
+                  color:
+                  const Color(
+                    0xFF64748B,
+                  ),
+
+                  fontWeight:
+                  FontWeight.w500,
+
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
         ),
-        SizedBox(height: 5.h),
-        Text(
-          'عرض أسماء المندوبين المشاركين في هذه الخطة',
-          style: TextStyle(fontSize: 13.sp, color: Colors.grey[600]),
+
+        SizedBox(
+          width:
+          ui.largeSpacing,
+        ),
+
+        // =================================================
+        // Visual Identity Indicator
+        // =================================================
+        Container(
+          height: 5,
+          width: 44,
+
+          decoration:
+          BoxDecoration(
+            color:
+            ColorManager
+                .medicalPrimary,
+
+            borderRadius:
+            BorderRadius.circular(
+              10,
+            ),
+          ),
         ),
       ],
     );
   }
+
+  // =====================================================
+  // Loading
+  // =====================================================
+
+  Widget _buildLoadingState(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Padding(
+      padding:
+      EdgeInsets.symmetric(
+        horizontal:
+        ui.pagePadding,
+        vertical:
+        ui.sectionSpacing,
+      ),
+
+      child: Column(
+        mainAxisAlignment:
+        MainAxisAlignment.center,
+
+        children: [
+          SizedBox(
+            width:
+            ui.iconSize + 6,
+
+            height:
+            ui.iconSize + 6,
+
+            child:
+            CircularProgressIndicator(
+              strokeWidth:
+              2.5,
+
+              color:
+              ColorManager
+                  .medicalPrimary,
+            ),
+          ),
+
+          SizedBox(
+            height:
+            ui.sectionSpacing,
+          ),
+
+          Text(
+            'جاري تحميل المندوبين...',
+
+            style:
+            TextStyle(
+              fontSize:
+              ui.bodyTextSize,
+
+              color:
+              const Color(
+                0xFF64748B,
+              ),
+
+              fontWeight:
+              FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =====================================================
+  // Empty
+  // =====================================================
+
+  Widget _buildEmptyState(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Center(
+      child: Padding(
+        padding:
+        EdgeInsets.all(
+          ui.pagePadding,
+        ),
+
+        child: Column(
+          mainAxisSize:
+          MainAxisSize.min,
+
+          children: [
+            Container(
+              width:
+              ui.iconBoxSize +
+                  18,
+
+              height:
+              ui.iconBoxSize +
+                  18,
+
+              alignment:
+              Alignment.center,
+
+              decoration:
+              BoxDecoration(
+                color: ColorManager
+                    .medicalPrimary
+                    .withOpacity(
+                  0.07,
+                ),
+
+                borderRadius:
+                BorderRadius.circular(
+                  ui.cardRadius,
+                ),
+              ),
+
+              child: Icon(
+                Icons
+                    .person_search_outlined,
+
+                size:
+                ui.iconSize +
+                    10,
+
+                color: ColorManager
+                    .medicalPrimary
+                    .withOpacity(
+                  0.65,
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height:
+              ui.sectionSpacing,
+            ),
+
+            Text(
+              'لا يوجد نتائج تطابق البحث',
+
+              textAlign:
+              TextAlign.center,
+
+              style:
+              TextStyle(
+                fontSize:
+                ui.cardTitleSize,
+
+                fontWeight:
+                FontWeight.w700,
+
+                color:
+                const Color(
+                  0xFF334155,
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height:
+              ui.smallSpacing,
+            ),
+
+            Text(
+              'جرّب البحث باسم مندوب آخر',
+
+              textAlign:
+              TextAlign.center,
+
+              style:
+              TextStyle(
+                fontSize:
+                ui.smallTextSize,
+
+                color:
+                const Color(
+                  0xFF94A3B8,
+                ),
+
+                fontWeight:
+                FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // Error
+  // =====================================================
+
+  Widget _buildErrorState(
+      BuildContext context,
+      String message,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    return Center(
+      child: Padding(
+        padding:
+        EdgeInsets.all(
+          ui.pagePadding,
+        ),
+
+        child: Column(
+          mainAxisSize:
+          MainAxisSize.min,
+
+          children: [
+            Container(
+              width:
+              ui.iconBoxSize +
+                  14,
+
+              height:
+              ui.iconBoxSize +
+                  14,
+
+              alignment:
+              Alignment.center,
+
+              decoration:
+              BoxDecoration(
+                color:
+                const Color(
+                  0xFFFEF2F2,
+                ),
+
+                borderRadius:
+                BorderRadius.circular(
+                  ui.cardRadius,
+                ),
+              ),
+
+              child: Icon(
+                Icons
+                    .error_outline_rounded,
+
+                size:
+                ui.iconSize +
+                    8,
+
+                color:
+                const Color(
+                  0xFFEF4444,
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height:
+              ui.sectionSpacing,
+            ),
+
+            Text(
+              'حدث خطأ',
+
+              style:
+              TextStyle(
+                fontSize:
+                ui.cardTitleSize,
+
+                fontWeight:
+                FontWeight.w700,
+
+                color:
+                const Color(
+                  0xFF334155,
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height:
+              ui.smallSpacing,
+            ),
+
+            Text(
+              message,
+
+              textAlign:
+              TextAlign.center,
+
+              style:
+              TextStyle(
+                fontSize:
+                ui.bodyTextSize,
+
+                color:
+                const Color(
+                  0xFF64748B,
+                ),
+
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-/// بطاقة عرض المندوب (تصميم بسيط ومركّز على الاسم)
+// =======================================================
+// Representative Card
+// =======================================================
+
 class RepCard extends StatelessWidget {
   final PlanRepsModel repName;
   final int repPlanId;
 
-  const RepCard({Key? key, required this.repName, required this.repPlanId})
-      : super(key: key);
+  const RepCard({
+    super.key,
+    required this.repName,
+    required this.repPlanId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+    final ui =
+    AppUi.of(context);
+
+    return Padding(
+      padding:
+      EdgeInsets.only(
+        bottom:
+        ui.cardSpacing,
       ),
-      child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
-        leading: CircleAvatar(
-          backgroundColor: ColorManager.medicalPrimary.withOpacity(0.1),
-          child: Icon(Icons.person,
-              color: ColorManager.medicalPrimary, size: 20.sp),
-        ),
-        title: Text(
-          repName.name,
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
-          ),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 14.sp,
-          color: Colors.grey[400],
-        ),
-        onTap: () {
-          initSeniorProfModule();
-          Navigator.push(
-              context,
+
+      child: Material(
+        color:
+        Colors.transparent,
+
+        child: PersonProgressCard(name: repName.name,
+          unreadCount: repName.totalUnReadVisit,
+          totalCount: repName.totalVisit,
+          onTap: () {
+            // 1. تهيئة موديل البروفايل
+            initSeniorProfModule();
+
+            // 2. إرسال الحدث
+            context
+                .read<SeniorProfBloc>()
+                .add(
+              getInfoRepEvent(
+                int.parse(
+                  repName.id,
+                ),
+                repPlanId,
+              ),
+            );
+
+            // 3. الانتقال للبروفايل
+            Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) =>
-                    ReportFinishedPlanUserPage(
-                        id: int.parse(repName.id),
-                        repPlanId: repPlanId,
-                        name: repName.name),
-              ));
-        },
+                    RepProfile(
+                      isFinal: true,
+                      index: -1,
+                      repPlanId:
+                      repPlanId,
+                      id:  int.parse(
+                        repName.id,
+                      ),
+                    ),
+              ),
+            );
+          },
+          remainingTitle: 'استعراض تقرير المندوب في هذه الخطة',
+        ),
       ),
     );
   }

@@ -144,7 +144,7 @@ class _DoctorVisitState extends State<DoctorVisit>
                                           doctors[index], // نرسل الـ ID هنا
                                     );
                                   },
-                                  child: buildCardButton(
+                                  child: buildCardButton(context,
                                       "بدء زيارة",
                                       ColorManager.medicalPrimary,
                                       Colors.white,

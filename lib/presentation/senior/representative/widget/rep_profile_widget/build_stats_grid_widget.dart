@@ -1,101 +1,275 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//عامودي
-Widget buildStatsGrid(BuildContext context, InfoRep rep) {
-  // فحص ما إذا كان الجهاز تابلت بناءً على عرض الشاشة (مثلاً 600 dp فأكثر)
-  final bool isTablet = MediaQuery.of(context).size.width >= 600;
+
+// =====================================================
+// Statistics Grid
+// =====================================================
+
+Widget buildStatsGrid(
+  BuildContext context,
+  InfoRep rep,
+) {
+  final deviceType = AppResponsive.deviceType(context);
+
+  int crossAxisCount;
+
+  double mainAxisSpacing;
+  double crossAxisSpacing;
+  double childAspectRatio;
+
+  double titleFontSize;
+  double titleBottomSpacing;
+  double titleRightPadding;
+
+  switch (deviceType) {
+    // =================================================
+    // Mobile
+    // =================================================
+    case AppDeviceType.mobilePortrait:
+      crossAxisCount = 2;
+
+      mainAxisSpacing = 12;
+      crossAxisSpacing = 12;
+
+      childAspectRatio = 1.30;
+
+      titleFontSize = 15;
+      titleBottomSpacing = 10;
+      titleRightPadding = 4;
+      break;
+
+    // =================================================
+    // Tablet Portrait
+    // =================================================
+    case AppDeviceType.tabletPortrait:
+      crossAxisCount = 2;
+
+      mainAxisSpacing = 16;
+      crossAxisSpacing = 16;
+
+      childAspectRatio = 1.70;
+
+      titleFontSize = 17;
+      titleBottomSpacing = 14;
+      titleRightPadding = 6;
+      break;
+
+    // =================================================
+    // Tablet Landscape
+    // =================================================
+    case AppDeviceType.tabletLandscape:
+      crossAxisCount = 4;
+
+      mainAxisSpacing = 14;
+      crossAxisSpacing = 14;
+
+      childAspectRatio = 1.20;
+
+      titleFontSize = 17;
+      titleBottomSpacing = 14;
+      titleRightPadding = 6;
+      break;
+  }
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
+      // ===============================================
+      // Section title
+      // ===============================================
       Padding(
-        padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
+        padding: EdgeInsets.only(
+          right: titleRightPadding,
+          bottom: titleBottomSpacing,
+        ),
         child: Text(
           "نظرة عامة على الإحصائيات",
           style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF2C3E50)),
+            fontSize: titleFontSize,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF2C3E50),
+          ),
         ),
       ),
+
+      // ===============================================
+      // Grid
+      // ===============================================
       GridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        // 4 أعمدة للتابلت و 2 للموبايل
-        crossAxisCount: isTablet ? 4 : 2,
-        mainAxisSpacing: 15.h,
-        crossAxisSpacing: 15.w,
-        // نسبة أبعاد 1.0 للتابلت و 1.25 للموبايل
-        childAspectRatio: isTablet ? 1.0 : 1.25,
+        crossAxisCount: crossAxisCount,
+        mainAxisSpacing: mainAxisSpacing,
+        crossAxisSpacing: crossAxisSpacing,
+        childAspectRatio: childAspectRatio,
         children: [
-          buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
-              const Color(0xFF1F4E79)),
-          buildStatCard("الوصفات", rep.recipesCount, const Color(0xFF8E44AD)),
-          buildStatCard("زيارات الأطباء المحققة", rep.visitDonDoc,
-              const Color(0xFF2D947A)),
-          buildStatCard("زيارات الأطباء المتبقية", rep.totDocVisit,
-              const Color(0xFFE67E22)),
-          buildStatCard("زيارات المشافي المحققة", rep.visitDonHos,
-              const Color(0xFF2D947A)),
-          buildStatCard("زيارات المشافي المتبقية", rep.totHosVisit,
-              const Color(0xFFE67E22)),
-          buildStatCard("إجمالي المحققة", rep.visitDon.toString(),
-              const Color(0xFF1F4E79)),
-          buildStatCard("إجمالي المتبقية", rep.visitNoteYet.toString(),
-              const Color(0xFFE67E22)),
+          buildStatCard(
+            "إجمالي الزيارات",
+            rep.totalVisit.toString(),
+            const Color(0xFF1F4E79),
+          ),
+          buildStatCard(
+            "الوصفات",
+            rep.recipesCount,
+            const Color(0xFF8E44AD),
+          ),
+          buildStatCard(
+            "زيارات الأطباء المحققة",
+            rep.visitDonDoc.toString(),
+            const Color(0xFF2D947A),
+          ),
+          buildStatCard(
+            "زيارات الأطباء المتبقية",
+            rep.totDocVisit.toString(),
+            const Color(0xFFE67E22),
+          ),
+          buildStatCard(
+            "زيارات المشافي المحققة",
+            rep.visitDonHos.toString(),
+            const Color(0xFF2D947A),
+          ),
+          buildStatCard(
+            "عدد زيارات المشافي",
+            rep.totHosVisit.toString(),
+            const Color(0xFFE67E22),
+          ),
+          buildStatCard(
+            "إجمالي المحققة",
+            rep.visitDon.toString(),
+            const Color(0xFF1F4E79),
+          ),
+          buildStatCard(
+            "إجمالي المتبقية",
+            rep.visitNoteYet.toString(),
+            const Color(0xFFE67E22),
+          ),
         ],
       ),
     ],
   );
 }
 
-// شبكة إحصائيات 4 أعمدة في التابلت لتقليل الارتفاع واستغلال العرض
-Widget buildStatsGridTablet(InfoRep rep) {
+// =====================================================
+// Tablet Landscape Statistics Grid
+// نفس الـ signature القديم
+// =====================================================
+
+Widget buildStatsGridTablet(
+  InfoRep rep,
+) {
   return Container(
-    padding: EdgeInsets.all(12.r),
+    width: double.infinity,
+    padding: const EdgeInsets.all(
+      16,
+    ),
     decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.5),
-      borderRadius: BorderRadius.circular(25.r),
+      color: Colors.white.withOpacity(0.55),
+      borderRadius: BorderRadius.circular(
+        20,
+      ),
+      border: Border.all(
+        color: Colors.black.withOpacity(0.025),
+      ),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 10.h),
+        // =============================================
+        // Section Title
+        // =============================================
+        const Padding(
+          padding: EdgeInsets.only(
+            right: 4,
+            bottom: 14,
+          ),
           child: Text(
             "نظرة عامة على الإحصائيات",
             style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF2C3E50)),
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF2C3E50),
+            ),
           ),
         ),
+
+        // =============================================
+        // Statistics
+        // =============================================
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 4, // 4 أعمدة لاستغلال العرض
-          mainAxisSpacing: 10.h,
-          crossAxisSpacing: 10.w,
-          childAspectRatio: 0.9,
+          crossAxisCount: 4,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 1.20,
           children: [
-            buildStatCard("إجمالي الزيارات", rep.totalVisit.toString(),
-                const Color(0xFF1F4E79)),
+            // =====================================================
+            // 1. Overview
+            // =====================================================
             buildStatCard(
-                "الوصفات", rep.recipesCount, const Color(0xFF8E44AD)),
-            buildStatCard("الأطباء المحققة", rep.visitDonDoc,
-                const Color(0xFF2D947A)),
-            buildStatCard("الأطباء المتبقية", rep.totDocVisit,
-                const Color(0xFFE67E22)),
-            buildStatCard("المشافي المحققة", rep.visitDonHos,
-                const Color(0xFF2D947A)),
-            buildStatCard("المشافي المتبقية", rep.totHosVisit,
-                const Color(0xFFE67E22)),
-            buildStatCard("إجمالي المحققة", rep.visitDon.toString(),
-                const Color(0xFF1F4E79)),
-            buildStatCard("إجمالي المتبقية", rep.visitNoteYet.toString(),
-                const Color(0xFFE67E22)),
+              "إجمالي الزيارات",
+              rep.totalVisit.toString(),
+              const Color(0xFF1F4E79),
+            ),
+
+            buildStatCard(
+              "الوصفات",
+              rep.recipesCount,
+              const Color(0xFF7C3AED),
+            ),
+
+            // =====================================================
+            // 2. Total Visits By Type
+            // =====================================================
+            buildStatCard(
+              "إجمالي زيارات الأطباء",
+              rep.totDocVisit.toString(),
+              const Color(0xFF3F7FBF),
+            ),
+
+            buildStatCard(
+              "إجمالي زيارات المشافي",
+              rep.totHosVisit.toString(),
+              const Color(0xFF3F7FBF),
+            ),
+
+            // =====================================================
+            // 3. Completed
+            // =====================================================
+            buildStatCard(
+              "زيارات الأطباء المحققة",
+              "${rep.visitDonDoc}",
+              const Color(0xFF2D947A),
+            ),
+
+            buildStatCard(
+              "زيارات المشافي المحققة",
+             "${ rep.visitDonHos}",
+              const Color(0xFF2D947A),
+            ),
+
+            // =====================================================
+            // 4. Remaining
+            // =====================================================
+            buildStatCard(
+              "زيارات الأطباء المتبقية",
+              (
+                  rep.totDocVisit -
+                      rep.visitDonDoc
+              ).toString(),
+              const Color(0xFFE67E22),
+            ),
+
+            buildStatCard(
+              "زيارات المشافي المتبقية",
+              (
+                  rep.totHosVisit -
+              rep.visitDonHos
+              ).toString(),
+              const Color(0xFFE67E22),
+            ),
           ],
         ),
       ],
@@ -103,64 +277,220 @@ Widget buildStatsGridTablet(InfoRep rep) {
   );
 }
 
-Widget buildStatCard(String title, String val, Color color) {
+// =====================================================
+// Stat Card
+// لا نغيّر الـ signature
+// =====================================================
+
+Widget buildStatCard(
+  String title,
+  String val,
+  Color color,
+) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+    padding: const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 12,
+    ),
     decoration: BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(25.r),
+      borderRadius: BorderRadius.circular(
+        18,
+      ),
+      border: Border.all(
+        color: Colors.black.withOpacity(
+          0.025,
+        ),
+      ),
       boxShadow: [
         BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 15,
-            offset: const Offset(0, 8))
+          color: Colors.black.withOpacity(
+            0.025,
+          ),
+          blurRadius: 12,
+          offset: const Offset(
+            0,
+            5,
+          ),
+        ),
       ],
     ),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        // =============================================
+        // Value
+        // الرقم أولاً لأنه أهم معلومة
+        // =============================================
+        Text(
+          val,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            height: 1,
+            fontWeight: FontWeight.w900,
+            color: color,
+          ),
+        ),
+
+        const SizedBox(
+          height: 7,
+        ),
+
+        // =============================================
+        // Title
+        // =============================================
         Text(
           title,
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-              fontSize: 9.sp,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 6.h),
-        Text(
-          val,
-          style: TextStyle(
-              fontSize: 20.sp, fontWeight: FontWeight.w900, color: color),
+            fontSize: 11,
+            height: 1.25,
+            color: Colors.grey.shade600,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     ),
   );
 }
-Widget buildIconBtn(BuildContext context, FaIconData icon, String label,
-    Color color, VoidCallback tap) {
+
+// =====================================================
+// Icon Button
+// نفس الـ signature
+// =====================================================
+
+Widget buildIconBtn(
+  BuildContext context,
+  FaIconData icon,
+  String label,
+  Color color,
+  VoidCallback tap,
+) {
+  final deviceType = AppResponsive.deviceType(context);
+
+  double boxSize;
+  double iconSize;
+  double radius;
+
+  double labelFontSize;
+  double labelWidth;
+
+  double spacing;
+
+  switch (deviceType) {
+    // =================================================
+    // Mobile
+    // =================================================
+    case AppDeviceType.mobilePortrait:
+      boxSize = 50;
+      iconSize = 20;
+      radius = 14;
+
+      labelFontSize = 11;
+      labelWidth = 68;
+
+      spacing = 7;
+      break;
+
+    // =================================================
+    // Tablet Portrait
+    // =================================================
+    case AppDeviceType.tabletPortrait:
+      boxSize = 56;
+      iconSize = 22;
+      radius = 16;
+
+      labelFontSize = 12.5;
+      labelWidth = 82;
+
+      spacing = 8;
+      break;
+
+    // =================================================
+    // Tablet Landscape
+    // =================================================
+    case AppDeviceType.tabletLandscape:
+      boxSize = 52;
+      iconSize = 20;
+      radius = 14;
+
+      labelFontSize = 12;
+      labelWidth = 76;
+
+      spacing = 7;
+      break;
+  }
+
   return InkWell(
+    // =================================================
+    // نفس السلوك
+    // =================================================
     onTap: tap,
-    borderRadius: BorderRadius.circular(20.r),
-    child: Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(14.r),
-          decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20.r)),
-          child: FaIcon(icon, color: color, size: 20.sp),
-        ),
-        SizedBox(height: 8.h),
-        Text(label,
-            style: TextStyle(
-                fontSize: 11.sp,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF4B6584))),
-      ],
+
+    borderRadius: BorderRadius.circular(
+      radius,
+    ),
+
+    child: Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 3,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // =============================================
+          // Icon
+          // =============================================
+          Container(
+            width: boxSize,
+            height: boxSize,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: color.withOpacity(
+                0.09,
+              ),
+              borderRadius: BorderRadius.circular(
+                radius,
+              ),
+            ),
+            child: FaIcon(
+              icon,
+              color: color,
+              size: iconSize,
+            ),
+          ),
+
+          SizedBox(
+            height: spacing,
+          ),
+
+          // =============================================
+          // Label
+          // =============================================
+          SizedBox(
+            width: labelWidth,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: labelFontSize,
+                fontWeight: FontWeight.w600,
+                color: const Color(
+                  0xFF4B6584,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
