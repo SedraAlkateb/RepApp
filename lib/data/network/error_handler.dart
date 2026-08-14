@@ -48,6 +48,9 @@ Failure _handleError(DioError error) {
       return DataSource.CANCEL.getFailure();
     case DioErrorType.unknown:
       return Failure(200, error.message ?? "unknown ${error.error}");
+    case DioExceptionType.transformTimeout:
+      // TODO: Handle this case.
+      throw UnimplementedError();
   }
 }
 

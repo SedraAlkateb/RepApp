@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
@@ -23,7 +23,7 @@ class SpecializationsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'الإختصاصات',
-          style: TextStyle(fontSize: isTablet ? 28.sp : 20.sp),
+
         ),
       ),
       body: OrientationBuilder(

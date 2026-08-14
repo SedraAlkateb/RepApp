@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
@@ -50,11 +50,7 @@ class _ReportFinishedPlanUserPageState
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text("ملف المندوب ${widget.name}",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                    color: const Color(0xFF1F4E79))),
+            title: Text("ملف المندوب ${widget.name}",),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new_rounded,
                   color: Color(0xFF1F4E79)),

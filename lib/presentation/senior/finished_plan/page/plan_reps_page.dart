@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
@@ -29,6 +29,7 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       // لون خلفية خفيف لإبراز البطاقات البيضاء
       backgroundColor: const Color(0xFFF8FAFD),
@@ -63,18 +64,20 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
           // 3. قائمة المندوبين المستمدة من الـ Bloc
           BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
             buildWhen: (previous, current) =>
-                current is PlanRepsLoading ||
+            current is PlanRepsLoading ||
                 current is PlanRepsLoaded ||
                 current is PlanRepsError,
             builder: (context, state) {
+              print("object");
               if (state is PlanRepsLoading) {
                 return const SliverFillRemaining(
                   hasScrollBody: false,
                   child: Center(child: CircularProgressIndicator()),
                 );
               } else if (state is PlanRepsLoaded) {
-                // 💡 التحقق في حال كانت القائمة المفلترة الممررة من الـ State فارغة (لا توجد نتائج بحث)
+                print("dddddddddddddddddddddddddddddddd");
                 if (state.reps.isEmpty) {
+
                   return SliverFillRemaining(
                     hasScrollBody: false,
                     child: Center(
@@ -91,7 +94,7 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) {
+                          (context, index) {
                         return RepCard(
                           repName: state.reps[index],
                           repPlanId: int.parse(state.reps[index].repPlan),
@@ -158,6 +161,7 @@ class _PlanRepsPageState extends State<PlanRepsPage> {
 class RepCard extends StatelessWidget {
   final PlanRepsModel repName;
   final int repPlanId;
+
   const RepCard({Key? key, required this.repName, required this.repPlanId})
       : super(key: key);
 
@@ -201,10 +205,11 @@ class RepCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ReportFinishedPlanUserPage(
-                    id: int.parse(repName.id),
-                    repPlanId: repPlanId,
-                    name: repName.name),
+                builder: (context) =>
+                    ReportFinishedPlanUserPage(
+                        id: int.parse(repName.id),
+                        repPlanId: repPlanId,
+                        name: repName.name),
               ));
         },
       ),

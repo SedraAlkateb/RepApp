@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/Recipes/pages/update_recipes.dart';
@@ -21,7 +21,8 @@ class AllRecip extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text("سجل الوصفات",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
+          )
+      ),
       body: bodyBuild(context),
     );
   }

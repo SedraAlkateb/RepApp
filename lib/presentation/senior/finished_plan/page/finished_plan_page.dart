@@ -46,7 +46,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
           // 2. التعامل مع حالات الـ Bloc داخل نظام الـ Slivers
           BlocBuilder<FinishedPlanBloc, FinishedPlanState>(
             buildWhen: (previous, current) =>
-                current is FinishedPlanLoading ||
+            current is FinishedPlanLoading ||
                 current is FinishedPlanLoaded ||
                 current is FinishedPlanError,
             builder: (context, state) {
@@ -62,7 +62,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) {
+                          (context, index) {
                         return PlanCard(plan: state.plans[index]);
                       },
                       childCount: state.plans.length,
@@ -123,6 +123,7 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
 
 class PlanCard extends StatelessWidget {
   final FinishedPlanModel plan;
+
   const PlanCard({required this.plan});
 
   @override

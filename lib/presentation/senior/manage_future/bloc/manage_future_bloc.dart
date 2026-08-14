@@ -97,9 +97,24 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
         (await changeRepPlanStatus.execute(event.id, event.brandType)).fold(
             (failure) {
           emit(ChangPlanStatusErrorState(failure: failure));
-        }, (data) async {
-          allRepresentative[event.index].flag = FlagModel(event.brandType);
-          emit(ChangPlanStatusState(allRepresentative));
+            }, (data) async {
+          // 1. جلب الكائن الحالي قبل التعديل
+          final currentRep = allRepresentative[event.index];
+
+          // 2. استبدال الكائن بكائن جديد وتحديث الـ flag فقط
+          allRepresentative[event.index] = AllRepresentativeFuture(
+             currentRep.id,
+             currentRep.name,
+            // انقل باقي الخصائص المتبقية في الموديل الخاص بك هنا بنفس الشكل:
+            // phone: currentRep.phone,
+            // details: currentRep.details,
+              FlagModel(event.brandType),
+              currentRep.activePlan,
+            currentRep.samplesCount,
+              currentRep.reptype
+          );
+          // 3. إرسال الحالة بقائمة جديدة لتحديث الاستماع في الواجهة
+          emit(ChangPlanStatusState(List.from(allRepresentative)));
         });
       } else if (event is GetPlaceEvent) {
         emit(GetPlaceStatusLoadingState());

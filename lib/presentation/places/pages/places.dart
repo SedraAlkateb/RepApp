@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
@@ -130,8 +130,8 @@ class _PlacesState extends State<Places> {
         ),
         title: Text('المناطق'),
       ),
-      body: WillPopScope(
-        onWillPop: () async => false,
+      body: PopScope(
+        canPop: false,
         child: Stack(
           children: [
             bodyBuild(context),

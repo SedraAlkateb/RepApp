@@ -1,4 +1,4 @@
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/drawer_model.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';

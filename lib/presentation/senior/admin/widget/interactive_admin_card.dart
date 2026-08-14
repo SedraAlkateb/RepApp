@@ -8,6 +8,7 @@ class InteractiveAdminCard extends StatefulWidget {
   final String subtitle;
   final Color iconColor;
   final VoidCallback onTap;
+  final bool isLandscape;
 
   const InteractiveAdminCard({
     super.key,
@@ -16,6 +17,7 @@ class InteractiveAdminCard extends StatefulWidget {
     required this.subtitle,
     required this.iconColor,
     required this.onTap,
+    this.isLandscape = false,
   });
 
   @override
@@ -36,15 +38,13 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
       onTapCancel: () => setState(() => _isPressed = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        margin: EdgeInsets.symmetric(vertical: 10.h),
-        padding: EdgeInsets.all(22.w),
+        margin: widget.isLandscape ? EdgeInsets.zero : EdgeInsets.symmetric(vertical: 8.h),
+        padding: EdgeInsets.all(widget.isLandscape ? 16.w : 22.w),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(25.r),
-          // تغيير لون البوردر عند اللمس
           border: Border.all(
-            color:
-                _isPressed ? widget.iconColor : Colors.black.withOpacity(0.05),
+            color: _isPressed ? widget.iconColor : Colors.black.withOpacity(0.05),
             width: 1.2,
           ),
           boxShadow: [
@@ -62,12 +62,10 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // 1. الخط الملون العلوي (جديد)
+              // 1. الخط الملون العلوي
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 200),
-                top: _isPressed
-                    ? -22.h
-                    : -30.h, // ينزلق للحافة العلوية عند الضغط
+                top: _isPressed ? -22.h : -30.h,
                 left: 60.w,
                 right: 60.w,
                 child: Container(
@@ -82,10 +80,10 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
                 ),
               ),
 
-              // 2. الخط الجانبي الملون (من جهة اليمين)
+              // 2. الخط الجانبي الملون
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 200),
-                right: _isPressed ? -22.w : -30.w, // حركة للداخل عند الضغط
+                right: _isPressed ? -22.w : -30.w,
                 top: 5.h,
                 bottom: 5.h,
                 child: Container(
@@ -97,61 +95,135 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
                 ),
               ),
 
-              // محتوى الكارد الأساسي
-              Row(
-                children: [
-                  // الأيقونة (تغيير ذكي للألوان)
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: EdgeInsets.all(12.w),
-                    decoration: BoxDecoration(
-                      color: _isPressed
-                          ? widget.iconColor
-                          : widget.iconColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    child: Icon(
-                      widget.icon,
-                      color: _isPressed ? Colors.white : widget.iconColor,
-                      size: 28.sp,
-                    ),
-                  ),
-                  SizedBox(width: 15.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.title,
-                          style: TextStyle(
-                            fontSize: 17.sp,
-                            fontWeight: FontWeight.bold,
-                            color: ColorManager.primaryText,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          widget.subtitle,
-                          style: TextStyle(
-                              fontSize: 12.sp, color: Colors.grey[500]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // سهم التنقل
-                  AnimatedPadding(
-                    duration: const Duration(milliseconds: 200),
-                    padding: EdgeInsets.only(left: _isPressed ? 5.w : 0),
-                    child: Icon(Icons.arrow_forward_ios,
-                        color: _isPressed ? widget.iconColor : Colors.grey[300],
-                        size: 16.sp),
-                  ),
-                ],
-              ),
+              // محتوى الكارد (يتغير حسب الوضعية)
+              widget.isLandscape ? _buildLandscapeLayout() : _buildPortraitLayout(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // التنسيق للوضع الطولي (البورتريت)
+  Widget _buildPortraitLayout() {
+    return Row(
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: EdgeInsets.all(12.w),
+          decoration: BoxDecoration(
+            color: _isPressed
+                ? widget.iconColor
+                : widget.iconColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+          child: Icon(
+            widget.icon,
+            color: _isPressed ? Colors.white : widget.iconColor,
+            size: 28.sp,
+          ),
+        ),
+        SizedBox(width: 15.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorManager.primaryText,
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                widget.subtitle,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.grey[500],
+                ),
+              ),
+            ],
+          ),
+        ),
+        AnimatedPadding(
+          duration: const Duration(milliseconds: 200),
+          padding: EdgeInsets.only(left: _isPressed ? 5.w : 0),
+          child: Icon(
+            Icons.arrow_forward_ios,
+            color: _isPressed ? widget.iconColor : Colors.grey[300],
+            size: 16.sp,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // التنسيق للوضع الأفقي (اللاندسكيب)
+  Widget _buildLandscapeLayout() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.all(2.w),
+              decoration: BoxDecoration(
+                color: _isPressed
+                    ? widget.iconColor
+                    : widget.iconColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(14.r),
+              ),
+              child: Icon(
+                widget.icon,
+                color: _isPressed ? Colors.white : widget.iconColor,
+                size: 20.sp,
+              ),
+            ),
+            AnimatedPadding(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.only(left: _isPressed ? 4.w : 0),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: _isPressed ? widget.iconColor : Colors.grey[300],
+                size: 14.sp,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10.h),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+                color: ColorManager.primaryText,
+                height: 1.2,
+              ),
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              widget.subtitle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 10.sp,
+                color: Colors.grey[500],
+                height: 1.2,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -112,7 +112,7 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
             Text(
               'إدارة التقارير',
               style: TextStyle(
-                fontSize: 24.sp,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 color: ColorManager.medicalPrimary,
               ),
@@ -127,10 +127,10 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
             )
           ],
         ),
-        SizedBox(height: 4.h),
+        SizedBox(height: 2.h),
         Text(
           'استعراض تقارير المندوبين ومراقبة السينيور',
-          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+          style: TextStyle(fontSize: 12.sp, color: Colors.grey),
         ),
       ],
     );
@@ -226,13 +226,14 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
             ));
           },
           child: Padding(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.all(10.w),
             child: Row(
               children: [
+
                 // أيقونة دائرية باسم المندوب أو رمز
                 Container(
-                  width: 50.w,
-                  height: 50.w,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: ColorManager.medicalPrimary.withOpacity(0.1),
                     shape: BoxShape.circle,
@@ -240,7 +241,7 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                   child: Icon(Icons.assessment_outlined,
                       color: ColorManager.medicalPrimary),
                 ),
-                SizedBox(width: 15.w),
+                SizedBox(width: 10.w),
                 // بيانات المندوب
                 Expanded(
                   child: Column(
@@ -249,7 +250,7 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                       Text(
                         rep.name,
                         style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                           color: ColorManager.secondaryColor1,
                         ),
@@ -257,14 +258,14 @@ class _AllRepSeniorGenerlReportsState extends State<AllRepSeniorGenerlReports> {
                       SizedBox(height: 4.h),
                       Text(
                         "عدد الزيارات غير المقروءة: ${rep.number}",
-                        style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                        style: TextStyle(fontSize: 10.sp, color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
                 // أيقونة السهم
                 Icon(Icons.arrow_forward_ios_rounded,
-                    size: 18.sp, color: Colors.grey.shade400),
+                    size: 16.sp, color: Colors.grey.shade400),
               ],
             ),
           ),

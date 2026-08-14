@@ -1,5 +1,5 @@
 // ignore_for_file: must_be_immutable, file_names
-import 'package:domina_app/app/di.dart';
+import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
@@ -156,13 +156,14 @@ class SeniorByCityId extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: ColorManager.secondaryColor1.withOpacity(0.1),
+                    color: ColorManager.medicalPrimary.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(Icons.person_pin_rounded,
-                      color: ColorManager.secondaryColor1),
+                      color: ColorManager.medicalPrimary),
                 ),
                 const SizedBox(width: 16),
                 Expanded(

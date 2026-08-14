@@ -8,7 +8,6 @@ PreferredSizeWidget appBarShow(String title, BuildContext context) {
     backgroundColor: ColorManager.primary,
     title: Text(
       title,
-      style: Theme.of(context).textTheme.titleLarge,
     ),
     leading: Builder(
       builder: (BuildContext context) {

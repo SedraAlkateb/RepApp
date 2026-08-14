@@ -162,6 +162,8 @@ extension RepresentativeMapper on RepresentativeResponse? {
       int.parse(this?.id ?? "0"),
       this?.name ?? Constants.empty,
       this?.unRead ?? Constants.zero,
+      this?.TotalReadVisit ?? Constants.zero,
+      this?.totalVisit ?? Constants.zero,
       int.parse(this?.activePlan ?? "0"),
     );
   }
