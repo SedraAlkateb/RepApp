@@ -186,12 +186,16 @@ class _VisitHospitalState extends State<VisitHospital>
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     BoxTextField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
+                        return null;
+                      },
                       keyboardType: TextInputType.text,
                       prefixIcon: null,
                       maxLines: 4,
-                      validator: (value) {
-                        return null;
-                      },
+
                       controller: _issueController,
                       obscureText: false,
                       minLines: 3,

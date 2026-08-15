@@ -23,7 +23,7 @@ class FutureSpecializationsPage extends StatefulWidget {
     required this.sampleCount,
     required this.repName,
     required this.repType,
-    required this.placeId,
+
   });
 
   final String repName;
@@ -32,7 +32,7 @@ class FutureSpecializationsPage extends StatefulWidget {
   final FlagModel flag;
   final int sampleCount;
   final RepType repType;
-  final int placeId;
+
 
   @override
   State<FutureSpecializationsPage> createState() =>
@@ -111,7 +111,7 @@ class _FutureSpecializationsPageState
         context,
       ).add(
         AllSeniorRepFutureEvent(
-          widget.placeId,
+
         ),
       );
 
@@ -179,7 +179,6 @@ class _FutureSpecializationsPageState
                 context,
               ).add(
                 AllSeniorRepFutureEvent(
-                  widget.placeId,
                 ),
               );
 

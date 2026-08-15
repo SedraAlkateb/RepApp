@@ -92,6 +92,9 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                       isEditable: isEditable,
                       iconColor: Colors.orange,
                       validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
                         return null;
                       },
                     ),

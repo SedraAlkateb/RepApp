@@ -90,7 +90,7 @@ class BrandPlanPage extends StatelessWidget {
                             children: [
                               const Icon(Icons.list_alt_outlined),
                               SizedBox(width: 8.w),
-                              const Text("الخطة الحالية"),
+                              const Text("الخطة المستقبلية"),
                             ],
                           ),
                         ),
@@ -101,7 +101,7 @@ class BrandPlanPage extends StatelessWidget {
                             children: [
                               const Icon(Icons.featured_play_list_outlined),
                               SizedBox(width: 8.w),
-                              const Text('قيد المعالجة'),
+                              const Text('الخطة الحالية'),
                             ],
                           ),
                         ),

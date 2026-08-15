@@ -1,57 +1,63 @@
 import 'package:domina_app/presentation/places/widget/place_archive/places_archive_content.dart';
-import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
 
 class PlacesArchiveResponsiveLayout extends StatelessWidget {
-  final TextEditingController searchController;
-
   const PlacesArchiveResponsiveLayout({
     super.key,
     required this.searchController,
   });
 
+  final TextEditingController searchController;
+
   @override
   Widget build(BuildContext context) {
-    final deviceType = AppResponsive.deviceType(context);
+    final ui = AppUi.of(context);
 
-    double pageMaxWidth;
-    double listMaxWidth;
-    double searchMaxWidth;
-    double horizontalPadding;
+    // =========================================================
+    // عرض الصفحة
+    // نفس النمط المعتمد لباقي صفحات الـ List
+    // =========================================================
+    final double contentMaxWidth =
+    ui.isTabletLandscape
+        ? 760
+        : ui.pageMaxWidth;
 
-    switch (deviceType) {
-      case AppDeviceType.mobilePortrait:
-        pageMaxWidth = 600;
-        listMaxWidth = 600;
-        searchMaxWidth = 600;
-        horizontalPadding = 16;
-        break;
+    // =========================================================
+    // عرض البحث والقائمة
+    // قيم خاصة بهالصفحة فقط، لذلك ما منضيفها لـ AppUi
+    // =========================================================
+    final double contentInnerMaxWidth =
+    ui.isMobile
+        ? contentMaxWidth
+        : ui.isTabletPortrait
+        ? 720
+        : 760;
 
-      case AppDeviceType.tabletPortrait:
-        pageMaxWidth = 900;
-        listMaxWidth = 720;
-        searchMaxWidth = 720;
-        horizontalPadding = 28;
-        break;
+    return ColoredBox(
+      color: const Color(
+        0xFFF8FAFC,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: contentMaxWidth,
+          ),
+          child: PlacesArchiveContent(
+            searchController: searchController,
 
-      case AppDeviceType.tabletLandscape:
-        pageMaxWidth = 1200;
-        listMaxWidth = 780;
-        searchMaxWidth = 780;
-        horizontalPadding = 32;
-        break;
-    }
+            // =================================================
+            // Responsive values من AppUi
+            // =================================================
+            horizontalPadding:
+            ui.pagePadding,
 
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: pageMaxWidth,
-        ),
-        child: PlacesArchiveContent(
-          searchController: searchController,
-          horizontalPadding: horizontalPadding,
-          searchMaxWidth: searchMaxWidth,
-          listMaxWidth: listMaxWidth,
+            searchMaxWidth:
+            contentInnerMaxWidth,
+
+            listMaxWidth:
+            contentInnerMaxWidth,
+          ),
         ),
       ),
     );

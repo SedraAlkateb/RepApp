@@ -78,6 +78,133 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         }, (data) async {
           emit(SenAllPlaceState(data));
         });
+      }
+      if (event is SearchSenAllPlaceEvent) {
+        List<PlaceModel> placeModel;
+        String search = normalizeText(event.contant);
+        placeModel = event.places.where((value) {
+          if (normalizeText(value.title).contains(search)) {
+            return true;
+          }
+          return false;
+        }).toList();
+        emit(SenAllPlaceState(placeModel));
+      } else if (event is SearchDocHosEvent) {
+        final String search = normalizeText(
+          event.content.trim(),
+        );
+
+        // ===========================================================
+        // إذا السيرش فاضي رجع القوائم الأصلية
+        // ===========================================================
+        if (search.isEmpty) {
+          emit(
+            DocHosState(
+              event.doctors,
+              event.hospitals,
+            ),
+          );
+
+          return;
+        }
+
+        // ===========================================================
+        // Doctors
+        // ===========================================================
+        if (event.tabIndex == 0) {
+          final List<DoctorSenModel> doctorList = event.doctors.where(
+            (doctor) {
+              if (normalizeText(
+                doctor.title ?? '',
+              ).contains(search)) {
+                return true;
+              }
+
+              if (normalizeText(
+                doctor.address ?? '',
+              ).contains(search)) {
+                return true;
+              }
+
+              if (normalizeText(
+                doctor.place ?? '',
+              ).contains(search)) {
+                return true;
+              }
+
+              if (normalizeText(
+                doctor.spTitle ?? '',
+              ).contains(search)) {
+                return true;
+              }
+
+              if (normalizeText(
+                doctor.rate ?? '',
+              ).contains(search)) {
+                return true;
+              }
+
+              return false;
+            },
+          ).toList();
+
+          // المشافي تبقى القائمة الأصلية
+          emit(
+            DocHosState(
+              doctorList,
+              event.hospitals,
+            ),
+          );
+
+          return;
+        }
+
+        // ===========================================================
+        // Hospitals
+        // ===========================================================
+        final List<HospitalSpModel> hospitalList = event.hospitals.where(
+          (hospital) {
+            if (normalizeText(
+              hospital.title ?? '',
+            ).contains(search)) {
+              return true;
+            }
+
+            if (normalizeText(
+              hospital.address ?? '',
+            ).contains(search)) {
+              return true;
+            }
+
+            if (normalizeText(
+              hospital.placeTitle ?? '',
+            ).contains(search)) {
+              return true;
+            }
+
+            if (normalizeText(
+              hospital.SpName ?? '',
+            ).contains(search)) {
+              return true;
+            }
+
+            if (normalizeText(
+              hospital.rate ?? '',
+            ).contains(search)) {
+              return true;
+            }
+
+            return false;
+          },
+        ).toList();
+
+        // الأطباء تبقى القائمة الأصلية
+        emit(
+          DocHosState(
+            event.doctors,
+            hospitalList,
+          ),
+        );
       } else if (event is LogoutDeleteAllEvent) {
         emit(LogoutDeleteAllLoadingState());
         (await deleteAllSqlUsecase.execute()).fold((failure) {

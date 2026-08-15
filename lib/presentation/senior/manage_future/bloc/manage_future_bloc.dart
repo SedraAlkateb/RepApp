@@ -24,10 +24,10 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
     on<ManageFutureEvent>((event, emit) async {
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
-        (await allRepsFutureUsecase.execute(UserInfo.repId, event.placeId))
+        (await allRepsFutureUsecase.execute(UserInfo.repId))
             .fold((failure) {
           emit(
-              AllSeniorRepErrorState(failure: failure, placeId: event.placeId));
+              AllSeniorRepErrorState(failure: failure));
         }, (data) async {
           data.sort((a, b) {
             // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
@@ -80,7 +80,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           });
 
           allRepresentative = data;
-          emit(AllSeniorRepState(data, event.placeId));
+          emit(AllSeniorRepState(data));
         });
       } else if (event is SenSearchRepFutureEvent) {
         List<AllRepresentativeFuture> allRepresentativeModel = [];
@@ -91,7 +91,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           }
           return false;
         }).toList();
-        emit(AllSeniorRepState(allRepresentativeModel, 0));
+        emit(AllSeniorRepState(allRepresentativeModel));
       } else if (event is ChangPlanStatusEvent) {
         emit(ChangPlanStatusLoadingState());
         (await changeRepPlanStatus.execute(event.id, event.brandType)).fold(

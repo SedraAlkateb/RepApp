@@ -7,6 +7,7 @@ import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/admin/widget/interactive_admin_card.dart';
 import 'package:domina_app/presentation/senior/admin/widget/square_interactive_card.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
+import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -291,26 +292,23 @@ class AdminDashboardPage extends StatelessWidget {
                                 child: SquareInteractiveCard(
                                   icon: Icons
                                       .calendar_today_outlined,
-                                  title: 'الخطط الحالية',
+                                  title: 'الخطة المستقبلية',
                                   subtitle: 'متابعة النشاط',
                                   iconColor: Colors.green,
 
-                                  // نفس السلوك الأصلي
                                   onTap: () {
-                                    initSeniorProfModule();
+                                    initSeniorManageFutureModule();
 
-                                    context
-                                        .read<SeniorProfBloc>()
-                                        .add(
-                                      SenAllPlaceEvent(
-                                        UserInfo.repId,
+                                    BlocProvider.of<ManageFutureBloc>(
+                                      context,
+                                    ).add(
+                                      AllSeniorRepFutureEvent(
                                       ),
                                     );
 
                                     Navigator.pushNamed(
                                       context,
-                                      Routes
-                                          .seniorFuturePlaces,
+                                      Routes.allRepWithFuture,
                                     );
                                   },
 

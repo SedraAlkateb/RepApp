@@ -1,268 +1,918 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class AllRecipesForView extends StatelessWidget {
-  AllRecipesForView({super.key});
+  const AllRecipesForView({
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
+    final ui = AppUi.of(context);
+
+    final double contentMaxWidth =
+    ui.isTabletLandscape
+        ? 760
+        : ui.pageMaxWidth;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('الوصفات'),
+      backgroundColor: const Color(
+        0xFFF8FAFC,
       ),
-      body: bodyBuild(context),
+
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
+
+        title: Text(
+          'الوصفات',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: ui.isMobile ? 18 : 21,
+            fontWeight: FontWeight.w700,
+            color: ColorManager.medicalPrimary,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        top: false,
+
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: contentMaxWidth,
+            ),
+
+            child: _bodyBuild(
+              context,
+              ui,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  Widget bodyBuild(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-            buildWhen: (previous, current) =>
-                current is AllReciLoadingState ||
-                current is AllReciState ||
-                current is AllReciErrorState ||
-                current is AllReciEmptyState,
-            builder: (context, state) {
-              if (state is AllReciLoadingState) {
-                return loadingFullScreen(context);
-              }
-              if (state is AllReciState) {
-                List<ReciModel> recis = state.reci;
-                return CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    // 2. عنوان القائمة (قائمة الوصفات) كما في الصورة
-                    SliverToBoxAdapter(child: _buildTitleSection(context)),
+  // ===========================================================
+  // Body
+  // ===========================================================
 
-                    // 3. البطاقات الذكية مع تأثير الدخول المتتالي
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: AnimationLimiter(
-                        child: SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final item = recis[index];
-                              bool isClinic = item.recipeType == "1";
+  Widget _bodyBuild(
+      BuildContext context,
+      AppUi ui,
+      ) {
+    return BlocBuilder<
+        SeniorProfBloc,
+        SeniorProfState>(
+      buildWhen: (
+          previous,
+          current,
+          ) =>
+      current is AllReciLoadingState ||
+          current is AllReciState ||
+          current is AllReciErrorState ||
+          current is AllReciEmptyState,
 
-                              return AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 600),
-                                delay: const Duration(milliseconds: 50),
-                                child: SlideAnimation(
-                                  verticalOffset: 30.0,
-                                  child: FadeInAnimation(
-                                    child: _buildSmartCard(
-                                        context, item, isClinic),
-                                  ),
-                                ),
-                              );
-                            },
-                            childCount: recis.length,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  ],
-                );
-              }
-              if (state is AllReciErrorState) {
-                return errorFullScreen(context,
-                    mes: state.failure.massage, func: () {});
-              }
-              if (state is AllReciEmptyState) {
-                return emptyFullScreen(context);
-              }
-              return SizedBox();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
+      builder: (
+          context,
+          state,
+          ) {
+        // =====================================================
+        // Loading
+        // =====================================================
+        if (state is AllReciLoadingState) {
+          return loadingFullScreen(
+            context,
+          );
+        }
 
-Widget _buildTitleSection(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(16, 25, 16, 15),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("قائمة الوصفات",
-                style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w900,
-                    color: ColorManager.medicalText)),
-            const SizedBox(height: 4),
-            Text("استعراض كافة الوصفات الصادرة لهذا المندوب",
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 13.sp)),
-          ],
-        ),
-        // الخط الأزرق الجمالي الموجود في الصورة
-        Container(
-          height: 5,
-          width: 45,
-          decoration: BoxDecoration(
-            color: const Color(0xFF42A5F5),
-            borderRadius: BorderRadius.circular(10),
-          ),
-        )
-      ],
-    ),
-  );
-}
+        // =====================================================
+        // Data
+        // =====================================================
+        if (state is AllReciState) {
+          final List<ReciModel> recis =
+              state.reci;
 
-Widget _buildSmartCard(BuildContext context, ReciModel item, bool isClinic) {
-  return Container(
-    margin: const EdgeInsets.only(bottom: 16),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(22),
-      border:
-          Border.all(color: ColorManager.black.withOpacity(0.09), width: 1.5),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.04),
-          blurRadius: 15,
-          offset: const Offset(0, 8),
-        ),
-      ],
-    ),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(22),
-      child: InkWell(
-        onTap: () {
-          BlocProvider.of<SeniorProfBloc>(context).add(GetRepReciEvent(
-              int.parse(item.id ?? "0"), isClinic, item.docName ?? ""));
-          Navigator.pushNamed(context, Routes.viewRecipe);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. الوسوم (Badge & Date)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildTypeBadge(isClinic),
-                  _buildDateSection(item.create_date ?? ""),
-                ],
-              ),
-              const SizedBox(height: 15),
-              // 3. المصدر (طبيب أو مشفى)
-              Row(
-                children: [
-                  Icon(
-                      isClinic
-                          ? Icons.person_outline
-                          : Icons.apartment_outlined,
-                      size: 18,
-                      color: Colors.grey.shade400),
-                  const SizedBox(width: 8),
-                  Text(isClinic ? "د. ${item.docName}" : item.docName ?? "",
-                      style: TextStyle(
-                          fontSize: 15.sp,
-                          color: Colors.blueGrey.shade600,
-                          fontWeight: FontWeight.w600)),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: Divider(
-                  height: 1,
-                  thickness: 0.3,
-                  color: ColorManager.medicalPrimary.withOpacity(0.5),
+          return CustomScrollView(
+            physics:
+            const BouncingScrollPhysics(),
+
+            keyboardDismissBehavior:
+            ScrollViewKeyboardDismissBehavior
+                .onDrag,
+
+            slivers: [
+              // =================================================
+              // Header
+              // =================================================
+              SliverToBoxAdapter(
+                child: _buildTitleSection(
+                  ui,
                 ),
               ),
 
-              // 4. السطر السفلي (الملاحظات والكمية)
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                        "ملاحظات مدونة : ${item.note_emp ?? "لا توجد ملاحظات مدونة"}",
-                        style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic)),
+              // =================================================
+              // Recipes
+              // =================================================
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  0,
+                  ui.pagePadding,
+                  ui.listBottomPadding,
+                ),
+
+                sliver: AnimationLimiter(
+                  child: SliverList(
+                    delegate:
+                    SliverChildBuilderDelegate(
+                          (
+                          context,
+                          index,
+                          ) {
+                        final item =
+                        recis[index];
+
+                        final bool isClinic =
+                            item.recipeType ==
+                                '1';
+
+                        return AnimationConfiguration
+                            .staggeredList(
+                          position: index,
+
+                          duration:
+                          const Duration(
+                            milliseconds:
+                            600,
+                          ),
+
+                          delay:
+                          const Duration(
+                            milliseconds:
+                            50,
+                          ),
+
+                          child: SlideAnimation(
+                            verticalOffset:
+                            30,
+
+                            child:
+                            FadeInAnimation(
+                              child:
+                              _buildSmartCard(
+                                context,
+                                ui,
+                                item,
+                                isClinic,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+
+                      childCount:
+                      recis.length,
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  Text("وحدة",
-                      style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
-                  const SizedBox(width: 8),
-                  _buildQuantityBubble(item.total ?? "0"),
-                ],
+                ),
+              ),
+            ],
+          );
+        }
+
+        // =====================================================
+        // Error
+        // =====================================================
+        if (state is AllReciErrorState) {
+          return errorFullScreen(
+            context,
+            mes:
+            state.failure.massage,
+            func: () {},
+          );
+        }
+
+        // =====================================================
+        // Empty
+        // =====================================================
+        if (state is AllReciEmptyState) {
+          return emptyFullScreen(
+            context,
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+// ============================================================================
+// Title
+// ============================================================================
+
+Widget _buildTitleSection(
+    AppUi ui,
+    ) {
+  return Padding(
+    padding: EdgeInsets.fromLTRB(
+      ui.pagePadding,
+      ui.headerTopPadding,
+      ui.pagePadding,
+      ui.headerBottomPadding,
+    ),
+
+    child: Row(
+      crossAxisAlignment:
+      CrossAxisAlignment.center,
+
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+            children: [
+              Text(
+                'قائمة الوصفات',
+
+                maxLines: 1,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+                style: TextStyle(
+                  fontSize:
+                  ui.pageTitleSize,
+
+                  fontWeight:
+                  FontWeight.w800,
+
+                  color: ColorManager
+                      .medicalText,
+
+                  height: 1.25,
+                ),
+              ),
+
+              SizedBox(
+                height:
+                ui.smallSpacing,
+              ),
+
+              Text(
+                'استعراض كافة الوصفات الصادرة لهذا المندوب',
+
+                maxLines: 2,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+                style: TextStyle(
+                  color: const Color(
+                    0xFF64748B,
+                  ),
+
+                  fontSize:
+                  ui.pageSubtitleSize,
+
+                  fontWeight:
+                  FontWeight.w500,
+
+                  height: 1.4,
+                ),
               ),
             ],
           ),
         ),
-      ),
+
+        SizedBox(
+          width:
+          ui.mediumSpacing,
+        ),
+
+        Container(
+          height: 5,
+          width:
+          ui.isMobile ? 40 : 45,
+
+          decoration: BoxDecoration(
+            color: ColorManager
+                .medicalPrimary,
+
+            borderRadius:
+            BorderRadius.circular(
+              10,
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }
 
-Widget _buildTypeBadge(bool isClinic) {
+// ============================================================================
+// Recipe Card
+// ============================================================================
+
+Widget _buildSmartCard(
+    BuildContext context,
+    AppUi ui,
+    ReciModel item,
+    bool isClinic,
+    ) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-    decoration: BoxDecoration(
-      color: isClinic ? const Color(0xFFE3F2FD) : const Color(0xFFE8F5E9),
-      borderRadius: BorderRadius.circular(8),
+    margin: EdgeInsets.only(
+      bottom: ui.cardSpacing,
     ),
-    child: Text(
-      isClinic ? "وصفة عيادة" : "وصفة مشفى",
-      style: TextStyle(
-        color: isClinic ? Colors.blue.shade700 : Colors.green.shade700,
-        fontSize: 11.sp,
-        fontWeight: FontWeight.bold,
+
+    decoration: BoxDecoration(
+      color: Colors.white,
+
+      borderRadius:
+      BorderRadius.circular(
+        ui.cardRadius,
+      ),
+
+      border: Border.all(
+        color: const Color(
+          0xFFE2E8F0,
+        ),
+      ),
+
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black
+              .withOpacity(
+            0.03,
+          ),
+
+          blurRadius: 12,
+
+          offset:
+          const Offset(
+            0,
+            4,
+          ),
+        ),
+      ],
+    ),
+
+    child: ClipRRect(
+      borderRadius:
+      BorderRadius.circular(
+        ui.cardRadius,
+      ),
+
+      child: Material(
+        color: Colors.white,
+
+        child: InkWell(
+          // ===================================================
+          // نفس السلوك الأصلي تماماً
+          // ===================================================
+          onTap: () {
+            context
+                .read<
+                SeniorProfBloc>()
+                .add(
+              GetRepReciEvent(
+                int.parse(
+                  item.id ?? '0',
+                ),
+                isClinic,
+                item.docName ?? '',
+              ),
+            );
+
+            Navigator.pushNamed(
+              context,
+              Routes.viewRecipe,
+            );
+          },
+
+          child: Padding(
+            padding: EdgeInsets.all(
+              ui.cardPadding,
+            ),
+
+            child: Column(
+              crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+              children: [
+                // ===============================================
+                // Type + Date
+                // ===============================================
+                Row(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.center,
+
+                  children: [
+                    _buildTypeBadge(
+                      ui,
+                      isClinic,
+                    ),
+
+                    SizedBox(
+                      width:
+                      ui.mediumSpacing,
+                    ),
+
+                    Expanded(
+                      child: Align(
+                        alignment:
+                        AlignmentDirectional
+                            .centerEnd,
+
+                        child:
+                        _buildDateSection(
+                          ui,
+                          item.create_date ??
+                              '',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height:
+                  ui.sectionSpacing,
+                ),
+
+                // ===============================================
+                // Doctor / Hospital
+                // ===============================================
+                Row(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.center,
+
+                  children: [
+                    Container(
+                      width:
+                      ui.isMobile
+                          ? 34
+                          : 38,
+
+                      height:
+                      ui.isMobile
+                          ? 34
+                          : 38,
+
+                      alignment:
+                      Alignment.center,
+
+                      decoration:
+                      BoxDecoration(
+                        color:
+                        ColorManager
+                            .medicalPrimary
+                            .withOpacity(
+                          0.07,
+                        ),
+
+                        borderRadius:
+                        BorderRadius
+                            .circular(
+                          ui.smallRadius,
+                        ),
+                      ),
+
+                      child: Icon(
+                        isClinic
+                            ? Icons
+                            .person_outline_rounded
+                            : Icons
+                            .local_hospital_outlined,
+
+                        size:
+                        ui.smallIconSize +
+                            2,
+
+                        color:
+                        ColorManager
+                            .medicalPrimary,
+                      ),
+                    ),
+
+                    SizedBox(
+                      width:
+                      ui.mediumSpacing,
+                    ),
+
+                    Expanded(
+                      child: Text(
+                        isClinic
+                            ? 'د. ${item.docName ?? ''}'
+                            : item.docName ??
+                            '',
+
+                        maxLines: 2,
+
+                        overflow:
+                        TextOverflow
+                            .ellipsis,
+
+                        style:
+                        TextStyle(
+                          fontSize: ui
+                              .bodyTextSize,
+
+                          color:
+                          const Color(
+                            0xFF475569,
+                          ),
+
+                          fontWeight:
+                          FontWeight
+                              .w600,
+
+                          height: 1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(
+                    vertical:
+                    ui.sectionSpacing,
+                  ),
+
+                  child: Divider(
+                    height: 1,
+                    thickness: 0.6,
+
+                    color:
+                    const Color(
+                      0xFFE2E8F0,
+                    ),
+                  ),
+                ),
+
+                // ===============================================
+                // Note + Quantity
+                // ===============================================
+                _buildBottomSection(
+                  ui,
+                  item,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     ),
   );
 }
 
-Widget _buildDateSection(String date) {
+// ============================================================================
+// Bottom Section
+// ============================================================================
+
+Widget _buildBottomSection(
+    AppUi ui,
+    ReciModel item,
+    ) {
+  // بالموبايل منخلي المساحة مرنة أكتر
+  // حتى النص الطويل ما يعمل Overflow.
   return Row(
+    crossAxisAlignment:
+    CrossAxisAlignment.center,
+
     children: [
-      Icon(Icons.calendar_today_outlined,
-          size: 14, color: Colors.grey.shade500),
-      const SizedBox(width: 6),
-      Text(date,
-          style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w500)),
+      Expanded(
+        child: Row(
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+
+          children: [
+            Icon(
+              Icons
+                  .notes_rounded,
+
+              size:
+              ui.smallIconSize,
+
+              color:
+              const Color(
+                0xFF94A3B8,
+              ),
+            ),
+
+            SizedBox(
+              width:
+              ui.smallSpacing,
+            ),
+
+            Expanded(
+              child: Text(
+                'ملاحظات مدونة: '
+                    '${_noteText(item.note_emp)}',
+
+                maxLines:
+                ui.isMobile
+                    ? 2
+                    : 3,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                style: TextStyle(
+                  fontSize:
+                  ui.smallTextSize,
+
+                  color:
+                  const Color(
+                    0xFF64748B,
+                  ),
+
+                  fontStyle:
+                  FontStyle.italic,
+
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      SizedBox(
+        width:
+        ui.mediumSpacing,
+      ),
+
+      Text(
+        'وحدة',
+
+        style: TextStyle(
+          fontSize:
+          ui.smallTextSize,
+
+          color: const Color(
+            0xFF94A3B8,
+          ),
+
+          fontWeight:
+          FontWeight.w500,
+        ),
+      ),
+
+      SizedBox(
+        width:
+        ui.smallSpacing,
+      ),
+
+      _buildQuantityBubble(
+        ui,
+        item.total ?? '0',
+      ),
     ],
   );
 }
 
-Widget _buildQuantityBubble(String quantity) {
+// ============================================================================
+// Type Badge
+// ============================================================================
+
+Widget _buildTypeBadge(
+    AppUi ui,
+    bool isClinic,
+    ) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+    padding: EdgeInsets.symmetric(
+      horizontal:
+      ui.mediumSpacing,
+      vertical: 6,
+    ),
+
     decoration: BoxDecoration(
-      color: ColorManager.medicalPrimary,
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: [
-        BoxShadow(
-            color: ColorManager.primary.withOpacity(0.3),
-            blurRadius: 6,
-            offset: const Offset(0, 3))
+      color: isClinic
+          ? const Color(
+        0xFFE3F2FD,
+      )
+          : const Color(
+        0xFFE8F5E9,
+      ),
+
+      borderRadius:
+      BorderRadius.circular(
+        ui.smallRadius,
+      ),
+    ),
+
+    child: Row(
+      mainAxisSize:
+      MainAxisSize.min,
+
+      children: [
+        Icon(
+          isClinic
+              ? Icons
+              .medical_information_outlined
+              : Icons
+              .local_hospital_outlined,
+
+          size:
+          ui.smallIconSize,
+
+          color: isClinic
+              ? const Color(
+            0xFF1976D2,
+          )
+              : const Color(
+            0xFF388E3C,
+          ),
+        ),
+
+        SizedBox(
+          width:
+          ui.smallSpacing,
+        ),
+
+        Text(
+          isClinic
+              ? 'وصفة عيادة'
+              : 'وصفة مشفى',
+
+          style: TextStyle(
+            color: isClinic
+                ? const Color(
+              0xFF1976D2,
+            )
+                : const Color(
+              0xFF388E3C,
+            ),
+
+            fontSize:
+            ui.smallTextSize,
+
+            fontWeight:
+            FontWeight.w700,
+          ),
+        ),
       ],
     ),
-    child: Text(quantity,
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.sp)),
   );
+}
+
+// ============================================================================
+// Date
+// ============================================================================
+
+Widget _buildDateSection(
+    AppUi ui,
+    String date,
+    ) {
+  return Row(
+    mainAxisSize:
+    MainAxisSize.min,
+
+    children: [
+      Icon(
+        Icons
+            .calendar_today_outlined,
+
+        size:
+        ui.smallIconSize,
+
+        color:
+        const Color(
+          0xFF94A3B8,
+        ),
+      ),
+
+      SizedBox(
+        width:
+        ui.smallSpacing,
+      ),
+
+      Flexible(
+        child: Text(
+          date,
+
+          maxLines: 1,
+
+          overflow:
+          TextOverflow.ellipsis,
+
+          style: TextStyle(
+            color:
+            const Color(
+              0xFF64748B,
+            ),
+
+            fontSize:
+            ui.smallTextSize,
+
+            fontWeight:
+            FontWeight.w500,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+// ============================================================================
+// Quantity
+// ============================================================================
+
+Widget _buildQuantityBubble(
+    AppUi ui,
+    String quantity,
+    ) {
+  return Container(
+    constraints:
+    const BoxConstraints(
+      minWidth: 38,
+    ),
+
+    alignment:
+    Alignment.center,
+
+    padding: EdgeInsets.symmetric(
+      horizontal:
+      ui.mediumSpacing,
+      vertical: 6,
+    ),
+
+    decoration: BoxDecoration(
+      color: ColorManager
+          .medicalPrimary,
+
+      borderRadius:
+      BorderRadius.circular(
+        ui.smallRadius,
+      ),
+
+      boxShadow: [
+        BoxShadow(
+          color: ColorManager
+              .medicalPrimary
+              .withOpacity(
+            0.15,
+          ),
+
+          blurRadius: 6,
+
+          offset:
+          const Offset(
+            0,
+            3,
+          ),
+        ),
+      ],
+    ),
+
+    child: Text(
+      quantity,
+
+      maxLines: 1,
+
+      style: TextStyle(
+        color: Colors.white,
+
+        fontWeight:
+        FontWeight.w700,
+
+        fontSize:
+        ui.bodyTextSize,
+      ),
+    ),
+  );
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+String _noteText(
+    String? note,
+    ) {
+  if (note == null ||
+      note.trim().isEmpty) {
+    return 'لا توجد ملاحظات مدونة';
+  }
+
+  return note;
 }

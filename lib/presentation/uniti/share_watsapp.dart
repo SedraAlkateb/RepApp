@@ -13,7 +13,7 @@ Future<void> shareReportToWhatsApp({
   required String repName, // اسم المندوب
 }) async {
   // 1. صياغة النص وتنسيقه بأسلوب تقرير إداري رسمي خالٍ من الرموز التعبيرية
-  final String reportText = "تقرير زيارة طبيب - تطبيق دومينا\n"
+  final String reportText = "تقرير زيارة طبيب - تطبيق دومنا\n"
       "===================================\n"
       "اسم الطبيب: $doctorName\n"
       "الاختصاص الطبي: $specialty\n"

@@ -1,4 +1,3 @@
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/hos_card.dart';
@@ -27,13 +26,6 @@ class HospitalSenior extends StatelessWidget {
     double searchBottomSpacing;
 
     double headerVerticalPadding;
-    double headerTitleFontSize;
-
-    double countHorizontalPadding;
-    double countVerticalPadding;
-    double countFontSize;
-    double countRadius;
-
     double listTopPadding;
     double listBottomPadding;
 
@@ -50,12 +42,6 @@ class HospitalSenior extends StatelessWidget {
         searchBottomSpacing = 10;
 
         headerVerticalPadding = 12;
-        headerTitleFontSize = 18;
-
-        countHorizontalPadding = 12;
-        countVerticalPadding = 5;
-        countFontSize = 11;
-        countRadius = 10;
 
         listTopPadding = 6;
         listBottomPadding = 24;
@@ -73,12 +59,6 @@ class HospitalSenior extends StatelessWidget {
         searchBottomSpacing = 14;
 
         headerVerticalPadding = 16;
-        headerTitleFontSize = 21;
-
-        countHorizontalPadding = 16;
-        countVerticalPadding = 7;
-        countFontSize = 13;
-        countRadius = 12;
 
         listTopPadding = 8;
         listBottomPadding = 30;
@@ -96,13 +76,6 @@ class HospitalSenior extends StatelessWidget {
         searchBottomSpacing = 12;
 
         headerVerticalPadding = 14;
-        headerTitleFontSize = 20;
-
-        countHorizontalPadding = 16;
-        countVerticalPadding = 6;
-        countFontSize = 13;
-        countRadius = 12;
-
         listTopPadding = 6;
         listBottomPadding = 28;
         break;

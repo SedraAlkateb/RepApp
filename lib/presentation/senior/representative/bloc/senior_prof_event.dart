@@ -57,7 +57,40 @@ class SenSearchSpecEvent extends SeniorProfEvent {
   @override
   List<Object?> get props => [contant];
 }
+class SearchSenAllPlaceEvent extends SeniorProfEvent {
+  final String contant;
+  final List<PlaceModel> places;
 
+  SearchSenAllPlaceEvent(this.contant,this.places);
+  @override
+  List<Object?> get props => [contant,places];
+}
+class SearchDocHosEvent extends SeniorProfEvent {
+  final String content;
+
+  /// 0 = doctors
+  /// 1 = hospitals
+  final int tabIndex;
+
+  /// القوائم الأصلية وليست نتيجة بحث سابقة
+  final List<DoctorSenModel> doctors;
+  final List<HospitalSpModel> hospitals;
+
+  SearchDocHosEvent({
+    required this.content,
+    required this.tabIndex,
+    required this.doctors,
+    required this.hospitals,
+  });
+
+  @override
+  List<Object?> get props => [
+    content,
+    tabIndex,
+    doctors,
+    hospitals,
+  ];
+}
 class SenSearchHospEvent extends SeniorProfEvent {
   final String contant;
   SenSearchHospEvent(this.contant);

@@ -4,8 +4,7 @@ part of 'manage_future_bloc.dart';
 sealed class ManageFutureEvent extends Equatable {}
 
 class AllSeniorRepFutureEvent extends ManageFutureEvent {
-  final int placeId;
-  AllSeniorRepFutureEvent(this.placeId);
+  AllSeniorRepFutureEvent();
   @override
   List<Object?> get props => [];
 }

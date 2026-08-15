@@ -24,27 +24,32 @@ class ViewRecipePage extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: ColorManager.secondaryColor7,
+        backgroundColor: Colors.white,
 
         leading: IconButton(
           tooltip: 'رجوع',
+
           onPressed: () {
             Navigator.pop(context);
           },
+
           icon: Icon(
             Icons.arrow_back_rounded,
-            color: ColorManager.white,
+            size: ui.isMobile ? 24 : 27,
+            color: ColorManager.medicalPrimary,
           ),
         ),
 
         title: Text(
           'تفاصيل الوصفة',
+
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+
           style: TextStyle(
-            color: ColorManager.white,
             fontSize: ui.isMobile ? 18 : 21,
             fontWeight: FontWeight.w700,
+            color: ColorManager.medicalPrimary,
           ),
         ),
       ),
