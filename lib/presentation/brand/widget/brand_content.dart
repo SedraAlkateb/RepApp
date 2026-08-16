@@ -77,6 +77,7 @@ class BrandContent extends StatelessWidget {
 
                   return BrandListWidget(
                     brands: brandModel,
+                    shrinkWrap: true,
                   );
                 }
 

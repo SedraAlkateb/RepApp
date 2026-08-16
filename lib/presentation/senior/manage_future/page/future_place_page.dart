@@ -425,7 +425,6 @@ class FuturePlacePage extends StatelessWidget {
               context,
             ).add(
               AllSeniorRepFutureEvent(
-                place.placeId,
               ),
             );
 

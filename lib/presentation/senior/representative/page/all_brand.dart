@@ -27,13 +27,6 @@ class AllBrand extends StatelessWidget {
     double searchBottomSpacing;
 
     double headerVerticalPadding;
-    double headerTitleFontSize;
-    double headerSubtitleFontSize;
-
-    double countHorizontalPadding;
-    double countVerticalPadding;
-    double countFontSize;
-    double countRadius;
 
     double listTopPadding;
     double listBottomPadding;
@@ -53,14 +46,6 @@ class AllBrand extends StatelessWidget {
         searchBottomSpacing = 10;
 
         headerVerticalPadding = 12;
-        headerTitleFontSize = 18;
-        headerSubtitleFontSize = 12;
-
-        countHorizontalPadding = 12;
-        countVerticalPadding = 5;
-        countFontSize = 11;
-        countRadius = 10;
-
         listTopPadding = 6;
         listBottomPadding = 24;
 
@@ -79,13 +64,6 @@ class AllBrand extends StatelessWidget {
         searchBottomSpacing = 14;
 
         headerVerticalPadding = 16;
-        headerTitleFontSize = 21;
-        headerSubtitleFontSize = 14;
-
-        countHorizontalPadding = 16;
-        countVerticalPadding = 7;
-        countFontSize = 13;
-        countRadius = 12;
 
         listTopPadding = 8;
         listBottomPadding = 30;
@@ -105,13 +83,7 @@ class AllBrand extends StatelessWidget {
         searchBottomSpacing = 12;
 
         headerVerticalPadding = 14;
-        headerTitleFontSize = 20;
-        headerSubtitleFontSize = 13;
 
-        countHorizontalPadding = 16;
-        countVerticalPadding = 6;
-        countFontSize = 13;
-        countRadius = 12;
 
         listTopPadding = 6;
         listBottomPadding = 28;

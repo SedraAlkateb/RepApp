@@ -9,17 +9,17 @@ final class ManageFutureInitial extends ManageFutureState {
 }
 
 final class AllSeniorRepState extends ManageFutureState {
-  final int placeId;
+
   final List<AllRepresentativeFuture> representatives;
-  AllSeniorRepState(this.representatives, this.placeId);
+  AllSeniorRepState(this.representatives);
   @override
   List<Object?> get props => [representatives];
 }
 
 final class AllSeniorRepErrorState extends ManageFutureState {
   final Failure failure;
-  final int placeId;
-  AllSeniorRepErrorState({required this.failure, required this.placeId});
+
+  AllSeniorRepErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

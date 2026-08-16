@@ -1,107 +1,237 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AnimatedPlaceCard extends StatefulWidget {
-  final dynamic place; // مرر الموديل الخاص بك هنا
+  const AnimatedPlaceCard({
+    super.key,
+    required this.place,
+    required this.onTap,
+  });
+
+  final dynamic place;
   final VoidCallback onTap;
 
-  const AnimatedPlaceCard(
-      {super.key, required this.place, required this.onTap});
-
   @override
-  State<AnimatedPlaceCard> createState() => _AnimatedPlaceCardState();
+  State<AnimatedPlaceCard> createState() =>
+      _AnimatedPlaceCardState();
 }
 
-class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
+class _AnimatedPlaceCardState
+    extends State<AnimatedPlaceCard> {
   bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
+    final ui = AppUi.of(context);
+
     return GestureDetector(
+      // =====================================================
+      // نفس سلوك الضغط الأصلي
+      // =====================================================
       onTapDown: (_) {
         setState(() {
           isPressed = true;
         });
       },
-      // --- لحظة رفع الإصبع (Up) ---
+
       onTapUp: (_) {
         setState(() {
           isPressed = false;
         });
-        // تنفيذ الأكشن الفعلي بعد رفع الإصبع
-        //     widget.onTap();
       },
-      // --- في حال سحب الإصبع للخارج أو إلغاء اللمس ---
+
       onTapCancel: () {
         setState(() {
           isPressed = false;
         });
       },
+
       onTap: widget.onTap,
+
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250), // سرعة التحول
-        margin: EdgeInsets.only(bottom: 15.h),
-        padding: EdgeInsets.all(15.w),
+        duration: const Duration(
+          milliseconds: 250,
+        ),
+
+        width: double.infinity,
+
+        margin: EdgeInsets.only(
+          bottom: ui.cardSpacing,
+        ),
+
+        padding: EdgeInsets.all(
+          ui.cardPadding,
+        ),
+
         decoration: BoxDecoration(
-          // تغيير لون الخلفية بالكامل عند الضغط
-          color: isPressed ? ColorManager.medicalBg : Colors.white,
-          borderRadius: BorderRadius.circular(15.r),
-          border: Border.all(
-            color: isPressed ? Colors.transparent : Colors.grey.shade200,
+          color: isPressed
+              ? ColorManager.medicalBg
+              : Colors.white,
+
+          borderRadius: BorderRadius.circular(
+            ui.cardRadius,
           ),
+
+          border: Border.all(
+            color: isPressed
+                ? Colors.transparent
+                : const Color(
+              0xFFE2E8F0,
+            ),
+          ),
+
           boxShadow: [
             BoxShadow(
               color: isPressed
-                  ? ColorManager.medicalPrimary.withOpacity(0.3)
-                  : Colors.black.withOpacity(0.03),
+                  ? ColorManager.medicalPrimary
+                  .withOpacity(
+                0.12,
+              )
+                  : Colors.black.withOpacity(
+                0.03,
+              ),
+
               blurRadius: 12,
-              offset: const Offset(0, 6),
+
+              offset: const Offset(
+                0,
+                4,
+              ),
             ),
           ],
         ),
+
         child: Row(
           children: [
-            // أيقونة الموقع الجانبية
+            // =================================================
+            // Location Icon
+            // =================================================
             AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              padding: EdgeInsets.all(12.w),
+              duration: const Duration(
+                milliseconds: 250,
+              ),
+
+              width: ui.iconBoxSize,
+              height: ui.iconBoxSize,
+
+              alignment: Alignment.center,
+
               decoration: BoxDecoration(
-                // لون أيقونة الموقع يتغير ليصبح أغمق أو أفتح حسب الخلفية
                 color: isPressed
                     ? ColorManager.medicalPrimary
-                    : const Color(0xFFF0F4F8),
-                borderRadius: BorderRadius.circular(12.r),
+                    : ColorManager.medicalPrimary
+                    .withOpacity(
+                  0.07,
+                ),
+
+                borderRadius:
+                BorderRadius.circular(
+                  ui.smallRadius + 2,
+                ),
               ),
+
               child: Icon(
                 Icons.location_on_outlined,
-                size: 25.sp,
-                color: isPressed ? Colors.white : ColorManager.medicalPrimary,
+
+                size: ui.iconSize,
+
+                color: isPressed
+                    ? Colors.white
+                    : ColorManager
+                    .medicalPrimary,
               ),
             ),
-            SizedBox(width: 15.w),
-            // نص اسم المنطقة
+
+            SizedBox(
+              width: ui.mediumSpacing,
+            ),
+
+            // =================================================
+            // Place Name
+            // =================================================
             Expanded(
-              child: AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 250),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
-                  color: ColorManager.medicalPrimary,
+              child:
+              AnimatedDefaultTextStyle(
+                duration: const Duration(
+                  milliseconds: 250,
                 ),
-                child: Text(widget.place.title),
+
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w700,
+
+                  fontSize:
+                  ui.cardTitleSize,
+
+                  color: ColorManager
+                      .medicalPrimary,
+
+                  height: 1.3,
+                ),
+
+                child: Text(
+                  widget.place.title,
+
+                  maxLines: 2,
+
+                  overflow:
+                  TextOverflow.ellipsis,
+                ),
               ),
             ),
-            // أيقونة السهم
+
+            SizedBox(
+              width: ui.smallSpacing,
+            ),
+
+            // =================================================
+            // Arrow
+            // =================================================
             AnimatedRotation(
-              duration: const Duration(milliseconds: 250),
-              turns: isPressed ? -0.02 : 0, // حركة ميلان بسيطة للسهم عند الضغط
-              child: Icon(
-                Icons.arrow_forward_ios,
-                size: 16.sp,
-                color: ColorManager.medicalMuted,
+              duration: const Duration(
+                milliseconds: 250,
+              ),
+
+              turns:
+              isPressed ? -0.02 : 0,
+
+              child: Container(
+                width: ui.isMobile
+                    ? 30
+                    : 34,
+
+                height: ui.isMobile
+                    ? 30
+                    : 34,
+
+                alignment:
+                Alignment.center,
+
+                decoration: BoxDecoration(
+                  color: const Color(
+                    0xFFF8FAFC,
+                  ),
+
+                  borderRadius:
+                  BorderRadius.circular(
+                    ui.smallRadius,
+                  ),
+                ),
+
+                child: Icon(
+                  Icons
+                      .arrow_forward_ios_rounded,
+
+                  size:
+                  ui.smallIconSize,
+
+                  color:
+                  ColorManager
+                      .medicalMuted,
+                ),
               ),
             ),
           ],

@@ -76,7 +76,7 @@ abstract class RemoteDataSource {
   );
   Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list);
 
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id, int planId);
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id);
 
   Future<Message1Response> updateRepPlanBrandAmount(
       BrandAmountRequestBody list);
@@ -139,7 +139,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<AllSpcBaseResponse> allSpecializations(int repDet,
       {int? planId}) async {
-    return await _appServiceClient.allSpecializations(repDet, planId);
+    return await _appServiceClient.allSpecializations(repDet, null);
   }
 
   @override
@@ -443,8 +443,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
-      int id, int planId) async {
-    return await _appServiceClient.getRepsFuture(id, planId);
+      int id) async {
+    return await _appServiceClient.getRepsFuture(id);
   }
 
   @override

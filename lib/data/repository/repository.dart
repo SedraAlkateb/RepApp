@@ -1421,10 +1421,10 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(
-      int id, int planId) async {
+      int id) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepsFuture(id, planId);
+        final response = await _remoteDataSource.getRepsFuture(id);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

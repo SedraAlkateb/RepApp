@@ -13,12 +13,10 @@ class EditingPlan extends StatelessWidget {
     super.key,
     required this.repPlan,
     required this.repName,
-    required this.placeId,
   });
 
   final int repPlan;
   final String repName;
-  final int placeId;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,6 @@ class EditingPlan extends StatelessWidget {
         context,
       ).add(
         AllSeniorRepFutureEvent(
-          placeId,
         ),
       );
 

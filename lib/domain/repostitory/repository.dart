@@ -112,7 +112,7 @@ abstract class Repository {
       PharmacyOrderRequestBody order);
 
   Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(
-      int id, int planId);
+      int id);
 
   Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(
       BrandAmountRequestBody list);

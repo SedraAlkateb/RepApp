@@ -1969,7 +1969,7 @@ class FlagModel {
       case 0:
         return "بانتظار موافقة المندوب";
       case 1:
-        return "بانتظار موافقة المشرف";
+        return "بانتظار موافقة supervisor";
       case 4:
         return "بانتظار موافقة المستودع";
       case 5:
@@ -2436,7 +2436,7 @@ List<StatusPlanModel> statusPlanSupervisor = [
 ];
 List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
-  StatusPlanModel(1, "بانتظار موافقة المشرف"),
+  StatusPlanModel(1, "بانتظار موافقة supervisor"),
   StatusPlanModel(6, "بانتظار موافقة Senior"),
 ];
 

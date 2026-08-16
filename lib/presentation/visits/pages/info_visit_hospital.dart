@@ -100,6 +100,9 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                       isEditable: isEditable,
                       iconColor: Colors.orange,
                       validator: (value) {
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
                         return null;
                       },
                     ),

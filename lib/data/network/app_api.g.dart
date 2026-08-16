@@ -1732,16 +1732,12 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
-    int id,
-    int placeId,
-  ) async {
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', id.toString()));
-    _data.fields.add(MapEntry('placeId', placeId.toString()));
     final _options = _setStreamType<AllRepresentativeFutureBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

@@ -40,7 +40,7 @@ class _AllRepWithFutureState
   );
 
   int selectedIndex = -1;
-  int placeId = -1;
+
 
   @override
   void dispose() {
@@ -167,7 +167,6 @@ class _AllRepWithFutureState
                               context,
                             ).add(
                               AllSeniorRepFutureEvent(
-                                state.placeId,
                               ),
                             );
                           },
@@ -177,13 +176,6 @@ class _AllRepWithFutureState
                       // ===============================================
                       // Save Place
                       // ===============================================
-                      if (state
-                      is AllSeniorRepState) {
-                        // نفس السلوك الأصلي
-                        placeId =
-                            state.placeId;
-                      }
-
                       // ===============================================
                       // Refresh
                       // ===============================================
@@ -198,7 +190,7 @@ class _AllRepWithFutureState
                             context,
                           ).add(
                             AllSeniorRepFutureEvent(
-                              placeId,
+
                             ),
                           );
 
@@ -242,7 +234,7 @@ class _AllRepWithFutureState
                               allRepresentative[
                               index],
                               index,
-                              placeId,
+
                             );
                           },
                         ),
@@ -266,7 +258,6 @@ class _AllRepWithFutureState
       BuildContext context,
       AllRepresentativeFuture rep,
       int index,
-      int placeId,
       ) {
     final ui =
     AppUi.of(context);
@@ -712,8 +703,8 @@ class _AllRepWithFutureState
 
                             onTap: () =>
                                 _handleAuditing(
-                                  rep,
-                                  placeId,
+                                  rep
+
                                 ),
                           ),
                         ),
@@ -755,7 +746,7 @@ class _AllRepWithFutureState
                             onTap: () =>
                                 _handleEditBrands(
                                   rep,
-                                  placeId,
+
                                 ),
                           ),
                         ),
@@ -1074,7 +1065,6 @@ class _AllRepWithFutureState
 
   void _handleAuditing(
       AllRepresentativeFuture rep,
-      int placeId,
       ) {
     // =====================================================
     // نفس الترتيب الأصلي
@@ -1106,8 +1096,6 @@ class _AllRepWithFutureState
             repType:
             rep.reptype,
 
-            placeId:
-            placeId,
           ),
         ),
       );
@@ -1148,7 +1136,7 @@ class _AllRepWithFutureState
 
   void _handleEditBrands(
       AllRepresentativeFuture rep,
-      int placeId,
+
       ) {
     // =====================================================
     // نفس الترتيب الأصلي
@@ -1177,9 +1165,6 @@ class _AllRepWithFutureState
 
           repName:
           rep.name,
-
-          placeId:
-          placeId,
         ),
       ),
     );

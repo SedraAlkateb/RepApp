@@ -124,9 +124,9 @@ class _VisitDoctorState extends State<VisitDoctor>
                       prefixIcon: null,
                       maxLines: 4,
                       validator: (value) {
-                        // if (value!.isEmpty) {
-                        //   return "الحقل مطلوب";
-                        // }
+                        if (value!.isEmpty) {
+                          return "الحقل مطلوب";
+                        }
                         return null;
                       },
                       controller: _issueController,
