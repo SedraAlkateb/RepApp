@@ -296,6 +296,7 @@ class _RepProfileState
       // فقط بالملف الكامل
       // =================================================
       if (!isFinal) ...[
+
         buildQuickActions(
           context,
         ),
@@ -313,8 +314,10 @@ class _RepProfileState
       // لكن المحتوى يتغير حسب isFinal
       // =================================================
       _buildCoverageSection(
-        context,
+          context,
+          rep
       ),
+
 
       // =================================================
       // Detailed Reports
@@ -326,8 +329,14 @@ class _RepProfileState
           height:
           ui.sectionSpacing,
         ),
-
-        _buildDetailsList(
+        (rep.repType!=5&&rep.repType!=6)?
+        _buildDetailsListRep(
+          context,
+          rep,
+          currentRepName,
+          currentRepPlan,
+          rep.mobile,
+        ): _buildDetailsList(
           context,
           rep,
           currentRepName,
@@ -1531,14 +1540,41 @@ class _RepProfileState
   // =====================================================
 
   Widget _buildCoverageSection(
-      BuildContext context,
+      BuildContext context
+  ,InfoRep rep
       ) {
-    if (isFinal) {
+    if((isFinal)&&(rep.repType!=5&&rep.repType!=6) ){
       return _buildFullCoverageSection(
         context,
       );
-    }
+    }else if((isFinal)&&(rep.repType==5||rep.repType==6)){
+      return   InteractiveActionTile(
+        title:
+        "الخطة الشهرية الفعالة",
 
+        icon:
+        FontAwesomeIcons
+            .calendarCheck,
+
+        color:
+        const Color(
+          0xFF2D947A,
+        ),
+
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.activePlanPage,
+
+            arguments:
+            rep.repPlanId,
+          );
+        },
+      );
+    }
+if(!isFinal&&(rep.repType==5||rep.repType==6)){
+  return SizedBox();
+}
     return _buildFullCoverageSection(
       context,
     );
@@ -1829,6 +1865,76 @@ class _RepProfileState
   // =====================================================
 
   Widget _buildDetailsList(
+      BuildContext context,
+      InfoRep rep,
+      String name,
+      int plan,
+      String phone,
+      ) {
+    return _buildSectionLayout(
+      context,
+      "التقارير التفصيلية",
+      [
+        InteractiveActionTile(
+          title:
+          "سجل الوصفات الطبية",
+
+          icon:
+          FontAwesomeIcons
+              .receipt,
+
+          color:
+          const Color(
+            0xFF7C3AED,
+          ),
+
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.allRecipe,
+            );
+
+            context
+                .read<
+                SeniorProfBloc>()
+                .add(
+              AllReciEvent(
+                id,
+              ),
+            );
+          },
+        ),
+
+        // =================================================
+        // Active Plan
+        // =================================================
+        InteractiveActionTile(
+          title:
+          "الخطة الشهرية الفعالة",
+
+          icon:
+          FontAwesomeIcons
+              .calendarCheck,
+
+          color:
+          const Color(
+            0xFF2D947A,
+          ),
+
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.activePlanPage,
+
+              arguments:
+              plan,
+            );
+          },
+        ),
+      ],
+    );
+  }
+  Widget _buildDetailsListRep(
       BuildContext context,
       InfoRep rep,
       String name,

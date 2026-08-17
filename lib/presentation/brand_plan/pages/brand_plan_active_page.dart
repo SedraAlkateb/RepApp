@@ -80,7 +80,7 @@ class _BrandPlanActivePageState extends State<BrandPlanActivePage>
                       _buildFluidAnimation(
                         index: 1,
                         child: Text(
-                          'منتجات الخطة الفعالة',
+                          'منتجات الخطة الحالية',
                           style: TextStyle(
                             fontSize: 22.sp,
                             fontWeight: FontWeight.bold,

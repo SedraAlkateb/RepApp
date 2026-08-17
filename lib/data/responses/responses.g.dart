@@ -1091,6 +1091,7 @@ ReciResponse _$ReciResponseFromJson(Map<String, dynamic> json) => ReciResponse(
       json['note_emp'] as String?,
       json['docId'] as String?,
       json['recipeType'] as String?,
+      json['recipeStatus'] as String?,
     );
 
 Map<String, dynamic> _$ReciResponseToJson(ReciResponse instance) =>
@@ -1102,6 +1103,7 @@ Map<String, dynamic> _$ReciResponseToJson(ReciResponse instance) =>
       'note_emp': instance.note_emp,
       'docId': instance.docId,
       'recipeType': instance.recipeType,
+      'recipeStatus': instance.recipeStatus,
     };
 
 AllReciResponse _$AllReciResponseFromJson(Map<String, dynamic> json) =>
@@ -1968,6 +1970,7 @@ RepresentativeFutureResponse _$RepresentativeFutureResponseFromJson(
       json['futurePlan'] as String?,
       json['samplesCount'] as String?,
       json['reptype'] as String,
+      json['planDate'] as String,
     );
 
 Map<String, dynamic> _$RepresentativeFutureResponseToJson(
@@ -1979,6 +1982,7 @@ Map<String, dynamic> _$RepresentativeFutureResponseToJson(
       'futurePlan': instance.futurePlan,
       'samplesCount': instance.samplesCount,
       'reptype': instance.reptype,
+      'planDate': instance.planDate,
     };
 
 FinishedPlanResponse _$FinishedPlanResponseFromJson(

@@ -1,128 +1,327 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/presentation/brand_plan/pages/spec_plan_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_active_page.dart';
+import 'package:domina_app/presentation/brand_plan/pages/spec_plan_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
-// تم إضافة flutter_screenutil لتوحيد المقاييس مع التصميم الجديد
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BrandPlanPage extends StatelessWidget {
-  const BrandPlanPage({super.key});
+  const BrandPlanPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // الاحتفاظ بعمليات الطباعة للتأكد من القيم
+    final ui = AppUi.of(context);
+
+    // =========================================================
+    // نفس الطباعة الموجودة سابقاً
+    // =========================================================
     print(UserInfo.otherstatus);
     print(UserInfo.flag);
 
+    final double contentMaxWidth =
+    ui.isTabletLandscape
+        ? 760
+        : ui.pageMaxWidth;
+
     return DefaultTabController(
       length: 2,
+
       child: Scaffold(
-        // استخدام لون الخلفية الموحد الفاتح
-        backgroundColor: const Color(0xFFF8F9FB),
+        backgroundColor: const Color(
+          0xFFF8FAFC,
+        ),
+
         body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
+          headerSliverBuilder: (
+              context,
+              innerBoxIsScrolled,
+              ) {
             return [
-              // 1. الهيدر العلوي (SliverAppBar)
+              // =================================================
+              // AppBar
+              // =================================================
               SliverAppBar(
                 elevation: 0,
-                pinned: true, // يبقى مثبت عند التمرير
-                floating: true, // يظهر بمجرد السحب للأسفل
+                scrolledUnderElevation: 0,
+                surfaceTintColor:
+                Colors.transparent,
+
+                pinned: true,
+                floating: true,
                 snap: true,
-                backgroundColor: Colors.white, // خلفية بيضاء للهيدر
-                // يمكنك إلغاء تعليق leading إذا أردت زر رجوع مخصص
-                // leading: IconButton(
-                //   icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),
-                //   onPressed: () => Navigator.pop(context),
-                // ),
+
+                backgroundColor:
+                Colors.white,
+
                 title: Text(
-                  "خطة المندوب", // عنوان الصفحة
+                  'خطة المندوب',
+
+                  maxLines: 1,
+                  overflow:
+                  TextOverflow.ellipsis,
+
                   style: TextStyle(
+                    fontSize:
+                    ui.isMobile
+                        ? 18
+                        : 21,
+
+                    fontWeight:
+                    FontWeight.w700,
+
                     color:
-                        const Color(0xFF0D47A1), // اللون الأزرق الداكن للعنوان
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
+                    ColorManager
+                        .medicalPrimary,
                   ),
                 ),
+
                 centerTitle: true,
               ),
 
-              // 2. تصميم الـ TabBar العائم داخل حاوية بيضاء (Contained Style)
+              // =================================================
+              // Tab Bar
+              // =================================================
               SliverToBoxAdapter(
-                child: Padding(
-                  // نفس المسافات من التصميم المثال
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-                  child: Container(
-                    height: 55.h, // الارتفاع الموحد للـ TabBar
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.r),
-                      border: Border.all(color: Colors.grey.shade200),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints:
+                    BoxConstraints(
+                      maxWidth:
+                      contentMaxWidth,
                     ),
-                    child: TabBar(
-                      padding: const EdgeInsets.all(4), // مسافة داخلية للمؤشر
-                      dividerColor:
-                          Colors.transparent, // إخفاء الخط الفاصل الافتراضي
-                      labelColor: Colors.white, // لون نص التبويب المحدد
-                      unselectedLabelColor:
-                          Colors.grey.shade400, // لون نص التبويب غير المحدد
-                      labelStyle: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 14.sp),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      // تصميم المؤشر الخلفي الأزرق
-                      indicator: BoxDecoration(
-                        color: ColorManager
-                            .medicalPrimary, // افترضت أن هذا هو اللون الأزرق الرئيسي في تطبيفك
-                        borderRadius: BorderRadius.circular(12.r),
+
+                    child: Padding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.searchTopPadding,
+                        ui.pagePadding,
+                        ui.searchBottomPadding,
                       ),
-                      tabs: [
-                        // التبويب الأول
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.list_alt_outlined),
-                              SizedBox(width: 8.w),
-                              const Text("الخطة المستقبلية"),
-                            ],
-                          ),
+
+                      child: Container(
+                        height:
+                        ui.isMobile
+                            ? 54
+                            : 58,
+
+                        padding:
+                        const EdgeInsets.all(
+                          4,
                         ),
-                        // التبويب الثاني
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.featured_play_list_outlined),
-                              SizedBox(width: 8.w),
-                              const Text('الخطة الحالية'),
-                            ],
+
+                        decoration:
+                        BoxDecoration(
+                          color: Colors.white,
+
+                          borderRadius:
+                          BorderRadius.circular(
+                            ui.cardRadius,
                           ),
+
+                          border: Border.all(
+                            color:
+                            const Color(
+                              0xFFE2E8F0,
+                            ),
+                          ),
+
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                              Colors.black
+                                  .withOpacity(
+                                0.025,
+                              ),
+
+                              blurRadius: 12,
+
+                              offset:
+                              const Offset(
+                                0,
+                                4,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+
+                        child: TabBar(
+                          padding:
+                          EdgeInsets.zero,
+
+                          labelPadding:
+                          EdgeInsets.zero,
+
+                          dividerColor:
+                          Colors.transparent,
+
+                          indicatorSize:
+                          TabBarIndicatorSize
+                              .tab,
+
+                          labelColor:
+                          Colors.white,
+
+                          unselectedLabelColor:
+                          const Color(
+                            0xFF64748B,
+                          ),
+
+                          labelStyle:
+                          TextStyle(
+                            fontSize:
+                            ui.isMobile
+                                ? 14.5
+                                : 16,
+
+                            fontWeight:
+                            FontWeight
+                                .w700,
+                          ),
+
+                          unselectedLabelStyle:
+                          TextStyle(
+                            fontSize:
+                            ui.isMobile
+                                ? 14.5
+                                : 16,
+
+                            fontWeight:
+                            FontWeight
+                                .w500,
+                          ),
+
+                          indicator:
+                          BoxDecoration(
+                            color:
+                            ColorManager
+                                .medicalPrimary,
+
+                            borderRadius:
+                            BorderRadius.circular(
+                              ui.smallRadius +
+                                  1,
+                            ),
+                          ),
+
+                          tabs: const [
+                            // =====================================
+                            // Current Plan
+                            // =====================================
+                            Tab(
+                              child:
+                              _PlanTabItem(
+                                icon: Icons
+                                    .list_alt_outlined,
+
+                                title:
+                                'الخطة الحالية',
+                              ),
+                            ),
+
+                            // =====================================
+                            // Future Plan
+                            // =====================================
+                            Tab(
+                              child:
+                              _PlanTabItem(
+                                icon: Icons
+                                    .featured_play_list_outlined,
+
+                                title:
+                                'الخطة المستقبلية',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ];
           },
-          // 3. محتوى الصفحات
-          body: TabBarView(
+
+          // =====================================================
+          // Tab Content
+          // نفس السلوك الأصلي
+          // =====================================================
+          body:  TabBarView(
             physics:
-                const NeverScrollableScrollPhysics(), // تغيير الفيزكس لتصبح ارتدادية وسلسة
-            //    physics: const BouncingScrollPhysics(),
+            NeverScrollableScrollPhysics(),
+
             children: [
               BrandPlanActivePage(),
               SpecPlanPage(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// Tab Item
+// ============================================================================
+
+class _PlanTabItem extends StatelessWidget {
+  const _PlanTabItem({
+    required this.icon,
+    required this.title,
+  });
+
+  final IconData icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final ui = AppUi.of(context);
+
+    return Padding(
+      padding:
+      EdgeInsets.symmetric(
+        horizontal:
+        ui.smallSpacing,
+      ),
+
+      child: Row(
+        mainAxisAlignment:
+        MainAxisAlignment.center,
+
+        mainAxisSize:
+        MainAxisSize.min,
+
+        children: [
+          Icon(
+            icon,
+
+            size:
+            ui.isMobile
+                ? 19
+                : 21,
+          ),
+
+          SizedBox(
+            width:
+            ui.smallSpacing,
+          ),
+
+          Flexible(
+            child: Text(
+              title,
+
+              maxLines: 1,
+
+              overflow:
+              TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }

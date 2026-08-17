@@ -28,7 +28,7 @@ abstract class RemoteDataSource {
   Future<PlanBrandsBaseSpResponse> getRepPlanBrandSp(
       int repPlanId, int? spId, int? repId);
   Future<SearchDoctorsBaseSpResponse> docSearch(
-      int cityId, String name, int repDet);
+      String name, int repDet);
   Future<DocDoctorsBaseResponse> docReport(int docId);
   Future<Message1Response> repPlanBrand(RepPlanBrandBody list);
   Future<LoginResponse> checkActivePlanBrand(int repDet);
@@ -46,7 +46,7 @@ abstract class RemoteDataSource {
   );
   Future<AllBrandResResponse> getBrandRes(int repDet);
   Future<InsertRecipeBaseResponse> insertReci(ReciRequest reciReq);
-  Future<Message1Response> updateReci(UpdateReciRequest reciReq);
+  Future<InsertRecipeBaseResponse> updateReci(UpdateReciRequest reciReq);
 
   Future<CheckReResponse> checkRe(int repDet);
   Future<ReciNumResponse> reciNum();
@@ -215,8 +215,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<SearchDoctorsBaseSpResponse> docSearch(
-      int cityId, String name, int repDet) async {
-    return await _appServiceClient.docSearch(cityId, name, repDet);
+      String name, int repDet) async {
+    return await _appServiceClient.docSearch(name, repDet);
   }
 
   @override
@@ -388,7 +388,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<Message1Response> updateReci(reciReq) async {
+  Future<InsertRecipeBaseResponse> updateReci(reciReq) async {
     return await _appServiceClient.updateReci(
         reciReq.recipeId,
         reciReq.recipeType,

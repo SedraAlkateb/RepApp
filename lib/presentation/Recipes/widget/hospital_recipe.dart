@@ -14,6 +14,7 @@ class PrescriptionHospitalMenuWidget
   const PrescriptionHospitalMenuWidget({
     super.key,
     required this.hospitalId,
+
   });
 
   final int hospitalId;
@@ -61,7 +62,8 @@ class PrescriptionHospitalMenuWidget
                     ),
               ),
             );
-          } else {
+          }
+          else {
             ScaffoldMessenger.of(context)
                 .clearSnackBars();
 
@@ -126,6 +128,7 @@ class PrescriptionHospitalMenuWidget
               CheckReciEvent(
                 hospitalId,
                 value,
+
               ),
             );
           },

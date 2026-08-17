@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 class UpdateReciUsecase extends Equatable {
   final Repository _repository;
   UpdateReciUsecase(this._repository);
-  Future<Either<Failure, Message1Response>> execute(
+  Future<Either<Failure, InsertRecResponse>> execute(
       UpdateReciRequest reciRequest) async {
     return await _repository.updateReci(reciRequest);
   }

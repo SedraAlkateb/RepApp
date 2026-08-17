@@ -865,7 +865,7 @@ Widget _buildResponsiveNoteCard(
       iconSize = 15;
 
       titleFontSize = 11.5;
-      contentFontSize = 12;
+      contentFontSize = 14;
 
       bottomSpacing = 10;
       break;
@@ -878,7 +878,7 @@ Widget _buildResponsiveNoteCard(
       iconSize = 18;
 
       titleFontSize = 13;
-      contentFontSize = 13.5;
+      contentFontSize = 15.5;
 
       bottomSpacing = 12;
       break;
@@ -890,8 +890,8 @@ Widget _buildResponsiveNoteCard(
       iconBoxSize = 32;
       iconSize = 16;
 
-      titleFontSize = 12;
-      contentFontSize = 12.5;
+      titleFontSize = 16;
+      contentFontSize = 14.5;
 
       bottomSpacing = 10;
       break;
@@ -1844,15 +1844,15 @@ Widget buildBulletItem(
 
       switch (deviceType) {
         case AppDeviceType.mobilePortrait:
-          fontSize = 11.5;
-          break;
-
-        case AppDeviceType.tabletPortrait:
           fontSize = 13.5;
           break;
 
+        case AppDeviceType.tabletPortrait:
+          fontSize = 15.5;
+          break;
+
         case AppDeviceType.tabletLandscape:
-          fontSize = 12.5;
+          fontSize = 14.5;
           break;
       }
 

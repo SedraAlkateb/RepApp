@@ -305,18 +305,22 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
-          //  emit(InsertRecipesState(data));
+          UserInfo.usedReci=data.usedReci;
+          UserInfo.remainReci=data.remainReci;
+          UserInfo.totalReci=data.totalReci;
+            emit(InsertRecipesState(data));
         });
       }
       ///////////////////////editRecipeUsecase
       if (event is EditeRecNumEvent) {
         (await editRecipeUsecase.execute(event.num)).fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
-        }, (data) async {});
+        }, (data) async {
+
+
+        });
       }
       if (event is UpdateReciSHospitalEvent) {
-        print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-        print("DateFormat('yyyy-MM-dd').format(DateTime.now())");
         emit(InsertRecipesLoadingState());
         final updatedUser = insertRecipesObject.copyWith(
             address: event.address,
@@ -361,7 +365,10 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
             .fold((failure) {
           emit(InsertRecipesErrorState(failure: failure));
         }, (data) async {
-          //   emit(InsertRecipesState(data));
+          UserInfo.usedReci=data.usedReci;
+          UserInfo.remainReci=data.remainReci;
+          UserInfo.totalReci=data.totalReci;
+              emit(InsertRecipesState(data));
         });
       }
       if (event is SelectTypeEvent) {

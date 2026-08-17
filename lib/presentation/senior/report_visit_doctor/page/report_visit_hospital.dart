@@ -744,7 +744,7 @@ class ReportVisitHospital extends StatelessWidget {
 
         sectionSpacing = 12;
 
-        noteFontSize = 12;
+        noteFontSize = 15;
         break;
 
     // =================================================
@@ -770,7 +770,7 @@ class ReportVisitHospital extends StatelessWidget {
 
         sectionSpacing = 15;
 
-        noteFontSize = 13.5;
+        noteFontSize = 15.5;
         break;
 
     // =================================================
@@ -796,7 +796,7 @@ class ReportVisitHospital extends StatelessWidget {
 
         sectionSpacing = 13;
 
-        noteFontSize = 13;
+        noteFontSize = 15;
         break;
     }
 

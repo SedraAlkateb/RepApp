@@ -343,16 +343,11 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<SearchDoctorsBaseSpResponse> docSearch(
-    int cityId,
-    String name,
-    int repDet,
-  ) async {
+  Future<SearchDoctorsBaseSpResponse> docSearch(String name, int repDet) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry('cityId', cityId.toString()));
     _data.fields.add(MapEntry('name', name));
     _data.fields.add(MapEntry('repDet', repDet.toString()));
     final _options = _setStreamType<SearchDoctorsBaseSpResponse>(
@@ -1531,7 +1526,7 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<Message1Response> updateReci(
+  Future<InsertRecipeBaseResponse> updateReci(
     int reciId,
     int recipeType,
     String repId,
@@ -1624,7 +1619,7 @@ class _AppServiceClient implements AppServiceClient {
     if (active != null) {
       _data.fields.add(MapEntry('active', active));
     }
-    final _options = _setStreamType<Message1Response>(
+    final _options = _setStreamType<InsertRecipeBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -1635,9 +1630,9 @@ class _AppServiceClient implements AppServiceClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Message1Response _value;
+    late InsertRecipeBaseResponse _value;
     try {
-      _value = Message1Response.fromJson(_result.data!);
+      _value = InsertRecipeBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

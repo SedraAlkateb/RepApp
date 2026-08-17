@@ -383,7 +383,7 @@ class AllRecip extends StatelessWidget {
               // ===============================================
               // نفس التنقل الأصلي تماماً
               // ===============================================
-              onTap: () {
+              onTap: item.recipeStatus=="1"?() {
                 initBrandRecModule();
 
                 Navigator.push(
@@ -415,7 +415,7 @@ class AllRecip extends StatelessWidget {
                     ),
                   ),
                 );
-              },
+              }:null,
 
               child: Padding(
                 padding: EdgeInsets.all(

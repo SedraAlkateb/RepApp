@@ -125,7 +125,9 @@ class _HospitalVisitState extends State<HospitalVisit>
                                   children: [
                                     PrescriptionHospitalMenuWidget(
                                         hospitalId:
-                                            hospitals[index].hospitalId),
+                                        hospitals[index].id?? hospitals[index].hospitalId,
+
+                                    ),
                                     const Spacer(),
                                     InkWell(
                                       onTap: () {

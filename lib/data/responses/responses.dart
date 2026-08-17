@@ -1041,8 +1041,10 @@ class ReciResponse {
   String? docId;
   @JsonKey(name: "recipeType")
   String? recipeType;
+  @JsonKey(name: "recipeStatus")
+  String? recipeStatus;
   ReciResponse(this.id, this.docName, this.create_date, this.total,
-      this.note_emp, this.docId, this.recipeType); // from json
+      this.note_emp, this.docId, this.recipeType,this.recipeStatus); // from json
   factory ReciResponse.fromJson(Map<String, dynamic> json) =>
       _$ReciResponseFromJson(json);
   // to json
@@ -1824,8 +1826,10 @@ class RepresentativeFutureResponse {
   String? samplesCount;
   @JsonKey(name: "reptype")
   String reptype;
+  @JsonKey(name: "planDate")
+  String planDate;
   RepresentativeFutureResponse(this.id, this.name, this.flag, this.futurePlan,
-      this.samplesCount, this.reptype);
+      this.samplesCount, this.reptype,this.planDate);
 
   // from json
   factory RepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>

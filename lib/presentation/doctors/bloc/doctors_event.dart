@@ -19,6 +19,7 @@ class SearchDocEvent extends DoctorsEvent {
 
 class CheckReciEvent extends DoctorsEvent {
   final int docId;
+
   final int st;
   CheckReciEvent(this.docId, this.st);
   List<Object?> get props => [docId];

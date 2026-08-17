@@ -102,7 +102,7 @@ class HospitalDetailsResponsiveLayout extends StatelessWidget {
                     maxWidth: pageMaxWidth,
                   ),
                   child: buildBottomButtons(
-                    hospital.hospitalId,
+                    hospital.id??hospital.hospitalId,
                   ),
                 ),
               ),

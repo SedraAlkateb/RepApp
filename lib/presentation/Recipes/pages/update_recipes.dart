@@ -662,13 +662,6 @@ class _UpdateRecipesHospitalState
           groupValue: selectedType,
         ),
 
-        _buildTypeOption(
-          context: context,
-          ui: ui,
-          value: '2',
-          label: 'لاشيء',
-          groupValue: selectedType,
-        ),
       ],
     );
   }

@@ -41,7 +41,127 @@ class _AllRepWithFutureState
 
   int selectedIndex = -1;
 
+  Widget buildDateTimeCard({
+    required BuildContext context,
+    required AppUi ui,
+    required String dateTime,
+  }) {
+    if (dateTime.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
 
+    return    Padding(
+      padding:
+      EdgeInsets.fromLTRB(
+        ui.pagePadding,
+        ui.searchTopPadding,
+        ui.pagePadding,
+        ui.searchBottomPadding,
+      ),
+
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          horizontal: ui.cardPadding,
+          vertical: ui.mediumSpacing,
+        ),
+        decoration: BoxDecoration(
+          // أزرق فاتح هادئ
+          color: const Color(0xFFEFF6FF),
+
+          borderRadius: BorderRadius.circular(
+            ui.cardRadius,
+          ),
+
+          border: Border.all(
+            // أزرق فاتح للحدود
+            color: const Color(0xFFBFDBFE),
+            width: 1,
+          ),
+
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A1E3A5F),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // =================================================
+            // Calendar icon
+            // =================================================
+            Container(
+              width: ui.iconBoxSize,
+              height: ui.iconBoxSize,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xFFDBEAFE),
+                borderRadius: BorderRadius.circular(
+                  ui.smallRadius + 2,
+                ),
+              ),
+              child: Icon(
+                Icons.calendar_month_rounded,
+                size: ui.smallIconSize + 4,
+                color: const Color(0xFF2563EB),
+              ),
+            ),
+
+            SizedBox(
+              width: ui.mediumSpacing,
+            ),
+
+            // =================================================
+            // Date information
+            // =================================================
+            Expanded(
+              child: Column(
+                crossAxisAlignment:
+                CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'التاريخ',
+                    maxLines: 1,
+                    overflow:
+                    TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: ui.smallTextSize,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(
+                        0xFF64748B,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: ui.smallSpacing / 2,
+                  ),
+
+                  Text(
+                    dateTime,
+                    maxLines: 1,
+                    overflow:
+                    TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: ui.bodyTextSize + 1,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(
+                        0xFF1E293B,
+                      ),
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   @override
   void dispose() {
     searchController.dispose();
@@ -68,7 +188,7 @@ class _AllRepWithFutureState
 
         title:
         const Text(
-          "إدارة الخطة الفعالة",
+          "إدارة الخطة المستقبلية",
         ),
       ),
 
@@ -85,9 +205,7 @@ class _AllRepWithFutureState
 
             child: Column(
               children: [
-                // =================================================
-                // Search
-                // =================================================
+                buildDateTimeCard(context: context, ui: ui, dateTime:    context.read<ManageFutureBloc>().dateTime),
                 Padding(
                   padding:
                   EdgeInsets.fromLTRB(
@@ -115,6 +233,11 @@ class _AllRepWithFutureState
                   ),
                 ),
 
+
+                // =================================================
+                // Search
+                // =================================================
+
                 // =================================================
                 // Representatives
                 // =================================================
@@ -124,6 +247,7 @@ class _AllRepWithFutureState
                       ManageFutureState>(
                     builder:
                         (context, state) {
+
                       // ===============================================
                       // نفس مصدر البيانات الأصلي
                       // ===============================================
@@ -133,7 +257,9 @@ class _AllRepWithFutureState
                               .watch<
                               ManageFutureBloc>()
                               .allRepresentative;
-
+if(state is AllSeniorRepState){
+  allRepresentative=state.representatives;
+}
                       // ===============================================
                       // Change Plan Status
                       // ===============================================

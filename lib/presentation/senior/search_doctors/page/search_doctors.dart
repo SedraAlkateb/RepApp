@@ -135,7 +135,7 @@ class _SearchDoctorsState
                                     context,
                                   ).add(
                                     FutureSearchDocEvent(
-                                        UserInfo.cityId  ,
+
                                       searchController
                                           .text,
                                       UserInfo.repId
