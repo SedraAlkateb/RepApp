@@ -129,6 +129,10 @@ class ReportVisitDoctorBloc
           }
           if (normalizeText(value.note).contains(search)) {
             return true;
+          } if (normalizeText(value.target).contains(search)) {
+            return true;
+          } if (normalizeText(value.issue).contains(search)) {
+            return true;
           }
           return false;
         }).toList();
@@ -148,6 +152,12 @@ class ReportVisitDoctorBloc
             return true;
           }
           if (normalizeText(value.note).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.target).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.issue).contains(search)) {
             return true;
           }
           return false;
