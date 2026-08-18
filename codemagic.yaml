@@ -7,6 +7,15 @@ scripts:
       rm -rf ios/.symlinks
       flutter pub get
 
+  - name: Set Build Number
+    script: |
+      echo "Codemagic Build Number: $BUILD_NUMBER"
+
+      if [ -z "$BUILD_NUMBER" ]; then
+        echo "ERROR: BUILD_NUMBER is not available"
+        exit 1
+      fi
+
   - name: Install CocoaPods
     script: |
       cd ios
@@ -16,4 +25,8 @@ scripts:
 
   - name: Build iOS
     script: |
-      flutter build ipa --release
+      echo "Building iOS with build number: $BUILD_NUMBER"
+
+      flutter build ipa \
+        --release \
+        --build-number="$BUILD_NUMBER"
