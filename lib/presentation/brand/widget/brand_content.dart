@@ -76,6 +76,7 @@ class BrandContent extends StatelessWidget {
                       state.brand;
 
                   return BrandListWidget(
+                    physics: NeverScrollableScrollPhysics(),
                     brands: brandModel,
                     shrinkWrap: true,
                   );

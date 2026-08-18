@@ -18,11 +18,12 @@ Future<void> shareReportToWhatsApp({
       "اسم الطبيب: $doctorName\n"
       "الاختصاص الطبي: $specialty\n"
       "تاريخ الزيارة: $visitDate\n"
-      "اسم المندوب: $repName\n"
+      "اسم المندوب:  $repName\n"
       "رقم الهاتف المرجعي: $phoneNumber\n"
       "===================================\n"
       "ملاحظات المكتب العلمي:\n"
-      "$scientificOfficeNote\n";
+      "$scientificOfficeNote\n"
+      "@${repName}";
 
   // 2. خطوة أمان: نسخ التقرير تلقائياً للحافظة (Clipboard) لضمان عدم ضياع البيانات
   await Clipboard.setData(ClipboardData(text: reportText));

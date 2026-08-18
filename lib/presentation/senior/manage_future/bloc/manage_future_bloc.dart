@@ -17,7 +17,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
   AllRepsFutureUsecase allRepsFutureUsecase;
   ChangeRepPlanStatus changeRepPlanStatus;
   AllPlaceUsecase allPlaceUsecase;
-
+  String dateTime="";
   ManageFutureBloc(
       this.allRepsFutureUsecase, this.changeRepPlanStatus, this.allPlaceUsecase)
       : super(ManageFutureInitial()) {
@@ -29,6 +29,9 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           emit(
               AllSeniorRepErrorState(failure: failure));
         }, (data) async {
+         if( data.isNotEmpty){
+           dateTime=data[0].planDate;
+         }
           data.sort((a, b) {
             // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
             int getTeamLeaderWeight(int flagValue) {
@@ -111,9 +114,11 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
               FlagModel(event.brandType),
               currentRep.activePlan,
             currentRep.samplesCount,
-              currentRep.reptype
+              currentRep.reptype,
+            currentRep.planDate
           );
           // 3. إرسال الحالة بقائمة جديدة لتحديث الاستماع في الواجهة
+          dateTime=currentRep.planDate;
           emit(ChangPlanStatusState(List.from(allRepresentative)));
         });
       } else if (event is GetPlaceEvent) {

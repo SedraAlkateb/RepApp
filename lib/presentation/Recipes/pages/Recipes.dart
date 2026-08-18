@@ -572,13 +572,7 @@ class _RecipesPageState extends State<RecipesPage> {
           label: 'الدكتورة',
           groupValue: selectedType,
         ),
-        _buildTypeOption(
-          context: context,
-          ui: ui,
-          value: '2',
-          label: 'لاشيء',
-          groupValue: selectedType,
-        ),
+
       ],
     );
   }

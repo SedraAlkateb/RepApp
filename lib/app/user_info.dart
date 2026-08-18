@@ -1,4 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:flutter/cupertino.dart';
 
 class UserInfo {
   static int percentage = 0;
@@ -33,7 +34,21 @@ class UserInfo {
   static int statusPlan = -1;
   static int totalReci = 0;
   static int remainReci = 0;
-  static int usedReci = 0;
+  static final ValueNotifier<int>
+  usedReciNotifier =
+  ValueNotifier<int>(0);
+
+  static int get usedReci =>
+      usedReciNotifier.value;
+
+  static set usedReci(int value) {
+    if (value < 0) {
+      usedReciNotifier.value = 0;
+      return;
+    }
+
+    usedReciNotifier.value = value;
+  }
   static void initializeUserPlan() {
     statusPlan = UserInfo.repType.i == 5
         ? 5
@@ -66,9 +81,9 @@ class UserInfo {
     samplesCount = data.samplesCount;
     repType = data.repType;
     flag = data.flag;
-    usedReci = data.usedReci;
-    remainReci = data.remainReci;
-    totalReci = data.totalReci;
+    usedReci = data.usedReci ?? 0;
+    remainReci = data.remainReci ?? 0;
+    totalReci = data.totalReci ?? 0;
     // منطق التحقق من الـ Flag كما كان في ملف المين
     flag1 = otherstatus == -1 ? 0 : (data.flag1 ?? 0);
     UserInfo.initializeUserPlan();

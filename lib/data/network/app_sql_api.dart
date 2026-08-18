@@ -535,6 +535,8 @@ class AppSqlApi extends AppSqlApiAbs {
       hospitalSp.totalDocs,
       hospitalSp.visit,
       hospitalSp.flag,
+      hospitalSp.id as id,
+      
       specialization.title as titleSp,
       specialization.flag as flagSp,
       -- حساب عدد الزيارات الفعلي لهذا الاختصاص بالتحديد داخل المشفى
@@ -1255,6 +1257,7 @@ class AppSqlApi extends AppSqlApiAbs {
       hospital.address,
       hospital.placeTitle,
       hospital.note,
+      hospitalSp.id as id ,
       hospitalSp.rate,
       hospitalSp.totalDocs,
       hospitalSp.visit,

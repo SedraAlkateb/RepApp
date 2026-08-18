@@ -8,69 +8,131 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // =====================================================
 
 Widget buildStatsGrid(
-  BuildContext context,
-  InfoRep rep,
-) {
-  final deviceType = AppResponsive.deviceType(context);
+    BuildContext context,
+    InfoRep rep,
+    ) {
+  final AppDeviceType deviceType =
+  AppResponsive.deviceType(context);
 
-  int crossAxisCount;
+  final bool showRecipesOnly =
+      rep.repType == 5 || rep.repType == 6;
 
-  double mainAxisSpacing;
-  double crossAxisSpacing;
-  double childAspectRatio;
+  late int crossAxisCount;
 
-  double titleFontSize;
-  double titleBottomSpacing;
-  double titleRightPadding;
+  late double mainAxisSpacing;
+  late double crossAxisSpacing;
+  late double childAspectRatio;
+
+  late double titleFontSize;
+  late double titleBottomSpacing;
+  late double titleRightPadding;
 
   switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+  // =================================================
+  // Mobile
+  // =================================================
     case AppDeviceType.mobilePortrait:
-      crossAxisCount = 2;
+      crossAxisCount = showRecipesOnly ? 1 : 2;
 
       mainAxisSpacing = 12;
       crossAxisSpacing = 12;
 
-      childAspectRatio = 1.30;
+      childAspectRatio =
+      showRecipesOnly ? 2.70 : 1.30;
 
       titleFontSize = 15;
       titleBottomSpacing = 10;
       titleRightPadding = 4;
       break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+  // =================================================
+  // Tablet Portrait
+  // =================================================
     case AppDeviceType.tabletPortrait:
-      crossAxisCount = 2;
+      crossAxisCount = showRecipesOnly ? 1 : 2;
 
       mainAxisSpacing = 16;
       crossAxisSpacing = 16;
 
-      childAspectRatio = 1.70;
+      childAspectRatio =
+      showRecipesOnly ? 4.50 : 1.70;
 
       titleFontSize = 17;
       titleBottomSpacing = 14;
       titleRightPadding = 6;
       break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+  // =================================================
+  // Tablet Landscape
+  // =================================================
     case AppDeviceType.tabletLandscape:
-      crossAxisCount = 4;
+      crossAxisCount = showRecipesOnly ? 1 : 4;
 
       mainAxisSpacing = 14;
       crossAxisSpacing = 14;
 
-      childAspectRatio = 1.20;
+      childAspectRatio =
+      showRecipesOnly ? 5.50 : 1.20;
 
       titleFontSize = 17;
       titleBottomSpacing = 14;
       titleRightPadding = 6;
       break;
+  }
+
+  final List<Widget> statisticCards;
+
+  if (showRecipesOnly) {
+    statisticCards = [
+      buildStatCard(
+        "الوصفات",
+        rep.recipesCount.toString(),
+        const Color(0xFF8E44AD),
+      ),
+    ];
+  } else {
+    statisticCards = [
+      buildStatCard(
+        "إجمالي الزيارات",
+        rep.totalVisit.toString(),
+        const Color(0xFF1F4E79),
+      ),
+      buildStatCard(
+        "الوصفات",
+        rep.recipesCount.toString(),
+        const Color(0xFF8E44AD),
+      ),
+      buildStatCard(
+        "زيارات الأطباء المحققة",
+        rep.visitDonDoc.toString(),
+        const Color(0xFF2D947A),
+      ),
+      buildStatCard(
+        "زيارات الأطباء المتبقية",
+        rep.totDocVisit.toString(),
+        const Color(0xFFE67E22),
+      ),
+      buildStatCard(
+        "زيارات المشافي المحققة",
+        rep.visitDonHos.toString(),
+        const Color(0xFF2D947A),
+      ),
+      buildStatCard(
+        "عدد زيارات المشافي",
+        rep.totHosVisit.toString(),
+        const Color(0xFFE67E22),
+      ),
+      buildStatCard(
+        "إجمالي المحققة",
+        rep.visitDon.toString(),
+        const Color(0xFF1F4E79),
+      ),
+      buildStatCard(
+        "إجمالي المتبقية",
+        rep.visitNoteYet.toString(),
+        const Color(0xFFE67E22),
+      ),
+    ];
   }
 
   return Column(
@@ -95,89 +157,125 @@ Widget buildStatsGrid(
       ),
 
       // ===============================================
-      // Grid
+      // Responsive Statistics Grid
       // ===============================================
       GridView.count(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+        physics:
+        const NeverScrollableScrollPhysics(),
         crossAxisCount: crossAxisCount,
         mainAxisSpacing: mainAxisSpacing,
         crossAxisSpacing: crossAxisSpacing,
         childAspectRatio: childAspectRatio,
-        children: [
-          buildStatCard(
-            "إجمالي الزيارات",
-            rep.totalVisit.toString(),
-            const Color(0xFF1F4E79),
-          ),
-          buildStatCard(
-            "الوصفات",
-            rep.recipesCount,
-            const Color(0xFF8E44AD),
-          ),
-          buildStatCard(
-            "زيارات الأطباء المحققة",
-            rep.visitDonDoc.toString(),
-            const Color(0xFF2D947A),
-          ),
-          buildStatCard(
-            "زيارات الأطباء المتبقية",
-            rep.totDocVisit.toString(),
-            const Color(0xFFE67E22),
-          ),
-          buildStatCard(
-            "زيارات المشافي المحققة",
-            rep.visitDonHos.toString(),
-            const Color(0xFF2D947A),
-          ),
-          buildStatCard(
-            "عدد زيارات المشافي",
-            rep.totHosVisit.toString(),
-            const Color(0xFFE67E22),
-          ),
-          buildStatCard(
-            "إجمالي المحققة",
-            rep.visitDon.toString(),
-            const Color(0xFF1F4E79),
-          ),
-          buildStatCard(
-            "إجمالي المتبقية",
-            rep.visitNoteYet.toString(),
-            const Color(0xFFE67E22),
-          ),
-        ],
+        children: statisticCards,
       ),
     ],
   );
 }
-
 // =====================================================
 // Tablet Landscape Statistics Grid
 // نفس الـ signature القديم
 // =====================================================
 
 Widget buildStatsGridTablet(
-  InfoRep rep,
-) {
+    InfoRep rep,
+    ) {
+  final bool showRecipesOnly =
+      rep.repType == 5 || rep.repType == 6;
+
+  final List<Widget> statisticCards;
+
+  if (showRecipesOnly) {
+    statisticCards = [
+      buildStatCard(
+        "الوصفات",
+        rep.recipesCount.toString(),
+        const Color(0xFF7C3AED),
+      ),
+    ];
+  } else {
+    statisticCards = [
+      // =================================================
+      // Overview
+      // =================================================
+      buildStatCard(
+        "إجمالي الزيارات",
+        rep.totalVisit.toString(),
+        const Color(0xFF1F4E79),
+      ),
+
+      buildStatCard(
+        "الوصفات",
+        rep.recipesCount.toString(),
+        const Color(0xFF7C3AED),
+      ),
+
+      // =================================================
+      // Total Visits By Type
+      // =================================================
+      buildStatCard(
+        "إجمالي زيارات الأطباء",
+        rep.totDocVisit.toString(),
+        const Color(0xFF3F7FBF),
+      ),
+
+      buildStatCard(
+        "إجمالي زيارات المشافي",
+        rep.totHosVisit.toString(),
+        const Color(0xFF3F7FBF),
+      ),
+
+      // =================================================
+      // Completed
+      // =================================================
+      buildStatCard(
+        "زيارات الأطباء المحققة",
+        rep.visitDonDoc.toString(),
+        const Color(0xFF2D947A),
+      ),
+
+      buildStatCard(
+        "زيارات المشافي المحققة",
+        rep.visitDonHos.toString(),
+        const Color(0xFF2D947A),
+      ),
+
+      // =================================================
+      // Remaining
+      // =================================================
+      buildStatCard(
+        "زيارات الأطباء المتبقية",
+        (rep.totDocVisit - rep.visitDonDoc)
+            .toString(),
+        const Color(0xFFE67E22),
+      ),
+
+      buildStatCard(
+        "زيارات المشافي المتبقية",
+        (rep.totHosVisit - rep.visitDonHos)
+            .toString(),
+        const Color(0xFFE67E22),
+      ),
+    ];
+  }
+
   return Container(
     width: double.infinity,
-    padding: const EdgeInsets.all(
-      16,
-    ),
+    padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.55),
-      borderRadius: BorderRadius.circular(
-        20,
-      ),
+      color: Colors.white.withValues(alpha: 0.55),
+      borderRadius: BorderRadius.circular(20),
       border: Border.all(
-        color: Colors.black.withOpacity(0.025),
+        color: Colors.black.withValues(
+          alpha: 0.025,
+        ),
       ),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // =============================================
-        // Section Title
+        // Section title
         // =============================================
         const Padding(
           padding: EdgeInsets.only(
@@ -199,84 +297,20 @@ Widget buildStatsGridTablet(
         // =============================================
         GridView.count(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 4,
+          physics:
+          const NeverScrollableScrollPhysics(),
+          crossAxisCount:
+          showRecipesOnly ? 1 : 4,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 1.20,
-          children: [
-            // =====================================================
-            // 1. Overview
-            // =====================================================
-            buildStatCard(
-              "إجمالي الزيارات",
-              rep.totalVisit.toString(),
-              const Color(0xFF1F4E79),
-            ),
-
-            buildStatCard(
-              "الوصفات",
-              rep.recipesCount,
-              const Color(0xFF7C3AED),
-            ),
-
-            // =====================================================
-            // 2. Total Visits By Type
-            // =====================================================
-            buildStatCard(
-              "إجمالي زيارات الأطباء",
-              rep.totDocVisit.toString(),
-              const Color(0xFF3F7FBF),
-            ),
-
-            buildStatCard(
-              "إجمالي زيارات المشافي",
-              rep.totHosVisit.toString(),
-              const Color(0xFF3F7FBF),
-            ),
-
-            // =====================================================
-            // 3. Completed
-            // =====================================================
-            buildStatCard(
-              "زيارات الأطباء المحققة",
-              "${rep.visitDonDoc}",
-              const Color(0xFF2D947A),
-            ),
-
-            buildStatCard(
-              "زيارات المشافي المحققة",
-             "${ rep.visitDonHos}",
-              const Color(0xFF2D947A),
-            ),
-
-            // =====================================================
-            // 4. Remaining
-            // =====================================================
-            buildStatCard(
-              "زيارات الأطباء المتبقية",
-              (
-                  rep.totDocVisit -
-                      rep.visitDonDoc
-              ).toString(),
-              const Color(0xFFE67E22),
-            ),
-
-            buildStatCard(
-              "زيارات المشافي المتبقية",
-              (
-                  rep.totHosVisit -
-              rep.visitDonHos
-              ).toString(),
-              const Color(0xFFE67E22),
-            ),
-          ],
+          childAspectRatio:
+          showRecipesOnly ? 5.50 : 1.20,
+          children: statisticCards,
         ),
       ],
     ),
   );
 }
-
 // =====================================================
 // Stat Card
 // لا نغيّر الـ signature

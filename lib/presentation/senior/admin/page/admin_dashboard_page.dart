@@ -8,7 +8,6 @@ import 'package:domina_app/presentation/senior/admin/widget/interactive_admin_ca
 import 'package:domina_app/presentation/senior/admin/widget/square_interactive_card.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
-import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -141,7 +140,7 @@ class AdminDashboardPage extends StatelessWidget {
         InteractiveAdminCard(
           icon: Icons.assignment_outlined,
           title: 'إدارة التقارير العامة الخاصة بالسينيور',
-          subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+          subtitle: 'متابعة أداء السينيور في مراقبة مندوبينهم',
           iconColor: Colors.purple,
           isLandscape: isLandscape,
           onTap: () {
@@ -156,7 +155,7 @@ class AdminDashboardPage extends StatelessWidget {
         InteractiveAdminCard(
           icon: Icons.assignment_outlined,
           title: 'إدارة التقارير العامة الخاصة بالتيم ليدر',
-          subtitle: 'متابعة أداء المشرفين في مراقبة مندوبينهم',
+          subtitle: 'متابعة أداء التيم ليدر في مراقبة مندوبينهم',
           iconColor: Colors.purple,
           isLandscape: isLandscape,
           onTap: () {

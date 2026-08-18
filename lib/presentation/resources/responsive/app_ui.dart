@@ -331,13 +331,13 @@ class AppUi {
   double get bodyTextSize {
     switch (deviceType) {
       case AppDeviceType.mobilePortrait:
-        return 12;
-
-      case AppDeviceType.tabletPortrait:
         return 14;
 
+      case AppDeviceType.tabletPortrait:
+        return 16;
+
       case AppDeviceType.tabletLandscape:
-        return 13;
+        return 15;
     }
   }
 

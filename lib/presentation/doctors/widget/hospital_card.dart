@@ -22,24 +22,19 @@ class HospitalCardItem extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-
       padding: EdgeInsets.all(
         ui.cardPadding,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(
@@ -53,64 +48,48 @@ class HospitalCardItem extends StatelessWidget {
           ),
         ],
       ),
-
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // =====================================================
           // Header
           // نفس ترتيب الكارد الأصلي
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // =================================================
               // Specialization
               // =================================================
               if (hospital.titleSp != null &&
-                  hospital.titleSp!
-                      .trim()
-                      .isNotEmpty) ...[
+                  hospital.titleSp!.trim().isNotEmpty) ...[
                 Flexible(
                   flex: 0,
                   child: Container(
-                    padding:
-                    EdgeInsets.symmetric(
-                      horizontal:
-                      ui.mediumSpacing,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ui.mediumSpacing,
                       vertical: 5,
                     ),
-                    decoration:
-                    BoxDecoration(
-                      color: ColorManager
-                          .medicalPrimary
-                          .withOpacity(
+                    decoration: BoxDecoration(
+                      color: ColorManager.medicalPrimary.withOpacity(
                         0.08,
                       ),
-                      borderRadius:
-                      BorderRadius.circular(
+                      borderRadius: BorderRadius.circular(
                         ui.smallRadius,
                       ),
                     ),
                     child: Text(
                       hospital.titleSp!,
                       maxLines: 1,
-                      overflow:
-                      TextOverflow.ellipsis,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: ColorManager
-                            .medicalPrimary,
-                        fontSize:
-                        ui.smallTextSize,
-                        fontWeight:
-                        FontWeight.w600,
+                        color: ColorManager.medicalPrimary,
+                        fontSize: ui.smallTextSize,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
-
                 SizedBox(
                   width: ui.mediumSpacing,
                 ),
@@ -124,15 +103,11 @@ class HospitalCardItem extends StatelessWidget {
                   hospital.title ?? '',
                   textAlign: TextAlign.end,
                   maxLines: 2,
-                  overflow:
-                  TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize:
-                    ui.cardTitleSize,
-                    fontWeight:
-                    FontWeight.w700,
-                    color: ColorManager
-                        .medicalPrimary,
+                    fontSize: ui.cardTitleSize,
+                    fontWeight: FontWeight.w700,
+                    color: ColorManager.medicalPrimary,
                     height: 1.35,
                   ),
                 ),
@@ -149,28 +124,21 @@ class HospitalCardItem extends StatelessWidget {
           // =====================================================
           _buildInfoRow(
             ui: ui,
-            icon:
-            Icons.location_on_outlined,
-            text:
-            hospital.placeTitle,
+            icon: Icons.location_on_outlined,
+            text: hospital.placeTitle,
           ),
 
           _buildInfoRow(
             ui: ui,
-            icon:
-            Icons.map_outlined,
-            text:
-            hospital.address,
+            icon: Icons.map_outlined,
+            text: hospital.address,
           ),
 
           _buildInfoRow(
             ui: ui,
-            icon:
-            Icons.star_rate_outlined,
-            text:
-            hospital.rate,
-            iconColor:
-            ColorManager.medicalSecondary,
+            icon: Icons.star_rate_outlined,
+            text: hospital.rate,
+            iconColor: ColorManager.medicalSecondary,
           ),
 
           SizedBox(
@@ -196,15 +164,11 @@ class HospitalCardItem extends StatelessWidget {
           Row(
             children: [
               PrescriptionHospitalMenuWidget(
-                hospitalId:
-                hospital.hospitalId,
+                hospitalId: hospital.id ?? hospital.hospitalId,
               ),
-
               const Spacer(),
-
               InkWell(
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   ui.smallRadius,
                 ),
                 onTap: () {
@@ -214,10 +178,10 @@ class HospitalCardItem extends StatelessWidget {
                     arguments: hospital,
                   );
                 },
-                child: buildCardButton(context,
+                child: buildCardButton(
+                  context,
                   'عرض التفاصيل',
-                  ColorManager
-                      .medicalPrimary,
+                  ColorManager.medicalPrimary,
                   Colors.white,
                   Icons.directions_run,
                 ),
@@ -237,11 +201,9 @@ class HospitalCardItem extends StatelessWidget {
     required AppUi ui,
     required IconData icon,
     required String? text,
-    Color iconColor =
-    const Color(0xFF94A3B8),
+    Color iconColor = const Color(0xFF94A3B8),
   }) {
-    final value =
-        text?.trim() ?? '';
+    final value = text?.trim() ?? '';
 
     if (value.isEmpty) {
       return const SizedBox.shrink();
@@ -249,37 +211,30 @@ class HospitalCardItem extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical:
-        ui.smallSpacing / 2,
+        vertical: ui.smallSpacing / 2,
       ),
       child: Row(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             icon,
             size: ui.smallIconSize + 2,
             color: iconColor,
           ),
-
           SizedBox(
             width: ui.smallSpacing,
           ),
-
           Expanded(
             child: Text(
               value,
               maxLines: 3,
-              overflow:
-              TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(
                   0xFF475569,
                 ),
-                fontSize:
-                ui.bodyTextSize,
-                fontWeight:
-                FontWeight.w500,
+                fontSize: ui.bodyTextSize,
+                fontWeight: FontWeight.w500,
                 height: 1.4,
               ),
             ),

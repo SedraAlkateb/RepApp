@@ -26,16 +26,23 @@ class ActivePlanBloc extends Bloc<ActivePlanEvent, ActivePlanState> {
           emit(AllActivePlanState(data));
         });
       } else if (event is SearchActivePlanEvent) {
-        String search = normalizeText(event.search);
+        final String search = normalizeText(event.search);
+
         activePlanSearch = activePlan.where((value) {
           if (normalizeText(value.title).contains(search)) {
             return true;
-          } else if (normalizeText(value.pharmaceuticalFormTitle)
-              .contains(search)) {
+          } else if (value.spPlan.any(
+                (specialty) => normalizeText(specialty.name).contains(search),
+          )) {
+            return true;
+          }else if (
+          normalizeText(value.pharmaceuticalFormTitle).contains(search)) {
             return true;
           }
+
           return false;
         }).toList();
+
         emit(AllActivePlanState(activePlanSearch));
       }
     });

@@ -104,7 +104,7 @@ class CustomAppDrawer extends StatelessWidget {
         statsGap = 12;
         statVerticalPadding = 11;
         statRadius = 15;
-        statTitleFontSize = 11;
+        statTitleFontSize = 13;
         statCountFontSize = 18;
         break;
 
@@ -147,7 +147,7 @@ class CustomAppDrawer extends StatelessWidget {
         statsGap = 14;
         statVerticalPadding = 13;
         statRadius = 16;
-        statTitleFontSize = 12;
+        statTitleFontSize = 14;
         statCountFontSize = 20;
         break;
 
@@ -190,7 +190,7 @@ class CustomAppDrawer extends StatelessWidget {
         statsGap = 14;
         statVerticalPadding = 13;
         statRadius = 16;
-        statTitleFontSize = 12;
+        statTitleFontSize = 14;
         statCountFontSize = 20;
         break;
     }
@@ -400,15 +400,25 @@ class CustomAppDrawer extends StatelessWidget {
                 ),
 
                 Flexible(
-                  child: Text(
-                    "الوصفات المنجزة: ${UserInfo.usedReci}",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: chipFontSize,
-                      fontWeight: FontWeight.w600,
-                      color: ColorManager.primary1,
-                    ),
+                  child: ValueListenableBuilder<int>(
+                    valueListenable:
+                    UserInfo.usedReciNotifier,
+                    builder: (
+                        context,
+                        usedReci,
+                        child,
+                        ) {
+                      return Text(
+                        "الوصفات المنجزة: $usedReci",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: chipFontSize,
+                          fontWeight: FontWeight.w600,
+                          color: ColorManager.primary1,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

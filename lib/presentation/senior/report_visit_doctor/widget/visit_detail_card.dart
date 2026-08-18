@@ -193,18 +193,11 @@ Widget _buildReportBottomSheet({
           // =================================================
           // Dark Background
           // =================================================
-          GestureDetector(
-            onTap: () {
-              bloc.add(
-                DocNoIsExpandedNoteEvent(),
-              );
-            },
-            child: ModalBarrier(
-              color: Colors.black.withOpacity(
-                0.42,
-              ),
-              dismissible: true,
+          ModalBarrier(
+            color: Colors.black.withOpacity(
+              0.42,
             ),
+           dismissible: false,
           ),
 
           // =================================================
@@ -480,15 +473,6 @@ Widget _buildReportBottomSheet({
                                             .star_outline,
                                       ),
 
-                                      TextInfo(
-                                        title:
-                                        "الأهداف",
-                                        supTitle:
-                                        doctorNoteModel
-                                            .target,
-                                        icon: Icons
-                                            .ads_click,
-                                      ),
                                     ],
 
                                     SizedBox(
@@ -502,7 +486,6 @@ Widget _buildReportBottomSheet({
                                     // =============================
                                     _buildResponsiveNoteCard(
                                       context,
-
                                       title:
                                       "ملاحظات المكتب العلمي",
 
@@ -541,7 +524,7 @@ Widget _buildReportBottomSheet({
                                       context,
 
                                       title:
-                                      "ملاحظات مستودع قاسيون",
+                                      "ملاحظات صيدلية مجاورة",
 
                                       content:
                                       doctorNoteModel
@@ -554,7 +537,24 @@ Widget _buildReportBottomSheet({
                                       icon: Icons
                                           .inventory_2_outlined,
                                     ),
+                                    _buildResponsiveNoteCard(
+                                      context,
 
+                                      title:
+                                      "الهدف من الزيارة",
+
+                                      content:
+                                      doctorNoteModel
+                                          .target,
+
+
+                                      accentColor:
+                                      ColorManager
+                                          .primary1,
+
+                                      icon: Icons
+                                          .task_alt_rounded,
+                                    ),
                                     // =============================
                                     // Samples
                                     // =============================
@@ -837,8 +837,7 @@ Widget _buildResponsiveNoteCard(
       required IconData icon,
     }) {
   if (content == null ||
-      content.trim().isEmpty ||
-      content.trim() == ".") {
+      content.trim().isEmpty ) {
     return const SizedBox.shrink();
   }
 
@@ -865,7 +864,7 @@ Widget _buildResponsiveNoteCard(
       iconSize = 15;
 
       titleFontSize = 11.5;
-      contentFontSize = 12;
+      contentFontSize = 14;
 
       bottomSpacing = 10;
       break;
@@ -878,7 +877,7 @@ Widget _buildResponsiveNoteCard(
       iconSize = 18;
 
       titleFontSize = 13;
-      contentFontSize = 13.5;
+      contentFontSize = 15.5;
 
       bottomSpacing = 12;
       break;
@@ -890,8 +889,8 @@ Widget _buildResponsiveNoteCard(
       iconBoxSize = 32;
       iconSize = 16;
 
-      titleFontSize = 12;
-      contentFontSize = 12.5;
+      titleFontSize = 16;
+      contentFontSize = 14.5;
 
       bottomSpacing = 10;
       break;
@@ -1844,15 +1843,15 @@ Widget buildBulletItem(
 
       switch (deviceType) {
         case AppDeviceType.mobilePortrait:
-          fontSize = 11.5;
-          break;
-
-        case AppDeviceType.tabletPortrait:
           fontSize = 13.5;
           break;
 
+        case AppDeviceType.tabletPortrait:
+          fontSize = 15.5;
+          break;
+
         case AppDeviceType.tabletLandscape:
-          fontSize = 12.5;
+          fontSize = 14.5;
           break;
       }
 

@@ -97,12 +97,11 @@ abstract class Repository {
   Future<Either<Failure, Message1Response>> readAllVisits(ReadAll readAll);
   Future<Either<Failure, List<DocdoctorsModel>>> docReport(int docId);
   Future<Either<Failure, List<doctorsModel>>> docSearch(
-    int cityId,
     String name,
       int repDet
   );
   Future<Either<Failure, List<ReciModel>>> getAllRepReci(int repDet);
-  Future<Either<Failure, Message1Response>> updateReci(
+  Future<Either<Failure, InsertRecResponse>> updateReci(
       UpdateReciRequest reciReq);
   Future<Either<Failure, DoctorModel>> getDocInfo(int docId);
   Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(

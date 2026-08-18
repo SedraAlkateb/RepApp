@@ -1682,6 +1682,7 @@ class CheckActiveModel {
 //       specialization.title as titleSp
 
 class HospitalSpAllModel {
+  int ?id;
   int hospitalId;
   String? title;
   String? address;
@@ -1695,6 +1696,7 @@ class HospitalSpAllModel {
   int? flagSp;
 
   HospitalSpAllModel(
+
       this.hospitalId,
       this.title,
       this.address,
@@ -1705,10 +1707,11 @@ class HospitalSpAllModel {
       this.visit,
       this.titleSp,
       this.flagSp,
-      {this.visited});
+      {this.visited,   this.id,});
 
   Map<String, dynamic> toMap() {
     return {
+      'id':id,
       'hospitalId': hospitalId,
       'title': title,
       'address': address,
@@ -1725,6 +1728,8 @@ class HospitalSpAllModel {
 
   factory HospitalSpAllModel.fromMap(Map<String, dynamic> map) {
     return HospitalSpAllModel(
+
+      id: map['id'],
         map['hospitalId'],
         map['title'],
         map['address'],
@@ -2153,9 +2158,9 @@ class ReciModel {
   String? note_emp;
   String docId;
   String recipeType;
-
+  String recipeStatus;
   ReciModel(this.id, this.docName, this.create_date, this.total, this.note_emp,
-      this.docId, this.recipeType);
+      this.docId, this.recipeType, this.recipeStatus);
 }
 
 class PlanBrandSp {
@@ -2292,9 +2297,10 @@ class AllRepresentativeFuture {
   FlagModel flag;
   int samplesCount;
   RepType reptype;
+  String planDate;
 
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan,
-      this.samplesCount, this.reptype);
+      this.samplesCount, this.reptype, this.planDate);
 }
 
 class WhoReadModel {
@@ -2393,7 +2399,7 @@ Color getColor(int flag) {
       return const Color(0xFF0288D1);
 
     case 1:
-      // بانتظار موافقة المشرف: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
+      // بانتظار موافقة supervisor: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
       return const Color(0xFFE53935);
 
     case 2:
@@ -2462,12 +2468,14 @@ class PlanRepsModel {
   PlanRepsModel(this.id, this.name, this.repPlan, this.totalVisit,
       this.totalUnReadVisit, this.totalReadVisit);
 }
-class DocHosByPlaceAndSp{
+
+class DocHosByPlaceAndSp {
   List<DoctorSenModel> doctors;
   List<HospitalSpModel> hospitals;
 
   DocHosByPlaceAndSp(this.doctors, this.hospitals);
 }
+
 class DoctorSenModel {
   String? docId;
   String? title;

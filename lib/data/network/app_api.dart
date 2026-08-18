@@ -56,15 +56,11 @@ abstract class AppServiceClient {
   @POST("/getAllPlanBrands.php") //
 
   Future<AllPlanBrandsBaseResponse> getAllPlanBrands(
-
       @Part(name: "repPlanIdActive") int repPlanIdActive,
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
   @POST("/admin/docSearch.php") //
   Future<SearchDoctorsBaseSpResponse> docSearch(
-    @Part(name: "cityId") int cityId,
-    @Part(name: "name") String name,
-      @Part(name: "repDet") int repDet,
-  );
+      @Part(name: "name") String name, @Part(name: "repDet") int repDet);
 
   @POST("/admin/docReport.php") //
   Future<DocDoctorsBaseResponse> docReport(
@@ -238,7 +234,7 @@ abstract class AppServiceClient {
     @Part(name: "docId") int docId,
   );
   @POST("/reci/updateReci.php") //
-  Future<Message1Response> updateReci(
+  Future<InsertRecipeBaseResponse> updateReci(
     @Part(name: "reciId") int reciId,
     @Part(name: "recipeType") int recipeType,
     @Part(name: "repId") String repId,
@@ -325,8 +321,7 @@ abstract class AppServiceClient {
   );
   @POST("/admin/getSpDocHos.php")
   Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(
-      @Part(name: "repDet") int repDet,
-      {
+    @Part(name: "repDet") int repDet, {
     @Part(name: "spId") int? spId,
     @Part(name: "placeId") int? placeId,
   });

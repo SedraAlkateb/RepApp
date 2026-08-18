@@ -443,6 +443,7 @@ extension HospitalMapper on HospitalSpAllModel? {
 extension HospitalSpMapper on HospitalSpModel? {
   HospitalSpAllModel toDomain() {
     return HospitalSpAllModel(
+   id:  this?.id ?? Constants.zero,
       this?.hospitalId ?? Constants.zero,
       this?.title ?? Constants.empty,
       this?.address ?? Constants.empty,
@@ -842,13 +843,15 @@ extension NoVisitDocMapper on NoVisitDoctorResponse? {
 extension ReciMapper on ReciResponse? {
   ReciModel toDomain() {
     return ReciModel(
-        this?.id ?? Constants.empty,
-        this?.docName ?? Constants.empty,
-        this?.create_date ?? Constants.empty,
-        this?.total ?? Constants.empty,
-        this?.note_emp ?? Constants.empty,
-        this?.docId ?? Constants.empty,
-        this?.recipeType ?? Constants.empty);
+      this?.id ?? Constants.empty,
+      this?.docName ?? Constants.empty,
+      this?.create_date ?? Constants.empty,
+      this?.total ?? Constants.empty,
+      this?.note_emp ?? Constants.empty,
+      this?.docId ?? Constants.empty,
+      this?.recipeType ?? Constants.empty,
+      this?.recipeStatus ?? Constants.empty,
+    );
   }
 }
 
@@ -991,12 +994,14 @@ extension AllRepresentativeFutureMapper
 extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
   AllRepresentativeFuture toDomain() {
     return AllRepresentativeFuture(
-        int.parse(this?.id ?? "0"),
-        this?.name ?? Constants.empty,
-        FlagModel(int.parse(this?.flag ?? "0")),
-        int.parse(this?.futurePlan ?? "0"),
-        int.parse(this?.samplesCount ?? "0"),
-        RepType.fromIntS(this?.reptype));
+      int.parse(this?.id ?? "0"),
+      this?.name ?? Constants.empty,
+      FlagModel(int.parse(this?.flag ?? "0")),
+      int.parse(this?.futurePlan ?? "0"),
+      int.parse(this?.samplesCount ?? "0"),
+      RepType.fromIntS(this?.reptype),
+      this?.planDate ?? Constants.empty,
+    );
   }
 }
 
@@ -1117,18 +1122,19 @@ extension PlanRepsBaseMapper on PlanRepsBaseResponse? {
     return rep;
   }
 }
+
 extension DocHosByPlaceAndSpMapper on GetDocHosByPlaceOrSpBaseResponse? {
   DocHosByPlaceAndSp toDomain() {
     List<DoctorSenModel> doctors =
-    (this!.docHos?.doctors?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<DoctorSenModel>()
-        .toList();
+        (this!.docHos?.doctors?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<DoctorSenModel>()
+            .toList();
     List<HospitalSpModel> hospitals =
-    (this!.docHos?.hospitals?.map((response) => response.toDomain()) ??
-        const Iterable.empty())
-        .cast<HospitalSpModel>()
-        .toList();
+        (this!.docHos?.hospitals?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<HospitalSpModel>()
+            .toList();
     return DocHosByPlaceAndSp(doctors, hospitals);
   }
 }

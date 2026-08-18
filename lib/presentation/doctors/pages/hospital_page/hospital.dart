@@ -54,8 +54,7 @@ class _HospitalState extends State<Hospital> {
           // نفس مصدر البيانات الأصلي
           // =====================================================
           List<HospitalSpAllModel> hospitalModel =
-              context
-                  .read<DoctorsBloc>()
+              BlocProvider.of<DoctorsBloc>(context)
                   .hospital;
 
           if (state

@@ -1113,11 +1113,11 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<doctorsModel>>> docSearch(
-      int cityId, String name, int repDet) async {
+      String name, int repDet) async {
     try {
       if (await _networkInfo.isConnected) {
         final response =
-            await _remoteDataSource.docSearch(cityId, name, repDet);
+            await _remoteDataSource.docSearch( name, repDet);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1253,14 +1253,14 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, Message1Response>> updateReci(
+  Future<Either<Failure, InsertRecResponse>> updateReci(
       UpdateReciRequest reciReq) async {
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.updateReci(reciReq);
         if (response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
-          return Right(response);
+          return Right(response.toDomain());
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);

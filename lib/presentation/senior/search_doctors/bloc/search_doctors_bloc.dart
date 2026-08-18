@@ -36,7 +36,7 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
         representative = [];
         emit(FutureSearchDoctorsLoadingState());
         (await searchDoctorsUsecase.execute(
-         event.cityId , event.name,event.id)).fold(
+         event.name,event.id)).fold(
             (failure) {
           emit(FutureSearchDoctorsErrorState(failure: failure));
         }, (data) async {
