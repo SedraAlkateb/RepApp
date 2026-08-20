@@ -1386,7 +1386,7 @@ class RepType {
   static RepType fromInt(int value) {
     return switch (value) {
       4 => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
-      5 => RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      5 => RepType(5, "team leader", color: const Color(0xFF3F7FBF)), // splash2
       6 => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
       7 => RepType(7, "مندوب",
           color: const Color(0xFFD4AF37)), // secondary (الذهبي)
@@ -1399,7 +1399,7 @@ class RepType {
       "4" =>
         RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
       "5" =>
-        RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+        RepType(5, "team leader", color: const Color(0xFF3F7FBF)), // splash2
       "6" => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
       "7" => RepType(7, "مندوب",
           color: const Color(0xFFD4AF37)), // secondary (الذهبي)
@@ -1412,8 +1412,8 @@ class RepType {
     return switch (name) {
       "supervisor" =>
         RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
-      "teamleader" =>
-        RepType(5, "teamleader", color: const Color(0xFF3F7FBF)), // splash2
+      "team leader" =>
+        RepType(5, "team leader", color: const Color(0xFF3F7FBF)), // splash2
       "senior" =>
         RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
       "مندوب" => RepType(7, "مندوب",
@@ -1978,7 +1978,7 @@ class FlagModel {
       case 4:
         return "بانتظار موافقة المستودع";
       case 5:
-        return "بانتظار TeamLeader";
+        return "بانتظار Team Leader";
       case 6:
         return "بانتظار موافقة Senior";
       default:
@@ -2438,7 +2438,7 @@ class StatusPlanModel {
 List<StatusPlanModel> statusPlanSupervisor = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
   StatusPlanModel(6, "بانتظار موافقة Senior"),
-  StatusPlanModel(5, "بانتظار TeamLeader"),
+  StatusPlanModel(5, "بانتظار Team Leader"),
 ];
 List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),

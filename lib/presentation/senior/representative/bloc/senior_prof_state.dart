@@ -295,3 +295,23 @@ final class DocHosLoadingState extends SeniorProfState {
   List<Object?> get props => [];
 }
 //
+final class SenAllCityBaseState extends SeniorProfState {
+  final List<CityModel> CityBases;
+  SenAllCityBaseState(this.CityBases);
+  @override
+  List<Object?> get props => [CityBases];
+}
+
+final class SenAllCityBaseErrorState extends SeniorProfState {
+  final Failure failure;
+  SenAllCityBaseErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+final class SenAllCityBaseLoadingState extends SeniorProfState {
+  @override
+  SenAllCityBaseLoadingState();
+  @override
+  List<Object?> get props => [];
+}

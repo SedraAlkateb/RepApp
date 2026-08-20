@@ -57,7 +57,7 @@ class DrawerPage extends StatelessWidget {
           }
         },
         child:    CustomAppDrawer(
-          roleTitle: "TeamLeader",
+          roleTitle: "Team Leader",
           menuItems: _getTeamLeaderItems(context),
           showStats: false,
         ),

@@ -486,59 +486,6 @@ Widget _buildReportBottomSheet({
                                     // =============================
                                     _buildResponsiveNoteCard(
                                       context,
-                                      title:
-                                      "ملاحظات المكتب العلمي",
-
-                                      content:
-                                      doctorNoteModel
-                                          .note,
-
-                                      accentColor:
-                                      ColorManager
-                                          .primary1,
-
-                                      icon: Icons
-                                          .science_outlined,
-                                    ),
-
-                                    _buildResponsiveNoteCard(
-                                      context,
-
-                                      title:
-                                      "ملاحظات إضافية",
-
-                                      content:
-                                      doctorNoteModel
-                                          .special,
-
-                                      accentColor:
-                                      Colors
-                                          .amber
-                                          .shade800,
-
-                                      icon: Icons
-                                          .note_alt_outlined,
-                                    ),
-
-                                    _buildResponsiveNoteCard(
-                                      context,
-
-                                      title:
-                                      "ملاحظات صيدلية مجاورة",
-
-                                      content:
-                                      doctorNoteModel
-                                          .issue,
-
-                                      accentColor:
-                                      ColorManager
-                                          .secondaryColor2,
-
-                                      icon: Icons
-                                          .inventory_2_outlined,
-                                    ),
-                                    _buildResponsiveNoteCard(
-                                      context,
 
                                       title:
                                       "الهدف من الزيارة",
@@ -555,6 +502,59 @@ Widget _buildReportBottomSheet({
                                       icon: Icons
                                           .task_alt_rounded,
                                     ),
+                                    _buildResponsiveNoteCard(
+                                      context,
+                                      title:
+                                      "ملاحظات المكتب العلمي",
+
+                                      content:
+                                      doctorNoteModel
+                                          .note,
+
+                                      accentColor:
+                                      ColorManager
+                                          .primary1,
+
+                                      icon: Icons
+                                          .science_outlined,
+                                    ),
+                                    _buildResponsiveNoteCard(
+                                      context,
+
+                                      title:
+                                      "ملاحظات صيدلية مجاورة",
+
+                                      content:
+                                      doctorNoteModel
+                                          .issue,
+
+                                      accentColor:
+                                      ColorManager
+                                          .primary1,
+
+                                      icon: Icons
+                                          .inventory_2_outlined,
+                                    ),
+                                    _buildResponsiveNoteCard(
+                                      context,
+
+                                      title:
+                                      "ملاحظات إضافية",
+
+                                      content:
+                                      doctorNoteModel
+                                          .special,
+
+                                      accentColor:
+                                      ColorManager
+                                          .primary1,
+
+                                      icon: Icons
+                                          .note_alt_outlined,
+                                    ),
+
+
+
                                     // =============================
                                     // Samples
                                     // =============================

@@ -97,39 +97,57 @@ Widget buildStatsGrid(
         rep.totalVisit.toString(),
         const Color(0xFF1F4E79),
       ),
+
       buildStatCard(
         "الوصفات",
         rep.recipesCount.toString(),
-        const Color(0xFF8E44AD),
+        const Color(0xFF7C3AED),
       ),
+
+      // =================================================
+      // Total Visits By Type
+      // =================================================
+      buildStatCard(
+        "إجمالي زيارات الأطباء",
+        rep.totDocVisit.toString(),
+        const Color(0xFF3F7FBF),
+      ),
+
+      buildStatCard(
+        "إجمالي زيارات المشافي",
+        rep.totHosVisit.toString(),
+        const Color(0xFF3F7FBF),
+      ),
+
+      // =================================================
+      // Completed
+      // =================================================
       buildStatCard(
         "زيارات الأطباء المحققة",
         rep.visitDonDoc.toString(),
         const Color(0xFF2D947A),
       ),
-      buildStatCard(
-        "زيارات الأطباء المتبقية",
-        rep.totDocVisit.toString(),
-        const Color(0xFFE67E22),
-      ),
+
       buildStatCard(
         "زيارات المشافي المحققة",
         rep.visitDonHos.toString(),
         const Color(0xFF2D947A),
       ),
+
+      // =================================================
+      // Remaining
+      // =================================================
       buildStatCard(
-        "عدد زيارات المشافي",
-        rep.totHosVisit.toString(),
+        "زيارات الأطباء المتبقية",
+        (rep.totDocVisit - rep.visitDonDoc)
+            .toString(),
         const Color(0xFFE67E22),
       ),
+
       buildStatCard(
-        "إجمالي المحققة",
-        rep.visitDon.toString(),
-        const Color(0xFF1F4E79),
-      ),
-      buildStatCard(
-        "إجمالي المتبقية",
-        rep.visitNoteYet.toString(),
+        "زيارات المشافي المتبقية",
+        (rep.totHosVisit - rep.visitDonHos)
+            .toString(),
         const Color(0xFFE67E22),
       ),
     ];

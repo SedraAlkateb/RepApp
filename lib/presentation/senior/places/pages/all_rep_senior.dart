@@ -3,291 +3,477 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
 import 'package:domina_app/presentation/senior/places/widget/rep_card_widget.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
-import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AllRepSenior extends StatefulWidget {
-  final int cityId;
-  final String cityname;
-  final int repId;
-
   const AllRepSenior({
     super.key,
-    required this.cityId,
-    required this.cityname,
-    required this.repId,
   });
 
   @override
-  State<AllRepSenior> createState() => _AllRepSeniorState();
+  State<AllRepSenior> createState() =>
+      _AllRepSeniorState();
 }
 
-class _AllRepSeniorState extends State<AllRepSenior> {
-  final TextEditingController _searchController =
+class _AllRepSeniorState
+    extends State<AllRepSenior> {
+  final TextEditingController
+  _searchController =
   TextEditingController();
 
-  final RefreshController _refreshController =
+  final RefreshController
+  _refreshController =
   RefreshController(
     initialRefresh: false,
   );
+
+  // يمنع تحميل نفس المحافظة مرتين
+  int? _lastLoadedCityId;
+
+  // ===========================================================
+  // Init
+  // ===========================================================
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance
+        .addPostFrameCallback(
+          (_) {
+        _loadSelectedCity();
+      },
+    );
+  }
+
+  // ===========================================================
+  // Load Selected City
+  // ===========================================================
+
+  void _loadSelectedCity({
+    bool force = false,
+  }) {
+    if (!mounted) {
+      return;
+    }
+
+    final cityBloc =
+    context.read<AllCityBloc>();
+
+    final int? cityId =
+        cityBloc.selectedCityId;
+
+    if (cityId == null ||
+        cityId < 0) {
+      return;
+    }
+
+    if (!force &&
+        _lastLoadedCityId ==
+            cityId) {
+      return;
+    }
+
+    _lastLoadedCityId =
+        cityId;
+
+    // عند تغيير المحافظة
+    // نظف البحث القديم
+    _searchController.clear();
+
+    context
+        .read<SeniorRepsBloc>()
+        .add(
+      AllSeniorRepEvent(
+        cityId,
+        UserInfo.repId,
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Refresh
+  // ===========================================================
+
+  void _onRefresh() {
+    _loadSelectedCity(
+      force: true,
+    );
+
+    _refreshController
+        .refreshCompleted();
+  }
+
+  // ===========================================================
+  // Dispose
+  // ===========================================================
 
   @override
   void dispose() {
     _searchController.dispose();
     _refreshController.dispose();
+
     super.dispose();
   }
 
-  // =====================================================
-  // نفس منطق التحديث
-  // =====================================================
-
-  void _onRefresh() {
-    context.read<SeniorRepsBloc>().add(
-      AllSeniorRepEvent(
-        widget.cityId,
-        widget.repId,
-      ),
-    );
-
-    _refreshController.refreshCompleted();
-  }
+  // ===========================================================
+  // Build
+  // ===========================================================
 
   @override
-  void initState() {
-    context.read<SeniorRepsBloc>().add(
-      AllSeniorRepEvent(
-        widget.cityId,
-        widget.repId,
-      ),
-    );
+  Widget build(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
 
-    super.initState();
-  }
+    final cityBloc =
+    context.watch<AllCityBloc>();
 
-  @override
-  Widget build(BuildContext context) {
-    final deviceType = AppResponsive.deviceType(context);
+    final cityState =
+        cityBloc.state;
 
-    double pageMaxWidth;
+    final double contentMaxWidth =
+    ui.isTabletLandscape
+        ? 760
+        : ui.pageMaxWidth;
 
-    double headerHorizontalPadding;
-    double headerTopPadding;
+    return BlocListener<
+        AllCityBloc,
+        AllCityState>(
+      listener: (
+          context,
+          state,
+          ) {
+        // =====================================================
+        // أول تحميل أو تغيير المحافظة
+        // =====================================================
+        if (state
+        is GetAllCityState) {
+          _loadSelectedCity();
+        }
+      },
 
-    double searchHorizontalPadding;
-    double searchVerticalPadding;
+      child: Scaffold(
+        // =====================================================
+        // Drawer
+        // =====================================================
+        drawer:
+        UserInfo.repType.i ==
+            6
+            ? const DrawerPage()
+            : null,
 
-    double listHorizontalPadding;
-    double cardBottomSpacing;
-    double bottomSpacing;
-
-    double headerTitleFontSize;
-    double headerSubtitleFontSize;
-
-    double appBarIconSize;
-
-    switch (deviceType) {
-      case AppDeviceType.mobilePortrait:
-        pageMaxWidth = 600;
-
-        headerHorizontalPadding = 20;
-        headerTopPadding = 22;
-
-        searchHorizontalPadding = 20;
-        searchVerticalPadding = 14;
-
-        listHorizontalPadding = 20;
-        cardBottomSpacing = 14;
-        bottomSpacing = 40;
-
-        headerTitleFontSize = 23;
-        headerSubtitleFontSize = 13;
-
-        appBarIconSize = 28;
-        break;
-
-      case AppDeviceType.tabletPortrait:
-        pageMaxWidth = 760;
-
-        headerHorizontalPadding = 28;
-        headerTopPadding = 26;
-
-        searchHorizontalPadding = 28;
-        searchVerticalPadding = 16;
-
-        listHorizontalPadding = 28;
-        cardBottomSpacing = 16;
-        bottomSpacing = 50;
-
-        headerTitleFontSize = 26;
-        headerSubtitleFontSize = 14;
-
-        appBarIconSize = 30;
-        break;
-
-      case AppDeviceType.tabletLandscape:
-        pageMaxWidth = 900;
-
-        headerHorizontalPadding = 32;
-        headerTopPadding = 20;
-
-        searchHorizontalPadding = 32;
-        searchVerticalPadding = 14;
-
-        listHorizontalPadding = 32;
-        cardBottomSpacing = 16;
-        bottomSpacing = 40;
-
-        headerTitleFontSize = 26;
-        headerSubtitleFontSize = 14;
-
-        appBarIconSize = 28;
-        break;
-    }
-    return Scaffold(
-      // =================================================
-      // نفس شرط الـ Drawer
-      // =================================================
-      drawer: UserInfo.repType.i == 6
-          ? const DrawerPage()
-          : null,
-
-      backgroundColor: const Color(0xFFF8FAFC),
-
-      appBar: AppBar(
-        title: Text(
-          'تقارير المندوبين (${widget.cityname})',
+        backgroundColor:
+        const Color(
+          0xFFF8FAFC,
         ),
 
-        leading: Builder(
-          builder: (BuildContext context) {
-            return Center(
-              child: UserInfo.repType.i == 6
-                  ? IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  size: appBarIconSize,
-                  color:
-                  ColorManager.secondaryColor,
-                ),
-                onPressed: () {
-                  Scaffold.of(context)
-                      .openDrawer();
-                },
-              )
-                  : IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios_new,
-                  size: appBarIconSize,
-                  color:
-                  ColorManager.secondaryColor,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            );
-          },
-        ),
-      ),
+        // =====================================================
+        // AppBar
+        // =====================================================
+        appBar: AppBar(
+          elevation:
+          0,
 
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: pageMaxWidth,
+          scrolledUnderElevation:
+          0,
+
+          surfaceTintColor:
+          Colors.transparent,
+
+          backgroundColor:
+          Colors.white,
+
+          title: Text(
+            cityBloc
+                .selectedCityName
+                .isEmpty
+                ? 'تقارير المندوبين'
+                : 'تقارير المندوبين (${cityBloc.selectedCityName})',
+
+            maxLines:
+            1,
+
+            overflow:
+            TextOverflow
+                .ellipsis,
+
+            style:
+            TextStyle(
+              fontSize:
+              ui.isMobile
+                  ? 18
+                  : 21,
+
+              fontWeight:
+              FontWeight
+                  .w700,
+
+              color:
+              ColorManager
+                  .medicalPrimary,
             ),
-            child: SmartRefresher(
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              enablePullDown: true,
-              header: const WaterDropHeader(),
+          ),
 
-              child: CustomScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-                slivers: [
-                  // =====================================
-                  // Header
-                  // =====================================
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        headerHorizontalPadding,
-                        headerTopPadding,
-                        headerHorizontalPadding,
+          leading:
+          Builder(
+            builder: (
+                context,
+                ) {
+              if (UserInfo
+                  .repType.i ==
+                  6) {
+                return IconButton(
+                  tooltip:
+                  'القائمة',
+
+                  icon:
+                  Icon(
+                    Icons
+                        .menu_rounded,
+
+                    size:
+                    ui.isMobile
+                        ? 26
+                        : 28,
+
+                    color:
+                    ColorManager
+                        .medicalPrimary,
+                  ),
+
+                  onPressed:
+                      () {
+                    Scaffold.of(
+                      context,
+                    ).openDrawer();
+                  },
+                );
+              }
+
+              return IconButton(
+                tooltip:
+                'رجوع',
+
+                icon:
+                Icon(
+                  Icons
+                      .arrow_back_rounded,
+
+                  size:
+                  ui.isMobile
+                      ? 24
+                      : 27,
+
+                  color:
+                  ColorManager
+                      .medicalPrimary,
+                ),
+
+                onPressed:
+                    () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+
+        // =====================================================
+        // Body
+        // =====================================================
+        body:
+        Directionality(
+          textDirection:
+          TextDirection.rtl,
+
+          child:
+          Center(
+            child:
+            ConstrainedBox(
+              constraints:
+              BoxConstraints(
+                maxWidth:
+                contentMaxWidth,
+              ),
+
+              child:
+              SmartRefresher(
+                controller:
+                _refreshController,
+
+                onRefresh:
+                _onRefresh,
+
+                enablePullDown:
+                true,
+
+                header:
+                const WaterDropHeader(),
+
+                child:
+                CustomScrollView(
+                  physics:
+                  const BouncingScrollPhysics(),
+
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior
+                      .onDrag,
+
+                  slivers: [
+                    // =========================================
+                    // Header
+                    // =========================================
+                    SliverPadding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.headerTopPadding,
+                        ui.pagePadding,
                         0,
                       ),
-                      child: _buildHeader(
-                        titleFontSize:
-                        headerTitleFontSize,
-                        subtitleFontSize:
-                        headerSubtitleFontSize,
+
+                      sliver:
+                      SliverToBoxAdapter(
+                        child:
+                        _buildHeader(
+                          ui,
+                        ),
                       ),
                     ),
-                  ),
 
-                  // =====================================
-                  // Search
-                  // =====================================
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal:
-                        searchHorizontalPadding,
-                        vertical:
-                        searchVerticalPadding,
+                    // =========================================
+                    // Search + City Filter
+                    // =========================================
+                    SliverPadding(
+                      padding:
+                      EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        ui.searchTopPadding,
+                        ui.pagePadding,
+                        ui.searchBottomPadding,
                       ),
-                      child: SearchField(
-                        searchController:
-                        _searchController,
 
-                        // نفس البحث
-                        onPressed: (value) {
-                          context
-                              .read<SeniorRepsBloc>()
-                              .add(
-                            SenSearchRepEvent(
+                      sliver:
+                      SliverToBoxAdapter(
+                        child:
+                        SearchWithCityFilter(
+                          searchController:
+                          _searchController,
+
+                          onSearch:
+                              (
                               value,
-                            ),
-                          );
-                        },
+                              ) {
+                            context
+                                .read<
+                                SeniorRepsBloc>()
+                                .add(
+                              SenSearchRepEvent(
+                                value,
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
 
-                  // =====================================
-                  // Representatives
-                  // =====================================
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal:
-                      listHorizontalPadding,
-                    ),
-                    sliver: _buildRepsList(
-                      cardBottomSpacing:
-                      cardBottomSpacing,
-                    ),
-                  ),
+                    // =========================================
+                    // City Loading
+                    // =========================================
+                    if (cityState
+                    is AllCityLoadingState)
+                      SliverFillRemaining(
+                        hasScrollBody:
+                        false,
 
-                  // =====================================
-                  // Bottom spacing
-                  // =====================================
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: bottomSpacing,
-                    ),
-                  ),
-                ],
+                        child:
+                        loadingFullScreen(
+                          context,
+                        ),
+                      )
+
+                    // =========================================
+                    // City Error
+                    // =========================================
+                    else if (cityState
+                    is AllCityErrorState)
+                      SliverFillRemaining(
+                        hasScrollBody:
+                        false,
+
+                        child:
+                        errorFullScreen(
+                          context,
+
+                          mes: cityState
+                              .failure
+                              .massage,
+
+                          func:
+                              () {
+                            context
+                                .read<
+                                AllCityBloc>()
+                                .add(
+                              const GetAllCityEvent(),
+                            );
+                          },
+                        ),
+                      )
+
+                    // =========================================
+                    // No Cities
+                    // =========================================
+                    else if (cityBloc
+                          .selectedCityId ==
+                          null)
+                        SliverFillRemaining(
+                          hasScrollBody:
+                          false,
+
+                          child:
+                          emptyFullScreen(
+                            context,
+
+                            message:
+                            'لا توجد محافظات متاحة',
+                          ),
+                        )
+
+                      // =========================================
+                      // Representatives
+                      // =========================================
+                      else
+                        SliverPadding(
+                          padding:
+                          EdgeInsets.fromLTRB(
+                            ui.pagePadding,
+                            ui.listTopPadding,
+                            ui.pagePadding,
+                            ui.listBottomPadding,
+                          ),
+
+                          sliver:
+                          _buildRepsList(
+                            ui,
+                          ),
+                        ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -296,145 +482,233 @@ class _AllRepSeniorState extends State<AllRepSenior> {
     );
   }
 
-  // =====================================================
+  // ===========================================================
   // Header
-  // =====================================================
+  // ===========================================================
 
-  Widget _buildHeader({
-    required double titleFontSize,
-    required double subtitleFontSize,
-  }) {
+  Widget _buildHeader(
+      AppUi ui,
+      ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+      CrossAxisAlignment.start,
+
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment:
+          CrossAxisAlignment.center,
+
           children: [
             Expanded(
-              child: Text(
+              child:
+              Text(
                 'إدارة المندوبين',
-                style: TextStyle(
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.medicalPrimary,
+
+                maxLines:
+                1,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                style:
+                TextStyle(
+                  fontSize:
+                  ui.pageTitleSize,
+
+                  fontWeight:
+                  FontWeight
+                      .w800,
+
+                  color:
+                  ColorManager
+                      .medicalPrimary,
                 ),
               ),
             ),
 
-            const SizedBox(width: 16),
+            SizedBox(
+              width:
+              ui.mediumSpacing,
+            ),
 
             Container(
-              width: 40,
-              height: 5,
-              decoration: BoxDecoration(
-                color: const Color(0xFF42A5F5),
-                borderRadius: BorderRadius.circular(10),
+              width:
+              40,
+
+              height:
+              5,
+
+              decoration:
+              BoxDecoration(
+                color:
+                ColorManager
+                    .medicalPrimary,
+
+                borderRadius:
+                BorderRadius
+                    .circular(
+                  10,
+                ),
               ),
             ),
           ],
         ),
 
-        const SizedBox(height: 5),
+        SizedBox(
+          height:
+          ui.smallSpacing,
+        ),
 
         Text(
           'اختر مندوباً لمراجعة الأداء والتقارير',
-          style: TextStyle(
-            fontSize: subtitleFontSize,
-            color: Colors.grey.shade600,
+
+          maxLines:
+          2,
+
+          overflow:
+          TextOverflow
+              .ellipsis,
+
+          style:
+          TextStyle(
+            fontSize:
+            ui.pageSubtitleSize,
+
+            color:
+            const Color(
+              0xFF64748B,
+            ),
+
+            fontWeight:
+            FontWeight
+                .w500,
+
+            height:
+            1.4,
           ),
         ),
       ],
     );
   }
 
-  // =====================================================
+  // ===========================================================
   // Representatives List
-  // =====================================================
+  // ===========================================================
 
-  Widget _buildRepsList({
-    required double cardBottomSpacing,
-  }) {
-    return BlocBuilder<SeniorRepsBloc, SeniorRepsState>(
-      builder: (context, state) {
-        // نفس القائمة الموجودة داخل Bloc
+  Widget _buildRepsList(
+      AppUi ui,
+      ) {
+    return BlocBuilder<
+        SeniorRepsBloc,
+        SeniorRepsState>(
+      builder: (
+          context,
+          state,
+          ) {
         List<AllRepresentative> list =
             context
-                .read<SeniorRepsBloc>()
+                .read<
+                SeniorRepsBloc>()
                 .allRepresentative;
 
-        // =========================================
+        // =====================================================
         // Loading
-        // =========================================
-        if (state is AllSeniorRepLoadingState) {
+        // =====================================================
+        if (state
+        is AllSeniorRepLoadingState) {
           return SliverToBoxAdapter(
-            child: Center(
-              child: loadingShimmer(
+            child:
+            Center(
+              child:
+              loadingShimmer(
                 context,
                 5,
                 100,
                 20,
-                BorderRadius.circular(20),
+                BorderRadius.circular(
+                  ui.cardRadius,
+                ),
               ),
             ),
           );
         }
 
-        // =========================================
+        // =====================================================
         // Error
-        // =========================================
-        if (state is AllSeniorRepErrorState) {
+        // =====================================================
+        if (state
+        is AllSeniorRepErrorState) {
           return SliverToBoxAdapter(
-            child: errorFullScreen(
+            child:
+            errorFullScreen(
               context,
-              func: _onRefresh,
+
+              func:
+              _onRefresh,
             ),
           );
         }
 
-        // =========================================
+        // =====================================================
         // Success
-        // =========================================
-        if (state is AllSeniorRepState) {
-          list = state.representatives;
+        // =====================================================
+        if (state
+        is AllSeniorRepState) {
+          list =
+              state.representatives;
         }
 
-        // =========================================
+        // =====================================================
         // Empty
-        // =========================================
+        // =====================================================
         if (list.isEmpty) {
           return SliverFillRemaining(
-            hasScrollBody: false,
-            child: emptyFullScreen(
+            hasScrollBody:
+            false,
+
+            child:
+            emptyFullScreen(
               context,
             ),
           );
         }
 
-        // =========================================
+        // =====================================================
         // List
-        // =========================================
+        // =====================================================
         return SliverList(
-          delegate: SliverChildBuilderDelegate(
-                (context, index) {
-              final rep = list[index];
+          delegate:
+          SliverChildBuilderDelegate(
+                (
+                context,
+                index,
+                ) {
+              final rep =
+              list[index];
 
               return Padding(
-                padding: EdgeInsets.only(
-                  bottom: cardBottomSpacing,
+                padding:
+                EdgeInsets.only(
+                  bottom:
+                  ui.cardSpacing,
                 ),
-                child: RepresentativeCard(
-                  allRepresentative: rep,
 
-                  // =================================
-                  // نفس السلوك الأصلي تماماً
-                  // =================================
-                  onTap: () {
-                    // 1. تهيئة موديل البروفايل
+                child:
+                RepresentativeCard(
+                  allRepresentative:
+                  rep,
+
+                  onTap:
+                      () {
+                    // =========================================
+                    // نفس السلوك الأصلي
+                    // =========================================
                     initSeniorProfModule();
 
-                    // 2. إرسال الحدث
                     context
-                        .read<SeniorProfBloc>()
+                        .read<
+                        SeniorProfBloc>()
                         .add(
                       getInfoRepEvent(
                         rep.id,
@@ -442,16 +716,23 @@ class _AllRepSeniorState extends State<AllRepSenior> {
                       ),
                     );
 
-                    // 3. الانتقال للبروفايل
-                    Navigator.of(context).push(
+                    Navigator.of(
+                      context,
+                    ).push(
                       MaterialPageRoute(
-                        builder: (context) =>
+                        builder:
+                            (
+                            context,
+                            ) =>
                             RepProfile(
-                              index: index,
+                              index:
+                              index,
+
                               repPlanId:
                               rep.activePlan,
-                              id: rep.id,
 
+                              id:
+                              rep.id,
                             ),
                       ),
                     );
@@ -459,7 +740,9 @@ class _AllRepSeniorState extends State<AllRepSenior> {
                 ),
               );
             },
-            childCount: list.length,
+
+            childCount:
+            list.length,
           ),
         );
       },

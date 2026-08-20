@@ -10,6 +10,12 @@ class SenAllPlaceEvent extends SeniorProfEvent {
   List<Object?> get props => [id];
 }
 
+class GetAllCityBaseEvent extends SeniorProfEvent {
+  @override
+  GetAllCityBaseEvent();
+  List<Object?> get props => [];
+}
+
 class SenAllHospitalEvent extends SeniorProfEvent {
   final int id;
   @override

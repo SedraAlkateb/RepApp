@@ -23,14 +23,22 @@ final class TeamLeaderAndCityErrorState extends GeneralReportsState {
   List<Object?> get props => [failure];
 }
 
-final class SeniorByCityIdLoadingState extends GeneralReportsState {
-  const SeniorByCityIdLoadingState();
+
+final class TeamLeaderAndCityLoadingState extends GeneralReportsState {
+  const TeamLeaderAndCityLoadingState();
   @override
   List<Object?> get props => [];
 }
 
-final class TeamLeaderAndCityLoadingState extends GeneralReportsState {
-  const TeamLeaderAndCityLoadingState();
+
+final class TeamLeaderAndCityState extends GeneralReportsState {
+  final List<SeniorCityModel> data;
+  const TeamLeaderAndCityState(this.data);
+  @override
+  List<Object?> get props => [data];
+}
+final class SeniorByCityIdLoadingState extends GeneralReportsState {
+  const SeniorByCityIdLoadingState();
   @override
   List<Object?> get props => [];
 }
@@ -42,15 +50,11 @@ final class SeniorByCityIdState extends GeneralReportsState {
   List<Object?> get props => [data];
 }
 
-final class TeamLeaderAndCityState extends GeneralReportsState {
-  final List<SeniorCityModel> data;
-  const TeamLeaderAndCityState(this.data);
-  @override
-  List<Object?> get props => [data];
-}
-
 final class SeniorByCityIdEmptyState extends GeneralReportsState {
   const SeniorByCityIdEmptyState();
   @override
   List<Object?> get props => [];
 }
+
+
+

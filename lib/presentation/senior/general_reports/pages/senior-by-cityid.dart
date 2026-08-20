@@ -3,503 +3,947 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-class SeniorByCityId extends StatelessWidget {
-  final String cityname;
-  final int cityid;
-
+class SeniorByCityId extends StatefulWidget {
   const SeniorByCityId({
     super.key,
-    required this.cityid,
-    required this.cityname,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final deviceType = AppResponsive.deviceType(context);
+  State<SeniorByCityId> createState() =>
+      _SeniorByCityIdState();
+}
 
-    double pageMaxWidth;
+class _SeniorByCityIdState
+    extends State<SeniorByCityId> {
+  final TextEditingController _searchController =
+  TextEditingController();
 
-    double headerHorizontalPadding;
-    double headerTopPadding;
-    double headerBottomPadding;
+  String _searchQuery = '';
 
-    double listHorizontalPadding;
-    double listVerticalPadding;
+  // آخر محافظة تم تحميلها
+  // لمنع تكرار نفس الطلب
+  int? _lastLoadedCityId;
 
-    double headerTitleFontSize;
-    double headerSubtitleFontSize;
+  // ===========================================================
+  // Init
+  // ===========================================================
 
-    double cardPadding;
-    double cardBottomMargin;
-    double cardRadius;
+  @override
+  void initState() {
+    super.initState();
 
-    double avatarSize;
-    double avatarIconSize;
-    double avatarSpacing;
+    WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+        _loadSelectedCity();
+      },
+    );
+  }
 
-    double nameFontSize;
-    double subtitleFontSize;
-    double arrowSize;
+  // ===========================================================
+  // Load Current City
+  // ===========================================================
 
-    switch (deviceType) {
-    // ============================================
-    // Mobile
-    // ============================================
-      case AppDeviceType.mobilePortrait:
-        pageMaxWidth = 600;
-
-        headerHorizontalPadding = 20;
-        headerTopPadding = 25;
-        headerBottomPadding = 15;
-
-        listHorizontalPadding = 16;
-        listVerticalPadding = 8;
-
-        headerTitleFontSize = 24;
-        headerSubtitleFontSize = 13;
-
-        cardPadding = 18;
-        cardBottomMargin = 16;
-        cardRadius = 18;
-
-        avatarSize = 50;
-        avatarIconSize = 24;
-        avatarSpacing = 16;
-
-        nameFontSize = 17;
-        subtitleFontSize = 11;
-        arrowSize = 18;
-        break;
-
-    // ============================================
-    // Tablet Portrait
-    // ============================================
-      case AppDeviceType.tabletPortrait:
-        pageMaxWidth = 760;
-
-        headerHorizontalPadding = 28;
-        headerTopPadding = 28;
-        headerBottomPadding = 18;
-
-        listHorizontalPadding = 24;
-        listVerticalPadding = 10;
-
-        headerTitleFontSize = 28;
-        headerSubtitleFontSize = 15;
-
-        cardPadding = 22;
-        cardBottomMargin = 18;
-        cardRadius = 20;
-
-        avatarSize = 58;
-        avatarIconSize = 28;
-        avatarSpacing = 18;
-
-        nameFontSize = 20;
-        subtitleFontSize = 13;
-        arrowSize = 20;
-        break;
-
-    // ============================================
-    // Tablet Landscape
-    // ============================================
-      case AppDeviceType.tabletLandscape:
-        pageMaxWidth = 900;
-
-        headerHorizontalPadding = 32;
-        headerTopPadding = 22;
-        headerBottomPadding = 16;
-
-        listHorizontalPadding = 28;
-        listVerticalPadding = 10;
-
-        headerTitleFontSize = 28;
-        headerSubtitleFontSize = 15;
-
-        cardPadding = 22;
-        cardBottomMargin = 18;
-        cardRadius = 20;
-
-        avatarSize = 58;
-        avatarIconSize = 28;
-        avatarSpacing = 18;
-
-        nameFontSize = 20;
-        subtitleFontSize = 13;
-        arrowSize = 20;
-        break;
+  void _loadSelectedCity({
+    bool force = false,
+  }) {
+    if (!mounted) {
+      return;
     }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        title: Text(
-          cityname,
-        ),
+    final cityBloc =
+    context.read<AllCityBloc>();
+
+    final int? cityId =
+        cityBloc.selectedCityId;
+
+    if (cityId == null ||
+        cityId < 0) {
+      return;
+    }
+
+    if (!force &&
+        _lastLoadedCityId == cityId) {
+      return;
+    }
+
+    _lastLoadedCityId = cityId;
+
+    // عند تغيير المحافظة ننظف البحث السابق
+    _searchController.clear();
+
+    if (_searchQuery.isNotEmpty) {
+      setState(() {
+        _searchQuery = '';
+      });
+    }
+
+    // =========================================================
+    // تحميل السينيور حسب المحافظة المختارة
+    // =========================================================
+    context
+        .read<GeneralReportsBloc>()
+        .add(
+      GetSeniorByCityIdEvent(
+        cityId,
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
+    );
+  }
+
+  // ===========================================================
+  // Search
+  // بحث محلي ضمن قائمة السينيور الحالية
+  // ===========================================================
+
+  void _onSearch(
+      String value,
+      ) {
+    setState(() {
+      _searchQuery =
+          value.trim().toLowerCase();
+    });
+  }
+
+  // ===========================================================
+  // Dispose
+  // ===========================================================
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+
+    super.dispose();
+  }
+
+  // ===========================================================
+  // Build
+  // ===========================================================
+
+  @override
+  Widget build(
+      BuildContext context,
+      ) {
+    final ui =
+    AppUi.of(context);
+
+    final cityBloc =
+    context.watch<AllCityBloc>();
+
+    final double contentMaxWidth =
+    ui.isTabletLandscape
+        ? 760
+        : ui.pageMaxWidth;
+
+    return BlocListener<
+        AllCityBloc,
+        AllCityState>(
+      listener: (
+          context,
+          state,
+          ) {
+        // =====================================================
+        // أول تحميل للمحافظات
+        // أو تغيير المحافظة من الفلتر
+        // =====================================================
+        if (state is GetAllCityState) {
+          _loadSelectedCity();
+        }
+      },
+
+      child: Scaffold(
+        backgroundColor:
+        const Color(
+          0xFFF8FAFC,
+        ),
+
+        // =====================================================
+        // AppBar
+        // =====================================================
+        appBar: AppBar(
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor:
+          Colors.transparent,
+          backgroundColor:
+          Colors.white,
+
+          leading: IconButton(
+            tooltip: 'رجوع',
+
+            onPressed: () {
+              Navigator.pop(
+                context,
+              );
+            },
+
+            icon: Icon(
+              Icons.arrow_back_rounded,
+
+              size:
+              ui.isMobile
+                  ? 24
+                  : 27,
+
+              color:
+              ColorManager
+                  .medicalPrimary,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // =========================================
-              // Header
-              // =========================================
-              _buildHeader(
-                horizontalPadding: headerHorizontalPadding,
-                topPadding: headerTopPadding,
-                bottomPadding: headerBottomPadding,
-                titleFontSize: headerTitleFontSize,
-                subtitleFontSize: headerSubtitleFontSize,
+
+          title: Text(
+            cityBloc
+                .selectedCityName
+                .isEmpty
+                ? 'السينيور'
+                : 'السينيور (${cityBloc.selectedCityName})',
+
+            maxLines: 1,
+
+            overflow:
+            TextOverflow.ellipsis,
+
+            style: TextStyle(
+              fontSize:
+              ui.isMobile
+                  ? 18
+                  : 21,
+
+              fontWeight:
+              FontWeight.w700,
+
+              color:
+              ColorManager
+                  .medicalPrimary,
+            ),
+          ),
+        ),
+
+        // =====================================================
+        // Body
+        // =====================================================
+        body: Directionality(
+          textDirection:
+          TextDirection.rtl,
+
+          child: Center(
+            child: ConstrainedBox(
+              constraints:
+              BoxConstraints(
+                maxWidth:
+                contentMaxWidth,
               ),
 
-              // =========================================
-              // Seniors List
-              // =========================================
-              BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
-                builder: (context, state) {
-                  List<SeniorCityModel> seniors = context
-                      .watch<GeneralReportsBloc>()
-                      .dataseniorsbycityid;
+              child: CustomScrollView(
+                physics:
+                const BouncingScrollPhysics(),
 
-                  if (state is SeniorByCityIdState) {
-                    seniors = state.data;
-                  }
+                keyboardDismissBehavior:
+                ScrollViewKeyboardDismissBehavior
+                    .onDrag,
 
-                  // =====================================
-                  // Loading
-                  // نفس السلوك
-                  // =====================================
-                  if (state is SeniorByCityIdLoadingState) {
-                    return Expanded(
-                      child: loadingShimmer(
-                        context,
-                        10,
-                        20,
-                        20,
-                        BorderRadius.circular(
-                          cardRadius,
-                        ),
-                      ),
-                    );
-                  }
+                slivers: [
+                  // =============================================
+                  // Header
+                  // =============================================
+                  SliverPadding(
+                    padding:
+                    EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.headerTopPadding,
+                      ui.pagePadding,
+                      ui.headerBottomPadding,
+                    ),
 
-                  // =====================================
-                  // Error
-                  // نفس السلوك
-                  // =====================================
-                  if (state is SeniorByCityIdErrorState) {
-                    return Expanded(
-                      child: errorFullScreen(
-                        context,
-                        func: () {},
-                      ),
-                    );
-                  }
-
-                  // =====================================
-                  // Empty
-                  // نفس السلوك
-                  // =====================================
-                  if (state is SeniorByCityIdEmptyState ||
-                      seniors.isEmpty) {
-                    return Expanded(
-                      child: emptyFullScreen(
-                        context,
-                      ),
-                    );
-                  }
-
-                  // =====================================
-                  // Data
-                  // =====================================
-                  return Expanded(
-                    child: AnimationLimiter(
-                      child: ListView.builder(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: listHorizontalPadding,
-                          vertical: listVerticalPadding,
-                        ),
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: seniors.length,
-                        itemBuilder: (context, index) {
-                          return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(
-                              milliseconds: 500,
-                            ),
-                            delay: const Duration(
-                              milliseconds: 50,
-                            ),
-                            child: SlideAnimation(
-                              verticalOffset: 30,
-                              child: FadeInAnimation(
-                                child: _buildRepSmartCard(
-                                  context,
-                                  seniors[index],
-                                  cardPadding: cardPadding,
-                                  cardBottomMargin: cardBottomMargin,
-                                  cardRadius: cardRadius,
-                                  avatarSize: avatarSize,
-                                  avatarIconSize: avatarIconSize,
-                                  avatarSpacing: avatarSpacing,
-                                  nameFontSize: nameFontSize,
-                                  subtitleFontSize: subtitleFontSize,
-                                  arrowSize: arrowSize,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                    sliver:
+                    SliverToBoxAdapter(
+                      child:
+                      _buildHeader(
+                        ui,
+                        cityBloc
+                            .selectedCityName,
                       ),
                     ),
-                  );
-                },
+                  ),
+
+                  // =============================================
+                  // Search + City Filter
+                  // =============================================
+                  SliverPadding(
+                    padding:
+                    EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.searchTopPadding,
+                      ui.pagePadding,
+                      ui.searchBottomPadding,
+                    ),
+
+                    sliver:
+                    SliverToBoxAdapter(
+                      child:
+                      SearchWithCityFilter(
+                        searchController:
+                        _searchController,
+
+                        onSearch:
+                        _onSearch,
+                      ),
+                    ),
+                  ),
+
+                  // =============================================
+                  // Content
+                  // =============================================
+                  ..._buildContent(
+                    context,
+                    ui,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Header
+  // ===========================================================
+
+  Widget _buildHeader(
+      AppUi ui,
+      String cityName,
+      ) {
+    return Row(
+      crossAxisAlignment:
+      CrossAxisAlignment.center,
+
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+            children: [
+              Text(
+                'سينيور المنطقة',
+
+                maxLines: 1,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                style: TextStyle(
+                  fontSize:
+                  ui.pageTitleSize,
+
+                  fontWeight:
+                  FontWeight.w800,
+
+                  color:
+                  ColorManager
+                      .medicalPrimary,
+                ),
+              ),
+
+              SizedBox(
+                height:
+                ui.smallSpacing,
+              ),
+
+              Text(
+                cityName.isEmpty
+                    ? 'قائمة السينيور المتاحين'
+                    : 'قائمة السينيور المتاحين في $cityName',
+
+                maxLines: 2,
+
+                overflow:
+                TextOverflow
+                    .ellipsis,
+
+                style: TextStyle(
+                  color:
+                  const Color(
+                    0xFF64748B,
+                  ),
+
+                  fontSize:
+                  ui.pageSubtitleSize,
+
+                  fontWeight:
+                  FontWeight.w500,
+
+                  height: 1.4,
+                ),
               ),
             ],
           ),
         ),
-      ),
+
+        SizedBox(
+          width:
+          ui.mediumSpacing,
+        ),
+
+        Container(
+          width: 42,
+          height: 5,
+
+          decoration:
+          BoxDecoration(
+            color:
+            ColorManager
+                .medicalPrimary,
+
+            borderRadius:
+            BorderRadius.circular(
+              10,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  // =====================================================
-  // Header
-  // =====================================================
+  // ===========================================================
+  // Content
+  // ===========================================================
 
-  Widget _buildHeader({
-    required double horizontalPadding,
-    required double topPadding,
-    required double bottomPadding,
-    required double titleFontSize,
-    required double subtitleFontSize,
-  }) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        horizontalPadding,
-        topPadding,
-        horizontalPadding,
-        bottomPadding,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "سينيور المنطقة",
-                  style: TextStyle(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
-                    color: ColorManager.medicalPrimary,
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 4,
-                ),
-
-                Text(
-                  "قائمة السينيور المتاحين في $cityname",
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: subtitleFontSize,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(
-            width: 16,
-          ),
-
-          Container(
-            height: 5,
-            width: 45,
-            decoration: BoxDecoration(
-              color: const Color(0xFF42A5F5),
-              borderRadius: BorderRadius.circular(
-                10,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // =====================================================
-  // Senior Card
-  // =====================================================
-
-  Widget _buildRepSmartCard(
+  List<Widget> _buildContent(
       BuildContext context,
-      SeniorCityModel senior, {
-        required double cardPadding,
-        required double cardBottomMargin,
-        required double cardRadius,
-        required double avatarSize,
-        required double avatarIconSize,
-        required double avatarSpacing,
-        required double nameFontSize,
-        required double subtitleFontSize,
-        required double arrowSize,
-      }) {
-    return Container(
-      margin: EdgeInsets.only(
-        bottom: cardBottomMargin,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          cardRadius,
-        ),
-        border: Border.all(
-          color: Colors.blue.withOpacity(0.05),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 15,
-            offset: const Offset(
-              0,
-              8,
-            ),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(
-          cardRadius,
-        ),
-        child: InkWell(
-          // ============================================
-          // نفس السلوك الأصلي تماماً
-          // ============================================
-          onTap: () {
-            initSeniorModule();
+      AppUi ui,
+      ) {
+    final cityBloc =
+    context.watch<AllCityBloc>();
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return AllRepSeniorGenerlReports(
-                    cityname: senior.city_name,
-                    cityId: int.parse(
-                      senior.city_id,
-                    ),
-                    repId: int.parse(
-                      senior.rep_id,
-                    ),
-                    seniorName: senior.rep_name,
+    final cityState =
+        cityBloc.state;
+
+    // =========================================================
+    // City Loading
+    // =========================================================
+    if (cityState
+    is AllCityLoadingState) {
+      return [
+        SliverFillRemaining(
+          hasScrollBody: false,
+
+          child: loadingFullScreen(
+            context,
+          ),
+        ),
+      ];
+    }
+
+    // =========================================================
+    // City Error
+    // =========================================================
+    if (cityState
+    is AllCityErrorState) {
+      return [
+        SliverFillRemaining(
+          hasScrollBody: false,
+
+          child: errorFullScreen(
+            context,
+
+            mes:
+            cityState
+                .failure
+                .massage,
+
+            func: () {
+              context
+                  .read<AllCityBloc>()
+                  .add(
+                const GetAllCityEvent(),
+              );
+            },
+          ),
+        ),
+      ];
+    }
+
+    // =========================================================
+    // No Cities
+    // =========================================================
+    if (cityBloc.selectedCityId ==
+        null) {
+      return [
+        SliverFillRemaining(
+          hasScrollBody: false,
+
+          child: emptyFullScreen(
+            context,
+
+            message:
+            'لا توجد محافظات متاحة',
+          ),
+        ),
+      ];
+    }
+
+    // =========================================================
+    // General Reports Bloc
+    // =========================================================
+    return [
+      BlocBuilder<
+          GeneralReportsBloc,
+          GeneralReportsState>(
+        buildWhen: (
+            previous,
+            current,
+            ) =>
+        current
+        is SeniorByCityIdLoadingState ||
+            current
+            is SeniorByCityIdState ||
+            current
+            is SeniorByCityIdErrorState ||
+            current
+            is SeniorByCityIdEmptyState,
+
+        builder: (
+            context,
+            state,
+            ) {
+          // ===================================================
+          // Loading
+          // ===================================================
+          if (state is SeniorByCityIdLoadingState) {
+            return SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ui.pagePadding,
+                  vertical: ui.listTopPadding,
+                ),
+                child: loadingShimmer(
+                  context,
+                  10,
+                  20,
+                  20,
+                  BorderRadius.circular(
+                    ui.cardRadius,
+                  ),
+                ),
+              ),
+            );
+          }
+          // ===================================================
+          // Error
+          // ===================================================
+          if (state
+          is SeniorByCityIdErrorState) {
+            return SliverFillRemaining(
+              hasScrollBody: false,
+
+              child:
+              errorFullScreen(
+                context,
+
+                func: () {
+                  _loadSelectedCity(
+                    force: true,
                   );
                 },
               ),
             );
+          }
 
-            print(
-              "rep_id:${senior.rep_id}",
-            );
+          // ===================================================
+          // Data source
+          // ===================================================
+          List<SeniorCityModel> seniors =
+              context
+                  .read<
+                  GeneralReportsBloc>()
+                  .dataseniorsbycityid;
 
-            BlocProvider.of<SeniorRepsBloc>(context).add(
-              AllSeniorRepEvent(
-                int.parse(
-                  senior.city_id,
-                ),
-                int.parse(
-                  senior.rep_id,
-                ),
+          if (state
+          is SeniorByCityIdState) {
+            seniors =
+                state.data;
+          }
+
+          // ===================================================
+          // Local Search
+          // ===================================================
+          if (_searchQuery.isNotEmpty) {
+            seniors =
+                seniors.where(
+                      (
+                      senior,
+                      ) {
+                    final name =
+                    senior.rep_name
+                        .toLowerCase();
+
+                    return name.contains(
+                      _searchQuery,
+                    );
+                  },
+                ).toList();
+          }
+
+          // ===================================================
+          // Empty
+          //
+          // السيرش والفلتر بيضلوا ظاهرين
+          // ===================================================
+          if (state
+          is SeniorByCityIdEmptyState ||
+              seniors.isEmpty) {
+            return SliverFillRemaining(
+              hasScrollBody: false,
+
+              child:
+              emptyFullScreen(
+                context,
               ),
             );
-          },
+          }
 
-          child: Padding(
-            padding: EdgeInsets.all(
-              cardPadding,
+          // ===================================================
+          // List
+          // ===================================================
+          return SliverPadding(
+            padding:
+            EdgeInsets.fromLTRB(
+              ui.pagePadding,
+              ui.listTopPadding,
+              ui.pagePadding,
+              ui.listBottomPadding,
             ),
-            child: Row(
-              children: [
-                // ======================================
-                // Avatar
-                // ======================================
-                Container(
-                  width: avatarSize,
-                  height: avatarSize,
-                  decoration: BoxDecoration(
-                    color: ColorManager.medicalPrimary
-                        .withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.person_pin_rounded,
-                    size: avatarIconSize,
-                    color: ColorManager.medicalPrimary,
-                  ),
-                ),
 
-                SizedBox(
-                  width: avatarSpacing,
-                ),
+            sliver: AnimationLimiter(
+              child: SliverList(
+                delegate:
+                SliverChildBuilderDelegate(
+                      (
+                      context,
+                      index,
+                      ) {
+                    final senior =
+                    seniors[index];
 
-                // ======================================
-                // Senior Info
-                // ======================================
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        senior.rep_name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: nameFontSize,
-                          fontWeight: FontWeight.w700,
-                          color: ColorManager.secondaryColor1,
+                    return AnimationConfiguration
+                        .staggeredList(
+                      position:
+                      index,
+
+                      duration:
+                      const Duration(
+                        milliseconds:
+                        500,
+                      ),
+
+                      delay:
+                      const Duration(
+                        milliseconds:
+                        50,
+                      ),
+
+                      child:
+                      SlideAnimation(
+                        verticalOffset:
+                        30,
+
+                        child:
+                        FadeInAnimation(
+                          child:
+                          _buildRepSmartCard(
+                            context,
+                            ui,
+                            senior,
+                          ),
                         ),
                       ),
+                    );
+                  },
 
-                      const SizedBox(
-                        height: 4,
+                  childCount:
+                  seniors.length,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    ];
+  }
+
+  // ===========================================================
+  // Senior Card
+  // ===========================================================
+
+  Widget _buildRepSmartCard(
+      BuildContext context,
+      AppUi ui,
+      SeniorCityModel senior,
+      ) {
+    return Container(
+      margin: EdgeInsets.only(
+        bottom:
+        ui.cardSpacing,
+      ),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+
+        borderRadius:
+        BorderRadius.circular(
+          ui.cardRadius,
+        ),
+
+        border: Border.all(
+          color:
+          const Color(
+            0xFFE2E8F0,
+          ),
+        ),
+
+        boxShadow: [
+          BoxShadow(
+            color:
+            Colors.black
+                .withOpacity(
+              0.03,
+            ),
+
+            blurRadius:
+            12,
+
+            offset:
+            const Offset(
+              0,
+              4,
+            ),
+          ),
+        ],
+      ),
+
+      child: ClipRRect(
+        borderRadius:
+        BorderRadius.circular(
+          ui.cardRadius,
+        ),
+
+        child: Material(
+          color:
+          Colors.white,
+
+          child: InkWell(
+            // =================================================
+            // نفس السلوك الأصلي تماماً
+            // =================================================
+            onTap: () {
+              initSeniorModule();
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (
+                      context,
+                      ) {
+                    return AllRepSeniorGenerlReports(
+                      cityname:
+                      senior.city_name,
+
+                      cityId:
+                      int.parse(
+                        senior.city_id,
                       ),
 
-                      Text(
-                        "اضغط لاستعراض تقارير المندوبين",
-                        style: TextStyle(
-                          fontSize: subtitleFontSize,
-                          color: Colors.grey.shade400,
-                        ),
+                      repId:
+                      int.parse(
+                        senior.rep_id,
                       ),
-                    ],
+
+                      seniorName:
+                      senior.rep_name,
+                    );
+                  },
+                ),
+              );
+
+              print(
+                'rep_id:${senior.rep_id}',
+              );
+
+              context
+                  .read<
+                  SeniorRepsBloc>()
+                  .add(
+                AllSeniorRepEvent(
+                  int.parse(
+                    senior.city_id,
+                  ),
+                  int.parse(
+                    senior.rep_id,
                   ),
                 ),
+              );
+            },
 
-                const SizedBox(
-                  width: 10,
-                ),
+            child: Padding(
+              padding:
+              EdgeInsets.all(
+                ui.cardPadding,
+              ),
 
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: arrowSize,
-                  color: Colors.grey.shade300,
-                ),
-              ],
+              child: Row(
+                children: [
+                  // =============================================
+                  // Avatar
+                  // =============================================
+                  Container(
+                    width:
+                    ui.iconBoxSize +
+                        6,
+
+                    height:
+                    ui.iconBoxSize +
+                        6,
+
+                    alignment:
+                    Alignment.center,
+
+                    decoration:
+                    BoxDecoration(
+                      color: ColorManager
+                          .medicalPrimary
+                          .withOpacity(
+                        0.08,
+                      ),
+
+                      borderRadius:
+                      BorderRadius
+                          .circular(
+                        ui.smallRadius +
+                            3,
+                      ),
+                    ),
+
+                    child: Icon(
+                      Icons
+                          .person_pin_rounded,
+
+                      size:
+                      ui.iconSize +
+                          2,
+
+                      color:
+                      ColorManager
+                          .medicalPrimary,
+                    ),
+                  ),
+
+                  SizedBox(
+                    width:
+                    ui.mediumSpacing,
+                  ),
+
+                  // =============================================
+                  // Senior Info
+                  // =============================================
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment
+                          .start,
+
+                      children: [
+                        Text(
+                          senior.rep_name,
+
+                          maxLines: 1,
+
+                          overflow:
+                          TextOverflow
+                              .ellipsis,
+
+                          style:
+                          TextStyle(
+                            fontSize: ui
+                                .cardTitleSize,
+
+                            fontWeight:
+                            FontWeight
+                                .w700,
+
+                            color:
+                            ColorManager
+                                .secondaryColor1,
+
+                            height: 1.3,
+                          ),
+                        ),
+
+                        SizedBox(
+                          height:
+                          ui.smallSpacing,
+                        ),
+
+                        Text(
+                          'اضغط لاستعراض تقارير المندوبين',
+
+                          maxLines: 2,
+
+                          overflow:
+                          TextOverflow
+                              .ellipsis,
+
+                          style:
+                          TextStyle(
+                            fontSize: ui
+                                .smallTextSize,
+
+                            color:
+                            const Color(
+                              0xFF94A3B8,
+                            ),
+
+                            fontWeight:
+                            FontWeight
+                                .w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    width:
+                    ui.smallSpacing,
+                  ),
+
+                  Icon(
+                    Icons
+                        .arrow_forward_ios_rounded,
+
+                    size:
+                    ui.smallIconSize,
+
+                    color:
+                    const Color(
+                      0xFF94A3B8,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

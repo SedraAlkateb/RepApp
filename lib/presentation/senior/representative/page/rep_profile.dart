@@ -1598,7 +1598,7 @@ if(!isFinal&&(rep.repType==5||rep.repType==6)){
         // =================================================
         InteractiveActionTile(
           title:
-          "الزيارات التي تمت مباشرتها",
+          "الزيارات التي تمت",
 
           icon:
           Icons
@@ -1650,7 +1650,7 @@ if(!isFinal&&(rep.repType==5||rep.repType==6)){
                 },
 
                 'title':
-                "الزيارات التي تمت مباشرتها",
+                "الزيارات التي تمت",
 
                 'doctor':
                 SenVisitDoctor(),

@@ -1,7 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:domina_app/presentation/Recipes/widget/doctor_recipe.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,539 +15,586 @@ class DoctorSp extends StatefulWidget {
   });
 
   @override
-  State<DoctorSp> createState() => _DoctorSpState();
+  State<DoctorSp> createState() =>
+      _DoctorSpState();
 }
 
 class _DoctorSpState extends State<DoctorSp> {
   @override
   Widget build(BuildContext context) {
-    final deviceType = AppResponsive.deviceType(context);
+    final ui = AppUi.of(context);
 
-    double pageMaxWidth;
-
-    double horizontalPadding;
-    double titleHorizontalPadding;
-
-    double cardPadding;
-    double cardMarginHorizontal;
-    double cardMarginBottom;
-
-    double titleFontSize;
-    double countFontSize;
-
-    double infoFontSize;
-    double infoIconSize;
-    double infoSpacing;
-
-    double cardRadius;
-
-    double emptyHorizontalPadding;
-    double emptyVerticalPadding;
-    double emptyIconSize;
-    double emptyFontSize;
-
-    double sectionSpacing;
-    double cardSectionSpacing;
-
-    switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
-      case AppDeviceType.mobilePortrait:
-        pageMaxWidth = 600;
-
-        horizontalPadding = 5;
-        titleHorizontalPadding = 20;
-
-        cardPadding = 16;
-        cardMarginHorizontal = 8;
-        cardMarginBottom = 16;
-
-        titleFontSize = 18;
-        countFontSize = 11;
-
-        infoFontSize = 15;
-        infoIconSize = 22;
-        infoSpacing = 8;
-
-        cardRadius = 15;
-
-        emptyHorizontalPadding = 20;
-        emptyVerticalPadding = 90;
-        emptyIconSize = 60;
-        emptyFontSize = 20;
-
-        sectionSpacing = 12;
-        cardSectionSpacing = 10;
-        break;
-
-    // =================================================
-    // Tablet Portrait
-    // =================================================
-      case AppDeviceType.tabletPortrait:
-        pageMaxWidth = 760;
-
-        horizontalPadding = 16;
-        titleHorizontalPadding = 24;
-
-        cardPadding = 20;
-        cardMarginHorizontal = 10;
-        cardMarginBottom = 18;
-
-        titleFontSize = 20;
-        countFontSize = 13;
-
-        infoFontSize = 16;
-        infoIconSize = 24;
-        infoSpacing = 10;
-
-        cardRadius = 17;
-
-        emptyHorizontalPadding = 30;
-        emptyVerticalPadding = 100;
-        emptyIconSize = 70;
-        emptyFontSize = 22;
-
-        sectionSpacing = 16;
-        cardSectionSpacing = 12;
-        break;
-
-    // =================================================
-    // Tablet Landscape
-    // =================================================
-      case AppDeviceType.tabletLandscape:
-        pageMaxWidth = 900;
-
-        horizontalPadding = 24;
-        titleHorizontalPadding = 28;
-
-        cardPadding = 22;
-        cardMarginHorizontal = 12;
-        cardMarginBottom = 20;
-
-        titleFontSize = 21;
-        countFontSize = 13;
-
-        infoFontSize = 17;
-        infoIconSize = 25;
-        infoSpacing = 10;
-
-        cardRadius = 18;
-
-        emptyHorizontalPadding = 40;
-        emptyVerticalPadding = 100;
-        emptyIconSize = 72;
-        emptyFontSize = 22;
-
-        sectionSpacing = 18;
-        cardSectionSpacing = 12;
-        break;
-    }
+    // =========================================================
+    // صفحة قائمة بعمود واحد
+    // =========================================================
+    final double contentMaxWidth =
+    ui.isTabletLandscape
+        ? 760
+        : ui.pageMaxWidth;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+      backgroundColor: const Color(
+        0xFFF8FAFC,
+      ),
+
+      body: SafeArea(
+        top: false,
+
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: pageMaxWidth,
+              maxWidth: contentMaxWidth,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocConsumer<SpecializationBloc, SpecializationState>(
-                  // ============================================
-                  // نفس الـlistener الأصلي تماماً
-                  // ============================================
-                  listener: (context, state) {
-                    if (state is AllSpecDoctorErrorState) {
-                      WidgetsBinding.instance.addPostFrameCallback(
-                            (_) {
-                          error(
+
+            child: BlocConsumer<
+                SpecializationBloc,
+                SpecializationState>(
+              // =================================================
+              // نفس listener الأصلي
+              // =================================================
+              listener: (
+                  context,
+                  state,
+                  ) {
+                if (state
+                is AllSpecDoctorErrorState) {
+                  WidgetsBinding.instance
+                      .addPostFrameCallback(
+                        (_) {
+                      error(
+                        context,
+                        state.failure.massage,
+                        state.failure.code,
+                      );
+                    },
+                  );
+                }
+              },
+
+              builder: (
+                  context,
+                  state,
+                  ) {
+                // =================================================
+                // نفس شرط العرض الأصلي
+                // =================================================
+                if (state is AllDoctorSpState) {
+                  final doctors =
+                      state.doctors;
+
+                  return CustomScrollView(
+                    physics:
+                    const BouncingScrollPhysics(),
+
+                    keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior
+                        .onDrag,
+
+                    slivers: [
+                      // =============================================
+                      // Count / Header
+                      // =============================================
+                      SliverPadding(
+                        padding:
+                        EdgeInsets.fromLTRB(
+                          ui.pagePadding,
+                          ui.listTopPadding,
+                          ui.pagePadding,
+                          ui.sectionSpacing,
+                        ),
+
+                        sliver:
+                        SliverToBoxAdapter(
+                          child:
+                          buildTotalReportsCard(
+                            doctors.length,
+                            'قائمة الأطباء المسجلين',
+                            '',
+                          ),
+                        ),
+                      ),
+
+                      // =============================================
+                      // Empty
+                      // =============================================
+                      if (doctors.isEmpty)
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+
+                          child:
+                          emptyFullScreen(
                             context,
-                            state.failure.massage,
-                            state.failure.code,
-                          );
-                        },
-                      );
-                    }
-                  },
+                          ),
+                        )
 
-                  builder: (context, state) {
-                    // ============================================
-                    // نفس الشرط الأصلي
-                    // ============================================
-                    if (state is AllDoctorSpState) {
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: sectionSpacing,
+                      // =============================================
+                      // Doctors
+                      // =============================================
+                      else
+                        SliverPadding(
+                          padding:
+                          EdgeInsets.fromLTRB(
+                            ui.pagePadding,
+                            0,
+                            ui.pagePadding,
+                            ui.listBottomPadding,
                           ),
 
-                          // =====================================
-                          // Header
-                          // =====================================
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: titleHorizontalPadding,
-                            ),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "قائمة الاطباء المسجين",
-                                    style: TextStyle(
-                                      color: ColorManager.medicalText
-                                          .withOpacity(0.8),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: titleFontSize,
-                                    ),
-                                  ),
-                                ),
+                          sliver:
+                          SliverList.builder(
+                            itemCount:
+                            doctors.length,
 
-                                const SizedBox(
-                                  width: 12,
-                                ),
+                            itemBuilder:
+                                (
+                                context,
+                                index,
+                                ) {
+                              final doctor =
+                              doctors[index];
 
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: deviceType ==
-                                        AppDeviceType.mobilePortrait
-                                        ? 12
-                                        : 16,
-                                    vertical: deviceType ==
-                                        AppDeviceType.mobilePortrait
-                                        ? 4
-                                        : 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: ColorManager.medicalPrimary
-                                        .withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(
-                                      deviceType ==
-                                          AppDeviceType.mobilePortrait
-                                          ? 8
-                                          : 10,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    " ${state.doctors.length} طبيب",
-                                    style: TextStyle(
-                                      color:
-                                      ColorManager.medicalPrimary,
-                                      fontSize: countFontSize,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              return _buildDoctorCard(
+                                context,
+                                ui,
+                                doctor,
+                              );
+                            },
                           ),
+                        ),
+                    ],
+                  );
+                }
 
-                          SizedBox(
-                            height: sectionSpacing,
-                          ),
+                // =================================================
+                // نفس السلوك السابق لباقي الـStates
+                // =================================================
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-                          // =====================================
-                          // Empty State
-                          // نفس الشرط الأصلي
-                          // =====================================
-                          state.doctors.length == 0
-                              ? Container(
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(
-                              horizontal:
-                              emptyHorizontalPadding,
-                              vertical:
-                              emptyVerticalPadding,
-                            ),
-                            margin: EdgeInsets.symmetric(
-                              horizontal:
-                              titleHorizontalPadding,
-                            ),
-                            decoration: BoxDecoration(
-                              color: ColorManager.white,
-                              borderRadius:
-                              BorderRadius.circular(
-                                cardRadius,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.person_outline,
-                                  color:
-                                  ColorManager.medicalMuted,
-                                  size: emptyIconSize,
-                                  weight: 100,
-                                ),
+  // ===========================================================
+  // Doctor Card
+  // ===========================================================
 
-                                SizedBox(
-                                  height: sectionSpacing,
-                                ),
+  Widget _buildDoctorCard(
+      BuildContext context,
+      AppUi ui,
+      dynamic doctor,
+      ) {
+    final String address =
+        doctor.address
+            ?.toString()
+            .trim() ??
+            '';
 
-                                Text(
-                                  "لا يوجد أطباء مسجلين في هذا الاختصاص",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.bold,
-                                    color: ColorManager
-                                        .medicalPrimary,
-                                    fontSize:
-                                    emptyFontSize,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+    final String visits =
+        doctor.visits
+            ?.toString()
+            .trim() ??
+            '0';
 
-                          // =================================
-                          // Doctors List
-                          // =================================
-                              : Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal:
-                              horizontalPadding,
-                            ),
-                            child: ListView.builder(
-                              physics:
-                              const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
+    return Container(
+      margin: EdgeInsets.only(
+        bottom: ui.cardSpacing,
+      ),
 
-                              itemCount:
-                              state.doctors.length,
+      decoration: BoxDecoration(
+        color: Colors.white,
 
-                              itemBuilder:
-                                  (context, index) {
-                                return Container(
-                                  margin:
-                                  EdgeInsets.only(
-                                    bottom:
-                                    cardMarginBottom,
-                                    right:
-                                    cardMarginHorizontal,
-                                    left:
-                                    cardMarginHorizontal,
-                                  ),
-                                  padding:
-                                  EdgeInsets.all(
-                                    cardPadding,
-                                  ),
-                                  decoration:
-                                  BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                      cardRadius,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black
-                                            .withOpacity(
-                                          0.08,
-                                        ),
-                                        blurRadius: 15,
-                                        spreadRadius: 0,
-                                        offset:
-                                        const Offset(
-                                          0,
-                                          6,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.end,
-                                    children: [
-                                      // =========================
-                                      // Doctor name
-                                      // =========================
-                                      Text(
-                                        state
-                                            .doctors[index]
-                                            .title,
-                                        textAlign:
-                                        TextAlign.end,
-                                        style:
-                                        TextStyle(
-                                          fontSize:
-                                          titleFontSize,
-                                          fontWeight:
-                                          FontWeight
-                                              .bold,
-                                          color: ColorManager
-                                              .medicalPrimary,
-                                        ),
-                                      ),
+        borderRadius:
+        BorderRadius.circular(
+          ui.cardRadius,
+        ),
 
-                                      SizedBox(
-                                        height:
-                                        cardSectionSpacing,
-                                      ),
+        border: Border.all(
+          color: const Color(
+            0xFFE2E8F0,
+          ),
+        ),
 
-                                      // =========================
-                                      // Address
-                                      // =========================
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .center,
-                                        children: [
-                                          Icon(
-                                            Icons
-                                                .location_on_outlined,
-                                            size:
-                                            infoIconSize,
-                                            color:
-                                            Colors.grey,
-                                          ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black
+                .withOpacity(
+              0.03,
+            ),
 
-                                          SizedBox(
-                                            width:
-                                            infoSpacing,
-                                          ),
+            blurRadius: 12,
 
-                                          Expanded(
-                                            child: Text(
-                                              state
-                                                  .doctors[
-                                              index]
-                                                  .address,
-                                              style:
-                                              TextStyle(
-                                                color:
-                                                Colors.grey,
-                                                fontSize:
-                                                infoFontSize,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+            offset: const Offset(
+              0,
+              4,
+            ),
+          ),
+        ],
+      ),
 
-                                      SizedBox(
-                                        height:
-                                        cardSectionSpacing,
-                                      ),
+      child: ClipRRect(
+        borderRadius:
+        BorderRadius.circular(
+          ui.cardRadius,
+        ),
 
-                                      // =========================
-                                      // Visits
-                                      // =========================
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .center,
-                                        children: [
-                                          Icon(
-                                            Icons.numbers,
-                                            size:
-                                            infoIconSize,
-                                            color:
-                                            Colors.grey,
-                                          ),
+        child: Material(
+          color: Colors.white,
 
-                                          SizedBox(
-                                            width:
-                                            infoSpacing,
-                                          ),
+          child: Padding(
+            padding: EdgeInsets.all(
+              ui.cardPadding,
+            ),
 
-                                          Expanded(
-                                            child: Text(
-                                              "عدد الزيارات : ${state.doctors[index].visits}",
-                                              style:
-                                              TextStyle(
-                                                color:
-                                                Colors.grey,
-                                                fontSize:
-                                                infoFontSize,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+            child: Column(
+              crossAxisAlignment:
+              CrossAxisAlignment.start,
 
-                                      SizedBox(
-                                        height:
-                                        sectionSpacing,
-                                      ),
+              children: [
+                // ===============================================
+                // Doctor Header
+                // ===============================================
+                Row(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.center,
 
-                                      const Divider(
-                                        color:
-                                        Colors.grey,
-                                        thickness: 0.1,
-                                      ),
+                  children: [
+                    // ===========================================
+                    // Icon
+                    // ===========================================
+                    Container(
+                      width:
+                      ui.iconBoxSize,
 
-                                      SizedBox(
-                                        height:
-                                        infoSpacing,
-                                      ),
+                      height:
+                      ui.iconBoxSize,
 
-                                      // =========================
-                                      // Actions
-                                      // نفس السلوك
-                                      // =========================
-                                      Row(
-                                        children: [
-                                          PrescriptionMenuWidget(
-                                            doctorId: state
-                                                .doctors[
-                                            index]
-                                                .id,
-                                          ),
+                      alignment:
+                      Alignment.center,
 
-                                          const Spacer(),
+                      decoration:
+                      BoxDecoration(
+                        color:
+                        ColorManager
+                            .medicalPrimary
+                            .withOpacity(
+                          0.08,
+                        ),
 
-                                          /*
-                                                InkWell(
-                                                  onTap: () =>
-                                                      Navigator.pushNamed(
-                                                    context,
-                                                    Routes.doctorDetails,
-                                                    arguments:
-                                                        state.doctors[index],
-                                                  ),
-                                                  child:
-                                                      buildCardButton(
-                                                    "عرض التفاصيل",
-                                                    ColorManager.medicalPrimary,
-                                                    Colors.white,
-                                                    Icons.directions_run,
-                                                  ),
-                                                ),
-                                                */
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    }
+                        borderRadius:
+                        BorderRadius
+                            .circular(
+                          ui.smallRadius + 2,
+                        ),
+                      ),
 
-                    // نفس السلوك السابق
-                    return const SizedBox.shrink();
-                  },
+                      child: Icon(
+                        Icons.person_outline_rounded,
+
+                        size:
+                        ui.iconSize,
+
+                        color:
+                        ColorManager
+                            .medicalPrimary,
+                      ),
+                    ),
+
+                    SizedBox(
+                      width:
+                      ui.mediumSpacing,
+                    ),
+
+                    // ===========================================
+                    // Name
+                    // ===========================================
+                    Expanded(
+                      child: Text(
+                        doctor.title
+                            .toString(),
+
+                        maxLines: 2,
+
+                        overflow:
+                        TextOverflow
+                            .ellipsis,
+
+                        style:
+                        TextStyle(
+                          fontSize:
+                          ui.cardTitleSize,
+
+                          fontWeight:
+                          FontWeight.w700,
+
+                          color:
+                          ColorManager
+                              .medicalPrimary,
+
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height:
+                  ui.sectionSpacing,
+                ),
+
+                // ===============================================
+                // Address
+                // ===============================================
+                _buildInfoTile(
+                  ui: ui,
+
+                  icon:
+                  Icons.location_on_outlined,
+
+                  text:
+                  address.isEmpty
+                      ? 'غير محدد'
+                      : address,
+                ),
+
+                SizedBox(
+                  height:
+                  ui.smallSpacing,
+                ),
+
+                // ===============================================
+                // Visits
+                // ===============================================
+                _buildVisitsTile(
+                  ui,
+                  visits,
+                ),
+
+                SizedBox(
+                  height:
+                  ui.sectionSpacing,
+                ),
+
+                const Divider(
+                  height: 1,
+
+                  thickness: 0.6,
+
+                  color: Color(
+                    0xFFE2E8F0,
+                  ),
+                ),
+
+                SizedBox(
+                  height:
+                  ui.mediumSpacing,
+                ),
+
+                // ===============================================
+                // Actions
+                // نفس السلوك الأصلي
+                // ===============================================
+                Row(
+                  children: [
+                    PrescriptionMenuWidget(
+                      doctorId:
+                      doctor.id,
+                    ),
+
+                    const Spacer(),
+
+                    /*
+                    InkWell(
+                      onTap: () =>
+                          Navigator.pushNamed(
+                        context,
+                        Routes.doctorDetails,
+                        arguments: doctor,
+                      ),
+                      child: buildCardButton(
+                        context,
+                        "عرض التفاصيل",
+                        ColorManager.medicalPrimary,
+                        Colors.white,
+                        Icons.directions_run,
+                      ),
+                    ),
+                    */
+                  ],
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Info Tile
+  // ===========================================================
+
+  Widget _buildInfoTile({
+    required AppUi ui,
+    required IconData icon,
+    required String text,
+  }) {
+    return Container(
+      width: double.infinity,
+
+      padding: EdgeInsets.symmetric(
+        horizontal:
+        ui.mediumSpacing,
+        vertical:
+        ui.isMobile ? 10 : 11,
+      ),
+
+      decoration: BoxDecoration(
+        color: const Color(
+          0xFFF8FAFC,
+        ),
+
+        borderRadius:
+        BorderRadius.circular(
+          ui.smallRadius + 1,
+        ),
+
+        border: Border.all(
+          color: const Color(
+            0xFFE2E8F0,
+          ),
+        ),
+      ),
+
+      child: Row(
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
+
+        children: [
+          Icon(
+            icon,
+
+            size:
+            ui.smallIconSize + 1,
+
+            color: const Color(
+              0xFF64748B,
+            ),
+          ),
+
+          SizedBox(
+            width:
+            ui.smallSpacing,
+          ),
+
+          Expanded(
+            child: Text(
+              text,
+
+              maxLines: 2,
+
+              overflow:
+              TextOverflow.ellipsis,
+
+              style: TextStyle(
+                fontSize:
+                ui.bodyTextSize,
+
+                fontWeight:
+                FontWeight.w500,
+
+                color: const Color(
+                  0xFF475569,
+                ),
+
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ===========================================================
+  // Visits Tile
+  // ===========================================================
+
+  Widget _buildVisitsTile(
+      AppUi ui,
+      String visits,
+      ) {
+    return Container(
+      width: double.infinity,
+
+      padding: EdgeInsets.symmetric(
+        horizontal:
+        ui.mediumSpacing,
+        vertical:
+        ui.isMobile ? 10 : 11,
+      ),
+
+      decoration: BoxDecoration(
+        color: const Color(
+          0xFFF0FDF4,
+        ),
+
+        borderRadius:
+        BorderRadius.circular(
+          ui.smallRadius + 1,
+        ),
+
+        border: Border.all(
+          color: const Color(
+            0xFFDCFCE7,
+          ),
+        ),
+      ),
+
+      child: Row(
+        children: [
+          Icon(
+            Icons.event_available_outlined,
+
+            size:
+            ui.smallIconSize + 1,
+
+            color: const Color(
+              0xFF16A34A,
+            ),
+          ),
+
+          SizedBox(
+            width:
+            ui.smallSpacing,
+          ),
+
+          Expanded(
+            child: Text(
+              'عدد الزيارات: $visits',
+
+              maxLines: 1,
+
+              overflow:
+              TextOverflow.ellipsis,
+
+              style: TextStyle(
+                fontSize:
+                ui.bodyTextSize,
+
+                fontWeight:
+                FontWeight.w600,
+
+                color: const Color(
+                  0xFF15803D,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

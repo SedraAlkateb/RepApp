@@ -5,7 +5,11 @@ import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class DatabaseHelper {
+abstract class DatabaseAccessor {
+  Future<Database> get database;
+}
+
+class DatabaseHelper implements DatabaseAccessor {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
 
