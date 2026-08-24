@@ -210,8 +210,9 @@ class DocHosEvent extends SeniorProfEvent {
   final int repDet;
   final int? spId;
   final int? placeId;
+  final int? cityId;
 
-  DocHosEvent(this.repDet, {this.spId, this.placeId});
+  DocHosEvent(this.repDet, {this.spId, this.placeId,this.cityId});
   @override
   List<Object?> get props => [repDet, spId,placeId];
 }

@@ -24,7 +24,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
     on<ManageFutureEvent>((event, emit) async {
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
-        (await allRepsFutureUsecase.execute(UserInfo.repId))
+        (await allRepsFutureUsecase.execute(UserInfo.repId,cityId: event.cityId))
             .fold((failure) {
           emit(
               AllSeniorRepErrorState(failure: failure));

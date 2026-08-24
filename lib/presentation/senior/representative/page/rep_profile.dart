@@ -70,12 +70,6 @@ class _RepProfileState
   @override
   void initState() {
     super.initState();
-
-    // =====================================================
-    // RepProfile صار مسؤول عن تحميل بياناته بنفسه.
-    //
-    // ما عاد لازم الصفحة السابقة ترسل getInfoRepEvent.
-    // =====================================================
     context
         .read<SeniorProfBloc>()
         .add(

@@ -472,7 +472,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       if (event is DocHosEvent) {
         emit(DocHosLoadingState());
         (await getDocHosBySpPlace.execute(event.repDet,
-                spId: event.spId, placeId: event.placeId))
+                spId: event.spId, placeId: event.placeId,cityId: event.cityId))
             .fold((failure) {
           emit(DocHosErrorState(failure: failure));
         }, (data) async {

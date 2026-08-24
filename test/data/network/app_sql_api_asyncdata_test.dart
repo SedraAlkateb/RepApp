@@ -25,7 +25,7 @@ class FakeDatabaseHelper implements DatabaseAccessor {
              sumBrandHospital INTEGER DEFAULT 0
            );
          ''' );
-         await db.execute('CREATE TABLE place (placeId INTEGER PRIMARY KEY, title TEXT NOT NULL);');
+         await db.execute('CREATE TABLE place (placeId INTEGER PRIMARY KEY, title TEXT NOT NULL,totalVisit INTEGER NOT NULL DEFAULT 0 );');
          await db.execute('CREATE TABLE doctor (id INTEGER PRIMARY KEY, title TEXT NOT NULL, placeId INTEGER NOT NULL, address TEXT NOT NULL, placeTitle TEXT NOT NULL, visits INTEGER NOT NULL, spTitle TEXT NOT NULL, workHours TEXT NOT NULL, note TEXT NOT NULL, rate TEXT NOT NULL, spId INTEGER NOT NULL);');
          await db.execute('CREATE TABLE hospital (id INTEGER PRIMARY KEY, title TEXT NOT NULL, address TEXT NOT NULL, placeId INTEGER NOT NULL, note TEXT NOT NULL, placeTitle TEXT NOT NULL);');
          await db.execute('CREATE TABLE brand (id INTEGER PRIMARY KEY, title TEXT NOT NULL, phTitle TEXT NOT NULL, falg INTEGER NOT NULL, sampleCoast INTEGER NOT NULL);');
@@ -53,7 +53,7 @@ void main() {
 
   test('asyncData inserts places, docs, hospitals, brands, specs and visits', () async {
     // arrange: minimal domain objects
-    final places = [PlaceModel(1, 'Place 1')];
+    final places = [PlaceModel(1, 'Place 1',3)];
     final specs = [SpecDModel(1, 'Spec 1', 1, 0, 0, 0)];
     final doctors = [DoctorModel(1, 'Doc 1', 1, 'addr', 'placeTitle', 5, '', '', 'spTitle', 1, 'workHours')];
     final hospitals = [HospitalModel(1, 'Hos 1', 1, 'address', 'note', 'placeTitle')];

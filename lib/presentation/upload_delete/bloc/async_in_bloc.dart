@@ -234,7 +234,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
             visitDoctorResult.fold((failure) => failure, (data) => data);
         if (visitDoctorFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(
-              failure: Failure(0, "${visitDoctorFailureOrSuccess.massage} 2")));
+              failure: Failure(visitDoctorFailureOrSuccess.code, "${visitDoctorFailureOrSuccess.massage} 2")));
+          print("visitDoctorFailureOrSuccess.code:${visitDoctorFailureOrSuccess.code}");
           return false;
         }
         final visitDoctorFlagResult =

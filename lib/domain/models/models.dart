@@ -718,13 +718,15 @@ class VisitHospitalModel {
 class PlaceModel {
   int placeId;
   String title;
+  int totalVisit;
 
-  PlaceModel(this.placeId, this.title);
+  PlaceModel(this.placeId, this.title,this.totalVisit);
 
   Map<String, dynamic> toMap() {
     return {
       'placeId': placeId,
       'title': title,
+      'totalVisit':totalVisit
     };
   }
 
@@ -732,6 +734,7 @@ class PlaceModel {
     return PlaceModel(
       map['placeId'],
       map['title'],
+      map['totalVisit'],
     );
   }
 }
@@ -1241,6 +1244,8 @@ class LoginModel {
   int totalReci;
   int usedReci;
   int remainReci;
+  int ?totDoc;
+  int ?totHos;
 
   LoginModel(
       this.samplesCount,
@@ -1263,8 +1268,11 @@ class LoginModel {
       this.totalReci,
       this.usedReci,
       this.remainReci,
+
       {this.otherStartDate,
-      this.otherEndDate});
+      this.otherEndDate,
+        this.totDoc,
+        this.totHos,});
 
   Map<String, dynamic> toMap() {
     return {
@@ -1289,7 +1297,9 @@ class LoginModel {
       'repType': repType.i.toString(),
       'totalReci': totalReci,
       'usedReci': usedReci,
-      'remainReci': remainReci
+      'remainReci': remainReci,
+      'totalVisitDoc':totDoc,
+      'totalVisitHos':totHos,
     };
   }
 
@@ -1315,6 +1325,8 @@ class LoginModel {
       map['totalReci'] ?? 0,
       map['usedReci'] ?? 0,
       map['remainReci'],
+    totDoc:   map['totalVisitDoc'],
+    totHos:   map['totalVisitHos'],
       otherStartDate: map['otherStartDate'] ?? "",
       otherEndDate: map['otherEndDate'] ?? "",
     );

@@ -3,7 +3,6 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
-import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/unread_visit_widget.dart';
@@ -708,22 +707,8 @@ class RepCard extends StatelessWidget {
           unreadCount: repName.totalUnReadVisit,
           totalCount: repName.totalVisit,
           onTap: () {
-            // 1. تهيئة موديل البروفايل
+
             initSeniorProfModule();
-
-            // 2. إرسال الحدث
-            context
-                .read<SeniorProfBloc>()
-                .add(
-              getInfoRepEvent(
-                int.parse(
-                  repName.id,
-                ),
-                repPlanId,
-              ),
-            );
-
-            // 3. الانتقال للبروفايل
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) =>

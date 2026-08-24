@@ -60,7 +60,10 @@ abstract class AppServiceClient {
       {@Part(name: "repPlanIdOther") int? repPlanIdOther});
   @POST("/admin/docSearch.php") //
   Future<SearchDoctorsBaseSpResponse> docSearch(
-      @Part(name: "name") String name, @Part(name: "repDet") int repDet);
+      @Part(name: "name") String name,
+      @Part(name: "repDet") int repDet
+      , {@Part(name: "cityId") int? cityId}
+      );
 
   @POST("/admin/docReport.php") //
   Future<DocDoctorsBaseResponse> docReport(
@@ -274,8 +277,7 @@ abstract class AppServiceClient {
 
   @POST("/admin/getRepsFuture.php")
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
-    @Part(name: "repDet") int id,
-  );
+      @Part(name: "repDet") int id, {@Part(name: "cityId") int? cityId});
 
   @POST("/admin/changeRepPlanStatus.php")
   Future<Message1Response> changeRepPlanStatus(
@@ -304,7 +306,8 @@ abstract class AppServiceClient {
   @POST("/admin/getHospitals.php")
   Future<AllSearchHospitalBaseResponse> getSearchHospitals(
     @Part(name: "name") String name,
-    @Part(name: "repDet") int repDet,
+    @Part(name: "repDet") int repDet
+  , {@Part(name: "cityId") int? cityId}
   );
   @POST("/admin/updateRepPlanBrandAmount.php")
   Future<Message1Response> updateRepPlanBrandAmount(
@@ -321,9 +324,11 @@ abstract class AppServiceClient {
   );
   @POST("/admin/getSpDocHos.php")
   Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(
-    @Part(name: "repDet") int repDet, {
+    @Part(name: "repDet") int repDet,
+      {
     @Part(name: "spId") int? spId,
     @Part(name: "placeId") int? placeId,
+   @Part(name: "cityId") int? cityId
   });
 }
 

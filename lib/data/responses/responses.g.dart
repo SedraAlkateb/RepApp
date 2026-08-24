@@ -301,6 +301,8 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['recipesCount'] as String?,
       json['otherStartDate'] as String? ?? '-9',
       json['otherEndDate'] as String? ?? '-9',
+      json['totDoc'] as String?,
+      json['totHos'] as String?,
     )
       ..samplesCount = json['samplesCount'] as String?
       ..repType = json['repType'] as String?
@@ -329,6 +331,8 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'TotalReci': instance.totalReci,
       'usedReci': instance.usedReci,
       'remainReci': instance.remainReci,
+      'totDoc': instance.totDoc,
+      'totHos': instance.totHos,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
@@ -558,12 +562,14 @@ PlaceResponse _$PlaceResponseFromJson(Map<String, dynamic> json) =>
     PlaceResponse(
       json['id'] as String?,
       json['title'] as String?,
+      (json['totalVisit'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PlaceResponseToJson(PlaceResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
+      'totalVisit': instance.totalVisit,
     };
 
 AllPlaceResponse _$AllPlaceResponseFromJson(Map<String, dynamic> json) =>

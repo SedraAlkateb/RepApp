@@ -300,15 +300,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                   iconColor: Colors.green,
 
                                   onTap: () {
-                                    initSeniorManageFutureModule();
-
-                                    BlocProvider.of<ManageFutureBloc>(
-                                      context,
-                                    ).add(
-                                      AllSeniorRepFutureEvent(
-                                      ),
-                                    );
-
                                     Navigator.pushNamed(
                                       context,
                                       Routes.allRepWithFuture,

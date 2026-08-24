@@ -3,6 +3,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -347,6 +348,9 @@ class _PlaceSeniorState
       AppUi ui,
       PlaceModel place,
       ) {
+    final String totalVisits =
+        place.totalVisit.toString() ;
+
     return Container(
       margin: EdgeInsets.only(
         bottom: ui.cardSpacing,
@@ -355,8 +359,7 @@ class _PlaceSeniorState
       decoration: BoxDecoration(
         color: Colors.white,
 
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
 
@@ -368,15 +371,11 @@ class _PlaceSeniorState
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black
-                .withOpacity(
+            color: Colors.black.withOpacity(
               0.03,
             ),
-
             blurRadius: 12,
-
-            offset:
-            const Offset(
+            offset: const Offset(
               0,
               4,
             ),
@@ -385,8 +384,7 @@ class _PlaceSeniorState
       ),
 
       child: ClipRRect(
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
 
@@ -404,27 +402,29 @@ class _PlaceSeniorState
               );
 
               context
-                  .read<
-                  SeniorProfBloc>()
+                  .read<SeniorProfBloc>()
                   .add(
                 DocHosEvent(
                   UserInfo.repId,
                   placeId:
                   place.placeId,
+                  cityId: BlocProvider.of<AllCityBloc>(context).selectedCityId
                 ),
               );
             },
 
             child: Padding(
-              padding:
-              EdgeInsets.all(
+              padding: EdgeInsets.all(
                 ui.cardPadding,
               ),
 
               child: Row(
+                crossAxisAlignment:
+                CrossAxisAlignment.center,
+
                 children: [
                   // =============================================
-                  // Icon
+                  // Place Icon
                   // =============================================
                   Container(
                     width:
@@ -445,21 +445,19 @@ class _PlaceSeniorState
                       ),
 
                       borderRadius:
-                      BorderRadius
-                          .circular(
-                        ui.smallRadius +
-                            2,
+                      BorderRadius.circular(
+                        ui.smallRadius + 2,
                       ),
                     ),
 
                     child: Icon(
-                      Icons
-                          .location_on_rounded,
+                      Icons.location_on_rounded,
 
                       size:
                       ui.iconSize,
 
-                      color: ColorManager
+                      color:
+                      ColorManager
                           .medicalPrimary,
                     ),
                   ),
@@ -478,17 +476,18 @@ class _PlaceSeniorState
                       MainAxisSize.min,
 
                       crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
+                      CrossAxisAlignment.start,
 
                       children: [
+                        // =========================================
+                        // Label
+                        // =========================================
                         Text(
                           'اسم المنطقة',
 
-                          style:
-                          TextStyle(
-                            fontSize: ui
-                                .smallTextSize,
+                          style: TextStyle(
+                            fontSize:
+                            ui.smallTextSize,
 
                             color:
                             const Color(
@@ -496,8 +495,7 @@ class _PlaceSeniorState
                             ),
 
                             fontWeight:
-                            FontWeight
-                                .w500,
+                            FontWeight.w500,
                           ),
                         ),
 
@@ -507,6 +505,9 @@ class _PlaceSeniorState
                               2,
                         ),
 
+                        // =========================================
+                        // Place Name
+                        // =========================================
                         Text(
                           place.title,
 
@@ -516,14 +517,12 @@ class _PlaceSeniorState
                           TextOverflow
                               .ellipsis,
 
-                          style:
-                          TextStyle(
-                            fontSize: ui
-                                .cardTitleSize,
+                          style: TextStyle(
+                            fontSize:
+                            ui.cardTitleSize,
 
                             fontWeight:
-                            FontWeight
-                                .w700,
+                            FontWeight.w700,
 
                             color:
                             const Color(
@@ -533,25 +532,147 @@ class _PlaceSeniorState
                             height: 1.3,
                           ),
                         ),
+
+                        SizedBox(
+                          height:
+                          ui.smallSpacing,
+                        ),
+
+                        // =========================================
+                        // Total Visits
+                        // =========================================
+                        Container(
+                          padding:
+                          EdgeInsets.symmetric(
+                            horizontal:
+                            ui.mediumSpacing,
+                            vertical: 5,
+                          ),
+
+                          decoration:
+                          BoxDecoration(
+                            color:
+                            const Color(
+                              0xFFF0FDF4,
+                            ),
+
+                            borderRadius:
+                            BorderRadius
+                                .circular(
+                              ui.smallRadius,
+                            ),
+
+                            border:
+                            Border.all(
+                              color:
+                              const Color(
+                                0xFFDCFCE7,
+                              ),
+                            ),
+                          ),
+
+                          child: Row(
+                            mainAxisSize:
+                            MainAxisSize.min,
+
+                            children: [
+                              Icon(
+                                Icons
+                                    .event_available_outlined,
+
+                                size:
+                                ui.smallIconSize,
+
+                                color:
+                                const Color(
+                                  0xFF16A34A,
+                                ),
+                              ),
+
+                              SizedBox(
+                                width:
+                                ui.smallSpacing,
+                              ),
+
+                              Flexible(
+                                child: Text(
+                                  'عدد الزيارات: $totalVisits',
+
+                                  maxLines: 1,
+
+                                  overflow:
+                                  TextOverflow
+                                      .ellipsis,
+
+                                  style:
+                                  TextStyle(
+                                    fontSize: ui
+                                        .smallTextSize,
+
+                                    fontWeight:
+                                    FontWeight
+                                        .w600,
+
+                                    color:
+                                    const Color(
+                                      0xFF15803D,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
 
                   SizedBox(
                     width:
-                    ui.smallSpacing,
+                    ui.mediumSpacing,
                   ),
 
-                  Icon(
-                    Icons
-                        .arrow_forward_ios_rounded,
+                  // =============================================
+                  // Arrow
+                  // =============================================
+                  Container(
+                    width:
+                    ui.isMobile
+                        ? 30
+                        : 34,
 
-                    size:
-                    ui.smallIconSize,
+                    height:
+                    ui.isMobile
+                        ? 30
+                        : 34,
 
-                    color:
-                    const Color(
-                      0xFF94A3B8,
+                    alignment:
+                    Alignment.center,
+
+                    decoration:
+                    BoxDecoration(
+                      color:
+                      const Color(
+                        0xFFF8FAFC,
+                      ),
+
+                      borderRadius:
+                      BorderRadius.circular(
+                        ui.smallRadius,
+                      ),
+                    ),
+
+                    child: Icon(
+                      Icons
+                          .arrow_forward_ios_rounded,
+
+                      size:
+                      ui.smallIconSize,
+
+                      color:
+                      const Color(
+                        0xFF94A3B8,
+                      ),
                     ),
                   ),
                 ],

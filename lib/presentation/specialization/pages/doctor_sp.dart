@@ -15,8 +15,7 @@ class DoctorSp extends StatefulWidget {
   });
 
   @override
-  State<DoctorSp> createState() =>
-      _DoctorSpState();
+  State<DoctorSp> createState() => _DoctorSpState();
 }
 
 class _DoctorSpState extends State<DoctorSp> {
@@ -27,40 +26,30 @@ class _DoctorSpState extends State<DoctorSp> {
     // =========================================================
     // صفحة قائمة بعمود واحد
     // =========================================================
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return Scaffold(
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       body: SafeArea(
         top: false,
-
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: contentMaxWidth,
             ),
-
-            child: BlocConsumer<
-                SpecializationBloc,
-                SpecializationState>(
+            child: BlocConsumer<SpecializationBloc, SpecializationState>(
               // =================================================
               // نفس listener الأصلي
               // =================================================
               listener: (
-                  context,
-                  state,
-                  ) {
-                if (state
-                is AllSpecDoctorErrorState) {
-                  WidgetsBinding.instance
-                      .addPostFrameCallback(
-                        (_) {
+                context,
+                state,
+              ) {
+                if (state is AllSpecDoctorErrorState) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) {
                       error(
                         context,
                         state.failure.massage,
@@ -72,41 +61,32 @@ class _DoctorSpState extends State<DoctorSp> {
               },
 
               builder: (
-                  context,
-                  state,
-                  ) {
+                context,
+                state,
+              ) {
                 // =================================================
                 // نفس شرط العرض الأصلي
                 // =================================================
                 if (state is AllDoctorSpState) {
-                  final doctors =
-                      state.doctors;
+                  final doctors = state.doctors;
 
                   return CustomScrollView(
-                    physics:
-                    const BouncingScrollPhysics(),
-
+                    physics: const BouncingScrollPhysics(),
                     keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior
-                        .onDrag,
-
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     slivers: [
                       // =============================================
                       // Count / Header
                       // =============================================
                       SliverPadding(
-                        padding:
-                        EdgeInsets.fromLTRB(
+                        padding: EdgeInsets.fromLTRB(
                           ui.pagePadding,
                           ui.listTopPadding,
                           ui.pagePadding,
                           ui.sectionSpacing,
                         ),
-
-                        sliver:
-                        SliverToBoxAdapter(
-                          child:
-                          buildTotalReportsCard(
+                        sliver: SliverToBoxAdapter(
+                          child: buildTotalReportsCard(
                             doctors.length,
                             'قائمة الأطباء المسجلين',
                             '',
@@ -120,9 +100,7 @@ class _DoctorSpState extends State<DoctorSp> {
                       if (doctors.isEmpty)
                         SliverFillRemaining(
                           hasScrollBody: false,
-
-                          child:
-                          emptyFullScreen(
+                          child: emptyFullScreen(
                             context,
                           ),
                         )
@@ -132,26 +110,19 @@ class _DoctorSpState extends State<DoctorSp> {
                       // =============================================
                       else
                         SliverPadding(
-                          padding:
-                          EdgeInsets.fromLTRB(
+                          padding: EdgeInsets.fromLTRB(
                             ui.pagePadding,
                             0,
                             ui.pagePadding,
                             ui.listBottomPadding,
                           ),
-
-                          sliver:
-                          SliverList.builder(
-                            itemCount:
-                            doctors.length,
-
-                            itemBuilder:
-                                (
-                                context,
-                                index,
-                                ) {
-                              final doctor =
-                              doctors[index];
+                          sliver: SliverList.builder(
+                            itemCount: doctors.length,
+                            itemBuilder: (
+                              context,
+                              index,
+                            ) {
+                              final doctor = doctors[index];
 
                               return _buildDoctorCard(
                                 context,
@@ -182,50 +153,34 @@ class _DoctorSpState extends State<DoctorSp> {
   // ===========================================================
 
   Widget _buildDoctorCard(
-      BuildContext context,
-      AppUi ui,
-      dynamic doctor,
-      ) {
-    final String address =
-        doctor.address
-            ?.toString()
-            .trim() ??
-            '';
+    BuildContext context,
+    AppUi ui,
+    dynamic doctor,
+  ) {
+    final String address = doctor.address?.toString().trim() ?? '';
 
-    final String visits =
-        doctor.visits
-            ?.toString()
-            .trim() ??
-            '0';
+    final String visits = doctor.visits?.toString().trim() ?? '0';
 
     return Container(
       margin: EdgeInsets.only(
         bottom: ui.cardSpacing,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
-            color: Colors.black
-                .withOpacity(
+            color: Colors.black.withOpacity(
               0.03,
             ),
-
             blurRadius: 12,
-
             offset: const Offset(
               0,
               4,
@@ -233,78 +188,49 @@ class _DoctorSpState extends State<DoctorSp> {
           ),
         ],
       ),
-
       child: ClipRRect(
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         child: Material(
           color: Colors.white,
-
           child: Padding(
             padding: EdgeInsets.all(
               ui.cardPadding,
             ),
-
             child: Column(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ===============================================
                 // Doctor Header
                 // ===============================================
                 Row(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.center,
-
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // ===========================================
                     // Icon
                     // ===========================================
                     Container(
-                      width:
-                      ui.iconBoxSize,
-
-                      height:
-                      ui.iconBoxSize,
-
-                      alignment:
-                      Alignment.center,
-
-                      decoration:
-                      BoxDecoration(
-                        color:
-                        ColorManager
-                            .medicalPrimary
-                            .withOpacity(
+                      width: ui.iconBoxSize,
+                      height: ui.iconBoxSize,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: ColorManager.medicalPrimary.withOpacity(
                           0.08,
                         ),
-
-                        borderRadius:
-                        BorderRadius
-                            .circular(
+                        borderRadius: BorderRadius.circular(
                           ui.smallRadius + 2,
                         ),
                       ),
-
                       child: Icon(
                         Icons.person_outline_rounded,
-
-                        size:
-                        ui.iconSize,
-
-                        color:
-                        ColorManager
-                            .medicalPrimary,
+                        size: ui.iconSize,
+                        color: ColorManager.medicalPrimary,
                       ),
                     ),
 
                     SizedBox(
-                      width:
-                      ui.mediumSpacing,
+                      width: ui.mediumSpacing,
                     ),
 
                     // ===========================================
@@ -312,27 +238,13 @@ class _DoctorSpState extends State<DoctorSp> {
                     // ===========================================
                     Expanded(
                       child: Text(
-                        doctor.title
-                            .toString(),
-
+                        doctor.title.toString(),
                         maxLines: 2,
-
-                        overflow:
-                        TextOverflow
-                            .ellipsis,
-
-                        style:
-                        TextStyle(
-                          fontSize:
-                          ui.cardTitleSize,
-
-                          fontWeight:
-                          FontWeight.w700,
-
-                          color:
-                          ColorManager
-                              .medicalPrimary,
-
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: ui.cardTitleSize,
+                          fontWeight: FontWeight.w700,
+                          color: ColorManager.medicalPrimary,
                           height: 1.3,
                         ),
                       ),
@@ -341,8 +253,7 @@ class _DoctorSpState extends State<DoctorSp> {
                 ),
 
                 SizedBox(
-                  height:
-                  ui.sectionSpacing,
+                  height: ui.sectionSpacing,
                 ),
 
                 // ===============================================
@@ -350,19 +261,12 @@ class _DoctorSpState extends State<DoctorSp> {
                 // ===============================================
                 _buildInfoTile(
                   ui: ui,
-
-                  icon:
-                  Icons.location_on_outlined,
-
-                  text:
-                  address.isEmpty
-                      ? 'غير محدد'
-                      : address,
+                  icon: Icons.location_on_outlined,
+                  text: address.isEmpty ? 'غير محدد' : address,
                 ),
 
                 SizedBox(
-                  height:
-                  ui.smallSpacing,
+                  height: ui.smallSpacing,
                 ),
 
                 // ===============================================
@@ -374,23 +278,19 @@ class _DoctorSpState extends State<DoctorSp> {
                 ),
 
                 SizedBox(
-                  height:
-                  ui.sectionSpacing,
+                  height: ui.sectionSpacing,
                 ),
 
                 const Divider(
                   height: 1,
-
                   thickness: 0.6,
-
                   color: Color(
                     0xFFE2E8F0,
                   ),
                 ),
 
                 SizedBox(
-                  height:
-                  ui.mediumSpacing,
+                  height: ui.mediumSpacing,
                 ),
 
                 // ===============================================
@@ -400,10 +300,8 @@ class _DoctorSpState extends State<DoctorSp> {
                 Row(
                   children: [
                     PrescriptionMenuWidget(
-                      doctorId:
-                      doctor.id,
+                      doctorId: doctor.id,
                     ),
-
                     const Spacer(),
 
                     /*
@@ -444,72 +342,47 @@ class _DoctorSpState extends State<DoctorSp> {
   }) {
     return Container(
       width: double.infinity,
-
       padding: EdgeInsets.symmetric(
-        horizontal:
-        ui.mediumSpacing,
-        vertical:
-        ui.isMobile ? 10 : 11,
+        horizontal: ui.mediumSpacing,
+        vertical: ui.isMobile ? 10 : 11,
       ),
-
       decoration: BoxDecoration(
         color: const Color(
           0xFFF8FAFC,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.smallRadius + 1,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
       ),
-
       child: Row(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             icon,
-
-            size:
-            ui.smallIconSize + 1,
-
+            size: ui.smallIconSize + 1,
             color: const Color(
               0xFF64748B,
             ),
           ),
-
           SizedBox(
-            width:
-            ui.smallSpacing,
+            width: ui.smallSpacing,
           ),
-
           Expanded(
             child: Text(
               text,
-
               maxLines: 2,
-
-              overflow:
-              TextOverflow.ellipsis,
-
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize:
-                ui.bodyTextSize,
-
-                fontWeight:
-                FontWeight.w500,
-
+                fontSize: ui.bodyTextSize,
+                fontWeight: FontWeight.w500,
                 color: const Color(
                   0xFF475569,
                 ),
-
                 height: 1.4,
               ),
             ),
@@ -524,70 +397,48 @@ class _DoctorSpState extends State<DoctorSp> {
   // ===========================================================
 
   Widget _buildVisitsTile(
-      AppUi ui,
-      String visits,
-      ) {
+    AppUi ui,
+    String visits,
+  ) {
     return Container(
       width: double.infinity,
-
       padding: EdgeInsets.symmetric(
-        horizontal:
-        ui.mediumSpacing,
-        vertical:
-        ui.isMobile ? 10 : 11,
+        horizontal: ui.mediumSpacing,
+        vertical: ui.isMobile ? 10 : 11,
       ),
-
       decoration: BoxDecoration(
         color: const Color(
           0xFFF0FDF4,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.smallRadius + 1,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFDCFCE7,
           ),
         ),
       ),
-
       child: Row(
         children: [
           Icon(
             Icons.event_available_outlined,
-
-            size:
-            ui.smallIconSize + 1,
-
+            size: ui.smallIconSize + 1,
             color: const Color(
               0xFF16A34A,
             ),
           ),
-
           SizedBox(
-            width:
-            ui.smallSpacing,
+            width: ui.smallSpacing,
           ),
-
           Expanded(
             child: Text(
               'عدد الزيارات: $visits',
-
               maxLines: 1,
-
-              overflow:
-              TextOverflow.ellipsis,
-
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize:
-                ui.bodyTextSize,
-
-                fontWeight:
-                FontWeight.w600,
-
+                fontSize: ui.bodyTextSize,
+                fontWeight: FontWeight.w600,
                 color: const Color(
                   0xFF15803D,
                 ),

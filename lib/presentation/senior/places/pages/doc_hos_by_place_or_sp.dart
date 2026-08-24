@@ -3,6 +3,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/doc_card.dart';
 import 'package:domina_app/presentation/senior/representative/widget/hos_card.dart';
@@ -219,169 +220,162 @@ class _DocHosByPlaceOrSpPageState
       body: SafeArea(
         top: false,
 
-        child: BlocBuilder<
-            SeniorProfBloc,
-            SeniorProfState>(
-          buildWhen: (
-              previous,
-              current,
-              ) =>
-          current
-          is DocHosLoadingState ||
+        child: Column(
+          children: [
+            // =========================================
+            // Tabs
+            // =========================================
+            Padding(
+              padding:
+              EdgeInsets.fromLTRB(
+                ui.pagePadding,
+                ui.searchTopPadding,
+                ui.pagePadding,
+                ui.smallSpacing,
+              ),
+
+              child: SizedBox(
+                height:
+                widget.height,
+
+                child:
+                _DocHosTabBar(
+                  height:
+                  widget.height,
+
+                  controller:
+                  _tabController,
+                ),
+              ),
+            ),
+
+            // =========================================
+            // Search
+            //
+            // دائماً ظاهر حتى لو النتيجة Empty
+            // =========================================
+            SliverPadding(
+              padding:
+              EdgeInsets.fromLTRB(
+                ui.pagePadding,
+                ui.searchTopPadding,
+                ui.pagePadding,
+                ui.searchBottomPadding,
+              ),
+
+              sliver:
+              SliverToBoxAdapter(
+                child:
+                SearchWithCityFilter(
+                  searchController:
+                  searchController,
+
+                  onSearch:
+                      (value) {
+                    _search(
+                      value,
+                    );
+                  },
+                ),
+              ),
+            ),
+
+
+            // =========================================
+            // Tabs Content
+            // =========================================
+            BlocBuilder<
+                SeniorProfBloc,
+                SeniorProfState>(
+              buildWhen: (
+                  previous,
+                  current,
+                  ) =>
               current
-              is DocHosState ||
-              current
-              is DocHosErrorState,
+              is DocHosLoadingState ||
+                  current
+                  is DocHosState ||
+                  current
+                  is DocHosErrorState,
 
-          builder: (
-              context,
-              state,
-              ) {
-            // =================================================
-            // Loading
-            // =================================================
-            if (state
-            is DocHosLoadingState) {
-              // إذا عم نجيب بيانات جديدة
-              // منسمح بتخزين القائمة الأصلية الجديدة
-              _baseDataLoaded = false;
+              builder: (
+                  context,
+                  state,
+                  ) {
+                // =================================================
+                // Loading
+                // =================================================
+                if (state
+                is DocHosLoadingState) {
+                  // إذا عم نجيب بيانات جديدة
+                  // منسمح بتخزين القائمة الأصلية الجديدة
+                  _baseDataLoaded = false;
 
-              return loadingFullScreen(
-                context,
-              );
-            }
+                  return Container(
+                    child: loadingFullScreen(
+                      context,
+                    ),
+                  );
+                }
 
-            // =================================================
-            // Error
-            // =================================================
-            if (state
-            is DocHosErrorState) {
-              return errorFullScreen(
-                context,
-              );
-            }
+                // =================================================
+                // Error
+                // =================================================
+                if (state
+                is DocHosErrorState) {
+                  return Container(
+                    child: errorFullScreen(
+                      context,
+                    ),
+                  );
+                }
 
-            // =================================================
-            // Success
-            // =================================================
-            if (state is DocHosState) {
-              // ===============================================
-              // تخزين القوائم الأصلية مرة واحدة فقط
-              // نتائج البحث التالية ما بتغير هالقوائم
-              // ===============================================
-              if (!_baseDataLoaded) {
-                _allDoctors =
-                List<DoctorSenModel>.from(
-                  state.doctors,
-                );
+                // =================================================
+                // Success
+                // =================================================
+                if (state is DocHosState) {
+                  if (!_baseDataLoaded) {
+                    _allDoctors =
+                    List<DoctorSenModel>.from(
+                      state.doctors,
+                    );
 
-                _allHospitals =
-                List<HospitalSpModel>.from(
-                  state.hospitals,
-                );
+                    _allHospitals =
+                    List<HospitalSpModel>.from(
+                      state.hospitals,
+                    );
 
-                _baseDataLoaded = true;
-              }
+                    _baseDataLoaded = true;
+                  }
 
-              return Center(
-                child: ConstrainedBox(
-                  constraints:
-                  BoxConstraints(
-                    maxWidth:
-                    contentMaxWidth,
-                  ),
-
-                  child: Column(
-                    children: [
-                      // =========================================
-                      // Tabs
-                      // =========================================
-                      Padding(
-                        padding:
-                        EdgeInsets.fromLTRB(
-                          ui.pagePadding,
-                          ui.searchTopPadding,
-                          ui.pagePadding,
-                          ui.smallSpacing,
+                  return Expanded(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: contentMaxWidth,
                         ),
 
-                        child: SizedBox(
-                          height:
-                          widget.height,
-
-                          child:
-                          _DocHosTabBar(
-                            height:
-                            widget.height,
-
-                            controller:
-                            _tabController,
-                          ),
-                        ),
-                      ),
-
-                      // =========================================
-                      // Search
-                      //
-                      // دائماً ظاهر حتى لو النتيجة Empty
-                      // =========================================
-                      Padding(
-                        padding:
-                        EdgeInsets.fromLTRB(
-                          ui.pagePadding,
-                          ui.searchTopPadding,
-                          ui.pagePadding,
-                          ui.searchBottomPadding,
-                        ),
-
-                        child: SearchField(
-                          searchController:
-                          searchController,
-
-                          onPressed:
-                              (value) {
-                            _search(
-                              value,
-                            );
-                          },
-                        ),
-                      ),
-
-                      // =========================================
-                      // Tabs Content
-                      // =========================================
-                      Expanded(
                         child: TabBarView(
-                          controller:
-                          _tabController,
+                          controller: _tabController,
 
                           children: [
-                            // ===================================
-                            // Doctors
-                            // ===================================
                             _DoctorsTab(
-                              doctors:
-                              state.doctors,
+                              doctors: state.doctors,
                             ),
 
-                            // ===================================
-                            // Hospitals
-                            // ===================================
                             _HospitalsTab(
-                              hospitals:
-                              state.hospitals,
+                              hospitals: state.hospitals,
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ],
         ),
       ),
     );

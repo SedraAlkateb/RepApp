@@ -8,7 +8,6 @@ import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
 import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
 import 'package:domina_app/presentation/senior/places/widget/rep_card_widget.dart';
-import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -701,20 +700,7 @@ class _AllRepSeniorState
 
                   onTap:
                       () {
-                    // =========================================
-                    // نفس السلوك الأصلي
-                    // =========================================
                     initSeniorProfModule();
-
-                    context
-                        .read<
-                        SeniorProfBloc>()
-                        .add(
-                      getInfoRepEvent(
-                        rep.id,
-                        rep.activePlan,
-                      ),
-                    );
 
                     Navigator.of(
                       context,
