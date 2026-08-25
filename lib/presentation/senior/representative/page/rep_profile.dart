@@ -70,12 +70,6 @@ class _RepProfileState
   @override
   void initState() {
     super.initState();
-
-    // =====================================================
-    // RepProfile صار مسؤول عن تحميل بياناته بنفسه.
-    //
-    // ما عاد لازم الصفحة السابقة ترسل getInfoRepEvent.
-    // =====================================================
     context
         .read<SeniorProfBloc>()
         .add(
@@ -1598,7 +1592,7 @@ if(!isFinal&&(rep.repType==5||rep.repType==6)){
         // =================================================
         InteractiveActionTile(
           title:
-          "الزيارات التي تمت مباشرتها",
+          "الزيارات التي تمت",
 
           icon:
           Icons
@@ -1650,7 +1644,7 @@ if(!isFinal&&(rep.repType==5||rep.repType==6)){
                 },
 
                 'title':
-                "الزيارات التي تمت مباشرتها",
+                "الزيارات التي تمت",
 
                 'doctor':
                 SenVisitDoctor(),

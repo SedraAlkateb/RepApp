@@ -1,10 +1,8 @@
-import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
-import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
-import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -437,22 +435,9 @@ class _AllCityState extends State<AllCitySeniors> {
         // نفس السلوك الأصلي بدون أي تعديل
         // ==============================================
         onTap: () {
-          initGeneralReportsModule();
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SeniorByCityId(
-                cityname: city.title,
-                cityid: city.id,
-              ),
-            ),
-          );
-
-          BlocProvider.of<GeneralReportsBloc>(context).add(
-            GetSeniorByCityIdEvent(
-              city.id,
-            ),
+          Navigator.pushNamed(
+              context,
+              Routes.seniorByCityId
           );
         },
 

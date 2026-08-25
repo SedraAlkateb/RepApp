@@ -50,9 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             UserInfo.percentage = loginModel!.percentage;
 
             UserInfo.recipesCount = loginModel!.recipesCount;
-            UserInfo.totalReci = loginModel!.totalReci;
-            UserInfo.remainReci = loginModel!.remainReci;
-            UserInfo.usedReci = loginModel!.usedReci;
+
             UserInfo.token = loginModel!.token;
 
             UserInfo.name = loginModel!.name;
@@ -69,7 +67,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             UserInfo.startDate = data.startDate;
 
             UserInfo.endDate = data.endDate;
+            UserInfo.totDoc = data.totDoc;
 
+            UserInfo.totHos = data.totHos;
+            UserInfo.totalReci = loginModel!.totalReci;
+            UserInfo.remainReci = loginModel!.remainReci;
+            UserInfo.usedReci = loginModel!.usedReci;
             UserInfo.otherStartDate = data.otherStartDate;
 
             UserInfo.otherEndDate = data.otherEndDate;

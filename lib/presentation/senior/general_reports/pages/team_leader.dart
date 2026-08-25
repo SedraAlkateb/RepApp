@@ -18,8 +18,7 @@ class TeamLeader extends StatefulWidget {
   });
 
   @override
-  State<TeamLeader> createState() =>
-      _TeamLeaderState();
+  State<TeamLeader> createState() => _TeamLeaderState();
 }
 
 class _TeamLeaderState extends State<TeamLeader>
@@ -28,8 +27,7 @@ class _TeamLeaderState extends State<TeamLeader>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
 
@@ -44,7 +42,6 @@ class _TeamLeaderState extends State<TeamLeader>
     double listTopPadding;
     double listBottomPadding;
 
- //   double loadingHorizontalPadding;
     double loadingVerticalSpacing;
     double loadingHeight;
     double loadingRadius;
@@ -67,7 +64,6 @@ class _TeamLeaderState extends State<TeamLeader>
         listTopPadding = 6;
         listBottomPadding = 30;
 
-       // loadingHorizontalPadding = 16;
         loadingVerticalSpacing = 16;
         loadingHeight = 100;
         loadingRadius = 18;
@@ -90,7 +86,6 @@ class _TeamLeaderState extends State<TeamLeader>
         listTopPadding = 8;
         listBottomPadding = 36;
 
-      //  loadingHorizontalPadding = 28;
         loadingVerticalSpacing = 18;
         loadingHeight = 120;
         loadingRadius = 20;
@@ -113,7 +108,6 @@ class _TeamLeaderState extends State<TeamLeader>
         listTopPadding = 6;
         listBottomPadding = 32;
 
-     //   loadingHorizontalPadding = 32;
         loadingVerticalSpacing = 14;
         loadingHeight = 105;
         loadingRadius = 18;
@@ -121,109 +115,63 @@ class _TeamLeaderState extends State<TeamLeader>
     }
 
     return Scaffold(
-      backgroundColor:
-      const Color(
+      backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
-        surfaceTintColor:
-        Colors.transparent,
-
-        title:
-        const Text(
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
           "إدارة التقارير العامة",
         ),
       ),
-
       body: Center(
         child: ConstrainedBox(
-          constraints:
-          BoxConstraints(
-            maxWidth:
-            pageMaxWidth,
+          constraints: BoxConstraints(
+            maxWidth: pageMaxWidth,
           ),
-
-          child:
-          CustomScrollView(
-            physics:
-            const BouncingScrollPhysics(),
-
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             slivers: [
               // =================================================
               // Header
               // =================================================
               SliverToBoxAdapter(
-                child:
-                _buildHeader(
+                child: _buildHeader(
                   context,
-
-                  horizontalPadding:
-                  horizontalPadding,
-
-                  topPadding:
-                  headerTopPadding,
-
-                  bottomPadding:
-                  headerBottomPadding,
-
-                  titleFontSize:
-                  headerTitleFontSize,
-
-                  subtitleFontSize:
-                  headerSubtitleFontSize,
+                  horizontalPadding: horizontalPadding,
+                  topPadding: headerTopPadding,
+                  bottomPadding: headerBottomPadding,
+                  titleFontSize: headerTitleFontSize,
+                  subtitleFontSize: headerSubtitleFontSize,
                 ),
               ),
 
               // =================================================
               // Data
               // =================================================
-              BlocBuilder<
-                  GeneralReportsBloc,
-                  GeneralReportsState>(
-                builder:
-                    (context, state) {
-                  // ===============================================
-                  // نفس المصدر الموجود عندك
-                  // ===============================================
-                  final List<SeniorCityModel>
-                  seniors =
-                      context
-                          .read<
-                          GeneralReportsBloc>()
-                          .dataseniors;
+              BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
+                builder: (context, state) {
+                  final List<SeniorCityModel> seniors =
+                      context.read<GeneralReportsBloc>().dataseniors;
 
                   // ===============================================
-                  // Loading
+                  // Loading (تم التعديل لاستخدام SliverToBoxAdapter)
                   // ===============================================
-                  if (state
-                  is TeamLeaderAndCityLoadingState) {
-                    return SliverFillRemaining(
-                      hasScrollBody:
-                      false,
-
-                      child:
-                      Padding(
-                        padding:
-                        EdgeInsets.symmetric(
-                          horizontal:
-                          horizontalPadding,
+                  if (state is TeamLeaderAndCityLoadingState) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: horizontalPadding,
+                          vertical: listTopPadding,
                         ),
-
-                        child:
-                        loadingShimmer(
+                        child: loadingShimmer(
                           context,
-
                           5,
-
                           loadingVerticalSpacing,
-
                           loadingHeight,
-
-                          BorderRadius
-                              .circular(
+                          BorderRadius.circular(
                             loadingRadius,
                           ),
                         ),
@@ -232,35 +180,30 @@ class _TeamLeaderState extends State<TeamLeader>
                   }
 
                   // ===============================================
-                  // Error
+                  // Error (تم التعديل لاستخدام SizedBox محدد)
                   // ===============================================
-                  if (state
-                  is TeamLeaderAndCityErrorState) {
-                    return SliverFillRemaining(
-                      hasScrollBody:
-                      false,
-
-                      child:
-                      errorFullScreen(
-                        context,
-
-                        // نفس السلوك الحالي
-                        func: () {},
+                  if (state is TeamLeaderAndCityErrorState) {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 400,
+                        child: errorFullScreen(
+                          context,
+                          func: () {},
+                        ),
                       ),
                     );
                   }
 
                   // ===============================================
-                  // Empty
+                  // Empty (تم التعديل لاستخدام SizedBox محدد)
                   // ===============================================
                   if (seniors.isEmpty) {
-                    return SliverFillRemaining(
-                      hasScrollBody:
-                      false,
-
-                      child:
-                      emptyFullScreen(
-                        context,
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 400,
+                        child: emptyFullScreen(
+                          context,
+                        ),
                       ),
                     );
                   }
@@ -269,62 +212,39 @@ class _TeamLeaderState extends State<TeamLeader>
                   // List
                   // ===============================================
                   return SliverPadding(
-                    padding:
-                    EdgeInsets.fromLTRB(
+                    padding: EdgeInsets.fromLTRB(
                       horizontalPadding,
                       listTopPadding,
                       horizontalPadding,
                       listBottomPadding,
                     ),
-
-                    sliver:
-                    AnimationLimiter(
-                      child:
-                      SliverList(
-                        delegate:
-                        SliverChildBuilderDelegate(
+                    sliver: AnimationLimiter(
+                      child: SliverList(
+                        delegate: SliverChildBuilderDelegate(
                               (
                               context,
                               index,
                               ) {
-                            return AnimationConfiguration
-                                .staggeredList(
-                              position:
-                              index,
-
-                              duration:
-                              const Duration(
-                                milliseconds:
-                                450,
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(
+                                milliseconds: 450,
                               ),
-
-                              delay:
-                              const Duration(
-                                milliseconds:
-                                40,
+                              delay: const Duration(
+                                milliseconds: 40,
                               ),
-
-                              child:
-                              SlideAnimation(
-                                verticalOffset:
-                                22,
-
-                                child:
-                                FadeInAnimation(
-                                  child:
-                                  _buildRepSmartCard(
+                              child: SlideAnimation(
+                                verticalOffset: 22,
+                                child: FadeInAnimation(
+                                  child: _buildRepSmartCard(
                                     context,
-
-                                    seniors[
-                                    index],
+                                    seniors[index],
                                   ),
                                 ),
                               ),
                             );
                           },
-
-                          childCount:
-                          seniors.length,
+                          childCount: seniors.length,
                         ),
                       ),
                     ),
@@ -351,103 +271,58 @@ class _TeamLeaderState extends State<TeamLeader>
         required double subtitleFontSize,
       }) {
     return Padding(
-      padding:
-      EdgeInsets.fromLTRB(
+      padding: EdgeInsets.fromLTRB(
         horizontalPadding,
         topPadding,
         horizontalPadding,
         bottomPadding,
       ),
-
       child: Row(
-        crossAxisAlignment:
-        CrossAxisAlignment.center,
-
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // =================================================
-          // Text
-          // =================================================
           Expanded(
             child: Column(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "تيم ليدر دومنا",
-
                   maxLines: 1,
-
-                  overflow:
-                  TextOverflow.ellipsis,
-
-                  style:
-                  TextStyle(
-                    fontSize:
-                    titleFontSize,
-
-                    fontWeight:
-                    FontWeight.w800,
-
-                    color:
-                    ColorManager
-                        .medicalPrimary,
-
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w800,
+                    color: ColorManager.medicalPrimary,
                     height: 1.25,
                   ),
                 ),
-
                 const SizedBox(
                   height: 5,
                 ),
-
                 Text(
                   "قائمة التيم ليدر المتاحين في دومنا",
-
                   maxLines: 2,
-
-                  overflow:
-                  TextOverflow.ellipsis,
-
-                  style:
-                  TextStyle(
-                    color:
-                    const Color(
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(
                       0xFF64748B,
                     ),
-
-                    fontSize:
-                    subtitleFontSize,
-
-                    fontWeight:
-                    FontWeight.w500,
-
+                    fontSize: subtitleFontSize,
+                    fontWeight: FontWeight.w500,
                     height: 1.4,
                   ),
                 ),
               ],
             ),
           ),
-
           const SizedBox(
             width: 16,
           ),
-
-          // =================================================
-          // Decorative Indicator
-          // =================================================
           Container(
             width: 44,
             height: 5,
-
-            decoration:
-            BoxDecoration(
-              color:
-              ColorManager
-                  .medicalPrimary,
-
-              borderRadius:
-              BorderRadius.circular(
+            decoration: BoxDecoration(
+              color: ColorManager.medicalPrimary,
+              borderRadius: BorderRadius.circular(
                 10,
               ),
             ),
@@ -465,8 +340,7 @@ class _TeamLeaderState extends State<TeamLeader>
       BuildContext context,
       SeniorCityModel senior,
       ) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double cardBottomSpacing;
 
@@ -485,9 +359,6 @@ class _TeamLeaderState extends State<TeamLeader>
     double arrowIconSize;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
       case AppDeviceType.mobilePortrait:
         cardBottomSpacing = 12;
 
@@ -506,9 +377,6 @@ class _TeamLeaderState extends State<TeamLeader>
         arrowIconSize = 16;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
       case AppDeviceType.tabletPortrait:
         cardBottomSpacing = 15;
 
@@ -527,9 +395,6 @@ class _TeamLeaderState extends State<TeamLeader>
         arrowIconSize = 18;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
       case AppDeviceType.tabletLandscape:
         cardBottomSpacing = 12;
 
@@ -550,45 +415,28 @@ class _TeamLeaderState extends State<TeamLeader>
     }
 
     return Padding(
-      padding:
-      EdgeInsets.only(
-        bottom:
-        cardBottomSpacing,
+      padding: EdgeInsets.only(
+        bottom: cardBottomSpacing,
       ),
-
       child: Material(
-        color:
-        Colors.transparent,
-
+        color: Colors.transparent,
         child: InkWell(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius,
           ),
-
           onTap: () {
-            // ===============================================
-            // نفس ترتيب المنطق الأصلي
-            // ===============================================
             initSeniorModule();
 
             Navigator.push(
               context,
-
               MaterialPageRoute(
-                builder:
-                    (context) {
+                builder: (context) {
                   return AllRepSeniorGenerlReports(
-                    cityname:
-                    senior.city_name,
-
-                    cityId:
-                    int.parse(
+                    cityname: senior.city_name,
+                    cityId: int.parse(
                       senior.city_id,
                     ),
-
-                    repId:
-                    int.parse(
+                    repId: int.parse(
                       senior.rep_id,
                     ),
                   );
@@ -596,199 +444,111 @@ class _TeamLeaderState extends State<TeamLeader>
               ),
             );
 
-            BlocProvider.of<
-                SeniorRepsBloc>(
+            BlocProvider.of<SeniorRepsBloc>(
               context,
             ).add(
               AllSeniorRepEvent(
                 int.parse(
                   senior.city_id,
                 ),
-
                 int.parse(
                   senior.rep_id,
                 ),
               ),
             );
           },
-
           child: Container(
-            padding:
-            EdgeInsets.all(
+            padding: EdgeInsets.all(
               cardPadding,
             ),
-
-            decoration:
-            BoxDecoration(
-              color:
-              Colors.white,
-
-              borderRadius:
-              BorderRadius.circular(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(
                 cardRadius,
               ),
-
-              border:
-              Border.all(
-                color:
-                const Color(
+              border: Border.all(
+                color: const Color(
                   0xFFE2E8F0,
                 ),
               ),
-
               boxShadow: [
                 BoxShadow(
-                  color:
-                  Colors.black
-                      .withOpacity(
+                  color: Colors.black.withOpacity(
                     0.025,
                   ),
-
                   blurRadius: 12,
-
-                  offset:
-                  const Offset(
+                  offset: const Offset(
                     0,
                     4,
                   ),
                 ),
               ],
             ),
-
             child: Row(
               children: [
-                // =============================================
-                // Icon
-                // =============================================
                 Container(
-                  width:
-                  iconBoxSize,
-
-                  height:
-                  iconBoxSize,
-
-                  alignment:
-                  Alignment.center,
-
-                  decoration:
-                  BoxDecoration(
-                    color: ColorManager
-                        .secondaryColor1
-                        .withOpacity(
+                  width: iconBoxSize,
+                  height: iconBoxSize,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: ColorManager.secondaryColor1.withOpacity(
                       0.08,
                     ),
-
-                    borderRadius:
-                    BorderRadius
-                        .circular(
+                    borderRadius: BorderRadius.circular(
                       iconRadius,
                     ),
                   ),
-
                   child: Icon(
-                    Icons
-                        .person_pin_rounded,
-
-                    size:
-                    iconSize,
-
-                    color:
-                    ColorManager
-                        .secondaryColor1,
+                    Icons.person_pin_rounded,
+                    size: iconSize,
+                    color: ColorManager.secondaryColor1,
                   ),
                 ),
-
                 SizedBox(
-                  width:
-                  iconSpacing,
+                  width: iconSpacing,
                 ),
-
-                // =============================================
-                // Information
-                // =============================================
                 Expanded(
                   child: Column(
-                    mainAxisSize:
-                    MainAxisSize.min,
-
-                    crossAxisAlignment:
-                    CrossAxisAlignment
-                        .start,
-
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         senior.rep_name,
-
                         maxLines: 1,
-
-                        overflow:
-                        TextOverflow
-                            .ellipsis,
-
-                        style:
-                        TextStyle(
-                          fontSize:
-                          titleFontSize,
-
-                          fontWeight:
-                          FontWeight
-                              .w700,
-
-                          color: ColorManager
-                              .secondaryColor1,
-
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.w700,
+                          color: ColorManager.secondaryColor1,
                           height: 1.25,
                         ),
                       ),
-
                       const SizedBox(
                         height: 5,
                       ),
-
                       Row(
                         children: [
                           Icon(
-                            Icons
-                                .location_on_outlined,
-
-                            size:
-                            subtitleFontSize +
-                                3,
-
-                            color:
-                            const Color(
+                            Icons.location_on_outlined,
+                            size: subtitleFontSize + 3,
+                            color: const Color(
                               0xFF94A3B8,
                             ),
                           ),
-
                           const SizedBox(
                             width: 4,
                           ),
-
                           Expanded(
-                            child:
-                            Text(
+                            child: Text(
                               "اضغط لاستعراض السينيور في ${senior.city_name}",
-
                               maxLines: 1,
-
-                              overflow:
-                              TextOverflow
-                                  .ellipsis,
-
-                              style:
-                              TextStyle(
-                                fontSize:
-                                subtitleFontSize,
-
-                                color:
-                                const Color(
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: subtitleFontSize,
+                                color: const Color(
                                   0xFF94A3B8,
                                 ),
-
-                                fontWeight:
-                                FontWeight
-                                    .w500,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -797,47 +557,25 @@ class _TeamLeaderState extends State<TeamLeader>
                     ],
                   ),
                 ),
-
                 const SizedBox(
                   width: 10,
                 ),
-
-                // =============================================
-                // Arrow
-                // =============================================
                 Container(
-                  width:
-                  arrowBoxSize,
-
-                  height:
-                  arrowBoxSize,
-
-                  alignment:
-                  Alignment.center,
-
-                  decoration:
-                  BoxDecoration(
-                    color:
-                    const Color(
+                  width: arrowBoxSize,
+                  height: arrowBoxSize,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(
                       0xFFF8FAFC,
                     ),
-
-                    borderRadius:
-                    BorderRadius
-                        .circular(
+                    borderRadius: BorderRadius.circular(
                       10,
                     ),
                   ),
-
                   child: Icon(
-                    Icons
-                        .arrow_forward_ios_rounded,
-
-                    size:
-                    arrowIconSize,
-
-                    color:
-                    const Color(
+                    Icons.arrow_forward_ios_rounded,
+                    size: arrowIconSize,
+                    color: const Color(
                       0xFF94A3B8,
                     ),
                   ),

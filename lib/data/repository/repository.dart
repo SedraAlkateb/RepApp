@@ -821,7 +821,7 @@ class RepositoryImp implements Repository {
             response.status == "200") {
           return Right(response.toDomain());
         } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
+          Failure failure = Failure(int.parse(response.status??"0"),
               response.message ?? ResponseMassage.DEFAULT);
           insertLog(ExceptionRequestBody(
               [ExceptionModel(failure.massage, "noVisitDoc")]));
@@ -831,11 +831,14 @@ class RepositoryImp implements Repository {
         return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
       }
     } catch (error) {
+
       Failure failure = ErrorHandler.handle(error).failure;
+      print(failure.massage);
       insertLog(ExceptionRequestBody(
           [ExceptionModel(failure.massage, "noVisitDoc")]));
       return Left(failure);
     }
+
   }
 
   @override
@@ -1113,11 +1116,11 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<doctorsModel>>> docSearch(
-      String name, int repDet) async {
+      String name, int repDet, {int? cityId}) async {
     try {
       if (await _networkInfo.isConnected) {
         final response =
-            await _remoteDataSource.docSearch( name, repDet);
+            await _remoteDataSource.docSearch( name, repDet,cityId: cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1421,10 +1424,10 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(
-      int id) async {
+      int id, {int ?cityId}) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepsFuture(id);
+        final response = await _remoteDataSource.getRepsFuture(id,cityId: cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1449,11 +1452,14 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(
-      String name, int repDet) async {
+      String name, int repDet,
+      {int? cityId}
+
+      ) async {
     try {
       if (await _networkInfo.isConnected) {
         final response =
-            await _remoteDataSource.getSearchHospitals(name, repDet);
+            await _remoteDataSource.getSearchHospitals(name, repDet,cityId: cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1737,10 +1743,12 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, DocHosByPlaceAndSp>> getSpDocHos(int repDet,
-      {int? spId, int? placeId}) async {
+      {int? spId, int? placeId
+      , int? cityId
+      }) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getSpDocHos(repDet, spId: spId,placeId: placeId);
+        final response = await _remoteDataSource.getSpDocHos(repDet, spId: spId,placeId: placeId,cityId: cityId);
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {

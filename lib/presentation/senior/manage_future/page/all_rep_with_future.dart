@@ -6,13 +6,14 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/widget/drop_down_change_plan.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
-import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,22 +25,19 @@ class AllRepWithFuture extends StatefulWidget {
   });
 
   @override
-  State<AllRepWithFuture> createState() =>
-      _AllRepWithFutureState();
+  State<AllRepWithFuture> createState() => _AllRepWithFutureState();
 }
 
-class _AllRepWithFutureState
-    extends State<AllRepWithFuture>
+class _AllRepWithFutureState extends State<AllRepWithFuture>
     with TickerProviderStateMixin {
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
-  final RefreshController _refreshController =
-  RefreshController(
+  final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
 
-  int selectedIndex = -1;
+  // يمنع تحميل نفس المحافظة مرتين
+  int? _lastLoadedCityId;
 
   Widget buildDateTimeCard({
     required BuildContext context,
@@ -50,15 +48,13 @@ class _AllRepWithFutureState
       return const SizedBox.shrink();
     }
 
-    return    Padding(
-      padding:
-      EdgeInsets.fromLTRB(
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
         ui.pagePadding,
         ui.searchTopPadding,
         ui.pagePadding,
         ui.searchBottomPadding,
       ),
-
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
@@ -118,15 +114,13 @@ class _AllRepWithFutureState
             // =================================================
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'التاريخ',
                     maxLines: 1,
-                    overflow:
-                    TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: ui.smallTextSize,
                       fontWeight: FontWeight.w500,
@@ -135,16 +129,13 @@ class _AllRepWithFutureState
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: ui.smallSpacing / 2,
                   ),
-
                   Text(
                     dateTime,
                     maxLines: 1,
-                    overflow:
-                    TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: ui.bodyTextSize + 1,
                       fontWeight: FontWeight.w700,
@@ -162,6 +153,7 @@ class _AllRepWithFutureState
       ),
     );
   }
+
   @override
   void dispose() {
     searchController.dispose();
@@ -171,68 +163,138 @@ class _AllRepWithFutureState
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        _loadSelectedCity();
+      },
+    );
+  }
+
+  // ===========================================================
+  // Load Selected City
+  // ===========================================================
+
+  void _loadSelectedCity({
+    bool force = false,
+  }) {
+    if (!mounted) {
+      return;
+    }
+
+    final cityBloc = context.read<AllCityBloc>();
+
+    final int? cityId = cityBloc.selectedCityId;
+
+    if (cityId == null || cityId < 0) {
+      return;
+    }
+
+    if (!force && _lastLoadedCityId == cityId) {
+      return;
+    }
+
+    _lastLoadedCityId = cityId;
+
+    // عند تغيير المحافظة
+    // نظف البحث القديم
+    searchController.clear();
+
+    context.read<ManageFutureBloc>().add(
+          AllSeniorRepFutureEvent(
+            cityId: cityId,
+          ),
+        );
+  }
+
+  // ===========================================================
+  // Refresh
+  // ===========================================================
+
+  void _onRefresh() {
+    _loadSelectedCity(
+      force: true,
+    );
+
+    _refreshController.refreshCompleted();
+  }
+
+  // ===========================================================
+  // Dispose
+  // ===========================================================
+
+  // ===========================================================
+  // Build
+  // ===========================================================
+
+  @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
+    final cityBloc = context.watch<AllCityBloc>();
+
+    final cityState = cityBloc.state;
+
     return Scaffold(
-      backgroundColor:
-      const Color(
+      backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor:
-        Colors.transparent,
 
-        title:
-        const Text(
-          "إدارة الخطة المستقبلية",
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+
+          " إدارة الخطة المستقبلية( ${cityBloc.selectedCity?.title??""})",
         ),
       ),
-
       body: SafeArea(
         top: false,
-
         child: Center(
           child: ConstrainedBox(
-            constraints:
-            BoxConstraints(
-              maxWidth:
-              ui.pageMaxWidth,
+            constraints: BoxConstraints(
+              maxWidth: ui.pageMaxWidth,
             ),
-
             child: Column(
               children: [
-                buildDateTimeCard(context: context, ui: ui, dateTime:    context.read<ManageFutureBloc>().dateTime),
-                Padding(
-                  padding:
-                  EdgeInsets.fromLTRB(
-                    ui.pagePadding,
-                    ui.searchTopPadding,
-                    ui.pagePadding,
-                    ui.searchBottomPadding,
-                  ),
-
-                  child: SearchField(
-                    searchController:
-                    searchController,
-
-                    onPressed:
-                        (value) {
-                      BlocProvider.of<
-                          ManageFutureBloc>(
-                        context,
-                      ).add(
-                        SenSearchRepFutureEvent(
-                          value,
-                        ),
-                      );
-                    },
+                buildDateTimeCard(
+                    context: context,
+                    ui: ui,
+                    dateTime: context.read<ManageFutureBloc>().dateTime),
+                // =========================================
+// Search + City Filter
+// =========================================
+                BlocListener<AllCityBloc, AllCityState>(
+                  listener: (
+                    context,
+                    state,
+                  ) {
+                    // =====================================================
+                    // أول تحميل أو تغيير المحافظة
+                    // =====================================================
+                    if (state is GetAllCityState) {
+                      _loadSelectedCity();
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.searchTopPadding,
+                      ui.pagePadding,
+                      ui.searchBottomPadding,
+                    ),
+                    child: SearchWithCityFilter(
+                      searchController: searchController,
+                      onSearch: (value) {
+                        BlocProvider.of<ManageFutureBloc>(context).add(
+                          SenSearchRepFutureEvent(value),
+                        );
+                      },
+                    ),
                   ),
                 ),
-
 
                 // =================================================
                 // Search
@@ -242,38 +304,27 @@ class _AllRepWithFutureState
                 // Representatives
                 // =================================================
                 Expanded(
-                  child: BlocBuilder<
-                      ManageFutureBloc,
-                      ManageFutureState>(
-                    builder:
-                        (context, state) {
-
+                  child: BlocBuilder<ManageFutureBloc, ManageFutureState>(
+                    builder: (context, state) {
                       // ===============================================
                       // نفس مصدر البيانات الأصلي
                       // ===============================================
-                      List<AllRepresentativeFuture>
-                      allRepresentative =
-                          context
-                              .watch<
-                              ManageFutureBloc>()
-                              .allRepresentative;
-if(state is AllSeniorRepState){
-  allRepresentative=state.representatives;
-}
+                      List<AllRepresentativeFuture> allRepresentative =
+                          context.watch<ManageFutureBloc>().allRepresentative;
+                      if (state is AllSeniorRepState) {
+                        allRepresentative = state.representatives;
+                      }
                       // ===============================================
                       // Change Plan Status
                       // ===============================================
-                      if (state
-                      is ChangPlanStatusState) {
-                        allRepresentative =
-                            state.representatives;
+                      if (state is ChangPlanStatusState) {
+                        allRepresentative = state.representatives;
                       }
 
                       // ===============================================
                       // Loading
                       // ===============================================
-                      if (state
-                      is AllSeniorRepLoadingState) {
+                      if (state is AllSeniorRepLoadingState) {
                         return _buildLoadingState(
                           context,
                         );
@@ -282,18 +333,18 @@ if(state is AllSeniorRepState){
                       // ===============================================
                       // Error
                       // ===============================================
-                      if (state
-                      is AllSeniorRepErrorState) {
+                      if (state is AllSeniorRepErrorState) {
                         return errorFullScreen(
                           context,
-
                           func: () {
-                            BlocProvider.of<
-                                ManageFutureBloc>(
+                            BlocProvider.of<ManageFutureBloc>(
                               context,
                             ).add(
                               AllSeniorRepFutureEvent(
-                              ),
+                                  cityId: context
+                                      .watch<AllCityBloc>()
+                                      .cities[0]
+                                      .id),
                             );
                           },
                         );
@@ -306,64 +357,46 @@ if(state is AllSeniorRepState){
                       // Refresh
                       // ===============================================
                       return SmartRefresher(
-                        controller:
-                        _refreshController,
-
+                        controller: _refreshController,
                         onRefresh: () {
                           // نفس ترتيب السلوك الأصلي تماماً
-                          BlocProvider.of<
-                              ManageFutureBloc>(
+                          BlocProvider.of<ManageFutureBloc>(
                             context,
                           ).add(
                             AllSeniorRepFutureEvent(
-
-                            ),
+                                cityId: context
+                                    .read<AllCityBloc>()
+                                    .selectedCityId),
                           );
 
-                          _refreshController
-                              .refreshCompleted();
+                          _refreshController.refreshCompleted();
                         },
-
-                        child:
-                        allRepresentative
-                            .isEmpty
+                        child: allRepresentative.isEmpty
                             ? _buildEmptyState(
-                          context,
-                        )
+                                context,
+                              )
                             : ListView.builder(
-                          keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior
-                              .onDrag,
-
-                          physics:
-                          const BouncingScrollPhysics(),
-
-                          padding:
-                          EdgeInsets.fromLTRB(
-                            ui.pagePadding,
-                            ui.listTopPadding,
-                            ui.pagePadding,
-                            ui.listBottomPadding,
-                          ),
-
-                          itemCount:
-                          allRepresentative
-                              .length,
-
-                          itemBuilder:
-                              (
-                              context,
-                              index,
-                              ) {
-                            return _buildRepItem(
-                              context,
-                              allRepresentative[
-                              index],
-                              index,
-
-                            );
-                          },
-                        ),
+                                keyboardDismissBehavior:
+                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                physics: const BouncingScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(
+                                  ui.pagePadding,
+                                  ui.listTopPadding,
+                                  ui.pagePadding,
+                                  ui.listBottomPadding,
+                                ),
+                                itemCount: allRepresentative.length,
+                                itemBuilder: (
+                                  context,
+                                  index,
+                                ) {
+                                  return _buildRepItem(
+                                    context,
+                                    allRepresentative[index],
+                                    index,
+                                  );
+                                },
+                              ),
                       );
                     },
                   ),
@@ -381,194 +414,110 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   Widget _buildRepItem(
-      BuildContext context,
-      AllRepresentativeFuture rep,
-      int index,
-      ) {
-    final ui =
-    AppUi.of(context);
+    BuildContext context,
+    AllRepresentativeFuture rep,
+    int index,
+  ) {
+    final ui = AppUi.of(context);
 
-    final bool isSelected =
-        selectedIndex == index;
+    final bool isSelected = _lastLoadedCityId == index;
 
     return Padding(
-      padding:
-      EdgeInsets.only(
-        bottom:
-        ui.cardSpacing,
+      padding: EdgeInsets.only(
+        bottom: ui.cardSpacing,
       ),
-
       child: GestureDetector(
-        behavior:
-        HitTestBehavior.opaque,
-
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           setState(() {
-            selectedIndex =
-            isSelected
-                ? -1
-                : index;
+            _lastLoadedCityId = isSelected ? -1 : index;
           });
         },
-
         child: AnimatedContainer(
-          duration:
-          const Duration(
+          duration: const Duration(
             milliseconds: 300,
           ),
-
-          curve:
-          Curves.easeOutCubic,
-
-          padding:
-          EdgeInsets.all(
+          curve: Curves.easeOutCubic,
+          padding: EdgeInsets.all(
             ui.cardPadding,
           ),
-
-          decoration:
-          BoxDecoration(
-            color:
-            Colors.white,
-
-            borderRadius:
-            BorderRadius.circular(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(
               ui.cardRadius,
             ),
-
-            border:
-            Border.all(
-              color:
-              isSelected
-                  ? ColorManager
-                  .secondaryColor1
+            border: Border.all(
+              color: isSelected
+                  ? ColorManager.secondaryColor1
                   : const Color(
-                0xFFE2E8F0,
-              ),
-
-              width:
-              isSelected
-                  ? 1.5
-                  : 1,
+                      0xFFE2E8F0,
+                    ),
+              width: isSelected ? 1.5 : 1,
             ),
-
             boxShadow: [
               BoxShadow(
-                color:
-                isSelected
-                    ? ColorManager
-                    .secondaryColor1
-                    .withOpacity(
-                  0.065,
-                )
-                    : Colors.black
-                    .withOpacity(
-                  0.025,
-                ),
-
-                blurRadius:
-                isSelected
-                    ? 16
-                    : 12,
-
-                offset:
-                const Offset(
+                color: isSelected
+                    ? ColorManager.secondaryColor1.withOpacity(
+                        0.065,
+                      )
+                    : Colors.black.withOpacity(
+                        0.025,
+                      ),
+                blurRadius: isSelected ? 16 : 12,
+                offset: const Offset(
                   0,
                   4,
                 ),
               ),
             ],
           ),
-
           child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.stretch,
-
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // =================================================
               // Representative Header
               // =================================================
               Row(
-                crossAxisAlignment:
-                CrossAxisAlignment.center,
-
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // ===============================================
                   // Expand Arrow
                   // ===============================================
                   AnimatedRotation(
-                    turns:
-                    isSelected
-                        ? 0
-                        : 0.5,
-
-                    duration:
-                    const Duration(
-                      milliseconds:
-                      300,
+                    turns: isSelected ? 0 : 0.5,
+                    duration: const Duration(
+                      milliseconds: 300,
                     ),
-
-                    curve:
-                    Curves.easeOutCubic,
-
-                    child:
-                    AnimatedContainer(
-                      duration:
-                      const Duration(
-                        milliseconds:
-                        200,
+                    curve: Curves.easeOutCubic,
+                    child: AnimatedContainer(
+                      duration: const Duration(
+                        milliseconds: 200,
                       ),
-
-                      width:
-                      ui.iconBoxSize -
-                          4,
-
-                      height:
-                      ui.iconBoxSize -
-                          4,
-
-                      alignment:
-                      Alignment.center,
-
-                      decoration:
-                      BoxDecoration(
-                        color:
-                        isSelected
-                            ? ColorManager
-                            .secondaryColor1
-                            : ColorManager
-                            .secondaryColor1
-                            .withOpacity(
-                          0.08,
-                        ),
-
-                        borderRadius:
-                        BorderRadius
-                            .circular(
-                          ui.smallRadius +
-                              2,
+                      width: ui.iconBoxSize - 4,
+                      height: ui.iconBoxSize - 4,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? ColorManager.secondaryColor1
+                            : ColorManager.secondaryColor1.withOpacity(
+                                0.08,
+                              ),
+                        borderRadius: BorderRadius.circular(
+                          ui.smallRadius + 2,
                         ),
                       ),
-
                       child: Icon(
-                        Icons
-                            .keyboard_arrow_up_rounded,
-
-                        color:
-                        isSelected
-                            ? Colors
-                            .white
-                            : ColorManager
-                            .secondaryColor1,
-
-                        size:
-                        ui.iconSize,
+                        Icons.keyboard_arrow_up_rounded,
+                        color: isSelected
+                            ? Colors.white
+                            : ColorManager.secondaryColor1,
+                        size: ui.iconSize,
                       ),
                     ),
                   ),
 
                   SizedBox(
-                    width:
-                    ui.sectionSpacing,
+                    width: ui.sectionSpacing,
                   ),
 
                   // ===============================================
@@ -576,112 +525,54 @@ if(state is AllSeniorRepState){
                   // ===============================================
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           rep.name,
-
-                          maxLines:
-                          1,
-
-                          overflow:
-                          TextOverflow
-                              .ellipsis,
-
-                          style:
-                          TextStyle(
-                            color:
-                            const Color(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: const Color(
                               0xFF1E293B,
                             ),
-
-                            fontSize:
-                            ui.cardTitleSize,
-
-                            fontWeight:
-                            FontWeight
-                                .w700,
-
-                            height:
-                            1.25,
+                            fontSize: ui.cardTitleSize,
+                            fontWeight: FontWeight.w700,
+                            height: 1.25,
                           ),
                         ),
-
                         SizedBox(
-                          height:
-                          ui.smallSpacing,
+                          height: ui.smallSpacing,
                         ),
-
                         Align(
-                          alignment:
-                          Alignment
-                              .centerRight,
-
-                          child:
-                          Container(
-                            padding:
-                            const EdgeInsets
-                                .symmetric(
-                              horizontal:
-                              9,
-
-                              vertical:
-                              4,
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 9,
+                              vertical: 4,
                             ),
-
-                            decoration:
-                            BoxDecoration(
-                              color:
-                              rep.reptype
-                                  .color
-                                  .withOpacity(
+                            decoration: BoxDecoration(
+                              color: rep.reptype.color.withOpacity(
                                 0.08,
                               ),
-
-                              borderRadius:
-                              BorderRadius
-                                  .circular(
+                              borderRadius: BorderRadius.circular(
                                 ui.smallRadius,
                               ),
-
-                              border:
-                              Border.all(
-                                color:
-                                rep.reptype
-                                    .color
-                                    .withOpacity(
+                              border: Border.all(
+                                color: rep.reptype.color.withOpacity(
                                   0.16,
                                 ),
                               ),
                             ),
-
-                            child:
-                            Text(
+                            child: Text(
                               rep.reptype.name,
-
-                              maxLines:
-                              1,
-
-                              overflow:
-                              TextOverflow
-                                  .ellipsis,
-
-                              style:
-                              TextStyle(
-                                color:
-                                const Color(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: const Color(
                                   0xFF475569,
                                 ),
-
-                                fontSize:
-                                ui.smallTextSize,
-
-                                fontWeight:
-                                FontWeight
-                                    .w600,
+                                fontSize: ui.smallTextSize,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
@@ -691,8 +582,7 @@ if(state is AllSeniorRepState){
                   ),
 
                   SizedBox(
-                    width:
-                    ui.mediumSpacing,
+                    width: ui.mediumSpacing,
                   ),
 
                   // ===============================================
@@ -707,179 +597,111 @@ if(state is AllSeniorRepState){
               ),
 
               SizedBox(
-                height:
-                ui.sectionSpacing +
-                    2,
+                height: ui.sectionSpacing + 2,
               ),
 
               // =================================================
               // Plan Status Dropdown
               // =================================================
               DropDownChangePlan(
-                hintText:
-                rep.flag.name,
-
-                items:
-                getAllFlags(
+                hintText: rep.flag.name,
+                items: getAllFlags(
                   rep.reptype.i,
                 ),
-
-                statusColor:
-                getColor(
+                statusColor: getColor(
                   rep.flag.flag,
                 ),
-
-                onChanged:
-                rep.flag.flag !=
-                    4
+                onChanged: rep.flag.flag != 4
                     ? (x) {
-                  final FlagModel
-                  xx =
-                  x as FlagModel;
+                        final FlagModel xx = x as FlagModel;
 
-                  // =========================================
-                  // نفس الـLogic الأصلي تماماً
-                  // =========================================
-                  BlocProvider.of<
-                      ManageFutureBloc>(
-                    context,
-                  ).add(
-                    ChangPlanStatusEvent(
-                      rep.activePlan,
-                      xx.flag,
-                      index,
-                    ),
-                  );
-                }
+                        // =========================================
+                        // نفس الـLogic الأصلي تماماً
+                        // =========================================
+                        BlocProvider.of<ManageFutureBloc>(
+                          context,
+                        ).add(
+                          ChangPlanStatusEvent(
+                            rep.activePlan,
+                            xx.flag,
+                            index,
+                            rep.id
+                          ),
+                        );
+                      }
                     : null,
-
-                errorText:
-                "",
+                errorText: "",
               ),
 
               // =================================================
               // Expanded Actions
               // =================================================
               AnimatedSize(
-                duration:
-                const Duration(
+                duration: const Duration(
                   milliseconds: 260,
                 ),
-
-                curve:
-                Curves.fastOutSlowIn,
-
-                alignment:
-                Alignment.topCenter,
-
-                child:
-                !isSelected
-                    ? const SizedBox
-                    .shrink()
+                curve: Curves.fastOutSlowIn,
+                alignment: Alignment.topCenter,
+                child: !isSelected
+                    ? const SizedBox.shrink()
                     : Column(
-                  children: [
-                    Padding(
-                      padding:
-                      EdgeInsets.symmetric(
-                        vertical:
-                        ui.sectionSpacing,
-                      ),
-
-                      child:
-                      const Divider(
-                        color:
-                        Color(
-                          0xFFF1F5F9,
-                        ),
-
-                        thickness:
-                        1,
-                      ),
-                    ),
-
-                    Row(
-                      children: [
-                        // =================================
-                        // Audit
-                        // =================================
-                        Expanded(
-                          child:
-                          _buildMicroActionButton(
-                            context:
-                            context,
-
-                            title:
-                            "تدقيق الخطة",
-
-                            subtitle:
-                            "مراجعة شاملة",
-
-                            icon:
-                            Icons
-                                .fact_check_rounded,
-
-                            isActive:
-                            rep.flag.flag ==
-                                UserInfo
-                                    .statusPlan,
-
-                            color:
-                            ColorManager
-                                .secondaryColor1,
-
-                            onTap: () =>
-                                _handleAuditing(
-                                  rep
-
-                                ),
-                          ),
-                        ),
-
-                        SizedBox(
-                          width:
-                          ui.mediumSpacing,
-                        ),
-
-                        // =================================
-                        // Brands
-                        // =================================
-                        Expanded(
-                          child:
-                          _buildMicroActionButton(
-                            context:
-                            context,
-
-                            title:
-                            "الأصناف",
-
-                            subtitle:
-                            "تعديل القائمة",
-
-                            icon:
-                            Icons
-                                .auto_awesome_motion_rounded,
-
-                            isActive:
-                            rep.flag.flag ==
-                                UserInfo
-                                    .statusPlan,
-
-                            color:
-                            const Color(
-                              0xFF3F7FBF,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: ui.sectionSpacing,
                             ),
-
-                            onTap: () =>
-                                _handleEditBrands(
-                                  rep,
-
-                                ),
+                            child: const Divider(
+                              color: Color(
+                                0xFFF1F5F9,
+                              ),
+                              thickness: 1,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                          Row(
+                            children: [
+                              // =================================
+                              // Audit
+                              // =================================
+                              Expanded(
+                                child: _buildMicroActionButton(
+                                  context: context,
+                                  title: "تدقيق الخطة",
+                                  subtitle: "مراجعة شاملة",
+                                  icon: Icons.fact_check_rounded,
+                                  isActive:
+                                      rep.flag.flag == UserInfo.statusPlan,
+                                  color: ColorManager.secondaryColor1,
+                                  onTap: () => _handleAuditing(rep),
+                                ),
+                              ),
+
+                              SizedBox(
+                                width: ui.mediumSpacing,
+                              ),
+
+                              // =================================
+                              // Brands
+                              // =================================
+                              Expanded(
+                                child: _buildMicroActionButton(
+                                  context: context,
+                                  title: "الأصناف",
+                                  subtitle: "تعديل القائمة",
+                                  icon: Icons.auto_awesome_motion_rounded,
+                                  isActive:
+                                      rep.flag.flag == UserInfo.statusPlan,
+                                  color: const Color(
+                                    0xFF3F7FBF,
+                                  ),
+                                  onTap: () => _handleEditBrands(
+                                    rep,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),
@@ -901,127 +723,79 @@ if(state is AllSeniorRepState){
     required Color color,
     required VoidCallback onTap,
   }) {
-    final ui =
-    AppUi.of(context);
+    final ui = AppUi.of(context);
 
     return Material(
-      color:
-      Colors.transparent,
-
+      color: Colors.transparent,
       child: InkWell(
-        onTap:
-        isActive
-            ? onTap
-            : null,
-
-        borderRadius:
-        BorderRadius.circular(
+        onTap: isActive ? onTap : null,
+        borderRadius: BorderRadius.circular(
           ui.cardRadius - 2,
         ),
-
         child: AnimatedContainer(
-          duration:
-          const Duration(
+          duration: const Duration(
             milliseconds: 180,
           ),
-
-          padding:
-          EdgeInsets.symmetric(
-            horizontal:
-            ui.mediumSpacing,
-
-            vertical:
-            ui.sectionSpacing,
+          padding: EdgeInsets.symmetric(
+            horizontal: ui.mediumSpacing,
+            vertical: ui.sectionSpacing,
           ),
-
-          decoration:
-          BoxDecoration(
-            color:
-            isActive
+          decoration: BoxDecoration(
+            color: isActive
                 ? color.withOpacity(
-              0.05,
-            )
+                    0.05,
+                  )
                 : const Color(
-              0xFFF8FAFC,
-            ),
-
-            borderRadius:
-            BorderRadius.circular(
+                    0xFFF8FAFC,
+                  ),
+            borderRadius: BorderRadius.circular(
               ui.cardRadius - 2,
             ),
-
-            border:
-            Border.all(
-              color:
-              isActive
+            border: Border.all(
+              color: isActive
                   ? color.withOpacity(
-                0.24,
-              )
+                      0.24,
+                    )
                   : const Color(
-                0xFFE2E8F0,
-              ),
+                      0xFFE2E8F0,
+                    ),
             ),
           ),
-
           child: Column(
-            mainAxisSize:
-            MainAxisSize.min,
-
+            mainAxisSize: MainAxisSize.min,
             children: [
               // ===============================================
               // Icon Container
               // ===============================================
               Container(
-                width:
-                ui.iconBoxSize -
-                    6,
-
-                height:
-                ui.iconBoxSize -
-                    6,
-
-                alignment:
-                Alignment.center,
-
-                decoration:
-                BoxDecoration(
-                  color:
-                  isActive
-                      ? color
-                      .withOpacity(
-                    0.09,
-                  )
+                width: ui.iconBoxSize - 6,
+                height: ui.iconBoxSize - 6,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? color.withOpacity(
+                          0.09,
+                        )
                       : const Color(
-                    0xFFF1F5F9,
-                  ),
-
-                  borderRadius:
-                  BorderRadius
-                      .circular(
-                    ui.smallRadius +
-                        2,
+                          0xFFF1F5F9,
+                        ),
+                  borderRadius: BorderRadius.circular(
+                    ui.smallRadius + 2,
                   ),
                 ),
-
                 child: Icon(
                   icon,
-
-                  color:
-                  isActive
+                  color: isActive
                       ? color
                       : const Color(
-                    0xFF94A3B8,
-                  ),
-
-                  size:
-                  ui.iconSize,
+                          0xFF94A3B8,
+                        ),
+                  size: ui.iconSize,
                 ),
               ),
 
               SizedBox(
-                height:
-                ui.smallSpacing +
-                    2,
+                height: ui.smallSpacing + 2,
               ),
 
               // ===============================================
@@ -1029,32 +803,17 @@ if(state is AllSeniorRepState){
               // ===============================================
               Text(
                 title,
-
-                maxLines:
-                1,
-
-                overflow:
-                TextOverflow
-                    .ellipsis,
-
-                textAlign:
-                TextAlign.center,
-
-                style:
-                TextStyle(
-                  color:
-                  isActive
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: isActive
                       ? color
                       : const Color(
-                    0xFF94A3B8,
-                  ),
-
-                  fontWeight:
-                  FontWeight
-                      .w700,
-
-                  fontSize:
-                  ui.bodyTextSize,
+                          0xFF94A3B8,
+                        ),
+                  fontWeight: FontWeight.w700,
+                  fontSize: ui.bodyTextSize,
                 ),
               ),
 
@@ -1067,30 +826,15 @@ if(state is AllSeniorRepState){
               // ===============================================
               Text(
                 subtitle,
-
-                maxLines:
-                1,
-
-                overflow:
-                TextOverflow
-                    .ellipsis,
-
-                textAlign:
-                TextAlign.center,
-
-                style:
-                TextStyle(
-                  color:
-                  const Color(
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: const Color(
                     0xFF94A3B8,
                   ),
-
-                  fontSize:
-                  ui.smallTextSize,
-
-                  fontWeight:
-                  FontWeight
-                      .w500,
+                  fontSize: ui.smallTextSize,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -1105,75 +849,46 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   Widget _buildPulseDot(
-      BuildContext context,
-      int flag,
-      RepType repType,
-      ) {
-    final ui =
-    AppUi.of(context);
+    BuildContext context,
+    int flag,
+    RepType repType,
+  ) {
+    final ui = AppUi.of(context);
 
-    final double dotSize =
-    ui.isMobile
-        ? 10
-        : 11;
+    final double dotSize = ui.isMobile ? 10 : 11;
 
     return TweenAnimationBuilder<double>(
-      tween:
-      Tween(
-        begin:
-        0.4,
-        end:
-        1,
+      tween: Tween(
+        begin: 0.4,
+        end: 1,
       ),
 
-      duration:
-      const Duration(
+      duration: const Duration(
         seconds: 1,
       ),
 
-      curve:
-      Curves.easeInOut,
+      curve: Curves.easeInOut,
 
-      builder:
-          (
-          context,
-          value,
-          child,
-          ) {
+      builder: (
+        context,
+        value,
+        child,
+      ) {
         return Container(
-          width:
-          dotSize,
-
-          height:
-          dotSize,
-
-          decoration:
-          BoxDecoration(
-            shape:
-            BoxShape.circle,
-
-            color:
-            getColor(
+          width: dotSize,
+          height: dotSize,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: getColor(
               flag,
             ),
-
             boxShadow: [
               BoxShadow(
-                color:
-                repType.color
-                    .withOpacity(
+                color: repType.color.withOpacity(
                   0.45,
                 ),
-
-                blurRadius:
-                10 *
-                    (1 -
-                        value),
-
-                spreadRadius:
-                4 *
-                    (1 -
-                        value),
+                blurRadius: 10 * (1 - value),
+                spreadRadius: 4 * (1 - value),
               ),
             ],
           ),
@@ -1190,44 +905,29 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   void _handleAuditing(
-      AllRepresentativeFuture rep,
-      ) {
+    AllRepresentativeFuture rep,
+  ) {
     // =====================================================
     // نفس الترتيب الأصلي
     // =====================================================
     iniFutureModule();
 
-    if (rep.reptype.i ==
-        7) {
+    if (rep.reptype.i == 7) {
       Navigator.push(
         context,
-
         _createRoute(
           FutureSpecializationsPage(
-            id:
-            rep.id,
-
-            repPlanId:
-            rep.activePlan,
-
-            flag:
-            rep.flag,
-
-            sampleCount:
-            rep.samplesCount,
-
-            repName:
-            rep.name,
-
-            repType:
-            rep.reptype,
-
+            id: rep.id,
+            repPlanId: rep.activePlan,
+            flag: rep.flag,
+            sampleCount: rep.samplesCount,
+            repName: rep.name,
+            repType: rep.reptype,
           ),
         ),
       );
     } else {
-      BlocProvider.of<
-          FutureRepBloc>(
+      BlocProvider.of<FutureRepBloc>(
         context,
       ).add(
         FutureRepPlanBrandSpEvent(
@@ -1236,7 +936,6 @@ if(state is AllSeniorRepState){
             38,
             rep.id,
           ),
-
           rep.samplesCount,
         ),
       );
@@ -1244,13 +943,9 @@ if(state is AllSeniorRepState){
       Navigator.pushNamed(
         context,
         Routes.RepPlanBrandSp,
-
         arguments: {
-          'title':
-          "كل الاختصاصات",
-
-          'flag':
-          rep.flag.flag,
+          'title': "كل الاختصاصات",
+          'flag': rep.flag.flag,
         },
       );
     }
@@ -1261,16 +956,14 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   void _handleEditBrands(
-      AllRepresentativeFuture rep,
-
-      ) {
+    AllRepresentativeFuture rep,
+  ) {
     // =====================================================
     // نفس الترتيب الأصلي
     // =====================================================
     iniEditBrandPlanModule();
 
-    BlocProvider.of<
-        EditBrandPlanBloc>(
+    BlocProvider.of<EditBrandPlanBloc>(
       context,
     ).add(
       FutureGetPlanBrandEvent(
@@ -1283,14 +976,10 @@ if(state is AllSeniorRepState){
 
     Navigator.push(
       context,
-
       _createRoute(
         EditingPlan(
-          repPlan:
-          rep.activePlan,
-
-          repName:
-          rep.name,
+          repPlan: rep.activePlan,
+          repName: rep.name,
         ),
       ),
     );
@@ -1301,59 +990,45 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   Route _createRoute(
-      Widget page,
-      ) {
+    Widget page,
+  ) {
     return PageRouteBuilder(
-      pageBuilder:
-          (
-          context,
-          animation,
-          secondaryAnimation,
-          ) {
+      pageBuilder: (
+        context,
+        animation,
+        secondaryAnimation,
+      ) {
         return page;
       },
-
-      transitionsBuilder:
-          (
-          context,
-          animation,
-          secondaryAnimation,
-          child,
-          ) {
-        const begin =
-        Offset(
+      transitionsBuilder: (
+        context,
+        animation,
+        secondaryAnimation,
+        child,
+      ) {
+        const begin = Offset(
           1,
           0,
         );
 
-        const end =
-            Offset.zero;
+        const end = Offset.zero;
 
-        const curve =
-            Curves.easeOutQuart;
+        const curve = Curves.easeOutQuart;
 
-        final tween =
-        Tween<Offset>(
-          begin:
-          begin,
-
-          end:
-          end,
+        final tween = Tween<Offset>(
+          begin: begin,
+          end: end,
         ).chain(
           CurveTween(
-            curve:
-            curve,
+            curve: curve,
           ),
         );
 
         return SlideTransition(
-          position:
-          animation.drive(
+          position: animation.drive(
             tween,
           ),
-
-          child:
-          child,
+          child: child,
         );
       },
     );
@@ -1366,18 +1041,14 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   Widget _buildLoadingState(
-      BuildContext context,
-      ) {
-    final ui =
-    AppUi.of(context);
+    BuildContext context,
+  ) {
+    final ui = AppUi.of(context);
 
     return Padding(
-      padding:
-      EdgeInsets.symmetric(
-        horizontal:
-        ui.pagePadding,
+      padding: EdgeInsets.symmetric(
+        horizontal: ui.pagePadding,
       ),
-
       child: loadingShimmer(
         context,
         5,
@@ -1395,117 +1066,71 @@ if(state is AllSeniorRepState){
   // =====================================================
 
   Widget _buildEmptyState(
-      BuildContext context,
-      ) {
-    final ui =
-    AppUi.of(context);
+    BuildContext context,
+  ) {
+    final ui = AppUi.of(context);
 
     return Center(
       child: Padding(
-        padding:
-        EdgeInsets.all(
+        padding: EdgeInsets.all(
           ui.pagePadding,
         ),
-
         child: Column(
-          mainAxisSize:
-          MainAxisSize.min,
-
+          mainAxisSize: MainAxisSize.min,
           children: [
             // ===============================================
             // Empty Icon
             // ===============================================
             Container(
-              width:
-              ui.iconBoxSize +
-                  20,
-
-              height:
-              ui.iconBoxSize +
-                  20,
-
-              alignment:
-              Alignment.center,
-
-              decoration:
-              BoxDecoration(
-                color: ColorManager
-                    .secondaryColor1
-                    .withOpacity(
+              width: ui.iconBoxSize + 20,
+              height: ui.iconBoxSize + 20,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: ColorManager.secondaryColor1.withOpacity(
                   0.07,
                 ),
-
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   ui.cardRadius,
                 ),
               ),
-
               child: Icon(
-                Icons
-                    .manage_accounts_outlined,
-
-                size:
-                ui.iconSize +
-                    10,
-
-                color: ColorManager
-                    .secondaryColor1
-                    .withOpacity(
+                Icons.manage_accounts_outlined,
+                size: ui.iconSize + 10,
+                color: ColorManager.secondaryColor1.withOpacity(
                   0.7,
                 ),
               ),
             ),
 
             SizedBox(
-              height:
-              ui.sectionSpacing,
+              height: ui.sectionSpacing,
             ),
 
             Text(
               "لا يوجد مندوبون حالياً",
-
-              textAlign:
-              TextAlign.center,
-
-              style:
-              TextStyle(
-                fontSize:
-                ui.cardTitleSize,
-
-                color:
-                const Color(
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: ui.cardTitleSize,
+                color: const Color(
                   0xFF334155,
                 ),
-
-                fontWeight:
-                FontWeight.w700,
+                fontWeight: FontWeight.w700,
               ),
             ),
 
             SizedBox(
-              height:
-              ui.smallSpacing,
+              height: ui.smallSpacing,
             ),
 
             Text(
               "ستظهر بيانات المندوبين هنا عند توفرها",
-
-              textAlign:
-              TextAlign.center,
-
-              style:
-              TextStyle(
-                fontSize:
-                ui.smallTextSize,
-
-                color:
-                const Color(
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: ui.smallTextSize,
+                color: const Color(
                   0xFF94A3B8,
                 ),
-
-                fontWeight:
-                FontWeight.w500,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

@@ -30,16 +30,24 @@ ThemeData getApplicationTheme() {
       ),
     ),
     appBarTheme: AppBarTheme(
-      iconTheme: IconThemeData(
-        color: ColorManager.secondaryColor1,
-        size: 30.h
-      ),
+      // 1. ترك الارتفاع لتلقائية Flutter يوفر تناسباً مثاليًا بين الموبايل والتابلت
+      // أو استخدام kToolbarHeight للقيم القياسية
       toolbarHeight: 65.h,
       backgroundColor: ColorManager.white,
-      elevation: 9,
+
       shadowColor: ColorManager.secondaryColor3,
-      titleTextStyle:
-          getBoldStyle(fontSize: 15.sp, color: ColorManager.secondaryColor1),
+
+      // 2. ضبط ثيم الأيقونات
+      iconTheme: IconThemeData(
+        color: ColorManager.secondaryColor1,
+        size: 15.h, // تقليل الحجم قليلاً ليكون متناسقاً بدلاً من 30.h
+      ),
+
+      // 3. نمط النص العنوان
+      titleTextStyle: getBoldStyle(
+        fontSize: 20.h, // 14.sp يعطي حجماً متوازناً بين الموبايل والتابلت
+        color: ColorManager.secondaryColor1,
+      ),////////////////////////
     ),
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),

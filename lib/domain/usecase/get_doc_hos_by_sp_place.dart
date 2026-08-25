@@ -10,8 +10,9 @@ class GetDocHosBySpPlace extends Equatable {
   Future<Either<Failure,DocHosByPlaceAndSp>> execute(int repDet,      {
     int? spId,
     int ?placeId,
+    int ?cityId,
   }) async {
-    return await _repository.getSpDocHos(repDet,spId: spId,placeId: placeId);
+    return await _repository.getSpDocHos(repDet,spId: spId,placeId: placeId,cityId:cityId );
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/senior/representative/widget/visit_st_widget.dart';
 import 'package:flutter/material.dart';
 
 class RemainingVisitCard extends StatelessWidget {
@@ -46,7 +47,8 @@ class RemainingVisitCard extends StatelessWidget {
     // Responsive Values
     // =====================================================
     double cardBottomSpacing;
-
+    double       addressSpacing ;
+    double addressFontSize;
     double cardRadius;
     double cardPadding;
 
@@ -80,10 +82,10 @@ class RemainingVisitCard extends StatelessWidget {
     // =================================================
       case AppDeviceType.mobilePortrait:
         cardBottomSpacing = 12;
-
+        addressSpacing = 6;
         cardRadius = 18;
         cardPadding = 15;
-
+        addressFontSize = 11.5;
         sideBarWidth = 4;
 
         iconBoxSize = 44;
@@ -115,10 +117,10 @@ class RemainingVisitCard extends StatelessWidget {
     // =================================================
       case AppDeviceType.tabletPortrait:
         cardBottomSpacing = 14;
-
+        addressSpacing = 8;
         cardRadius = 20;
         cardPadding = 20;
-
+        addressFontSize = 13;
         sideBarWidth = 5;
 
         iconBoxSize = 52;
@@ -150,10 +152,10 @@ class RemainingVisitCard extends StatelessWidget {
     // =================================================
       case AppDeviceType.tabletLandscape:
         cardBottomSpacing = 12;
-
+        addressSpacing = 7;
         cardRadius = 18;
         cardPadding = 17;
-
+        addressFontSize = 12;
         sideBarWidth = 5;
 
         iconBoxSize = 48;
@@ -355,7 +357,7 @@ class RemainingVisitCard extends StatelessWidget {
                                     ),
                                   ),
 
-                                  _buildRateBadge(
+                                  buildRateBadge(
                                     data.rate,
 
                                     horizontalPadding:
@@ -383,16 +385,103 @@ class RemainingVisitCard extends StatelessWidget {
                         // =====================================
                         // Done Counter
                         // =====================================
-                        _buildDoneCounter(
-                          done:
-                          doneVisits,
+                        Container(
+                          constraints: const BoxConstraints(
+                            minWidth: 58,
+                          ),
 
-                          labelFontSize:
-                          doneLabelFontSize,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
 
-                          numberFontSize:
-                          doneNumberFontSize,
-                        ),
+                          decoration: BoxDecoration(
+                            color: const Color(
+                              0xFFEFF6FF,
+                            ),
+
+                            borderRadius:
+                            BorderRadius.circular(
+                              12,
+                            ),
+
+                            border: Border.all(
+                              color: const Color(
+                                0xFFDBEAFE,
+                              ),
+                            ),
+                          ),
+
+                          child: Column(
+                            mainAxisSize:
+                            MainAxisSize.min,
+
+                            children: [
+                              Text(
+                                "تمت زيارته",
+
+                                maxLines: 1,
+
+
+                                style: TextStyle(
+                                  fontSize:
+                                  doneLabelFontSize,
+
+                                  color: const Color(
+                                    0xFF64748B,
+                                  ),
+
+                                  fontWeight:
+                                  FontWeight.w500,
+                                ),
+                              ),
+
+                              const SizedBox(
+                                height: 2,
+                              ),
+
+                              Text(
+                                "$doneVisits",
+
+                                style: TextStyle(
+                                  fontSize:
+                                  doneNumberFontSize,
+
+                                  height: 1,
+
+                                  fontWeight:
+                                  FontWeight.w800,
+
+                                  color: const Color(
+                                    0xFF2563EB,
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(
+                                height: 3,
+                              ),
+
+                              Text(
+                                "من أصل $totalVisits",
+
+                                maxLines: 1,
+
+                                style: TextStyle(
+                                  fontSize:
+                                  doneLabelFontSize,
+
+                                  color: const Color(
+                                    0xFF64748B,
+                                  ),
+
+                                  fontWeight:
+                                  FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
 
@@ -420,6 +509,70 @@ class RemainingVisitCard extends StatelessWidget {
                     // =========================================
                     // Progress
                     // =========================================
+                Row(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.center,
+
+                  children: [
+                    Container(
+                      width: iconSize + 12,
+                      height: iconSize + 12,
+
+                      alignment: Alignment.center,
+
+                      decoration: BoxDecoration(
+                        color: const Color(
+                          0xFFEFF6FF,
+                        ),
+
+                        borderRadius:
+                        BorderRadius.circular(
+                          8,
+                        ),
+                      ),
+
+                      child: Icon(
+                        Icons
+                            .location_on_outlined,
+
+                        size: iconSize,
+
+                        color: const Color(
+                          0xFF64B5F6,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      width:       addressSpacing
+                    ),
+
+                    Expanded(
+                      child: Text(
+                        data.address.isEmpty
+                            ? "العنوان غير محدد"
+                            : data.address,
+
+                        maxLines: 2,
+
+                        overflow:
+                        TextOverflow.ellipsis,
+
+                        style: TextStyle(
+                          fontSize: addressFontSize,
+
+                          color:
+                          Colors.grey.shade700,
+
+                          height: 1.4,
+
+                          fontWeight:
+                          FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                     _buildProgressBarRow(
                       percent:
                       progressPercent,
@@ -464,91 +617,7 @@ class RemainingVisitCard extends StatelessWidget {
     );
   }
 
-  // =====================================================
-  // Done Counter
-  // =====================================================
 
-  Widget _buildDoneCounter({
-    required int done,
-    required double labelFontSize,
-    required double numberFontSize,
-  }) {
-    return Container(
-      constraints:
-      const BoxConstraints(
-        minWidth: 58,
-      ),
-
-      padding:
-      const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 7,
-      ),
-
-      decoration:
-      BoxDecoration(
-        color: const Color(
-          0xFFEFF6FF,
-        ),
-
-        borderRadius:
-        BorderRadius.circular(
-          12,
-        ),
-
-        border: Border.all(
-          color: const Color(
-            0xFFDBEAFE,
-          ),
-        ),
-      ),
-
-      child: Column(
-        mainAxisSize:
-        MainAxisSize.min,
-
-        children: [
-          Text(
-            "المنجز",
-
-            style: TextStyle(
-              fontSize:
-              labelFontSize,
-
-              color: const Color(
-                0xFF64748B,
-              ),
-
-              fontWeight:
-              FontWeight.w500,
-            ),
-          ),
-
-          const SizedBox(
-            height: 2,
-          ),
-
-          Text(
-            "$done",
-
-            style: TextStyle(
-              fontSize:
-              numberFontSize,
-
-              height: 1,
-
-              fontWeight:
-              FontWeight.w800,
-
-              color: const Color(
-                0xFF2563EB,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // =====================================================
   // Progress
@@ -573,7 +642,7 @@ class RemainingVisitCard extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "حالة الإنجاز من الهدف",
+                "نسبة الإنجاز",
 
                 maxLines: 1,
 
@@ -707,60 +776,7 @@ class RemainingVisitCard extends StatelessWidget {
   // Rate Badge
   // =====================================================
 
-  Widget _buildRateBadge(
-      String rate, {
-        required double horizontalPadding,
-        required double verticalPadding,
-        required double radius,
-        required double fontSize,
-      }) {
-    return Container(
-      padding:
-      EdgeInsets.symmetric(
-        horizontal:
-        horizontalPadding,
 
-        vertical:
-        verticalPadding,
-      ),
-
-      decoration:
-      BoxDecoration(
-        color: const Color(
-          0xFFFFF7ED,
-        ),
-
-        borderRadius:
-        BorderRadius.circular(
-          radius,
-        ),
-
-        border: Border.all(
-          color: const Color(
-            0xFFFED7AA,
-          ),
-        ),
-      ),
-
-      child: Text(
-        rate,
-
-        maxLines: 1,
-
-        style: TextStyle(
-          fontSize:
-          fontSize,
-
-          color: const Color(
-            0xFFEA580C,
-          ),
-
-          fontWeight:
-          FontWeight.w700,
-        ),
-      ),
-    );
-  }
 
   // =====================================================
   // Profile Icon

@@ -46,8 +46,8 @@ class ReportVisitHospital extends StatelessWidget {
     // =====================================================
     // Responsive Values
     // =====================================================
-
     double pageMaxWidth;
+
     double horizontalPadding;
 
     double headerTopPadding;
@@ -67,6 +67,7 @@ class ReportVisitHospital extends StatelessWidget {
     // =================================================
     // Mobile
     // =================================================
+
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -91,7 +92,7 @@ class ReportVisitHospital extends StatelessWidget {
     // Tablet Portrait
     // =================================================
       case AppDeviceType.tabletPortrait:
-        pageMaxWidth = 800;
+        pageMaxWidth = 760;
 
         horizontalPadding = 28;
 
@@ -114,7 +115,7 @@ class ReportVisitHospital extends StatelessWidget {
     // Tablet Landscape
     // =================================================
       case AppDeviceType.tabletLandscape:
-        pageMaxWidth = 1100;
+        pageMaxWidth = 900;
 
         horizontalPadding = 32;
 

@@ -85,6 +85,12 @@ class PlanManagementBloc
         UserInfo.repType = data.repType; // حالة الخطة (مفتوحة 0 أو مغلقة)
         UserInfo.endDate = data.endDate; // حالة الخطة (مفتوحة 0 أو مغلقة)
         UserInfo.startDate = data.startDate; // حالة الخطة (مفتوحة 0 أو مغلقة)
+        UserInfo.totDoc=data.totDoc;
+        UserInfo.usedReci=data.usedReci;
+        UserInfo.totalReci=data.totalReci;
+        UserInfo.remainReci=data.remainReci;
+
+        UserInfo.totHos=data.totHos;
         UserInfo.initializeUserPlan();
         add(RepPlanBrandSpEvent(
             RepSp(UserInfo.otherPlanId ?? -1, 38, UserInfo.repId)));

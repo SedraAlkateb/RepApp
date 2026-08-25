@@ -343,13 +343,21 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<SearchDoctorsBaseSpResponse> docSearch(String name, int repDet) async {
+  Future<SearchDoctorsBaseSpResponse> docSearch(
+    String name,
+    int repDet, {
+    int? cityId,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('name', name));
     _data.fields.add(MapEntry('repDet', repDet.toString()));
+    if (cityId != null) {
+      _data.fields.add(MapEntry('cityId', cityId.toString()));
+    }
     final _options = _setStreamType<SearchDoctorsBaseSpResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1727,12 +1735,19 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id) async {
+  Future<AllRepresentativeFutureBaseResponse> getRepsFuture(
+    int id, {
+    int? cityId,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', id.toString()));
+    if (cityId != null) {
+      _data.fields.add(MapEntry('cityId', cityId.toString()));
+    }
     final _options = _setStreamType<AllRepresentativeFutureBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -1907,14 +1922,19 @@ class _AppServiceClient implements AppServiceClient {
   @override
   Future<AllSearchHospitalBaseResponse> getSearchHospitals(
     String name,
-    int repDet,
-  ) async {
+    int repDet, {
+    int? cityId,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('name', name));
     _data.fields.add(MapEntry('repDet', repDet.toString()));
+    if (cityId != null) {
+      _data.fields.add(MapEntry('cityId', cityId.toString()));
+    }
     final _options = _setStreamType<AllSearchHospitalBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -2027,6 +2047,7 @@ class _AppServiceClient implements AppServiceClient {
     int repDet, {
     int? spId,
     int? placeId,
+    int? cityId,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -2039,6 +2060,9 @@ class _AppServiceClient implements AppServiceClient {
     }
     if (placeId != null) {
       _data.fields.add(MapEntry('placeId', placeId.toString()));
+    }
+    if (cityId != null) {
+      _data.fields.add(MapEntry('cityId', cityId.toString()));
     }
     final _options = _setStreamType<GetDocHosByPlaceOrSpBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)

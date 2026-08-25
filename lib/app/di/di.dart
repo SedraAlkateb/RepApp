@@ -908,10 +908,11 @@ Future<void> initGeneralReportsModule() async {
   if (!GetIt.I.isRegistered<TeamLeaderAndCityUsecase>()) {
     instance.registerFactory<TeamLeaderAndCityUsecase>(
         () => TeamLeaderAndCityUsecase(instance()));
+    instance.registerFactory<SeniorByCityIdUsecase>(
+            () => SeniorByCityIdUsecase(instance()));
     instance.registerFactory<GeneralReportsBloc>(
         () => GeneralReportsBloc(instance(), instance()));
-    instance.registerFactory<SeniorByCityIdUsecase>(
-        () => SeniorByCityIdUsecase(instance()));
+
   }
 }
 
@@ -935,7 +936,11 @@ Future<void> initSeniorManageFutureModule() async {
 Future<void> iniAllCityModule() async {
   if (!GetIt.I.isRegistered<AllCityUsecase>()) {
     instance.registerFactory<AllCityUsecase>(() => AllCityUsecase(instance()));
+
+  }
+  if (!GetIt.I.isRegistered<AllCityBloc>()) {
     instance.registerFactory<AllCityBloc>(() => AllCityBloc(instance()));
+
   }
 }
 

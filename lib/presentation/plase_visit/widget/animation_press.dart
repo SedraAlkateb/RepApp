@@ -15,21 +15,20 @@ class AnimatedPlaceCard extends StatefulWidget {
   final VoidCallback onTap;
 
   @override
-  State<AnimatedPlaceCard> createState() =>
-      _AnimatedPlaceCardState();
+  State<AnimatedPlaceCard> createState() => _AnimatedPlaceCardState();
 }
 
-class _AnimatedPlaceCardState
-    extends State<AnimatedPlaceCard> {
+class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
   bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
+    final String totalVisits = widget.place.totalVisit?.toString() ?? '0';
 
     return GestureDetector(
       // =====================================================
-      // نفس سلوك الضغط الأصلي
+      // سلوك الضغط والتفاعل
       // =====================================================
       onTapDown: (_) {
         setState(() {
@@ -67,44 +66,31 @@ class _AnimatedPlaceCardState
         ),
 
         decoration: BoxDecoration(
-          color: isPressed
-              ? ColorManager.medicalBg
-              : Colors.white,
+          color: isPressed ? ColorManager.medicalBg : Colors.white,
 
           borderRadius: BorderRadius.circular(
             ui.cardRadius,
           ),
 
           border: Border.all(
-            color: isPressed
-                ? Colors.transparent
-                : const Color(
-              0xFFE2E8F0,
-            ),
+            color: isPressed ? Colors.transparent : const Color(0xFFE2E8F0),
           ),
 
           boxShadow: [
             BoxShadow(
               color: isPressed
-                  ? ColorManager.medicalPrimary
-                  .withOpacity(
-                0.12,
-              )
-                  : Colors.black.withOpacity(
-                0.03,
-              ),
+                  ? ColorManager.medicalPrimary.withOpacity(0.12)
+                  : Colors.black.withOpacity(0.03),
 
               blurRadius: 12,
 
-              offset: const Offset(
-                0,
-                4,
-              ),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
 
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // =================================================
             // Location Icon
@@ -114,34 +100,27 @@ class _AnimatedPlaceCardState
                 milliseconds: 250,
               ),
 
-              width: ui.iconBoxSize,
-              height: ui.iconBoxSize,
+              width: ui.iconBoxSize + 4,
+              height: ui.iconBoxSize + 4,
 
               alignment: Alignment.center,
 
               decoration: BoxDecoration(
                 color: isPressed
                     ? ColorManager.medicalPrimary
-                    : ColorManager.medicalPrimary
-                    .withOpacity(
-                  0.07,
-                ),
+                    : ColorManager.medicalPrimary.withOpacity(0.08),
 
-                borderRadius:
-                BorderRadius.circular(
-                  ui.smallRadius + 2,
+                borderRadius: BorderRadius.circular(
+                  ui.smallRadius + 4,
                 ),
               ),
 
               child: Icon(
-                Icons.location_on_outlined,
+                Icons.location_on_rounded,
 
                 size: ui.iconSize,
 
-                color: isPressed
-                    ? Colors.white
-                    : ColorManager
-                    .medicalPrimary,
+                color: isPressed ? Colors.white : ColorManager.medicalPrimary,
               ),
             ),
 
@@ -150,36 +129,109 @@ class _AnimatedPlaceCardState
             ),
 
             // =================================================
-            // Place Name
+            // Place Content (Title & Visits)
             // =================================================
             Expanded(
-              child:
-              AnimatedDefaultTextStyle(
-                duration: const Duration(
-                  milliseconds: 250,
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Label: اسم المنطقة
+                  Text(
+                    'اسم المنطقة',
+                    style: TextStyle(
+                      fontSize: ui.smallTextSize,
+                      color: const Color(0xFF94A3B8),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
 
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w700,
+                  SizedBox(
+                    height: ui.smallSpacing / 3,
+                  ),
 
-                  fontSize:
-                  ui.cardTitleSize,
+                  // Place Title
+                  AnimatedDefaultTextStyle(
+                    duration: const Duration(
+                      milliseconds: 250,
+                    ),
 
-                  color: ColorManager
-                      .medicalPrimary,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
 
-                  height: 1.3,
-                ),
+                      fontSize: ui.cardTitleSize,
 
-                child: Text(
-                  widget.place.title,
+                      color: ColorManager.medicalPrimary,
 
-                  maxLines: 2,
+                      height: 1.2,
+                    ),
 
-                  overflow:
-                  TextOverflow.ellipsis,
-                ),
+                    child: Text(
+                      widget.place.title,
+
+                      maxLines: 1,
+
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: ui.smallSpacing,
+                  ),
+
+                  // =========================================
+                  // Total Visits Badge (إجمالي زيارات المنطقة)
+                  // =========================================
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ui.mediumSpacing,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isPressed
+                          ? Colors.white
+                          : const Color(0xFFEFF6FF), // أزرق هادئ
+                      borderRadius: BorderRadius.circular(
+                        ui.smallRadius,
+                      ),
+                      border: Border.all(
+                        color: isPressed
+                            ? Colors.transparent
+                            : const Color(0xFFDBEAFE),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.analytics_outlined,
+                          size: ui.smallIconSize,
+                          color: const Color(0xFF2563EB),
+                        ),
+                        SizedBox(
+                          width: ui.smallSpacing / 2,
+                        ),
+                        Text(
+                          'إجمالي زيارات المنطقة: ',
+                          style: TextStyle(
+                            fontSize: ui.smallTextSize,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF3B82F6),
+                          ),
+                        ),
+                        Text(
+                          totalVisits,
+                          style: TextStyle(
+                            fontSize: ui.smallTextSize + 1,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF1D4ED8),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -188,49 +240,41 @@ class _AnimatedPlaceCardState
             ),
 
             // =================================================
-            // Arrow
+            // Arrow Action
             // =================================================
             AnimatedRotation(
               duration: const Duration(
                 milliseconds: 250,
               ),
 
-              turns:
-              isPressed ? -0.02 : 0,
+              turns: isPressed ? -0.02 : 0,
 
               child: Container(
-                width: ui.isMobile
-                    ? 30
-                    : 34,
+                width: ui.isMobile ? 32 : 36,
 
-                height: ui.isMobile
-                    ? 30
-                    : 34,
+                height: ui.isMobile ? 32 : 36,
 
-                alignment:
-                Alignment.center,
+                alignment: Alignment.center,
 
                 decoration: BoxDecoration(
-                  color: const Color(
-                    0xFFF8FAFC,
-                  ),
+                  color: isPressed
+                      ? Colors.white
+                      : const Color(0xFFF8FAFC),
 
-                  borderRadius:
-                  BorderRadius.circular(
+                  borderRadius: BorderRadius.circular(
                     ui.smallRadius,
+                  ),
+                  border: Border.all(
+                    color: const Color(0xFFF1F5F9),
                   ),
                 ),
 
                 child: Icon(
-                  Icons
-                      .arrow_forward_ios_rounded,
+                  Icons.arrow_forward_ios_rounded,
 
-                  size:
-                  ui.smallIconSize,
+                  size: ui.smallIconSize - 2,
 
-                  color:
-                  ColorManager
-                      .medicalMuted,
+                  color: ColorManager.medicalMuted,
                 ),
               ),
             ),

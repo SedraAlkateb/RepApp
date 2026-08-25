@@ -558,7 +558,7 @@ class CustomAppDrawer extends StatelessWidget {
         children: [
           _buildStatCard(
             "المشافي",
-            UserInfo.numOfHospitalVisit.toString(),
+            "${UserInfo.numOfHospitalVisit}\/${UserInfo.totHos}",
             true,
             verticalPadding: statVerticalPadding,
             radius: statRadius,
@@ -572,7 +572,7 @@ class CustomAppDrawer extends StatelessWidget {
 
           _buildStatCard(
             "الأطباء",
-            UserInfo.numOfDoctorVisit.toString(),
+            "${UserInfo.numOfDoctorVisit}\/${UserInfo.totDoc}",
             false,
             verticalPadding: statVerticalPadding,
             radius: statRadius,

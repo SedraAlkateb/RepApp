@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/senior/representative/widget/visit_st_widget.dart';
 import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -13,12 +14,11 @@ class SenVisitDoctor extends StatelessWidget {
   });
 
   final TextEditingController searchteDoctorController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
 
@@ -30,9 +30,9 @@ class SenVisitDoctor extends StatelessWidget {
     double listBottomPadding;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -45,9 +45,9 @@ class SenVisitDoctor extends StatelessWidget {
         listBottomPadding = 24;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
 
@@ -60,9 +60,9 @@ class SenVisitDoctor extends StatelessWidget {
         listBottomPadding = 30;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
 
@@ -102,11 +102,9 @@ class SenVisitDoctor extends StatelessWidget {
                   searchBottomPadding,
                 ),
                 child: SearchField(
-                  searchController:
-                  searchteDoctorController,
+                  searchController: searchteDoctorController,
                   onPressed: (value) {
-                    BlocProvider.of<
-                        SeniorProfBloc>(
+                    BlocProvider.of<SeniorProfBloc>(
                       context,
                     ).add(
                       SenSearchVisitDoctorEvent(
@@ -121,37 +119,27 @@ class SenVisitDoctor extends StatelessWidget {
               // List
               // =================================================
               Expanded(
-                child: BlocBuilder<
-                    SeniorProfBloc,
-                    SeniorProfState>(
+                child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
                   builder: (context, state) {
-                     List<NoVisitDocModel>
-                    visitDoc =
-                        context
-                            .watch<
-                            SeniorProfBloc>()
-                            .visitDoc;
+                    List<NoVisitDocModel> visitDoc =
+                        context.watch<SeniorProfBloc>().visitDoc;
 
                     // ===========================================
                     // Loading
                     // ===========================================
-                    if (state
-                    is SenVisitDocLoadingState) {
+                    if (state is SenVisitDocLoadingState) {
                       return loadingFullScreen(
                         context,
                       );
                     }
-                    if (state
-                    is SenVisitDocsState) {
-                      visitDoc=state.visitDoc;
+                    if (state is SenVisitDocsState) {
+                      visitDoc = state.visitDoc;
                     }
 
                     // ===========================================
                     // Empty
                     // ===========================================
-                    if (state
-                    is SenVisitDocEmptyState ||
-                        visitDoc.isEmpty) {
+                    if (state is SenVisitDocEmptyState || visitDoc.isEmpty) {
                       return emptyFullScreen(
                         context,
                       );
@@ -161,13 +149,11 @@ class SenVisitDoctor extends StatelessWidget {
                     // Error
                     // نفس السلوك الأصلي
                     // ===========================================
-                    if (state
-                    is SenVisitDocErrorState) {
+                    if (state is SenVisitDocErrorState) {
                       return errorFullScreen(
                         context,
                         func: () {
-                          BlocProvider.of<
-                              SeniorProfBloc>(
+                          BlocProvider.of<SeniorProfBloc>(
                             context,
                           ).add(
                             VisitDocEvent(
@@ -184,33 +170,22 @@ class SenVisitDoctor extends StatelessWidget {
                     // ===========================================
                     return ListView.builder(
                       keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior
-                          .onDrag,
-
-                      physics:
-                      const BouncingScrollPhysics(),
-
-                      padding:
-                      EdgeInsets.fromLTRB(
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.fromLTRB(
                         horizontalPadding,
                         listTopPadding,
                         horizontalPadding,
                         listBottomPadding,
                       ),
-
-                      itemCount:
-                      visitDoc.length + 1,
-
-                      itemBuilder:
-                          (context, index) {
+                      itemCount: visitDoc.length + 1,
+                      itemBuilder: (context, index) {
                         if (index == 0) {
                           return Padding(
-                            padding:
-                            const EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                               bottom: 12,
                             ),
-                            child:
-                            buildTotalReportsCard(
+                            child: buildTotalReportsCard(
                               visitDoc.length,
                               'إجمالي الزيارات الناجحة',
                               'لهذا الشهر',
@@ -219,8 +194,7 @@ class SenVisitDoctor extends StatelessWidget {
                         }
 
                         return VisitedDoctorCard(
-                          data:
-                          visitDoc[index - 1],
+                          data: visitDoc[index - 1],
                         );
                       },
                     );
@@ -249,28 +223,29 @@ class VisitedDoctorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     // =====================================================
     // Visits calculation
     // =====================================================
-    final int total =
-        int.tryParse(
+    final int total = int.tryParse(
           data.visits ?? '0',
         ) ??
-            0;
+        0;
 
-    final int remaining =
-        data.remainingVisits ?? 0;
+    final int remaining = data.remainingVisits ?? 0;
 
-    final int done =
-    (total - remaining)
-        .clamp(0, total);
+    final int done = (total - remaining).clamp(0, total);
 
     // =====================================================
     // Responsive Values
     // =====================================================
+
+    double rateHorizontalPadding;
+    double rateVerticalPadding;
+    double rateRadius;
+    double rateFontSize;
+
     double cardBottomSpacing;
 
     double cardRadius;
@@ -299,10 +274,15 @@ class VisitedDoctorCard extends StatelessWidget {
     double progressHeight;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
+        rateHorizontalPadding = 7;
+        rateVerticalPadding = 3;
+        rateRadius = 7;
+        rateFontSize = 10;
+
         cardBottomSpacing = 12;
 
         cardRadius = 18;
@@ -331,10 +311,14 @@ class VisitedDoctorCard extends StatelessWidget {
         progressHeight = 7;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
+        rateHorizontalPadding = 9;
+        rateVerticalPadding = 4;
+        rateRadius = 8;
+        rateFontSize = 12;
         cardBottomSpacing = 14;
 
         cardRadius = 20;
@@ -363,9 +347,9 @@ class VisitedDoctorCard extends StatelessWidget {
         progressHeight = 8;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         cardBottomSpacing = 12;
 
@@ -373,7 +357,10 @@ class VisitedDoctorCard extends StatelessWidget {
         cardPadding = 17;
 
         sideBarWidth = 5;
-
+        rateHorizontalPadding = 8;
+        rateVerticalPadding = 3;
+        rateRadius = 8;
+        rateFontSize = 11;
         profileBoxSize = 48;
         profileIconSize = 24;
         profileRadius = 13;
@@ -398,7 +385,6 @@ class VisitedDoctorCard extends StatelessWidget {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-
       child: Container(
         margin: EdgeInsets.only(
           bottom: cardBottomSpacing,
@@ -412,23 +398,18 @@ class VisitedDoctorCard extends StatelessWidget {
         // =================================================
         decoration: BoxDecoration(
           color: Colors.white,
-
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius,
           ),
-
           border: Border.all(
             color: const Color(
               0xFFE9EEF3,
             ),
             width: 1,
           ),
-
           boxShadow: [
             BoxShadow(
-              color:
-              Colors.black.withOpacity(
+              color: Colors.black.withOpacity(
                 0.03,
               ),
               blurRadius: 12,
@@ -441,8 +422,7 @@ class VisitedDoctorCard extends StatelessWidget {
         ),
 
         child: ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius - 1,
           ),
 
@@ -464,71 +444,46 @@ class VisitedDoctorCard extends StatelessWidget {
 
                   // زيادة بسيطة من اليمين
                   // حتى ما يلزق المحتوى بالشريط
-                  cardPadding +
-                      sideBarWidth,
+                  cardPadding + sideBarWidth,
 
                   cardPadding,
                 ),
-
                 child: Column(
-                  mainAxisSize:
-                  MainAxisSize.min,
-
-                  crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
-
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // =========================================
                     // Header
                     // =========================================
                     Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // =====================================
                         // Doctor Icon
                         // =====================================
                         Container(
-                          width:
-                          profileBoxSize,
-                          height:
-                          profileBoxSize,
-
-                          alignment:
-                          Alignment.center,
-
-                          decoration:
-                          BoxDecoration(
-                            color:
-                            const Color(
+                          width: profileBoxSize,
+                          height: profileBoxSize,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(
                               0xFFE8F5E9,
                             ),
-
-                            borderRadius:
-                            BorderRadius
-                                .circular(
+                            borderRadius: BorderRadius.circular(
                               profileRadius,
                             ),
                           ),
-
                           child: Icon(
-                            Icons
-                                .check_circle_outline_rounded,
-
-                            color:
-                            const Color(
+                            Icons.check_circle_outline_rounded,
+                            color: const Color(
                               0xFF43A047,
                             ),
-
-                            size:
-                            profileIconSize,
+                            size: profileIconSize,
                           ),
                         ),
 
                         SizedBox(
-                          width:
-                          profileSpacing,
+                          width: profileSpacing,
                         ),
 
                         // =====================================
@@ -536,68 +491,48 @@ class VisitedDoctorCard extends StatelessWidget {
                         // =====================================
                         Expanded(
                           child: Column(
-                            mainAxisSize:
-                            MainAxisSize
-                                .min,
-
-                            crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 data.docTitle,
-
                                 maxLines: 2,
-
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-
-                                style:
-                                TextStyle(
-                                  fontSize:
-                                  nameFontSize,
-
-                                  fontWeight:
-                                  FontWeight
-                                      .w700,
-
-                                  color:
-                                  const Color(
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: nameFontSize,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(
                                     0xFF0D47A1,
                                   ),
-
                                   height: 1.25,
                                 ),
                               ),
-
                               const SizedBox(
                                 height: 4,
                               ),
-
-                              Text(
-                                data.spTitle,
-
-                                maxLines: 1,
-
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-
-                                style:
-                                TextStyle(
-                                  fontSize:
-                                  specializationFontSize,
-
-                                  color: Colors
-                                      .grey
-                                      .shade600,
-
-                                  fontWeight:
-                                  FontWeight
-                                      .w500,
-                                ),
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: 8,
+                                runSpacing: 5,
+                                children: [
+                                  Text(
+                                    data.spTitle,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: specializationFontSize,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  buildRateBadge(
+                                    data.rate,
+                                    horizontalPadding: rateHorizontalPadding,
+                                    verticalPadding: rateVerticalPadding,
+                                    radius: rateRadius,
+                                    fontSize: rateFontSize,
+                                  )
+                                ],
                               ),
                             ],
                           ),
@@ -610,22 +545,18 @@ class VisitedDoctorCard extends StatelessWidget {
                         // =====================================
                         // Visits Counter
                         // =====================================
-                        _buildVisitCounter(
+                        buildVisitCounter(
                           done: done,
                           total: total,
-                          labelFontSize:
-                          visitLabelFontSize,
-                          numberFontSize:
-                          visitNumberFontSize,
-                          totalFontSize:
-                          visitTotalFontSize,
+                          labelFontSize: visitLabelFontSize,
+                          numberFontSize: visitNumberFontSize,
+                          totalFontSize: visitTotalFontSize,
                         ),
                       ],
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
@@ -639,35 +570,30 @@ class VisitedDoctorCard extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
                     // Address
                     // =========================================
                     _buildAddressRow(
-                      iconSize:
-                      addressIconSize,
-                      fontSize:
-                      addressFontSize,
-                      spacing:
-                      addressSpacing,
+                      iconSize: addressIconSize,
+                      fontSize: addressFontSize,
+                      spacing: addressSpacing,
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
                     // Progress
                     // =========================================
-                    _buildProgressBar(
+                    buildProgressBar(
                       done,
                       total,
-                      height:
-                      progressHeight,
+                      Color(0xFF2E7D32),
+                      height: progressHeight,
                     ),
                   ],
                 ),
@@ -683,7 +609,6 @@ class VisitedDoctorCard extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 right: 0,
-
                 child: Container(
                   width: sideBarWidth,
                   color: const Color(
@@ -702,7 +627,7 @@ class VisitedDoctorCard extends StatelessWidget {
   // Visit Counter
   // =====================================================
 
-  Widget _buildVisitCounter({
+  Widget buildVisitCounter({
     required int done,
     required int total,
     required double labelFontSize,
@@ -713,92 +638,61 @@ class VisitedDoctorCard extends StatelessWidget {
       constraints: const BoxConstraints(
         minWidth: 58,
       ),
-
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
         vertical: 6,
       ),
-
       decoration: BoxDecoration(
         color: const Color(
           0xFFF0FDF4,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           12,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFDCFCE7,
           ),
         ),
       ),
-
       child: Column(
-        mainAxisSize:
-        MainAxisSize.min,
-
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "تمت زيارته",
-
             maxLines: 1,
-
             style: TextStyle(
-              fontSize:
-              labelFontSize,
-
+              fontSize: labelFontSize,
               color: const Color(
                 0xFF2E7D32,
               ),
-
-              fontWeight:
-              FontWeight.w500,
+              fontWeight: FontWeight.w500,
             ),
           ),
-
           const SizedBox(
             height: 2,
           ),
-
           Text(
             "$done",
-
             style: TextStyle(
-              fontSize:
-              numberFontSize,
-
+              fontSize: numberFontSize,
               height: 1,
-
-              fontWeight:
-              FontWeight.w800,
-
+              fontWeight: FontWeight.w800,
               color: const Color(
                 0xFF2E7D32,
               ),
             ),
           ),
-
           const SizedBox(
             height: 3,
           ),
-
           Text(
             "من أصل $total",
-
             maxLines: 1,
-
             style: TextStyle(
-              fontSize:
-              totalFontSize,
-
-              color:
-              Colors.grey.shade600,
-
-              fontWeight:
-              FontWeight.w500,
+              fontSize: totalFontSize,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -810,110 +704,6 @@ class VisitedDoctorCard extends StatelessWidget {
   // Progress
   // =====================================================
 
-  Widget _buildProgressBar(
-      int done,
-      int total, {
-        required double height,
-      }) {
-    final double percent =
-    total == 0
-        ? 0
-        : (done / total)
-        .clamp(
-      0.0,
-      1.0,
-    );
-
-    return Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
-      children: [
-        Row(
-          children: [
-            Text(
-              "نسبة الإنجاز",
-
-              style: TextStyle(
-                fontSize: 11,
-                color:
-                Colors.grey.shade600,
-                fontWeight:
-                FontWeight.w500,
-              ),
-            ),
-
-            const Spacer(),
-
-            Container(
-              padding:
-              const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 3,
-              ),
-
-              decoration: BoxDecoration(
-                color: const Color(
-                  0xFFF0FDF4,
-                ),
-
-                borderRadius:
-                BorderRadius.circular(
-                  7,
-                ),
-              ),
-
-              child: Text(
-                "${(percent * 100).round()}%",
-
-                style:
-                const TextStyle(
-                  fontSize: 11,
-                  color: Color(
-                    0xFF2E7D32,
-                  ),
-                  fontWeight:
-                  FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(
-          height: 7,
-        ),
-
-        ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
-            10,
-          ),
-
-          child:
-          LinearProgressIndicator(
-            value: percent,
-
-            minHeight: height,
-
-            backgroundColor:
-            const Color(
-              0xFFE8F5E9,
-            ),
-
-            valueColor:
-            const AlwaysStoppedAnimation<
-                Color>(
-              Color(
-                0xFF43A047,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   // =====================================================
   // Address
   // =====================================================
@@ -924,64 +714,41 @@ class VisitedDoctorCard extends StatelessWidget {
     required double spacing,
   }) {
     return Row(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: iconSize + 12,
           height: iconSize + 12,
-
           alignment: Alignment.center,
-
           decoration: BoxDecoration(
             color: const Color(
               0xFFEFF6FF,
             ),
-
-            borderRadius:
-            BorderRadius.circular(
+            borderRadius: BorderRadius.circular(
               8,
             ),
           ),
-
           child: Icon(
-            Icons
-                .location_on_outlined,
-
+            Icons.location_on_outlined,
             size: iconSize,
-
             color: const Color(
               0xFF64B5F6,
             ),
           ),
         ),
-
         SizedBox(
           width: spacing,
         ),
-
         Expanded(
           child: Text(
-            data.address.isEmpty
-                ? "العنوان غير محدد"
-                : data.address,
-
+            data.address.isEmpty ? "العنوان غير محدد" : data.address,
             maxLines: 2,
-
-            overflow:
-            TextOverflow.ellipsis,
-
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: fontSize,
-
-              color:
-              Colors.grey.shade700,
-
+              color: Colors.grey.shade700,
               height: 1.4,
-
-              fontWeight:
-              FontWeight.w500,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

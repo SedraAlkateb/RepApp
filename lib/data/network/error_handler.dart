@@ -9,7 +9,6 @@ class ErrorHandler implements Exception {
   ErrorHandler.handle(dynamic error) {
     print(error);
     if (error is DioError) {
-      print("error.message??" "");
       failure = _handleError(error);
     } else if (error is DatabaseException) {
       failure = _handleErrorSql(error);
@@ -24,6 +23,7 @@ class ErrorHandler implements Exception {
 Failure _handleError(DioError error) {
   switch (error.type) {
     case DioErrorType.connectionTimeout:
+
       return DataSource.CONNECT_TIOMOUT.getFailure();
     case DioErrorType.sendTimeout:
       return DataSource.SEND_TIMOUT.getFailure();
@@ -186,7 +186,7 @@ class ResponseMassage {
   static const String SYNTAX_ERROR = "SYNTAX_ERROR"; //success with data
   static const String CONSTRAINT_VIOLATION =
       "CONSTRAINT_VIOLATION"; //success with data
-
+  static const String FORMAT_ERROR = "حدث خطأ في تنسيق البيانات";
   static const String SUCCESS = "success"; //success with data
   static const String NO_CONTENT =
       "success"; //success with no data (no content)

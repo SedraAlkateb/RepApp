@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:path/path.dart';
-// تغيير الاستيراد إلى sqlcipher
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class DatabaseHelper {
+abstract class DatabaseAccessor {
+  Future<Database> get database;
+}
+
+class DatabaseHelper implements DatabaseAccessor {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
 
@@ -47,19 +50,37 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database1.db');
 
-    // جلب المفتاح السري الآمن
     final encryptionKey = await _getOrCreateEncryptionKey();
 
     return await openDatabase(
       path,
-      version: 5,
-      password:
-          encryptionKey, // 👈 هنا يكمن السحر: يتم تشفير البيانات بالكامل بـ AES-256
+      version: 6,
+      password: encryptionKey,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
       onOpen: (db) async {
         await db.execute("PRAGMA foreign_keys = ON");
       },
     );
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 6) {
+      // 1. إضافة حقل totalVisit إلى جدول place
+      await db.execute(
+        'ALTER TABLE place ADD COLUMN totalVisit INTEGER NOT NULL DEFAULT 0;',
+      );
+
+      // 2. إضافة حقل totalVisitDoc إلى جدول rep
+      await db.execute(
+        'ALTER TABLE rep ADD COLUMN totalVisitDoc INTEGER NOT NULL DEFAULT 0;',
+      );
+
+      // 3. إضافة حقل totalVisitHos إلى جدول rep
+      await db.execute(
+        'ALTER TABLE rep ADD COLUMN totalVisitHos INTEGER NOT NULL DEFAULT 0;',
+      );
+    }
   }
 
   Future _onCreate(Database db, int version) async {
@@ -86,7 +107,9 @@ class DatabaseHelper {
     otherEndDate TEXT ,
     totalReci INTEGER NOT NULL DEFAULT 0,
     usedReci INTEGER NOT NULL DEFAULT 0,
-    remainReci INTEGER NOT NULL DEFAULT 0
+    remainReci INTEGER NOT NULL DEFAULT 0,
+    totalVisitDoc INTEGER NOT NULL DEFAULT 0, 
+    totalVisitHos INTEGER NOT NULL DEFAULT 0  
     );
     ''');
     await db.execute('''
@@ -103,7 +126,8 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE place (
     placeId INTEGER PRIMARY KEY,
-    title TEXT NOT NULL
+    title TEXT NOT NULL,
+    totalVisit INTEGER NOT NULL DEFAULT 0 -- 👈 أضف الحقل هنا أيضاً
     );
     ''');
     await db.execute('''

@@ -386,9 +386,9 @@ class _VisitDoctorState extends State<VisitDoctor>
                               state.failure.code);
                         }
                         if (state is InsertVisitDoctorState) {
+                          print("333333333333333333333333");
                           BlocProvider.of<VisitPlaceBloc>(context).add(
                               DoctorByPlace(widget.doctorModel.placeId, 0));
-                          success(context);
                           SnackBarMessage().showAlertSScaffoldMessenger(
                               context: context, message: "تم حفظ التغيرات");
                           Navigator.pop(context);
@@ -398,9 +398,10 @@ class _VisitDoctorState extends State<VisitDoctor>
                               state.failure.code);
                         }
                         if (state is AllVisitBrandDoctorState) {
+                          print("ddddddddddddddddddddddddddddddddddddddddddddddddddddd");
                           BlocProvider.of<VisitPlaceBloc>(context).add(
                               DoctorByPlace(widget.doctorModel.placeId, 0));
-                          success(context);
+
                           SnackBarMessage().showAlertSScaffoldMessenger(
                               context: context, message: "تم حفظ التغيرات");
 

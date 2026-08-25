@@ -348,8 +348,7 @@ class _DoctorsHospitalsReportsState
                               fontSize:
                               tabFontSize,
 
-                              fontFamily:
-                              'Cairo',
+
                             ),
 
                             unselectedLabelStyle:
@@ -361,8 +360,6 @@ class _DoctorsHospitalsReportsState
                               fontSize:
                               tabFontSize,
 
-                              fontFamily:
-                              'Cairo',
                             ),
 
                             indicatorSize:
@@ -457,12 +454,6 @@ class _DoctorsHospitalsReportsState
 
                                       maxLines:
                                       1,
-
-                                      style:
-                                      TextStyle(
-                                        fontSize:
-                                        tabFontSize,
-                                      ),
                                     ),
                                   ],
                                 ),
@@ -501,11 +492,7 @@ class _DoctorsHospitalsReportsState
                                       maxLines:
                                       1,
 
-                                      style:
-                                      TextStyle(
-                                        fontSize:
-                                        tabFontSize,
-                                      ),
+
                                     ),
                                   ],
                                 ),

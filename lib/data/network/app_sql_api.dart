@@ -2,6 +2,8 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 abstract class AppSqlApiAbs {
@@ -105,10 +107,15 @@ abstract class AppSqlApiAbs {
 }
 
 class AppSqlApi extends AppSqlApiAbs {
-  DatabaseHelper databaseHelper;
+  DatabaseAccessor databaseHelper;
   AppSqlApi(this.databaseHelper);
   Future<void> initializeDatabase() async {
-    await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
+    WidgetsFlutterBinding.ensureInitialized();
+    try {
+      await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
+    } on MissingPluginException {
+      // Some tests use the FFI SQLite implementation instead of the platform plugin.
+    }
   }
 
   insertBrands(List<BrandModel> brands) async {

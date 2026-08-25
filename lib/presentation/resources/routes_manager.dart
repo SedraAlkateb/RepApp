@@ -20,6 +20,7 @@ import 'package:domina_app/presentation/senior/all_city/pages/all_city-plan.dart
 import 'package:domina_app/presentation/senior/finished_plan/page/finished_plan_page.dart';
 import 'package:domina_app/presentation/senior/finished_plan/page/plan_reps_page.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all_city-seniors.dart';
+import 'package:domina_app/presentation/senior/general_reports/pages/senior-by-cityid.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/team_leader.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/all_rep_with_future.dart';
 import 'package:domina_app/presentation/senior/manage_future/page/future_place_page.dart';
@@ -145,8 +146,13 @@ class RouteGenerator {
       case Routes.allBrand:
         return _animatedRoute(AllBrand());
       case Routes.docHos:
+        final args = settings.arguments as Map<String, dynamic>;
+
         return _animatedRoute(DocHosByPlaceOrSpPage(
+          placeId: args['placeId'],
+          spId: args['spId'],
         ));
+
       // case Routes.createOrder:
       //   initOrderBradModule();
       //   return _animatedRoute(CreateOrderPage());
@@ -261,12 +267,8 @@ class RouteGenerator {
         ));
       case Routes.AllRepSenior:
         initSeniorModule();
-        final args = settings.arguments as int?; // ننتظر الـ ID هنا كـ Integer
-
+        UserInfo.repType.i==6?     iniAllCityModule():null;
         return _animatedRoute(AllRepSenior(
-          cityId: args != null ? args : UserInfo.cityId,
-          cityname: UserInfo.cityTitle,
-          repId: UserInfo.repId,
         ));
       // case Routes.cities:
       //
@@ -341,15 +343,16 @@ class RouteGenerator {
         return _animatedRoute(AllRepWithFuture());
       case Routes.seniorByCityId:
         initGeneralReportsModule();
-        return _animatedRoute(AllRepWithFuture());
+        return _animatedRoute(SeniorByCityId());
       case Routes.adminControl:
+        iniAllCityModule();
+
         return _animatedRoute(AdminDashboardPage());
       case Routes.doctorAndHospitalArchive:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
         return _animatedRoute(PlaceVisitArchivePage(placeId: args));
       case Routes.teamLeader:
-        initGeneralReportsModule();
         return _animatedRoute(TeamLeader());
       case Routes.allCitySeniors:
         iniAllCityModule();

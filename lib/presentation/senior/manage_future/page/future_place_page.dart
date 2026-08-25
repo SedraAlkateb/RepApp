@@ -2,6 +2,7 @@ import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -425,6 +426,7 @@ class FuturePlacePage extends StatelessWidget {
               context,
             ).add(
               AllSeniorRepFutureEvent(
+                  cityId:    context.watch<AllCityBloc>().cities[0].id
               ),
             );
 

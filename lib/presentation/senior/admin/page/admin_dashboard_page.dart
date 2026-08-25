@@ -6,16 +6,27 @@ import 'package:domina_app/presentation/resources/responsive/app_responsive.dart
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/admin/widget/interactive_admin_card.dart';
 import 'package:domina_app/presentation/senior/admin/widget/square_interactive_card.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AdminDashboardPage extends StatelessWidget {
+class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({
     super.key,
   });
 
+  @override
+  State<AdminDashboardPage> createState() => _AdminDashboardPageState();
+}
+
+class _AdminDashboardPageState extends State<AdminDashboardPage> {
+  @override
+  void initState() {
+    BlocProvider.of<AllCityBloc>(context).cities;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final deviceType = AppResponsive.deviceType(context);
@@ -120,18 +131,10 @@ class AdminDashboardPage extends StatelessWidget {
         iconColor: ColorManager.primaryBlue,
         isLandscape: isLandscape,
         onTap: () {
-          if (UserInfo.repType.i == 4 ||
-              UserInfo.repType.i == 5) {
-            Navigator.pushNamed(
-              context,
-              Routes.allCitySupervisor,
-            );
-          } else {
-            Navigator.pushNamed(
-              context,
-              Routes.AllRepSenior,
-            );
-          }
+          Navigator.pushNamed(
+            context,
+            Routes.AllRepSenior,
+          );
         },
       ),
 
@@ -146,9 +149,10 @@ class AdminDashboardPage extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(
               context,
-              Routes.allCitySeniors,
+                Routes.seniorByCityId
             );
           },
+
         ),
 
       if (UserInfo.repType.i == 4)
@@ -296,22 +300,11 @@ class AdminDashboardPage extends StatelessWidget {
                                   iconColor: Colors.green,
 
                                   onTap: () {
-                                    initSeniorManageFutureModule();
-
-                                    BlocProvider.of<ManageFutureBloc>(
-                                      context,
-                                    ).add(
-                                      AllSeniorRepFutureEvent(
-                                      ),
-                                    );
-
                                     Navigator.pushNamed(
                                       context,
                                       Routes.allRepWithFuture,
                                     );
                                   },
-
-                                  isLandscape: isLandscape,
                                 ),
                               ),
 
@@ -333,8 +326,6 @@ class AdminDashboardPage extends StatelessWidget {
                                       Routes.cityPlan,
                                     );
                                   },
-
-                                  isLandscape: isLandscape,
                                 ),
                               ),
                             ],
@@ -359,9 +350,6 @@ class AdminDashboardPage extends StatelessWidget {
   }
 
   // =====================================================
-  // Admin Cards Responsive Layout
-  // =====================================================
-
   Widget _buildAdminCards({
     required List<Widget> adminCards,
     required AppDeviceType deviceType,
@@ -371,14 +359,17 @@ class AdminDashboardPage extends StatelessWidget {
     // ==========================================
     // Tablet Landscape
     // ==========================================
+    // ==========================================
     if (deviceType == AppDeviceType.tabletLandscape) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (int i = 0; i < adminCards.length; i++) ...[
             Expanded(
-              child: SizedBox(
-                height: 250,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: 220,
+                ),
                 child: adminCards[i],
               ),
             ),
@@ -391,7 +382,6 @@ class AdminDashboardPage extends StatelessWidget {
         ],
       );
     }
-
     // ==========================================
     // Mobile + Tablet Portrait
     // ==========================================

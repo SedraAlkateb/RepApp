@@ -118,52 +118,111 @@ class ReportVisitDoctorBloc
         List<RepVisitsModel> hospitalNote;
         String search = normalizeText(event.contant);
         hospitalNote = repVisitHospital.where((value) {
-          if (normalizeText(value.docTitle).contains(search)) {
+          if (normalizeText(value.docTitle)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.placeTitle).contains(search)) {
+
+          if (normalizeText(value.placeTitle)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.spTitle).contains(search)) {
+
+          if (normalizeText(value.spTitle)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.note).contains(search)) {
-            return true;
-          } if (normalizeText(value.target).contains(search)) {
-            return true;
-          } if (normalizeText(value.issue).contains(search)) {
+
+          if (normalizeText(value.note)
+              .contains(search)) {
             return true;
           }
+
+          if (normalizeText(value.target)
+              .contains(search)) {
+            return true;
+          }
+
+          if (normalizeText(value.issue)
+              .contains(search)) {
+            return true;
+          }
+
+          // البحث داخل المستحضرات / العينات
+          if (value.samples.any(
+                (sample) =>
+                normalizeText(sample)
+                    .contains(search),
+          )) {
+            return true;
+          }
+
           return false;
         }).toList();
+
         repVisitsSearch = hospitalNote;
-        emit(AllReportVisitHospitalsState(hospitalNote));
+
+        emit(
+          AllReportVisitHospitalsState(
+            hospitalNote,
+          ),
+        );
       } else if (event is SenSearchNoteVisitDoctorEvent) {
         List<RepVisitsModel> doctorNote;
-        String search = normalizeText(event.contant);
+
+        final String search =
+        normalizeText(event.contant);
+
         doctorNote = repVisits.where((value) {
-          if (normalizeText(value.docTitle).contains(search)) {
+          if (normalizeText(value.docTitle)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.placeTitle).contains(search)) {
+
+          if (normalizeText(value.placeTitle)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.spTitle).contains(search)) {
+
+          if (normalizeText(value.spTitle)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.note).contains(search)) {
+
+          if (normalizeText(value.note)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.target).contains(search)) {
+
+          if (normalizeText(value.target)
+              .contains(search)) {
             return true;
           }
-          if (normalizeText(value.issue).contains(search)) {
+
+          if (normalizeText(value.issue)
+              .contains(search)) {
             return true;
           }
+
+          // إذا أي مستحضر داخل الزيارة مطابق
+          if (value.samples.any(
+                (sample) =>
+                normalizeText(sample)
+                    .contains(search),
+          )) {
+            return true;
+          }
+
           return false;
         }).toList();
+
         repVisitsSearch = doctorNote;
-        emit(AllReportVisitDoctorsState(repVisitsSearch));
+
+        emit(
+          AllReportVisitDoctorsState(
+            repVisitsSearch,
+          ),
+        );
       } else if (event is DocIsExpandedNoteEvent) {
         isExpanded = true;
         doctorNoteModel = event.repVisitsModel;

@@ -8,8 +8,8 @@ class AllRepsFutureUsecase extends Equatable {
   final Repository _repository;
   AllRepsFutureUsecase(this._repository);
   Future<Either<Failure, List<AllRepresentativeFuture>>> execute(
-      int id) async {
-    return await _repository.getRepsFuture(id);
+      int id, {int? cityId}) async {
+    return await _repository.getRepsFuture(id,cityId: cityId);
   }
 
   @override

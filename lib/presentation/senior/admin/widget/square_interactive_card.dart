@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 
 class SquareInteractiveCard extends StatefulWidget {
   final IconData icon;
@@ -7,7 +8,6 @@ class SquareInteractiveCard extends StatefulWidget {
   final String subtitle;
   final Color iconColor;
   final VoidCallback onTap;
-  final bool isLandscape;
 
   const SquareInteractiveCard({
     super.key,
@@ -16,130 +16,244 @@ class SquareInteractiveCard extends StatefulWidget {
     required this.subtitle,
     required this.iconColor,
     required this.onTap,
-    required this.isLandscape,
   });
 
   @override
-  State<SquareInteractiveCard> createState() => _SquareInteractiveCardState();
+  State<SquareInteractiveCard> createState() =>
+      _SquareInteractiveCardState();
 }
+
 
 class _SquareInteractiveCardState extends State<SquareInteractiveCard>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  bool _isPressed = false;
+
+
+  late AnimationController controller;
+  late Animation<double> scaleAnimation;
+
+  bool pressed = false;
+
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+
+    controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+
+
+    scaleAnimation = Tween<double>(
+      begin: 1,
+      end: 0.96,
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeOut,
+      ),
     );
   }
+
+
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = widget.isLandscape;
 
-    // أبعاد متناسبة لكل وضعية
-    final double cardHeight = isLandscape ? 160.h : 160.h;
-    final double iconSize = isLandscape ? 24.sp : 32.sp;
-    final double iconPadding = isLandscape ? 10.w : 12.w;
-    final double titleFontSize = isLandscape ? 14.sp : 16.sp;
-    final double subtitleFontSize = isLandscape ? 10.sp : 11.sp;
+
+    final device = AppResponsive.deviceType(context);
+
+
+    late double height;
+    late double iconSize;
+    late double iconPadding;
+    late double titleSize;
+    late double subTitleSize;
+    late double radius;
+    late bool landscape;
+
+
+
+    switch(device){
+
+
+    // =========================
+    // Mobile
+    // =========================
+      case AppDeviceType.mobilePortrait:
+
+        height = 160.h;
+        iconSize = 30.sp;
+        iconPadding = 11.w;
+        titleSize = 15.sp;
+        subTitleSize = 11.sp;
+        radius = 24.r;
+        landscape = false;
+
+        break;
+
+
+
+    // =========================
+    // Tablet Portrait
+    // =========================
+      case AppDeviceType.tabletPortrait:
+
+        height = 175.h;
+        iconSize = 32.sp;
+        iconPadding = 12.w;
+        titleSize = 16.sp;
+        subTitleSize = 12.sp;
+        radius = 26.r;
+        landscape = false;
+
+        break;
+
+
+
+
+    // =========================
+    // Tablet Landscape
+    // =========================
+      case AppDeviceType.tabletLandscape:
+
+        height = 160.h;
+        iconSize = 10.sp;
+        iconPadding = 8.w;
+        titleSize = 10.sp;
+        subTitleSize = 8.sp;
+        radius = 18.r;
+        landscape = true;
+
+        break;
+    }
+
+
 
     return GestureDetector(
+
       onTapDown: (_) {
-        _controller.forward();
-        setState(() => _isPressed = true);
+        controller.forward();
+        setState(() {
+          pressed = true;
+        });
       },
+
+
       onTapUp: (_) {
-        _controller.reverse();
-        setState(() => _isPressed = false);
+
+        controller.reverse();
+
+        setState(() {
+          pressed = false;
+        });
+
         widget.onTap();
       },
-      onTapCancel: () {
-        _controller.reverse();
-        setState(() => _isPressed = false);
+
+
+      onTapCancel: (){
+
+        controller.reverse();
+
+        setState(() {
+          pressed=false;
+        });
+
       },
+
+
       child: ScaleTransition(
-        scale: _scaleAnimation,
+
+        scale: scaleAnimation,
+
+
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: double.infinity,
-          height: cardHeight,
+
+          duration:
+          const Duration(milliseconds:200),
+
+
+          height: height,
+
+
           decoration: BoxDecoration(
+
             color: Colors.white,
-            borderRadius: BorderRadius.circular(isLandscape ? 18.r : 25.r),
+
+
+            borderRadius:
+            BorderRadius.circular(radius),
+
+
             border: Border.all(
-              color: _isPressed
+
+              color: pressed
                   ? widget.iconColor
-                  : Colors.black.withOpacity(0.1),
-              width: 0.5,
+                  : Colors.black12,
+
+              width: 0.8,
             ),
+
+
             boxShadow: [
+
               BoxShadow(
-                color: _isPressed
-                    ? widget.iconColor.withOpacity(0.1)
-                    : Colors.black.withOpacity(0.08),
-                blurRadius: 8,
-                offset: const Offset(0, 6),
-              ),
+
+                color: pressed
+                    ? widget.iconColor.withOpacity(.15)
+                    : Colors.black.withOpacity(.06),
+
+                blurRadius: 12,
+
+                offset:
+                const Offset(0,5),
+
+              )
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(isLandscape ? 18.r : 25.r),
-            child: Stack(
-              children: [
-                // الخط الملون العلوي التفاعلي
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 200),
-                  top: _isPressed ? 0 : -5.h,
-                  left: isLandscape ? 50.w : 40.w,
-                  right: isLandscape ? 50.w : 40.w,
-                  child: Container(
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: widget.iconColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10.r),
-                        bottomRight: Radius.circular(10.r),
-                      ),
-                    ),
-                  ),
-                ),
 
-                // المحتوى الداخلي: تبديل التنسيق حسب الوضعية
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isLandscape ? 14.w : 12.w,
-                    vertical: isLandscape ? 12.h : 10.h,
-                  ),
-                  child: isLandscape
-                      ? _buildLandscapeRowLayout(
-                    iconPadding,
-                    iconSize,
-                    titleFontSize,
-                    subtitleFontSize,
-                  )
-                      : _buildPortraitColumnLayout(
-                    iconPadding,
-                    iconSize,
-                    titleFontSize,
-                    subtitleFontSize,
-                  ),
-                ),
-              ],
+
+
+          child: ClipRRect(
+
+            borderRadius:
+            BorderRadius.circular(radius),
+
+
+            child: Padding(
+
+              padding:
+              EdgeInsets.all(
+                landscape ? 12.w : 14.w,
+              ),
+
+
+              child: landscape
+
+                  ? _landscapeLayout(
+                iconSize,
+                iconPadding,
+                titleSize,
+                subTitleSize,
+              )
+
+
+                  : _portraitLayout(
+                iconSize,
+                iconPadding,
+                titleSize,
+                subTitleSize,
+              ),
+
             ),
           ),
         ),
@@ -147,133 +261,277 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
     );
   }
 
-  // التنسيق للوضع الأفقي (Row)
-  Widget _buildLandscapeRowLayout(
-      double iconPadding,
+
+
+
+
+  Widget _landscapeLayout(
       double iconSize,
-      double titleFontSize,
-      double subtitleFontSize,
-      ) {
+      double padding,
+      double titleSize,
+      double subTitleSize,
+      ){
+
+
     return Row(
+
+      crossAxisAlignment:
+      CrossAxisAlignment.center,
+
+
       children: [
-        // الأيقونة
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.all(iconPadding),
-          decoration: BoxDecoration(
-            color: _isPressed
-                ? widget.iconColor
-                : widget.iconColor.withOpacity(0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            widget.icon,
-            color: _isPressed ? Colors.white : widget.iconColor,
-            size: iconSize,
-          ),
+
+
+        _icon(
+          iconSize,
+          padding,
         ),
-        SizedBox(width: 12.w),
-        // النصوص مرتبة عمودياً بجانب الأيقونة
+
+
+        SizedBox(
+          width:10.w,
+        ),
+
+
+
         Expanded(
+
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+
+
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+
+            mainAxisSize:
+            MainAxisSize.min,
+
+
             children: [
+
+
               Text(
+
                 widget.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+
+                maxLines:1,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+
                 style: TextStyle(
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: _isPressed
-                      ? widget.iconColor
-                      : const Color(0xFF2C3E50),
-                  height: 1.2,
+
+                  fontSize:titleSize,
+
+                  fontWeight:
+                  FontWeight.bold,
+
                 ),
               ),
-              SizedBox(height: 4.h),
+
+
+
+              SizedBox(
+                height:3.h,
+              ),
+
+
+
               Text(
+
                 widget.subtitle,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+
+                maxLines:1,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+
                 style: TextStyle(
-                  fontSize: subtitleFontSize,
-                  color: Colors.grey[500],
-                  height: 1.2,
+
+                  fontSize:
+                  subTitleSize,
+
+                  color:
+                  Colors.grey,
+
                 ),
               ),
+
             ],
           ),
         ),
-        // سهم إرشادي صغير
-        AnimatedPadding(
-          duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.only(left: _isPressed ? 4.w : 0),
-          child: Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: _isPressed ? widget.iconColor : Colors.grey[300],
-            size: 14.sp,
-          ),
-        ),
+
+
+
+        Icon(
+
+          Icons.arrow_forward_ios_rounded,
+
+          size:12.sp,
+
+          color:Colors.grey,
+
+        )
+
       ],
     );
+
   }
 
-  // التنسيق للوضع الطولي (Column) - نَفْس شكل كودك الأصلي تماماً
-  Widget _buildPortraitColumnLayout(
-      double iconPadding,
+
+
+
+
+  Widget _portraitLayout(
       double iconSize,
-      double titleFontSize,
-      double subtitleFontSize,
-      ) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.all(iconPadding),
-            decoration: BoxDecoration(
-              color: _isPressed
-                  ? widget.iconColor
-                  : widget.iconColor.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              widget.icon,
-              color: _isPressed ? Colors.white : widget.iconColor,
-              size: iconSize,
-            ),
-          ),
-          SizedBox(height: 12.h),
-          Text(
+      double padding,
+      double titleSize,
+      double subTitleSize,
+      ){
+
+
+    return Column(
+
+      mainAxisAlignment:
+      MainAxisAlignment.center,
+
+
+      mainAxisSize:
+      MainAxisSize.min,
+
+
+      children: [
+
+
+        _icon(
+          iconSize,
+          padding,
+        ),
+
+
+        SizedBox(
+          height:10.h,
+        ),
+
+
+        Flexible(
+
+          child: Text(
+
             widget.title,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+
+            maxLines:1,
+
+            overflow:
+            TextOverflow.ellipsis,
+
+
+            textAlign:
+            TextAlign.center,
+
+
             style: TextStyle(
-              fontSize: titleFontSize,
-              fontWeight: FontWeight.bold,
-              color: _isPressed
-                  ? widget.iconColor
-                  : const Color(0xFF2C3E50),
+
+              fontSize:titleSize,
+
+              fontWeight:
+              FontWeight.bold,
+
             ),
           ),
-          SizedBox(height: 4.h),
-          Text(
+        ),
+
+
+
+        SizedBox(
+          height:4.h,
+        ),
+
+
+
+        Flexible(
+
+          child: Text(
+
             widget.subtitle,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+
+            maxLines:1,
+
+            overflow:
+            TextOverflow.ellipsis,
+
+
+            textAlign:
+            TextAlign.center,
+
+
             style: TextStyle(
-              fontSize: subtitleFontSize,
-              color: Colors.grey[500],
+
+              fontSize:
+              subTitleSize,
+
+              color:
+              Colors.grey,
+
             ),
           ),
-        ],
+        ),
+
+      ],
+    );
+
+  }
+
+
+
+
+
+  Widget _icon(
+      double size,
+      double padding,
+      ){
+
+    return AnimatedContainer(
+
+      duration:
+      const Duration(milliseconds:200),
+
+
+      padding:
+      EdgeInsets.all(padding),
+
+
+      decoration: BoxDecoration(
+
+        shape:
+        BoxShape.circle,
+
+
+        color: pressed
+            ? widget.iconColor
+            : widget.iconColor.withOpacity(.1),
+
+      ),
+
+
+      child: Icon(
+
+        widget.icon,
+
+        size:size,
+
+
+        color: pressed
+            ? Colors.white
+            : widget.iconColor,
+
       ),
     );
   }
+
 }

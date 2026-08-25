@@ -97,9 +97,7 @@ class _PlacesState extends State<Places> {
       ),
       title: const Text(
         'المناطق',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-        ),
+
       ),
     );
   }

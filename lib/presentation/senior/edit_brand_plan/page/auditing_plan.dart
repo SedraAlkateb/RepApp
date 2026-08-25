@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/widgets/editing_plan_assistant.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/widgets/editing_plan_target.dart';
@@ -45,6 +46,8 @@ class EditingPlan extends StatelessWidget {
         context,
       ).add(
         AllSeniorRepFutureEvent(
+cityId:   context.read<AllCityBloc>().selectedCityId
+
         ),
       );
 

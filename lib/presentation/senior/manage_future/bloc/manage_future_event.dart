@@ -4,7 +4,8 @@ part of 'manage_future_bloc.dart';
 sealed class ManageFutureEvent extends Equatable {}
 
 class AllSeniorRepFutureEvent extends ManageFutureEvent {
-  AllSeniorRepFutureEvent();
+ final int ?cityId;
+  AllSeniorRepFutureEvent({ this.cityId});
   @override
   List<Object?> get props => [];
 }
@@ -18,9 +19,10 @@ class SenSearchRepFutureEvent extends ManageFutureEvent {
 
 class ChangPlanStatusEvent extends ManageFutureEvent {
   final int id;
+  final int idRep;
   final int brandType;
   final int index;
-  ChangPlanStatusEvent(this.id, this.brandType, this.index);
+  ChangPlanStatusEvent(this.id, this.brandType, this.index,this.idRep);
   @override
   List<Object?> get props => [id, brandType, index];
 }

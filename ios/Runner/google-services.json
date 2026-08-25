@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "911354788511",
+    "project_id": "domina-rep",
+    "storage_bucket": "domina-rep.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911354788511:android:777af6398a3f5604b000aa",
+        "android_client_info": {
+          "package_name": "com.example.domina_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_d-2szpbuditQEjuhpeIxa7Wji_ETXgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

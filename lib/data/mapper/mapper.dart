@@ -174,6 +174,7 @@ extension PlaceResponseMapper on PlaceResponse? {
     return PlaceModel(
       int.parse(this?.id ?? "0"),
       this?.title ?? Constants.empty,
+      this?.totalVisit ?? Constants.zero,
     );
   }
 }
@@ -296,6 +297,8 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.totalReci ?? Constants.zero,
       this?.data?.usedReci ?? Constants.zero,
       this?.data?.remainReci ?? Constants.zero,
+     totDoc:  int.parse(this?.data?.totDoc??"0") ,
+    totHos:  int.parse(this?.data?.totHos??"0"),
     );
   }
 }

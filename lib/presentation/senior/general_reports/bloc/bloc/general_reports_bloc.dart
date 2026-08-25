@@ -14,6 +14,7 @@ class GeneralReportsBloc
   List<SeniorCityModel> dataseniorsbycityid = [];
   SeniorByCityIdUsecase seniorbycityidUsecase;
   TeamLeaderAndCityUsecase teamLeaderAndCityUsecase;
+
   GeneralReportsBloc(this.seniorbycityidUsecase, this.teamLeaderAndCityUsecase)
       : super(GeneralReportsInitial()) {
     on<GeneralReportsEvent>((event, emit) async {
@@ -31,7 +32,8 @@ class GeneralReportsBloc
             emit(SeniorByCityIdState(data));
           }
         });
-      } else if (event is TeamLeaderAndCityEvent) {
+      }
+      else if (event is TeamLeaderAndCityEvent) {
         emit(const TeamLeaderAndCityLoadingState());
         (await teamLeaderAndCityUsecase.execute()).fold((failure) {
           emit(TeamLeaderAndCityErrorState(failure: failure));
@@ -41,6 +43,7 @@ class GeneralReportsBloc
           emit(TeamLeaderAndCityState(data));
         });
       }
+
     });
   }
 }

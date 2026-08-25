@@ -316,6 +316,10 @@ class TokenResponse {
   int? usedReci;
   @JsonKey(name: "remainReci")
   int? remainReci;
+  @JsonKey(name: "totDoc")
+  String? totDoc;
+  @JsonKey(name: "totHos")
+  String? totHos;
   TokenResponse(
       this.token,
       this.cityId,
@@ -330,7 +334,7 @@ class TokenResponse {
       this.endDate,
       this.recipesCount,
       this.otherStartDate,
-      this.otherEndDate);
+      this.otherEndDate,this.totDoc,this.totHos);
   factory TokenResponse.fromJson(Map<String, dynamic> json) =>
       _$TokenResponseFromJson(json);
   Map<String, dynamic> toJson() => _$TokenResponseToJson(this);
@@ -510,7 +514,9 @@ class PlaceResponse {
   String? id;
   @JsonKey(name: "title")
   String? title;
-  PlaceResponse(this.id, this.title);
+  @JsonKey(name: "totalVisit")
+  int? totalVisit;
+  PlaceResponse(this.id, this.title,this.totalVisit);
   factory PlaceResponse.fromJson(Map<String, dynamic> json) =>
       _$PlaceResponseFromJson(json);
 

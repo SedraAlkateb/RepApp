@@ -34,6 +34,9 @@ class UserInfo {
   static int statusPlan = -1;
   static int totalReci = 0;
   static int remainReci = 0;
+
+  static int? totDoc = 0;
+  static int? totHos = 0;
   static final ValueNotifier<int>
   usedReciNotifier =
   ValueNotifier<int>(0);
@@ -83,6 +86,9 @@ class UserInfo {
     flag = data.flag;
     usedReci = data.usedReci ?? 0;
     remainReci = data.remainReci ?? 0;
+    totHos=data.totHos??0;
+    totDoc=data.totDoc??0;
+    print("totHos:${totHos} ??? totDoc:${totDoc}");
     totalReci = data.totalReci ?? 0;
     // منطق التحقق من الـ Flag كما كان في ملف المين
     flag1 = otherstatus == -1 ? 0 : (data.flag1 ?? 0);

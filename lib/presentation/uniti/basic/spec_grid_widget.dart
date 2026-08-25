@@ -4,6 +4,7 @@ import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,9 +140,14 @@ class SpecGridWidget extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       Routes.docHos,
+                      arguments: {
+                        'spId': item.id,
+
+                      },
                     );
                     BlocProvider.of<SeniorProfBloc>(context)
-                        .add(DocHosEvent(UserInfo.repId,spId:item.id));
+                        .add(DocHosEvent(UserInfo.repId,spId:item.id,
+                        cityId: BlocProvider.of<AllCityBloc>(context).selectedCityId));
                   },
             borderRadius: BorderRadius.circular(
               cardRadius,

@@ -1,7 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/senior/representative/widget/no_visit_doc_card.dart';
+import 'package:domina_app/presentation/senior/representative/widget/remainig_visit_card.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';

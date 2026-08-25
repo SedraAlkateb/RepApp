@@ -24,7 +24,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
     on<ManageFutureEvent>((event, emit) async {
       if (event is AllSeniorRepFutureEvent) {
         emit(AllSeniorRepLoadingState());
-        (await allRepsFutureUsecase.execute(UserInfo.repId))
+        (await allRepsFutureUsecase.execute(UserInfo.repId,cityId: event.cityId))
             .fold((failure) {
           emit(
               AllSeniorRepErrorState(failure: failure));
@@ -101,11 +101,13 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
             (failure) {
           emit(ChangPlanStatusErrorState(failure: failure));
             }, (data) async {
-          // 1. جلب الكائن الحالي قبل التعديل
-          final currentRep = allRepresentative[event.index];
+          final int index = allRepresentative.indexWhere(
+                (element) => element.id == event.idRep,
+          );
+          final currentRep = allRepresentative[index];
 
           // 2. استبدال الكائن بكائن جديد وتحديث الـ flag فقط
-          allRepresentative[event.index] = AllRepresentativeFuture(
+          allRepresentative[index] = AllRepresentativeFuture(
              currentRep.id,
              currentRep.name,
             // انقل باقي الخصائص المتبقية في الموديل الخاص بك هنا بنفس الشكل:

@@ -178,7 +178,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
             : not == ""
                 ? null
                 : addition();
-        emit(AllVisitBrandDoctorLoadingState());
         (await insertVisitBrandDoctorSqlUsecase.execute(
                 visitBrandPharmacys, event.visitDoctorModel))
             .fold((failure) {

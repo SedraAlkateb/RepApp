@@ -470,7 +470,6 @@ class _AllCityForRepSuperState
           Navigator.pushNamed(
             context,
             Routes.AllRepSenior,
-            arguments: city.id,
           );
         },
 
