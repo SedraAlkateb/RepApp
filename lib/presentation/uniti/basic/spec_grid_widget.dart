@@ -140,7 +140,10 @@ class SpecGridWidget extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       Routes.docHos,
+                      arguments: {
+                        'spId': item.id,
 
+                      },
                     );
                     BlocProvider.of<SeniorProfBloc>(context)
                         .add(DocHosEvent(UserInfo.repId,spId:item.id,

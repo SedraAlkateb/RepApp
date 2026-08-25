@@ -1,14 +1,18 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/doc_hos_tab_bar_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/header_sen_doc_hos.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/doc_card.dart';
 import 'package:domina_app/presentation/senior/representative/widget/hos_card.dart';
 import 'package:domina_app/presentation/uniti/num_list.dart';
-import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,24 +21,24 @@ class DocHosByPlaceOrSpPage extends StatefulWidget {
   const DocHosByPlaceOrSpPage({
     super.key,
     this.height = 54,
+    this.placeId,
+    this.spId
   });
-
   final double height;
+  final int? placeId;
+  final int? spId;
 
   @override
-  State<DocHosByPlaceOrSpPage> createState() =>
-      _DocHosByPlaceOrSpPageState();
+  State<DocHosByPlaceOrSpPage> createState() => _DocHosByPlaceOrSpPageState();
 }
 
-class _DocHosByPlaceOrSpPageState
-    extends State<DocHosByPlaceOrSpPage>
+class _DocHosByPlaceOrSpPageState extends State<DocHosByPlaceOrSpPage>
     with SingleTickerProviderStateMixin {
   // ===========================================================
   // Controllers
   // ===========================================================
 
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   late final TabController _tabController;
 
@@ -78,13 +82,11 @@ class _DocHosByPlaceOrSpPageState
       return;
     }
 
-    if (_lastTabIndex ==
-        _tabController.index) {
+    if (_lastTabIndex == _tabController.index) {
       return;
     }
 
-    _lastTabIndex =
-        _tabController.index;
+    _lastTabIndex = _tabController.index;
 
     if (!_baseDataLoaded) {
       return;
@@ -102,31 +104,62 @@ class _DocHosByPlaceOrSpPageState
   // ===========================================================
   // Search
   // ===========================================================
+  int? _lastLoadedCityId;
 
   void _search(
-      String value,
-      ) {
+    String value,
+  ) {
     if (!_baseDataLoaded) {
       return;
     }
 
     context.read<SeniorProfBloc>().add(
-      SearchDocHosEvent(
-        content: value,
+          SearchDocHosEvent(
+            content: value,
 
-        // 0 = Doctors
-        // 1 = Hospitals
-        tabIndex:
-        _tabController.index,
+            // 0 = Doctors
+            // 1 = Hospitals
+            tabIndex: _tabController.index,
 
-        // دائماً القوائم الأصلية
-        doctors:
-        _allDoctors,
+            // دائماً القوائم الأصلية
+            doctors: _allDoctors,
 
-        hospitals:
-        _allHospitals,
-      ),
-    );
+            hospitals: _allHospitals,
+          ),
+        );
+  }
+
+  void _loadSelectedCity({
+    bool force = false,
+  }) {
+    if (!mounted) {
+      return;
+    }
+
+    final cityBloc = context.read<AllCityBloc>();
+
+    final int? cityId = cityBloc.selectedCityId;
+
+    if (cityId == null || cityId < 0) {
+      return;
+    }
+
+    if (!force && _lastLoadedCityId == cityId) {
+      return;
+    }
+
+    _lastLoadedCityId = cityId;
+
+    // عند تغيير المحافظة
+    // نظف البحث القديم
+    searchController.clear();
+
+    context.read<SeniorProfBloc>().add(
+          DocHosEvent(UserInfo.repId,
+              spId: widget.spId,
+              placeId: widget.placeId,
+              cityId: BlocProvider.of<AllCityBloc>(context).selectedCityId),
+        );
   }
 
   // ===========================================================
@@ -150,363 +183,118 @@ class _DocHosByPlaceOrSpPageState
   // Build
   // ===========================================================
 
+// Replace SliverPadding with Padding in the SafeArea body
   @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
+    final deviceType = AppResponsive.deviceType(context);
 
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    double pageMaxWidth;
 
-    return Scaffold(
-      backgroundColor: const Color(
-        0xFFF8FAFC,
-      ),
+    switch (deviceType) {
+      case AppDeviceType.mobilePortrait:
+        pageMaxWidth = 600;
+        break;
+      case AppDeviceType.tabletPortrait:
+        pageMaxWidth = 760;
+        break;
 
-      // =======================================================
-      // AppBar
-      // =======================================================
-      appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor:
-        Colors.transparent,
-        backgroundColor:
-        Colors.white,
+      case AppDeviceType.tabletLandscape:
+        pageMaxWidth = 900;
+        break;
+    }
 
-        leading: IconButton(
-          tooltip: 'رجوع',
-
-          onPressed: () {
-            Navigator.pop(
-              context,
-            );
-          },
-
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            size:
-            ui.isMobile ? 24 : 27,
-            color: ColorManager
-                .medicalPrimary,
-          ),
-        ),
-
-        title: Text(
-          'أرشيف الأطباء والمشافي',
-
-          maxLines: 1,
-
-          overflow:
-          TextOverflow.ellipsis,
-
-          style: TextStyle(
-            fontSize:
-            ui.isMobile ? 18 : 21,
-
-            fontWeight:
-            FontWeight.w700,
-
-            color: ColorManager
-                .medicalPrimary,
-          ),
-        ),
-      ),
-
-      // =======================================================
-      // Body
-      // =======================================================
-      body: SafeArea(
-        top: false,
-
-        child: Column(
-          children: [
-            // =========================================
-            // Tabs
-            // =========================================
-            Padding(
-              padding:
-              EdgeInsets.fromLTRB(
-                ui.pagePadding,
-                ui.searchTopPadding,
-                ui.pagePadding,
-                ui.smallSpacing,
-              ),
-
-              child: SizedBox(
-                height:
-                widget.height,
-
-                child:
-                _DocHosTabBar(
-                  height:
-                  widget.height,
-
-                  controller:
-                  _tabController,
-                ),
-              ),
+    return BlocListener<AllCityBloc, AllCityState>(
+      listener: (
+        context,
+        state,
+      ) {
+        // =====================================================
+        // أول تحميل أو تغيير المحافظة
+        // =====================================================
+        if (state is GetAllCityState) {
+          _loadSelectedCity();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: header(context,ui),
+        body: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: pageMaxWidth,
             ),
-
-            // =========================================
-            // Search
-            //
-            // دائماً ظاهر حتى لو النتيجة Empty
-            // =========================================
-            SliverPadding(
-              padding:
-              EdgeInsets.fromLTRB(
-                ui.pagePadding,
-                ui.searchTopPadding,
-                ui.pagePadding,
-                ui.searchBottomPadding,
-              ),
-
-              sliver:
-              SliverToBoxAdapter(
-                child:
-                SearchWithCityFilter(
-                  searchController:
-                  searchController,
-
-                  onSearch:
-                      (value) {
-                    _search(
-                      value,
-                    );
-                  },
-                ),
-              ),
-            ),
-
-
-            // =========================================
-            // Tabs Content
-            // =========================================
-            BlocBuilder<
-                SeniorProfBloc,
-                SeniorProfState>(
-              buildWhen: (
-                  previous,
-                  current,
-                  ) =>
-              current
-              is DocHosLoadingState ||
-                  current
-                  is DocHosState ||
-                  current
-                  is DocHosErrorState,
-
-              builder: (
-                  context,
-                  state,
-                  ) {
-                // =================================================
-                // Loading
-                // =================================================
-                if (state
-                is DocHosLoadingState) {
-                  // إذا عم نجيب بيانات جديدة
-                  // منسمح بتخزين القائمة الأصلية الجديدة
-                  _baseDataLoaded = false;
-
-                  return Container(
-                    child: loadingFullScreen(
-                      context,
+            child: SafeArea(
+              top: false,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.searchTopPadding,
+                      ui.pagePadding,
+                      ui.smallSpacing,
                     ),
-                  );
-                }
-
-                // =================================================
-                // Error
-                // =================================================
-                if (state
-                is DocHosErrorState) {
-                  return Container(
-                    child: errorFullScreen(
-                      context,
-                    ),
-                  );
-                }
-
-                // =================================================
-                // Success
-                // =================================================
-                if (state is DocHosState) {
-                  if (!_baseDataLoaded) {
-                    _allDoctors =
-                    List<DoctorSenModel>.from(
-                      state.doctors,
-                    );
-
-                    _allHospitals =
-                    List<HospitalSpModel>.from(
-                      state.hospitals,
-                    );
-
-                    _baseDataLoaded = true;
-                  }
-
-                  return Expanded(
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: contentMaxWidth,
-                        ),
-
-                        child: TabBarView(
-                          controller: _tabController,
-
-                          children: [
-                            _DoctorsTab(
-                              doctors: state.doctors,
-                            ),
-
-                            _HospitalsTab(
-                              hospitals: state.hospitals,
-                            ),
-                          ],
-                        ),
+                    child: SizedBox(
+                      height: widget.height,
+                      child: DocHosTabBar(
+                        height: widget.height,
+                        controller: _tabController,
                       ),
                     ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ============================================================================
-// Tab Bar
-// ============================================================================
-
-class _DocHosTabBar extends StatelessWidget {
-  const _DocHosTabBar({
-    required this.height,
-    required this.controller,
-  });
-
-  final double height;
-  final TabController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final ui = AppUi.of(context);
-
-    return Container(
-      height: height,
-
-      padding: const EdgeInsets.all(
-        4,
-      ),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(
-          16,
-        ),
-
-        border: Border.all(
-          color: const Color(
-            0xFFE2E8F0,
-          ),
-        ),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black
-                .withOpacity(
-              0.025,
-            ),
-
-            blurRadius: 12,
-
-            offset: const Offset(
-              0,
-              4,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.searchTopPadding,
+                      ui.pagePadding,
+                      ui.searchBottomPadding,
+                    ),
+                    child: SearchWithCityFilter(
+                      searchController: searchController,
+                      onSearch: (value) {
+                        _search(value);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+                      buildWhen: (previous, current) =>
+                          current is DocHosLoadingState ||
+                          current is DocHosState ||
+                          current is DocHosErrorState,
+                      builder: (context, state) {
+                        if (state is DocHosLoadingState) {
+                          _baseDataLoaded = false;
+                          return loadingFullScreen(context);
+                        }
+                        if (state is DocHosErrorState) {
+                          return errorFullScreen(context);
+                        }
+                        if (state is DocHosState) {
+                          if (!_baseDataLoaded) {
+                            _allDoctors = List<DoctorSenModel>.from(state.doctors);
+                            _allHospitals =
+                                List<HospitalSpModel>.from(state.hospitals);
+                            _baseDataLoaded = true;
+                          }
+                          return TabBarView(
+                            controller: _tabController,
+                            children: [
+                              _DoctorsTab(doctors: state.doctors),
+                              _HospitalsTab(hospitals: state.hospitals),
+                            ],
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
-
-      child: TabBar(
-        controller: controller,
-
-        padding: EdgeInsets.zero,
-
-        labelPadding:
-        EdgeInsets.zero,
-
-        dividerColor:
-        Colors.transparent,
-
-        indicatorSize:
-        TabBarIndicatorSize.tab,
-
-        labelColor:
-        Colors.white,
-
-        unselectedLabelColor:
-        const Color(
-          0xFF64748B,
         ),
-
-        labelStyle: TextStyle(
-          fontWeight:
-          FontWeight.w700,
-
-          fontSize:
-          ui.isMobile
-              ? 15
-              : 16,
-        ),
-
-        unselectedLabelStyle:
-        TextStyle(
-          fontWeight:
-          FontWeight.w500,
-
-          fontSize:
-          ui.isMobile
-              ? 15
-              : 16,
-        ),
-
-        indicator: BoxDecoration(
-          color: ColorManager
-              .medicalPrimary,
-
-          borderRadius:
-          BorderRadius.circular(
-            12,
-          ),
-        ),
-
-        tabs: const [
-          Tab(
-            child: _ArchiveTabItem(
-              icon:
-              Icons.groups_outlined,
-              title: 'الأطباء',
-            ),
-          ),
-
-          Tab(
-            child: _ArchiveTabItem(
-              icon: Icons
-                  .local_hospital_outlined,
-              title: 'المشافي',
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -539,30 +327,21 @@ class _DoctorsTab extends StatelessWidget {
     }
 
     return CustomScrollView(
-      physics:
-      const BouncingScrollPhysics(),
-
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior
-          .onDrag,
-
+      physics: const BouncingScrollPhysics(),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         // =====================================================
         // Count
         // =====================================================
         SliverPadding(
-          padding:
-          EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
             ui.pagePadding,
             ui.listTopPadding,
             ui.pagePadding,
             ui.sectionSpacing,
           ),
-
-          sliver:
-          SliverToBoxAdapter(
-            child:
-            buildTotalReportsCard(
+          sliver: SliverToBoxAdapter(
+            child: buildTotalReportsCard(
               doctors.length,
               'قائمة الأطباء المسجلين',
               '',
@@ -574,26 +353,20 @@ class _DoctorsTab extends StatelessWidget {
         // Doctors List
         // =====================================================
         SliverPadding(
-          padding:
-          EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
             ui.pagePadding,
             0,
             ui.pagePadding,
             ui.listBottomPadding,
           ),
-
-          sliver:
-          SliverList.builder(
-            itemCount:
-            doctors.length,
-
+          sliver: SliverList.builder(
+            itemCount: doctors.length,
             itemBuilder: (
-                context,
-                index,
-                ) {
+              context,
+              index,
+            ) {
               return DoctorSenCardWidget(
-                doctor:
-                doctors[index],
+                doctor: doctors[index],
               );
             },
           ),
@@ -612,8 +385,7 @@ class _HospitalsTab extends StatelessWidget {
     required this.hospitals,
   });
 
-  final List<HospitalSpModel>
-  hospitals;
+  final List<HospitalSpModel> hospitals;
 
   @override
   Widget build(BuildContext context) {
@@ -631,30 +403,21 @@ class _HospitalsTab extends StatelessWidget {
     }
 
     return CustomScrollView(
-      physics:
-      const BouncingScrollPhysics(),
-
-      keyboardDismissBehavior:
-      ScrollViewKeyboardDismissBehavior
-          .onDrag,
-
+      physics: const BouncingScrollPhysics(),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         // =====================================================
         // Count
         // =====================================================
         SliverPadding(
-          padding:
-          EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
             ui.pagePadding,
             ui.listTopPadding,
             ui.pagePadding,
             ui.sectionSpacing,
           ),
-
-          sliver:
-          SliverToBoxAdapter(
-            child:
-            buildTotalReportsCard(
+          sliver: SliverToBoxAdapter(
+            child: buildTotalReportsCard(
               hospitals.length,
               'قائمة المشافي المسجلة',
               '',
@@ -666,26 +429,20 @@ class _HospitalsTab extends StatelessWidget {
         // Hospitals List
         // =====================================================
         SliverPadding(
-          padding:
-          EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
             ui.pagePadding,
             0,
             ui.pagePadding,
             ui.listBottomPadding,
           ),
-
-          sliver:
-          SliverList.builder(
-            itemCount:
-            hospitals.length,
-
+          sliver: SliverList.builder(
+            itemCount: hospitals.length,
             itemBuilder: (
-                context,
-                index,
-                ) {
+              context,
+              index,
+            ) {
               return HospitalCardWidget(
-                hospital:
-                hospitals[index],
+                hospital: hospitals[index],
               );
             },
           ),
@@ -695,58 +452,3 @@ class _HospitalsTab extends StatelessWidget {
   }
 }
 
-// ============================================================================
-// Tab Item
-// ============================================================================
-
-class _ArchiveTabItem
-    extends StatelessWidget {
-  const _ArchiveTabItem({
-    required this.icon,
-    required this.title,
-  });
-
-  final IconData icon;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final ui = AppUi.of(context);
-
-    return Row(
-      mainAxisAlignment:
-      MainAxisAlignment.center,
-
-      mainAxisSize:
-      MainAxisSize.min,
-
-      children: [
-        Icon(
-          icon,
-
-          size:
-          ui.isMobile
-              ? 20
-              : 22,
-        ),
-
-        SizedBox(
-          width:
-          ui.smallSpacing,
-        ),
-
-        Flexible(
-          child: Text(
-            title,
-
-            maxLines: 1,
-
-            overflow:
-            TextOverflow
-                .ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
-}

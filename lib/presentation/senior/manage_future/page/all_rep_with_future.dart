@@ -242,10 +242,11 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
         0xFFF8FAFC,
       ),
       appBar: AppBar(
-        elevation: 0,
+
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         title: Text(
+
           " إدارة الخطة المستقبلية( ${cityBloc.selectedCity?.title??""})",
         ),
       ),
@@ -624,6 +625,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                             rep.activePlan,
                             xx.flag,
                             index,
+                            rep.id
                           ),
                         );
                       }

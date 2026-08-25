@@ -456,7 +456,7 @@ class _VisitHospitalState extends State<VisitHospital>
                               state.failure.code);
                         }
                         if (state is InsertVisitHospitalState) {
-                          success(context);
+
                           SnackBarMessage().showAlertSScaffoldMessenger(
                               context: context, message: "تم حفظ التغيرات");
                           BlocProvider.of<VisitPlaceBloc>(context).add(
@@ -468,7 +468,7 @@ class _VisitHospitalState extends State<VisitHospital>
                               state.failure.code);
                         }
                         if (state is AllVisitBrandHospitalState) {
-                          success(context);
+
                           SnackBarMessage().showAlertSScaffoldMessenger(
                               context: context, message: "تم حفظ التغيرات");
                           BlocProvider.of<VisitPlaceBloc>(context).add(

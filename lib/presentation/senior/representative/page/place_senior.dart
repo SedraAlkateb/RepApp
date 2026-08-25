@@ -56,9 +56,6 @@ class _PlaceSeniorState
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontSize:
-            ui.isMobile ? 18 : 21,
-            fontWeight: FontWeight.w700,
             color:
             ColorManager.medicalPrimary,
           ),
@@ -399,6 +396,10 @@ class _PlaceSeniorState
               Navigator.pushNamed(
                 context,
                 Routes.docHos,
+                arguments: {
+                  'placeId': place.placeId,
+
+                },
               );
 
               context

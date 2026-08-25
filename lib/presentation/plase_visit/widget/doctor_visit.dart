@@ -174,9 +174,7 @@ class _DoctorVisitState
                     return _DoctorVisitCard(
                       doctor: doctor,
                       ui: ui,
-
                       onVisit: () {
-                        // نفس الـ Navigation الأصلي
                         Navigator.pushNamed(
                           context,
                           Routes.visitDoctor,

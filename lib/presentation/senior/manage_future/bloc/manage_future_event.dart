@@ -19,9 +19,10 @@ class SenSearchRepFutureEvent extends ManageFutureEvent {
 
 class ChangPlanStatusEvent extends ManageFutureEvent {
   final int id;
+  final int idRep;
   final int brandType;
   final int index;
-  ChangPlanStatusEvent(this.id, this.brandType, this.index);
+  ChangPlanStatusEvent(this.id, this.brandType, this.index,this.idRep);
   @override
   List<Object?> get props => [id, brandType, index];
 }

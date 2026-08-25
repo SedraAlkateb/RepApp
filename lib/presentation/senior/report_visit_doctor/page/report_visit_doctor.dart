@@ -89,7 +89,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
     // Tablet Portrait
     // =================================================
       case AppDeviceType.tabletPortrait:
-        pageMaxWidth = 800;
+        pageMaxWidth = 760;
 
         horizontalPadding = 28;
 
@@ -112,7 +112,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
     // Tablet Landscape
     // =================================================
       case AppDeviceType.tabletLandscape:
-        pageMaxWidth = 1100;
+        pageMaxWidth = 900;
 
         horizontalPadding = 32;
 

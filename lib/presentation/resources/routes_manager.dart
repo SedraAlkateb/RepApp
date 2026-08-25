@@ -146,8 +146,13 @@ class RouteGenerator {
       case Routes.allBrand:
         return _animatedRoute(AllBrand());
       case Routes.docHos:
+        final args = settings.arguments as Map<String, dynamic>;
+
         return _animatedRoute(DocHosByPlaceOrSpPage(
+          placeId: args['placeId'],
+          spId: args['spId'],
         ));
+
       // case Routes.createOrder:
       //   initOrderBradModule();
       //   return _animatedRoute(CreateOrderPage());

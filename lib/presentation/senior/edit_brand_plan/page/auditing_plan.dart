@@ -46,7 +46,7 @@ class EditingPlan extends StatelessWidget {
         context,
       ).add(
         AllSeniorRepFutureEvent(
-cityId:   context.watch<AllCityBloc>().cities[0].id
+cityId:   context.read<AllCityBloc>().selectedCityId
 
         ),
       );

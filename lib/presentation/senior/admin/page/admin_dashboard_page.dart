@@ -305,8 +305,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                       Routes.allRepWithFuture,
                                     );
                                   },
-
-                                  isLandscape: isLandscape,
                                 ),
                               ),
 
@@ -328,8 +326,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                       Routes.cityPlan,
                                     );
                                   },
-
-                                  isLandscape: isLandscape,
                                 ),
                               ),
                             ],
@@ -363,14 +359,17 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     // ==========================================
     // Tablet Landscape
     // ==========================================
+    // ==========================================
     if (deviceType == AppDeviceType.tabletLandscape) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (int i = 0; i < adminCards.length; i++) ...[
             Expanded(
-              child: SizedBox(
-                height: 250,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: 220,
+                ),
                 child: adminCards[i],
               ),
             ),
@@ -383,7 +382,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         ],
       );
     }
-
     // ==========================================
     // Mobile + Tablet Portrait
     // ==========================================
