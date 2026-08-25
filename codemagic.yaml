@@ -1,0 +1,32 @@
+scripts:
+  - name: Clean Flutter
+    script: |
+      flutter clean
+      rm -rf ios/Pods
+      rm -rf ios/Podfile.lock
+      rm -rf ios/.symlinks
+      flutter pub get
+
+  - name: Set Build Number
+    script: |
+      echo "Codemagic Build Number: $BUILD_NUMBER"
+
+      if [ -z "$BUILD_NUMBER" ]; then
+        echo "ERROR: BUILD_NUMBER is not available"
+        exit 1
+      fi
+
+  - name: Install CocoaPods
+    script: |
+      cd ios
+      pod repo update
+      pod install
+      cd ..
+
+  - name: Build iOS
+    script: |
+      echo "Building iOS with build number: $BUILD_NUMBER"
+
+      flutter build ipa \
+        --release \
+        --build-number="$BUILD_NUMBER"
