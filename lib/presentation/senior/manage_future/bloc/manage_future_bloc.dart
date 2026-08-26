@@ -101,13 +101,10 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
             (failure) {
           emit(ChangPlanStatusErrorState(failure: failure));
             }, (data) async {
-          final int index = allRepresentative.indexWhere(
-                (element) => element.id == event.idRep,
-          );
-          final currentRep = allRepresentative[index];
+          final currentRep = allRepresentative[event.index];
 
           // 2. استبدال الكائن بكائن جديد وتحديث الـ flag فقط
-          allRepresentative[index] = AllRepresentativeFuture(
+          allRepresentative[event.index] = AllRepresentativeFuture(
              currentRep.id,
              currentRep.name,
             // انقل باقي الخصائص المتبقية في الموديل الخاص بك هنا بنفس الشكل:

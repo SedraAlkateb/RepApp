@@ -19,15 +19,12 @@ class HospitalVisit extends StatefulWidget {
   });
 
   @override
-  State<HospitalVisit> createState() =>
-      _HospitalVisitState();
+  State<HospitalVisit> createState() => _HospitalVisitState();
 }
 
-class _HospitalVisitState
-    extends State<HospitalVisit>
+class _HospitalVisitState extends State<HospitalVisit>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void dispose() {
@@ -45,7 +42,6 @@ class _HospitalVisitState
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       body: Column(
         children: [
           // =====================================================
@@ -59,22 +55,17 @@ class _HospitalVisitState
               ui.pagePadding,
               ui.searchBottomPadding,
             ),
-
             child: SearchField(
-              searchController:
-              searchController,
-
+              searchController: searchController,
               onPressed: (value) {
                 // =================================================
                 // نفس سلوك البحث الأصلي
                 // =================================================
-                context
-                    .read<VisitPlaceBloc>()
-                    .add(
-                  SearchHospitalVisitEvent(
-                    value: value,
-                  ),
-                );
+                context.read<VisitPlaceBloc>().add(
+                      SearchHospitalVisitEvent(
+                        value: value,
+                      ),
+                    );
               },
             ),
           ),
@@ -83,22 +74,17 @@ class _HospitalVisitState
           // Content
           // =====================================================
           Expanded(
-            child: BlocConsumer<
-                VisitPlaceBloc,
-                VisitPlaceState>(
+            child: BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
               // =================================================
               // نفس Listener الأصلي
               // =================================================
               listener: (
-                  context,
-                  state,
-                  ) {
-                if (state
-                is AllHospitalByPlaceErrorState) {
-                  WidgetsBinding
-                      .instance
-                      .addPostFrameCallback(
-                        (_) {
+                context,
+                state,
+              ) {
+                if (state is AllHospitalByPlaceErrorState) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) {
                       error(
                         context,
                         state.failure.massage,
@@ -113,41 +99,32 @@ class _HospitalVisitState
               // نفس الحالات الأصلية
               // =================================================
               buildWhen: (
-                  previous,
-                  current,
-                  ) =>
-              current is EmptyState ||
-                  current
-                  is SearchVisitHospitalState ||
-                  current
-                  is AllHospitalByPlaceState,
+                previous,
+                current,
+              ) =>
+                  current is EmptyState ||
+                  current is SearchVisitHospitalState ||
+                  current is AllHospitalByPlaceState,
 
               builder: (
-                  context,
-                  state,
-                  ) {
-                List<HospitalSpAllModel>
-                hospitals =
-                    context
-                        .watch<VisitPlaceBloc>()
-                        .hospitals;
+                context,
+                state,
+              ) {
+                List<HospitalSpAllModel> hospitals =
+                    context.watch<VisitPlaceBloc>().hospitals;
 
                 // ===============================================
                 // Search Result
                 // ===============================================
-                if (state
-                is SearchVisitHospitalState) {
-                  hospitals =
-                      state.hospitalVisit;
+                if (state is SearchVisitHospitalState) {
+                  hospitals = state.hospitalVisit;
                 }
 
                 // ===============================================
                 // All Hospitals
                 // ===============================================
-                if (state
-                is AllHospitalByPlaceState) {
-                  hospitals =
-                      state.data;
+                if (state is AllHospitalByPlaceState) {
+                  hospitals = state.data;
                 }
 
                 // ===============================================
@@ -155,8 +132,7 @@ class _HospitalVisitState
                 //
                 // السيرش بيضل ظاهر لأنه خارج الـ Expanded
                 // ===============================================
-                if (state is EmptyState ||
-                    hospitals.isEmpty) {
+                if (state is EmptyState || hospitals.isEmpty) {
                   return emptyFullScreen(
                     context,
                   );
@@ -166,37 +142,25 @@ class _HospitalVisitState
                 // Hospitals List
                 // ===============================================
                 return ListView.builder(
-                  physics:
-                  const BouncingScrollPhysics(),
-
+                  physics: const BouncingScrollPhysics(),
                   keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior
-                      .onDrag,
-
-                  padding:
-                  EdgeInsets.fromLTRB(
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.fromLTRB(
                     ui.pagePadding,
                     ui.listTopPadding,
                     ui.pagePadding,
                     ui.listBottomPadding,
                   ),
-
-                  itemCount:
-                  hospitals.length,
-
+                  itemCount: hospitals.length,
                   itemBuilder: (
-                      context,
-                      index,
-                      ) {
-                    final hospital =
-                    hospitals[index];
+                    context,
+                    index,
+                  ) {
+                    final hospital = hospitals[index];
 
                     return _HospitalVisitCard(
-                      hospital:
-                      hospital,
-
+                      hospital: hospital,
                       ui: ui,
-
                       onVisit: () {
                         // =========================================
                         // نفس Navigation الأصلي
@@ -204,8 +168,7 @@ class _HospitalVisitState
                         Navigator.pushNamed(
                           context,
                           Routes.visitHospital,
-                          arguments:
-                          hospital.toDomain(),
+                          arguments: hospital.toDomain(),
                         );
                       },
                     );
@@ -227,8 +190,7 @@ class _HospitalVisitState
 // Hospital Visit Card
 // ============================================================================
 
-class _HospitalVisitCard
-    extends StatelessWidget {
+class _HospitalVisitCard extends StatelessWidget {
   const _HospitalVisitCard({
     required this.hospital,
     required this.ui,
@@ -245,34 +207,25 @@ class _HospitalVisitCard
       margin: EdgeInsets.only(
         bottom: ui.cardSpacing,
       ),
-
       padding: EdgeInsets.all(
         ui.cardPadding,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
-            color:
-            Colors.black.withOpacity(
+            color: Colors.black.withOpacity(
               0.03,
             ),
-
             blurRadius: 12,
-
             offset: const Offset(
               0,
               4,
@@ -280,81 +233,70 @@ class _HospitalVisitCard
           ),
         ],
       ),
-
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // =====================================================
           // Hospital Header
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width:
-                ui.iconBoxSize,
-
-                height:
-                ui.iconBoxSize,
-
-                alignment:
-                Alignment.center,
-
-                decoration:
-                BoxDecoration(
-                  color: ColorManager
-                      .medicalPrimary
-                      .withOpacity(
+                width: ui.iconBoxSize,
+                height: ui.iconBoxSize,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: ColorManager.medicalPrimary.withOpacity(
                     0.08,
                   ),
-
-                  borderRadius:
-                  BorderRadius.circular(
+                  borderRadius: BorderRadius.circular(
                     ui.smallRadius + 2,
                   ),
                 ),
-
                 child: Icon(
-                  Icons
-                      .local_hospital_outlined,
-
-                  size:
-                  ui.iconSize,
-
-                  color: ColorManager
-                      .medicalPrimary,
+                  Icons.local_hospital_outlined,
+                  size: ui.iconSize,
+                  color: ColorManager.medicalPrimary,
                 ),
               ),
-
               SizedBox(
-                width:
-                ui.mediumSpacing,
+                width: ui.mediumSpacing,
               ),
-
               Expanded(
                 child: Text(
                   hospital.title ?? '',
-
                   maxLines: 2,
-
-                  overflow:
-                  TextOverflow.ellipsis,
-
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize:
-                    ui.cardTitleSize,
-
-                    fontWeight:
-                    FontWeight.w700,
-
-                    color: ColorManager
-                        .medicalPrimary,
-
+                    fontSize: ui.cardTitleSize,
+                    fontWeight: FontWeight.w700,
+                    color: ColorManager.medicalPrimary,
                     height: 1.3,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ui.mediumSpacing,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                  color: ColorManager.medicalPrimary.withOpacity(
+                    0.08,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    ui.smallRadius,
+                  ),
+                ),
+                child: Text(
+                  hospital.titleSp!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ColorManager.medicalPrimary,
+                    fontSize: ui.smallTextSize,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -362,8 +304,70 @@ class _HospitalVisitCard
           ),
 
           SizedBox(
-            height:
-            ui.sectionSpacing,
+            height: ui.sectionSpacing,
+          ),
+
+          // =====================================================
+          // Visit Counter Badge (الشكل الجديد التجاوبي)
+          // =====================================================
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: ui.mediumSpacing,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(ui.smallRadius),
+              border: Border.all(
+                color: const Color(0xFFCBD5E1),
+                width: 0.8,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  size: ui.smallIconSize,
+                  color: ColorManager.medicalPrimary,
+                ),
+                SizedBox(width: ui.smallSpacing),
+                Text(
+                  'عدد الزيارات: ',
+                  style: TextStyle(
+                    fontSize: ui.bodyTextSize,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF475569),
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${hospital.visited ?? 0}',
+                        style: TextStyle(
+                          fontSize: ui.bodyTextSize,
+                          fontWeight: FontWeight.bold,
+                          color: ColorManager.medicalPrimary,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' / ${hospital.visit ?? 0}',
+                        style: TextStyle(
+                          fontSize: ui.bodyTextSize,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF64748B),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: ui.sectionSpacing,
           ),
 
           // =====================================================
@@ -371,82 +375,49 @@ class _HospitalVisitCard
           // =====================================================
           Container(
             width: double.infinity,
-
-            padding:
-            EdgeInsets.symmetric(
-              horizontal:
-              ui.mediumSpacing,
-              vertical:
-              ui.isMobile ? 10 : 11,
+            padding: EdgeInsets.symmetric(
+              horizontal: ui.mediumSpacing,
+              vertical: ui.isMobile ? 10 : 11,
             ),
-
-            decoration:
-            BoxDecoration(
+            decoration: BoxDecoration(
               color: const Color(
                 0xFFF8FAFC,
               ),
-
-              borderRadius:
-              BorderRadius.circular(
+              borderRadius: BorderRadius.circular(
                 ui.smallRadius + 1,
               ),
-
               border: Border.all(
                 color: const Color(
                   0xFFE2E8F0,
                 ),
               ),
             ),
-
             child: Row(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  Icons
-                      .location_on_outlined,
-
-                  size:
-                  ui.smallIconSize +
-                      1,
-
-                  color:
-                  const Color(
+                  Icons.location_on_outlined,
+                  size: ui.smallIconSize + 1,
+                  color: const Color(
                     0xFF94A3B8,
                   ),
                 ),
-
                 SizedBox(
-                  width:
-                  ui.smallSpacing,
+                  width: ui.smallSpacing,
                 ),
-
                 Expanded(
                   child: Text(
                     _addressText(
                       hospital.address,
                     ),
-
                     maxLines: 3,
-
-                    overflow:
-                    TextOverflow
-                        .ellipsis,
-
-                    style:
-                    TextStyle(
-                      color:
-                      const Color(
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: const Color(
                         0xFF64748B,
                       ),
-
-                      fontSize:
-                      ui.bodyTextSize,
-
-                      fontWeight:
-                      FontWeight.w500,
-
+                      fontSize: ui.bodyTextSize,
+                      fontWeight: FontWeight.w500,
                       height: 1.4,
                     ),
                   ),
@@ -456,8 +427,7 @@ class _HospitalVisitCard
           ),
 
           SizedBox(
-            height:
-            ui.sectionSpacing,
+            height: ui.sectionSpacing,
           ),
 
           const Divider(
@@ -469,61 +439,42 @@ class _HospitalVisitCard
           ),
 
           SizedBox(
-            height:
-            ui.sectionSpacing,
+            height: ui.sectionSpacing,
           ),
 
           // =====================================================
           // Actions
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // =================================================
               // Prescription
-              // نفس السلوك الأصلي
               // =================================================
-              Flexible(
-                child:
-                PrescriptionHospitalMenuWidget(
-                  hospitalId:
-                  hospital.id ??
-                      hospital
-                          .hospitalId,
-                ),
+              PrescriptionHospitalMenuWidget(
+                hospitalId: hospital.id ?? hospital.hospitalId,
               ),
 
               SizedBox(
-                width:
-                ui.mediumSpacing,
+                width: ui.mediumSpacing,
               ),
 
               const Spacer(),
 
               // =================================================
               // Start Visit
-              // نفس السلوك الأصلي
               // =================================================
               InkWell(
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   ui.smallRadius,
                 ),
-
-                onTap:
-                onVisit,
-
-                child:
-                buildCardButton(
+                onTap: onVisit,
+                child: buildCardButton(
                   context,
                   'بدء زيارة',
-                  ColorManager
-                      .medicalPrimary,
+                  ColorManager.medicalPrimary,
                   Colors.white,
-                  Icons
-                      .directions_run,
+                  Icons.directions_run,
                 ),
               ),
             ],
@@ -536,8 +487,7 @@ class _HospitalVisitCard
   String _addressText(
       String? address,
       ) {
-    if (address == null ||
-        address.trim().isEmpty) {
+    if (address == null || address.trim().isEmpty) {
       return 'العنوان غير محدد';
     }
 
