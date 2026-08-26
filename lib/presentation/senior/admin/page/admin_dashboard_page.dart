@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/senior/admin/widget/square_interactive_c
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
+import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,9 +25,12 @@ class AdminDashboardPage extends StatefulWidget {
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
   @override
   void initState() {
-    BlocProvider.of<AllCityBloc>(context).cities;
+    BlocProvider
+        .of<AllCityBloc>(context)
+        .cities;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final deviceType = AppResponsive.deviceType(context);
@@ -148,7 +152,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           isLandscape: isLandscape,
           onTap: () {
             Navigator.pushNamed(
-              context,
+                context,
                 Routes.seniorByCityId
             );
           },
@@ -176,176 +180,206 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         ),
     ];
 
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        drawer: const DrawerPage(),
-        backgroundColor: ColorManager.bgGrey,
+    return BlocBuilder<AllCityBloc, AllCityState>(
+      builder: (context, state) {
+        if(state is AllCityErrorState){
+          return Scaffold(
 
-        // =================================================
-        // AppBar
-        // =================================================
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return Center(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                    size: menuIconSize,
-                    color: ColorManager.secondaryColor,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                ),
-              );
-            },
-          ),
-          title: const Text(
-            'لوحة التحكم الإدارية',
-          ),
-        ),
-
-        // =================================================
-        // Body
-        // =================================================
-        body: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: pageMaxWidth,
+            appBar: AppBar(
+              leading: null,
+              actions: [],
+              title: const Text(
+                'لوحة التحكم الإدارية',
               ),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  // =========================================
-                  // Welcome Header
-                  // =========================================
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: headerHorizontalPadding,
-                        vertical: headerVerticalPadding,
-                      ),
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'مرحباً بك مجدداً',
-                            style: TextStyle(
-                              fontSize: welcomeFontSize,
-                              fontWeight: FontWeight.bold,
-                              color:
-                              ColorManager.medicalPrimary,
-                            ),
-                          ),
+            ),
+            body:  errorFullScreen(context,func:()=> BlocProvider
+                .of<AllCityBloc>(context).add(GetAllCityEvent())),
+          );
+        }
+        else if(state is AllCityLoadingState){
+          return Scaffold(
+              appBar: AppBar(
+                leading: null,
 
-                          SizedBox(
-                            height: headerSpacing,
-                          ),
+                actions: [],
+                title: const Text(
+                  'لوحة التحكم الإدارية',
+                ),
+              ),
+              body: loadingFullScreen(context));
+        }
+        return PopScope(
+          canPop: false,
+          child: Scaffold(
+            drawer: const DrawerPage(),
+            backgroundColor: ColorManager.bgGrey,
 
-                          Text(
-                            'اختر القسم الذي ترغب في إدارته اليوم',
-                            style: TextStyle(
-                              fontSize:
-                              descriptionFontSize,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
+            // =================================================
+            // AppBar
+            // =================================================
+            appBar: AppBar(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return Center(
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.menu,
+                        size: menuIconSize,
+                        color: ColorManager.secondaryColor,
                       ),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
                     ),
+                  );
+                },
+              ),
+              title: const Text(
+                'لوحة التحكم الإدارية',
+              ),
+            ),
+
+            // =================================================
+            // Body
+            // =================================================
+            body: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: pageMaxWidth,
                   ),
-
-                  // =========================================
-                  // Dashboard Content
-                  // =========================================
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: contentHorizontalPadding,
-                    ),
-                    sliver: SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          // =================================
-                          // Admin cards
-                          // =================================
-                          _buildAdminCards(
-                            adminCards: adminCards,
-                            deviceType: deviceType,
-                            isLandscape: isLandscape,
-                            spacing: cardSpacing,
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      // =========================================
+                      // Welcome Header
+                      // =========================================
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: headerHorizontalPadding,
+                            vertical: headerVerticalPadding,
                           ),
-
-                          SizedBox(
-                            height: sectionSpacing,
-                          ),
-
-                          // =================================
-                          // Current / Old plans
-                          // =================================
-                          Row(
+                          child: Column(
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: SquareInteractiveCard(
-                                  icon: Icons
-                                      .calendar_today_outlined,
-                                  title: 'الخطة المستقبلية',
-                                  subtitle: 'متابعة النشاط',
-                                  iconColor: Colors.green,
-
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      Routes.allRepWithFuture,
-                                    );
-                                  },
+                              Text(
+                                'مرحباً بك مجدداً',
+                                style: TextStyle(
+                                  fontSize: welcomeFontSize,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                  ColorManager.medicalPrimary,
                                 ),
                               ),
 
                               SizedBox(
-                                width: cardSpacing,
+                                height: headerSpacing,
                               ),
 
-                              Expanded(
-                                child: SquareInteractiveCard(
-                                  icon: Icons.history_rounded,
-                                  title: 'الخطط المنتهية',
-                                  subtitle: 'أرشيف الخطط',
-                                  iconColor: Colors.grey,
-
-                                  // نفس السلوك الأصلي
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      Routes.cityPlan,
-                                    );
-                                  },
+                              Text(
+                                'اختر القسم الذي ترغب في إدارته اليوم',
+                                style: TextStyle(
+                                  fontSize:
+                                  descriptionFontSize,
+                                  color: Colors.grey[600],
                                 ),
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
 
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: bottomSpacing,
-                    ),
+                      // =========================================
+                      // Dashboard Content
+                      // =========================================
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: contentHorizontalPadding,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              // =================================
+                              // Admin cards
+                              // =================================
+                              _buildAdminCards(
+                                adminCards: adminCards,
+                                deviceType: deviceType,
+                                isLandscape: isLandscape,
+                                spacing: cardSpacing,
+                              ),
+
+                              SizedBox(
+                                height: sectionSpacing,
+                              ),
+
+                              // =================================
+                              // Current / Old plans
+                              // =================================
+                              Row(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: SquareInteractiveCard(
+                                      icon: Icons
+                                          .calendar_today_outlined,
+                                      title: 'الخطة المستقبلية',
+                                      subtitle: 'متابعة النشاط',
+                                      iconColor: Colors.green,
+
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          Routes.allRepWithFuture,
+                                        );
+                                      },
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    width: cardSpacing,
+                                  ),
+
+                                  Expanded(
+                                    child: SquareInteractiveCard(
+                                      icon: Icons.history_rounded,
+                                      title: 'الخطط المنتهية',
+                                      subtitle: 'أرشيف الخطط',
+                                      iconColor: Colors.grey,
+
+                                      // نفس السلوك الأصلي
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          Routes.cityPlan,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: bottomSpacing,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
