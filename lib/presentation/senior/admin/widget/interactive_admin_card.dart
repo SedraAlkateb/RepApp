@@ -45,28 +45,29 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
 
 
     final double portraitIconSize =
-    isTabletLandscape ? 22.sp : 28.sp;
+    isTabletLandscape ? 25.sp : 28.sp;
+
 
 
     final double portraitTitleSize =
-    isTabletLandscape ? 13.sp : 17.sp;
+    isTabletLandscape ? 16.sp : 17.sp;
 
 
     final double portraitSubtitleSize =
-    isTabletLandscape ? 9.sp : 12.sp;
+    isTabletLandscape ? 12.sp : 12.sp;
 
 
 
     final double landscapeIconSize =
-    isTabletLandscape ? 16.sp : 20.sp;
+    isTabletLandscape ? 19.sp : 20.sp;
 
 
     final double landscapeTitleSize =
-    isTabletLandscape ? 11.sp : 14.sp;
+    isTabletLandscape ? 14.sp : 14.sp;
 
 
     final double landscapeSubtitleSize =
-    isTabletLandscape ? 8.sp : 10.sp;
+    isTabletLandscape ? 11.sp : 10.sp;
 
 
 

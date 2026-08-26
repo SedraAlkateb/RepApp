@@ -23,6 +23,7 @@ import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_v
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
+import 'package:domina_app/presentation/uniti/app_bar_theme.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,21 +96,27 @@ class MyApp extends StatelessWidget {
             create: (_) => instance<GeneralReportsBloc>()),
         BlocProvider<FutureRepBloc>(create: (_) => instance<FutureRepBloc>()),
       ],
-      child: MaterialApp(
-        navigatorKey: appNavigatorKey, // تم الربط بمفتاح الملاحة الموحد
-        locale: const Locale('ar'),
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('ar')],
-        localeResolutionCallback: (locale, supportedLocales) =>
-            const Locale('ar'),
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: _getInitialRoute(),
-        theme: getApplicationTheme(),
+      child: Builder(
+          builder: (materialContext) {
+          return MaterialApp(
+            navigatorKey: appNavigatorKey, // تم الربط بمفتاح الملاحة الموحد
+            locale: const Locale('ar'),
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('ar')],
+            localeResolutionCallback: (locale, supportedLocales) =>
+                const Locale('ar'),
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: RouteGenerator.getRoute,
+            initialRoute: _getInitialRoute(),
+              theme: getApplicationTheme().copyWith(
+                appBarTheme: buildResponsiveAppBarTheme(context),
+              ),
+          );
+        }
       ),
     );
   }

@@ -310,7 +310,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                       // نفس مصدر البيانات الأصلي
                       // ===============================================
                       List<AllRepresentativeFuture> allRepresentative =
-                          context.watch<ManageFutureBloc>().allRepresentative;
+                          context.watch<ManageFutureBloc>().allRepresentativeSearch;
                       if (state is AllSeniorRepState) {
                         allRepresentative = state.representatives;
                       }
@@ -604,6 +604,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
               // Plan Status Dropdown
               // =================================================
               DropDownChangePlan(
+                key: ValueKey('rep_${rep.id}_status_${rep.flag.flag}'),
                 hintText: rep.flag.name,
                 items: getAllFlags(
                   rep.reptype.i,

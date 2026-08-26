@@ -125,11 +125,11 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
     // =========================
       case AppDeviceType.tabletLandscape:
 
-        height = 160.h;
-        iconSize = 10.sp;
+        height = 180.h;
+        iconSize = 13.sp;
         iconPadding = 8.w;
-        titleSize = 10.sp;
-        subTitleSize = 8.sp;
+        titleSize = 13.sp;
+        subTitleSize = 11.sp;
         radius = 18.r;
         landscape = true;
 
