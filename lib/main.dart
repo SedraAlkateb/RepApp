@@ -142,7 +142,7 @@ class MyResponsiveApp extends StatelessWidget {
       fontSizeResolver: (fontSize, instance) {
         if (isTabletLandscape) {
           // تصغير الخط بنسبة 10% فقط في الوضع العرضي للتابلت
-          return (fontSize * instance.scaleText) * 3;
+          return (fontSize * instance.scaleText) * 2;
         }
         // في بقية الحالات (طولي أو موابيل) يبعد الخط كالمعتاد
         return fontSize * instance.scaleText;

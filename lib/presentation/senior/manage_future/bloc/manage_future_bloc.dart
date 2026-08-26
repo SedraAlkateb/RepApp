@@ -14,6 +14,7 @@ part 'manage_future_state.dart';
 
 class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
   List<AllRepresentativeFuture> allRepresentative = [];
+  List<AllRepresentativeFuture> allRepresentativeSearch = [];
   AllRepsFutureUsecase allRepsFutureUsecase;
   ChangeRepPlanStatus changeRepPlanStatus;
   AllPlaceUsecase allPlaceUsecase;
@@ -81,7 +82,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
             }
             return weightA.compareTo(weightB);
           });
-
+         allRepresentativeSearch=data;
           allRepresentative = data;
           emit(AllSeniorRepState(data));
         });
@@ -94,31 +95,34 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
           }
           return false;
         }).toList();
-        emit(AllSeniorRepState(allRepresentativeModel));
+        allRepresentativeSearch=allRepresentativeModel;
+        emit(AllSeniorRepState(allRepresentativeSearch));
       } else if (event is ChangPlanStatusEvent) {
         emit(ChangPlanStatusLoadingState());
         (await changeRepPlanStatus.execute(event.id, event.brandType)).fold(
             (failure) {
           emit(ChangPlanStatusErrorState(failure: failure));
             }, (data) async {
-          final currentRep = allRepresentative[event.index];
+          // 1. البحث عن فهرس العنصر الأصلي في القائمة الكبيرة باستخدام الـ ID
+          final targetIndex = allRepresentativeSearch.indexWhere((rep) => rep.activePlan == event.id);
 
-          // 2. استبدال الكائن بكائن جديد وتحديث الـ flag فقط
-          allRepresentative[event.index] = AllRepresentativeFuture(
-             currentRep.id,
-             currentRep.name,
-            // انقل باقي الخصائص المتبقية في الموديل الخاص بك هنا بنفس الشكل:
-            // phone: currentRep.phone,
-            // details: currentRep.details,
+          if (targetIndex != -1) {
+            final currentRep = allRepresentativeSearch[targetIndex];
+            allRepresentativeSearch[targetIndex] = AllRepresentativeFuture(
+              currentRep.id,
+              currentRep.name,
               FlagModel(event.brandType),
               currentRep.activePlan,
-            currentRep.samplesCount,
+              currentRep.samplesCount,
               currentRep.reptype,
-            currentRep.planDate
-          );
-          // 3. إرسال الحالة بقائمة جديدة لتحديث الاستماع في الواجهة
-          dateTime=currentRep.planDate;
-          emit(ChangPlanStatusState(List.from(allRepresentative)));
+              currentRep.planDate,
+            );
+
+            dateTime = currentRep.planDate;
+
+            // 3. إرسال نسخة جديدة من القائمة المحدثة
+            emit(AllSeniorRepState(allRepresentativeSearch));
+          }
         });
       } else if (event is GetPlaceEvent) {
         emit(GetPlaceStatusLoadingState());
