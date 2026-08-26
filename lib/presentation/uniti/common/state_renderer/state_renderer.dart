@@ -1,5 +1,6 @@
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
@@ -56,27 +57,52 @@ class StateRenderer extends StatelessWidget {
           _getRetryButton("موافق", context)
         ]);
       case StateRendererType.fullScreenLoadingState:
-        return _getItemsColumn([_getAnimatedImage(JsonAssets.loading2)]);
+        return _getItemsColumn([_getAnimatedImage(JsonAssets.loading2),],context);
       case StateRendererType.fullScreenErrorState:
         return _getItemsColumn([
           _getAnimatedImage(JsonAssets.error),
           _getMessage(message),
           _getRetryButton("retry again", context)
-        ]);
+        ],context);
       case StateRendererType.fullScreenEmptyState:
         return _getItemsColumn(
-            [_getAnimatedImage(JsonAssets.empty1), _getMessage(message)]);
+            [_getAnimatedImage(JsonAssets.empty1), _getMessage(message)],context);
       case StateRendererType.contentState:
         return Container();
     }
   }
 
-  Widget _getItemsColumn(List<Widget> children) {
+  Widget _getItemsColumn(List<Widget> children,BuildContext context) {
+
+    double pageMaxWidth;
+    final deviceType =
+    AppResponsive.deviceType(
+      context,
+    );
+    switch (deviceType) {
+      case AppDeviceType.mobilePortrait:
+        pageMaxWidth = 600;
+        break;
+      case AppDeviceType.tabletPortrait:
+        pageMaxWidth = 760;
+        break;
+      case AppDeviceType.tabletLandscape:
+        pageMaxWidth = 900;
+        break;
+    }
+
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: children,
+      child: ConstrainedBox(
+        constraints:
+        BoxConstraints(
+          maxWidth:
+          pageMaxWidth,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
+        ),
       ),
     );
   }
@@ -94,7 +120,7 @@ class StateRenderer extends StatelessWidget {
         padding: EdgeInsets.all(AppPaddingH.p8),
         child: Text(
           message ?? "",
-          style: getRegularStyle(color: ColorManager.black, fontSize: 18.sp),
+          style: getRegularStyle(color: ColorManager.black, fontSize: 18.h),
         ),
       ),
     );
@@ -120,21 +146,47 @@ class StateRenderer extends StatelessWidget {
   }
 
   Widget _getPopupDialog(BuildContext context, List<Widget> children) {
-    return PopScope(
-      canPop: false,
-      child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSize.s14),
+    double pageMaxWidth;
+    final deviceType =
+    AppResponsive.deviceType(
+      context,
+    );
+    switch (deviceType) {
+      case AppDeviceType.mobilePortrait:
+        pageMaxWidth = 600;
+        break;
+      case AppDeviceType.tabletPortrait:
+        pageMaxWidth = 760;
+        break;
+      case AppDeviceType.tabletLandscape:
+        pageMaxWidth = 900;
+        break;
+    }
+    return Center(
+      child: ConstrainedBox(
+        constraints:
+        BoxConstraints(
+          maxWidth:
+          pageMaxWidth,
         ),
-        elevation: AppSize.s1_5,
-        backgroundColor: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-              color: ColorManager.white,
-              shape: BoxShape.rectangle,
+        child: PopScope(
+          canPop: false,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppSize.s14),
-              boxShadow: const [BoxShadow(color: Colors.black26)]),
-          child: _getDialogContent(context, children),
+            ),
+            elevation: AppSize.s1_5,
+            backgroundColor: Colors.transparent,
+            child: Container(
+              decoration: BoxDecoration(
+
+                  color: ColorManager.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(AppSize.s14),
+                  boxShadow: const [BoxShadow(color: Colors.black26)]),
+              child: _getDialogContent(context, children),
+            ),
+          ),
         ),
       ),
     );

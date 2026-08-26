@@ -73,12 +73,12 @@ class _SearchDoctorsState extends State<SearchDoctors>
   void _triggerSearch() {
     final cityBloc = context.read<AllCityBloc>();
     context.read<SearchDoctorsBloc>().add(
-      FutureSearchDocEvent(
-        searchController.text.trim(),
-        UserInfo.repId,
-        cityId: cityBloc.selectedCityId,
-      ),
-    );
+          FutureSearchDocEvent(
+            searchController.text.trim(),
+            UserInfo.repId,
+            cityId: cityBloc.selectedCityId,
+          ),
+        );
   }
 
   // ===========================================================
@@ -147,7 +147,8 @@ class _SearchDoctorsState extends State<SearchDoctors>
                         color: ColorManager.medicalPrimary,
                         borderRadius: BorderRadius.circular(ui.smallRadius + 4),
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(ui.smallRadius + 4),
+                          borderRadius:
+                              BorderRadius.circular(ui.smallRadius + 4),
                           onTap: _triggerSearch,
                           child: Container(
                             height: 48,
@@ -199,8 +200,8 @@ class _SearchDoctorsState extends State<SearchDoctors>
         mes: cityState.failure.massage,
         func: () {
           context.read<AllCityBloc>().add(
-            const GetAllCityEvent(),
-          );
+                const GetAllCityEvent(),
+              );
         },
       );
     }
@@ -303,7 +304,7 @@ class _SearchDoctorsState extends State<SearchDoctors>
                 ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    (context, index) {
                       final doctor = state.representative[index];
 
                       return doctorWidget(
