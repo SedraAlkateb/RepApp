@@ -17,12 +17,10 @@ class HospitalDetails extends StatefulWidget {
   final SearchHospitalModel searchHospitalModel;
 
   @override
-  State<HospitalDetails> createState() =>
-      _HospitalDetailsState();
+  State<HospitalDetails> createState() => _HospitalDetailsState();
 }
 
-class _HospitalDetailsState
-    extends State<HospitalDetails>
+class _HospitalDetailsState extends State<HospitalDetails>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController searchNoteHospitalController =
   TextEditingController();
@@ -42,19 +40,12 @@ class _HospitalDetailsState
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: BlocBuilder<SearchDoctorsBloc, SearchDoctorsState>(
-        // =====================================================
-        // نفس buildWhen الأصلي
-        // =====================================================
         buildWhen: (previous, current) =>
         current is FutureDocHospitalsState ||
             current is FutureDocHospitalsErrorState ||
             current is FutureDocHospitalsLoadingState ||
             current is FutureDocHospitalsEmptyState,
-
         builder: (context, state) {
-          // ===================================================
-          // Error
-          // ===================================================
           if (state is FutureDocHospitalsErrorState) {
             return _buildStatePage(
               context,
@@ -66,9 +57,6 @@ class _HospitalDetailsState
             );
           }
 
-          // ===================================================
-          // Loading
-          // ===================================================
           if (state is FutureDocHospitalsLoadingState) {
             return _buildStatePage(
               context,
@@ -76,9 +64,6 @@ class _HospitalDetailsState
             );
           }
 
-          // ===================================================
-          // Empty
-          // ===================================================
           if (state is FutureDocHospitalsEmptyState) {
             return _buildStatePage(
               context,
@@ -86,37 +71,19 @@ class _HospitalDetailsState
             );
           }
 
-          // ===================================================
-          // Success
-          // ===================================================
           if (state is FutureDocHospitalsState) {
-            final String cleanName =
-            widget.searchHospitalModel.name.trim();
+            final String cleanName = widget.searchHospitalModel.name.trim();
 
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
               keyboardDismissBehavior:
               ScrollViewKeyboardDismissBehavior.onDrag,
-
               slivers: [
-                // ===============================================
-                // AppBar
-                // ===============================================
                 _buildHospitalAppBar(context),
-
-                // ===============================================
-                // Hospital Profile
-                // ===============================================
                 _buildHospitalProfileSection(
                   context,
-                  cleanName,
+                  cleanName.isNotEmpty ? cleanName[0] : "",
                 ),
-
-                // ===============================================
-                // Search
-                //
-                // نفس عرض الكرت الأزرق والـList
-                // ===============================================
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(
@@ -131,10 +98,8 @@ class _HospitalDetailsState
                           maxWidth: ui.pageMaxWidth,
                         ),
                         child: SearchField(
-                          searchController:
-                          searchNoteHospitalController,
+                          searchController: searchNoteHospitalController,
                           onPressed: (value) {
-                            // نفس Event الأصلي
                             BlocProvider.of<SearchDoctorsBloc>(
                               context,
                             ).add(
@@ -146,12 +111,6 @@ class _HospitalDetailsState
                     ),
                   ),
                 ),
-
-                // ===============================================
-                // Reports
-                //
-                // نفس Wrapper المستخدم للكرت الأزرق والبحث
-                // ===============================================
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(
@@ -168,18 +127,18 @@ class _HospitalDetailsState
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
-                          physics:
-                          const NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: state.allNote.length,
                           itemBuilder: (context, index) {
-                            final report =
-                            state.allNote[index];
+                            final report = state.allNote[index];
 
                             return _buildReportCard(
                               context,
                               repName: report.name,
                               visitDate: report.visitDate,
                               note: report.note.toString(),
+                              issues: report.issue.toString(),
+                              target: report.target.toString(),
                             );
                           },
                         ),
@@ -201,9 +160,7 @@ class _HospitalDetailsState
   // AppBar
   // =======================================================
 
-  SliverAppBar _buildHospitalAppBar(
-      BuildContext context,
-      ) {
+  SliverAppBar _buildHospitalAppBar(BuildContext context) {
     final ui = AppUi.of(context);
 
     return SliverAppBar(
@@ -212,7 +169,6 @@ class _HospitalDetailsState
       scrolledUnderElevation: 0,
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
-
       leading: IconButton(
         tooltip: "رجوع",
         onPressed: () {
@@ -224,7 +180,6 @@ class _HospitalDetailsState
           size: ui.iconSize,
         ),
       ),
-
       title: Text(
         "تقارير المشفى",
         maxLines: 1,
@@ -235,7 +190,6 @@ class _HospitalDetailsState
           fontWeight: FontWeight.w700,
         ),
       ),
-
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(1),
         child: Divider(
@@ -259,9 +213,6 @@ class _HospitalDetailsState
 
     return SliverToBoxAdapter(
       child: Padding(
-        // مهم:
-        // Padding خارج ConstrainedBox
-        // حتى يكون نفس عرض البحث والـList
         padding: EdgeInsets.fromLTRB(
           ui.pagePadding,
           ui.pageTopPadding,
@@ -279,7 +230,7 @@ class _HospitalDetailsState
                   return _buildWideHospitalProfile(
                     context,
                     firstLetter,
-                  );//
+                  );
                 }
 
                 return _buildCompactHospitalProfile(
@@ -312,33 +263,20 @@ class _HospitalDetailsState
       decoration: _hospitalProfileDecoration(ui),
       child: Column(
         children: [
-          // =================================================
-          // Hospital Icon / Letter
-          // =================================================
           _buildHospitalAvatar(
             context,
             firstLetter,
           ),
-
           SizedBox(
             height: ui.mediumSpacing,
           ),
-
-          // =================================================
-          // Hospital Name
-          // =================================================
           _buildHospitalName(
             context,
             textAlign: TextAlign.center,
           ),
-
           SizedBox(
             height: ui.sectionSpacing,
           ),
-
-          // =================================================
-          // Small hospital label
-          // =================================================
           _buildHospitalTypeChip(
             context,
           ),
@@ -366,44 +304,31 @@ class _HospitalDetailsState
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // =================================================
-          // Avatar
-          // =================================================
-
-
+          _buildHospitalAvatar(
+            context,
+            firstLetter,
+            compact: true,
+          ),
           SizedBox(
             width: ui.sectionSpacing,
           ),
-
-          // =================================================
-          // Hospital Name
-          // =================================================
           Expanded(
             child: _buildHospitalName(
               context,
               textAlign: TextAlign.start,
             ),
           ),
-
           SizedBox(
             width: ui.largeSpacing,
           ),
-
           Container(
             width: 1,
             height: 54,
-            color: Colors.white.withOpacity(
-              0.20,
-            ),
+            color: Colors.white.withOpacity(0.20),
           ),
-
           SizedBox(
             width: ui.largeSpacing,
           ),
-
-          // =================================================
-          // Hospital Type
-          // =================================================
           _buildHospitalTypeTile(
             context,
           ),
@@ -416,22 +341,15 @@ class _HospitalDetailsState
   // Blue Hospital Container
   // =======================================================
 
-  BoxDecoration _hospitalProfileDecoration(
-      AppUi ui,
-      ) {
+  BoxDecoration _hospitalProfileDecoration(AppUi ui) {
     return BoxDecoration(
-      // نفس الهوية الزرقاء لـ DoctorDetails
       color: ColorManager.medicalPrimary,
-
       borderRadius: BorderRadius.circular(
         ui.cardRadius,
       ),
-
       boxShadow: [
         BoxShadow(
-          color: ColorManager.medicalPrimary.withOpacity(
-            0.16,
-          ),
+          color: ColorManager.medicalPrimary.withOpacity(0.16),
           blurRadius: 14,
           offset: const Offset(
             0,
@@ -453,25 +371,19 @@ class _HospitalDetailsState
       }) {
     final ui = AppUi.of(context);
 
-    final double size = compact
-        ? ui.iconBoxSize + 8
-        : ui.iconBoxSize + 18;
+    final double size = compact ? ui.iconBoxSize + 8 : ui.iconBoxSize + 18;
 
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(
-          0.14,
-        ),
+        color: Colors.white.withOpacity(0.14),
         borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
         border: Border.all(
-          color: Colors.white.withOpacity(
-            0.25,
-          ),
+          color: Colors.white.withOpacity(0.25),
           width: 1.5,
         ),
       ),
@@ -486,16 +398,13 @@ class _HospitalDetailsState
               fontWeight: FontWeight.w800,
             ),
           ),
-
           Positioned(
             right: 4,
             bottom: 4,
             child: Icon(
               Icons.local_hospital_rounded,
               size: ui.smallIconSize,
-              color: Colors.white.withOpacity(
-                0.65,
-              ),
+              color: Colors.white.withOpacity(0.65),
             ),
           ),
         ],
@@ -531,9 +440,7 @@ class _HospitalDetailsState
   // Portrait Type Chip
   // =======================================================
 
-  Widget _buildHospitalTypeChip(
-      BuildContext context,
-      ) {
+  Widget _buildHospitalTypeChip(BuildContext context) {
     final ui = AppUi.of(context);
 
     return Container(
@@ -542,16 +449,12 @@ class _HospitalDetailsState
         vertical: ui.smallSpacing,
       ),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(
-          0.12,
-        ),
+        color: Colors.white.withOpacity(0.12),
         borderRadius: BorderRadius.circular(
           ui.smallRadius,
         ),
         border: Border.all(
-          color: Colors.white.withOpacity(
-            0.18,
-          ),
+          color: Colors.white.withOpacity(0.18),
         ),
       ),
       child: Row(
@@ -562,11 +465,9 @@ class _HospitalDetailsState
             color: Colors.white,
             size: ui.smallIconSize,
           ),
-
           SizedBox(
             width: ui.smallSpacing,
           ),
-
           Text(
             "مشفى",
             style: TextStyle(
@@ -584,9 +485,7 @@ class _HospitalDetailsState
   // Landscape Type
   // =======================================================
 
-  Widget _buildHospitalTypeTile(
-      BuildContext context,
-      ) {
+  Widget _buildHospitalTypeTile(BuildContext context) {
     final ui = AppUi.of(context);
 
     return Row(
@@ -597,9 +496,7 @@ class _HospitalDetailsState
           height: ui.smallIconSize + 14,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(
-              0.12,
-            ),
+            color: Colors.white.withOpacity(0.12),
             borderRadius: BorderRadius.circular(
               ui.smallRadius,
             ),
@@ -610,17 +507,13 @@ class _HospitalDetailsState
             size: ui.smallIconSize,
           ),
         ),
-
         SizedBox(
           width: ui.mediumSpacing,
         ),
-
         Text(
           "مشفى",
           style: TextStyle(
-            color: Colors.white.withOpacity(
-              0.92,
-            ),
+            color: Colors.white.withOpacity(0.92),
             fontSize: ui.bodyTextSize,
             fontWeight: FontWeight.w600,
           ),
@@ -630,7 +523,7 @@ class _HospitalDetailsState
   }
 
   // =======================================================
-  // Report Card
+  // Report Card & Note Blocks
   // =======================================================
 
   Widget _buildReportCard(
@@ -638,19 +531,23 @@ class _HospitalDetailsState
         required String repName,
         required String visitDate,
         required String note,
+        required String issues,
+        required String target,
       }) {
     final ui = AppUi.of(context);
 
-    // =====================================================
-    // نفس شرط الملاحظة الأصلي تماماً
-    // =====================================================
-    final bool hasNote =
-        note.trim().isNotEmpty &&
-            note != "null";
-
-    final String displayedNote = hasNote
+    final String displayedNote =
+    (note.trim().isNotEmpty && note != "null")
         ? note
         : "لا توجد ملاحظات مسجلة.";
+    final String displayedIssues =
+    (issues.trim().isNotEmpty && issues != "null")
+        ? issues
+        : "لا توجد ملاحظات صيدلية مجاورة.";
+    final String displayedTarget =
+    (target.trim().isNotEmpty && target != "null")
+        ? target
+        : "لا يوجد هدف محدد للزيارة.";
 
     return Padding(
       padding: EdgeInsets.only(
@@ -664,20 +561,13 @@ class _HospitalDetailsState
             ui.cardRadius,
           ),
           border: Border.all(
-            color: const Color(
-              0xFFE2E8F0,
-            ),
+            color: const Color(0xFFE2E8F0),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(
-                0.025,
-              ),
+              color: Colors.black.withOpacity(0.025),
               blurRadius: 12,
-              offset: const Offset(
-                0,
-                4,
-              ),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -686,118 +576,122 @@ class _HospitalDetailsState
             ui.cardPadding,
           ),
           child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // =================================================
-              // Representative + Date
-              // =================================================
               _buildReportMeta(
                 context,
                 repName: repName,
                 visitDate: visitDate,
               ),
-
               SizedBox(
                 height: ui.sectionSpacing,
               ),
-
-              // =================================================
-              // Scientific Office Note
-              // =================================================
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(
-                  ui.cardPadding - 3,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(
-                    0xFFF8FAFC,
-                  ),
-                  borderRadius:
-                  BorderRadius.circular(
-                    ui.smallRadius + 2,
-                  ),
-                  border: Border.all(
-                    color: const Color(
-                      0xFFF1F5F9,
-                    ),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width:
-                          ui.smallIconSize + 14,
-                          height:
-                          ui.smallIconSize + 14,
-                          alignment:
-                          Alignment.center,
-                          decoration: BoxDecoration(
-                            color: ColorManager
-                                .secondaryColor1
-                                .withOpacity(
-                              0.07,
-                            ),
-                            borderRadius:
-                            BorderRadius.circular(
-                              ui.smallRadius,
-                            ),
-                          ),
-                          child: Icon(
-                            Icons
-                                .rate_review_outlined,
-                            color: ColorManager
-                                .secondaryColor1,
-                            size: ui.smallIconSize,
-                          ),
-                        ),
-
-                        SizedBox(
-                          width: ui.mediumSpacing,
-                        ),
-
-                        Expanded(
-                          child: Text(
-                            "ملاحظات المكتب العلمي",
-                            style: TextStyle(
-                              fontSize:
-                              ui.bodyTextSize,
-                              fontWeight:
-                              FontWeight.w700,
-                              color: ColorManager
-                                  .secondaryColor1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: ui.mediumSpacing,
-                    ),
-
-                    Text(
-                      displayedNote,
-                      style: TextStyle(
-                        fontSize: ui.bodyTextSize,
-                        color: const Color(
-                          0xFF475569,
-                        ),
-                        fontWeight: FontWeight.w500,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
+              _buildNoteBlock(
+                context,
+                title: "الهدف من الزيارة",
+                content: displayedTarget,
+                icon: Icons.track_changes_outlined,
+                iconColor: ColorManager.secondaryColor1,
+              ),
+              SizedBox(
+                height: ui.mediumSpacing,
+              ),
+              _buildNoteBlock(
+                context,
+                title: "ملاحظات المكتب العلمي",
+                content: displayedNote,
+                icon: Icons.rate_review_outlined,
+                iconColor: ColorManager.secondaryColor1,
+              ),
+              SizedBox(
+                height: ui.mediumSpacing,
+              ),
+              _buildNoteBlock(
+                context,
+                title: "ملاحظات صيدلية مجاورة",
+                content: displayedIssues,
+                icon: Icons.local_pharmacy_outlined,
+                iconColor: ColorManager.secondaryColor1,
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildNoteBlock(
+      BuildContext context, {
+        required String title,
+        required String content,
+        required IconData icon,
+        required Color iconColor,
+      }) {
+    final ui = AppUi.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(
+        ui.cardPadding - 3,
+      ),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(
+          ui.smallRadius + 2,
+        ),
+        border: Border.all(
+          color: const Color(0xFFF1F5F9),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: ui.smallIconSize + 14,
+                height: ui.smallIconSize + 14,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(
+                    ui.smallRadius,
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: ui.smallIconSize,
+                ),
+              ),
+              SizedBox(
+                width: ui.mediumSpacing,
+              ),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: ui.bodyTextSize,
+                    fontWeight: FontWeight.w700,
+                    color: iconColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: ui.mediumSpacing,
+          ),
+          Text(
+            content,
+            style: TextStyle(
+              fontSize: ui.bodyTextSize,
+              color: const Color(0xFF475569),
+              fontWeight: FontWeight.w500,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -814,60 +708,42 @@ class _HospitalDetailsState
     final ui = AppUi.of(context);
 
     return LayoutBuilder(
-      builder: (
-          context,
-          constraints,
-          ) {
-        // =================================================
-        // Narrow Mobile
-        // =================================================
+      builder: (context, constraints) {
         if (constraints.maxWidth < 390) {
           return Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               InfoRowItem(
-                icon:
-                Icons.person_outline_rounded,
+                icon: Icons.person_outline_rounded,
                 value: repName,
               ),
-
               SizedBox(
                 height: ui.smallSpacing,
               ),
-
               InfoRowItem(
-                icon:
-                Icons.calendar_month_outlined,
+                icon: Icons.calendar_month_outlined,
                 value: visitDate,
               ),
             ],
           );
         }
 
-        // =================================================
-        // Wide
-        // =================================================
         return Row(
           children: [
             Expanded(
               flex: 5,
               child: InfoRowItem(
-                icon:
-                Icons.person_outline_rounded,
+                icon: Icons.person_outline_rounded,
                 value: repName,
               ),
             ),
-
             SizedBox(
               width: ui.sectionSpacing,
             ),
-
             Expanded(
               flex: 4,
               child: InfoRowItem(
-                icon:
-                Icons.calendar_month_outlined,
+                icon: Icons.calendar_month_outlined,
                 value: visitDate,
               ),
             ),
