@@ -11,10 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlaceSenior extends StatefulWidget {
-  const PlaceSenior({
+   PlaceSenior({
     super.key,
-  });
+  required  this.isPr
 
+  });
+final bool isPr;
   @override
   State<PlaceSenior> createState() =>
       _PlaceSeniorState();
@@ -392,7 +394,7 @@ class _PlaceSeniorState
             // =================================================
             // نفس السلوك الأصلي
             // =================================================
-            onTap: () {
+            onTap: widget.isPr?() {
               Navigator.pushNamed(
                 context,
                 Routes.docHos,
@@ -406,13 +408,13 @@ class _PlaceSeniorState
                   .read<SeniorProfBloc>()
                   .add(
                 DocHosEvent(
-                  UserInfo.repId,
+                    UserInfo.repId,
                   placeId:
                   place.placeId,
                   cityId: BlocProvider.of<AllCityBloc>(context).selectedCityId
                 ),
               );
-            },
+            }:null,
 
             child: Padding(
               padding: EdgeInsets.all(
@@ -636,7 +638,7 @@ class _PlaceSeniorState
                   // =============================================
                   // Arrow
                   // =============================================
-                  Container(
+                 widget.isPr? Container(
                     width:
                     ui.isMobile
                         ? 30
@@ -675,7 +677,7 @@ class _PlaceSeniorState
                         0xFF94A3B8,
                       ),
                     ),
-                  ),
+                  ):SizedBox(),
                 ],
               ),
             ),

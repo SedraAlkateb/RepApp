@@ -1435,6 +1435,7 @@ class _RepProfileState
                   Navigator.pushNamed(
                     context,
                     Routes.seniorPlaces,
+                      arguments: false
                   );
                 },
               ),

@@ -220,7 +220,12 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           emit(SenAllHospitalErrorState(failure: failure));
         }, (data) async {
           hospital = data;
-          emit(SenAllHospitalsState(data));
+          if(hospital.isEmpty){
+            emit(SenAllHospitalEmptyState());
+          }else{
+            emit(SenAllHospitalsState(data));
+          }
+
         });
       } else if (event is SenAllBrandEvent) {
         emit(SenAllBrandLoadingState());
@@ -270,9 +275,6 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         String search = normalizeText(event.contant);
         hospitalList = hospital.where((value) {
           if (normalizeText(value.title ?? "").contains(search)) {
-            return true;
-          }
-          if (normalizeText(value.address ?? "").contains(search)) {
             return true;
           }
           if (normalizeText(value.placeTitle ?? "").contains(search)) {
@@ -358,9 +360,6 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         String search = normalizeText(event.contant);
         doctorList = doctor.where((value) {
           if (normalizeText(value.title).contains(search)) {
-            return true;
-          }
-          if (normalizeText(value.address).contains(search)) {
             return true;
           }
           if (normalizeText(value.placeTitle).contains(search)) {

@@ -7,6 +7,7 @@ import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/uniti/custom-wavy-background.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -572,6 +573,9 @@ class _MyLoginState extends State<MyLogin> {
               if (!context.mounted) return;
 
               if (UserInfo.isLogging == 2) {
+                BlocProvider.of<AllCityBloc>(context).add(
+                  GetAllCityEvent(),
+                );
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.adminControl,

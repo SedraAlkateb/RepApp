@@ -3,6 +3,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/drawer_model.dart';
 import 'package:domina_app/presentation/drawer/widget/custom_drawer_widget.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
@@ -22,6 +23,7 @@ class DrawerPage extends StatelessWidget {
 
           listener: (context, state) {
             if (state is LogoutDeleteAllState) {
+              BlocProvider.of<AllCityBloc>(context).cities=[];
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.login,
@@ -45,6 +47,7 @@ class DrawerPage extends StatelessWidget {
       return BlocListener<SeniorProfBloc, SeniorProfState>(
         listener: (context, state) {
           if (state is LogoutDeleteAllState) {
+            BlocProvider.of<AllCityBloc>(context).cities=[];
             Navigator.pushNamedAndRemoveUntil(
               context,
               Routes.login,
@@ -268,7 +271,8 @@ class DrawerPage extends StatelessWidget {
             context
                 .read<SeniorProfBloc>()
                 .add(SenAllPlaceEvent(UserInfo.repId));
-            Navigator.pushNamed(context, Routes.seniorPlaces);
+            Navigator.pushNamed(context, Routes.seniorPlaces,
+            arguments: true);
           }),
       DrawerMenuItem(
         icon: Icons.person_search_outlined,
@@ -357,7 +361,7 @@ class DrawerPage extends StatelessWidget {
             context
                 .read<SeniorProfBloc>()
                 .add(SenAllPlaceEvent(UserInfo.repId));
-            Navigator.pushNamed(context, Routes.seniorPlaces);
+            Navigator.pushNamed(context, Routes.seniorPlaces, arguments: true);
           }),
       DrawerMenuItem(
         icon: Icons.person_search_outlined,

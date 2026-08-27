@@ -2,7 +2,6 @@
 
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';

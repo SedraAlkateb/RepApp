@@ -2,6 +2,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/remainig_visit_card.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class RemainingVisits extends StatelessWidget {
 
     double listTopPadding;
     double listBottomPadding;
-
+    double headerVerticalPadding;
     switch (deviceType) {
     // =================================================
     // Mobile
@@ -40,7 +41,7 @@ class RemainingVisits extends StatelessWidget {
 
         searchTopPadding = 14;
         searchBottomPadding = 8;
-
+        headerVerticalPadding = 12;
         listTopPadding = 6;
         listBottomPadding = 24;
         break;
@@ -56,6 +57,7 @@ class RemainingVisits extends StatelessWidget {
         searchTopPadding = 18;
         searchBottomPadding = 10;
 
+        headerVerticalPadding = 16;
         listTopPadding = 8;
         listBottomPadding = 30;
         break;
@@ -70,7 +72,7 @@ class RemainingVisits extends StatelessWidget {
 
         searchTopPadding = 14;
         searchBottomPadding = 8;
-
+        headerVerticalPadding = 14;
         listTopPadding = 6;
         listBottomPadding = 28;
         break;
@@ -85,43 +87,43 @@ class RemainingVisits extends StatelessWidget {
           constraints: BoxConstraints(
             maxWidth: pageMaxWidth,
           ),
-          child: Column(
-            children: [
-              // =================================================
-              // Search
-              // =================================================
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  searchTopPadding,
-                  horizontalPadding,
-                  searchBottomPadding,
-                ),
-                child: SearchField(
-                  searchController:
-                  searchNoteDoctorController,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // =================================================
+                // Search
+                // =================================================
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    searchTopPadding,
+                    horizontalPadding,
+                    searchBottomPadding,
+                  ),
+                  child: SearchField(
+                    searchController:
+                    searchNoteDoctorController,
 
-                  // =============================================
-                  // نفس سلوك البحث
-                  // =============================================
-                  onPressed: (value) {
-                    BlocProvider.of<
-                        SeniorProfBloc>(
-                      context,
-                    ).add(
-                      SenSearchRemainingVisitsDoctorEvent(
-                        value,
-                      ),
-                    );
-                  },
+                    // =============================================
+                    // نفس سلوك البحث
+                    // =============================================
+                    onPressed: (value) {
+                      BlocProvider.of<
+                          SeniorProfBloc>(
+                        context,
+                      ).add(
+                        SenSearchRemainingVisitsDoctorEvent(
+                          value,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
 
-              // =================================================
-              // List
-              // =================================================
-              Expanded(
-                child: BlocBuilder<
+                // =================================================
+                // List
+                // =================================================
+                BlocBuilder<
                     SeniorProfBloc,
                     SeniorProfState>(
                   builder: (context, state) {
@@ -176,36 +178,49 @@ class RemainingVisits extends StatelessWidget {
                     // ===========================================
                     // Data
                     // ===========================================
-                    return ListView.builder(
-                      // عند سحب القائمة والكيبورد مفتوح
-                      // ينزل بشكل طبيعي
-                      keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior
-                          .onDrag,
+                    return     Column(
+                      children: [
+                        // =================================================
+                        // Header + Count
+                        // =================================================
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                            vertical: headerVerticalPadding,
+                          ),
+                          child: buildTotalReportsCard(
+                            noVisitDoc
+                                .length,
+                            "عدد الأطباء",
+                            'قائمة الأطباء الذين تمت زيارتهم ولم تكتمل',
+                          ),
+                        ),
+                        ListView.builder(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalPadding,
+                            listTopPadding,
+                            horizontalPadding,
+                            listBottomPadding,
+                          ),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount:
+                          noVisitDoc.length,
 
-                      padding:
-                      EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        listTopPadding,
-                        horizontalPadding,
-                        listBottomPadding,
-                      ),
-
-                      itemCount:
-                      noVisitDoc.length,
-
-                      itemBuilder:
-                          (context, index) {
-                        return RemainingVisitCard(
-                          data:
-                          noVisitDoc[index],
-                        );
-                      },
+                          itemBuilder:
+                              (context, index) {
+                            return RemainingVisitCard(
+                              data:
+                              noVisitDoc[index],
+                            );
+                          },
+                        ),
+                      ],
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

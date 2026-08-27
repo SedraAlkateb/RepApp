@@ -142,6 +142,7 @@ class RouteGenerator {
     switch (settings.name) {
       case Routes.login:
         initLoginModule();
+        iniAllCityModule();
         return _animatedRoute(const MyLogin());
       case Routes.allBrand:
         return _animatedRoute(AllBrand());
@@ -275,7 +276,9 @@ class RouteGenerator {
       //   return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
-        return _animatedRoute(PlaceSenior());
+        final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
+
+        return _animatedRoute(PlaceSenior(isPr: args,));
       case Routes.seniorFuturePlaces:
         return _animatedRoute(FuturePlacePage());
       case Routes.seniorSpec:

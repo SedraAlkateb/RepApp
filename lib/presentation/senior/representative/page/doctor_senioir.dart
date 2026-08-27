@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class DoctorSenior extends StatelessWidget {
 
     double listTopPadding;
     double listBottomPadding;
-
+    double headerVerticalPadding;
     switch (deviceType) {
     // =================================================
     // Mobile
@@ -38,7 +39,7 @@ class DoctorSenior extends StatelessWidget {
         horizontalPadding = 16;
         searchTopPadding = 14;
         searchBottomPadding = 10;
-
+        headerVerticalPadding = 12;
         listTopPadding = 6;
         listBottomPadding = 24;
         break;
@@ -53,6 +54,7 @@ class DoctorSenior extends StatelessWidget {
         searchTopPadding = 20;
         searchBottomPadding = 14;
 
+        headerVerticalPadding = 16;
         listTopPadding = 8;
         listBottomPadding = 30;
         break;
@@ -66,7 +68,7 @@ class DoctorSenior extends StatelessWidget {
         horizontalPadding = 32;
         searchTopPadding = 16;
         searchBottomPadding = 12;
-
+        headerVerticalPadding = 14;
         listTopPadding = 6;
         listBottomPadding = 28;
         break;
@@ -89,44 +91,45 @@ class DoctorSenior extends StatelessWidget {
             maxWidth: pageMaxWidth,
           ),
 
-          child: Column(
-            children: [
-              // =================================================
-              // Search
-              // =================================================
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  searchTopPadding,
-                  horizontalPadding,
-                  searchBottomPadding,
+          child:  SingleChildScrollView(
+    physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                // =================================================
+                // Search
+                // =================================================
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    searchTopPadding,
+                    horizontalPadding,
+                    searchBottomPadding,
+                  ),
+
+                  child: SearchField(
+                    searchController:
+                    searchDocController,
+
+                    // =============================================
+                    // نفس سلوك البحث
+                    // =============================================
+                    onPressed: (value) {
+                      BlocProvider.of<
+                          SeniorProfBloc>(
+                        context,
+                      ).add(
+                        SenSearchDoctorEvent(
+                          value,
+                        ),
+                      );
+                    },
+                  ),
                 ),
 
-                child: SearchField(
-                  searchController:
-                  searchDocController,
-
-                  // =============================================
-                  // نفس سلوك البحث
-                  // =============================================
-                  onPressed: (value) {
-                    BlocProvider.of<
-                        SeniorProfBloc>(
-                      context,
-                    ).add(
-                      SenSearchDoctorEvent(
-                        value,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              // =================================================
-              // Doctors List
-              // =================================================
-              Expanded(
-                child: BlocBuilder<
+                // =================================================
+                // Doctors List
+                // =================================================
+                BlocBuilder<
                     SeniorProfBloc,
                     SeniorProfState>(
 
@@ -196,29 +199,49 @@ class DoctorSenior extends StatelessWidget {
                     // ===========================================
                     // Data
                     // ===========================================
-                    return ListView.builder(
-                      padding: EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        listTopPadding,
-                        horizontalPadding,
-                        listBottomPadding,
-                      ),
+                              return Column(
+                      children: [
+                        // =================================================
+                        // Header + Count
+                        // =================================================
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                            vertical: headerVerticalPadding,
+                          ),
+                          child: buildTotalReportsCard(
+                            doctorsList
+                                .length,
+                            "قائمة الأطباء المسجلة",
+                            'لهذا المندوب',
+                          ),
+                        ),
+                        ListView.builder(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalPadding,
+                            listTopPadding,
+                            horizontalPadding,
+                            listBottomPadding,
+                          ),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount:
+                          doctorsList.length,
 
-                      itemCount:
-                      doctorsList.length,
-
-                      itemBuilder:
-                          (context, index) {
-                        return AdminRepDoctorCard(
-                          doctor:
-                          doctorsList[index],
-                        );
-                      },
+                          itemBuilder:
+                              (context, index) {
+                            return AdminRepDoctorCard(
+                              doctor:
+                              doctorsList[index],
+                            );
+                          },
+                        ),
+                      ],
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

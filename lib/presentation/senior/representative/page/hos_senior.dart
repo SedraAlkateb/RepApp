@@ -158,6 +158,7 @@ class HospitalSenior extends StatelessWidget {
                     // Empty
                     // =============================================
                     if (state is SenAllHospitalEmptyState) {
+
                       return emptyFullScreen(
                         context,
                       );
@@ -167,6 +168,7 @@ class HospitalSenior extends StatelessWidget {
                     // Error
                     // =============================================
                     if (state is SenAllHospitalErrorState) {
+
                       return errorFullScreen(
                         context,
                       );

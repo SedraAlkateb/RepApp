@@ -22,94 +22,64 @@ class SpecGridWidget extends StatelessWidget {
   });
 
   @override
+  @override
   Widget build(BuildContext context) {
+    // 🌟 تصفية القائمة لعرض العناصر التي تحتوي على flag == 1 فقط
+    final filteredItems = items.where((item) => item.flag == 1).toList();
+
     final deviceType = AppResponsive.deviceType(context);
 
     double crossAxisSpacing;
     double mainAxisSpacing;
-
     double childAspectRatio;
-
     double cardPadding;
     double cardRadius;
-
     double iconContainerSize;
     double iconSize;
-
     double iconSpacing;
-
     double titleFontSize;
-
     double statFontSize;
     double statSpacing;
 
     switch (deviceType) {
-      // =================================================
-      // Mobile
-      // =================================================
       case AppDeviceType.mobilePortrait:
         crossAxisSpacing = 10;
         mainAxisSpacing = 10;
-
         childAspectRatio = 0.82;
-
         cardPadding = 12;
         cardRadius = 16;
-
         iconContainerSize = 54;
         iconSize = 30;
-
         iconSpacing = 10;
-
         titleFontSize = 14;
-
         statFontSize = 10.5;
         statSpacing = 3;
         break;
 
-      // =================================================
-      // Tablet Portrait
-      // =================================================
       case AppDeviceType.tabletPortrait:
         crossAxisSpacing = 14;
         mainAxisSpacing = 14;
-
         childAspectRatio = 0.88;
-
         cardPadding = 16;
         cardRadius = 18;
-
         iconContainerSize = 66;
         iconSize = 38;
-
         iconSpacing = 12;
-
         titleFontSize = 17;
-
         statFontSize = 12;
         statSpacing = 4;
         break;
 
-      // =================================================
-      // Tablet Landscape
-      // =================================================
       case AppDeviceType.tabletLandscape:
         crossAxisSpacing = 14;
         mainAxisSpacing = 14;
-
-        // Landscape أعرض، فما بدنا الكرت يطول زيادة
         childAspectRatio = 1.0;
-
         cardPadding = 14;
         cardRadius = 17;
-
         iconContainerSize = 60;
         iconSize = 34;
-
         iconSpacing = 10;
-
         titleFontSize = 16;
-
         statFontSize = 11.5;
         statSpacing = 3;
         break;
@@ -125,57 +95,47 @@ class SpecGridWidget extends StatelessWidget {
         mainAxisSpacing: mainAxisSpacing,
         childAspectRatio: childAspectRatio,
       ),
-      itemCount: items.length,
+      itemCount: filteredItems.length, // 🌟 القائمة المفلترة
       itemBuilder: (context, index) {
-        final item = items[index];
+        final item = filteredItems[index]; // 🌟 جلب العنصر من المفلترة
 
         return Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap != null
                 ? () {
-                    onTap!(item);
-                  }
+              onTap!(item);
+            }
                 : () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.docHos,
-                      arguments: {
-                        'spId': item.id,
-
-                      },
-                    );
-                    BlocProvider.of<SeniorProfBloc>(context)
-                        .add(DocHosEvent(UserInfo.repId,spId:item.id,
-                        cityId: BlocProvider.of<AllCityBloc>(context).selectedCityId));
-                  },
-            borderRadius: BorderRadius.circular(
-              cardRadius,
-            ),
+              Navigator.pushNamed(
+                context,
+                Routes.docHos,
+                arguments: {
+                  'spId': item.id,
+                },
+              );
+              BlocProvider.of<SeniorProfBloc>(context).add(
+                DocHosEvent(
+                  UserInfo.repId,
+                  spId: item.id,
+                  cityId: BlocProvider.of<AllCityBloc>(context).selectedCityId,
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(cardRadius),
             child: Container(
-              padding: EdgeInsets.all(
-                cardPadding,
-              ),
+              padding: EdgeInsets.all(cardPadding),
               decoration: BoxDecoration(
                 color: ColorManager.white,
-                borderRadius: BorderRadius.circular(
-                  cardRadius,
-                ),
+                borderRadius: BorderRadius.circular(cardRadius),
                 border: Border.all(
-                  color: ColorManager.inputBorder.withOpacity(
-                    0.45,
-                  ),
+                  color: ColorManager.inputBorder.withOpacity(0.45),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(
-                      0.025,
-                    ),
+                    color: Colors.black.withOpacity(0.025),
                     blurRadius: 10,
-                    offset: const Offset(
-                      0,
-                      4,
-                    ),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -183,37 +143,24 @@ class SpecGridWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // =============================================
-                  // Icon
-                  // =============================================
                   Container(
                     width: iconContainerSize,
                     height: iconContainerSize,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: ColorManager.medicalSecondary.withOpacity(
-                        0.08,
-                      ),
+                      color: ColorManager.medicalSecondary.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(
                         iconContainerSize * 0.30,
                       ),
                     ),
                     child: Image.asset(
-                      ImageAssetsSpec().getImage(
-                        item.id,
-                      ),
+                      ImageAssetsSpec().getImage(item.id),
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.contain,
-                      color: ColorManager.medicalSecondary.withOpacity(
-                        0.85,
-                      ),
+                      color: ColorManager.medicalSecondary.withOpacity(0.85),
                       colorBlendMode: BlendMode.modulate,
-                      errorBuilder: (
-                        context,
-                        error,
-                        stackTrace,
-                      ) {
+                      errorBuilder: (context, error, stackTrace) {
                         return Icon(
                           Icons.medical_services_outlined,
                           color: ColorManager.medicalSecondary,
@@ -222,14 +169,7 @@ class SpecGridWidget extends StatelessWidget {
                       },
                     ),
                   ),
-
-                  SizedBox(
-                    height: iconSpacing,
-                  ),
-
-                  // =============================================
-                  // Specialization Name
-                  // =============================================
+                  SizedBox(height: iconSpacing),
                   Text(
                     item.title,
                     textAlign: TextAlign.center,
@@ -242,23 +182,15 @@ class SpecGridWidget extends StatelessWidget {
                       height: 1.25,
                     ),
                   ),
-
-                  // =============================================
-                  // Statistics
-                  // =============================================
                   if (item.sumDoctor != 0 || item.sumHospital != 0) ...[
-                    SizedBox(
-                      height: statSpacing + 2,
-                    ),
+                    SizedBox(height: statSpacing + 2),
                     if (item.sumDoctor != 0)
                       _buildStatText(
                         text: "زيارات الأطباء: ${item.sumDoctor}",
                         fontSize: statFontSize,
                       ),
                     if (item.sumDoctor != 0 && item.sumHospital != 0)
-                      SizedBox(
-                        height: statSpacing,
-                      ),
+                      SizedBox(height: statSpacing),
                     if (item.sumHospital != 0)
                       _buildStatText(
                         text: "زيارات المشافي: ${item.sumHospital}",
@@ -273,7 +205,6 @@ class SpecGridWidget extends StatelessWidget {
       },
     );
   }
-
   // =====================================================
   // Statistics Text
   // =====================================================
