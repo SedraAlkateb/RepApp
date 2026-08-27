@@ -4,7 +4,7 @@ import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
-import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctors_bloc.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/hospital_details.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';

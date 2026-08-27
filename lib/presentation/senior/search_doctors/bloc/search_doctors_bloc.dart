@@ -53,8 +53,6 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
         (await docDoctorsUseCase.execute(event.docId)).fold((failure) {
           emit(FutureDocDoctorsErrorState(failure: failure));
         }, (data) async {
-          emit(FutureDocDoctorsState(data));
-
           if (data.isEmpty) {
             emit(FutureDocDoctorsEmptyState());
           } else {
@@ -123,6 +121,9 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
           if (normalizeText(value.note).contains(search)) {
             return true;
           }
+          if (normalizeText(value.target).contains(search)) {
+            return true;
+          }
           if (normalizeText(value.repName).contains(search)) {
             return true;
           }
@@ -137,6 +138,9 @@ class SearchDoctorsBloc extends Bloc<SearchDoctorsEvent, SearchDoctorsState> {
             return true;
           }
           if (normalizeText(value.issue).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.target).contains(search)) {
             return true;
           }
           if (normalizeText(value.name).contains(search)) {

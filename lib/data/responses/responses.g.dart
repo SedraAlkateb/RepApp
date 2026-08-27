@@ -1078,6 +1078,7 @@ DocDoctorsJsonResponse _$DocDoctorsJsonResponseFromJson(
       json['visitDate'] as String?,
       json['issue'] as String?,
       json['note'] as String?,
+      json['target'] as String?,
     );
 
 Map<String, dynamic> _$DocDoctorsJsonResponseToJson(
@@ -1087,6 +1088,7 @@ Map<String, dynamic> _$DocDoctorsJsonResponseToJson(
       'visitDate': instance.visitDate,
       'issue': instance.issue,
       'note': instance.note,
+      'target': instance.target,
     };
 
 ReciResponse _$ReciResponseFromJson(Map<String, dynamic> json) => ReciResponse(
@@ -1851,7 +1853,7 @@ SearchHospitalNoteResponse _$SearchHospitalNoteResponseFromJson(
       json['note'] as String?,
       json['issue'] as String?,
       json['visitDate'] as String?,
-    );
+    )..target = json['target'] as String?;
 
 Map<String, dynamic> _$SearchHospitalNoteResponseToJson(
         SearchHospitalNoteResponse instance) =>
@@ -1862,6 +1864,7 @@ Map<String, dynamic> _$SearchHospitalNoteResponseToJson(
       'note': instance.note,
       'issue': instance.issue,
       'visitDate': instance.visitDate,
+      'target': instance.target,
     };
 
 SeniorByCityidBaseResponse _$SeniorByCityidBaseResponseFromJson(

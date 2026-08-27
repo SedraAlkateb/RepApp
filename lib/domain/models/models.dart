@@ -2223,8 +2223,9 @@ class DocdoctorsModel {
   String visitDate;
   String issue;
   String note;
+  String target;
 
-  DocdoctorsModel(this.repName, this.visitDate, this.issue, this.note);
+  DocdoctorsModel(this.repName, this.visitDate, this.issue, this.note,this.target);
 }
 
 class BrandAmountModel {
@@ -2371,9 +2372,9 @@ class SearchHospitalNoteModel {
   String note;
   String issue;
   String visitDate;
-
+  String target;
   SearchHospitalNoteModel(
-      this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);
+      this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate,this.target);
 }
 
 List<FlagModel> getAllFlags(int repType) {

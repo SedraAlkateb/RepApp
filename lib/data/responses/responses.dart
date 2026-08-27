@@ -1022,8 +1022,10 @@ class DocDoctorsJsonResponse {
   String? issue;
   @JsonKey(name: "note")
   String? note;
+  @JsonKey(name: "target")
+  String? target;
 
-  DocDoctorsJsonResponse(this.repName, this.visitDate, this.issue, this.note);
+  DocDoctorsJsonResponse(this.repName, this.visitDate, this.issue, this.note,this.target);
   // from json
   factory DocDoctorsJsonResponse.fromJson(Map<String, dynamic> json) =>
       _$DocDoctorsJsonResponseFromJson(json);
@@ -1726,6 +1728,8 @@ class SearchHospitalNoteResponse {
   String? issue;
   @JsonKey(name: "visitDate")
   String? visitDate;
+  @JsonKey(name: "target")
+  String? target;
 
   SearchHospitalNoteResponse(
       this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate);

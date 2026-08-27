@@ -353,7 +353,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                       onTap: () {
                                         Navigator.pushNamed(
                                           context,
-                                          Routes.cityPlan,
+                                          Routes.finishedPlan,
+
                                         );
                                       },
                                     ),

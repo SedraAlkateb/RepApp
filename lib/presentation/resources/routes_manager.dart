@@ -356,6 +356,7 @@ class RouteGenerator {
 
         return _animatedRoute(PlaceVisitArchivePage(placeId: args));
       case Routes.teamLeader:
+        initGeneralReportsModule();
         return _animatedRoute(TeamLeader());
       case Routes.allCitySeniors:
         iniAllCityModule();
@@ -365,9 +366,7 @@ class RouteGenerator {
         return _animatedRoute(AllCityForRepSuper());
       case Routes.finishedPlan:
         initFinishedPlan();
-        final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
-
-        return _animatedRoute(FinishedPlanPage(cityId: args));
+        return _animatedRoute(FinishedPlanPage());
       case Routes.planReps:
         return _animatedRoute(PlanRepsPage());
       case Routes.createCurrentPlan:

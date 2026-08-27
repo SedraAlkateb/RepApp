@@ -430,7 +430,7 @@ class _AllCityState extends State<AllCityPlan> {
           Navigator.pushNamed(
             context,
             Routes.finishedPlan,
-            arguments: city.id,
+
           );
         },
 

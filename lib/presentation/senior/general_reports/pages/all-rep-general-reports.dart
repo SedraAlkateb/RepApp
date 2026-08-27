@@ -199,8 +199,8 @@ class _AllRepSeniorGenerlReportsState
       appBar: AppBar(
         title: Text(
           widget.seniorName!=null?
-              "تقارير مندوبين ${widget.seniorName}":
-          'تقارير المندوبين (${widget.cityname})',
+              "تقارير مندوبين ${widget.seniorName} ":
+          ' تقارير المندوبين ( ${widget.cityname} ) ',
         ),
       ),
 

@@ -733,7 +733,7 @@ class ReportInventory extends StatelessWidget {
       appBar: AppBar(
         title:
         const Text(
-          'تقرير توزيع العينات (الجرد)',
+          'تقرير توزيع العينات ( الجرد )',
         ),
       ),
 

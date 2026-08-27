@@ -909,6 +909,7 @@ extension DocDoctorsMapper on DocDoctorsJsonResponse? {
       this?.visitDate ?? Constants.empty,
       this?.issue ?? Constants.empty,
       this?.note ?? Constants.empty,
+      this?.target ?? Constants.empty,
     );
   }
 }
@@ -1053,6 +1054,8 @@ extension SearchHospitalNoteMapper on SearchHospitalNoteResponse? {
       this?.note ?? Constants.empty,
       this?.issue ?? Constants.empty,
       this?.visitDate ?? Constants.empty,
+      this?.target ?? Constants.empty,
+
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
-import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/senior/places/widget/rep_card_widget.dart';
 import 'package:domina_app/presentation/senior/representative/page/rep_profile.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -199,7 +199,7 @@ class _AllRepSeniorState
                 .selectedCityName
                 .isEmpty
                 ? 'تقارير المندوبين'
-                : 'تقارير المندوبين (${cityBloc.selectedCityName})',
+                : ' تقارير المندوبين (${cityBloc.selectedCityName} )',
 
             maxLines:
             1,

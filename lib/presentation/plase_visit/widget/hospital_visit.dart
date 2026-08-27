@@ -352,7 +352,7 @@ class _HospitalVisitCard extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: ' / ${hospital.visit ?? 0}',
+                        text: ' / ${hospital.visit}',
                         style: TextStyle(
                           fontSize: ui.bodyTextSize,
                           fontWeight: FontWeight.w600,

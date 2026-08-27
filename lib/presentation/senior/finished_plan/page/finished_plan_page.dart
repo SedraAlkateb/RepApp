@@ -1,34 +1,72 @@
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/finished_plan/bloc/finished_plan_bloc.dart';
 import 'package:domina_app/presentation/senior/finished_plan/widgets/date_plan_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FinishedPlanPage extends StatefulWidget {
   const FinishedPlanPage({
     super.key,
-    required this.cityId,
   });
-
-  final int cityId;
 
   @override
   State<FinishedPlanPage> createState() =>
       _FinishedPlanPageState();
 }
 
-class _FinishedPlanPageState
-    extends State<FinishedPlanPage> {
+class _FinishedPlanPageState extends State<FinishedPlanPage> {
+  int? _lastLoadedCityId;
+
   @override
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+        _loadSelectedCity();
+      },
+    );
+  }
+
+  // ===========================================================
+  // Load Current City
+  // ===========================================================
+
+  void _loadSelectedCity({
+    bool force = false,
+  }) {
+    if (!mounted) {
+      return;
+    }
+
+    final cityBloc =
+    context.read<AllCityBloc>();
+
+    final int? cityId =
+        cityBloc.selectedCityId;
+
+    if (cityId == null ||
+        cityId < 0) {
+      return;
+    }
+
+    if (!force &&
+        _lastLoadedCityId == cityId) {
+      return;
+    }
+
+    _lastLoadedCityId = cityId;
+    // =========================================================
+    // تحميل السينيور حسب المحافظة المختارة
+    // =========================================================
     context
         .read<FinishedPlanBloc>()
         .add(
       GetFinishedPlansEvent(
-        cityId: widget.cityId,
+        cityId: cityId,
       ),
     );
   }
@@ -37,7 +75,6 @@ class _FinishedPlanPageState
   Widget build(BuildContext context) {
     final deviceType =
     AppResponsive.deviceType(context);
-
     double pageMaxWidth;
 
     double horizontalPadding;
@@ -107,175 +144,188 @@ class _FinishedPlanPageState
         break;
     }
 
-    return Scaffold(
-      backgroundColor:
-      const Color(
-        0xFFF8FAFC,
-      ),
+    return BlocListener<
+        AllCityBloc,
+        AllCityState>(
+      listener: (
+          context,
+          state,
+          ) {
+        // =====================================================
+        // أول تحميل للمحافظات
+        // أو تغيير المحافظة من الفلتر
+        // =====================================================
+        if (state is GetAllCityState) {
+          _loadSelectedCity();
+        }
+      },
 
-      appBar: AppBar(
-        elevation: 0,
-
-        scrolledUnderElevation:
-        0,
-
-        surfaceTintColor:
-        Colors.transparent,
-
-        title:
-        const Text(
-          "سجل الخطط",
+      child: Scaffold(
+        backgroundColor:
+        const Color(
+          0xFFF8FAFC,
         ),
-      ),
 
-      body: Center(
-        child: ConstrainedBox(
-          constraints:
-          BoxConstraints(
-            maxWidth:
-            pageMaxWidth,
+        appBar: AppBar(
+          elevation: 0,
+
+          scrolledUnderElevation:
+          0,
+
+          surfaceTintColor:
+          Colors.transparent,
+
+          title:
+          const Text(
+            "سجل الخطط",
           ),
+        ),
 
-          child:
-          CustomScrollView(
-            physics:
-            const BouncingScrollPhysics(),
+        body: Center(
+          child: ConstrainedBox(
+            constraints:
+            BoxConstraints(
+              maxWidth:
+              pageMaxWidth,
+            ),
 
-            slivers: [
-              // =================================================
-              // Header
-              // =================================================
-              SliverPadding(
-                padding:
-                EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  headerTopPadding,
-                  horizontalPadding,
-                  headerBottomPadding,
-                ),
+            child:
+            CustomScrollView(
+              physics:
+              const BouncingScrollPhysics(),
 
-                sliver:
-                SliverToBoxAdapter(
-                  child:
-                  _buildHeader(
-                    titleFontSize:
-                    titleFontSize,
+              slivers: [
+                // =================================================
+                // Header
+                // =================================================
+                SliverPadding(
+                  padding:
+                  EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    headerTopPadding,
+                    horizontalPadding,
+                    headerBottomPadding,
+                  ),
 
-                    subtitleFontSize:
-                    subtitleFontSize,
+                  sliver:
+                  SliverToBoxAdapter(
+                    child:
+                    _buildHeader(
+                      titleFontSize:
+                      titleFontSize,
+
+                      subtitleFontSize:
+                      subtitleFontSize,
+                    ),
                   ),
                 ),
-              ),
 
-              // =================================================
-              // Bloc
-              // =================================================
-              BlocBuilder<
-                  FinishedPlanBloc,
-                  FinishedPlanState>(
-                buildWhen:
-                    (
-                    previous,
-                    current,
-                    ) {
-                  return current
-                  is FinishedPlanLoading ||
-                      current
-                      is FinishedPlanLoaded ||
-                      current
-                      is FinishedPlanError;
-                },
+                // =================================================
+                // Bloc
+                // =================================================
+                BlocBuilder<
+                    FinishedPlanBloc,
+                    FinishedPlanState>(
+                  buildWhen:
+                      (previous,
+                      current,) {
+                    return current
+                    is FinishedPlanLoading ||
+                        current
+                        is FinishedPlanLoaded ||
+                        current
+                        is FinishedPlanError;
+                  },
 
-                builder:
-                    (context, state) {
-                  // ===============================================
-                  // Loading
-                  // ===============================================
-                  if (state
-                  is FinishedPlanLoading) {
-                    return const SliverFillRemaining(
-                      hasScrollBody:
-                      false,
+                  builder:
+                      (context, state) {
+                    // ===============================================
+                    // Loading
+                    // ===============================================
+                    if (state
+                    is FinishedPlanLoading) {
+                      return const SliverFillRemaining(
+                        hasScrollBody:
+                        false,
 
-                      child:
-                      Center(
                         child:
-                        CircularProgressIndicator(),
-                      ),
-                    );
-                  }
+                        Center(
+                          child:
+                          CircularProgressIndicator(),
+                        ),
+                      );
+                    }
 
-                  // ===============================================
-                  // Loaded
-                  // ===============================================
-                  if (state
-                  is FinishedPlanLoaded) {
-                    if (state.plans.isEmpty) {
+                    // ===============================================
+                    // Loaded
+                    // ===============================================
+                    if (state
+                    is FinishedPlanLoaded) {
+                      if (state.plans.isEmpty) {
+                        return SliverFillRemaining(
+                          hasScrollBody:
+                          false,
+
+                          child:
+                          _buildEmptyState(
+                            context,
+                          ),
+                        );
+                      }
+
+                      return SliverPadding(
+                        padding:
+                        EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          listTopPadding,
+                          horizontalPadding,
+                          listBottomPadding,
+                        ),
+
+                        sliver:
+                        SliverList(
+                          delegate:
+                          SliverChildBuilderDelegate(
+                                (context,
+                                index,) {
+                              return PlanCard(
+                                plan:
+                                state.plans[index],
+                              );
+                            },
+
+                            childCount:
+                            state.plans.length,
+                          ),
+                        ),
+                      );
+                    }
+
+                    // ===============================================
+                    // Error
+                    // ===============================================
+                    if (state
+                    is FinishedPlanError) {
                       return SliverFillRemaining(
                         hasScrollBody:
                         false,
 
                         child:
-                        _buildEmptyState(
+                        _buildErrorState(
                           context,
+                          state.message,
                         ),
                       );
                     }
 
-                    return SliverPadding(
-                      padding:
-                      EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        listTopPadding,
-                        horizontalPadding,
-                        listBottomPadding,
-                      ),
-
-                      sliver:
-                      SliverList(
-                        delegate:
-                        SliverChildBuilderDelegate(
-                              (
-                              context,
-                              index,
-                              ) {
-                            return PlanCard(
-                              plan:
-                              state.plans[index],
-                            );
-                          },
-
-                          childCount:
-                          state.plans.length,
-                        ),
-                      ),
-                    );
-                  }
-
-                  // ===============================================
-                  // Error
-                  // ===============================================
-                  if (state
-                  is FinishedPlanError) {
-                    return SliverFillRemaining(
-                      hasScrollBody:
-                      false,
-
+                    return const SliverToBoxAdapter(
                       child:
-                      _buildErrorState(
-                        context,
-                        state.message,
-                      ),
+                      SizedBox.shrink(),
                     );
-                  }
-
-                  return const SliverToBoxAdapter(
-                    child:
-                    SizedBox.shrink(),
-                  );
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -361,22 +411,7 @@ class _FinishedPlanPageState
           width: 16,
         ),
 
-        Container(
-          height: 5,
-          width: 44,
-
-          decoration:
-          BoxDecoration(
-            color:
-            ColorManager
-                .medicalPrimary,
-
-            borderRadius:
-            BorderRadius.circular(
-              10,
-            ),
-          ),
-        ),
+        CityFilterWidget()
       ],
     );
   }
@@ -385,9 +420,7 @@ class _FinishedPlanPageState
   // Empty State
   // =====================================================
 
-  Widget _buildEmptyState(
-      BuildContext context,
-      ) {
+  Widget _buildEmptyState(BuildContext context,) {
     final deviceType =
     AppResponsive.deviceType(context);
 
@@ -516,10 +549,8 @@ class _FinishedPlanPageState
   // Error State
   // =====================================================
 
-  Widget _buildErrorState(
-      BuildContext context,
-      String message,
-      ) {
+  Widget _buildErrorState(BuildContext context,
+      String message,) {
     return Center(
       child: Padding(
         padding:

@@ -5,7 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
-import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/senior/places/widget/doc_hos_tab_bar_widget.dart';
 import 'package:domina_app/presentation/senior/places/widget/header_sen_doc_hos.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';

@@ -11,7 +11,7 @@ import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_p
 import 'package:domina_app/presentation/senior/edit_brand_plan/page/auditing_plan.dart';
 import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_bloc.dart';
 import 'package:domina_app/presentation/senior/manage_future/widget/drop_down_change_plan.dart';
-import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -209,34 +209,11 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
         );
   }
 
-  // ===========================================================
-  // Refresh
-  // ===========================================================
-
-  void _onRefresh() {
-    _loadSelectedCity(
-      force: true,
-    );
-
-    _refreshController.refreshCompleted();
-  }
-
-  // ===========================================================
-  // Dispose
-  // ===========================================================
-
-  // ===========================================================
-  // Build
-  // ===========================================================
-
   @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
     final cityBloc = context.watch<AllCityBloc>();
-
-    final cityState = cityBloc.state;
-
     return Scaffold(
       backgroundColor: const Color(
         0xFFF8FAFC,

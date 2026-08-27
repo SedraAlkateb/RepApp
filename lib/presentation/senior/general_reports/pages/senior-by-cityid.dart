@@ -8,7 +8,7 @@ import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.
 import 'package:domina_app/presentation/senior/general_reports/bloc/bloc/general_reports_bloc.dart';
 import 'package:domina_app/presentation/senior/general_reports/pages/all-rep-general-reports.dart';
 import 'package:domina_app/presentation/senior/places/bloc/senior_reps_bloc.dart';
-import 'package:domina_app/presentation/senior/places/widget/city_filter_widget.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -205,7 +205,7 @@ class _SeniorByCityIdState
                 .selectedCityName
                 .isEmpty
                 ? 'السينيور'
-                : 'السينيور (${cityBloc.selectedCityName})',
+                : 'السينيور ( ${cityBloc.selectedCityName} ) ',
 
             maxLines: 1,
 

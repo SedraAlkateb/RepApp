@@ -216,6 +216,10 @@ class _DoctorDetailsState
                               note:
                               report.note
                                   .toString(),
+                              issues: report.issue
+                                  .toString(),
+                              target: report.target
+                                  .toString(),
                             ),
                           ),
                         );
@@ -974,232 +978,107 @@ class _DoctorDetailsState
         required String repName,
         required String visitDate,
         required String note,
+        required String issues,
+        required String target,
       }) {
     final ui = AppUi.of(context);
 
+    // التحقق من وجود القيم أو إظهار النص الافتراضي
     final String displayedNote =
-    note.isNotEmpty
-        ? note
-        : "لا توجد ملاحظات مسجلة.";
+    note.trim().isNotEmpty ? note : "لا توجد ملاحظات مسجلة.";
+    final String displayedIssues =
+    issues.trim().isNotEmpty ? issues : "لا توجد ملاحظات صيدلية مجاورة.";
+    final String displayedTarget =
+    target.trim().isNotEmpty ? target : "لا يوجد هدف محدد للزيارة.";
 
     return Padding(
-      padding:
-      EdgeInsets.only(
-        bottom:
-        ui.cardSpacing,
+      padding: EdgeInsets.only(
+        bottom: ui.cardSpacing,
       ),
-
       child: Container(
-        width:
-        double.infinity,
-
-        decoration:
-        BoxDecoration(
-          color:
-          Colors.white,
-
-          borderRadius:
-          BorderRadius.circular(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(
             ui.cardRadius,
           ),
-
-          border:
-          Border.all(
-            color:
-            const Color(
+          border: Border.all(
+            color: const Color(
               0xFFE2E8F0,
             ),
           ),
-
           boxShadow: [
             BoxShadow(
-              color:
-              Colors.black
-                  .withOpacity(
+              color: Colors.black.withOpacity(
                 0.025,
               ),
-
-              blurRadius:
-              12,
-
-              offset:
-              const Offset(
+              blurRadius: 12,
+              offset: const Offset(
                 0,
                 4,
               ),
             ),
           ],
         ),
-
         child: Padding(
-          padding:
-          EdgeInsets.all(
+          padding: EdgeInsets.all(
             ui.cardPadding,
           ),
-
           child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment
-                .stretch,
-
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // =================================================
               // Representative + Date
               // =================================================
               _buildReportMeta(
                 context,
-
-                repName:
-                repName,
-
-                visitDate:
-                visitDate,
+                repName: repName,
+                visitDate: visitDate,
               ),
 
               SizedBox(
-                height:
-                ui.sectionSpacing,
+                height: ui.sectionSpacing,
               ),
 
               // =================================================
-              // Note
+              // Target (الهدف من الزيارة)
               // =================================================
-              Container(
-                width:
-                double.infinity,
+              _buildNoteBlock(
+                context,
+                title: "الهدف من الزيارة",
+                content: displayedTarget,
+                icon: Icons.track_changes_outlined,
+                iconColor: ColorManager.secondaryColor1,
+              ),
 
-                padding:
-                EdgeInsets.all(
-                  ui.cardPadding -
-                      3,
-                ),
+              SizedBox(
+                height: ui.mediumSpacing,
+              ),
 
-                decoration:
-                BoxDecoration(
-                  color:
-                  const Color(
-                    0xFFF8FAFC,
-                  ),
+              // =================================================
+              // Scientific Note (ملاحظات المكتب العلمي)
+              // =================================================
+              _buildNoteBlock(
+                context,
+                title: "ملاحظات المكتب العلمي",
+                content: displayedNote,
+                icon: Icons.rate_review_outlined,
+                iconColor: ColorManager.secondaryColor1,
+              ),
 
-                  borderRadius:
-                  BorderRadius.circular(
-                    ui.smallRadius +
-                        2,
-                  ),
+              SizedBox(
+                height: ui.mediumSpacing,
+              ),
 
-                  border:
-                  Border.all(
-                    color:
-                    const Color(
-                      0xFFF1F5F9,
-                    ),
-                  ),
-                ),
-
-                child:
-                Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
-
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width:
-                          ui.smallIconSize +
-                              14,
-
-                          height:
-                          ui.smallIconSize +
-                              14,
-
-                          alignment:
-                          Alignment.center,
-
-                          decoration:
-                          BoxDecoration(
-                            color:
-                            ColorManager
-                                .secondaryColor1
-                                .withOpacity(
-                              0.07,
-                            ),
-
-                            borderRadius:
-                            BorderRadius.circular(
-                              ui.smallRadius,
-                            ),
-                          ),
-
-                          child:
-                          Icon(
-                            Icons
-                                .rate_review_outlined,
-
-                            color:
-                            ColorManager
-                                .secondaryColor1,
-
-                            size:
-                            ui.smallIconSize,
-                          ),
-                        ),
-
-                        SizedBox(
-                          width:
-                          ui.mediumSpacing,
-                        ),
-
-                        Expanded(
-                          child:
-                          Text(
-                            "ملاحظات المكتب العلمي",
-
-                            style:
-                            TextStyle(
-                              fontSize:
-                              ui.bodyTextSize,
-
-                              fontWeight:
-                              FontWeight.w700,
-
-                              color:
-                              ColorManager
-                                  .secondaryColor1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height:
-                      ui.mediumSpacing,
-                    ),
-
-                    Text(
-                      displayedNote,
-
-                      style:
-                      TextStyle(
-                        fontSize:
-                        ui.bodyTextSize,
-
-                        color:
-                        const Color(
-                          0xFF475569,
-                        ),
-
-                        fontWeight:
-                        FontWeight.w500,
-
-                        height:
-                        1.5,
-                      ),
-                    ),
-                  ],
-                ),
+              // =================================================
+              // Nearby Pharmacy Issues (ملاحظات صيدلية مجاورة)
+              // =================================================
+              _buildNoteBlock(
+                context,
+                title: "ملاحظات صيدلية مجاورة",
+                content: displayedIssues,
+                icon: Icons.local_pharmacy_outlined,
+                iconColor: ColorManager.secondaryColor1,
               ),
             ],
           ),
@@ -1207,7 +1086,89 @@ class _DoctorDetailsState
       ),
     );
   }
+  Widget _buildNoteBlock(
+      BuildContext context, {
+        required String title,
+        required String content,
+        required IconData icon,
+        required Color iconColor,
+      }) {
+    final ui = AppUi.of(context);
 
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(
+        ui.cardPadding - 3,
+      ),
+      decoration: BoxDecoration(
+        color: const Color(
+          0xFFF8FAFC,
+        ),
+        borderRadius: BorderRadius.circular(
+          ui.smallRadius + 2,
+        ),
+        border: Border.all(
+          color: const Color(
+            0xFFF1F5F9,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: ui.smallIconSize + 14,
+                height: ui.smallIconSize + 14,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(
+                    0.08,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    ui.smallRadius,
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: ui.smallIconSize,
+                ),
+              ),
+              SizedBox(
+                width: ui.mediumSpacing,
+              ),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: ui.bodyTextSize,
+                    fontWeight: FontWeight.w700,
+                    color: iconColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: ui.mediumSpacing,
+          ),
+          Text(
+            content,
+            style: TextStyle(
+              fontSize: ui.bodyTextSize,
+              color: const Color(
+                0xFF475569,
+              ),
+              fontWeight: FontWeight.w500,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   // =======================================================
   // Report Metadata
   // =======================================================
