@@ -544,6 +544,7 @@ class _PlaceSeniorState
                         // =========================================
                         // Total Visits
                         // =========================================
+                        widget.isPr==true?SizedBox():
                         Container(
                           padding:
                           EdgeInsets.symmetric(
@@ -596,7 +597,6 @@ class _PlaceSeniorState
                                 width:
                                 ui.smallSpacing,
                               ),
-
                               Flexible(
                                 child: Text(
                                   'عدد الزيارات: $totalVisits',

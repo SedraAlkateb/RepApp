@@ -13,13 +13,14 @@ class BrandContent extends StatelessWidget {
     required this.horizontalPadding,
     required this.topSpacing,
     required this.sectionSpacing,
+    this.onTap,
   });
-
   final TextEditingController searchController;
 
   final double horizontalPadding;
   final double topSpacing;
   final double sectionSpacing;
+  final void Function(dynamic brand)? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +73,14 @@ class BrandContent extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is AllBrandState) {
-                  final List<BrandModel> brandModel =
-                      state.brand;
+                  final List<BrandModel> brandModel = state.brand;
 
                   return BrandListWidget(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     brands: brandModel,
                     shrinkWrap: true,
+                    onTap: onTap, // تمرير دالة الضغط
+                    isPr: true,
                   );
                 }
 

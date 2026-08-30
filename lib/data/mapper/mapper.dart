@@ -227,6 +227,9 @@ extension BrandResponseMapper on BrandResponse? {
       this?.phTitle ?? Constants.empty,
       this?.falg ?? Constants.zero,
       int.parse(this?.sampleCoast ?? "0"),
+      this?.features ?? Constants.empty,
+      this?.generalCoast ?? Constants.empty,
+      this?.phCoast ?? Constants.empty
     );
   }
 }
@@ -297,8 +300,8 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.totalReci ?? Constants.zero,
       this?.data?.usedReci ?? Constants.zero,
       this?.data?.remainReci ?? Constants.zero,
-     totDoc:  int.parse(this?.data?.totDoc??"0") ,
-    totHos:  int.parse(this?.data?.totHos??"0"),
+      totDoc: int.parse(this?.data?.totDoc ?? "0"),
+      totHos: int.parse(this?.data?.totHos ?? "0"),
     );
   }
 }
@@ -446,7 +449,7 @@ extension HospitalMapper on HospitalSpAllModel? {
 extension HospitalSpMapper on HospitalSpModel? {
   HospitalSpAllModel toDomain() {
     return HospitalSpAllModel(
-   id:  this?.id ?? Constants.zero,
+      id: this?.id ?? Constants.zero,
       this?.hospitalId ?? Constants.zero,
       this?.title ?? Constants.empty,
       this?.address ?? Constants.empty,
@@ -1055,7 +1058,6 @@ extension SearchHospitalNoteMapper on SearchHospitalNoteResponse? {
       this?.issue ?? Constants.empty,
       this?.visitDate ?? Constants.empty,
       this?.target ?? Constants.empty,
-
     );
   }
 }

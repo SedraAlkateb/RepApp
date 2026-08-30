@@ -589,8 +589,8 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                 statusColor: getColor(
                   rep.flag.flag,
                 ),
-                onChanged: rep.flag.flag != 4
-                    ? (x) {
+                onChanged:
+                     (x) {
                         final FlagModel xx = x as FlagModel;
 
                         // =========================================
@@ -607,7 +607,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                           ),
                         );
                       }
-                    : null,
+                   ,
                 errorText: "",
               ),
 

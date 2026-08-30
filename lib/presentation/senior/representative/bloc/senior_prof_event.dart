@@ -25,9 +25,10 @@ class SenAllHospitalEvent extends SeniorProfEvent {
 
 class SenAllBrandEvent extends SeniorProfEvent {
   final int id;
+  final bool isPr;
   @override
-  SenAllBrandEvent(this.id);
-  List<Object?> get props => [id];
+  SenAllBrandEvent(this.id,this.isPr);
+  List<Object?> get props => [id,isPr];
 }
 
 class getInfoRepEvent extends SeniorProfEvent {

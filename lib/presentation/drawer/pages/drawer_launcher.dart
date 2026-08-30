@@ -306,8 +306,8 @@ class DrawerPage extends StatelessWidget {
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
                 context
                     .read<SeniorProfBloc>()
-                    .add(SenAllBrandEvent(UserInfo.activePlanId));
-                Navigator.pushNamed(context, Routes.allBrand);
+                    .add(SenAllBrandEvent(UserInfo.activePlanId,true));
+                Navigator.pushNamed(context, Routes.allBrand,arguments: true);
               })),
       DrawerMenuItem(
           icon: Icons.edit_note_sharp,
@@ -388,8 +388,8 @@ class DrawerPage extends StatelessWidget {
           onTap: () => WidgetsBinding.instance.addPostFrameCallback((_) {
                 context
                     .read<SeniorProfBloc>()
-                    .add(SenAllBrandEvent(UserInfo.activePlanId));
-                Navigator.pushNamed(context, Routes.allBrand);
+                    .add(SenAllBrandEvent(UserInfo.activePlanId,true));
+                Navigator.pushNamed(context, Routes.allBrand,arguments: true);
               })),
     ];
   }

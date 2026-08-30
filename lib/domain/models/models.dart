@@ -127,6 +127,12 @@ class BrandModel {
   String phTitle;
   int flag;
   int sampleCoast;
+  String features;
+  String generalCoast;
+  String phCoast;
+
+  BrandModel(this.id, this.title, this.phTitle, this.flag, this.sampleCoast,
+      this.features, this.generalCoast, this.phCoast);
 
   Map<String, dynamic> toMap() {
     return {
@@ -134,7 +140,10 @@ class BrandModel {
       'title': title,
       'phTitle': phTitle,
       'falg': flag,
-      'sampleCoast': sampleCoast
+      'sampleCoast': sampleCoast,
+      'features': features,
+      'generalCoast': generalCoast,
+      'phCoast': phCoast
     };
   }
 
@@ -145,10 +154,12 @@ class BrandModel {
       map['phTitle'],
       map['falg'],
       map['sampleCoast'],
+      map['features'],
+      map['generalCoast'],
+      map['phCoast'],
     );
   }
 
-  BrandModel(this.id, this.title, this.phTitle, this.flag, this.sampleCoast);
 }
 
 class OtherBrandModel {

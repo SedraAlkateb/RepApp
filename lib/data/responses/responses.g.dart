@@ -724,6 +724,9 @@ BrandResponse _$BrandResponseFromJson(Map<String, dynamic> json) =>
       json['phTitle'] as String?,
       (json['falg'] as num?)?.toInt(),
       json['sampleCoast'] as String?,
+      json['phCoast'] as String?,
+      json['generalCoast'] as String?,
+      json['features'] as String?,
     );
 
 Map<String, dynamic> _$BrandResponseToJson(BrandResponse instance) =>
@@ -733,6 +736,9 @@ Map<String, dynamic> _$BrandResponseToJson(BrandResponse instance) =>
       'phTitle': instance.phTitle,
       'falg': instance.falg,
       'sampleCoast': instance.sampleCoast,
+      'phCoast': instance.phCoast,
+      'generalCoast': instance.generalCoast,
+      'features': instance.features,
     };
 
 AllBrandResponse _$AllBrandResponseFromJson(Map<String, dynamic> json) =>

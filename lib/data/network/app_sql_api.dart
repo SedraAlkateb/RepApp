@@ -1292,6 +1292,9 @@ class AppSqlApi extends AppSqlApiAbs {
     brand.title AS brand_title,
     brand.phTitle AS brand_phTitle,
     brand.sampleCoast AS brand_sampleCost,
+    brand.features AS brand_features,
+    brand.generalCoast AS brand_generalCoast,
+    brand.phCoast AS brand_phCoast,
     specialization.id AS specialization_id,
     specialization.title AS specialization_title,
     specialization.flag AS specialization_flag,
@@ -1317,11 +1320,15 @@ class AppSqlApi extends AppSqlApiAbs {
       int brandId = row['brand_id'] as int;
       if (!brandMap.containsKey(brandId)) {
         BrandModel brandModel = BrandModel(
-            brandId,
-            row['brand_title'] as String,
-            row['brand_phTitle'] as String,
-            0,
-            row['brand_sampleCost']);
+          brandId,
+          row['brand_title'] as String,
+          row['brand_phTitle'] as String,
+          0,
+          row['brand_sampleCost'],
+          row['brand_features'],
+          row['brand_generalCoast'],
+          row['brand_phCoast'],
+        );
         brandMap[brandId] = BrandSpPlanModel(
           brandModel,
           [],

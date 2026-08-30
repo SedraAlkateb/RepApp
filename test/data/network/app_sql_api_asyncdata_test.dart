@@ -57,7 +57,7 @@ void main() {
     final specs = [SpecDModel(1, 'Spec 1', 1, 0, 0, 0)];
     final doctors = [DoctorModel(1, 'Doc 1', 1, 'addr', 'placeTitle', 5, '', '', 'spTitle', 1, 'workHours')];
     final hospitals = [HospitalModel(1, 'Hos 1', 1, 'address', 'note', 'placeTitle')];
-    final brands = [BrandModel(1, 'Brand 1', 'ph', 1, 10)];
+    final brands = [BrandModel(1, 'Brand 1', 'ph', 1, 10,"","","")];
     final hospitalSps = [HospitalSpModel(1, 1, 1, 10, 'rate', 2, 0)];
     final brandSps = [BrandSpModel(1, 1, 1, Type(0, "لا شيء"))];
 

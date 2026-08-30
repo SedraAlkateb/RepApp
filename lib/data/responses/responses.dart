@@ -668,7 +668,17 @@ class BrandResponse {
   int? falg;
   @JsonKey(name: "sampleCoast")
   String? sampleCoast;
-  BrandResponse(this.id, this.title, this.phTitle, this.falg, this.sampleCoast);
+  @JsonKey(name: "phCoast")
+  String? phCoast;
+  @JsonKey(name: "generalCoast")
+  String? generalCoast;
+  @JsonKey(name: "features")
+  String? features;
+  BrandResponse(this.id, this.title, this.phTitle, this.falg, this.sampleCoast
+
+      , this.phCoast, this.generalCoast, this.features
+
+      );
   // from json
   factory BrandResponse.fromJson(Map<String, dynamic> json) =>
       _$BrandResponseFromJson(json);

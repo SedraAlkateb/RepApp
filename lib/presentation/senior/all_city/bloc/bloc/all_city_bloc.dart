@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_city_usecase.dart';
+import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
 import 'package:equatable/equatable.dart';
 
 part 'all_city_event.dart';
@@ -11,6 +13,7 @@ class AllCityBloc
     extends Bloc<AllCityEvent, AllCityState> {
   AllCityBloc(
       this.allcityUsecase,
+      this.checkRepUsecase,
       ) : super(
      AllCityInitial(),
   ) {
@@ -21,7 +24,9 @@ class AllCityBloc
     on<GetAllCityEvent>(
       _getAllCities,
     );
-
+    on<CheckUserEvent>(
+        _checkUser
+    );
     // =========================================================
     // Select City
     // =========================================================
@@ -29,7 +34,7 @@ class AllCityBloc
       _selectCity,
     );
   }
-
+final  CheckRepUsecase checkRepUsecase;
   final AllCityUsecase allcityUsecase;
 
   // ===========================================================
@@ -88,6 +93,20 @@ class AllCityBloc
       },
     );
   }
+  Future<void> _checkUser(
+      CheckUserEvent event,
+      Emitter<AllCityState> emit,
+      ) async {
+    //   emit(CheckRepLoadingState());
+    (await checkRepUsecase.execute(UserInfo.repId)).fold((failure) {
+      emit(CheckUserErrorState(failure: failure));
+    }, (data) async {
+      emit(CheckUserState(data.accepted ?? true));
+    });
+  }
+
+
+
 
   // ===========================================================
   // Select City

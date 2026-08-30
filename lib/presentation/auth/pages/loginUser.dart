@@ -576,6 +576,7 @@ class _MyLoginState extends State<MyLogin> {
                 BlocProvider.of<AllCityBloc>(context).add(
                   GetAllCityEvent(),
                 );
+
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.adminControl,

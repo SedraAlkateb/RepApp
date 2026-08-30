@@ -145,7 +145,9 @@ class RouteGenerator {
         iniAllCityModule();
         return _animatedRoute(const MyLogin());
       case Routes.allBrand:
-        return _animatedRoute(AllBrand());
+        final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
+
+        return _animatedRoute(AllBrand(isPr:args ,));
       case Routes.docHos:
         final args = settings.arguments as Map<String, dynamic>;
 
@@ -223,6 +225,7 @@ class RouteGenerator {
 
       case Routes.brand:
         initBrandModule();
+
         return _animatedRoute(BrandPage());
 
       case Routes.pharmacy:

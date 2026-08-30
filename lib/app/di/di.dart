@@ -429,8 +429,10 @@ Future<void> initPlacesModule() async {
         () => NumVisitSqlUsecase(instance()));
     instance.registerFactory<NumDocHasSqlUsecase>(
         () => NumDocHasSqlUsecase(instance()));
-    instance
-        .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
+    if (!GetIt.I.isRegistered<CheckRepUsecase>()) {
+      instance.registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
+
+    }
     instance.registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance(),
         instance(), instance(), instance(), instance()));
   }
@@ -938,8 +940,12 @@ Future<void> iniAllCityModule() async {
     instance.registerFactory<AllCityUsecase>(() => AllCityUsecase(instance()));
 
   }
+  if (!GetIt.I.isRegistered<CheckRepUsecase>()) {
+    instance.registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
+
+  }
   if (!GetIt.I.isRegistered<AllCityBloc>()) {
-    instance.registerFactory<AllCityBloc>(() => AllCityBloc(instance()));
+    instance.registerFactory<AllCityBloc>(() => AllCityBloc(instance(),instance()));
 
   }
 }

@@ -88,9 +88,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ManageFutureBloc>(
             create: (_) => instance<ManageFutureBloc>()),
         BlocProvider<AllCityBloc>(
-          create: (_) => instance<AllCityBloc>() ..add(
-            const GetAllCityEvent(),
-          ),
+          create: (_) => instance<AllCityBloc>() 
+            ..add(const GetAllCityEvent(),)
+              ..add(CheckUserEvent())
         ),
         BlocProvider<GeneralReportsBloc>(
             create: (_) => instance<GeneralReportsBloc>()),

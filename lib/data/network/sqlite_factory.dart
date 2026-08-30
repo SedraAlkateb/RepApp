@@ -54,7 +54,7 @@ class DatabaseHelper implements DatabaseAccessor {
 
     return await openDatabase(
       path,
-      version: 6,
+      version: 7, // تم رفع الإصدار إلى 7
       password: encryptionKey,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
@@ -66,19 +66,27 @@ class DatabaseHelper implements DatabaseAccessor {
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 6) {
-      // 1. إضافة حقل totalVisit إلى جدول place
       await db.execute(
         'ALTER TABLE place ADD COLUMN totalVisit INTEGER NOT NULL DEFAULT 0;',
       );
-
-      // 2. إضافة حقل totalVisitDoc إلى جدول rep
       await db.execute(
         'ALTER TABLE rep ADD COLUMN totalVisitDoc INTEGER NOT NULL DEFAULT 0;',
       );
-
-      // 3. إضافة حقل totalVisitHos إلى جدول rep
       await db.execute(
         'ALTER TABLE rep ADD COLUMN totalVisitHos INTEGER NOT NULL DEFAULT 0;',
+      );
+    }
+
+    // الترقية إلى الإصدار 7 (إضافة حقول جدول brand)
+    if (oldVersion < 7) {
+      await db.execute(
+        'ALTER TABLE brand ADD COLUMN features TEXT;',
+      );
+      await db.execute(
+        'ALTER TABLE brand ADD COLUMN generalCoast TEXT;',
+      );
+      await db.execute(
+        'ALTER TABLE brand ADD COLUMN phCoast TEXT;',
       );
     }
   }
@@ -168,14 +176,17 @@ class DatabaseHelper implements DatabaseAccessor {
     );
     ''');
     await db.execute('''
-      CREATE TABLE brand (
+  CREATE TABLE brand (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
-     phTitle TEXT NOT NULL,
-     falg INTEGER NOT NULL,
-     sampleCoast INTEGER NOT NULL
-    );
-    ''');
+    phTitle TEXT NOT NULL,
+    falg INTEGER NOT NULL,
+    sampleCoast INTEGER NOT NULL,
+    features TEXT,
+    generalCoast TEXT,
+    phCoast TEXT
+  );
+''');
     await db.execute('''
         CREATE TABLE hospitalSp (
         id INTEGER PRIMARY KEY,

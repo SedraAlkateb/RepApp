@@ -1,7 +1,6 @@
 part of 'all_city_bloc.dart';
 
-sealed class AllCityState
-    extends Equatable {
+sealed class AllCityState extends Equatable {
   const AllCityState();
 
   @override
@@ -12,8 +11,7 @@ sealed class AllCityState
 // Initial
 // =============================================================
 
-final class AllCityInitial
-    extends AllCityState {
+final class AllCityInitial extends AllCityState {
   const AllCityInitial();
 }
 
@@ -21,8 +19,7 @@ final class AllCityInitial
 // Loading
 // =============================================================
 
-final class AllCityLoadingState
-    extends AllCityState {
+final class AllCityLoadingState extends AllCityState {
   const AllCityLoadingState();
 }
 
@@ -30,9 +27,46 @@ final class AllCityLoadingState
 // Error
 // =============================================================
 
-final class AllCityErrorState
-    extends AllCityState {
+final class AllCityErrorState extends AllCityState {
   const AllCityErrorState({
+    required this.failure,
+  });
+
+  final Failure failure;
+
+  @override
+  List<Object?> get props => [
+        failure,
+      ];
+}
+
+// =============================================================
+// Success
+// =============================================================
+
+final class GetAllCityState extends AllCityState {
+  const GetAllCityState({
+    required this.cities,
+    required this.selectedCity,
+  });
+
+  final List<CityModel> cities;
+
+  final CityModel? selectedCity;
+
+  @override
+  List<Object?> get props => [
+        cities,
+        selectedCity,
+      ];
+}
+
+// =============================================================
+// Error
+// =============================================================
+
+final class CheckUserErrorState extends AllCityState {
+  const CheckUserErrorState({
     required this.failure,
   });
 
@@ -48,20 +82,9 @@ final class AllCityErrorState
 // Success
 // =============================================================
 
-final class GetAllCityState
-    extends AllCityState {
-  const GetAllCityState({
-    required this.cities,
-    required this.selectedCity,
-  });
-
-  final List<CityModel> cities;
-
-  final CityModel? selectedCity;
-
+final class CheckUserState extends AllCityState {
+  final bool check;
+  CheckUserState(this.check);
   @override
-  List<Object?> get props => [
-    cities,
-    selectedCity,
-  ];
+  List<Object?> get props => [];
 }

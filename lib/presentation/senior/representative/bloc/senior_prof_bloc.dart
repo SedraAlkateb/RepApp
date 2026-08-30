@@ -232,8 +232,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         (await allBrandsUsecase.execute(event.id)).fold((failure) {
           emit(SenAllBrandErrorState(failure: failure));
         }, (data) async {
-          brand = data;
-          emit(SenAllBrandsState(data));
+
+          if(!event.isPr){
+            brand = data.where((item) => item.flag == 1).toList();
+          }else{
+            brand=data;
+          }
+
+          emit(SenAllBrandsState(brand));
         });
       } else if (event is getInfoRepEvent) {
         emit(RepInfoLoadingState());

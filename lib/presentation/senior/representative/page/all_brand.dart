@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
@@ -11,9 +12,142 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AllBrand extends StatelessWidget {
   AllBrand({
     super.key,
+    required this.isPr
   });
-
+final bool isPr;
   final TextEditingController searchDocController = TextEditingController();
+
+  // =========================================================
+  // دالة عرض BottomSheet لعرض التفاصيل الثلاثة للصنف
+  // =========================================================
+  void _showBrandDetailsSheet(BuildContext context, BrandModel brand) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.5,
+          minChildSize: 0.3,
+          maxChildSize: 0.85,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  // مؤشر السحب العلوي
+                  Center(
+                    child: Container(
+                      width: 45,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+
+                  // عنوان الصنف
+                  Text(
+                    brand.title ?? 'تفاصيل الصنف',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E293B),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 1. الميزات (features)
+                  _buildDetailTile(
+                    context: context,
+                    title: 'الميزات (Features)',
+                    value: brand.features,
+                    icon: Icons.featured_play_list_outlined,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 2. الكلفة العامة (generalCoast)
+                  _buildDetailTile(
+                    context: context,
+                    title: 'الكلفة العامة (General Coast)',
+                    value: brand.generalCoast,
+                    icon: Icons.monetization_on_outlined,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 3. كلفة الصيدلية (phCoast)
+                  _buildDetailTile(
+                    context: context,
+                    title: 'كلفة الصيدلية (Ph Coast)',
+                    value: brand.phCoast,
+                    icon: Icons.local_pharmacy_outlined,
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // ودجت بناء عنصر التفاصيل
+  Widget _buildDetailTile({
+    required BuildContext context,
+    required String title,
+    required String? value,
+    required IconData icon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Theme.of(context).primaryColor, size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  (value == null || value.trim().isEmpty) ? 'غير محدد' : value,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +168,9 @@ class AllBrand extends StatelessWidget {
     double stateTopSpacing;
 
     switch (deviceType) {
-      // =================================================
-      // Mobile
-      // =================================================
+    // =================================================
+    // Mobile
+    // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -52,9 +186,9 @@ class AllBrand extends StatelessWidget {
         stateTopSpacing = 70;
         break;
 
-      // =================================================
-      // Tablet Portrait
-      // =================================================
+    // =================================================
+    // Tablet Portrait
+    // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
 
@@ -71,9 +205,9 @@ class AllBrand extends StatelessWidget {
         stateTopSpacing = 90;
         break;
 
-      // =================================================
-      // Tablet Landscape
-      // =================================================
+    // =================================================
+    // Tablet Landscape
+    // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
 
@@ -83,7 +217,6 @@ class AllBrand extends StatelessWidget {
         searchBottomSpacing = 12;
 
         headerVerticalPadding = 14;
-
 
         listTopPadding = 6;
         listBottomPadding = 28;
@@ -122,10 +255,6 @@ class AllBrand extends StatelessWidget {
                   ),
                   child: SearchField(
                     searchController: searchDocController,
-
-                    // ===========================================
-                    // نفس سلوك البحث
-                    // ===========================================
                     onPressed: (value) {
                       BlocProvider.of<SeniorProfBloc>(
                         context,
@@ -148,34 +277,21 @@ class AllBrand extends StatelessWidget {
               // =================================================
               // Header + Count
               // =================================================
-              // =================================================
-// Header + Count
-// =================================================
               SliverToBoxAdapter(
                 child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
                   buildWhen: (previous, current) =>
-                      current is SenAllBrandsState ||
+                  current is SenAllBrandsState ||
                       current is SenAllBrandEmptyState ||
                       current is SenAllBrandLoadingState ||
                       current is SenAllBrandErrorState,
                   builder: (context, state) {
-                    // ===============================================
-                    // القائمة الأساسية
-                    // ===============================================
                     List<BrandModel> currentBrands =
                         context.read<SeniorProfBloc>().brand;
 
-                    // ===============================================
-                    // عند البحث أو جلب بيانات جديدة
-                    // ناخد القائمة الموجودة داخل الـState
-                    // ===============================================
                     if (state is SenAllBrandsState) {
                       currentBrands = state.brand;
                     }
 
-                    // ===============================================
-                    // عند Empty العدد = 0
-                    // ===============================================
                     final int brandLength = state is SenAllBrandEmptyState
                         ? 0
                         : currentBrands.length;
@@ -185,38 +301,36 @@ class AllBrand extends StatelessWidget {
                         horizontal: horizontalPadding,
                         vertical: headerVerticalPadding,
                       ),
-                      child: buildTotalReportsCard(brandLength, "قائمة الأصناف",
-                          "الأصناف المتاحة ضمن الخطة"),
+                      child: buildTotalReportsCard(
+                        brandLength,
+                        "قائمة الأصناف",
+                        "الأصناف المتاحة ضمن الخطة",
+                      ),
                     );
                   },
                 ),
               ),
+
               // =================================================
               // Brands
               // =================================================
               BlocBuilder<SeniorProfBloc, SeniorProfState>(
-                // نفس buildWhen الموجود عندك
                 buildWhen: (
-                  previous,
-                  current,
-                ) =>
-                    current is SenAllBrandsState ||
-                    current is SenAllBrandEmptyState,
-
+                    previous,
+                    current,
+                    ) =>
+                current is SenAllBrandsState ||
+                    current is SenAllBrandEmptyState ||
+                    current is SenAllBrandErrorState ||
+                    current is SenAllBrandLoadingState,
                 builder: (context, state) {
                   List<BrandModel> brandModel =
                       context.watch<SeniorProfBloc>().brand;
 
-                  // ===========================================
-                  // Success
-                  // ===========================================
                   if (state is SenAllBrandsState) {
                     brandModel = state.brand;
                   }
 
-                  // ==================[=========================
-                  // Empty
-                  // ===========================================
                   if (state is SenAllBrandEmptyState) {
                     return SliverToBoxAdapter(
                       child: Column(
@@ -232,10 +346,6 @@ class AllBrand extends StatelessWidget {
                     );
                   }
 
-                  // ===========================================
-                  // Error
-                  // نفس السلوك الأصلي
-                  // ===========================================
                   if (state is SenAllBrandErrorState) {
                     return SliverToBoxAdapter(
                       child: Column(
@@ -245,24 +355,22 @@ class AllBrand extends StatelessWidget {
                           ),
                           errorFullScreen(
                             context,
-                            func: () {
+                            func: isPr?() {
                               BlocProvider.of<SeniorProfBloc>(
                                 context,
                               ).add(
                                 SenAllBrandEvent(
-                                  203,
-                                ),
+                                  UserInfo.activePlanId
+                                ,isPr
+                                )
                               );
-                            },
+                            }:null,
                           ),
                         ],
                       ),
                     );
                   }
 
-                  // ===========================================
-                  // Loading
-                  // ===========================================
                   if (state is SenAllBrandLoadingState) {
                     return SliverToBoxAdapter(
                       child: Column(
@@ -293,6 +401,11 @@ class AllBrand extends StatelessWidget {
                         brands: brandModel,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
+                        // عند الضغط على صنف محدد تفتح دالة _showBrandDetailsSheet
+                        onTap: isPr?(selectedBrand) {
+                          _showBrandDetailsSheet(context, selectedBrand);
+                        }:null,
+                        isPr: isPr,
                       ),
                     ),
                   );

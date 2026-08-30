@@ -1513,13 +1513,14 @@ class _RepProfileState
                       SeniorProfBloc>()
                       .add(
                     SenAllBrandEvent(
-                      repPlanId,
+                      repPlanId,false
                     ),
                   );
 
                   Navigator.pushNamed(
                     context,
                     Routes.allBrand,
+                    arguments: false
                   );
                 },
               ),

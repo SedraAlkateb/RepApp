@@ -16,6 +16,10 @@ class GetAllCityEvent
     extends AllCityEvent {
   const GetAllCityEvent();
 }
+class CheckUserEvent
+    extends AllCityEvent {
+  const CheckUserEvent();
+}
 
 // =============================================================
 // Select City
