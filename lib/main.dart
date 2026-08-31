@@ -11,6 +11,7 @@ import 'package:domina_app/crashlytics/app_bloc_observer.dart';
 import 'package:domina_app/crashlytics/crashlytics_service.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/is_login_sql_usecase.dart';
+import 'package:domina_app/firebase_options.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -38,7 +39,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
