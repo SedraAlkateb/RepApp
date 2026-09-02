@@ -269,7 +269,7 @@ class ReportVisitDoctorPage extends StatelessWidget {
                             ),
 
                             Text(
-                              'مراجعة تفاصيل الزيارات الميدانية للأطباء للمندوب',
+                              'مراجعة تفاصيل الزيارات الميدانية لأطباء للمندوب',
 
                               style:
                               TextStyle(

@@ -239,7 +239,7 @@ class _BrandPlanActivePageState
                             index: 1,
 
                             child: Text(
-                              'منتجات الخطة الحالية',
+                              'أصناف الخطة الحالية',
 
                               maxLines: 2,
 
@@ -278,7 +278,7 @@ class _BrandPlanActivePageState
                             index: 2,
 
                             child: Text(
-                              'عرض جميع المنتجات المدرجة في الخطة الحالية '
+                              'عرض جميع الأصناف المدرجة في الخطة الحالية '
                                   'مع امكانية البحث عن منتج معين',
 
                               style:

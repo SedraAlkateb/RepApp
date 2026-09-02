@@ -205,7 +205,7 @@ class ReportVisitHospital extends StatelessWidget {
                           animatedEntry(
                             delay: 100,
                             child: Text(
-                              'مراجعة تفاصيل الزيارات الميدانية للمشافي للمندوب',
+                              'مراجعة تفاصيل الزيارات الميدانية لمشافي للمندوب',
                               style: TextStyle(
                                 fontSize:
                                 subtitleFontSize,

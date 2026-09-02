@@ -47,7 +47,7 @@ class PlanCard extends StatelessWidget {
       );
 
       statusText =
-      "منتهية";
+      "مستقبلية";
 
       statusIcon =
           Icons.check_circle_outline_rounded;

@@ -1408,8 +1408,8 @@ class RepType {
   // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
   static RepType fromInt(int value) {
     return switch (value) {
-      4 => RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
-      5 => RepType(5, "team leader", color: const Color(0xFF3F7FBF)), // splash2
+      4 => RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
+      5 => RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
       6 => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
       7 => RepType(7, "مندوب",
           color: const Color(0xFFD4AF37)), // secondary (الذهبي)
@@ -1420,9 +1420,9 @@ class RepType {
   static RepType fromIntS(String? value) {
     return switch (value) {
       "4" =>
-        RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
       "5" =>
-        RepType(5, "team leader", color: const Color(0xFF3F7FBF)), // splash2
+        RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
       "6" => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
       "7" => RepType(7, "مندوب",
           color: const Color(0xFFD4AF37)), // secondary (الذهبي)
@@ -1433,10 +1433,10 @@ class RepType {
   // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
   static RepType fromName(String name) {
     return switch (name) {
-      "supervisor" =>
-        RepType(4, "supervisor", color: const Color(0xFF3A5A75)), // primary
-      "team leader" =>
-        RepType(5, "team leader", color: const Color(0xFF3F7FBF)), // splash2
+      "Supervisor" =>
+        RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
+      "Team Leader" =>
+        RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
       "senior" =>
         RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
       "مندوب" => RepType(7, "مندوب",
@@ -1997,7 +1997,7 @@ class FlagModel {
       case 0:
         return "بانتظار موافقة المندوب";
       case 1:
-        return "بانتظار موافقة supervisor";
+        return "بانتظار موافقة Supervisor";
       case 4:
         return "بانتظار موافقة المستودع";
       case 5:
@@ -2423,7 +2423,7 @@ Color getColor(int flag) {
       return const Color(0xFF0288D1);
 
     case 1:
-      // بانتظار موافقة supervisor: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
+      // بانتظار موافقة Supervisor: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
       return const Color(0xFFE53935);
 
     case 2:
@@ -2466,7 +2466,7 @@ List<StatusPlanModel> statusPlanSupervisor = [
 ];
 List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
-  StatusPlanModel(1, "بانتظار موافقة supervisor"),
+  StatusPlanModel(1, "بانتظار موافقة Supervisor"),
   StatusPlanModel(6, "بانتظار موافقة Senior"),
 ];
 
