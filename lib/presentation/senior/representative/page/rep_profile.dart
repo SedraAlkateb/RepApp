@@ -1407,6 +1407,7 @@ class _RepProfileState
                   Navigator.pushNamed(
                     context,
                     Routes.seniorSpec,
+                      arguments: false
                   );
                 },
               ),

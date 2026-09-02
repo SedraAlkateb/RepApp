@@ -285,7 +285,8 @@ class RouteGenerator {
       case Routes.seniorFuturePlaces:
         return _animatedRoute(FuturePlacePage());
       case Routes.seniorSpec:
-        return _animatedRoute(SpecSeniorPage());
+        final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
+        return _animatedRoute(SpecSeniorPage(isPr: args,));
       case Routes.seniorHos:
         return _animatedRoute(HospitalSenior());
       case Routes.seniorDoc:

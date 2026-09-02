@@ -1,5 +1,6 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/uniti/basic/brand.dart';
@@ -69,7 +70,7 @@ final bool isPr;
                   // 1. الميزات (features)
                   _buildDetailTile(
                     context: context,
-                    title: 'الميزات (Features)',
+                    title: 'الميزة التسويقية ',
                     value: brand.features,
                     icon: Icons.featured_play_list_outlined,
                   ),
@@ -78,7 +79,7 @@ final bool isPr;
                   // 2. الكلفة العامة (generalCoast)
                   _buildDetailTile(
                     context: context,
-                    title: 'الكلفة العامة (General Coast)',
+                    title: 'سعر العموم',
                     value: brand.generalCoast,
                     icon: Icons.monetization_on_outlined,
                   ),
@@ -87,7 +88,7 @@ final bool isPr;
                   // 3. كلفة الصيدلية (phCoast)
                   _buildDetailTile(
                     context: context,
-                    title: 'كلفة الصيدلية (Ph Coast)',
+                    title: 'سعر الصيدلي ',
                     value: brand.phCoast,
                     icon: Icons.local_pharmacy_outlined,
                   ),
@@ -118,7 +119,7 @@ final bool isPr;
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Theme.of(context).primaryColor, size: 24),
+          Icon(icon, color: ColorManager.primary1, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

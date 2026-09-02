@@ -309,7 +309,7 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
                   },
                 )
               : SizedBox(),
-          context.read<VisitBloc>().isBrand == false
+          context.watch<VisitBloc>().isBrand == false
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

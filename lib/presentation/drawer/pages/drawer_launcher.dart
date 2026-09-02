@@ -298,7 +298,9 @@ class DrawerPage extends StatelessWidget {
                 context
                     .read<SeniorProfBloc>()
                     .add(SenAllSpecEvent(UserInfo.repId));
-                Navigator.pushNamed(context, Routes.seniorSpec);
+                Navigator.pushNamed(context, Routes.seniorSpec
+                    , arguments: true
+                );
               })),
       DrawerMenuItem(
           icon: Icons.medication_outlined,
@@ -380,7 +382,7 @@ class DrawerPage extends StatelessWidget {
                 context
                     .read<SeniorProfBloc>()
                     .add(SenAllSpecEvent(UserInfo.repId));
-                Navigator.pushNamed(context, Routes.seniorSpec);
+                Navigator.pushNamed(context, Routes.seniorSpec      , arguments: true);
               })),
       DrawerMenuItem(
           icon: Icons.medication_outlined,

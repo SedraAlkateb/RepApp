@@ -256,7 +256,7 @@ class BrandListWidget extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  'السعر العام:',
+                                  'سعر العموم:',
                                   style: TextStyle(
                                     fontSize: pharmaFontSize,
                                     color: Colors.grey.shade600,
@@ -291,7 +291,7 @@ class BrandListWidget extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  'الصيدلي:',
+                                  'سعر الصيدلي :',
                                   style: TextStyle(
                                     fontSize: pharmaFontSize,
                                     color: Colors.grey.shade600,

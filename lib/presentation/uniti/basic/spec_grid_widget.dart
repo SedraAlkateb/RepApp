@@ -13,12 +13,13 @@ class SpecGridWidget extends StatelessWidget {
   final List<SpecDModel> items;
   final int crossAxisCount;
   final Function(SpecDModel model)? onTap;
-
+  final bool isPr;
   const SpecGridWidget({
     super.key,
     required this.items,
     required this.crossAxisCount,
     this.onTap,
+  required this.isPr
   });
 
   @override
@@ -102,7 +103,9 @@ class SpecGridWidget extends StatelessWidget {
         return Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: onTap != null
+            onTap:
+            isPr==false?null:
+            onTap != null
                 ? () {
               onTap!(item);
             }

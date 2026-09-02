@@ -31,9 +31,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 void resetAppNavigatorKey() {
-  appNavigatorKey =
-      GlobalKey<NavigatorState>();
+  appNavigatorKey = GlobalKey<NavigatorState>();
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -88,36 +88,35 @@ class MyApp extends StatelessWidget {
         BlocProvider<ManageFutureBloc>(
             create: (_) => instance<ManageFutureBloc>()),
         BlocProvider<AllCityBloc>(
-          create: (_) => instance<AllCityBloc>() 
-            ..add(const GetAllCityEvent(),)
-              ..add(CheckUserEvent())
-        ),
+            create: (_) => instance<AllCityBloc>()
+              ..add(
+                const GetAllCityEvent(),
+              )
+              ..add(CheckUserEvent())),
         BlocProvider<GeneralReportsBloc>(
             create: (_) => instance<GeneralReportsBloc>()),
         BlocProvider<FutureRepBloc>(create: (_) => instance<FutureRepBloc>()),
       ],
-      child: Builder(
-          builder: (materialContext) {
-          return MaterialApp(
-            navigatorKey: appNavigatorKey, // تم الربط بمفتاح الملاحة الموحد
-            locale: const Locale('ar'),
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('ar')],
-            localeResolutionCallback: (locale, supportedLocales) =>
-                const Locale('ar'),
-            debugShowCheckedModeBanner: false,
-            onGenerateRoute: RouteGenerator.getRoute,
-            initialRoute: _getInitialRoute(),
-              theme: getApplicationTheme().copyWith(
-                appBarTheme: buildResponsiveAppBarTheme(context),
-              ),
-          );
-        }
-      ),
+      child: Builder(builder: (materialContext) {
+        return MaterialApp(
+          navigatorKey: appNavigatorKey, // تم الربط بمفتاح الملاحة الموحد
+          locale: const Locale('ar'),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('ar')],
+          localeResolutionCallback: (locale, supportedLocales) =>
+              const Locale('ar'),
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: RouteGenerator.getRoute,
+          initialRoute: _getInitialRoute(),
+          theme: getApplicationTheme().copyWith(
+            appBarTheme: buildResponsiveAppBarTheme(context),
+          ),
+        );
+      }),
     );
   }
 

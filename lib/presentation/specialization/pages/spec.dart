@@ -231,7 +231,7 @@ class SpecializationsPage extends StatelessWidget {
 
                             crossAxisCount:
                             crossAxisCount,
-
+                            isPr: true,
                             onTap:
                                 (model) {
                               // =======================================

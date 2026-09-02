@@ -290,6 +290,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
           SizedBox(height: 10.h),
           isEditable
               ? BlocBuilder<VisitBloc, VisitState>(
+
                   builder: (context, state) {
                     return Row(
                       children: [
@@ -308,7 +309,7 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                   },
                 )
               : SizedBox(),
-          context.read<VisitBloc>().isBrand == false
+          context.watch<VisitBloc>().isBrand == false
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

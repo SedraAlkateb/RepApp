@@ -8,7 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SpecSeniorPage extends StatelessWidget {
-  SpecSeniorPage({super.key});
+  final bool isPr;
+  SpecSeniorPage({super.key, required this.isPr});
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -69,6 +70,7 @@ class SpecSeniorPage extends StatelessWidget {
                       return loadingFullScreen(context);
                     }
                     return SpecGridWidget(
+                        isPr:isPr,
                         items: placeModel, crossAxisCount: crossAxisCount);
                   },
                 ),

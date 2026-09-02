@@ -404,7 +404,7 @@ class _FutureSpecializationsPageState
                           SpecGridWidget(
                             items:
                             spModel,
-
+                            isPr: true,
                             crossAxisCount:
                             crossAxisCount,
 

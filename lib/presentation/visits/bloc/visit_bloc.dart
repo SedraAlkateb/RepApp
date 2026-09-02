@@ -132,6 +132,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           if (normalizeText(value.doctorModel.title).contains(search)) {
             return true;
           }
+          if (normalizeText(value.doctorModel.spTitle).contains(search)) {
+            return true;
+          }
           if (normalizeText(value.visitDoctorModel.science ?? "")
               .contains(search)) {
             return true;
@@ -144,6 +147,9 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
         String search = normalizeText(event.value);
         hospitalSearch = hospitals.where((value) {
           if (normalizeText(value.hospitalModel.title).contains(search)) {
+            return true;
+          }
+          if (normalizeText(value.specModel.title).contains(search)) {
             return true;
           }
           if (normalizeText(value.visitHospitalModel.science!)
