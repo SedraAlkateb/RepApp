@@ -320,6 +320,10 @@ class TokenResponse {
   String? totDoc;
   @JsonKey(name: "totHos")
   String? totHos;
+  @JsonKey(name: "groupId")
+  String? groupId;
+  @JsonKey(name: "groupTitle")
+  String? groupTitle;
   TokenResponse(
       this.token,
       this.cityId,
@@ -334,7 +338,7 @@ class TokenResponse {
       this.endDate,
       this.recipesCount,
       this.otherStartDate,
-      this.otherEndDate,this.totDoc,this.totHos);
+      this.otherEndDate,this.totDoc,this.totHos,this.groupId,this.groupTitle);
   factory TokenResponse.fromJson(Map<String, dynamic> json) =>
       _$TokenResponseFromJson(json);
   Map<String, dynamic> toJson() => _$TokenResponseToJson(this);
@@ -1485,7 +1489,10 @@ class RepInfoResponse {
   String? visitDonHos;
   @JsonKey(name: "visitnotYet")
   int? visitnotYet;
-
+  @JsonKey(name: "groupId")
+  String? groupId;
+  @JsonKey(name: "groupTitle")
+  String? groupTitle;
   RepInfoResponse(
       this.id,
       this.name,
@@ -1500,7 +1507,10 @@ class RepInfoResponse {
       this.visitDon,
       this.visitDonDoc,
       this.visitDonHos,
-      this.visitnotYet);
+      this.visitnotYet,
+
+      this.groupId,
+      this.groupTitle);
 
   factory RepInfoResponse.fromJson(Map<String, dynamic> json) =>
       _$RepInfoResponseFromJson(json);

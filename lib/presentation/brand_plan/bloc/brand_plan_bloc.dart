@@ -139,7 +139,7 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
         } else if (x.state == 2) {
           emit(UpdateAmountErrorState(
               failure: Failure(5,
-                  "لم يتم تعبئة إختصاص (${planBrand[x.index].specModel.title})")));
+                  "لم يتم تعبئة إختصاص(${planBrand[x.index].specModel.title})")));
         }
       }
       if (event is UpdateAmountSucEvent) {

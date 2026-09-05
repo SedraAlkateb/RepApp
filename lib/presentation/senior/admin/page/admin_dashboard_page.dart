@@ -326,7 +326,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                       icon: Icons
                                           .calendar_today_outlined,
                                       title: 'الخطة المستقبلية',
-                                      subtitle: 'متابعة النشاط',
+                                      subtitle: 'تدقيق الخطة المسيتقبلية',
                                       iconColor: Colors.green,
 
                                       onTap: () {
@@ -389,40 +389,29 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     required bool isLandscape,
     required double spacing,
   }) {
-    // ==========================================
-    // Tablet Landscape
-    // ==========================================
-    // ==========================================
     if (deviceType == AppDeviceType.tabletLandscape) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (int i = 0; i < adminCards.length; i++) ...[
-            Expanded(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minHeight: 220,
-                ),
+      return IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (int i = 0; i < adminCards.length; i++) ...[
+              Expanded(
                 child: adminCards[i],
               ),
-            ),
-
-            if (i != adminCards.length - 1)
-              SizedBox(
-                width: spacing,
-              ),
+              if (i != adminCards.length - 1)
+                SizedBox(
+                  width: spacing,
+                ),
+            ],
           ],
-        ],
+        ),
       );
     }
-    // ==========================================
-    // Mobile + Tablet Portrait
-    // ==========================================
+
     return Column(
       children: [
         for (int i = 0; i < adminCards.length; i++) ...[
           adminCards[i],
-
           if (i != adminCards.length - 1)
             SizedBox(
               height: spacing,

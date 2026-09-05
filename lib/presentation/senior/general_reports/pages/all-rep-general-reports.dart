@@ -200,7 +200,7 @@ class _AllRepSeniorGenerlReportsState
         title: Text(
           widget.seniorName!=null?
               "تقارير مندوبين ${widget.seniorName} ":
-          ' تقارير المندوبين ( ${widget.cityname} ) ',
+          ' تقارير المندوبين (${widget.cityname}) ',
         ),
       ),
 

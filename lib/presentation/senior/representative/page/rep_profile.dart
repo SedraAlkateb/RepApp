@@ -1829,26 +1829,19 @@ if(!isFinal&&(rep.repType==5||rep.repType==6)){
       ),
 
       onTap: () {
-        initSeniorReportInventoryModule();
 
-        Navigator.push(
+        Navigator.pushNamed(
           context,
+            Routes.inventory
+        );
 
-          MaterialPageRoute(
-            builder:
-                (routeContext) {
-              context
-                  .read<
-                  ReportInventoryBloc>()
-                  .add(
-                SenAllInventoryEvent(
-                  id,
-                  repPlanId,
-                ),
-              );
-
-              return ReportInventory();
-            },
+        context
+            .read<
+            ReportInventoryBloc>()
+            .add(
+          SenAllInventoryEvent(
+            id,
+            repPlanId,
           ),
         );
       },

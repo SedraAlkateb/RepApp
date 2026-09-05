@@ -172,7 +172,7 @@ class PersonalOrder extends StatelessWidget {
                                         Padding(
                                           padding: const EdgeInsets.all(15),
                                           child: Center(
-                                            child: Text('نوع العينة',
+                                            child: Text('الشكل الصيدلاني',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:

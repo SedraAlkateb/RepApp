@@ -76,14 +76,6 @@ final bool isPr;
                   ),
                   const SizedBox(height: 12),
 
-                  // 2. الكلفة العامة (generalCoast)
-                  _buildDetailTile(
-                    context: context,
-                    title: 'سعر العموم',
-                    value: brand.generalCoast,
-                    icon: Icons.monetization_on_outlined,
-                  ),
-                  const SizedBox(height: 12),
 
                   // 3. كلفة الصيدلية (phCoast)
                   _buildDetailTile(
@@ -92,7 +84,17 @@ final bool isPr;
                     value: brand.phCoast,
                     icon: Icons.local_pharmacy_outlined,
                   ),
+                  // 2. الكلفة العامة (generalCoast)
+
                   const SizedBox(height: 20),
+                  _buildDetailTile(
+                    context: context,
+                    title: 'سعر العموم',
+                    value: brand.generalCoast,
+                    icon: Icons.monetization_on_outlined,
+                  ),
+                  const SizedBox(height: 12),
+
                 ],
               ),
             );
@@ -135,7 +137,7 @@ final bool isPr;
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  (value == null || value.trim().isEmpty) ? 'غير محدد' : value,
+                  (value == null || value.trim().isEmpty) ? '' : value,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

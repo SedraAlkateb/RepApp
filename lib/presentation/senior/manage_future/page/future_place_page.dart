@@ -211,7 +211,7 @@ class FuturePlacePage extends StatelessWidget {
             builder: (context, state) {
               if (state is SenAllPlaceState) {
                 final List<PlaceModel> placeModel =
-                    state.places;
+                    state.placesSearch;
 
                 return placeModel.isEmpty
                     ? emptyFullScreen(context)

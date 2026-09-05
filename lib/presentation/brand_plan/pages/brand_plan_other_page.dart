@@ -117,7 +117,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  "النوع : ${brandItem.phTitle}",
+                                  "الشكل الصيدلاني: : ${brandItem.phTitle}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium,

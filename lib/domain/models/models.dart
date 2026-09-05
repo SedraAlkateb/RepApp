@@ -1257,7 +1257,8 @@ class LoginModel {
   int remainReci;
   int ?totDoc;
   int ?totHos;
-
+  String ?groupId;
+  String groupTitle;
   LoginModel(
       this.samplesCount,
       this.token,
@@ -1280,10 +1281,11 @@ class LoginModel {
       this.usedReci,
       this.remainReci,
 
+      this.groupTitle,
       {this.otherStartDate,
       this.otherEndDate,
         this.totDoc,
-        this.totHos,});
+        this.totHos,this.groupId,});
 
   Map<String, dynamic> toMap() {
     return {
@@ -1311,6 +1313,7 @@ class LoginModel {
       'remainReci': remainReci,
       'totalVisitDoc':totDoc,
       'totalVisitHos':totHos,
+      'groupTitle':groupTitle,
     };
   }
 
@@ -1336,6 +1339,8 @@ class LoginModel {
       map['totalReci'] ?? 0,
       map['usedReci'] ?? 0,
       map['remainReci'],
+
+   map['groupTitle'],
     totDoc:   map['totalVisitDoc'],
     totHos:   map['totalVisitHos'],
       otherStartDate: map['otherStartDate'] ?? "",
@@ -1454,7 +1459,7 @@ class RepType {
 final List<Type> type = [
   Type(0, "دفاتر", color: Colors.cyan),
   Type(1, "عينات", color: Colors.lime),
-  Type(2, "غير متوفر", color: Colors.teal),
+  Type(2, "لا شيء", color: Colors.teal),
 ];
 final List<Type> brandType = [
   Type(1, "هدف", color: Colors.blue),
@@ -2001,7 +2006,7 @@ class FlagModel {
       case 4:
         return "بانتظار موافقة المستودع";
       case 5:
-        return "بانتظار Team Leader";
+        return "بانتظار موافقة Team Leader";
       case 6:
         return "بانتظار موافقة Senior";
       default:
@@ -2063,7 +2068,8 @@ class InfoRep {
   int visitDonHos; // حقل جديد
   int visitNoteYet;
   int repType;
-
+  String? groupId;
+  String groupTitle;
   InfoRep(
       this.id,
       this.name,
@@ -2079,7 +2085,11 @@ class InfoRep {
       this.visitDonDoc,
       this.visitDonHos,
       this.visitNoteYet,
-      this.repType);
+      this.repType,
+
+      this.groupTitle,
+      { this.groupId,}
+      );
 }
 
 class VisitRepSen {
@@ -2250,8 +2260,8 @@ class BrandAmountModel {
 class AllPlanBrandSp {
   List<PlanBrandSp> planBrandSps;
   int amount;
-
-  AllPlanBrandSp(this.planBrandSps, this.amount);
+  BrandAmountModel brandAmountModel;
+  AllPlanBrandSp(this.planBrandSps, this.amount,this.brandAmountModel);
 }
 
 class SpecPlan {
@@ -2462,7 +2472,7 @@ class StatusPlanModel {
 List<StatusPlanModel> statusPlanSupervisor = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),
   StatusPlanModel(6, "بانتظار موافقة Senior"),
-  StatusPlanModel(5, "بانتظار Team Leader"),
+  StatusPlanModel(5, "بانتظار موافقة Team Leader"),
 ];
 List<StatusPlanModel> statusPlanTeamleader = [
   StatusPlanModel(0, "بانتظار موافقة المندوب"),

@@ -36,7 +36,7 @@ class _VisitDoctorState extends State<VisitDoctor>
     BlocProvider.of<VisitPlaceBloc>(context).selectAddBrand = [];
     BlocProvider.of<VisitPlaceBloc>(context).visitBrandPharmacys = [];
     BlocProvider.of<VisitPlaceBloc>(context).isBrand = false;
-    BlocProvider.of<VisitPlaceBloc>(context).type = Type(0, "غير متوفر");
+    BlocProvider.of<VisitPlaceBloc>(context).type = Type(0, "لا شيء");
     super.initState();
   }
 
@@ -233,7 +233,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                         Padding(
                                           padding: const EdgeInsets.all(15),
                                           child: Center(
-                                            child: Text('العينات',
+                                            child: Text('الصنف',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -243,7 +243,7 @@ class _VisitDoctorState extends State<VisitDoctor>
                                         Padding(
                                           padding: const EdgeInsets.all(15),
                                           child: Center(
-                                            child: Text('نوع العينة',
+                                            child: Text('الشكل الصيدلاني',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:

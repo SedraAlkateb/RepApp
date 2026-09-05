@@ -818,7 +818,7 @@ class BrandPlanCard extends StatelessWidget {
 
                       Expanded(
                         child: Text(
-                          "توزيع الأهداف حسب الاختصاص",
+                          "توزيع الصنف حسب الاختصاص",
 
                           maxLines: 1,
 

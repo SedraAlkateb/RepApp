@@ -473,7 +473,7 @@ class _EditingPlanAssistantState
 
                       children: [
                         Text(
-                          "نوع الصنف",
+                          "الشكل الصيدلاني",
 
                           style: TextStyle(
                             fontSize:

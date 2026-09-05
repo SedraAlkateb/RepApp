@@ -26,7 +26,7 @@ class TableVisitStatic extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
-                      child: Text('نوع العينة',
+                      child: Text('الشكل الصيدلاني',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ),

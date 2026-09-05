@@ -159,59 +159,50 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
 
 
 
-        child: ClipRRect(
+        child: Stack(
 
-          borderRadius:
-          BorderRadius.circular(25.r),
-
-
-
-          child: Stack(
-
-            clipBehavior:
-            Clip.none,
+          clipBehavior:
+          Clip.none,
 
 
-            children: [
+          children: [
 
 
-              // الخط العلوي كما هو
+            // الخط العلوي كما هو
 
-              AnimatedPositioned(
+            AnimatedPositioned(
 
-                duration:
-                const Duration(milliseconds:200),
-
-
-                top:
-                _isPressed ? -22.h : -30.h,
+              duration:
+              const Duration(milliseconds:200),
 
 
-                left:60.w,
-
-                right:60.w,
-
-
-                child: Container(
-
-                  height:4.h,
+              top:
+              _isPressed ? -22.h : -30.h,
 
 
-                  decoration:BoxDecoration(
+              left:60.w,
 
-                    color:widget.iconColor,
+              right:60.w,
 
 
-                    borderRadius:
-                    BorderRadius.only(
+              child: Container(
 
-                      bottomLeft:
-                      Radius.circular(10.r),
+                height:4.h,
 
-                      bottomRight:
-                      Radius.circular(10.r),
 
-                    ),
+                decoration:BoxDecoration(
+
+                  color:widget.iconColor,
+
+
+                  borderRadius:
+                  BorderRadius.only(
+
+                    bottomLeft:
+                    Radius.circular(10.r),
+
+                    bottomRight:
+                    Radius.circular(10.r),
 
                   ),
 
@@ -219,65 +210,29 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
 
               ),
 
-
-
-              // الخط الجانبي كما هو
-
-              AnimatedPositioned(
-
-                duration:
-                const Duration(milliseconds:200),
-
-
-                right:
-                _isPressed ? -22.w : -30.w,
-
-
-                top:5.h,
-
-                bottom:5.h,
-
-
-                child:Container(
-
-                  width:5.w,
-
-
-                  decoration:BoxDecoration(
-
-                    color:widget.iconColor,
-
-
-                    borderRadius:
-                    BorderRadius.circular(10.r),
-
-                  ),
-
-                ),
-
-              ),
+            ),
 
 
 
 
-              widget.isLandscape
-
-                  ? _buildLandscapeLayout(
-                landscapeIconSize,
-                landscapeTitleSize,
-                landscapeSubtitleSize,
-              )
-
-                  : _buildPortraitLayout(
-                portraitIconSize,
-                portraitTitleSize,
-                portraitSubtitleSize,
-              ),
 
 
-            ],
+            widget.isLandscape
 
-          ),
+                ? _buildLandscapeLayout(
+              landscapeIconSize,
+              landscapeTitleSize,
+              landscapeSubtitleSize,
+            )
+
+                : _buildPortraitLayout(
+              portraitIconSize,
+              portraitTitleSize,
+              portraitSubtitleSize,
+            ),
+
+
+          ],
 
         ),
 

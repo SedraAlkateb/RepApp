@@ -296,7 +296,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                           Padding(
                                             padding: const EdgeInsets.all(15),
                                             child: Center(
-                                              child: Text('العينات',
+                                              child: Text('الصنف',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -306,7 +306,7 @@ class _VisitHospitalState extends State<VisitHospital>
                                           Padding(
                                             padding: const EdgeInsets.all(15),
                                             child: Center(
-                                              child: Text('نوع العينة',
+                                              child: Text('الشكل الصيدلاني',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:

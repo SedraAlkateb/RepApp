@@ -40,6 +40,7 @@ Widget buildEditableSection(
         ),
         SizedBox(height: 12.h),
         BoxTextField(
+
           validator: validator,
           controller: controller,
           enabled: !isEditable,

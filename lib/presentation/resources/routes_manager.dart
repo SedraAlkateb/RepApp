@@ -28,6 +28,7 @@ import 'package:domina_app/presentation/senior/places/pages/doc_hos_by_place_or_
 import 'package:domina_app/presentation/senior/plan_management/page/plan_help_goal_tap.dart';
 import 'package:domina_app/presentation/senior/plan_review/page/rep_plan_brand_sp.dart';
 import 'package:domina_app/presentation/senior/places/pages/all_rep_senior.dart';
+import 'package:domina_app/presentation/senior/report_Inventory/page/report_inventory.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_brand.dart';
 import 'package:domina_app/presentation/senior/representative/page/all_recip.dart';
 import 'package:domina_app/presentation/senior/representative/page/doctor_senioir.dart';
@@ -135,6 +136,8 @@ class Routes {
   static const String cityPlan = "/cityPlan";
   static const String allCitySupervisor = "/allCitySupervisor"; /////////ToDo
   static const String activePlanPage = "/activePlanPage";
+  static const String inventory = "/inventory";
+
 }
 
 class RouteGenerator {
@@ -243,6 +246,9 @@ class RouteGenerator {
       case Routes.asyncIn:
         initAsyncInModule();
         return _animatedRoute(AsyncPage());
+      case Routes.inventory:
+        initSeniorReportInventoryModule();
+        return _animatedRoute(ReportInventory());
 
       case Routes.logout:
         initAsyncInModule();

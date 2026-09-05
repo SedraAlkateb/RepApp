@@ -224,7 +224,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
         surfaceTintColor: Colors.transparent,
         title: Text(
 
-          " إدارة الخطة المستقبلية ( ${cityBloc.selectedCity?.title??""})",
+          " إدارة الخطة المستقبلية (${cityBloc.selectedCity?.title??""})",
         ),
       ),
       body: SafeArea(

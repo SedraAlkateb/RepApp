@@ -471,7 +471,7 @@ class _EditingPlanTargetState
 
                       children: [
                         Text(
-                          "نوع الصنف",
+                          "الشكل الصيدلاني",
 
                           style: TextStyle(
                             fontSize:

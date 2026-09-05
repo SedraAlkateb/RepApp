@@ -89,6 +89,7 @@ class PlanManagementBloc
         UserInfo.usedReci=data.usedReci;
         UserInfo.totalReci=data.totalReci;
         UserInfo.remainReci=data.remainReci;
+        UserInfo.groupTitle = data.groupTitle;
 
         UserInfo.totHos=data.totHos;
         UserInfo.initializeUserPlan();

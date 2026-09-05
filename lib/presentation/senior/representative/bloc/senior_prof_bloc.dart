@@ -76,7 +76,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
         (await allPlaceUsecase.execute(event.id)).fold((failure) {
           emit(SenAllPlaceErrorState(failure: failure));
         }, (data) async {
-          emit(SenAllPlaceState(data));
+          emit(SenAllPlaceState(places: data, placesSearch: data));
         });
       }
       if (event is SearchSenAllPlaceEvent) {
@@ -88,7 +88,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           }
           return false;
         }).toList();
-        emit(SenAllPlaceState(placeModel));
+        emit(SenAllPlaceState(placesSearch: placeModel, places: event.places));
       } else if (event is SearchDocHosEvent) {
         final String search = normalizeText(
           event.content.trim(),
@@ -220,23 +220,21 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           emit(SenAllHospitalErrorState(failure: failure));
         }, (data) async {
           hospital = data;
-          if(hospital.isEmpty){
+          if (hospital.isEmpty) {
             emit(SenAllHospitalEmptyState());
-          }else{
+          } else {
             emit(SenAllHospitalsState(data));
           }
-
         });
       } else if (event is SenAllBrandEvent) {
         emit(SenAllBrandLoadingState());
         (await allBrandsUsecase.execute(event.id)).fold((failure) {
           emit(SenAllBrandErrorState(failure: failure));
         }, (data) async {
-
-          if(!event.isPr){
+          if (!event.isPr) {
             brand = data.where((item) => item.flag == 1).toList();
-          }else{
-            brand=data;
+          } else {
+            brand = data;
           }
 
           emit(SenAllBrandsState(brand));
@@ -284,6 +282,13 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             return true;
           }
           if (normalizeText(value.placeTitle ?? "").contains(search)) {
+            return true;
+          }
+          if ("${value.visit}زيارة".contains(search)) {
+            return true;
+          }
+          if ((value.rate != null )&&
+              ( normalizeText(value.rate!).contains(search))) {
             return true;
           }
           return false;
@@ -372,6 +377,13 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             return true;
           }
           if (normalizeText(value.spTitle).contains(search)) {
+            return true;
+          }
+          if ("${value.visits}زيارة".contains(search)) {
+            return true;
+          }
+          if ((value.rate != null )&&
+             ( normalizeText(value.rate!).contains(search))) {
             return true;
           }
           return false;
@@ -477,7 +489,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       if (event is DocHosEvent) {
         emit(DocHosLoadingState());
         (await getDocHosBySpPlace.execute(event.repDet,
-                spId: event.spId, placeId: event.placeId,cityId: event.cityId))
+                spId: event.spId, placeId: event.placeId, cityId: event.cityId))
             .fold((failure) {
           emit(DocHosErrorState(failure: failure));
         }, (data) async {

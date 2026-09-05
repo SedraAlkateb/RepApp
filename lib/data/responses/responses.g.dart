@@ -303,6 +303,8 @@ TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       json['otherEndDate'] as String? ?? '-9',
       json['totDoc'] as String?,
       json['totHos'] as String?,
+      json['groupId'] as String?,
+      json['groupTitle'] as String?,
     )
       ..samplesCount = json['samplesCount'] as String?
       ..repType = json['repType'] as String?
@@ -333,6 +335,8 @@ Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
       'remainReci': instance.remainReci,
       'totDoc': instance.totDoc,
       'totHos': instance.totHos,
+      'groupId': instance.groupId,
+      'groupTitle': instance.groupTitle,
     };
 
 BrandSpResponse _$BrandSpResponseFromJson(Map<String, dynamic> json) =>
@@ -1594,6 +1598,8 @@ RepInfoResponse _$RepInfoResponseFromJson(Map<String, dynamic> json) =>
       json['visitDonDoc'] as String?,
       json['visitDonHos'] as String?,
       (json['visitnotYet'] as num?)?.toInt(),
+      json['groupId'] as String?,
+      json['groupTitle'] as String?,
     )..repType = json['repType'] as String?;
 
 Map<String, dynamic> _$RepInfoResponseToJson(RepInfoResponse instance) =>
@@ -1613,6 +1619,8 @@ Map<String, dynamic> _$RepInfoResponseToJson(RepInfoResponse instance) =>
       'visitDonDoc': instance.visitDonDoc,
       'visitDonHos': instance.visitDonHos,
       'visitnotYet': instance.visitnotYet,
+      'groupId': instance.groupId,
+      'groupTitle': instance.groupTitle,
     };
 
 RepVisitsResponse _$RepVisitsResponseFromJson(Map<String, dynamic> json) =>

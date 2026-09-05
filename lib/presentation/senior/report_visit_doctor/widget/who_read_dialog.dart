@@ -101,7 +101,7 @@ void whoReadDialog(BuildContext context, ReportVisitDoctorBloc bloc) {
                                           ),
                                           Text(
                                             textAlign: TextAlign.center,
-                                            "( ${state.whoReadModel[index].role} )  ",
+                                            "(${state.whoReadModel[index].role})  ",
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 color: ColorManager

@@ -521,6 +521,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
           UserInfo.endDate = data.endDate;
           UserInfo.totalReci = data.totalReci;
           UserInfo.remainReci = data.remainReci;
+          UserInfo.groupTitle = data.groupTitle;
 
           UserInfo.totHos = data.totHos;
           UserInfo.totDoc = data.totDoc;

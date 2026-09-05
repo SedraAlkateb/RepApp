@@ -199,7 +199,7 @@ class _AllRepSeniorState
                 .selectedCityName
                 .isEmpty
                 ? 'تقارير المندوبين'
-                : ' تقارير المندوبين (${cityBloc.selectedCityName} )',
+                : ' تقارير المندوبين (${cityBloc.selectedCityName})',
 
             maxLines:
             1,

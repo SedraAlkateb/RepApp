@@ -34,6 +34,7 @@ class UserInfo {
   static int statusPlan = -1;
   static int totalReci = 0;
   static int remainReci = 0;
+  static String groupTitle = "";
 
   static int? totDoc = 0;
   static int? totHos = 0;

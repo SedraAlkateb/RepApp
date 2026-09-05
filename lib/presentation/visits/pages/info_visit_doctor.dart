@@ -102,10 +102,11 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                   if (_noteeController.text.isNotEmpty || isEditable) ...[
                     SizedBox(height: 15.h),
                     buildEditableSection(
+
                       title: "طلبات شخصية",
                       controller: _noteeController,
                       icon: Icons.person_outline,
-                      isEditable: isEditable,
+                      isEditable: false,
                       iconColor: Colors.redAccent,
                       validator: (value) {
                         return null;

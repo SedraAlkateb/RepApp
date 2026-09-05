@@ -142,7 +142,7 @@ class _PlaceSeniorState
                     is SenAllPlaceState) {
                       final List<PlaceModel>
                       placeModel =
-                          state.places;
+                          state.placesSearch;
 
                       return Column(
                         children: [
@@ -174,6 +174,7 @@ class _PlaceSeniorState
                                   SearchSenAllPlaceEvent(
                                     value,
                                     state.places,
+
                                   ),
                                 );
                               },

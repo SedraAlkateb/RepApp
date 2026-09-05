@@ -205,7 +205,7 @@ class _SeniorByCityIdState
                 .selectedCityName
                 .isEmpty
                 ? 'السينيور'
-                : 'السينيور ( ${cityBloc.selectedCityName} ) ',
+                : 'السينيور (${cityBloc.selectedCityName}) ',
 
             maxLines: 1,
 

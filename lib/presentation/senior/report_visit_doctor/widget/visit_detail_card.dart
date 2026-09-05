@@ -568,7 +568,7 @@ Widget _buildReportBottomSheet({
                                       ),
 
                                       Text(
-                                        "المستحضرات الموزعة",
+                                        "العينات الموزعة",
 
                                         style:
                                         TextStyle(

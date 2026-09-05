@@ -37,6 +37,7 @@ class _InfoVisitHospitalState extends State<InfoVisitHospital> {
         widget.hospitalModel.visitHospitalModel.target ?? "";
     BlocProvider.of<VisitBloc>(context).add(
         BrandHospitalVisitEvent(widget.hospitalModel.visitHospitalModel.id));
+
     super.initState();
   }
 

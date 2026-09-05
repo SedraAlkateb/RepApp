@@ -12,7 +12,7 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ReportVisitHospital extends StatelessWidget {
+class ReportVisitHospital extends StatefulWidget {
   ReportVisitHospital({
     super.key,
     required this.userId,
@@ -35,8 +35,30 @@ class ReportVisitHospital extends StatelessWidget {
 
   final bool iscanedite;
 
-  final TextEditingController searchNoteDoctorController =
-  TextEditingController();
+  @override
+  State<ReportVisitHospital> createState() => _ReportVisitHospitalState();
+}
+
+class _ReportVisitHospitalState extends State<ReportVisitHospital> {
+  late final TextEditingController searchNoteDoctorController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    searchNoteDoctorController =
+        TextEditingController();
+
+    context
+        .read<ReportVisitDoctorBloc>()
+        .clear();
+  }
+
+  @override
+  void dispose() {
+    searchNoteDoctorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +107,7 @@ class ReportVisitHospital extends StatelessWidget {
         actionsBottomSpacing = 14;
 
         inputReservedSpace =
-        iscanedite ? 100 : 28;
+        widget.iscanedite ? 100 : 28;
         break;
 
     // =================================================
@@ -108,7 +130,7 @@ class ReportVisitHospital extends StatelessWidget {
         actionsBottomSpacing = 18;
 
         inputReservedSpace =
-        iscanedite ? 110 : 34;
+        widget.iscanedite ? 110 : 34;
         break;
 
     // =================================================
@@ -131,7 +153,7 @@ class ReportVisitHospital extends StatelessWidget {
         actionsBottomSpacing = 16;
 
         inputReservedSpace =
-        iscanedite ? 100 : 30;
+        widget.iscanedite ? 100 : 30;
         break;
     }
 
@@ -294,10 +316,10 @@ class ReportVisitHospital extends StatelessWidget {
                         ).add(
                           AllReportVisitHospitalEvent(
                             VisitRepSen(
-                              repId,
-                              userId,
+                              widget.repId,
+                              widget.userId,
                             ),
-                            iscanedite,
+                            widget.iscanedite,
                           ),
                         );
                       }
@@ -387,10 +409,10 @@ class ReportVisitHospital extends StatelessWidget {
                               ).add(
                                 AllReportVisitHospitalEvent(
                                   VisitRepSen(
-                                    repId,
-                                    userId,
+                                    widget.repId,
+                                    widget.userId,
                                   ),
-                                  iscanedite,
+                                  widget.iscanedite,
                                 ),
                               );
                             },
@@ -435,7 +457,7 @@ class ReportVisitHospital extends StatelessWidget {
                               // =================================
                               // Read All Actions
                               // =================================
-                              if (iscanedite)
+                              if (widget.iscanedite)
                                 animatedEntry(
                                   delay: 400,
                                   child:
@@ -475,7 +497,7 @@ class ReportVisitHospital extends StatelessWidget {
                                               AllReadDocNoteEvent(
                                                 readAll:
                                                 ReadAll(
-                                                  repPlan,
+                                                  widget.repPlan,
                                                   UserInfo
                                                       .repId,
 
@@ -513,7 +535,7 @@ class ReportVisitHospital extends StatelessWidget {
                                               AllReadDocNoteEvent(
                                                 readAll:
                                                 ReadAll(
-                                                  repPlan,
+                                                  widget.repPlan,
                                                   UserInfo
                                                       .repId,
 
@@ -562,9 +584,9 @@ class ReportVisitHospital extends StatelessWidget {
                                       index:
                                       index,
                                       indexRep:
-                                      indexRep,
+                                      widget.indexRep,
                                       iscanedite:
-                                      iscanedite,
+                                      widget.iscanedite,
                                       context:
                                       context,
                                     ),
@@ -594,8 +616,8 @@ class ReportVisitHospital extends StatelessWidget {
           // Hospital Bottom Sheet
           // =================================================
           stackInputHospital(
-            indexRep: indexRep,
-            iscanedite: iscanedite,
+            indexRep: widget.indexRep,
+            iscanedite: widget.iscanedite,
           ),
         ],
       ),
@@ -606,7 +628,7 @@ class ReportVisitHospital extends StatelessWidget {
     //
     // ما بدنا Scaffold داخل Scaffold
     // =====================================================
-    if (!iscanedite) {
+    if (!widget.iscanedite) {
       return ColoredBox(
         color:
         const Color(
@@ -666,7 +688,7 @@ class ReportVisitHospital extends StatelessWidget {
         ),
 
         title: Text(
-          repName,
+          widget.repName,
           maxLines: 1,
           overflow:
           TextOverflow.ellipsis,
@@ -687,9 +709,6 @@ class ReportVisitHospital extends StatelessWidget {
   }
 
   // =====================================================
-  // Hospital Visit Card
-  // =====================================================
-
   Widget _buildHospitalVisitCard({
     required dynamic doctorNoteModel,
     required int index,
@@ -1239,7 +1258,7 @@ class ReportVisitHospital extends StatelessWidget {
                         ),
 
                         buildDetailBox(
-                          'المستحضرات الموزعة',
+                          'العينات الموزعة',
                           Column(
                             crossAxisAlignment:
                             CrossAxisAlignment
@@ -1284,9 +1303,6 @@ class ReportVisitHospital extends StatelessWidget {
   }
 
   // =====================================================
-  // Hospital Specialization
-  // =====================================================
-
   Widget _buildHospitalSpecialization({
     required dynamic doctorNoteModel,
     required double fontSize,
@@ -1354,9 +1370,6 @@ class ReportVisitHospital extends StatelessWidget {
   }
 
   // =====================================================
-  // Hospital Actions
-  // =====================================================
-
   Widget _buildHospitalActions({
     required BuildContext context,
     required dynamic doctorNoteModel,
@@ -1398,10 +1411,10 @@ class ReportVisitHospital extends StatelessWidget {
                       .visitDate,
 
                   phoneNumber:
-                  phone,
+                  widget.phone,
 
                   repName:
-                  repName,
+                  widget.repName,
                 );
               },
             ),

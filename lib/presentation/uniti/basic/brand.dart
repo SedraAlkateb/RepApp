@@ -251,6 +251,41 @@ class BrandListWidget extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
+                          // سعر الصيدلي
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  'سعر الصيدلي :',
+                                  style: TextStyle(
+                                    fontSize: pharmaFontSize,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    phCoast,
+                                    style: TextStyle(
+                                      fontSize: pharmaFontSize + 1,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorManager.medicalPrimary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+
+                          // فاصل عمودي ناعم
+                          Container(
+                            height: 12,
+                            width: 1,
+                            color: Colors.grey.shade300,
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                          ),
                           // السعر العام
                           Expanded(
                             child: Row(
@@ -278,40 +313,6 @@ class BrandListWidget extends StatelessWidget {
                             ),
                           ),
 
-                          // فاصل عمودي ناعم
-                          Container(
-                            height: 12,
-                            width: 1,
-                            color: Colors.grey.shade300,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                          ),
-
-                          // سعر الصيدلي
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Text(
-                                  'سعر الصيدلي :',
-                                  style: TextStyle(
-                                    fontSize: pharmaFontSize,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Flexible(
-                                  child: Text(
-                                    phCoast,
-                                    style: TextStyle(
-                                      fontSize: pharmaFontSize + 1,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorManager.medicalPrimary,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                         ],
                       ),
                     ):SizedBox(),

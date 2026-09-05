@@ -54,7 +54,7 @@ class DatabaseHelper implements DatabaseAccessor {
 
     return await openDatabase(
       path,
-      version: 7, // تم رفع الإصدار إلى 7
+      version: 8, // تم رفع الإصدار إلى 8
       password: encryptionKey,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
@@ -89,37 +89,45 @@ class DatabaseHelper implements DatabaseAccessor {
         'ALTER TABLE brand ADD COLUMN phCoast TEXT;',
       );
     }
+
+    // الترقية إلى الإصدار 8 (إضافة groupTitle إلى جدول rep)
+    if (oldVersion < 8) {
+      await db.execute(
+        'ALTER TABLE rep ADD COLUMN groupTitle TEXT;',
+      );
+    }
   }
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE rep (
-    token  TEXT NOT NULL,
+  CREATE TABLE rep (
+    token TEXT NOT NULL,
     repId INTEGER NOT NULL,
     cityId INTEGER NOT NULL,
-    cityTitle TEXT ,
-    otherPlanId INTEGER ,
-    activePlanId INTEGER ,
+    cityTitle TEXT,
+    otherPlanId INTEGER,
+    activePlanId INTEGER,
     otherStatus INTEGER NOT NULL,
     flag INTEGER NOT NULL DEFAULT 0,
     flag1 INTEGER NOT NULL DEFAULT 0,
     name TEXT NOT NULL,
-    repType TEXT ,
+    repType TEXT,
     percentage INTEGER NOT NULL,
     samplesCount INTEGER NOT NULL,
     recipesCount INTEGER NOT NULL DEFAULT 0,
     isLogin INTEGER NOT NULL DEFAULT 0,
-    endDate TEXT ,
-    startDate TEXT ,
-    otherStartDate TEXT ,
-    otherEndDate TEXT ,
+    endDate TEXT,
+    startDate TEXT,
+    otherStartDate TEXT,
+    otherEndDate TEXT,
     totalReci INTEGER NOT NULL DEFAULT 0,
     usedReci INTEGER NOT NULL DEFAULT 0,
     remainReci INTEGER NOT NULL DEFAULT 0,
     totalVisitDoc INTEGER NOT NULL DEFAULT 0, 
-    totalVisitHos INTEGER NOT NULL DEFAULT 0  
-    );
-    ''');
+    totalVisitHos INTEGER NOT NULL DEFAULT 0,
+    groupTitle TEXT
+  );
+  ''');
     await db.execute('''
   CREATE TABLE specialization (
     id INTEGER PRIMARY KEY,

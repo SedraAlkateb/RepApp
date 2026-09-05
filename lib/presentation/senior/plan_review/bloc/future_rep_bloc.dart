@@ -20,7 +20,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
   ChangeRepPlanStatus changeRepPlanStatus;
   int sumBrandsAmount = 0;
   List<SpecDModel> specialization = [];
-  AllPlanBrandSp planBrandSp = AllPlanBrandSp([], 0);
+  AllPlanBrandSp planBrandSp = AllPlanBrandSp([], 0,BrandAmountModel(0, 0, 0));
   List<BrandAmountRequestModel> planBrandSpSend = [];
   int number = 0;
   FutureRepBloc(this.allSpeUsecase, this.repPlanBrandSpUsecase,
@@ -57,14 +57,17 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
           }
           return false;
         }).toList();
-        emit(FutureRepPlanBrandSpState(planBrandSp2));
+        emit(FutureRepPlanBrandSpState(planBrandSp2,planBrandSp.brandAmountModel));
       } else if (event is FutureRepPlanBrandSpEvent) {
-        planBrandSp = AllPlanBrandSp([], 0);
+        planBrandSp = AllPlanBrandSp([], 0,BrandAmountModel(0, 0, 0));
         emit(FutureRepPlanBrandSpLoadingState());
         (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
           emit(FutureRepPlanBrandSpErrorState(failure: failure));
         }, (data) async {
           planBrandSp = data!;
+          // planBrandSp.brandAmountModel.numHospital=planBrandSp.brandAmountModel.numHospital* event.sampleCount;
+          // planBrandSp.brandAmountModel.numDoctor=planBrandSp.brandAmountModel.numDoctor* event.sampleCount;
+          // planBrandSp.brandAmountModel.numDepartment=planBrandSp.brandAmountModel.numDepartment* event.sampleCount;
           number = data.amount;
           data.amount = data.amount * event.sampleCount;
           if (data.planBrandSps.isEmpty) {
@@ -72,7 +75,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
           } else {
             sumBrandsAmount = 0;
             sumBrandsAmount = sumBrandAmount(data.planBrandSps);
-            emit(FutureRepPlanBrandSpState(data.planBrandSps));
+            emit(FutureRepPlanBrandSpState(data.planBrandSps,data.brandAmountModel));
           }
         });
       } else if (event is ChangeFieldEvent) {

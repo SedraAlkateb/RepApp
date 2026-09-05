@@ -54,6 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             UserInfo.token = loginModel!.token;
 
             UserInfo.name = loginModel!.name;
+            UserInfo.groupTitle = loginModel!.groupTitle;
 
             UserInfo.cityId = loginModel!.cityId;
 

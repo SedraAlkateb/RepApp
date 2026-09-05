@@ -17,7 +17,8 @@ final class FutureSpRepState extends FutureRepState {
 
 final class FutureRepPlanBrandSpState extends FutureRepState {
   final List<PlanBrandSp> planBrandSp;
-  FutureRepPlanBrandSpState(this.planBrandSp);
+  final BrandAmountModel brandAmountModel;
+  FutureRepPlanBrandSpState(this.planBrandSp,this.brandAmountModel);
   @override
   List<Object?> get props => [planBrandSp];
 }

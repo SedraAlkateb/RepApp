@@ -70,6 +70,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(BrandFlagErrorState(failure: failure));
         }, (data) async {
           bandFlag = data;
+
           emit(BrandFlagState(data));
         });
       } else if (event is RemoveBrandEvent) {
@@ -108,6 +109,7 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
         }, (data) async {
           doctors = data;
           if (doctors.isNotEmpty) {
+
             emit(VisitDoctorState(data));
           } else {
             emit(EmptyVisitHospitalState());
@@ -199,6 +201,11 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(BrandPharmacyVisitErrorState(failure: failure));
         }, (data) async {
           brands = data;
+          if(brands.isEmpty){
+            isBrand=true;
+          }else{
+            isBrand=false;
+          }
           emit(BrandPharmacyVisitState(data));
         });
       } else if (event is BrandHospitalVisitEvent) {
@@ -208,6 +215,11 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
           emit(BrandHospitalVisitErrorState(failure: failure));
         }, (data) async {
           brands = data;
+          if(brands.isEmpty){
+            isBrand=true;
+          }else{
+            isBrand=false;
+          }
           emit(BrandHospitalVisitState(data));
         });
       } else if (event is EditAmountBrandEvent) {

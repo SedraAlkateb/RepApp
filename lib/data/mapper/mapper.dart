@@ -69,6 +69,8 @@ extension InfoRepMapper on AllRepInfoResponseBaseResponse? {
       int.parse(responseItem?.visitDonHos ?? "0"),
       responseItem?.visitnotYet ?? Constants.zero,
       int.parse(responseItem?.repType ?? "0"),
+      groupId:   responseItem?.groupId ?? Constants.empty,
+      responseItem?.groupTitle ?? Constants.empty,
     );
   }
 }
@@ -302,6 +304,8 @@ extension LoginResponseMapper on LoginResponse? {
       this?.data?.remainReci ?? Constants.zero,
       totDoc: int.parse(this?.data?.totDoc ?? "0"),
       totHos: int.parse(this?.data?.totHos ?? "0"),
+      groupId:  this?.data?.groupId ?? Constants.empty,
+      this?.data?.groupTitle ?? Constants.empty,
     );
   }
 }
@@ -509,20 +513,19 @@ extension BrandAmountMapper on BrandAmountResponse? {
 extension RepPlanBrandSpMapper on PlanBrandsBaseSpResponse? {
   AllPlanBrandSp toDomain() {
     if (this?.data == null) {
-      return AllPlanBrandSp([], 0);
+      return AllPlanBrandSp([], 0,BrandAmountModel(0, 0, 0));
     }
     List<PlanBrandSp>? planBrands =
-        (this?.data?.PlanBrands?.map((response) => response.toDomain()) ??
-                const Iterable.empty())
-            .cast<PlanBrandSp>()
-            .toList();
+    (this?.data?.PlanBrands?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<PlanBrandSp>()
+        .toList();
     BrandAmountModel brand =
         this?.data!.Brands.toDomain() ?? BrandAmountModel(0, 0, 0);
     int sum = brand.numDoctor + brand.numHospital + brand.numDepartment;
-    return AllPlanBrandSp(planBrands, sum);
+    return AllPlanBrandSp(planBrands, sum,brand);
   }
 }
-
 extension DoctorResponseMapper on DoctorResponse? {
   DoctorModel toDomain() {
     if (this?.note == null || this?.note == "" || this?.note == " ") {

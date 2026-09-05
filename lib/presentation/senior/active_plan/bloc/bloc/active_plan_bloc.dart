@@ -39,7 +39,10 @@ class ActivePlanBloc extends Bloc<ActivePlanEvent, ActivePlanState> {
           normalizeText(value.pharmaceuticalFormTitle).contains(search)) {
             return true;
           }
-
+          else if (
+          normalizeText(value.type.name).contains(search)) {
+            return true;
+          }
           return false;
         }).toList();
 

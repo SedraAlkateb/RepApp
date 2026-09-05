@@ -10,9 +10,10 @@ final class SeniorProfInitial extends SeniorProfState {
 
 final class SenAllPlaceState extends SeniorProfState {
   final List<PlaceModel> places;
-  SenAllPlaceState(this.places);
+  final List<PlaceModel> placesSearch;
+  SenAllPlaceState({required this.places,required this.placesSearch});
   @override
-  List<Object?> get props => [places];
+  List<Object?> get props => [placesSearch];
 }
 
 final class SenAllPlaceErrorState extends SeniorProfState {

@@ -279,7 +279,7 @@ class _BrandPlanActivePageState
 
                             child: Text(
                               'عرض جميع الأصناف المدرجة في الخطة الحالية '
-                                  'مع امكانية البحث عن منتج معين',
+                                  'مع امكانية البحث',
 
                               style:
                               TextStyle(
@@ -708,7 +708,7 @@ class ActiveBrandPlanCard
 
                       Expanded(
                         child: Text(
-                          'توزيع الأهداف حسب الاختصاص',
+                          'توزيع الصنف حسب الاختصاص',
 
                           maxLines: 1,
 

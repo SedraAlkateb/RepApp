@@ -506,7 +506,7 @@ class InventoryCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            "نسبة توزيع العينات من المخزون",
+                            "نسبة توزيع العينات",
 
                             maxLines: 1,
 
