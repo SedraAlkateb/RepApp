@@ -57,7 +57,7 @@ final bool isPr;
 
                   // عنوان الصنف
                   Text(
-                    brand.title ?? 'تفاصيل الصنف',
+                    brand.title,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
