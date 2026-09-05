@@ -884,7 +884,75 @@ class _RepProfileState
                   ],
                 ),
               ],
+              if (rep
+                  .groupTitle
+                  .isNotEmpty) ...[
+                const SizedBox(
+                  height: 10,
+                ),
 
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .center,
+
+                  children: [
+                    Icon(
+                      Icons
+                          .group_outlined,
+
+                      size:
+                      16,
+
+                      color:
+                      Colors.white
+                          .withOpacity(
+                        0.75,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      width: 5,
+                    ),
+
+                    Flexible(
+                      child: Text(
+                        rep.groupTitle,
+
+                        maxLines:
+                        3,
+
+                        overflow:
+                        TextOverflow
+                            .ellipsis,
+
+                        textAlign:
+                        TextAlign
+                            .center,
+
+                        style:
+                        TextStyle(
+                          fontSize:
+                          13,
+
+                          color:
+                          Colors.white
+                              .withOpacity(
+                            0.85,
+                          ),
+
+                          fontWeight:
+                          FontWeight
+                              .w500,
+
+                          height:
+                          1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               // =================================================
               // Finished Plan Badge
               // =================================================
@@ -1171,6 +1239,75 @@ class _RepProfileState
                     Flexible(
                       child: Text(
                         rep.address,
+
+                        maxLines:
+                        3,
+
+                        overflow:
+                        TextOverflow
+                            .ellipsis,
+
+                        textAlign:
+                        TextAlign
+                            .center,
+
+                        style:
+                        TextStyle(
+                          fontSize:
+                          13,
+
+                          color:
+                          Colors.white
+                              .withOpacity(
+                            0.85,
+                          ),
+
+                          fontWeight:
+                          FontWeight
+                              .w500,
+
+                          height:
+                          1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              if (rep
+                  .groupTitle
+                  .isNotEmpty) ...[
+                const SizedBox(
+                  height: 10,
+                ),
+
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .center,
+
+                  children: [
+                    Icon(
+                      Icons
+                          .group_outlined,
+
+                      size:
+                      16,
+
+                      color:
+                      Colors.white
+                          .withOpacity(
+                        0.75,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      width: 5,
+                    ),
+
+                    Flexible(
+                      child: Text(
+                        rep.groupTitle,
 
                         maxLines:
                         3,

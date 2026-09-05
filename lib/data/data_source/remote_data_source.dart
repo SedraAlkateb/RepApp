@@ -138,7 +138,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<AllSpcBaseResponse> allSpecializations(int repDet,
       {int? planId}) async {
-    return await _appServiceClient.allSpecializations(repDet, null);
+    return await _appServiceClient.allSpecializations(repDet, planId);
   }
 
   @override

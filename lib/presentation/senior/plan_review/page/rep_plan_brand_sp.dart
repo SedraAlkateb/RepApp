@@ -1065,6 +1065,20 @@ class _RepPlanBrandSpPageState
                 children: [
                   Expanded(
                     child: _buildStatItem(
+                      title: "المشافي والشعب",
+                      count: planBrandSp.numHospital+planBrandSp.numDepartment,
+                      icon: Icons.local_hospital_outlined,
+                      color: const Color(0xFF0D9488),
+                      bgColor: const Color(0xFFF0FDFA),
+                      labelSize: labelFontSize,
+                      countSize: countFontSize,
+                      iconSize: iconSize,
+                    ),
+                  ),
+
+                  _buildDivider(),
+                  Expanded(
+                    child: _buildStatItem(
                       title: "الأطباء",
                       count: planBrandSp.numDoctor,
                       icon: Icons.person_outline_rounded,
@@ -1078,22 +1092,9 @@ class _RepPlanBrandSpPageState
                   _buildDivider(),
                   Expanded(
                     child: _buildStatItem(
-                      title: "المستشفيات",
-                      count: planBrandSp.numHospital,
-                      icon: Icons.local_hospital_outlined,
-                      color: const Color(0xFF0D9488),
-                      bgColor: const Color(0xFFF0FDFA),
-                      labelSize: labelFontSize,
-                      countSize: countFontSize,
-                      iconSize: iconSize,
-                    ),
-                  ),
-                  _buildDivider(),
-                  Expanded(
-                    child: _buildStatItem(
-                      title: "الشعب",
-                      count: planBrandSp.numDepartment,
-                      icon: Icons.meeting_room_outlined,
+                      title: "الكلي",
+                      count: planBrandSp.numDepartment+planBrandSp.numDoctor+planBrandSp.numHospital,
+                      icon: Icons.medication_outlined,
                       color: const Color(0xFFD97706),
                       bgColor: const Color(0xFFFFFBEB),
                       labelSize: labelFontSize,
