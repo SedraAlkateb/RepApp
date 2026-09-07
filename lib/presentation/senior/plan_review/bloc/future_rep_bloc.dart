@@ -66,7 +66,8 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
             planBrandSp2, planBrandSp.brandAmountModel, sumTargetAss));
       } else if (event is FutureRepPlanBrandSpEvent) {
         sumTargetAss = SumBrandAmountModel(0, 0, 0);
-        planBrandSp = AllPlanBrandSp([], 0, BrandAmountModel(0, 0, 0));
+        planBrandSp = AllPlanBrandSp([], 0,
+            BrandAmountModel(0, 0, 0));
         emit(FutureRepPlanBrandSpLoadingState());
         (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
           emit(FutureRepPlanBrandSpErrorState(failure: failure));
@@ -133,8 +134,7 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
             }
           }
 
-          emit(AmountState(sumTargetAss.targetAmount,
-              sumTargetAss.assistantAmount, sumTargetAss.totalAmount));
+
         } else {
           planBrandSp.planBrandSps[event.index].totalAmount = event.number;
           int existingIndex = planBrandSpSend.indexWhere(
@@ -150,6 +150,8 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
                 planBrandSp.planBrandSps[event.index].totalAmount;
           }
         }
+        emit(AmountState(sumTargetAss.targetAmount,
+            sumTargetAss.assistantAmount, sumTargetAss.totalAmount));
       }
       if (event is UpdateAmountEvent) {
         emit(UpdateAmountLoadingState());

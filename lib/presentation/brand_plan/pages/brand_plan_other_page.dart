@@ -121,7 +121,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium,
-                                  overflow: TextOverflow.ellipsis,
+
                                 ),
                               ),
                             ],
