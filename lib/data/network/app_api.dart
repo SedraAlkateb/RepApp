@@ -262,7 +262,7 @@ abstract class AppServiceClient {
     @Part(name: "print_date") String? print_date,
     @Part(name: "active") String? active,
   });
-
+/////////////////////////////////////////////////
   @POST("/admin/getinfoPlanBrandsType.php")
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     @Part(name: "repPlanId") int repPlanId,

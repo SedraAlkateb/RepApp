@@ -20,8 +20,9 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
   ChangeRepPlanStatus changeRepPlanStatus;
   int sumBrandsAmount = 0;
   List<SpecDModel> specialization = [];
-  AllPlanBrandSp planBrandSp = AllPlanBrandSp([], 0,BrandAmountModel(0, 0, 0));
+  AllPlanBrandSp planBrandSp = AllPlanBrandSp([], 0, BrandAmountModel(0, 0, 0));
   List<BrandAmountRequestModel> planBrandSpSend = [];
+  SumBrandAmountModel sumTargetAss = SumBrandAmountModel(0, 0, 0);
   int number = 0;
   FutureRepBloc(this.allSpeUsecase, this.repPlanBrandSpUsecase,
       this.updateRepPlanBrandAmount, this.changeRepPlanStatus)
@@ -54,31 +55,60 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
         planBrandSp2 = planBrandSp.planBrandSps.where((value) {
           if (normalizeText(value.titleAr).contains(search)) {
             return true;
+          } else if (normalizeText(value.brandType.name).contains(search)) {
+            return true;
+          } else if (normalizeText(value.phTitle).contains(search)) {
+            return true;
           }
           return false;
         }).toList();
-        emit(FutureRepPlanBrandSpState(planBrandSp2,planBrandSp.brandAmountModel));
+        emit(FutureRepPlanBrandSpState(
+            planBrandSp2, planBrandSp.brandAmountModel, sumTargetAss));
       } else if (event is FutureRepPlanBrandSpEvent) {
-        planBrandSp = AllPlanBrandSp([], 0,BrandAmountModel(0, 0, 0));
+        sumTargetAss = SumBrandAmountModel(0, 0, 0);
+        planBrandSp = AllPlanBrandSp([], 0, BrandAmountModel(0, 0, 0));
         emit(FutureRepPlanBrandSpLoadingState());
         (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
           emit(FutureRepPlanBrandSpErrorState(failure: failure));
         }, (data) async {
           planBrandSp = data!;
-          // planBrandSp.brandAmountModel.numHospital=planBrandSp.brandAmountModel.numHospital* event.sampleCount;
-          // planBrandSp.brandAmountModel.numDoctor=planBrandSp.brandAmountModel.numDoctor* event.sampleCount;
-          // planBrandSp.brandAmountModel.numDepartment=planBrandSp.brandAmountModel.numDepartment* event.sampleCount;
           number = data.amount;
           data.amount = data.amount * event.sampleCount;
           if (data.planBrandSps.isEmpty) {
             emit(FutureRepPlanBrandSpEmptyState(data));
           } else {
+            for (var item in data.planBrandSps) {
+              final amount = item.totalAmount;
+
+              if (item.brandType.i == 2) {
+                // مساعد
+                sumTargetAss.assistantAmount += amount;
+              } else {
+                // هدف
+                sumTargetAss.targetAmount += amount;
+              }
+              sumTargetAss.totalAmount += amount;
+            }
+
             sumBrandsAmount = 0;
             sumBrandsAmount = sumBrandAmount(data.planBrandSps);
-            emit(FutureRepPlanBrandSpState(data.planBrandSps,data.brandAmountModel));
+            emit(FutureRepPlanBrandSpState(
+                data.planBrandSps, data.brandAmountModel, sumTargetAss));
           }
         });
       } else if (event is ChangeFieldEvent) {
+        if (planBrandSp.planBrandSps[event.index].brandType.i == 1) {
+          sumTargetAss.targetAmount = ((sumTargetAss.targetAmount) -
+              (planBrandSp.planBrandSps[event.index].totalAmount) +
+              (event.number));
+        } else {
+          sumTargetAss.assistantAmount = ((sumTargetAss.assistantAmount) -
+              (planBrandSp.planBrandSps[event.index].totalAmount) +
+              (event.number));
+        }
+        sumTargetAss.totalAmount = sumTargetAss.totalAmount -
+            planBrandSp.planBrandSps[event.index].totalAmount +
+            event.number;
         if (UserInfo.repType == 7) {
           int sumF = sumBrandsAmount -
               planBrandSp.planBrandSps[event.index].totalAmount;
@@ -102,6 +132,9 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
                   planBrandSp.planBrandSps[event.index].totalAmount;
             }
           }
+
+          emit(AmountState(sumTargetAss.targetAmount,
+              sumTargetAss.assistantAmount, sumTargetAss.totalAmount));
         } else {
           planBrandSp.planBrandSps[event.index].totalAmount = event.number;
           int existingIndex = planBrandSpSend.indexWhere(

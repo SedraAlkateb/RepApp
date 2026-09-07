@@ -2256,7 +2256,13 @@ class BrandAmountModel {
 
   BrandAmountModel(this.numDoctor, this.numHospital, this.numDepartment);
 }
+class SumBrandAmountModel {
+  int targetAmount;
+  int assistantAmount;
+  int totalAmount;
 
+  SumBrandAmountModel(this.targetAmount, this.assistantAmount, this.totalAmount);
+}
 class AllPlanBrandSp {
   List<PlanBrandSp> planBrandSps;
   int amount;

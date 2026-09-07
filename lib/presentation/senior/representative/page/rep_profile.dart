@@ -886,7 +886,7 @@ class _RepProfileState
               ],
               if (rep
                   .groupTitle
-                  .isNotEmpty) ...[
+                  .isNotEmpty&&rep.repType==7) ...[
                 const SizedBox(
                   height: 10,
                 ),

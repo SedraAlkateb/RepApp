@@ -18,9 +18,10 @@ final class FutureSpRepState extends FutureRepState {
 final class FutureRepPlanBrandSpState extends FutureRepState {
   final List<PlanBrandSp> planBrandSp;
   final BrandAmountModel brandAmountModel;
-  FutureRepPlanBrandSpState(this.planBrandSp,this.brandAmountModel);
+  final SumBrandAmountModel sum;
+  FutureRepPlanBrandSpState(this.planBrandSp, this.brandAmountModel, this.sum);
   @override
-  List<Object?> get props => [planBrandSp];
+  List<Object?> get props => [planBrandSp, sum];
 }
 
 final class FutureSpRepLoadingState extends FutureRepState {
@@ -97,4 +98,15 @@ final class EditeStatusState extends FutureRepState {
   EditeStatusState();
   @override
   List<Object?> get props => [];
+}
+
+final class AmountState extends FutureRepState {
+  final int targetAmount;
+  final int assistantAmount;
+  final int totalAmount;
+
+  AmountState(this.targetAmount, this.assistantAmount, this.totalAmount);
+
+  @override
+  List<Object?> get props => [targetAmount,assistantAmount,totalAmount];
 }

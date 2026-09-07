@@ -363,17 +363,19 @@ class CustomAppDrawer extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-          SizedBox(
-            height: smallSpacing,
-          ),
-          Text(
-            UserInfo.groupTitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: roleFontSize,
-              color: Colors.grey[700],
-            ),
-          ),
+         if(UserInfo.repType.i==7)...[
+           SizedBox(
+             height: smallSpacing,
+           ),
+           Text(
+             UserInfo.groupTitle,
+             textAlign: TextAlign.center,
+             style: TextStyle(
+               fontSize: roleFontSize,
+               color: Colors.grey[700],
+             ),
+           ),
+         ],
           SizedBox(
             height: headerSpacing - 2,
           ),

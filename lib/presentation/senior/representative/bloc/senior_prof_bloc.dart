@@ -19,6 +19,7 @@ import 'package:domina_app/domain/usecase/remaining_visits_use_case.dart';
 import 'package:domina_app/domain/usecase/unfinished_visit_hos_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_hos_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
+import 'package:domina_app/presentation/uniti/string_utils_number.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 part 'senior_prof_event.dart';
@@ -284,11 +285,11 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           if (normalizeText(value.placeTitle ?? "").contains(search)) {
             return true;
           }
-          if ("${value.visit}زيارة".contains(search)) {
+          if ("${value.visit}زيارة".contains(search.toEnglishNumbers())) {
             return true;
           }
-          if ((value.rate != null )&&
-              ( normalizeText(value.rate!).contains(search))) {
+          if (value.rate != null &&
+              normalizeText(value.rate!).toLowerCase().contains(search.toLowerCase())) {
             return true;
           }
           return false;
@@ -308,7 +309,8 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           if (normalizeText(value.address).contains(search)) {
             return true;
           }
-          if (normalizeText(value.rate).contains(search)) {
+          if (
+              normalizeText(value.rate).toLowerCase().contains(search.toLowerCase())) {
             return true;
           }
           return false;
@@ -328,7 +330,8 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           if (normalizeText(value.address).contains(search)) {
             return true;
           }
-          if (normalizeText(value.rate).contains(search)) {
+          if (
+              normalizeText(value.rate).toLowerCase().contains(search.toLowerCase())) {
             return true;
           }
           return false;
@@ -347,7 +350,8 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           if (normalizeText(value.address).contains(search)) {
             return true;
           }
-          if (normalizeText(value.rate).contains(search)) {
+          if (
+              normalizeText(value.rate).toLowerCase().contains(search.toLowerCase())) {
             return true;
           }
           return false;
@@ -379,11 +383,11 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
           if (normalizeText(value.spTitle).contains(search)) {
             return true;
           }
-          if ("${value.visits}زيارة".contains(search)) {
+          if ("${value.visits}زيارة".contains(search.toEnglishNumbers())) {
             return true;
           }
-          if ((value.rate != null )&&
-             ( normalizeText(value.rate!).contains(search))) {
+          if (value.rate != null &&
+              normalizeText(value.rate!).toLowerCase().contains(search.toLowerCase())) {
             return true;
           }
           return false;

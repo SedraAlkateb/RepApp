@@ -13,7 +13,7 @@ import 'package:domina_app/presentation/senior/manage_future/bloc/manage_future_
 import 'package:domina_app/presentation/senior/manage_future/widget/drop_down_change_plan.dart';
 import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
-import 'package:domina_app/presentation/senior/plan_review/page/future_spec.dart';
+import 'package:domina_app/presentation/senior/plan_review/page/plan_sp_br.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -891,10 +891,11 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
     iniFutureModule();
 
     if (rep.reptype.i == 7) {
+      initActivePlanModule();
       Navigator.push(
         context,
         _createRoute(
-          FutureSpecializationsPage(
+          PlanSpBr(
             id: rep.id,
             repPlanId: rep.activePlan,
             flag: rep.flag,
