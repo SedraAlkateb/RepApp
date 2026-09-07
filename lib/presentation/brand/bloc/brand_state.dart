@@ -23,7 +23,6 @@ final class AllBrandErrorState extends BrandState {
 }
 
 final class AllBrandLoadingState extends BrandState {
-  @override
   AllBrandLoadingState();
   @override
   List<Object?> get props => [];

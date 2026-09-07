@@ -94,7 +94,6 @@ final class DeleteAllErrorState extends AsyncState {
 }
 
 final class DeleteAllLoadingState extends AsyncState {
-  @override
   DeleteAllLoadingState();
   @override
   List<Object?> get props => [];

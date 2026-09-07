@@ -4,7 +4,6 @@ part of 'pharmacy_bloc.dart';
 sealed class PharmacyEvent extends Equatable {}
 
 class AllPharmacyEvent extends PharmacyEvent {
-  @override
   AllPharmacyEvent();
   List<Object?> get props => [];
 }

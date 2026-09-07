@@ -135,14 +135,12 @@ final class AllReciErrorState extends RecipesBrandState {
 }
 
 final class AllReciLoadingState extends RecipesBrandState {
-  @override
   AllReciLoadingState();
   @override
   List<Object?> get props => [];
 }
 
 final class AllReciEmptyState extends RecipesBrandState {
-  @override
   AllReciEmptyState();
   @override
   List<Object?> get props => [];

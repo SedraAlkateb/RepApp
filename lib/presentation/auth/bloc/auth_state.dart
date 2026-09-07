@@ -32,7 +32,6 @@ final class InsertAllBrandErrorState extends AuthState {
 }
 
 final class InsertAllBrandLoadingState extends AuthState {
-  @override
   InsertAllBrandLoadingState();
   @override
   List<Object?> get props => [];
@@ -53,7 +52,6 @@ final class LoginErrorState extends AuthState {
 }
 
 final class LoginLoadingState extends AuthState {
-  @override
   LoginLoadingState();
   @override
   List<Object?> get props => [];
