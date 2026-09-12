@@ -57,7 +57,6 @@ class DefaultFirebaseOptions {
     projectId: 'domina-rep',
     storageBucket: 'domina-rep.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDAENCcMN6_pugBF_CXYfGMxVn7FKkF7VA',
     appId: '1:911354788511:ios:2dd11ee37324920db000aa',
@@ -66,7 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'domina-rep.firebasestorage.app',
     iosBundleId: 'com.example.dominaApp',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDAENCcMN6_pugBF_CXYfGMxVn7FKkF7VA',
     appId: '1:911354788511:ios:2dd11ee37324920db000aa',
