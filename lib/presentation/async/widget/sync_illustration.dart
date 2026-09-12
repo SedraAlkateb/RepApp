@@ -1,6 +1,6 @@
 import 'package:domina_app/presentation/async/widget/database_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class SyncIllustration extends StatelessWidget {
   final double size;

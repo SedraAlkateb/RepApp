@@ -13,7 +13,7 @@ PODS:
   - firebase_core (4.14.0):
     - Firebase/CoreOnly (= 12.14.0)
     - Flutter
-  - firebase_crashlytics (5.2.7):
+  - firebase_crashlytics (5.3.0):
     - Firebase/Crashlytics (= 12.14.0)
     - firebase_core
     - Flutter
@@ -69,8 +69,6 @@ PODS:
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
-    - Flutter
-  - flutter_native_splash (2.4.3):
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
@@ -169,7 +167,6 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
-  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
@@ -211,8 +208,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
-  flutter_native_splash:
-    :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   image_picker_ios:
@@ -231,7 +226,7 @@ SPEC CHECKSUMS:
   Firebase: 7cc10425300768ec86292688af5cb228f0604bde
   firebase_analytics: 214485a545aff2cdefdd0e5dbdb9a44cad34123d
   firebase_core: 67cd8d2d980bde235d4de8a3d8db99d72f7c0168
-  firebase_crashlytics: 3d745f21395f046d251d1e6491044130ba9ff634
+  firebase_crashlytics: 7cf489c290e6d88cba60024adc34a9ef607f1ba0
   FirebaseAnalytics: 99364329a3ea4d1ab4a3744b5464371b7351c481
   FirebaseCore: 4939b340b9c598dc1f965d68f8fe57e630b65407
   FirebaseCoreExtension: ee3e3697acea1062288b1900bcdcab4d59ab93b4
@@ -242,7 +237,6 @@ SPEC CHECKSUMS:
   FirebaseSessions: c9e7b7829265454f08cb68f7f8a6650c9b221bd4
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
-  flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   GoogleAdsOnDeviceConversion: e3b71da24ff4cf01cf520756ac1c2b93c07b86ff
