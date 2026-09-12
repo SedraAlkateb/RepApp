@@ -32,18 +32,22 @@ import 'package:permission_handler/permission_handler.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+// ------------------------------------------------------------
+// Firebase
+// ------------------------------------------------------------
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
     await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -55,21 +59,81 @@ Future<void> main() async {
           stackTrace,
           fatal: true,
         );
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Crashlytics platform error: $e');
+      }
+
       return true;
     };
   } catch (e, stack) {
-    debugPrint("Firebase initialization error: $e");
+    debugPrint('Firebase initialization error: $e');
+
     try {
-      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      if (Firebase.apps.isNotEmpty) {
+        await FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          fatal: false,
+        );
+      }
+    } catch (crashError) {
+      debugPrint('Crashlytics recording error: $crashError');
+    }
+  }
+
+// ------------------------------------------------------------
+// App requirements
+// ------------------------------------------------------------
+  try {
+    await _setupAppRequirements();
+  } catch (e, stack) {
+    debugPrint('App requirements initialization error: $e');
+
+    try {
+      if (Firebase.apps.isNotEmpty) {
+        await FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          fatal: false,
+          reason: 'App requirements initialization',
+        );
+      }
     } catch (_) {}
   }
 
-  await _setupAppRequirements();
-  await _prepareUserData();
+// ------------------------------------------------------------
+// User data
+// مهم: لا نسمح لهذه العملية بمنع تشغيل التطبيق
+// ------------------------------------------------------------
+  try {
+    await _prepareUserData();
+  } catch (e, stack) {
+    debugPrint('User data initialization error: $e');
 
+    try {
+      UserInfo.isLogging = 0;
+    } catch (_) {}
+
+    try {
+      if (Firebase.apps.isNotEmpty) {
+        await FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          fatal: false,
+          reason: 'User data initialization',
+        );
+      }
+    } catch (_) {}
+  }
+
+// ------------------------------------------------------------
+// إزالة Native Splash دائمًا قبل runApp
+// ------------------------------------------------------------
   FlutterNativeSplash.remove();
 
+// ------------------------------------------------------------
+// Start Flutter app
+// ------------------------------------------------------------
   runApp(
     Phoenix(
       child: const MyResponsiveApp(),
@@ -77,52 +141,135 @@ Future<void> main() async {
   );
 }
 
+// ============================================================
+// APP REQUIREMENTS
+// ============================================================
+
 Future<void> _setupAppRequirements() async {
+// ------------------------------------------------------------
+// Screen
+// ------------------------------------------------------------
   await ScreenUtil.ensureScreenSize();
 
-  // init light DI (core + local)
-  await initAppModule();
+// ------------------------------------------------------------
+// Dependency Injection
+// ------------------------------------------------------------
+  try {
+    await initAppModule();
+  } catch (e, stack) {
+    debugPrint('DI initialization error: $e');
 
-  // تهيئة شبكة الاتصالات هنا بدلاً من initState
+    try {
+      if (Firebase.apps.isNotEmpty) {
+        await FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          fatal: false,
+          reason: 'DI initialization',
+        );
+      }
+    } catch (_) {}
+  }
+
+// ------------------------------------------------------------
+// Network
+// ------------------------------------------------------------
   try {
     await ensureNetworkModule();
-  } catch (_) {}
+  } catch (e) {
+    debugPrint('Network module error: $e');
+  }
 
-  // Bloc Crash Monitoring
+// ------------------------------------------------------------
+// Bloc Crash Monitoring
+// ------------------------------------------------------------
   try {
-    Bloc.observer = AppBlocObserver(instance<CrashlyticsService>());
-  } catch (_) {}
+    Bloc.observer = AppBlocObserver(
+      instance<CrashlyticsService>(),
+    );
+  } catch (e) {
+    debugPrint('Bloc observer error: $e');
+  }
 
+// ------------------------------------------------------------
+// HTTP Overrides
+// ------------------------------------------------------------
   HttpOverrides.global = MyHttpOverrides();
 
-  await _initNotifications();
-  await requestNotificationPermission();
+// ------------------------------------------------------------
+// Notifications
+// لا تسمح بفشل الإشعارات بإيقاف التطبيق
+// ------------------------------------------------------------
+  try {
+    await _initNotifications();
+  } catch (e, stack) {
+    debugPrint('Notifications initialization error: $e');
 
-  // جلب قياسات الشاشة بالطريقة الحديثة المعتمدة في Flutter
-  final view = WidgetsBinding.instance.platformDispatcher.views.first;
-  final physicalWidth = view.physicalSize.width;
-  final devicePixelRatio = view.devicePixelRatio;
-  final logicalWidth = physicalWidth / devicePixelRatio;
+    try {
+      if (Firebase.apps.isNotEmpty) {
+        await FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          fatal: false,
+          reason: 'Notifications initialization',
+        );
+      }
+    } catch (_) {}
+  }
 
-  // فحص هل الجهاز تابلت (العرض المنطقي أكبر من أو يساوي 600)
-  final bool isTablet = logicalWidth >= 600;
+// ------------------------------------------------------------
+// Notification Permission
+// ------------------------------------------------------------
+  try {
+    await requestNotificationPermission();
+  } catch (e) {
+    debugPrint('Notification permission error: $e');
+  }
 
-  if (isTablet) {
-    // التابلت: مسموح التدوير بالطول والعرض (Portrait + Landscape)
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-  } else {
-    // الموبايل: بالطول فقط (Portrait)
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+// ------------------------------------------------------------
+// Device Orientation
+// ------------------------------------------------------------
+  try {
+    final views = WidgetsBinding.instance.platformDispatcher.views;
+
+    if (views.isEmpty) {
+      return;
+    }
+
+    final view = views.first;
+
+    final physicalWidth = view.physicalSize.width;
+    final devicePixelRatio = view.devicePixelRatio;
+
+    if (devicePixelRatio <= 0) {
+      return;
+    }
+
+    final logicalWidth = physicalWidth / devicePixelRatio;
+
+    final bool isTablet = logicalWidth >= 600;
+
+    if (isTablet) {
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    }
+  } catch (e) {
+    debugPrint('Orientation configuration error: $e');
   }
 }
+
+// ============================================================
+// RESPONSIVE APP
+// ============================================================
 
 class MyResponsiveApp extends StatelessWidget {
   const MyResponsiveApp({super.key});
@@ -130,59 +277,143 @@ class MyResponsiveApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
+
     final double deviceWidth = mq.size.width;
+
     final bool isTabletDevice = deviceWidth > 450;
 
-    // 🌟 فحص ما إذا كان الجهاز تابلت وفي الوضع العرضي حصراً
-    final bool isTabletLandscape = isTabletDevice && mq.orientation == Orientation.landscape;
+    final bool isTabletLandscape =
+        isTabletDevice && mq.orientation == Orientation.landscape;
 
     return ScreenUtilInit(
       designSize: isTabletDevice ? const Size(500, 800) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
 
-      // 🌟 تطبيق تعديل الخط فقط إذا كان تابلت وفي الوضع العرضي
+// ----------------------------------------------------------
+// Font scaling
+// ----------------------------------------------------------
       fontSizeResolver: (fontSize, instance) {
         if (isTabletLandscape) {
-          // تصغير الخط بنسبة 10% فقط في الوضع العرضي للتابلت
           return (fontSize * instance.scaleText) * 2;
         }
-        // في بقية الحالات (طولي أو موابيل) يبعد الخط كالمعتاد
+
         return fontSize * instance.scaleText;
       },
 
+// ----------------------------------------------------------
+// App
+// ----------------------------------------------------------
       builder: (context, child) {
-        // نمرر تطبيق MyApp الأصلي الذي يحتوي على MultiBlocProvider و MaterialApp الوحيدة!
         return SafeArea(
-bottom: true,
-          child:  const MyApp(key: ValueKey('app_root')),
+          bottom: true,
+          child: const MyApp(
+            key: ValueKey('app_root'),
+          ),
         );
       },
     );
   }
 }
+
+// ============================================================
+// USER DATA
+// ============================================================
+
 Future<void> _prepareUserData() async {
   final usecase = IsLoginSqlUsecase(instance());
+
   final result = await usecase.execute();
 
   await result.fold(
-        (failure) {
+// ----------------------------------------------------------
+// Failure
+// ----------------------------------------------------------
+    (failure) async {
+      debugPrint('IsLoginSqlUsecase failure: $failure');
+
       UserInfo.isLogging = 0;
     },
-        (data) async {
+
+// ----------------------------------------------------------
+// Success
+// ----------------------------------------------------------
+    (data) async {
       if (data != null && data.isLogin > 0) {
         UserInfo.fillFromModel(data);
+
         final String repIdStr = UserInfo.repId.toString();
+
+// ------------------------------------------------------
+// Crashlytics User ID
+// ------------------------------------------------------
         try {
-          await FirebaseCrashlytics.instance.setUserIdentifier(repIdStr);
-          await instance<CrashlyticsService>().setUserId(repIdStr);
-        } catch (_) {}
+          if (Firebase.apps.isNotEmpty) {
+            await FirebaseCrashlytics.instance.setUserIdentifier(
+              repIdStr,
+            );
+          }
+        } catch (e) {
+          debugPrint('Crashlytics user ID error: $e');
+        }
+
         try {
-          await instance<AnalyticsService>().setUserId(repIdStr);
-          await FirebaseAnalytics.instance.setUserProperty(name: 'rep_id', value: repIdStr);
-        } catch (_) {}
-        await _checkPlanExpiration();
-        await AlarmAndNotifications.scheduleExpirationNotification();
+          await instance<CrashlyticsService>().setUserId(
+            repIdStr,
+          );
+        } catch (e) {
+          debugPrint('CrashlyticsService user ID error: $e');
+        }
+
+// ------------------------------------------------------
+// Analytics User ID
+// ------------------------------------------------------
+        try {
+          await instance<AnalyticsService>().setUserId(
+            repIdStr,
+          );
+        } catch (e) {
+          debugPrint('AnalyticsService user ID error: $e');
+        }
+
+        try {
+          if (Firebase.apps.isNotEmpty) {
+            await FirebaseAnalytics.instance.setUserProperty(
+              name: 'rep_id',
+              value: repIdStr,
+            );
+          }
+        } catch (e) {
+          debugPrint('Firebase Analytics user property error: $e');
+        }
+
+// ------------------------------------------------------
+// Plan expiration
+// ------------------------------------------------------
+        try {
+          await _checkPlanExpiration();
+        } catch (e, stack) {
+          debugPrint('Plan expiration error: $e');
+
+          try {
+            await instance<CrashlyticsService>().recordError(
+              error: e,
+              stackTrace: stack,
+              reason: 'Check Plan Expiration',
+            );
+          } catch (_) {}
+        }
+
+// ------------------------------------------------------
+// Expiration notification
+// ------------------------------------------------------
+        try {
+          await AlarmAndNotifications.scheduleExpirationNotification();
+        } catch (e) {
+          debugPrint(
+            'Schedule expiration notification error: $e',
+          );
+        }
       } else {
         UserInfo.isLogging = 0;
       }
@@ -190,43 +421,129 @@ Future<void> _prepareUserData() async {
   );
 }
 
+// ============================================================
+// LOCAL NOTIFICATIONS
+// ============================================================
+
 Future<void> _initNotifications() async {
+// ------------------------------------------------------------
+// Android
+// ------------------------------------------------------------
   const AndroidInitializationSettings androidSettings =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings(
+    '@mipmap/ic_launcher',
+  );
 
-  const InitializationSettings settings = InitializationSettings(android: androidSettings);
+// ------------------------------------------------------------
+// iOS
+// مهم جدًا: يجب وجود هذه الإعدادات عند تشغيل iOS
+// ------------------------------------------------------------
+  const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
 
-  await flutterLocalNotificationsPlugin.initialize(settings: settings);
-  await AlarmAndNotifications.initialize();
-}
+// ------------------------------------------------------------
+// Common initialization
+// ------------------------------------------------------------
+  const InitializationSettings settings = InitializationSettings(
+    android: androidSettings,
+    iOS: iosSettings,
+  );
 
-Future<void> requestNotificationPermission() async {
-  if (Platform.isAndroid) await Permission.notification.request();
-}
+  await flutterLocalNotificationsPlugin.initialize(
+    settings: settings,
+  );
 
-Future<void> _checkPlanExpiration() async {
-  if (UserInfo.isLogging != 0 && UserInfo.endDate != null && UserInfo.endDate != "") {
-    try {
-      final today = DateFormat("dd-MM-yyyy").format(DateTime.now());
-      DateTime endDate = formatStringToDataTime(UserInfo.endDate!);
-      String nextDay = DateFormat("dd-MM-yyyy").format(endDate.add(const Duration(days: 1)));
-      if (UserInfo.isLogging != 5 && today == nextDay) {
-        final edit = EditIsLoginSqlUsecase(instance());
-        await edit.execute(UserInfo.repId, 5);
-        UserInfo.isLogging = 5;
-      }
-    } catch (e, stack) {
-      await instance<CrashlyticsService>().recordError(error: e, stackTrace: stack, reason: "Check Plan Expiration");
-    }
+// ------------------------------------------------------------
+// App notification/alarm initialization
+// ------------------------------------------------------------
+  try {
+    await AlarmAndNotifications.initialize();
+  } catch (e) {
+    debugPrint(
+      'AlarmAndNotifications initialization error: $e',
+    );
   }
 }
 
+// ============================================================
+// NOTIFICATION PERMISSION
+// ============================================================
+
+Future<void> requestNotificationPermission() async {
+  if (Platform.isAndroid || Platform.isIOS) {
+    await Permission.notification.request();
+  }
+}
+
+// ============================================================
+// PLAN EXPIRATION
+// ============================================================
+
+Future<void> _checkPlanExpiration() async {
+  if (UserInfo.isLogging == 0 ||
+      UserInfo.endDate == null ||
+      UserInfo.endDate!.isEmpty) {
+    return;
+  }
+
+  try {
+    final String today = DateFormat("dd-MM-yyyy").format(DateTime.now());
+
+    final DateTime endDate = formatStringToDataTime(UserInfo.endDate!);
+
+    final String nextDay = DateFormat("dd-MM-yyyy").format(
+      endDate.add(
+        const Duration(days: 1),
+      ),
+    );
+
+    if (UserInfo.isLogging != 5 && today == nextDay) {
+      final edit = EditIsLoginSqlUsecase(instance());
+
+      await edit.execute(
+        UserInfo.repId,
+        5,
+      );
+
+      UserInfo.isLogging = 5;
+    }
+  } catch (e, stack) {
+    try {
+      await instance<CrashlyticsService>().recordError(
+        error: e,
+        stackTrace: stack,
+        reason: "Check Plan Expiration",
+      );
+    } catch (_) {}
+
+    debugPrint(
+      'Check plan expiration error: $e',
+    );
+  }
+}
+
+// ============================================================
+// HTTP OVERRIDES
+// ============================================================
+
 class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context) {
+  HttpClient createHttpClient(
+    SecurityContext? context,
+  ) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
-        if (host == '192.168.1.50' || host == 'localhost') return true;
+      ..badCertificateCallback = (
+        X509Certificate cert,
+        String host,
+        int port,
+      ) {
+        if (host == '192.168.1.50' || host == 'localhost') {
+          return true;
+        }
+
         return false;
       };
   }
