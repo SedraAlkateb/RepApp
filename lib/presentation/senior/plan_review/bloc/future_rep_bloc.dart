@@ -4,6 +4,8 @@ import 'package:domina_app/data/network/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
 import 'package:domina_app/domain/usecase/change_rep_plan_status.dart';
+import 'package:domina_app/domain/usecase/doc_sp_search_usecase.dart';
+import 'package:domina_app/domain/usecase/hos_sp_search_usecase.dart';
 import 'package:domina_app/domain/usecase/rep_plan_brand_sp_usecase.dart';
 import 'package:domina_app/domain/usecase/update_rep_plan_brand_amount.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -14,171 +16,257 @@ part 'future_rep_event.dart';
 part 'future_rep_state.dart';
 
 class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
-  AllSpeUsecase allSpeUsecase;
-  RepPlanBrandSpUsecase repPlanBrandSpUsecase;
-  UpdateRepPlanBrandAmount updateRepPlanBrandAmount;
-  ChangeRepPlanStatus changeRepPlanStatus;
+  final AllSpeUsecase allSpeUsecase;
+  final RepPlanBrandSpUsecase repPlanBrandSpUsecase;
+  final UpdateRepPlanBrandAmount updateRepPlanBrandAmount;
+  final ChangeRepPlanStatus changeRepPlanStatus;
+  final DocSpSearchUsecase docSpSearchUsecase;
+  final HosSpSearchUsecase hosSpSearchUsecase;
   int sumBrandsAmount = 0;
   List<SpecDModel> specialization = [];
   AllPlanBrandSp planBrandSp = AllPlanBrandSp([], 0, BrandAmountModel(0, 0, 0));
   List<BrandAmountRequestModel> planBrandSpSend = [];
   SumBrandAmountModel sumTargetAss = SumBrandAmountModel(0, 0, 0);
-  int number = 0;
-  FutureRepBloc(this.allSpeUsecase, this.repPlanBrandSpUsecase,
-      this.updateRepPlanBrandAmount, this.changeRepPlanStatus)
-      : super(FutureRepInitial()) {
-    on<FutureRepEvent>((event, emit) async {
-      if (event is FutureSpEvent) {
-        specialization = [];
-        emit(FutureSpRepLoadingState());
-        (await allSpeUsecase.execute(event.id, planId: event.planId)).fold(
-            (failure) {
-          emit(FutureSpRepErrorState(failure: failure));
-        }, (data) async {
-          planBrandSpSend = [];
-          specialization = data;
-          emit(FutureSpRepState(data));
-        });
-      } else if (event is FutureSearchSpecEvent) {
-        List<SpecDModel> specializationSearch = [];
-        String search = normalizeText(event.contan);
-        specializationSearch = specialization.where((value) {
-          if (normalizeText(value.title).contains(search)) {
-            return true;
-          }
-          return false;
-        }).toList();
-        emit(FutureSpRepState(specializationSearch));
-      } else if (event is SearchPlanBrandsEvent) {
-        List<PlanBrandSp> planBrandSp2 = [];
-        String search = normalizeText(event.contant);
-        planBrandSp2 = planBrandSp.planBrandSps.where((value) {
-          if (normalizeText(value.titleAr).contains(search)) {
-            return true;
-          } else if (normalizeText(value.brandType.name).contains(search)) {
-            return true;
-          } else if (normalizeText(value.phTitle).contains(search)) {
-            return true;
-          }
-          return false;
-        }).toList();
-        emit(FutureRepPlanBrandSpState(
-            planBrandSp2, planBrandSp.brandAmountModel, sumTargetAss));
-      } else if (event is FutureRepPlanBrandSpEvent) {
-        sumTargetAss = SumBrandAmountModel(0, 0, 0);
-        planBrandSp = AllPlanBrandSp([], 0,
-            BrandAmountModel(0, 0, 0));
-        emit(FutureRepPlanBrandSpLoadingState());
-        (await repPlanBrandSpUsecase.execute(event.rep)).fold((failure) {
-          emit(FutureRepPlanBrandSpErrorState(failure: failure));
-        }, (data) async {
-          planBrandSp = data!;
-          number = data.amount;
-          data.amount = data.amount * event.sampleCount;
-          if (data.planBrandSps.isEmpty) {
-            emit(FutureRepPlanBrandSpEmptyState(data));
-          } else {
-            for (var item in data.planBrandSps) {
-              final amount = item.totalAmount;
-
-              if (item.brandType.i == 2) {
-                // مساعد
-                sumTargetAss.assistantAmount += amount;
-              } else {
-                // هدف
-                sumTargetAss.targetAmount += amount;
-              }
-              sumTargetAss.totalAmount += amount;
-            }
-
-            sumBrandsAmount = 0;
-            sumBrandsAmount = sumBrandAmount(data.planBrandSps);
-            emit(FutureRepPlanBrandSpState(
-                data.planBrandSps, data.brandAmountModel, sumTargetAss));
-          }
-        });
-      } else if (event is ChangeFieldEvent) {
-        if (planBrandSp.planBrandSps[event.index].brandType.i == 1) {
-          sumTargetAss.targetAmount = ((sumTargetAss.targetAmount) -
-              (planBrandSp.planBrandSps[event.index].totalAmount) +
-              (event.number));
-        } else {
-          sumTargetAss.assistantAmount = ((sumTargetAss.assistantAmount) -
-              (planBrandSp.planBrandSps[event.index].totalAmount) +
-              (event.number));
-        }
-        sumTargetAss.totalAmount = sumTargetAss.totalAmount -
-            planBrandSp.planBrandSps[event.index].totalAmount +
-            event.number;
-        if (UserInfo.repType == 7) {
-          int sumF = sumBrandsAmount -
-              planBrandSp.planBrandSps[event.index].totalAmount;
-          sumF = sumF + event.number;
-          if (sumF > planBrandSp.amount) {
-            emit(SumErrorState(
-                failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص")));
-          } else {
-            planBrandSp.planBrandSps[event.index].totalAmount = event.number;
-            sumBrandsAmount = sumF;
-            int existingIndex = planBrandSpSend.indexWhere(
-              (item) => item.id == planBrandSp.planBrandSps[event.index].id,
-            );
-            if (existingIndex == -1) {
-              planBrandSpSend.add(BrandAmountRequestModel(
-                planBrandSp.planBrandSps[event.index].id,
-                planBrandSp.planBrandSps[event.index].totalAmount,
-              ));
-            } else {
-              planBrandSpSend[existingIndex].amount =
-                  planBrandSp.planBrandSps[event.index].totalAmount;
-            }
-          }
-
-
-        } else {
-          planBrandSp.planBrandSps[event.index].totalAmount = event.number;
-          int existingIndex = planBrandSpSend.indexWhere(
-            (item) => item.id == planBrandSp.planBrandSps[event.index].id,
-          );
-          if (existingIndex == -1) {
-            planBrandSpSend.add(BrandAmountRequestModel(
-              planBrandSp.planBrandSps[event.index].id,
-              planBrandSp.planBrandSps[event.index].totalAmount,
-            ));
-          } else {
-            planBrandSpSend[existingIndex].amount =
-                planBrandSp.planBrandSps[event.index].totalAmount;
-          }
-        }
-        emit(AmountState(sumTargetAss.targetAmount,
-            sumTargetAss.assistantAmount, sumTargetAss.totalAmount));
-      }
-      if (event is UpdateAmountEvent) {
-        emit(UpdateAmountLoadingState());
-        (await updateRepPlanBrandAmount
-                .execute(BrandAmountRequestBody(planBrandSpSend)))
-            .fold((failure) {
-          emit(FutureSpRepErrorState(failure: failure));
-        }, (data) async {
-          emit(UpdateAmountState());
-        });
-      }
-      if (event is EditePlanStatusEvent) {
-        emit(EditeStatusLoadingState());
-        (await changeRepPlanStatus.execute(event.id, event.status)).fold(
-            (failure) {
-          emit(EditeStatusFailureState(failure: failure));
-        }, (data) async {
-          emit(EditeStatusState());
-        });
-      }
-    });
+  int baseAmount = 0;
+  int calculatedMaxAmount = 0;
+int percent=0;
+int sampleCount=0;
+  FutureRepBloc(
+      this.allSpeUsecase,
+      this.repPlanBrandSpUsecase,
+      this.updateRepPlanBrandAmount,
+      this.changeRepPlanStatus,
+      this.docSpSearchUsecase,
+      this.hosSpSearchUsecase,
+      ) : super(FutureRepInitial()) {
+    on<FutureSpEvent>(_onFutureSp);
+    on<FutureSearchSpecEvent>(_onFutureSearchSpec);
+    on<SearchPlanBrandsEvent>(_onSearchPlanBrands);
+    on<FutureRepPlanBrandSpEvent>(_onFutureRepPlanBrandSp);
+    on<ChangeFieldEvent>(_onChangeField);
+    on<UpdateAmountEvent>(_onUpdateAmount);
+    on<EditePlanStatusEvent>(_onEditePlanStatus);
+    on<DocSpSearchEvent>(_onGetDocSpSearch);
+    on<HosSpSearchEvent>(_onGetHosSpSearch);
   }
-  int sumBrandAmount(List<PlanBrandSp> planBrands) {
-    int sum = 0;
-    for (PlanBrandSp brand in planBrands) {
-      sum += brand.totalAmount;
+
+  Future<void> _onFutureSp(
+      FutureSpEvent event,
+      Emitter<FutureRepState> emit,
+      ) async {
+    specialization = [];
+    emit(FutureSpRepLoadingState());
+
+    final result = await allSpeUsecase.execute(event.id, planId: event.planId);
+    result.fold(
+          (failure) => emit(FutureSpRepErrorState(failure: failure)),
+          (data) {
+        planBrandSpSend = [];
+        specialization = data;
+        emit(FutureSpRepState(data));
+      },
+    );
+  }
+
+  void _onFutureSearchSpec(
+      FutureSearchSpecEvent event,
+      Emitter<FutureRepState> emit,
+      ) {
+    final search = normalizeText(event.contan);
+    final specializationSearch = specialization.where((value) {
+      return normalizeText(value.title).contains(search);
+    }).toList();
+
+    emit(FutureSpRepState(specializationSearch));
+  }
+
+  void _onSearchPlanBrands(
+      SearchPlanBrandsEvent event,
+      Emitter<FutureRepState> emit,
+      ) {
+    final search = normalizeText(event.contant);
+    final planBrandSp2 = planBrandSp.planBrandSps.where((value) {
+      return normalizeText(value.titleAr).contains(search) ||
+          normalizeText(value.brandType.name).contains(search) ||
+          normalizeText(value.phTitle).contains(search);
+    }).toList();
+
+    emit(FutureRepPlanBrandSpState(
+      planBrandSp2,
+      planBrandSp.brandAmountModel,
+      sumTargetAss,
+    ));
+  }
+
+  Future<void> _onFutureRepPlanBrandSp(
+      FutureRepPlanBrandSpEvent event,
+      Emitter<FutureRepState> emit,
+      ) async {
+    sumTargetAss = SumBrandAmountModel(0, 0, 0);
+    planBrandSp = AllPlanBrandSp([], 0, BrandAmountModel(0, 0, 0));
+    emit(FutureRepPlanBrandSpLoadingState());
+
+    final result = await repPlanBrandSpUsecase.execute(event.rep);
+    result.fold(
+          (failure) => emit(FutureRepPlanBrandSpErrorState(failure: failure)),
+          (data) {
+        if (data == null) return;
+sampleCount=event.sampleCount;
+percent=event.percent??0;
+        planBrandSp = data;
+        baseAmount = data.amount;
+        calculatedMaxAmount = data.amount * event.sampleCount;
+
+        if (data.planBrandSps.isEmpty) {
+          emit(FutureRepPlanBrandSpEmptyState(data));
+        } else {
+          for (var item in data.planBrandSps) {
+            final amount = item.totalAmount;
+            if (item.brandType.i == 2) {
+              sumTargetAss.assistantAmount += amount;
+            } else {
+              sumTargetAss.targetAmount += amount;
+            }
+            sumTargetAss.totalAmount += amount;
+          }
+
+          sumBrandsAmount = _sumBrandAmount(data.planBrandSps);
+          emit(FutureRepPlanBrandSpState(
+            data.planBrandSps,
+            data.brandAmountModel,
+            sumTargetAss,
+          ));
+        }
+      },
+    );
+  }
+
+  void _onChangeField(
+      ChangeFieldEvent event,
+      Emitter<FutureRepState> emit,
+      ) {
+// البحث عن العنصر باستخدام itemId بدلاً من index
+    final targetIndex = planBrandSp.planBrandSps.indexWhere(
+          (item) => item.id == event.itemId,
+    );
+
+    // إذا لم يتم العثور على العنصر تجنب متابعة التنفيذ
+    if (targetIndex == -1) return;
+
+    final targetItem = planBrandSp.planBrandSps[targetIndex];
+
+    // إعادة حساب مجاميع الأصناف (هدف / مساعد)
+    if (targetItem.brandType.i == 1) {
+      sumTargetAss.targetAmount =
+          sumTargetAss.targetAmount - targetItem.totalAmount + event.number;
+    } else {
+      sumTargetAss.assistantAmount =
+          sumTargetAss.assistantAmount - targetItem.totalAmount + event.number;
     }
-    return sum;
+    sumTargetAss.totalAmount =
+        sumTargetAss.totalAmount - targetItem.totalAmount + event.number;
+
+    // التحقق من حد المندوب في حال كان repType == 7
+    if (UserInfo.repType == 7) {
+      int sumF = sumBrandsAmount - targetItem.totalAmount + event.number;
+
+      if (sumF > planBrandSp.amount) {
+        emit(SumErrorState(
+          failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص"),
+        ));
+        return;
+      }
+      sumBrandsAmount = sumF;
+    }
+
+    // تحديث الكمية في القائمة الأصلية
+    targetItem.totalAmount = event.number;
+
+    // تحديث العناصر المجهزة للإرسال
+    final existingIndex = planBrandSpSend.indexWhere(
+          (item) => item.id == targetItem.id,
+    );
+
+    if (existingIndex == -1) {
+      planBrandSpSend.add(BrandAmountRequestModel(
+        targetItem.id,
+        targetItem.totalAmount,
+      ));
+    } else {
+      planBrandSpSend[existingIndex].amount = targetItem.totalAmount;
+    }
+
+    emit(AmountState(
+      sumTargetAss.targetAmount,
+      sumTargetAss.assistantAmount,
+      sumTargetAss.totalAmount,
+    ));
+  }
+
+  Future<void> _onUpdateAmount(
+      UpdateAmountEvent event,
+      Emitter<FutureRepState> emit,
+      ) async {
+    if(planBrandSpSend.isNotEmpty){
+      emit(UpdateAmountLoadingState());
+
+      final result = await updateRepPlanBrandAmount.execute(
+        BrandAmountRequestBody(planBrandSpSend),
+      );
+
+      result.fold(
+            (failure) => emit(FutureSpRepErrorState(failure: failure)),
+            (data) {
+
+          emit(UpdateAmountState());
+          planBrandSpSend = [];
+        },
+      );
+    }else{
+      emit(ISEmptyState());
+    }
+  }
+
+  Future<void> _onEditePlanStatus(
+      EditePlanStatusEvent event,
+      Emitter<FutureRepState> emit,
+      ) async {
+    emit(EditeStatusLoadingState());
+
+    final result = await changeRepPlanStatus.execute(event.id, event.status);
+
+    result.fold(
+          (failure) => emit(EditeStatusFailureState(failure: failure)),
+          (data) => emit(EditeStatusState()),
+    );
+  }
+  Future<void> _onGetHosSpSearch(
+      HosSpSearchEvent event,
+      Emitter<FutureRepState> emit,
+      ) async {
+    emit(DocHosSpSearchLoadingState());
+
+    final result = await hosSpSearchUsecase.execute(event.repPlanId, event.spId);
+
+    result.fold(
+          (failure) => emit(DocHosSpSearchFailureState(failure: failure)),
+          (data) => emit(DocHosSpSearchState(data)),
+    );
+  }
+  Future<void> _onGetDocSpSearch(
+      DocSpSearchEvent event,
+      Emitter<FutureRepState> emit,
+      ) async {
+    emit(DocHosSpSearchLoadingState());
+
+    final result = await docSpSearchUsecase.execute(event.repPlanId, event.spId);
+
+    result.fold(
+          (failure) => emit(DocHosSpSearchFailureState(failure: failure)),
+          (data) => emit(DocHosSpSearchState(data)),
+    );
+  }
+  int _sumBrandAmount(List<PlanBrandSp> planBrands) {
+    return planBrands.fold(0, (sum, item) => sum + item.totalAmount);
   }
 }

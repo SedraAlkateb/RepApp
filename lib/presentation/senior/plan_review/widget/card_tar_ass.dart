@@ -4,7 +4,7 @@ import 'package:domina_app/presentation/resources/responsive/app_responsive.dart
 import 'package:domina_app/presentation/senior/plan_review/widget/stat_item.dart';
 import 'package:flutter/material.dart';
 
-Widget buildSampleStatisticsTypeSummaryCard(SumBrandAmountModel sumTargetAss) {
+Widget buildSampleStatisticsTypeSummaryCard(SumBrandAmountModel sumTargetAss,int samplesCount) {
   return Builder(
     builder: (context) {
       final deviceType = AppResponsive.deviceType(context);
@@ -112,12 +112,11 @@ Widget buildSampleStatisticsTypeSummaryCard(SumBrandAmountModel sumTargetAss) {
                     iconSize: iconSize,
                   ),
                 ),
-
                 buildDivider(),
                 Expanded(
                   child: buildStatItem(
                     title: "مساعد",
-                    count:  sumTargetAss.assistantAmount,
+                    count: sumTargetAss.assistantAmount,
                     icon: Icons.person_outline_rounded,
                     color: const Color(0xFF2563EB),
                     bgColor: const Color(0xFFEFF6FF),
@@ -128,15 +127,44 @@ Widget buildSampleStatisticsTypeSummaryCard(SumBrandAmountModel sumTargetAss) {
                 ),
                 buildDivider(),
                 Expanded(
-                  child: buildStatItem(
-                    title: "الكلي",
-                    count:  sumTargetAss.totalAmount,
-                    icon: Icons.medication_outlined,
-                    color: const Color(0xFFD97706),
-                    bgColor: const Color(0xFFFFFBEB),
-                    labelSize: labelFontSize,
-                    countSize: countFontSize,
-                    iconSize: iconSize,
+                  child: Tooltip(
+                    padding: const EdgeInsets.all(
+                      8,
+                    ),
+                    triggerMode: TooltipTriggerMode.tap,
+                    message: "${sumTargetAss.totalAmount * samplesCount}",
+                    waitDuration: const Duration(
+                      milliseconds: 100,
+                    ),
+                    showDuration: const Duration(
+                      seconds: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(
+                        8,
+                      ),
+                    ),
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(
+                        18,
+                      ),
+
+                      child: buildStatItem(
+                        title: "الكلي",
+                        count: sumTargetAss.totalAmount,
+                        icon: Icons.medication_outlined,
+                        color: const Color(0xFFD97706),
+                        bgColor: const Color(0xFFFFFBEB),
+                        labelSize: labelFontSize,
+                        countSize: countFontSize,
+                        iconSize: iconSize,
+                      ),
+                    ),
                   ),
                 ),
               ],

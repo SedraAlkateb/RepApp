@@ -59,8 +59,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final deviceType =
     AppResponsive.deviceType(context);
 
@@ -157,9 +155,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
 
       // ===================================================
       // مهم للكيبورد
-      //
-      // الـScaffold يصغر المساحة المتاحة عند ظهور
-      // لوحة المفاتيح، وبالتالي input السفلي يطلع فوقها
       // ===================================================
       resizeToAvoidBottomInset: true,
 
@@ -229,461 +224,418 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
             // =================================================
             // Scrollable Content
             // =================================================
-            Center(
-              child: ConstrainedBox(
-                constraints:
-                BoxConstraints(
-                  maxWidth:
-                  pageMaxWidth,
-                ),
-
-                child:
-                CustomScrollView(
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   keyboardDismissBehavior:
                   ScrollViewKeyboardDismissBehavior
                       .onDrag,
-
-                  slivers: [
-                    // ===========================================
-                    // Header
-                    // ===========================================
-                    SliverPadding(
-                      padding:
-                      EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        headerTopPadding,
-                        horizontalPadding,
-                        headerBottomPadding,
-                      ),
-
-                      sliver:
-                      SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start,
-
-                          children: [
-                            Text(
-                              'تقارير الزيارات للأطباء',
-
-                              style:
-                              TextStyle(
-                                fontSize:
-                                titleFontSize,
-
-                                fontWeight:
-                                FontWeight
-                                    .w800,
-
-                                color:
-                                const Color(
-                                  0xFF0F172A,
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height: 5,
-                            ),
-
-                            Text(
-                              'مراجعة تفاصيل الزيارات الميدانية لأطباء للمندوب',
-
-                              style:
-                              TextStyle(
-                                fontSize:
-                                subtitleFontSize,
-
-                                color:
-                                const Color(
-                                  0xFF64748B,
-                                ),
-
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
                     ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints:
+                        BoxConstraints(
+                          maxWidth:
+                          pageMaxWidth,
+                        ),
 
-                    // ===========================================
-                    // Bloc Content
-                    // ===========================================
-                    BlocConsumer<
-                        ReportVisitDoctorBloc,
-                        ReportVisitDoctorState>(
-                      listener:
-                          (context, state) {
-                        if (state
-                        is AsReadErrorState) {
-                          error(
-                            context,
-                            state.failure.massage,
-                            state.failure.code,
-                          );
-                        }
-                      },
-
-                      builder:
-                          (context, state) {
-                        List<RepVisitsModel>
-                        doctorNoteModel =
-                            context
-                                .watch<
-                                ReportVisitDoctorBloc>()
-                                .repVisitsSearch;
-
-                        // =======================================
-                        // Empty
-                        // =======================================
-                        if (state
-                        is AllReportVisitDoctorEmptyState) {
-                          return SliverFillRemaining(
-                            hasScrollBody:
-                            false,
-
-                            child:
-                            emptyFullScreen(
-                              context,
-                            ),
-                          );
-                        }
-
-                        // =======================================
-                        // Read State
-                        // =======================================
-                        if (state
-                        is SenVisitDoctorAsReadState) {
-                          doctorNoteModel =
-                              state.doctorNoteModel;
-                        }
-
-                        // =======================================
-                        // Success
-                        // =======================================
-                        if (state
-                        is AllReportVisitDoctorsState) {
-                          doctorNoteModel =
-                              state.repVisitsModel;
-                        }
-
-                        // =======================================
-                        // Loading
-                        // =======================================
-                        if (state
-                        is AllReportVisitDoctorLoadingState) {
-                          return SliverFillRemaining(
-                            hasScrollBody:
-                            false,
-
-                            child:
-                            loadingFullScreen(
-                              context,
-                            ),
-                          );
-                        }
-
-                        if (state
-                        is AllReadLoadingState) {
-                          return SliverFillRemaining(
-                            hasScrollBody:
-                            false,
-
-                            child:
-                            loadingFullScreen(
-                              context,
-                            ),
-                          );
-                        }
-
-                        // =======================================
-                        // Refresh after Read All
-                        // نفس السلوك الموجود عندك
-                        // =======================================
-                        if (state
-                        is AllReadSucState) {
-                          BlocProvider.of<
-                              ReportVisitDoctorBloc>(
-                            context,
-                          ).add(
-                            AllReportVisitDoctorEvent(
-                              VisitRepSen(
-                                widget.repId,
-                                UserInfo.repId,
-                              ),
-                              widget.iscanedite,
-                            ),
-                          );
-                        }
-
-                        // =======================================
-                        // Error
-                        // =======================================
-                        if (state
-                        is AllReportVisitDoctorErrorState) {
-                          return SliverFillRemaining(
-                            hasScrollBody:
-                            false,
-
-                            child:
-                            errorFullScreen(
-                              context,
-                              func: () {
-                                BlocProvider.of<
-                                    ReportVisitDoctorBloc>(
-                                  context,
-                                ).add(
-                                  AllReportVisitDoctorEvent(
-                                    VisitRepSen(
-                                      widget.repId,
-                                      widget.userId,
-                                    ),
-                                    widget.iscanedite,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }
-
-                        if (state
-                        is AllReadErrorState) {
-                          return SliverFillRemaining(
-                            hasScrollBody:
-                            false,
-
-                            child:
-                            errorFullScreen(
-                              context,
-                              func: () {
-                                BlocProvider.of<
-                                    ReportVisitDoctorBloc>(
-                                  context,
-                                ).add(
-                                  AllReportVisitDoctorEvent(
-                                    VisitRepSen(
-                                      widget.repId,
-                                      widget.userId,
-                                    ),
-                                    widget.iscanedite,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }
-
-                        // =======================================
-                        // Data
-                        // =======================================
-                        return SliverPadding(
-                          padding:
-                          EdgeInsets.symmetric(
-                            horizontal:
-                            horizontalPadding,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
                           ),
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.stretch,
+                            children: [
+                              // ===========================================
+                              // Header
+                              // ===========================================
+                              Padding(
+                                padding:
+                                EdgeInsets.fromLTRB(
+                                  0,
+                                  headerTopPadding,
+                                  0,
+                                  headerBottomPadding,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment
+                                      .start,
 
-                          sliver:
-                          SliverList(
-                            delegate:
-                            SliverChildListDelegate(
-                              [
-                                // =================================
-                                // Search
-                                // =================================
-                                SearchField(
-                                  searchController:
-                                  searchNoteDoctorController,
+                                  children: [
+                                    Text(
+                                      'تقارير الزيارات للأطباء',
 
-                                  onPressed:
-                                      (value) {
+                                      style:
+                                      TextStyle(
+                                        fontSize:
+                                        titleFontSize,
+
+                                        fontWeight:
+                                        FontWeight
+                                            .w800,
+
+                                        color:
+                                        const Color(
+                                          0xFF0F172A,
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+
+                                    Text(
+                                      'مراجعة تفاصيل الزيارات الميدانية لأطباء للمندوب',
+
+                                      style:
+                                      TextStyle(
+                                        fontSize:
+                                        subtitleFontSize,
+
+                                        color:
+                                        const Color(
+                                          0xFF64748B,
+                                        ),
+
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // ===========================================
+                              // Bloc Content
+                              // ===========================================
+                              BlocConsumer<
+                                  ReportVisitDoctorBloc,
+                                  ReportVisitDoctorState>(
+                                listener:
+                                    (context, state) {
+                                  if (state
+                                  is AsReadErrorState) {
+                                    error(
+                                      context,
+                                      state.failure.massage,
+                                      state.failure.code,
+                                    );
+                                  }
+                                },
+
+                                builder:
+                                    (context, state) {
+                                  List<RepVisitsModel>
+                                  doctorNoteModel =
+                                      context
+                                          .watch<
+                                          ReportVisitDoctorBloc>()
+                                          .repVisitsSearch;
+
+                                  // =======================================
+                                  // Empty
+                                  // =======================================
+                                  if (state
+                                  is AllReportVisitDoctorEmptyState) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 40,
+                                      ),
+                                      child: emptyFullScreen(
+                                        context,
+                                      ),
+                                    );
+                                  }
+
+                                  // =======================================
+                                  // Read State
+                                  // =======================================
+                                  if (state
+                                  is SenVisitDoctorAsReadState) {
+                                    doctorNoteModel =
+                                        state.doctorNoteModel;
+                                  }
+
+                                  // =======================================
+                                  // Success
+                                  // =======================================
+                                  if (state
+                                  is AllReportVisitDoctorsState) {
+                                    doctorNoteModel =
+                                        state.repVisitsModel;
+                                  }
+
+                                  // =======================================
+                                  // Loading
+                                  // =======================================
+                                  if (state
+                                  is AllReportVisitDoctorLoadingState ||
+                                      state is AllReadLoadingState) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 60,
+                                      ),
+                                      child: loadingFullScreen(
+                                        context,
+                                      ),
+                                    );
+                                  }
+
+                                  // =======================================
+                                  // Refresh after Read All
+                                  // =======================================
+                                  if (state
+                                  is AllReadSucState) {
                                     BlocProvider.of<
                                         ReportVisitDoctorBloc>(
                                       context,
                                     ).add(
-                                      SenSearchNoteVisitDoctorEvent(
-                                        value,
+                                      AllReportVisitDoctorEvent(
+                                        VisitRepSen(
+                                          widget.repId,
+                                          UserInfo.repId,
+                                        ),
+                                        widget.iscanedite,
                                       ),
                                     );
-                                  },
-                                ),
+                                  }
 
-                                SizedBox(
-                                  height:
-                                  searchBottomSpacing,
-                                ),
-
-                                // =================================
-                                // Total
-                                // =================================
-                                buildTotalReportsCard(
-                                  doctorNoteModel
-                                      .length,
-                                  'إجمالي التقارير',
-                                  'لهذا الشهر',
-                                ),
-
-                                // =================================
-                                // Read All Actions
-                                // =================================
-                                if (widget.iscanedite)
-                                  Padding(
-                                    padding:
-                                    EdgeInsets.only(
-                                      top:
-                                      actionsTopSpacing,
-                                      bottom:
-                                      actionsBottomSpacing,
-                                    ),
-
-                                    child:
-                                    Wrap(
-                                      spacing:
-                                      10,
-                                      runSpacing:
-                                      10,
-
-                                      children: [
-                                        // =========================
-                                        // Read All
-                                        // =========================
-                                        buildActionBtn(
-                                          context:
-                                          context,
-
-                                          label:
-                                          'قراءة الكل',
-
-                                          icon:
-                                          Icons.bookmarks_rounded,
-
-                                          color:
-                                          const Color(
-                                            0xFF1E3A8A,
-                                          ),
-
-                                          onTap:
-                                              () {
-                                            BlocProvider.of<
-                                                ReportVisitDoctorBloc>(
-                                              context,
-                                            ).add(
-                                              AllReadDocNoteEvent(
-                                                readAll:
-                                                ReadAll(
-                                                  widget.repPlan,
-                                                  UserInfo.repId,
-                                                  1,
-                                                  1,
-                                                ),
+                                  // =======================================
+                                  // Error
+                                  // =======================================
+                                  if (state
+                                  is AllReportVisitDoctorErrorState ||
+                                      state is AllReadErrorState) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 40,
+                                      ),
+                                      child: errorFullScreen(
+                                        context,
+                                        func: () {
+                                          BlocProvider.of<
+                                              ReportVisitDoctorBloc>(
+                                            context,
+                                          ).add(
+                                            AllReportVisitDoctorEvent(
+                                              VisitRepSen(
+                                                widget.repId,
+                                                widget.userId,
                                               ),
-                                            );
-                                          },
-                                        ),
-
-                                        // =========================
-                                        // Unread All
-                                        // =========================
-                                        buildActionBtn(
-                                          context:
-                                          context,
-
-                                          label:
-                                          'إلغاء قراءة الكل',
-
-                                          icon:
-                                          Icons.bookmark_remove_outlined,
-
-                                          color:
-                                          const Color(
-                                            0xFFEF4444,
-                                          ),
-
-                                          onTap:
-                                              () {
-                                            BlocProvider.of<
-                                                ReportVisitDoctorBloc>(
-                                              context,
-                                            ).add(
-                                              AllReadDocNoteEvent(
-                                                readAll:
-                                                ReadAll(
-                                                  widget.repPlan,
-                                                  UserInfo.repId,
-                                                  1,
-                                                  0,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                else
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-
-                                // =================================
-                                // Cards
-                                // =================================
-                                ...doctorNoteModel
-                                    .asMap()
-                                    .entries
-                                    .map(
-                                      (entry) {
-                                    final index =
-                                        entry.key;
-
-                                    final doctorNote =
-                                        entry.value;
-
-                                    return _buildDoctorVisitCard(
-                                      doctorNoteModel:
-                                      doctorNote,
-
-                                      index:
-                                      index,
-
-                                      indexRep:
-                                      widget.indexRep,
-
-                                      iscanedite:
-                                      widget.iscanedite,
-
-                                      context:
-                                      context,
+                                              widget.iscanedite,
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     );
-                                  },
-                                ),
+                                  }
 
-                                // =================================
-                                // Space for bottom input
-                                //
-                                // آخر كرت ما بيندفن تحت input
-                                // =================================
-                                SizedBox(
-                                  height:
-                                  inputReservedSpace,
-                                ),
-                              ],
-                            ),
+                                  // =======================================
+                                  // Data
+                                  // =======================================
+                                  return Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                    children: [
+                                      // =================================
+                                      // Search
+                                      // =================================
+                                      SearchField(
+                                        searchController:
+                                        searchNoteDoctorController,
+
+                                        onPressed:
+                                            (value) {
+                                          BlocProvider.of<
+                                              ReportVisitDoctorBloc>(
+                                            context,
+                                          ).add(
+                                            SenSearchNoteVisitDoctorEvent(
+                                              value,
+                                            ),
+                                          );
+                                        },
+                                      ),
+
+                                      SizedBox(
+                                        height:
+                                        searchBottomSpacing,
+                                      ),
+
+                                      // =================================
+                                      // Total
+                                      // =================================
+                                      buildTotalReportsCard(
+                                        doctorNoteModel
+                                            .length,
+                                        'إجمالي التقارير',
+                                        'لهذا الشهر',
+                                      ),
+
+                                      // =================================
+                                      // Read All Actions
+                                      // =================================
+                                      if (widget.iscanedite)
+                                        Padding(
+                                          padding:
+                                          EdgeInsets.only(
+                                            top:
+                                            actionsTopSpacing,
+                                            bottom:
+                                            actionsBottomSpacing,
+                                          ),
+
+                                          child:
+                                          Wrap(
+                                            spacing:
+                                            10,
+                                            runSpacing:
+                                            10,
+
+                                            children: [
+                                              // =========================
+                                              // Read All
+                                              // =========================
+                                              buildActionBtn(
+                                                context:
+                                                context,
+
+                                                label:
+                                                'قراءة الكل',
+
+                                                icon:
+                                                Icons.bookmarks_rounded,
+
+                                                color:
+                                                const Color(
+                                                  0xFF1E3A8A,
+                                                ),
+
+                                                onTap:
+                                                    () {
+                                                  BlocProvider.of<
+                                                      ReportVisitDoctorBloc>(
+                                                    context,
+                                                  ).add(
+                                                    AllReadDocNoteEvent(
+                                                      readAll:
+                                                      ReadAll(
+                                                        widget.repPlan,
+                                                        UserInfo.repId,
+                                                        1,
+                                                        1,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+
+                                              // =========================
+                                              // Unread All
+                                              // =========================
+                                              buildActionBtn(
+                                                context:
+                                                context,
+
+                                                label:
+                                                'إلغاء قراءة الكل',
+
+                                                icon:
+                                                Icons.bookmark_remove_outlined,
+
+                                                color:
+                                                const Color(
+                                                  0xFFEF4444,
+                                                ),
+
+                                                onTap:
+                                                    () {
+                                                  BlocProvider.of<
+                                                      ReportVisitDoctorBloc>(
+                                                    context,
+                                                  ).add(
+                                                    AllReadDocNoteEvent(
+                                                      readAll:
+                                                      ReadAll(
+                                                        widget.repPlan,
+                                                        UserInfo.repId,
+                                                        1,
+                                                        0,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      else
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+
+                                      // =================================
+                                      // Cards
+                                      // =================================
+                                      ...doctorNoteModel
+                                          .asMap()
+                                          .entries
+                                          .map(
+                                            (entry) {
+                                          final index =
+                                              entry.key;
+
+                                          final doctorNote =
+                                              entry.value;
+
+                                          return _buildDoctorVisitCard(
+                                            doctorNoteModel:
+                                            doctorNote,
+
+                                            index:
+                                            index,
+
+                                            indexRep:
+                                            widget.indexRep,
+
+                                            iscanedite:
+                                            widget.iscanedite,
+
+                                            context:
+                                            context,
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+
+                              // =================================
+                              // Space for bottom input
+                              // =================================
+                              SizedBox(
+                                height:
+                                inputReservedSpace,
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
 
             // =================================================
             // Bottom Input
-            //
-            // ظلينا محافظين عليه بنفس الاستدعاء
             // =================================================
             stackInputDoctor(
               indexRep: widget.indexRep,
@@ -807,9 +759,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
             cardRadius,
           ),
 
-          // =================================================
-          // نفس السلوك
-          // =================================================
           onTap: () {
             BlocProvider.of<
                 ReportVisitDoctorBloc>(
@@ -831,8 +780,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                 cardRadius,
               ),
 
-              // Border موحد حتى ما نرجع لمشكلة
-              // borderRadius + border مختلف
               border: Border.all(
                 color: const Color(
                   0xFFE2E8F0,
@@ -860,15 +807,8 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
             clipBehavior:
             Clip.antiAlias,
 
-            // =================================================
-            // Stack للشريط الجانبي
-            // بدون IntrinsicHeight
-            // =================================================
             child: Stack(
               children: [
-                // ===============================================
-                // Card Content
-                // ===============================================
                 Padding(
                   padding:
                   EdgeInsets.fromLTRB(
@@ -890,18 +830,12 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                         .stretch,
 
                     children: [
-                      // =========================================
-                      // Name + Date
-                      // =========================================
                       Row(
                         crossAxisAlignment:
                         CrossAxisAlignment
                             .start,
 
                         children: [
-                          // =====================================
-                          // Doctor Name
-                          // =====================================
                           Expanded(
                             child: Text(
                               doctorNoteModel
@@ -936,9 +870,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                             width: 10,
                           ),
 
-                          // =====================================
-                          // Visit Date
-                          // =====================================
                           Container(
                             padding:
                             const EdgeInsets
@@ -1024,9 +955,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                         sectionSpacing,
                       ),
 
-                      // =========================================
-                      // Specialization + Actions
-                      // =========================================
                       if (deviceType ==
                           AppDeviceType
                               .mobilePortrait)
@@ -1119,9 +1047,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                         sectionSpacing,
                       ),
 
-                      // =========================================
-                      // Divider
-                      // =========================================
                       Container(
                         height: 1,
 
@@ -1136,11 +1061,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                         sectionSpacing,
                       ),
 
-                      // =========================================
-                      // Place + Rate
-                      //
-                      // نفس helpers الموجودة بالمشروع
-                      // =========================================
                       Row(
                         children: [
                           buildSmallInfoBox(
@@ -1171,9 +1091,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                         sectionSpacing,
                       ),
 
-                      // =========================================
-                      // Scientific Office Note
-                      // =========================================
                       buildDetailBox(
                         'ملاحظة المكتب العلمي',
 
@@ -1203,9 +1120,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                         ),
                       ),
 
-                      // =========================================
-                      // Samples
-                      // =========================================
                       if (doctorNoteModel
                           .samples
                           .isNotEmpty) ...[
@@ -1239,12 +1153,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                   ),
                 ),
 
-                // ===============================================
-                // Status Side Bar
-                //
-                // ما في border غير موحد
-                // وما في infinite height
-                // ===============================================
                 Positioned(
                   top: 0,
                   bottom: 0,
@@ -1355,9 +1263,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
           MainAxisSize.min,
 
           children: [
-            // =============================================
-            // WhatsApp
-            // =============================================
             buildIconWatsAppButton(
               onPressed: () {
                 shareReportToWhatsApp(
@@ -1392,9 +1297,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
               width: 8,
             ),
 
-            // =============================================
-            // Who Read
-            // =============================================
             buildIconButton(
               false,
 
@@ -1428,9 +1330,6 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
               width: 8,
             ),
 
-            // =============================================
-            // Read / Unread
-            // =============================================
             buildIconButton(
               doctorNoteModel.flag,
 

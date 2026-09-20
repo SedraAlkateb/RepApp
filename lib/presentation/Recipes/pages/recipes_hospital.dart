@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_num.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_recipes.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -1304,7 +1305,7 @@ class _RecipesHospitalState extends State<RecipesHospital> {
                   firstNoteController.text,
                   _secondNoteController.text,
                   _addressController.text,
-                  _connectController.text,
+                  convertArabicNumberToEnglish( _connectController.text),
                   _specialNotesController.text,
                 ),
               );

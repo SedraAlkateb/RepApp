@@ -83,8 +83,10 @@ class TableVisitDynamic extends StatelessWidget {
                       IntrinsicHeight(
                         child: TextField(
                           controller: amount,
-                          onChanged: (value) {
+                          onChanged: (v) {
+                            String  value=   convertArabicNumberToEnglish( v);
                             if (value.isEmpty) {
+
                               BlocProvider.of<VisitBloc>(context)
                                   .add(EditAmountBrandEvent(index, 1));
                             } else {

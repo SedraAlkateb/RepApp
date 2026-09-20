@@ -14,19 +14,9 @@ class PlacesArchiveResponsiveLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
-    // =========================================================
-    // عرض الصفحة
-    // نفس النمط المعتمد لباقي صفحات الـ List
-    // =========================================================
     final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
-    // =========================================================
-    // عرض البحث والقائمة
-    // قيم خاصة بهالصفحة فقط، لذلك ما منضيفها لـ AppUi
-    // =========================================================
     final double contentInnerMaxWidth =
     ui.isMobile
         ? contentMaxWidth
@@ -35,9 +25,7 @@ class PlacesArchiveResponsiveLayout extends StatelessWidget {
         : 760;
 
     return ColoredBox(
-      color: const Color(
-        0xFFF8FAFC,
-      ),
+      color: const Color(0xFFF8FAFC),
       child: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -45,18 +33,9 @@ class PlacesArchiveResponsiveLayout extends StatelessWidget {
           ),
           child: PlacesArchiveContent(
             searchController: searchController,
-
-            // =================================================
-            // Responsive values من AppUi
-            // =================================================
-            horizontalPadding:
-            ui.pagePadding,
-
-            searchMaxWidth:
-            contentInnerMaxWidth,
-
-            listMaxWidth:
-            contentInnerMaxWidth,
+            horizontalPadding: ui.pagePadding,
+            searchMaxWidth: contentInnerMaxWidth,
+            listMaxWidth: contentInnerMaxWidth,
           ),
         ),
       ),

@@ -17,12 +17,26 @@ class ActivePlanBloc extends Bloc<ActivePlanEvent, ActivePlanState> {
     on<ActivePlanEvent>((event, emit) async {
       if (event is GetActivePlanEvent) {
         emit(AllActivePlanLoadingState());
-        (await getInfoPlanBrandsUsecase.execute(event.index)).fold((failure) {
+        (await getInfoPlanBrandsUsecase.execute(event.index,status: 0)).fold((failure) {
           emit(AllActivePlanErrorState(failure: failure));
           return false;
         }, (data) async {
-          activePlan = data;
-          activePlanSearch = data;
+          final updatedData = data.map((brand) {
+            int sum = 0;
+
+            for (var plan in brand.spPlan) {
+              // تحويل النص إلى رقم وحسابه، وإذا كانت القيمة ليست رقمية يتم تجاهلها (تعتبر 0)
+              sum += int.tryParse(plan.amount) ?? 0;
+            }
+
+            // إسناد المجموع إلى متغيّر total
+            brand.total = sum;
+
+            return brand;
+          }).toList();
+          activePlan = updatedData;
+
+          activePlanSearch = updatedData;
           emit(AllActivePlanState(data));
         });
       } else if (event is SearchActivePlanEvent) {

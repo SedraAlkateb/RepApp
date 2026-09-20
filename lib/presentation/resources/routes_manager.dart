@@ -333,9 +333,19 @@ class RouteGenerator {
         final args = settings.arguments as Map<String, dynamic>?;
         final title = args?['title'];
         final flag = args?['flag'];
+        final percent = args?['percent'];
+        final isRep = args?['isRep'];
+        final sampleCount = args?['sampleCount'];
+        final spId = args?['spId'];
+        final repPlanId = args?['repPlanId'];
         return _animatedRoute(RepPlanBrandSpPage(
           title: title,
           flag: flag,
+          percent: percent,
+            isRep:isRep,
+          sampleCount: sampleCount,
+          spId:spId ,
+          repPlanId: repPlanId,
         ));
       case Routes.deleteLogout:
         initDeleteModule();

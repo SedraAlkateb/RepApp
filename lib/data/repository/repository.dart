@@ -1312,10 +1312,10 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(
-      int repPlan) async {
+      int repPlan,{int status=0}) async {
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getinfoPlanBrandsType(repPlan);
+        final response = await _remoteDataSource.getinfoPlanBrandsType(repPlan,status: status);
         if (response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
@@ -1576,6 +1576,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(
       BrandAmountRequestBody list) async {
+
     try {
       if (await _networkInfo.isConnected) {
         final response = await _remoteDataSource.updateRepPlanBrandAmount(list);
@@ -1767,6 +1768,59 @@ class RepositoryImp implements Repository {
       Failure failure = ErrorHandler.handle(error).failure;
       insertLog(ExceptionRequestBody(
           [ExceptionModel(failure.massage, "noVisitDoc")]));
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<HosDocSpSearchModel>>> docSpSearch(int repPlanId, int spId) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.docSpSearch(repPlanId, spId);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "docHosSpSearch")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "docHosSpSearch")]));
+      return Left(failure);
+    }
+  }
+  @override
+  Future<Either<Failure, List<HosDocSpSearchModel>>> hosSpSearch(int repPlanId, int spId) async {
+    try {
+      if (await _networkInfo.isConnected) {
+        final response = await _remoteDataSource.hosSpSearch(repPlanId, spId);
+        if (response.status == null ||
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.status == "200") {
+          return Right(response.toDomain());
+        } else {
+          Failure failure = Failure(ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMassage.DEFAULT);
+          insertLog(ExceptionRequestBody(
+              [ExceptionModel(failure.massage, "hosSpSearch")]));
+          return Left(failure);
+        }
+      } else {
+        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      }
+    } catch (error) {
+      Failure failure = ErrorHandler.handle(error).failure;
+      insertLog(ExceptionRequestBody(
+          [ExceptionModel(failure.massage, "docHosSpSearch")]));
       return Left(failure);
     }
   }

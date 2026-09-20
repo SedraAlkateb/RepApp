@@ -1994,6 +1994,7 @@ RepresentativeFutureResponse _$RepresentativeFutureResponseFromJson(
       json['samplesCount'] as String?,
       json['reptype'] as String,
       json['planDate'] as String,
+      json['percent'] as String,
     );
 
 Map<String, dynamic> _$RepresentativeFutureResponseToJson(
@@ -2006,6 +2007,7 @@ Map<String, dynamic> _$RepresentativeFutureResponseToJson(
       'samplesCount': instance.samplesCount,
       'reptype': instance.reptype,
       'planDate': instance.planDate,
+      'percent': instance.percent,
     };
 
 FinishedPlanResponse _$FinishedPlanResponseFromJson(
@@ -2145,4 +2147,58 @@ Map<String, dynamic> _$DoctorSenResponseToJson(DoctorSenResponse instance) =>
       'note': instance.note,
       'rate': instance.rate,
       'spTitle': instance.spTitle,
+    };
+
+HosSpSearchResponse _$HosSpSearchResponseFromJson(Map<String, dynamic> json) =>
+    HosSpSearchResponse(
+      json['name'] as String?,
+      json['spTitle'] as String?,
+      json['rate'] as String?,
+      json['placeTitle'] as String?,
+      json['visits'] as String?,
+      totalDocs: json['totalDocs'] as String?,
+    );
+
+Map<String, dynamic> _$HosSpSearchResponseToJson(
+        HosSpSearchResponse instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'spTitle': instance.spTitle,
+      'rate': instance.rate,
+      'placeTitle': instance.placeTitle,
+      'visits': instance.visits,
+      'totalDocs': instance.totalDocs,
+    };
+
+ListHosSpSearchResponseResponse _$ListHosSpSearchResponseResponseFromJson(
+        Map<String, dynamic> json) =>
+    ListHosSpSearchResponseResponse(
+      (json['Doctors'] as List<dynamic>?)
+          ?.map((e) => HosSpSearchResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ListHosSpSearchResponseResponseToJson(
+        ListHosSpSearchResponseResponse instance) =>
+    <String, dynamic>{
+      'Doctors': instance.doctors,
+    };
+
+ListHosSpSearchBaseResponse _$ListHosSpSearchBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    ListHosSpSearchBaseResponse(
+      json['Doctors'] == null
+          ? null
+          : ListHosSpSearchResponseResponse.fromJson(
+              json['Doctors'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$ListHosSpSearchBaseResponseToJson(
+        ListHosSpSearchBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'Doctors': instance.doctors,
     };

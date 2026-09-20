@@ -10,6 +10,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // =======================================================
 // Doctor Bottom Sheet
 // =======================================================
+import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
+import 'package:domina_app/presentation/senior/report_visit_doctor/widget/text_info.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// =======================================================
+// Doctor Bottom Sheet
+// =======================================================
 
 Widget stackInputDoctor({
   required int indexRep,
@@ -38,7 +50,7 @@ Widget stackInputHospital({
 }
 
 // =======================================================
-// Unified Report Bottom Sheet
+// Unified Report Bottom Sheet (Optimized)
 // =======================================================
 
 Widget _buildReportBottomSheet({
@@ -46,38 +58,23 @@ Widget _buildReportBottomSheet({
   required bool iscanedite,
   required bool isHospital,
 }) {
-  return BlocBuilder<
-      ReportVisitDoctorBloc,
-      ReportVisitDoctorState>(
+  return BlocBuilder<ReportVisitDoctorBloc, ReportVisitDoctorState>(
+    buildWhen: (previous, current) =>
+    current is DocIsExpandedNoteState ||
+        current is DocNoIsExpandedNoteState,
     builder: (context, state) {
-      final bloc =
-      BlocProvider.of<ReportVisitDoctorBloc>(
-        context,
-      );
+      final bloc = BlocProvider.of<ReportVisitDoctorBloc>(context);
 
-      bool num = bloc.num;
       bool isExpanded = bloc.isExpanded;
-
-      RepVisitsModel doctorNoteModel =
-          bloc.doctorNoteModel;
-
+      RepVisitsModel doctorNoteModel = bloc.doctorNoteModel;
       int index = bloc.index;
 
-      // =================================================
-      // Expanded
-      // =================================================
       if (state is DocIsExpandedNoteState) {
         isExpanded = true;
-
         index = state.index;
-
-        doctorNoteModel =
-            state.doctorNoteModel;
+        doctorNoteModel = state.doctorNoteModel;
       }
 
-      // =================================================
-      // Closed
-      // =================================================
       if (state is DocNoIsExpandedNoteState) {
         isExpanded = false;
       }
@@ -86,587 +83,400 @@ Widget _buildReportBottomSheet({
         return const SizedBox.shrink();
       }
 
-      final deviceType =
-      AppResponsive.deviceType(context);
+      return _OptimizedBottomSheetContent(
+        indexRep: indexRep,
+        iscanedite: iscanedite,
+        isHospital: isHospital,
+        doctorNoteModel: doctorNoteModel,
+        index: index,
+        bloc: bloc,
+      );
+    },
+  );
+}
 
-      double maxSheetWidth;
+// =======================================================
+// Optimized Stateful Widget to Manage Local Drag State
+// =======================================================
 
-      double initialChildSize;
-      double minChildSize;
+class _OptimizedBottomSheetContent extends StatefulWidget {
+  final int indexRep;
+  final bool iscanedite;
+  final bool isHospital;
+  final RepVisitsModel doctorNoteModel;
+  final int index;
+  final ReportVisitDoctorBloc bloc;
 
-      double sheetRadius;
+  const _OptimizedBottomSheetContent({
+    required this.indexRep,
+    required this.iscanedite,
+    required this.isHospital,
+    required this.doctorNoteModel,
+    required this.index,
+    required this.bloc,
+  });
 
-      double horizontalPadding;
-      double contentTopPadding;
+  @override
+  State<_OptimizedBottomSheetContent> createState() =>
+      _OptimizedBottomSheetContentState();
+}
 
-      double headerIconBoxSize;
-      double headerIconSize;
-      double headerIconRadius;
-      double headerSpacing;
+class _OptimizedBottomSheetContentState
+    extends State<_OptimizedBottomSheetContent> {
+  late final DraggableScrollableController _sheetController;
+  late final ValueNotifier<bool> _isTopNotifier;
 
-      double titleFontSize;
-      double dateFontSize;
+  @override
+  void initState() {
+    super.initState();
+    _sheetController = DraggableScrollableController();
+    _isTopNotifier = ValueNotifier<bool>(false);
+  }
 
-      double sectionSpacing;
+  @override
+  void dispose() {
+    _sheetController.dispose();
+    _isTopNotifier.dispose();
+    super.dispose();
+  }
 
-      switch (deviceType) {
-      // ===============================================
-      // Mobile
-      // ===============================================
-        case AppDeviceType.mobilePortrait:
-          maxSheetWidth =
-              double.infinity;
+  @override
+  Widget build(BuildContext context) {
+    final deviceType = AppResponsive.deviceType(context);
 
-          initialChildSize = 0.46;
-          minChildSize = 0.12;
+    double maxSheetWidth;
+    double initialChildSize;
+    double minChildSize;
+    double sheetRadius;
+    double horizontalPadding;
+    double contentTopPadding;
+    double headerIconBoxSize;
+    double headerIconSize;
+    double headerIconRadius;
+    double headerSpacing;
+    double titleFontSize;
+    double dateFontSize;
+    double sectionSpacing;
 
-          sheetRadius = 26;
+    switch (deviceType) {
+      case AppDeviceType.mobilePortrait:
+        maxSheetWidth = double.infinity;
+        initialChildSize = 0.46;
+        minChildSize = 0.12;
+        sheetRadius = 26;
+        horizontalPadding = 18;
+        contentTopPadding = 4;
+        headerIconBoxSize = 46;
+        headerIconSize = 23;
+        headerIconRadius = 13;
+        headerSpacing = 12;
+        titleFontSize = 18;
+        dateFontSize = 11;
+        sectionSpacing = 16;
+        break;
 
-          horizontalPadding = 18;
-          contentTopPadding = 4;
+      case AppDeviceType.tabletPortrait:
+        maxSheetWidth = 760;
+        initialChildSize = 0.42;
+        minChildSize = 0.12;
+        sheetRadius = 28;
+        horizontalPadding = 28;
+        contentTopPadding = 8;
+        headerIconBoxSize = 54;
+        headerIconSize = 27;
+        headerIconRadius = 15;
+        headerSpacing = 16;
+        titleFontSize = 21;
+        dateFontSize = 13;
+        sectionSpacing = 20;
+        break;
 
-          headerIconBoxSize = 46;
-          headerIconSize = 23;
-          headerIconRadius = 13;
-          headerSpacing = 12;
+      case AppDeviceType.tabletLandscape:
+        maxSheetWidth = 900;
+        initialChildSize = 0.58;
+        minChildSize = 0.16;
+        sheetRadius = 24;
+        horizontalPadding = 28;
+        contentTopPadding = 4;
+        headerIconBoxSize = 48;
+        headerIconSize = 24;
+        headerIconRadius = 13;
+        headerSpacing = 14;
+        titleFontSize = 19;
+        dateFontSize = 12;
+        sectionSpacing = 16;
+        break;
+    }
 
-          titleFontSize = 18;
-          dateFontSize = 11;
+    return Stack(
+      children: [
+        // =================================================
+        // Dark Background
+        // =================================================
+        ModalBarrier(
+          color: Colors.black.withOpacity(0.42),
+          dismissible: false,
+        ),
 
-          sectionSpacing = 16;
-          break;
-
-      // ===============================================
-      // Tablet Portrait
-      // ===============================================
-        case AppDeviceType.tabletPortrait:
-          maxSheetWidth = 760;
-
-          initialChildSize = 0.42;
-          minChildSize = 0.12;
-
-          sheetRadius = 28;
-
-          horizontalPadding = 28;
-          contentTopPadding = 8;
-
-          headerIconBoxSize = 54;
-          headerIconSize = 27;
-          headerIconRadius = 15;
-          headerSpacing = 16;
-
-          titleFontSize = 21;
-          dateFontSize = 13;
-
-          sectionSpacing = 20;
-          break;
-
-      // ===============================================
-      // Tablet Landscape
-      // ===============================================
-        case AppDeviceType.tabletLandscape:
-          maxSheetWidth = 900;
-
-          // Landscape أقصر، لذلك نفتح مساحة أكبر
-          initialChildSize = 0.58;
-          minChildSize = 0.16;
-
-          sheetRadius = 24;
-
-          horizontalPadding = 28;
-          contentTopPadding = 4;
-
-          headerIconBoxSize = 48;
-          headerIconSize = 24;
-          headerIconRadius = 13;
-          headerSpacing = 14;
-
-          titleFontSize = 19;
-          dateFontSize = 12;
-
-          sectionSpacing = 16;
-          break;
-      }
-
-      return Stack(
-        children: [
-          // =================================================
-          // Dark Background
-          // =================================================
-          ModalBarrier(
-            color: Colors.black.withOpacity(
-              0.42,
-            ),
-           dismissible: false,
-          ),
-
-          // =================================================
-          // Sheet
-          // =================================================
-          DraggableScrollableSheet(
-            initialChildSize:
-            initialChildSize,
-
-            minChildSize:
-            minChildSize,
-
-            maxChildSize: 1,
-
-            builder:
-                (context, scrollController) {
-              return NotificationListener<
-                  DraggableScrollableNotification>(
-                onNotification:
-                    (notification) {
-                  if (notification.extent ==
-                      1.0) {
-                    bloc.add(
-                      ExpandedBorder(true),
-                    );
-                  } else if (bloc.num == true) {
-                    bloc.add(
-                      ExpandedBorder(false),
-                    );
-                  } else if (notification
-                      .extent <=
-                      minChildSize) {
-                    bloc.add(
-                      DocNoIsExpandedNoteEvent(),
-                    );
-                  }
-
+        // =================================================
+        // Sheet with Local Controller & ValueNotifier
+        // =================================================
+        DraggableScrollableSheet(
+          controller: _sheetController,
+          initialChildSize: initialChildSize,
+          minChildSize: minChildSize,
+          maxChildSize: 1.0,
+          expand: true,
+          snap: false,
+          builder: (context, scrollController) {
+            return NotificationListener<DraggableScrollableNotification>(
+              onNotification: (notification) {
+                // إخفاء الـ Sheet بسلاسة تامة عند النزول لأقل حد
+                if (notification.extent <= minChildSize + 0.015) {
+                  widget.bloc.add(DocNoIsExpandedNoteEvent());
                   return true;
-                },
+                }
 
-                child: Align(
-                  alignment:
-                  Alignment.bottomCenter,
-
-                  child: ConstrainedBox(
-                    constraints:
-                    BoxConstraints(
-                      maxWidth:
-                      maxSheetWidth,
-                    ),
-
-                    child: Container(
-                      width:
-                      double.infinity,
-
-                      decoration:
-                      BoxDecoration(
-                        color:
-                        ColorManager.white,
-
-                        border:
-                        Border.all(
-                          color: ColorManager
-                              .secondaryColor3
-                              .withOpacity(
-                            0.35,
+                // تحديث الحدود محلياً دون استدعاء BLoC لمنع أي تقطيع (Lag)
+                if (notification.extent >= 0.99) {
+                  if (!_isTopNotifier.value) {
+                    _isTopNotifier.value = true;
+                  }
+                } else {
+                  if (_isTopNotifier.value) {
+                    _isTopNotifier.value = false;
+                  }
+                }
+                return false;
+              },
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: maxSheetWidth,
+                  ),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _isTopNotifier,
+                    builder: (context, isTop, child) {
+                      return Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: ColorManager.white,
+                          border: Border.all(
+                            color: ColorManager.secondaryColor3
+                                .withOpacity(0.35),
                           ),
-                        ),
-
-                        borderRadius:
-                        BorderRadius.vertical(
-                          top: Radius.circular(
-                            num
-                                ? 0
-                                : sheetRadius,
-                          ),
-                        ),
-
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black
-                                .withOpacity(
-                              0.08,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(
+                              isTop ? 0 : sheetRadius,
                             ),
-                            blurRadius: 16,
-                            offset:
-                            const Offset(
-                              0,
-                              -4,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 16,
+                              offset: const Offset(0, -4),
+                            ),
+                          ],
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: child,
+                      );
+                    },
+                    child: SafeArea(
+                      top: false,
+                      child: CustomScrollView(
+                        controller: scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
+                        keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                        slivers: [
+                          // =================================
+                          // Drag Handle
+                          // =================================
+                          SliverToBoxAdapter(
+                            child: ValueListenableBuilder<bool>(
+                              valueListenable: _isTopNotifier,
+                              builder: (context, isTop, _) {
+                                return isTop
+                                    ? const SizedBox(height: 16)
+                                    : Center(
+                                  child: InkWell(
+                                    borderRadius:
+                                    BorderRadius.circular(12),
+                                    onTap: () {
+                                      widget.bloc.add(
+                                        DocNoIsExpandedNoteEvent(),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 24,
+                                        vertical: 14,
+                                      ),
+                                      child: Container(
+                                        width: 48,
+                                        height: 5,
+                                        decoration: BoxDecoration(
+                                          color: ColorManager
+                                              .secondaryColor1
+                                              .withOpacity(0.32),
+                                          borderRadius:
+                                          BorderRadius.circular(3),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
+                          // =================================
+                          // Main Content
+                          // =================================
+                          SliverPadding(
+                            padding: EdgeInsets.fromLTRB(
+                              horizontalPadding,
+                              contentTopPadding,
+                              horizontalPadding,
+                              30,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  _buildSheetHeader(
+                                    context: context,
+                                    data: widget.doctorNoteModel,
+                                    isHospital: widget.isHospital,
+                                    iconBoxSize: headerIconBoxSize,
+                                    iconSize: headerIconSize,
+                                    iconRadius: headerIconRadius,
+                                    spacing: headerSpacing,
+                                    titleFontSize: titleFontSize,
+                                    dateFontSize: dateFontSize,
+                                  ),
+                                  SizedBox(height: sectionSpacing),
+                                  const Divider(
+                                    height: 1,
+                                    thickness: 0.8,
+                                    color: Color(0xFFE2E8F0),
+                                  ),
+                                  SizedBox(height: sectionSpacing),
+                                  TextInfo(
+                                    title: "العنوان",
+                                    supTitle: widget.doctorNoteModel.placeTitle,
+                                    icon: Icons.location_on_outlined,
+                                  ),
+                                  TextInfo(
+                                    title: "الاختصاص",
+                                    supTitle: widget.doctorNoteModel.spTitle,
+                                    icon: Icons.medical_services_outlined,
+                                  ),
+                                  if (!widget.isHospital) ...[
+                                    TextInfo(
+                                      title: "التقييم",
+                                      supTitle: widget.doctorNoteModel.rate,
+                                      icon: Icons.star_outline,
+                                    ),
+                                  ],
+                                  SizedBox(height: sectionSpacing - 4),
+                                  _buildResponsiveNoteCard(
+                                    context,
+                                    title: "الهدف من الزيارة",
+                                    content: widget.doctorNoteModel.target,
+                                    accentColor: ColorManager.primary1,
+                                    icon: Icons.task_alt_rounded,
+                                  ),
+                                  _buildResponsiveNoteCard(
+                                    context,
+                                    title: "ملاحظات المكتب العلمي",
+                                    content: widget.doctorNoteModel.note,
+                                    accentColor: ColorManager.primary1,
+                                    icon: Icons.science_outlined,
+                                  ),
+                                  _buildResponsiveNoteCard(
+                                    context,
+                                    title: "ملاحظات صيدلية مجاورة",
+                                    content: widget.doctorNoteModel.issue,
+                                    accentColor: ColorManager.primary1,
+                                    icon: Icons.inventory_2_outlined,
+                                  ),
+                                  _buildResponsiveNoteCard(
+                                    context,
+                                    title: "ملاحظات إضافية",
+                                    content: widget.doctorNoteModel.special,
+                                    accentColor: ColorManager.primary1,
+                                    icon: Icons.note_alt_outlined,
+                                  ),
+                                  if (widget.doctorNoteModel
+                                      .samples.isNotEmpty) ...[
+                                    SizedBox(height: sectionSpacing - 4),
+                                    Text(
+                                      "العينات الموزعة",
+                                      style: TextStyle(
+                                        fontSize: deviceType ==
+                                            AppDeviceType.mobilePortrait
+                                            ? 13
+                                            : 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF334155),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      children: widget
+                                          .doctorNoteModel.samples
+                                          .map<Widget>((sample) {
+                                        return _buildSampleChip(
+                                            context, sample);
+                                      }).toList(),
+                                    ),
+                                  ],
+                                  SizedBox(height: sectionSpacing),
+                                  if (widget.iscanedite)
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: BlocBuilder<
+                                          ReportVisitDoctorBloc,
+                                          ReportVisitDoctorState>(
+                                        builder: (context, state) {
+                                          return _buildReadReportButton(
+                                            context: context,
+                                            state: state,
+                                            doctorNoteModel:
+                                            widget.doctorNoteModel,
+                                            indexRep: widget.indexRep,
+                                            index: widget.index,
+                                            isHospital: widget.isHospital,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  const SizedBox(height: 12),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
-
-                      clipBehavior:
-                      Clip.antiAlias,
-
-                      child: SafeArea(
-                        top: false,
-
-                        child:
-                        CustomScrollView(
-                          controller:
-                          scrollController,
-
-                          keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior
-                              .onDrag,
-
-                          slivers: [
-                            // =================================
-                            // Drag Handle
-                            // =================================
-                            SliverToBoxAdapter(
-                              child: num
-                                  ? const SizedBox(
-                                height:
-                                16,
-                              )
-                                  : Center(
-                                child:
-                                InkWell(
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                    12,
-                                  ),
-
-                                  onTap:
-                                      () {
-                                    bloc.add(
-                                      DocNoIsExpandedNoteEvent(),
-                                    );
-                                  },
-
-                                  child:
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(
-                                      horizontal:
-                                      24,
-                                      vertical:
-                                      14,
-                                    ),
-
-                                    child:
-                                    Container(
-                                      width:
-                                      48,
-                                      height:
-                                      5,
-
-                                      decoration:
-                                      BoxDecoration(
-                                        color: ColorManager
-                                            .secondaryColor1
-                                            .withOpacity(
-                                          0.32,
-                                        ),
-
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                          3,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            // =================================
-                            // Main Content
-                            // =================================
-                            SliverPadding(
-                              padding:
-                              EdgeInsets.fromLTRB(
-                                horizontalPadding,
-                                contentTopPadding,
-                                horizontalPadding,
-                                30,
-                              ),
-
-                              sliver:
-                              SliverToBoxAdapter(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-
-                                  children: [
-                                    // =============================
-                                    // Header
-                                    // =============================
-                                    _buildSheetHeader(
-                                      context:
-                                      context,
-
-                                      data:
-                                      doctorNoteModel,
-
-                                      isHospital:
-                                      isHospital,
-
-                                      iconBoxSize:
-                                      headerIconBoxSize,
-
-                                      iconSize:
-                                      headerIconSize,
-
-                                      iconRadius:
-                                      headerIconRadius,
-
-                                      spacing:
-                                      headerSpacing,
-
-                                      titleFontSize:
-                                      titleFontSize,
-
-                                      dateFontSize:
-                                      dateFontSize,
-                                    ),
-
-                                    SizedBox(
-                                      height:
-                                      sectionSpacing,
-                                    ),
-
-                                    const Divider(
-                                      height: 1,
-                                      thickness:
-                                      0.8,
-                                      color: Color(
-                                        0xFFE2E8F0,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height:
-                                      sectionSpacing,
-                                    ),
-
-                                    // =============================
-                                    // Basic Information
-                                    // =============================
-                                    TextInfo(
-                                      title:
-                                      "العنوان",
-                                      supTitle:
-                                      doctorNoteModel
-                                          .placeTitle,
-                                      icon: Icons
-                                          .location_on_outlined,
-                                    ),
-
-                                    TextInfo(
-                                      title:
-                                      "الاختصاص",
-                                      supTitle:
-                                      doctorNoteModel
-                                          .spTitle,
-                                      icon: Icons
-                                          .medical_services_outlined,
-                                    ),
-
-                                    // Doctor-specific info
-                                    if (!isHospital) ...[
-                                      TextInfo(
-                                        title:
-                                        "التقييم",
-                                        supTitle:
-                                        doctorNoteModel
-                                            .rate,
-                                        icon: Icons
-                                            .star_outline,
-                                      ),
-
-                                    ],
-
-                                    SizedBox(
-                                      height:
-                                      sectionSpacing -
-                                          4,
-                                    ),
-
-                                    // =============================
-                                    // Notes
-                                    // =============================
-                                    _buildResponsiveNoteCard(
-                                      context,
-
-                                      title:
-                                      "الهدف من الزيارة",
-
-                                      content:
-                                      doctorNoteModel
-                                          .target,
-
-
-                                      accentColor:
-                                      ColorManager
-                                          .primary1,
-
-                                      icon: Icons
-                                          .task_alt_rounded,
-                                    ),
-                                    _buildResponsiveNoteCard(
-                                      context,
-                                      title:
-                                      "ملاحظات المكتب العلمي",
-
-                                      content:
-                                      doctorNoteModel
-                                          .note,
-
-                                      accentColor:
-                                      ColorManager
-                                          .primary1,
-
-                                      icon: Icons
-                                          .science_outlined,
-                                    ),
-                                    _buildResponsiveNoteCard(
-                                      context,
-
-                                      title:
-                                      "ملاحظات صيدلية مجاورة",
-
-                                      content:
-                                      doctorNoteModel
-                                          .issue,
-
-                                      accentColor:
-                                      ColorManager
-                                          .primary1,
-
-                                      icon: Icons
-                                          .inventory_2_outlined,
-                                    ),
-                                    _buildResponsiveNoteCard(
-                                      context,
-
-                                      title:
-                                      "ملاحظات إضافية",
-
-                                      content:
-                                      doctorNoteModel
-                                          .special,
-
-                                      accentColor:
-                                      ColorManager
-                                          .primary1,
-
-                                      icon: Icons
-                                          .note_alt_outlined,
-                                    ),
-
-
-
-                                    // =============================
-                                    // Samples
-                                    // =============================
-                                    if (doctorNoteModel
-                                        .samples
-                                        .isNotEmpty) ...[
-                                      SizedBox(
-                                        height:
-                                        sectionSpacing -
-                                            4,
-                                      ),
-
-                                      Text(
-                                        "العينات الموزعة",
-
-                                        style:
-                                        TextStyle(
-                                          fontSize:
-                                          deviceType ==
-                                              AppDeviceType
-                                                  .mobilePortrait
-                                              ? 13
-                                              : 15,
-
-                                          fontWeight:
-                                          FontWeight
-                                              .w700,
-
-                                          color:
-                                          const Color(
-                                            0xFF334155,
-                                          ),
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-
-                                      Wrap(
-                                        spacing: 8,
-                                        runSpacing: 8,
-
-                                        children:
-                                        doctorNoteModel
-                                            .samples
-                                            .map<Widget>(
-                                              (sample) {
-                                            return _buildSampleChip(
-                                              context,
-                                              sample,
-                                            );
-                                          },
-                                        ).toList(),
-                                      ),
-                                    ],
-
-                                    SizedBox(
-                                      height:
-                                      sectionSpacing,
-                                    ),
-
-                                    // =============================
-                                    // Read Button
-                                    // =============================
-                                    if (iscanedite)
-                                      Align(
-                                        alignment:
-                                        Alignment.centerLeft,
-
-                                        child:
-                                        _buildReadReportButton(
-                                          context:
-                                          context,
-
-                                          state:
-                                          state,
-
-                                          doctorNoteModel:
-                                          doctorNoteModel,
-
-                                          indexRep:
-                                          indexRep,
-
-                                          index:
-                                          index,
-
-                                          isHospital:
-                                          isHospital,
-                                        ),
-                                      ),
-
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        ],
-      );
-    },
-  );
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
 }
 
 // =======================================================
@@ -685,61 +495,27 @@ Widget _buildSheetHeader({
   required double dateFontSize,
 }) {
   return Row(
-    crossAxisAlignment:
-    CrossAxisAlignment.start,
-
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      // =================================================
-      // Icon
-      // =================================================
       Container(
         width: iconBoxSize,
         height: iconBoxSize,
-
-        alignment:
-        Alignment.center,
-
-        decoration:
-        BoxDecoration(
-          color: ColorManager.primary1
-              .withOpacity(
-            0.08,
-          ),
-
-          borderRadius:
-          BorderRadius.circular(
-            iconRadius,
-          ),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: ColorManager.primary1.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(iconRadius),
         ),
-
         child: Icon(
-          isHospital
-              ? Icons
-              .local_hospital_outlined
-              : Icons.person_outline,
-
-          color:
-          ColorManager.primary1,
-
+          isHospital ? Icons.local_hospital_outlined : Icons.person_outline,
+          color: ColorManager.primary1,
           size: iconSize,
         ),
       ),
-
-      SizedBox(
-        width: spacing,
-      ),
-
-      // =================================================
-      // Title + Date
-      // =================================================
+      SizedBox(width: spacing),
       Expanded(
         child: Column(
-          mainAxisSize:
-          MainAxisSize.min,
-
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               data.docTitle.isNotEmpty
@@ -747,72 +523,33 @@ Widget _buildSheetHeader({
                   : isHospital
                   ? "اسم المشفى غير محدد"
                   : "اسم الطبيب غير محدد",
-
               maxLines: 2,
-
-              overflow:
-              TextOverflow.ellipsis,
-
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize:
-                titleFontSize,
-
-                fontWeight:
-                FontWeight.w700,
-
-                color:
-                const Color(
-                  0xFF0F172A,
-                ),
-
+                fontSize: titleFontSize,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF0F172A),
                 height: 1.25,
               ),
             ),
-
-            const SizedBox(
-              height: 7,
-            ),
-
+            const SizedBox(height: 7),
             Row(
               children: [
                 const Icon(
-                  Icons
-                      .calendar_today_outlined,
-
+                  Icons.calendar_today_outlined,
                   size: 14,
-
-                  color: Color(
-                    0xFF94A3B8,
-                  ),
+                  color: Color(0xFF94A3B8),
                 ),
-
-                const SizedBox(
-                  width: 5,
-                ),
-
+                const SizedBox(width: 5),
                 Expanded(
                   child: Text(
                     data.visitDate,
-
                     maxLines: 1,
-
-                    overflow:
-                    TextOverflow
-                        .ellipsis,
-
-                    style:
-                    TextStyle(
-                      fontSize:
-                      dateFontSize,
-
-                      color:
-                      const Color(
-                        0xFF64748B,
-                      ),
-
-                      fontWeight:
-                      FontWeight
-                          .w500,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: dateFontSize,
+                      color: const Color(0xFF64748B),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -836,183 +573,105 @@ Widget _buildResponsiveNoteCard(
       required Color accentColor,
       required IconData icon,
     }) {
-  if (content == null ||
-      content.trim().isEmpty ) {
+  if (content == null || content.trim().isEmpty) {
     return const SizedBox.shrink();
   }
 
-  final deviceType =
-  AppResponsive.deviceType(context);
+  final deviceType = AppResponsive.deviceType(context);
 
   double padding;
   double radius;
-
   double iconBoxSize;
   double iconSize;
-
   double titleFontSize;
   double contentFontSize;
-
   double bottomSpacing;
 
   switch (deviceType) {
     case AppDeviceType.mobilePortrait:
       padding = 12;
       radius = 14;
-
       iconBoxSize = 30;
       iconSize = 15;
-
       titleFontSize = 11.5;
       contentFontSize = 14;
-
       bottomSpacing = 10;
       break;
 
     case AppDeviceType.tabletPortrait:
       padding = 15;
       radius = 16;
-
       iconBoxSize = 36;
       iconSize = 18;
-
       titleFontSize = 13;
       contentFontSize = 15.5;
-
       bottomSpacing = 12;
       break;
 
     case AppDeviceType.tabletLandscape:
       padding = 13;
       radius = 14;
-
       iconBoxSize = 32;
       iconSize = 16;
-
       titleFontSize = 16;
       contentFontSize = 14.5;
-
       bottomSpacing = 10;
       break;
   }
 
   return Container(
     width: double.infinity,
-
-    margin: EdgeInsets.only(
-      bottom: bottomSpacing,
-    ),
-
-    padding: EdgeInsets.all(
-      padding,
-    ),
-
-    decoration:
-    BoxDecoration(
-      color: accentColor.withOpacity(
-        0.045,
-      ),
-
-      borderRadius:
-      BorderRadius.circular(
-        radius,
-      ),
-
+    margin: EdgeInsets.only(bottom: bottomSpacing),
+    padding: EdgeInsets.all(padding),
+    decoration: BoxDecoration(
+      color: accentColor.withOpacity(0.045),
+      borderRadius: BorderRadius.circular(radius),
       border: Border.all(
-        color: accentColor.withOpacity(
-          0.10,
-        ),
+        color: accentColor.withOpacity(0.10),
       ),
     ),
-
     child: Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Container(
               width: iconBoxSize,
               height: iconBoxSize,
-
-              alignment:
-              Alignment.center,
-
-              decoration:
-              BoxDecoration(
-                color: accentColor
-                    .withOpacity(
-                  0.10,
-                ),
-
-                borderRadius:
-                BorderRadius.circular(
-                  8,
-                ),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: accentColor.withOpacity(0.10),
+                borderRadius: BorderRadius.circular(8),
               ),
-
               child: Icon(
                 icon,
-
                 size: iconSize,
-
-                color:
-                accentColor,
+                color: accentColor,
               ),
             ),
-
-            const SizedBox(
-              width: 8,
-            ),
-
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 title,
-
                 maxLines: 2,
-
-                overflow:
-                TextOverflow
-                    .ellipsis,
-
-                style:
-                TextStyle(
-                  fontSize:
-                  titleFontSize,
-
-                  color:
-                  accentColor,
-
-                  fontWeight:
-                  FontWeight
-                      .w700,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: titleFontSize,
+                  color: accentColor,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
           ],
         ),
-
-        const SizedBox(
-          height: 9,
-        ),
-
+        const SizedBox(height: 9),
         Text(
           content,
-
           style: TextStyle(
-            fontSize:
-            contentFontSize,
-
-            color:
-            const Color(
-              0xFF334155,
-            ),
-
+            fontSize: contentFontSize,
+            color: const Color(0xFF334155),
             height: 1.5,
-
-            fontWeight:
-            FontWeight.w400,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],
@@ -1028,12 +687,10 @@ Widget _buildSampleChip(
     BuildContext context,
     String sample,
     ) {
-  final deviceType =
-  AppResponsive.deviceType(context);
+  final deviceType = AppResponsive.deviceType(context);
 
   double horizontalPadding;
   double verticalPadding;
-
   double iconSize;
   double fontSize;
 
@@ -1041,7 +698,6 @@ Widget _buildSampleChip(
     case AppDeviceType.mobilePortrait:
       horizontalPadding = 10;
       verticalPadding = 7;
-
       iconSize = 15;
       fontSize = 11;
       break;
@@ -1049,7 +705,6 @@ Widget _buildSampleChip(
     case AppDeviceType.tabletPortrait:
       horizontalPadding = 13;
       verticalPadding = 9;
-
       iconSize = 17;
       fontSize = 13;
       break;
@@ -1057,88 +712,42 @@ Widget _buildSampleChip(
     case AppDeviceType.tabletLandscape:
       horizontalPadding = 12;
       verticalPadding = 8;
-
       iconSize = 16;
       fontSize = 12;
       break;
   }
 
   return Container(
-    constraints:
-    const BoxConstraints(
-      maxWidth: 260,
+    constraints: const BoxConstraints(maxWidth: 260),
+    padding: EdgeInsets.symmetric(
+      horizontal: horizontalPadding,
+      vertical: verticalPadding,
     ),
-
-    padding:
-    EdgeInsets.symmetric(
-      horizontal:
-      horizontalPadding,
-
-      vertical:
-      verticalPadding,
-    ),
-
-    decoration:
-    BoxDecoration(
-      color: ColorManager
-          .secondaryColor7
-          .withOpacity(
-        0.10,
-      ),
-
-      borderRadius:
-      BorderRadius.circular(
-        12,
-      ),
-
+    decoration: BoxDecoration(
+      color: ColorManager.secondaryColor7.withOpacity(0.10),
+      borderRadius: BorderRadius.circular(12),
       border: Border.all(
-        color: ColorManager
-            .secondaryColor7
-            .withOpacity(
-          0.25,
-        ),
+        color: ColorManager.secondaryColor7.withOpacity(0.25),
       ),
     ),
-
     child: Row(
-      mainAxisSize:
-      MainAxisSize.min,
-
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           Icons.medication_outlined,
-
-          size:
-          iconSize,
-
-          color:
-          ColorManager.primary1,
+          size: iconSize,
+          color: ColorManager.primary1,
         ),
-
-        const SizedBox(
-          width: 6,
-        ),
-
+        const SizedBox(width: 6),
         Flexible(
           child: Text(
             sample,
-
             maxLines: 2,
-
-            overflow:
-            TextOverflow.ellipsis,
-
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize:
-              fontSize,
-
-              color:
-              const Color(
-                0xFF1E293B,
-              ),
-
-              fontWeight:
-              FontWeight.w600,
+              fontSize: fontSize,
+              color: const Color(0xFF1E293B),
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -1159,19 +768,15 @@ Widget _buildReadReportButton({
   required int index,
   required bool isHospital,
 }) {
-  final deviceType =
-  AppResponsive.deviceType(context);
+  final deviceType = AppResponsive.deviceType(context);
 
-  final bool isRead =
-      doctorNoteModel.flag;
-
+  final bool isRead = doctorNoteModel.flag;
   final Color color = isRead
       ? ColorManager.secondaryColor2
       : ColorManager.primary1;
 
   double horizontalPadding;
   double verticalPadding;
-
   double iconSize;
   double fontSize;
 
@@ -1179,7 +784,6 @@ Widget _buildReadReportButton({
     case AppDeviceType.mobilePortrait:
       horizontalPadding = 13;
       verticalPadding = 9;
-
       iconSize = 19;
       fontSize = 12;
       break;
@@ -1187,7 +791,6 @@ Widget _buildReadReportButton({
     case AppDeviceType.tabletPortrait:
       horizontalPadding = 16;
       verticalPadding = 11;
-
       iconSize = 22;
       fontSize = 14;
       break;
@@ -1195,7 +798,6 @@ Widget _buildReadReportButton({
     case AppDeviceType.tabletLandscape:
       horizontalPadding = 14;
       verticalPadding = 9;
-
       iconSize = 20;
       fontSize = 13;
       break;
@@ -1203,135 +805,66 @@ Widget _buildReadReportButton({
 
   return Material(
     color: Colors.transparent,
-
     child: InkWell(
-      borderRadius:
-      BorderRadius.circular(
-        12,
-      ),
-
-      onTap:
-      state is AsReadLoadingState
+      borderRadius: BorderRadius.circular(12),
+      onTap: state is AsReadLoadingState
           ? null
           : () {
         if (isHospital) {
-          BlocProvider.of<
-              ReportVisitDoctorBloc>(
-            context,
-          ).add(
+          BlocProvider.of<ReportVisitDoctorBloc>(context).add(
             ChangeReadHosNoteEvent(
-              index:
-              indexRep,
-
-              indexBook:
-              index,
-
-              repVisitsModel:
-              doctorNoteModel,
+              index: indexRep,
+              indexBook: index,
+              repVisitsModel: doctorNoteModel,
             ),
           );
         } else {
-          BlocProvider.of<
-              ReportVisitDoctorBloc>(
-            context,
-          ).add(
+          BlocProvider.of<ReportVisitDoctorBloc>(context).add(
             ChangeReadDocNoteEvent(
-              repVisitsModel:
-              doctorNoteModel,
-
-              index:
-              indexRep,
-
-              indexBook:
-              index,
+              repVisitsModel: doctorNoteModel,
+              index: indexRep,
+              indexBook: index,
             ),
           );
         }
       },
-
       child: Container(
-        padding:
-        EdgeInsets.symmetric(
-          horizontal:
-          horizontalPadding,
-
-          vertical:
-          verticalPadding,
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontalPadding,
+          vertical: verticalPadding,
         ),
-
-        decoration:
-        BoxDecoration(
-          color:
-          color.withOpacity(
-            0.08,
-          ),
-
-          borderRadius:
-          BorderRadius.circular(
-            12,
-          ),
-
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color:
-            color.withOpacity(
-              0.65,
-            ),
+            color: color.withOpacity(0.65),
           ),
         ),
-
         child: Row(
-          mainAxisSize:
-          MainAxisSize.min,
-
+          mainAxisSize: MainAxisSize.min,
           children: [
-            if (state
-            is AsReadLoadingState)
+            if (state is AsReadLoadingState)
               SizedBox(
-                width:
-                iconSize,
-                height:
-                iconSize,
-
-                child:
-                CircularProgressIndicator(
+                width: iconSize,
+                height: iconSize,
+                child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color:
-                  color,
+                  color: color,
                 ),
               )
             else
               Icon(
-                isRead
-                    ? Icons.bookmark
-                    : Icons
-                    .bookmark_border_outlined,
-
-                size:
-                iconSize,
-
-                color:
-                color,
+                isRead ? Icons.bookmark : Icons.bookmark_border_outlined,
+                size: iconSize,
+                color: color,
               ),
-
-            const SizedBox(
-              width: 7,
-            ),
-
+            const SizedBox(width: 7),
             Text(
-              isRead
-                  ? "تم الاطلاع"
-                  : "تعليم كمقروء",
-
-              style:
-              TextStyle(
-                fontSize:
-                fontSize,
-
-                fontWeight:
-                FontWeight.w700,
-
-                color:
-                color,
+              isRead ? "تم الاطلاع" : "تعليم كمقروء",
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.w700,
+                color: color,
               ),
             ),
           ],
@@ -1340,6 +873,15 @@ Widget _buildReadReportButton({
     ),
   );
 }
+
+// =======================================================
+// Sample Chip
+// =======================================================
+
+// =======================================================
+// Read Report Button
+// =======================================================
+
 
 // =======================================================
 // Global Helpers

@@ -1,5 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/plan_management/bloc/plan_management_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -639,7 +640,8 @@ class _CreatePlanBrandPageState
                   ),
                 ),
               ),
-              onChanged: (val) {
+              onChanged: (v) {
+                String  val=   convertArabicNumberToEnglish( v);
                 final qty =
                     int.tryParse(val) ?? 0;
 

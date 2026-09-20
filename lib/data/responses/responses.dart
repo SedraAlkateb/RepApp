@@ -338,7 +338,11 @@ class TokenResponse {
       this.endDate,
       this.recipesCount,
       this.otherStartDate,
-      this.otherEndDate,this.totDoc,this.totHos,this.groupId,this.groupTitle);
+      this.otherEndDate,
+      this.totDoc,
+      this.totHos,
+      this.groupId,
+      this.groupTitle);
   factory TokenResponse.fromJson(Map<String, dynamic> json) =>
       _$TokenResponseFromJson(json);
   Map<String, dynamic> toJson() => _$TokenResponseToJson(this);
@@ -520,7 +524,7 @@ class PlaceResponse {
   String? title;
   @JsonKey(name: "totalVisit")
   int? totalVisit;
-  PlaceResponse(this.id, this.title,this.totalVisit);
+  PlaceResponse(this.id, this.title, this.totalVisit);
   factory PlaceResponse.fromJson(Map<String, dynamic> json) =>
       _$PlaceResponseFromJson(json);
 
@@ -678,11 +682,8 @@ class BrandResponse {
   String? generalCoast;
   @JsonKey(name: "features")
   String? features;
-  BrandResponse(this.id, this.title, this.phTitle, this.falg, this.sampleCoast
-
-      , this.phCoast, this.generalCoast, this.features
-
-      );
+  BrandResponse(this.id, this.title, this.phTitle, this.falg, this.sampleCoast,
+      this.phCoast, this.generalCoast, this.features);
   // from json
   factory BrandResponse.fromJson(Map<String, dynamic> json) =>
       _$BrandResponseFromJson(json);
@@ -1039,7 +1040,8 @@ class DocDoctorsJsonResponse {
   @JsonKey(name: "target")
   String? target;
 
-  DocDoctorsJsonResponse(this.repName, this.visitDate, this.issue, this.note,this.target);
+  DocDoctorsJsonResponse(
+      this.repName, this.visitDate, this.issue, this.note, this.target);
   // from json
   factory DocDoctorsJsonResponse.fromJson(Map<String, dynamic> json) =>
       _$DocDoctorsJsonResponseFromJson(json);
@@ -1065,8 +1067,15 @@ class ReciResponse {
   String? recipeType;
   @JsonKey(name: "recipeStatus")
   String? recipeStatus;
-  ReciResponse(this.id, this.docName, this.create_date, this.total,
-      this.note_emp, this.docId, this.recipeType,this.recipeStatus); // from json
+  ReciResponse(
+      this.id,
+      this.docName,
+      this.create_date,
+      this.total,
+      this.note_emp,
+      this.docId,
+      this.recipeType,
+      this.recipeStatus); // from json
   factory ReciResponse.fromJson(Map<String, dynamic> json) =>
       _$ReciResponseFromJson(json);
   // to json
@@ -1508,7 +1517,6 @@ class RepInfoResponse {
       this.visitDonDoc,
       this.visitDonHos,
       this.visitnotYet,
-
       this.groupId,
       this.groupTitle);
 
@@ -1858,8 +1866,10 @@ class RepresentativeFutureResponse {
   String reptype;
   @JsonKey(name: "planDate")
   String planDate;
+  @JsonKey(name: "percent")
+  String percent;
   RepresentativeFutureResponse(this.id, this.name, this.flag, this.futurePlan,
-      this.samplesCount, this.reptype,this.planDate);
+      this.samplesCount, this.reptype, this.planDate, this.percent);
 
   // from json
   factory RepresentativeFutureResponse.fromJson(Map<String, dynamic> json) =>
@@ -1995,4 +2005,50 @@ class DoctorSenResponse {
       _$DoctorSenResponseFromJson(json);
   // to json
   Map<String, dynamic> toJson() => _$DoctorSenResponseToJson(this);
+}
+
+@JsonSerializable()
+class HosSpSearchResponse {
+  @JsonKey(name: "name")
+  String? name;
+  @JsonKey(name: "spTitle")
+  String? spTitle;
+  @JsonKey(name: "rate")
+  String? rate;
+  @JsonKey(name: "placeTitle")
+  String? placeTitle;
+  @JsonKey(name: "visits")
+  String? visits;
+  @JsonKey(name: "totalDocs")
+  String? totalDocs;
+
+  HosSpSearchResponse(this.name, this.spTitle, this.rate, this.placeTitle,
+      this.visits, {this.totalDocs}); // from json
+  factory HosSpSearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$HosSpSearchResponseFromJson(json);
+
+  // to json
+  Map<String, dynamic> toJson() => _$HosSpSearchResponseToJson(this);
+}
+@JsonSerializable()
+class ListHosSpSearchResponseResponse  {
+  @JsonKey(name: "Doctors")
+  List<HosSpSearchResponse>? doctors;
+  ListHosSpSearchResponseResponse(this.doctors);
+  // from json
+  factory ListHosSpSearchResponseResponse.fromJson(Map<String, dynamic> json) =>
+      _$ListHosSpSearchResponseResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$ListHosSpSearchResponseResponseToJson(this);
+}
+@JsonSerializable()
+class ListHosSpSearchBaseResponse extends BaseResponse {
+  @JsonKey(name: "Doctors")
+  ListHosSpSearchResponseResponse? doctors;
+  ListHosSpSearchBaseResponse(this.doctors);
+  // from json
+  factory ListHosSpSearchBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$ListHosSpSearchBaseResponseFromJson(json);
+  // to json
+  Map<String, dynamic> toJson() => _$ListHosSpSearchBaseResponseToJson(this);
 }

@@ -116,6 +116,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
               currentRep.samplesCount,
               currentRep.reptype,
               currentRep.planDate,
+              currentRep.percent
             );
 
             dateTime = currentRep.planDate;

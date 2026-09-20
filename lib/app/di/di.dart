@@ -1,4 +1,3 @@
-
 import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_doctor_visits_sql_usecase.dart';
@@ -48,6 +47,7 @@ import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/doc_doctors_usecase.dart';
+import 'package:domina_app/domain/usecase/doc_sp_search_usecase.dart';
 import 'package:domina_app/domain/usecase/doctor_info_usecase.dart';
 import 'package:domina_app/domain/usecase/doctors_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
@@ -59,6 +59,7 @@ import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
 import 'package:domina_app/domain/usecase/get_pan_reps_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_doctor_usecase.dart';
 import 'package:domina_app/domain/usecase/get_visit_hospital_usecase.dart';
+import 'package:domina_app/domain/usecase/hos_sp_search_usecase.dart';
 import 'package:domina_app/domain/usecase/hospitals_by_place_usecase.dart';
 import 'package:domina_app/domain/usecase/info_rep_usecase.dart';
 import 'package:domina_app/domain/usecase/insert_as/get_brands_doctor_visits_sql_usecase.dart';
@@ -185,7 +186,6 @@ Future<void> initAppModule() async {
 Future<void> ensureNetworkModule() async {
   await initNetworkModule();
 }
-
 
 //GetIt instance = GetIt.instance;
 // Future<void> initAppModule() async {
@@ -430,8 +430,8 @@ Future<void> initPlacesModule() async {
     instance.registerFactory<NumDocHasSqlUsecase>(
         () => NumDocHasSqlUsecase(instance()));
     if (!GetIt.I.isRegistered<CheckRepUsecase>()) {
-      instance.registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
-
+      instance
+          .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
     }
     instance.registerFactory<PlaceBloc>(() => PlaceBloc(instance(), instance(),
         instance(), instance(), instance(), instance()));
@@ -734,12 +734,12 @@ Future<void> initSeniorProfModule() async {
           () => GetRepReciUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<DeleteAllSqlUsecase>()) {
-      instance
-          .registerFactory<DeleteAllSqlUsecase>(() => DeleteAllSqlUsecase(instance()));
+      instance.registerFactory<DeleteAllSqlUsecase>(
+          () => DeleteAllSqlUsecase(instance()));
     }
     if (!GetIt.I.isRegistered<GetDocHosBySpPlace>()) {
-      instance
-          .registerFactory<GetDocHosBySpPlace>(() => GetDocHosBySpPlace(instance()));
+      instance.registerFactory<GetDocHosBySpPlace>(
+          () => GetDocHosBySpPlace(instance()));
     }
     if (!GetIt.I.isRegistered<SeniorProfBloc>()) {
       instance.registerFactory<SeniorProfBloc>(() => SeniorProfBloc(
@@ -770,9 +770,6 @@ Future<void> initSeniorModule() async {
     instance.registerFactory<SeniorRepsBloc>(() => SeniorRepsBloc(instance()));
   }
 }
-
-
-
 
 Future<void> initSeniorReportInventoryModule() async {
   if (!GetIt.I.isRegistered<AllInventoryUsecase>()) {
@@ -828,7 +825,13 @@ Future<void> iniFutureModule() async {
         () => ChangeRepPlanStatus(instance()));
   }
   if (!GetIt.I.isRegistered<FutureRepBloc>()) {
+    instance.registerFactory<DocSpSearchUsecase>(
+        () => DocSpSearchUsecase(instance()));
+    instance.registerFactory<HosSpSearchUsecase>(
+        () => HosSpSearchUsecase(instance()));
     instance.registerFactory<FutureRepBloc>(() => FutureRepBloc(
+          instance(),
+          instance(),
           instance(),
           instance(),
           instance(),
@@ -911,10 +914,9 @@ Future<void> initGeneralReportsModule() async {
     instance.registerFactory<TeamLeaderAndCityUsecase>(
         () => TeamLeaderAndCityUsecase(instance()));
     instance.registerFactory<SeniorByCityIdUsecase>(
-            () => SeniorByCityIdUsecase(instance()));
+        () => SeniorByCityIdUsecase(instance()));
     instance.registerFactory<GeneralReportsBloc>(
         () => GeneralReportsBloc(instance(), instance()));
-
   }
 }
 
@@ -938,15 +940,14 @@ Future<void> initSeniorManageFutureModule() async {
 Future<void> iniAllCityModule() async {
   if (!GetIt.I.isRegistered<AllCityUsecase>()) {
     instance.registerFactory<AllCityUsecase>(() => AllCityUsecase(instance()));
-
   }
   if (!GetIt.I.isRegistered<CheckRepUsecase>()) {
-    instance.registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
-
+    instance
+        .registerFactory<CheckRepUsecase>(() => CheckRepUsecase(instance()));
   }
   if (!GetIt.I.isRegistered<AllCityBloc>()) {
-    instance.registerFactory<AllCityBloc>(() => AllCityBloc(instance(),instance()));
-
+    instance.registerFactory<AllCityBloc>(
+        () => AllCityBloc(instance(), instance()));
   }
 }
 

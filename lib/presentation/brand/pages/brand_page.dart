@@ -5,13 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BrandPage extends StatelessWidget {
-
-  BrandPage({
-    super.key,
-
-  });
+  BrandPage({super.key});
 
   final TextEditingController searchbrandController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BrandBloc>(
@@ -20,13 +17,12 @@ class BrandPage extends StatelessWidget {
           AllBrandEvent(),
         ),
       child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
         appBar: AppBar(
           title: const Text('الأصناف'),
         ),
         body: BrandResponsiveLayout(
           searchController: searchbrandController,
-
-          // ت مرير الدالة أو البارامترات لـ Responsive Layout إذا أردت استدعاء السحب عند الضغط على أحد العناصر
         ),
       ),
     );

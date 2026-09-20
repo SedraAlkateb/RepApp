@@ -108,7 +108,7 @@ abstract class Repository {
       UpdateReciRequest reciReq);
   Future<Either<Failure, DoctorModel>> getDocInfo(int docId);
   Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(
-      int repPlan);
+      int repPlan,{int status=0});
 
   Future<Either<Failure, Message1Response>> pharmacyOrder(
       PharmacyOrderRequestBody order);
@@ -153,5 +153,7 @@ abstract class Repository {
     int ?placeId,
     int? cityId
   });
+  Future<Either<Failure, List<HosDocSpSearchModel>>> docSpSearch(int repPlanId, int spId);
+  Future<Either<Failure, List<HosDocSpSearchModel>>> hosSpSearch(int repPlanId, int spId);
 
 }

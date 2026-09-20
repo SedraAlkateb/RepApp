@@ -158,6 +158,7 @@ class PlanManagementBloc
       (failure) => emit(state.copyWith(
           activeStatus: PlanStatus.error, activeFailure: failure)),
       (data) {
+
         emit(state.copyWith(
             activeStatus: PlanStatus.success,
             activeBrands: data,

@@ -6,24 +6,22 @@ class BrandResponsiveLayout extends StatelessWidget {
   const BrandResponsiveLayout({
     super.key,
     required this.searchController,
-
   });
+
   final TextEditingController searchController;
 
-  // =========================================================
-  // دالة عرض BottomSheet بالتفاصيل الثلاثة للصنف
-  // =========================================================
+  // دالة عرض BottomSheet للتفاصيل الثلاثة للصنف
   static void showBrandDetailsSheet(BuildContext context, dynamic brand) {
     final String features = (brand.features == null || brand.features.toString().trim().isEmpty)
-        ? 'غير محدد'
+        ? ''
         : brand.features.toString();
 
     final String genCoast = (brand.generalCoast == null || brand.generalCoast.toString().trim().isEmpty)
-        ? 'غير محدد'
+        ? ''
         : brand.generalCoast.toString();
 
     final String phCoast = (brand.phCoast == null || brand.phCoast.toString().trim().isEmpty)
-        ? 'غير محدد'
+        ? ''
         : brand.phCoast.toString();
 
     showModalBottomSheet(
@@ -46,7 +44,6 @@ class BrandResponsiveLayout extends StatelessWidget {
               child: ListView(
                 controller: scrollController,
                 children: [
-                  // مؤشر السحب العلوي
                   Center(
                     child: Container(
                       width: 45,
@@ -58,8 +55,6 @@ class BrandResponsiveLayout extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  // عنوان الصنف
                   Text(
                     brand.title ?? 'تفاصيل الصنف',
                     style: const TextStyle(
@@ -70,31 +65,27 @@ class BrandResponsiveLayout extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-
-                  // 1. الميزات (features)
                   _buildDetailTile(
                     context: context,
-                    title: 'الميزات (Features)',
+                    title: 'الميزة التسويقية',
                     value: features,
                     icon: Icons.featured_play_list_outlined,
                   ),
                   const SizedBox(height: 12),
 
-                  // 2. الكلفة العامة (generalCoast)
                   _buildDetailTile(
                     context: context,
-                    title: 'الكلفة العامة (General Coast)',
-                    value: genCoast,
-                    icon: Icons.monetization_on_outlined,
-                  ),
-                  const SizedBox(height: 12),
-
-                  // 3. كلفة الصيدلية (phCoast)
-                  _buildDetailTile(
-                    context: context,
-                    title: 'كلفة الصيدلية (Ph Coast)',
+                    title: 'سعر الصيدلي',
                     value: phCoast,
                     icon: Icons.local_pharmacy_outlined,
+                  ),
+
+                  const SizedBox(height: 12),
+                  _buildDetailTile(
+                    context: context,
+                    title: 'سعر العموم',
+                    value: genCoast,
+                    icon: Icons.monetization_on_outlined,
                   ),
                   const SizedBox(height: 20),
                 ],
@@ -161,44 +152,63 @@ class BrandResponsiveLayout extends StatelessWidget {
     double horizontalPadding;
     double topSpacing;
     double sectionSpacing;
+    double stateTopSpacing;
 
     switch (deviceType) {
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
-        horizontalPadding = 8;
-        topSpacing = 12;
+        horizontalPadding = 16;
+        topSpacing = 16;
         sectionSpacing = 12;
+        stateTopSpacing = 70;
         break;
 
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
-        horizontalPadding = 24;
-        topSpacing = 18;
+        horizontalPadding = 28;
+        topSpacing = 20;
         sectionSpacing = 18;
+        stateTopSpacing = 90;
         break;
 
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 1000;
         horizontalPadding = 32;
-        topSpacing = 20;
+        topSpacing = 16;
         sectionSpacing = 20;
+        stateTopSpacing = 70;
         break;
     }
 
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: pageMaxWidth,
-        ),
-        child: BrandContent(
-          searchController: searchController,
-          horizontalPadding: horizontalPadding,
-          topSpacing: topSpacing,
-          sectionSpacing: sectionSpacing,
-          // إذا لم تُمرّر دالة onTap من الخارج، سيتم استدعاء showBrandDetailsSheet تلقائياً
-          onTap:  (selectedBrand) => showBrandDetailsSheet(context, selectedBrand),
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight, // يضمن تغطية الشاشة بالكامل وتفعيل السكرول من الفراغ
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: pageMaxWidth, // تطبيق قيود العرض الأقصى على المحتوى الداخلي فقط
+                ),
+                child: BrandContent(
+                  searchController: searchController,
+                  horizontalPadding: horizontalPadding,
+                  topSpacing: topSpacing,
+                  sectionSpacing: sectionSpacing,
+                  stateTopSpacing: stateTopSpacing,
+                  onTap: (selectedBrand) => showBrandDetailsSheet(context, selectedBrand),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

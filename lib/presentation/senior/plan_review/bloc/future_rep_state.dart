@@ -78,7 +78,11 @@ final class UpdateAmountState extends FutureRepState {
   @override
   List<Object?> get props => [];
 }
-
+final class ISEmptyState extends FutureRepState {
+  ISEmptyState();
+  @override
+  List<Object?> get props => [];
+}
 final class EditeStatusLoadingState extends FutureRepState {
   @override
   EditeStatusLoadingState();
@@ -109,4 +113,24 @@ final class AmountState extends FutureRepState {
 
   @override
   List<Object?> get props => [targetAmount,assistantAmount,totalAmount];
+}
+final class DocHosSpSearchLoadingState extends FutureRepState {
+  @override
+  DocHosSpSearchLoadingState();
+  @override
+  List<Object?> get props => [];
+}
+
+final class DocHosSpSearchFailureState extends FutureRepState {
+  final Failure failure;
+  DocHosSpSearchFailureState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+final class DocHosSpSearchState extends FutureRepState {
+  final List<HosDocSpSearchModel> items;
+  DocHosSpSearchState(this.items);
+  @override
+  List<Object?> get props => [];
 }

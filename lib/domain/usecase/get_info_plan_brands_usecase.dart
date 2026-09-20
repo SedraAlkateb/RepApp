@@ -8,8 +8,8 @@ class GetInfoPlanBrandsUsecase extends Equatable {
   final Repository _repository;
   const GetInfoPlanBrandsUsecase(this._repository);
   Future<Either<Failure, List<ActivePlanBrandModel>>> execute(
-      int repPlan) async {
-    return await _repository.getInfoPlanBrandsType(repPlan);
+      int repPlan,{int status=0}) async {
+    return await _repository.getInfoPlanBrandsType(repPlan,status: status);
   }
 
   @override

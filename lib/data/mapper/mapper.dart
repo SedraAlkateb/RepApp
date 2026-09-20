@@ -1011,6 +1011,7 @@ extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
       int.parse(this?.samplesCount ?? "0"),
       RepType.fromIntS(this?.reptype),
       this?.planDate ?? Constants.empty,
+      int.parse(this?.percent ?? "0"),
     );
   }
 }
@@ -1147,5 +1148,31 @@ extension DocHosByPlaceAndSpMapper on GetDocHosByPlaceOrSpBaseResponse? {
             .cast<HospitalSpModel>()
             .toList();
     return DocHosByPlaceAndSp(doctors, hospitals);
+  }
+}
+
+extension HosDocSpSearchMapper on HosSpSearchResponse? {
+  HosDocSpSearchModel toDomain() {
+    return HosDocSpSearchModel(
+      this?.name ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.placeTitle ?? Constants.empty,
+      this?.rate ?? Constants.empty,
+      this?.visits ?? Constants.empty,
+      totalDocs: this?.totalDocs ?? Constants.empty,
+    );
+  }
+}
+
+extension ListHosDocSpSearchMapper on
+ListHosSpSearchBaseResponse? {
+  List<HosDocSpSearchModel> toDomain() {
+    List<HosDocSpSearchModel> allSearchHospital = (this
+        ?.doctors?.doctors
+        ?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<HosDocSpSearchModel>()
+        .toList();
+    return allSearchHospital;
   }
 }

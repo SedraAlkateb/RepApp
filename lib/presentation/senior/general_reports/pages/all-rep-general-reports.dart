@@ -24,7 +24,7 @@ class AllRepSeniorGenerlReports extends StatefulWidget {
     required this.cityId,
     required this.cityname,
     required this.repId,
-     this.seniorName,
+    this.seniorName,
   });
 
   @override
@@ -50,7 +50,7 @@ class _AllRepSeniorGenerlReportsState
   }
 
   // =====================================================
-  // نفس منطق التحديث
+  // منطق التحديث السليم (إرسال الحدث والانتظار للـ Bloc)
   // =====================================================
   void _onRefresh() {
     BlocProvider.of<SeniorRepsBloc>(context).add(
@@ -59,8 +59,6 @@ class _AllRepSeniorGenerlReportsState
         widget.repId,
       ),
     );
-
-    _refreshController.refreshCompleted();
   }
 
   @override
@@ -69,242 +67,163 @@ class _AllRepSeniorGenerlReportsState
     AppResponsive.deviceType(context);
 
     double pageMaxWidth;
-
     double headerHorizontalPadding;
     double headerTopPadding;
-
     double searchHorizontalPadding;
     double searchVerticalPadding;
-
     double listHorizontalPadding;
     double cardBottomSpacing;
     double bottomSafeSpacing;
-
     double headerTitleFontSize;
     double headerSubtitleFontSize;
-
-    double cardPadding;
     double cardRadius;
 
-    double avatarSize;
-    double avatarIconSize;
-    double avatarSpacing;
-
-    double repNameFontSize;
-    double repInfoFontSize;
-
-    double arrowSize;
-
     switch (deviceType) {
-    // ===========================================
-    // Mobile
-    // ===========================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
-
         headerHorizontalPadding = 25;
         headerTopPadding = 20;
-
         searchHorizontalPadding = 15;
         searchVerticalPadding = 15;
-
         listHorizontalPadding = 20;
         cardBottomSpacing = 15;
         bottomSafeSpacing = 50;
-
         headerTitleFontSize = 22;
         headerSubtitleFontSize = 12;
-
-        cardPadding = 10;
         cardRadius = 15;
-
-        avatarSize = 50;
-        avatarIconSize = 24;
-        avatarSpacing = 10;
-
-        repNameFontSize = 16;
-        repInfoFontSize = 10;
-
-        arrowSize = 16;
         break;
 
-    // ===========================================
-    // Tablet Portrait
-    // ===========================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
-
         headerHorizontalPadding = 30;
         headerTopPadding = 24;
-
         searchHorizontalPadding = 24;
         searchVerticalPadding = 18;
-
         listHorizontalPadding = 28;
         cardBottomSpacing = 18;
         bottomSafeSpacing = 60;
-
         headerTitleFontSize = 26;
         headerSubtitleFontSize = 14;
-
-        cardPadding = 16;
         cardRadius = 18;
-
-        avatarSize = 58;
-        avatarIconSize = 28;
-        avatarSpacing = 14;
-
-        repNameFontSize = 19;
-        repInfoFontSize = 12;
-
-        arrowSize = 19;
         break;
 
-    // ===========================================
-    // Tablet Landscape
-    // ===========================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
-
         headerHorizontalPadding = 32;
         headerTopPadding = 20;
-
         searchHorizontalPadding = 28;
         searchVerticalPadding = 16;
-
         listHorizontalPadding = 32;
         cardBottomSpacing = 18;
         bottomSafeSpacing = 50;
-
         headerTitleFontSize = 26;
         headerSubtitleFontSize = 14;
-
-        cardPadding = 16;
         cardRadius = 18;
-
-        avatarSize = 58;
-        avatarIconSize = 28;
-        avatarSpacing = 14;
-
-        repNameFontSize = 19;
-        repInfoFontSize = 12;
-
-        arrowSize = 19;
         break;
     }
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-
       appBar: AppBar(
         title: Text(
-          widget.seniorName!=null?
-              "تقارير مندوبين ${widget.seniorName} ":
-          ' تقارير المندوبين (${widget.cityname}) ',
+          widget.seniorName != null
+              ? "تقارير مندوبين ${widget.seniorName} "
+              : ' تقارير المندوبين (${widget.cityname}) ',
         ),
       ),
-
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: pageMaxWidth,
-            ),
-            child: SmartRefresher(
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              enablePullDown: true,
-              header: const WaterDropHeader(),
-
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  // =====================================
-                  // Header
-                  // =====================================
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        headerHorizontalPadding,
-                        headerTopPadding,
-                        headerHorizontalPadding,
-                        0,
+        // استخدام BlocListener لإنهاء حركة التحديث فور وصول الرد من الـ Bloc
+        child: BlocListener<SeniorRepsBloc, SeniorRepsState>(
+          listener: (context, state) {
+            if (state is AllSeniorRepState ||
+                state is AllSeniorRepErrorState) {
+              if (_refreshController.isRefresh) {
+                _refreshController.refreshCompleted();
+              }
+            }
+          },
+          child: SmartRefresher(
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            enablePullDown: true,
+            header: const WaterDropHeader(),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                // =====================================
+                // 1. Header
+                // =====================================
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: pageMaxWidth,
                       ),
-                      child: _buildHeader(
-                        titleFontSize:
-                        headerTitleFontSize,
-                        subtitleFontSize:
-                        headerSubtitleFontSize,
-                      ),
-                    ),
-                  ),
-
-                  // =====================================
-                  // Search
-                  // =====================================
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal:
-                        searchHorizontalPadding,
-                        vertical:
-                        searchVerticalPadding,
-                      ),
-                      child: SearchField(
-                        searchController:
-                        _searchController,
-
-                        // نفس السلوك
-                        onPressed: (value) {
-                          context
-                              .read<SeniorRepsBloc>()
-                              .add(
-                            SenSearchRepEvent(
-                              value,
-                            ),
-                          );
-                        },
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          headerHorizontalPadding,
+                          headerTopPadding,
+                          headerHorizontalPadding,
+                          0,
+                        ),
+                        child: _buildHeader(
+                          titleFontSize: headerTitleFontSize,
+                          subtitleFontSize: headerSubtitleFontSize,
+                        ),
                       ),
                     ),
                   ),
+                ),
 
-                  // =====================================
-                  // Reps List
-                  // =====================================
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal:
-                      listHorizontalPadding,
-                    ),
-                    sliver: _buildRepsList(
-                      cardBottomSpacing:
-                      cardBottomSpacing,
-                      cardPadding: cardPadding,
-                      cardRadius: cardRadius,
-                      avatarSize: avatarSize,
-                      avatarIconSize:
-                      avatarIconSize,
-                      avatarSpacing:
-                      avatarSpacing,
-                      repNameFontSize:
-                      repNameFontSize,
-                      repInfoFontSize:
-                      repInfoFontSize,
-                      arrowSize: arrowSize,
+                // =====================================
+                // 2. Search Field
+                // =====================================
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: pageMaxWidth,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: searchHorizontalPadding,
+                          vertical: searchVerticalPadding,
+                        ),
+                        child: SearchField(
+                          searchController: _searchController,
+                          onPressed: (value) {
+                            context
+                                .read<SeniorRepsBloc>()
+                                .add(
+                              SenSearchRepEvent(value),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
+                ),
 
-                  // =====================================
-                  // Bottom safe space
-                  // =====================================
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: bottomSafeSpacing,
-                    ),
+                // =====================================
+                // 3. Reps List & States
+                // =====================================
+                _buildRepsContent(
+                  pageMaxWidth: pageMaxWidth,
+                  listHorizontalPadding: listHorizontalPadding,
+                  cardBottomSpacing: cardBottomSpacing,
+                  cardRadius: cardRadius,
+                ),
+
+                // =====================================
+                // 4. Bottom Safe Space
+                // =====================================
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: bottomSafeSpacing,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -313,7 +232,7 @@ class _AllRepSeniorGenerlReportsState
   }
 
   // =====================================================
-  // Header
+  // Header Widget Builder
   // =====================================================
 
   Widget _buildHeader({
@@ -324,8 +243,7 @@ class _AllRepSeniorGenerlReportsState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment:
-          MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Text(
@@ -333,32 +251,22 @@ class _AllRepSeniorGenerlReportsState
                 style: TextStyle(
                   fontSize: titleFontSize,
                   fontWeight: FontWeight.bold,
-                  color:
-                  ColorManager.medicalPrimary,
+                  color: ColorManager.medicalPrimary,
                 ),
               ),
             ),
-
-            const SizedBox(
-              width: 12,
-            ),
-
+            const SizedBox(width: 12),
             Container(
               height: 4,
               width: 35,
               decoration: BoxDecoration(
                 color: const Color(0xFF42A5F5),
-                borderRadius:
-                BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
           ],
         ),
-
-        const SizedBox(
-          height: 2,
-        ),
-
+        const SizedBox(height: 2),
         Text(
           'استعراض تقارير المندوبين ومراقبة السينيور',
           style: TextStyle(
@@ -371,39 +279,44 @@ class _AllRepSeniorGenerlReportsState
   }
 
   // =====================================================
-  // Reps List
+  // Reps Content Builder (Handles Loading, Error, Empty, Data)
   // =====================================================
 
-  Widget _buildRepsList({
+  Widget _buildRepsContent({
+    required double pageMaxWidth,
+    required double listHorizontalPadding,
     required double cardBottomSpacing,
-    required double cardPadding,
     required double cardRadius,
-    required double avatarSize,
-    required double avatarIconSize,
-    required double avatarSpacing,
-    required double repNameFontSize,
-    required double repInfoFontSize,
-    required double arrowSize,
   }) {
     return BlocBuilder<SeniorRepsBloc, SeniorRepsState>(
       builder: (context, state) {
-        List<AllRepresentative> list = context
-            .watch<SeniorRepsBloc>()
-            .allRepresentative;
+        List<AllRepresentative> list =
+            context.watch<SeniorRepsBloc>().allRepresentative;
 
         // =========================================
-        // Loading
+        // Loading State
         // =========================================
         if (state is AllSeniorRepLoadingState) {
           return SliverToBoxAdapter(
             child: Center(
-              child: loadingShimmer(
-                context,
-                5,
-                100,
-                20,
-                BorderRadius.circular(
-                  cardRadius,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: pageMaxWidth,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 40,
+                    horizontal: listHorizontalPadding,
+                  ),
+                  child: Center(
+                    child: loadingShimmer(
+                      context,
+                      5,
+                      100,
+                      20,
+                      BorderRadius.circular(cardRadius),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -411,70 +324,95 @@ class _AllRepSeniorGenerlReportsState
         }
 
         // =========================================
-        // Error
+        // Error State
         // =========================================
         if (state is AllSeniorRepErrorState) {
-          return SliverToBoxAdapter(
-            child: errorFullScreen(
-              context,
-              func: _onRefresh,
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: pageMaxWidth,
+                ),
+                child: errorFullScreen(
+                  context,
+                  func: _onRefresh,
+                ),
+              ),
             ),
           );
         }
 
         // =========================================
-        // Data
+        // Data State
         // =========================================
         if (state is AllSeniorRepState) {
           list = state.representatives;
         }
 
         // =========================================
-        // Empty
+        // Empty State
         // =========================================
         if (list.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: emptyFullScreen(
-              context,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: pageMaxWidth,
+                ),
+                child: emptyFullScreen(context),
+              ),
             ),
           );
         }
 
         // =========================================
-        // List
+        // Data List State
         // =========================================
-        return AnimationLimiter(
-          child: SliverList(
-            delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                final rep = list[index];
+        return SliverToBoxAdapter(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: pageMaxWidth,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: listHorizontalPadding,
+                ),
+                child: AnimationLimiter(
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.stretch,
+                    children: list.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final rep = entry.value;
 
-                return AnimationConfiguration
-                    .staggeredList(
-                  position: index,
-                  duration: const Duration(
-                    milliseconds: 500,
-                  ),
-                  child: SlideAnimation(
-                    verticalOffset: 50,
-                    child: FadeInAnimation(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          bottom:
-                          cardBottomSpacing,
+                      return AnimationConfiguration
+                          .staggeredList(
+                        position: index,
+                        duration: const Duration(
+                          milliseconds: 500,
                         ),
-                        child: _buildRepReportCard(
-                          rep,
-                          index,
-
+                        child: SlideAnimation(
+                          verticalOffset: 50,
+                          child: FadeInAnimation(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                bottom: cardBottomSpacing,
+                              ),
+                              child: _buildRepReportCard(
+                                rep,
+                                index,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    }).toList(),
                   ),
-                );
-              },
-              childCount: list.length,
+                ),
+              ),
             ),
           ),
         );
@@ -483,7 +421,7 @@ class _AllRepSeniorGenerlReportsState
   }
 
   // =====================================================
-  // Rep Card
+  // Rep Card Widget Builder
   // =====================================================
 
   Widget _buildRepReportCard(
@@ -491,31 +429,11 @@ class _AllRepSeniorGenerlReportsState
       int index,
       ) {
     return PersonProgressCard(
-      // =====================================================
-      // Representative
-      // =====================================================
       name: rep.name,
-
-      // =====================================================
-      // number = عدد الزيارات غير المقروءة
-      // =====================================================
       unreadCount: rep.number,
-
-      // =====================================================
-      // إجمالي الزيارات
-      // =====================================================
       totalCount: rep.totalVisit ?? 0,
-
-      // =====================================================
-      // UI Labels
-      // =====================================================
       progressTitle: "الزيارات",
-
       remainingTitle: "غير المقروءة",
-
-      // =====================================================
-      // نفس onTap الأصلي تماماً
-      // =====================================================
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(

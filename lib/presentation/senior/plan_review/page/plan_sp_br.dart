@@ -20,6 +20,7 @@ class PlanSpBr extends StatelessWidget {
     required this.sampleCount,
     required this.repName,
     required this.repType,
+    this.percent
   });
 
   final String repName;
@@ -28,7 +29,7 @@ class PlanSpBr extends StatelessWidget {
   final FlagModel flag;
   final int sampleCount;
   final RepType repType;
-
+  final int ?percent;
   @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
@@ -203,7 +204,10 @@ class PlanSpBr extends StatelessWidget {
                   repPlanId: repPlanId,
                   flag: flag,
                   sampleCount: sampleCount,
-                repType: repType),
+                repType: repType,percent: percent,
+
+
+              ),
               ShowPlanBrand(planId: repPlanId),
             ],
           ),

@@ -571,7 +571,11 @@ void error(BuildContext context, String massage, int code) async {
   ErrorState(StateRendererType.popupErrorState, massage)
       .showPopup(context, StateRendererType.popupErrorState, massage);
 }
+void errorWithoutPop(BuildContext context, String massage, int code) async {
 
+  ErrorState(StateRendererType.popupErrorState, massage)
+      .showPopup(context, StateRendererType.popupErrorState, massage);
+}
 void loading(BuildContext context, {String? text}) {
   LoadingState(stateRendererType: StateRendererType.popupLoadingState)
       .showPopup(context, StateRendererType.popupLoadingState, "loading $text");

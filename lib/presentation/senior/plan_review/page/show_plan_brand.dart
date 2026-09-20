@@ -323,6 +323,11 @@ class BrandPlanCard extends StatelessWidget {
     double specialtyFontSize;
     double amountFontSize;
 
+    // قيم تجاوب جديدة خاصة بـ Total
+    double totalBadgeFontSize;
+    double totalBadgePaddingH;
+    double totalBadgePaddingV;
+
     switch (deviceType) {
       case AppDeviceType.mobilePortrait:
         cardBottomSpacing = 14;
@@ -344,6 +349,9 @@ class BrandPlanCard extends StatelessWidget {
         itemBottomSpacing = 8;
         specialtyFontSize = 13;
         amountFontSize = 16;
+        totalBadgeFontSize = 11.5;
+        totalBadgePaddingH = 8;
+        totalBadgePaddingV = 3;
         break;
 
       case AppDeviceType.tabletPortrait:
@@ -366,6 +374,9 @@ class BrandPlanCard extends StatelessWidget {
         itemBottomSpacing = 10;
         specialtyFontSize = 15;
         amountFontSize = 19;
+        totalBadgeFontSize = 13.5;
+        totalBadgePaddingH = 10;
+        totalBadgePaddingV = 4;
         break;
 
       case AppDeviceType.tabletLandscape:
@@ -388,6 +399,9 @@ class BrandPlanCard extends StatelessWidget {
         itemBottomSpacing = 8;
         specialtyFontSize = 14;
         amountFontSize = 17;
+        totalBadgeFontSize = 12.5;
+        totalBadgePaddingH = 9;
+        totalBadgePaddingV = 3.5;
         break;
     }
 
@@ -424,7 +438,9 @@ class BrandPlanCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // ===========================================
             // Header
+            // ===========================================
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: headerHorizontalPadding,
@@ -507,7 +523,9 @@ class BrandPlanCard extends StatelessWidget {
               ),
             ),
 
+            // ===========================================
             // Content
+            // ===========================================
             Padding(
               padding: EdgeInsets.all(
                 contentPadding,
@@ -554,8 +572,46 @@ class BrandPlanCard extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (model.spPlan.isNotEmpty && model.total > 0)
+                        Text(
+                          "(${model.spPlan.length} اختصاصات)",
+                          style: TextStyle(
+                            fontSize: sectionTitleFontSize * 0.9,
+                            color: const Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                     ],
                   ),
+
+                  if (model.total > 0) ...[
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: totalBadgePaddingH,
+                        vertical: totalBadgePaddingV,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3A8A).withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: const Color(0xFF1E3A8A).withOpacity(0.15),
+                        ),
+                      ),
+                      child: Text(
+                        "المجموع: ${model.total}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: totalBadgeFontSize,
+                          color: const Color(0xFF1E3A8A),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                   SizedBox(
                     height: sectionSpacing,
                   ),

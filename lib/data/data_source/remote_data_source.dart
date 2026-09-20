@@ -73,6 +73,7 @@ abstract class RemoteDataSource {
   Future<InfoDoctorBaseResponse> getDocInfo(int docId);
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     int repPlanId,
+      {int status=0}
   );
   Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list);
 
@@ -117,6 +118,14 @@ abstract class RemoteDataSource {
   );
   Future<GetDocHosByPlaceOrSpBaseResponse> getSpDocHos(int repDet,
       {int? spId, int? placeId, int? cityId});
+  Future<ListHosSpSearchBaseResponse> docSpSearch(
+      int repPlanId,
+      int spId,
+      );
+  Future<ListHosSpSearchBaseResponse> hosSpSearch(
+      int repPlanId,
+      int spId,
+      );
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -421,8 +430,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
-      int repPlanId) async {
-    return await _appServiceClient.getinfoPlanBrandsType(repPlanId);
+      int repPlanId, {int status=0}) async {
+    return await _appServiceClient.getinfoPlanBrandsType(repPlanId,status: status);
   }
 
   @override
@@ -513,5 +522,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       {int? spId, int? placeId, int? cityId}) async {
     return await _appServiceClient.getSpDocHos(repDet,
         spId: spId, placeId: placeId, cityId: cityId);
+  }
+
+
+  @override
+  Future<ListHosSpSearchBaseResponse> docSpSearch(int repPlanId, int spId) async {
+    return await _appServiceClient.docSpSearch(repPlanId,spId);
+  }
+
+  @override
+  Future<ListHosSpSearchBaseResponse> hosSpSearch(int repPlanId, int spId)async {
+    return await _appServiceClient.hosSpSearch(repPlanId,spId);
   }
 }

@@ -226,7 +226,6 @@ class SpecPlanPage extends StatelessWidget {
                               ),
                             ),
                           ),
-
                           SliverToBoxAdapter(
                             child: SizedBox(
                               height: ui.isMobile ? 120 : 130,
@@ -438,38 +437,6 @@ class SpecPlanPage extends StatelessWidget {
                             ),
                             fontWeight: FontWeight.bold,
                             fontSize: ui.isMobile ? 13 : 15,
-                          ),
-                        ),
-
-                        SizedBox(
-                          height: ui.isMobile ? 4 : 8,
-                        ),
-
-                        // Stats
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: ui.isMobile ? 2 : 4,
-                          ),
-                          child: Column(
-                            children: [
-                              _buildStatItem(
-                                ui,
-                                'زيارات أطباء',
-                                '${model.specModel.sumDoctor}',
-                              ),
-                              _buildDivider(ui),
-                              _buildStatItem(
-                                ui,
-                                'زيارات المشافي',
-                                '${model.specModel.sumHospital}',
-                              ),
-                              _buildDivider(ui),
-                              _buildStatItem(
-                                ui,
-                                'عينات',
-                                '${model.brandk / UserInfo.samplesCount}',
-                              ),
-                            ],
                           ),
                         ),
                       ],

@@ -1650,13 +1650,15 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
-    int repPlanId,
-  ) async {
+    int repPlanId, {
+    int status = 0,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    _data.fields.add(MapEntry('status', status.toString()));
     final _options = _setStreamType<ActiveBrandPlanBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -2078,6 +2080,70 @@ class _AppServiceClient implements AppServiceClient {
     late GetDocHosByPlaceOrSpBaseResponse _value;
     try {
       _value = GetDocHosByPlaceOrSpBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ListHosSpSearchBaseResponse> hosSpSearch(
+    int repPlanId,
+    int spId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    _data.fields.add(MapEntry('spId', spId.toString()));
+    final _options = _setStreamType<ListHosSpSearchBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/hosSpSearch.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ListHosSpSearchBaseResponse _value;
+    try {
+      _value = ListHosSpSearchBaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ListHosSpSearchBaseResponse> docSpSearch(
+    int repPlanId,
+    int spId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('repPlanId', repPlanId.toString()));
+    _data.fields.add(MapEntry('spId', spId.toString()));
+    final _options = _setStreamType<ListHosSpSearchBaseResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/admin/docSpSearch.php',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ListHosSpSearchBaseResponse _value;
+    try {
+      _value = ListHosSpSearchBaseResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

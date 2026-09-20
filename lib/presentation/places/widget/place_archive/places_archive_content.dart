@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlacesArchiveContent extends StatelessWidget {
   final TextEditingController searchController;
-
   final double horizontalPadding;
   final double searchMaxWidth;
   final double listMaxWidth;
@@ -24,15 +23,12 @@ class PlacesArchiveContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final placeBloc = context.watch<PlaceBloc>();
-
-    final showSyncWarning =
-        UserInfo.endDate == placeBloc.data;
+    final showSyncWarning = UserInfo.endDate == placeBloc.data;
 
     return Column(
+      mainAxisSize: MainAxisSize.min, // هام جداً لتجنب خطأ Unbounded height داخل الـ SingleChildScrollView
       children: [
-        const SizedBox(
-          height: 12,
-        ),
+        const SizedBox(height: 12),
 
         if (showSyncWarning)
           Padding(
@@ -50,9 +46,7 @@ class PlacesArchiveContent extends StatelessWidget {
           ),
 
         if (showSyncWarning)
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
 
         Padding(
           padding: EdgeInsets.symmetric(
@@ -69,17 +63,16 @@ class PlacesArchiveContent extends StatelessWidget {
             ),
           ),
         ),
-///////////////////
-        const SizedBox(
-          height: 16,
+
+        const SizedBox(height: 16),
+
+        // استبدال Expanded بـ PlacesArchiveList مباشرة
+        PlacesArchiveList(
+          horizontalPadding: horizontalPadding,
+          maxWidth: listMaxWidth,
         ),
 
-        Expanded(
-          child: PlacesArchiveList(
-            horizontalPadding: horizontalPadding,
-            maxWidth: listMaxWidth,
-          ),
-        ),
+        const SizedBox(height: 32),
       ],
     );
   }

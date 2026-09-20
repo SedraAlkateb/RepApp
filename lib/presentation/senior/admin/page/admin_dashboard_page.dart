@@ -179,7 +179,12 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     ];
 
     return BlocBuilder<AllCityBloc, AllCityState>(
+      buildWhen: (previous, current) => current is AllCityErrorState || current is AllCityLoadingState
+      || current is GetAllCityState
+      ,
       builder: (context, state) {
+
+
         if(state is AllCityErrorState){
           return Scaffold(
 

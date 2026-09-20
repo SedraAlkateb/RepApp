@@ -2282,9 +2282,10 @@ class ActivePlanBrandModel {
   Type type;
   String title;
   String pharmaceuticalFormTitle;
-
+  int total;
   ActivePlanBrandModel(
-      this.spPlan, this.type, this.title, this.pharmaceuticalFormTitle);
+      this.spPlan, this.type, this.title, this.pharmaceuticalFormTitle,
+      {this.total=0});
 }
 
 class Orders {
@@ -2338,9 +2339,10 @@ class AllRepresentativeFuture {
   int samplesCount;
   RepType reptype;
   String planDate;
+  int percent;
 
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan,
-      this.samplesCount, this.reptype, this.planDate);
+      this.samplesCount, this.reptype, this.planDate,this.percent);
 }
 
 class WhoReadModel {
@@ -2529,4 +2531,15 @@ class DoctorSenModel {
 
   DoctorSenModel(this.docId, this.title, this.address, this.spId, this.place,
       this.visit, this.note, this.rate, this.spTitle);
+}
+class HosDocSpSearchModel {
+  String name;
+  String spTitle;
+  String placeTitle;
+  String rate;
+  String visits;
+  String? totalDocs;
+
+  HosDocSpSearchModel(this.name, this.spTitle, this.placeTitle, this.rate,
+      this.visits, {this.totalDocs});
 }

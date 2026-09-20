@@ -725,31 +725,24 @@ class ReportInventory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-      const Color(
+      backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       appBar: AppBar(
-        title:
-        const Text(
+        title: const Text(
           'تقرير توزيع العينات ( الجرد )',
         ),
       ),
-
-      body:
-      bodyBuild(context),
+      body: bodyBuild(context),
     );
   }
 
   Widget bodyBuild(
       BuildContext context,
       ) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
-
     double horizontalPadding;
 
     double searchTopPadding;
@@ -764,7 +757,6 @@ class ReportInventory extends StatelessWidget {
     // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
-
         horizontalPadding = 16;
 
         searchTopPadding = 14;
@@ -779,7 +771,6 @@ class ReportInventory extends StatelessWidget {
     // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
-
         horizontalPadding = 28;
 
         searchTopPadding = 18;
@@ -794,7 +785,6 @@ class ReportInventory extends StatelessWidget {
     // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
-
         horizontalPadding = 32;
 
         searchTopPadding = 14;
@@ -805,104 +795,85 @@ class ReportInventory extends StatelessWidget {
         break;
     }
 
-    return BlocBuilder<
-        ReportInventoryBloc,
-        ReportInventoryState>(
+    return BlocBuilder<ReportInventoryBloc, ReportInventoryState>(
       builder: (context, state) {
         // =================================================
         // Success
         // =================================================
-        if (state
-        is SenAllInventoryState) {
-          final List inventoryModel =
-              state.inventoryModel;
+        if (state is SenAllInventoryState) {
+          final List inventoryModel = state.inventoryModel;
 
-          return Center(
-            child: ConstrainedBox(
-              constraints:
-              BoxConstraints(
-                maxWidth:
-                pageMaxWidth,
-              ),
-
-              child: Column(
-                children: [
-                  // =============================================
-                  // Search
-                  // =============================================
-                  Padding(
-                    padding:
-                    EdgeInsets.fromLTRB(
-                      horizontalPadding,
-                      searchTopPadding,
-                      horizontalPadding,
-                      searchBottomPadding,
-                    ),
-
-                    child:
-                    SearchField(
-                      searchController:
-                      searchInventoryController,
-
-                      onPressed:
-                          (value) {
-                        BlocProvider.of<
-                            ReportInventoryBloc>(
-                          context,
-                        ).add(
-                          SenSearchInventoryEvent(
-                            value,
-                          ),
-                        );
-                      },
-                    ),
+          return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: pageMaxWidth,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
                   ),
-
-                  // =============================================
-                  // Empty
-                  // =============================================
-                  if (inventoryModel
-                      .isEmpty)
-                    Expanded(
-                      child:
-                      emptyFullScreen(
-                        context,
-                      ),
-                    )
-
-                  // =============================================
-                  // List
-                  // =============================================
-                  else
-                    Expanded(
-                      child:
-                      ListView.builder(
-                        keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior
-                            .onDrag,
-
-                        padding:
-                        EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          listTopPadding,
-                          horizontalPadding,
-                          listBottomPadding,
+                  child: Column(
+                    children: [
+                      // =============================================
+                      // Search
+                      // =============================================
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: searchTopPadding,
+                          bottom: searchBottomPadding,
                         ),
-
-                        itemCount:
-                        inventoryModel.length,
-
-                        itemBuilder:
-                            (context, index) {
-                          return InventoryCard(
-                            data:
-                            inventoryModel[
-                            index],
-                          );
-                        },
+                        child: SearchField(
+                          searchController: searchInventoryController,
+                          onPressed: (value) {
+                            BlocProvider.of<ReportInventoryBloc>(
+                              context,
+                            ).add(
+                              SenSearchInventoryEvent(
+                                value,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                ],
+
+                      // =============================================
+                      // Empty
+                      // =============================================
+                      if (inventoryModel.isEmpty)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: listTopPadding,
+                            bottom: listBottomPadding,
+                          ),
+                          child: emptyFullScreen(
+                            context,
+                          ),
+                        )
+
+                      // =============================================
+                      // List
+                      // =============================================
+                      else
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(
+                            top: listTopPadding,
+                            bottom: listBottomPadding,
+                          ),
+                          itemCount: inventoryModel.length,
+                          itemBuilder: (context, index) {
+                            return InventoryCard(
+                              data: inventoryModel[index],
+                            );
+                          },
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
           );
@@ -911,8 +882,7 @@ class ReportInventory extends StatelessWidget {
         // =================================================
         // Loading
         // =================================================
-        if (state
-        is SenAllInventoryLoadingState) {
+        if (state is SenAllInventoryLoadingState) {
           return loadingFullScreen(
             context,
           );
@@ -921,14 +891,11 @@ class ReportInventory extends StatelessWidget {
         // =================================================
         // Error
         // =================================================
-        if (state
-        is SenAllInventoryErrorState) {
+        if (state is SenAllInventoryErrorState) {
           return errorFullScreen(
             context,
-
             func: () {
-              BlocProvider.of<
-                  ReportInventoryBloc>(
+              BlocProvider.of<ReportInventoryBloc>(
                 context,
               ).add(
                 SenAllInventoryEvent(
@@ -940,8 +907,7 @@ class ReportInventory extends StatelessWidget {
           );
         }
 
-        return const SizedBox
-            .shrink();
+        return const SizedBox.shrink();
       },
     );
   }

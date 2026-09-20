@@ -362,7 +362,8 @@ class _VisitHospitalState extends State<VisitHospital>
                                             IntrinsicHeight(
                                               child: TextField(
                                                 controller: amount,
-                                                onChanged: (value) {
+                                                onChanged: (v) {
+                                                  String  value=   convertArabicNumberToEnglish( v);
                                                   if (value.isEmpty) {
                                                     BlocProvider.of<
                                                                 VisitPlaceBloc>(

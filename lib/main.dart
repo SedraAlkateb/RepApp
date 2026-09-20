@@ -38,9 +38,18 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-// ------------------------------------------------------------
-// Firebase
-// ------------------------------------------------------------
+  // جعل أشرطة النظام شفافة تماماً لتجنب ظهور المربعات السوداء
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // شفاف لشريط الأعلى (الساعة والشحن)
+      statusBarIconBrightness: Brightness.dark, // لون أيقونات الساعة (dark أو light)
+      systemNavigationBarColor: Colors.transparent, // شفاف للشريط السفلي
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  // إذا كنت تريد أن يتمدد التطبيق تحت أشرطة النظام بالكامل (Edge-to-Edge):
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -279,9 +288,7 @@ class MyResponsiveApp extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     final double deviceWidth = mq.size.width;
-
     final bool isTabletDevice = deviceWidth > 450;
-
     final bool isTabletLandscape =
         isTabletDevice && mq.orientation == Orientation.landscape;
 
@@ -289,33 +296,31 @@ class MyResponsiveApp extends StatelessWidget {
       designSize: isTabletDevice ? const Size(500, 800) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-
-// ----------------------------------------------------------
-// Font scaling
-// ----------------------------------------------------------
       fontSizeResolver: (fontSize, instance) {
         if (isTabletLandscape) {
           return (fontSize * instance.scaleText) * 2;
         }
-
         return fontSize * instance.scaleText;
       },
-
-// ----------------------------------------------------------
-// App
-// ----------------------------------------------------------
       builder: (context, child) {
-        return SafeArea(
-          bottom: true,
+        // جلب مساحة شريط الحالة بالأعلى والشريط السفلي دون استخدام SafeArea
+        final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
+        return Container(
+          color: const Color(0xFFFFFFFF), // نفس لون خلفية التطبيق أو الـ Scaffold لديك
+                child: Padding(
+                padding: EdgeInsets.only(
+                bottom: bottomPadding,
+                ),
           child: const MyApp(
             key: ValueKey('app_root'),
           ),
-        );
+        ),
+                );
       },
     );
   }
 }
-
 // ============================================================
 // USER DATA
 // ============================================================

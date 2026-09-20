@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,7 +71,7 @@ class DialogFilter extends StatelessWidget {
                                 if (formKey.currentState!.validate()) {
                                   BlocProvider.of<VisitPlaceBloc>(context).add(
                                       SelectNumBrandAddEvent(
-                                          numController.text));
+                                          convertArabicNumberToEnglish( numController.text)));
                                   Navigator.pop(context);
                                 }
                               },
