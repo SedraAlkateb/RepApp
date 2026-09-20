@@ -38,10 +38,12 @@ Failure _handleError(DioError error) {
       return Failure(200, error.message ?? "badCertificate${error.error}");
     case DioErrorType.badResponse:
       final responseBody = error.response?.data;
-      String message = "";
       if (responseBody != null) {
-        message =
-            responseBody['message'] ?? responseBody['error'] ?? responseBody;
+        // قد يكون الرد Map (JSON) أو نصاً (مثل صفحة HTML لخطأ 502/500).
+        final String message = responseBody is Map
+            ? (responseBody['message'] ?? responseBody['error'] ?? responseBody)
+                .toString()
+            : responseBody.toString();
         return Failure(error.response?.statusCode ?? 404, message);
       } else {
         return Failure(200, error.message ?? "badResponse${error.error}");
@@ -51,8 +53,7 @@ Failure _handleError(DioError error) {
     case DioErrorType.unknown:
       return Failure(200, error.message ?? "unknown ${error.error}");
     case DioExceptionType.transformTimeout:
-      // TODO: Handle this case.
-      throw UnimplementedError();
+      return Failure(200, error.message ?? "transformTimeout");
   }
 }
 

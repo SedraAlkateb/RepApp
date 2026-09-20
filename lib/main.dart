@@ -38,6 +38,10 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 @pragma('vm:entry-point')
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // debugPrint لا يُحذف في release: نُسكته حتى لا تتسرب رسائل التطبيق إلى logcat.
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
   AppLogger.init();
 
   // جعل أشرطة النظام شفافة تماماً لتجنب ظهور المربعات السوداء
@@ -547,7 +551,8 @@ class MyHttpOverrides extends HttpOverrides {
         String host,
         int port,
       ) {
-        if (host == '192.168.1.50' || host == 'localhost') {
+        // تجاوز الشهادة لبيئة التطوير المحلية فقط، وليس في release.
+        if (!kReleaseMode && (host == '192.168.1.50' || host == 'localhost')) {
           return true;
         }
 
