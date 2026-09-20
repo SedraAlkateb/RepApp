@@ -92,15 +92,22 @@ class BrandPlanBloc extends Bloc<BrandPlanEvent, BrandPlanState> {
 
       int sum1 =
           sum - (currentAmount * sampleCoast) + (event.number * sampleCoast);
-      int sum2 = sumS - currentAmount + event.number;
-
       // 2. تحديث البيانات محلياً أولاً لحفظ الحالة في الذاكرة
       planBrand[event.index].brands[event.indexBr].amount = event.number;
       sum = sum1;
+
+      // مجموع الاختصاص يُحسب من البيانات نفسها لا من متغير مشترك بين الصفحات
+      int sum2 = planBrand[event.index]
+          .brands
+          .fold<int>(0, (total, b) => total + (b.amount as num).toInt());
       sumS = sum2;
 
       // 3. التحقق الصارم من الشروط وإطلاق الـ State المناسبة
-      if (sum2 <= event.brandM) {
+      // التخفيض مسموح دائماً حتى لو بقي الاختصاص متجاوزاً للحد،
+      // لأن المستخدم يحتاج للنزول تدريجياً حتى يعود تحت الحد
+      if (event.number <= currentAmount) {
+        emit(SumState(List.from(planBrand)));
+      } else if (sum2 <= event.brandM) {
         if (sum1 < UserInfo.percentage) {
           // إطلاق حالة النجاح صامتة للـ UI بالخلفية دون الحاجة لإعادة بناء الحقول
           emit(SumState(List.from(planBrand)));

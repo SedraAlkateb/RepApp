@@ -9,14 +9,30 @@ import 'package:domina_app/presentation/brand_plan/widget/save_send_bottom.dart'
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SpecPlanPage extends StatelessWidget {
+class SpecPlanPage extends StatefulWidget {
   const SpecPlanPage({
     super.key,
   });
+
+  @override
+  State<SpecPlanPage> createState() => _SpecPlanPageState();
+}
+
+class _SpecPlanPageState extends State<SpecPlanPage> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchText = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +81,16 @@ class SpecPlanPage extends StatelessWidget {
                   ),
                 );
               }
+
+              // الفهارس الأصلية للاختصاصات المطابقة للبحث (الفهرس الأصلي مطلوب للـ bloc)
+              final query = normalizeText(_searchText.trim());
+              final filteredIndexes = <int>[
+                for (int i = 0; i < planBrandModel.length; i++)
+                  if (query.isEmpty ||
+                      normalizeText(planBrandModel[i].specModel.title)
+                          .contains(query))
+                    i,
+              ];
 
               return OrientationBuilder(
                 builder: (
@@ -150,7 +176,20 @@ class SpecPlanPage extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: ui.isMobile ? 25 : 28,
+                                    height: ui.isMobile ? 20 : 22,
+                                  ),
+                                  SearchField(
+                                    searchController: _searchController,
+                                    hintText: 'البحث باسم الاختصاص',
+                                    isIcon: true,
+                                    onPressed: (value) {
+                                      setState(() {
+                                        _searchText = value;
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: ui.isMobile ? 20 : 22,
                                   ),
                                   Text(
                                     'توزيع العينات حسب الاختصاص',
@@ -210,7 +249,8 @@ class SpecPlanPage extends StatelessWidget {
                                     context,
                                     index,
                                     ) {
-                                  final item = planBrandModel[index];
+                                  final realIndex = filteredIndexes[index];
+                                  final item = planBrandModel[realIndex];
 
                                   if (item.brandk == 0) {
                                     return const SizedBox.shrink();
@@ -220,10 +260,10 @@ class SpecPlanPage extends StatelessWidget {
                                     context,
                                     ui,
                                     item,
-                                    index,
+                                    realIndex,
                                   );
                                 },
-                                childCount: planBrandModel.length,
+                                childCount: filteredIndexes.length,
                               ),
                             ),
                           ),

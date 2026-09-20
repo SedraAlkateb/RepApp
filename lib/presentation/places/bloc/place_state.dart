@@ -22,12 +22,6 @@ final class AllPlaceErrorState extends PlaceState {
   List<Object?> get props => [failure];
 }
 
-final class AllPlaceLoadingState extends PlaceState {
-  @override
-  AllPlaceLoadingState();
-  @override
-  List<Object?> get props => [];
-}
 
 final class SearchPlaceState extends PlaceState {
   final List<PlaceModel> places;
@@ -51,12 +45,6 @@ final class CheckRepErrorState extends PlaceState {
   List<Object?> get props => [failure];
 }
 
-final class CheckRepLoadingState extends PlaceState {
-  @override
-  CheckRepLoadingState();
-  @override
-  List<Object?> get props => [];
-}
 
 final class NumVisitState extends PlaceState {
   List<Object?> get props => [];

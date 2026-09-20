@@ -1,6 +1,5 @@
 // lib/app/di/di_local.dart
 import 'package:domina_app/domain/repository/repository_sql.dart';
-import 'package:domina_app/domain/usecase/insert_exception_sql_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
@@ -24,8 +23,5 @@ Future<void> initLocalModule() async {
   }
   instance.registerLazySingleton<RepositorySql>(
     () => RepositroySqlImp(instance(), instance()),
-  );
-  instance.registerLazySingleton<InsertExceptionSqlUsecase>(
-    () => InsertExceptionSqlUsecase(instance()),
   );
 }

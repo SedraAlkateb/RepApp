@@ -84,7 +84,6 @@ extension FlowStateExtension on FlowState {
       case ErrorState:
         {
           if (getStateRendererType() == StateRendererType.popupErrorState) {
-            //  dismissDialog(context);
             showPopup(context, getStateRendererType(), getMessage());
             return contentScreenWidget;
           } else {

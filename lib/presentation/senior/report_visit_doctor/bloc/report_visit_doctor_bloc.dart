@@ -262,7 +262,6 @@ class ReportVisitDoctorBloc
     });
 
     on<AllReadDocNoteEvent>((event, emit) async {
-      //  emit(AllReadLoadingState());
       (await allReadSenUsecase.execute(event.readAll)).fold((failure) {
         emit(AllReadErrorState(failure: failure));
       }, (data) async {

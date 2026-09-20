@@ -87,7 +87,6 @@ class Routes {
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String AllRepSenior = "/AllRepSenior";
-  // static const String cities = "/cities";
 
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
@@ -120,7 +119,6 @@ class Routes {
   static const String recipesHospital = "/recipesHospital";
   static const String recipesDoctor = "/recipesDoctor";
 
-  // static const String createOrder = "/createOrder";
   static const String recipeDH = "/recipeDH";
 
   static const String allRepWithFuture = "/allRepWithFuture";
@@ -159,9 +157,6 @@ class RouteGenerator {
           spId: args['spId'],
         ));
 
-      // case Routes.createOrder:
-      //   initOrderBradModule();
-      //   return _animatedRoute(CreateOrderPage());
       case Routes.placeVisitPage:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
@@ -213,7 +208,6 @@ class RouteGenerator {
         return _animatedRoute(Places());
       case Routes.placesArchive:
         initPlacesModule();
-        // initPlaceVisitModule();
         initDoctorAndHospitalModule();
         return _animatedRoute(PlacesArchive());
       case Routes.spec:
@@ -280,9 +274,6 @@ class RouteGenerator {
         UserInfo.repType.i==6?     iniAllCityModule():null;
         return _animatedRoute(AllRepSenior(
         ));
-      // case Routes.cities:
-      //
-      //   return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
@@ -297,8 +288,6 @@ class RouteGenerator {
         return _animatedRoute(HospitalSenior());
       case Routes.seniorDoc:
         return _animatedRoute(DoctorSenior());
-      // case Routes.seniorNoteDoc:
-      //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
         return _animatedRoute(NoVisitDoctor());
       case Routes.remainingVisitsDoctor:

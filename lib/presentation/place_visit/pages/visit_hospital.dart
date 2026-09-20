@@ -490,7 +490,6 @@ class _VisitHospitalState extends State<VisitHospital>
                       child: ButtonWidget(() {
                         if (_formKey.currentState!.validate()) {
                           DateTime now = DateTime.now();
-                          // String formattedTime = DateFormat('EEEE, dd-MM-yyyy – HH:mm', 'ar').format(now);
                           VisitHospitalModel visitHospitalModel =
                               VisitHospitalModel(
                             0,

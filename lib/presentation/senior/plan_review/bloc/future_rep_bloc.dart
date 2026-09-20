@@ -155,7 +155,22 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
 
     final targetItem = planBrandSp.planBrandSps[targetIndex];
 
-    // إعادة حساب مجاميع الأصناف (هدف / مساعد)
+    // التحقق من حد المندوب في حال كان repType == 7
+    // التخفيض مسموح دائماً حتى لو بقي الاختصاص متجاوزاً للحد،
+    // حتى يتمكن المستخدم من النزول تدريجياً والعودة تحت الحد
+    if (UserInfo.repType == 7) {
+      int sumF = sumBrandsAmount - targetItem.totalAmount + event.number;
+
+      if (sumF > planBrandSp.amount && event.number > targetItem.totalAmount) {
+        emit(SumErrorState(
+          failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص"),
+        ));
+        return;
+      }
+      sumBrandsAmount = sumF;
+    }
+
+    // إعادة حساب مجاميع الأصناف (هدف / مساعد) بعد اجتياز التحقق
     if (targetItem.brandType.i == 1) {
       sumTargetAss.targetAmount =
           sumTargetAss.targetAmount - targetItem.totalAmount + event.number;
@@ -165,19 +180,6 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
     }
     sumTargetAss.totalAmount =
         sumTargetAss.totalAmount - targetItem.totalAmount + event.number;
-
-    // التحقق من حد المندوب في حال كان repType == 7
-    if (UserInfo.repType == 7) {
-      int sumF = sumBrandsAmount - targetItem.totalAmount + event.number;
-
-      if (sumF > planBrandSp.amount) {
-        emit(SumErrorState(
-          failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص"),
-        ));
-        return;
-      }
-      sumBrandsAmount = sumF;
-    }
 
     // تحديث الكمية في القائمة الأصلية
     targetItem.totalAmount = event.number;

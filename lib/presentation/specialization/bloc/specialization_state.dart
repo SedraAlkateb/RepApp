@@ -22,12 +22,6 @@ final class AllSpecErrorState extends SpecializationState {
   List<Object?> get props => [failure];
 }
 
-final class AllSpecLoadingState extends SpecializationState {
-  @override
-  AllSpecLoadingState();
-  @override
-  List<Object?> get props => [];
-}
 
 final class AllDoctorSpState extends SpecializationState {
   final List<DoctorModel> doctors;

@@ -11,7 +11,6 @@ part 'senior_reps_state.dart';
 class SeniorRepsBloc extends Bloc<SeniorRepsEvent, SeniorRepsState> {
   AllSeinor_Rep_Usecase allSeinor_Rep_Usecase;
   List<AllRepresentative> allRepresentative = [];
-  // List<CityModel> cities=[];
   SeniorRepsBloc(this.allSeinor_Rep_Usecase) : super(SeniorRepsInitial()) {
     on<AllSeniorRepEvent>((event, emit) async {
       emit(AllSeniorRepLoadingState());

@@ -1,12 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AppMargin {
-  static double m8 = 8.h;
-  static double m12 = 12.h;
-  static double m16 = 16.h;
-  static double m18 = 18.h;
-  static double m20 = 20.h;
-}
 
 class AppPaddingH {
   static double p5 = 5.h;

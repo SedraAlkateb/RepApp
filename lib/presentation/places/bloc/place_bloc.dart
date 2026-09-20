@@ -36,7 +36,6 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       this.numDocHasSqlUsecase)
       : super(PlaceInitial()) {
     on<AllPlaceEvent>((event, emit) async {
-      //   emit(AllPlaceLoadingState());
       (await allPlaceUsecase.execute()).fold((failure) {
         emit(AllPlaceErrorState(failure: failure));
       }, (data) async {
@@ -47,7 +46,6 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
     });
 
     on<NumVisitEvent>((event, emit) async {
-      //   emit(AllPlaceLoadingState());
       (await numVisitSqlUsecase.execute()).fold((failure) {
         emit(NumVisitErrorState(failure: failure));
       }, (data) async {
@@ -67,7 +65,6 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
     });
 
     on<CheckRepEvent>((event, emit) async {
-      //   emit(CheckRepLoadingState());
       (await checkRepUsecase.execute(UserInfo.repId)).fold((failure) {
         emit(CheckRepErrorState(failure: failure));
       }, (data) async {

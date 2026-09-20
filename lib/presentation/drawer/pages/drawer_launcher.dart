@@ -118,7 +118,6 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.assignment_outlined,
           title: "عرض الوصفات",
           onTap: () {
-            // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
             Navigator.pushNamed(
               context,
               Routes.allRecip,
@@ -206,7 +205,6 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.assignment_outlined,
           title: "عرض الوصفات",
           onTap: () {
-            // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
             Navigator.pushNamed(
               context,
               Routes.allRecip,
@@ -322,7 +320,6 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.assignment_outlined,
           title: "عرض الوصفات",
           onTap: () {
-            // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
             Navigator.pushNamed(
               context,
               Routes.allRecip,

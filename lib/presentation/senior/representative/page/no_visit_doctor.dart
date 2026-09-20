@@ -39,7 +39,6 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
     double listTopPadding;
     double listBottomPadding;
 
-   // double countFontSize;
     double countBottomSpacing;
 
     switch (deviceType) {
@@ -57,7 +56,6 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
         listTopPadding = 4;
         listBottomPadding = 24;
 
-     //   countFontSize = 13;
         countBottomSpacing = 10;
         break;
 
@@ -75,7 +73,6 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
         listTopPadding = 6;
         listBottomPadding = 30;
 
-    //    countFontSize = 15;
         countBottomSpacing = 12;
         break;
 
@@ -93,7 +90,6 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
         listTopPadding = 4;
         listBottomPadding = 28;
 
-       // countFontSize = 14;
         countBottomSpacing = 10;
         break;
     }

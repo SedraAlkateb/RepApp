@@ -18,7 +18,6 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
       this.editIsLoginSqlUsecase)
       : super(DeleteInitial()) {
     on<DeleteBaseEvent>((event, emit) async {
-      //   emit(DeleteBaseLoadingState());
       (await deleteSqlUsecase.execute()).fold((failure) {
         emit(DeleteBaseErrorState(failure: failure));
         return false;
@@ -28,7 +27,6 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
     });
 
     on<DeleteAllEvent>((event, emit) async {
-      //   emit(DeleteAllLoadingState());
       (await deleteAllSqlUsecase.execute()).fold((failure) {
         emit(DeleteAllErrorState(failure: failure));
         return false;

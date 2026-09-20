@@ -14,7 +14,6 @@ class BrandBloc extends Bloc<BrandEvent, BrandState> {
   List<BrandModel> brand = [];
   BrandBloc(this.allBrandsSqlUsecase) : super(BrandInitial()) {
     on<AllBrandEvent>((event, emit) async {
-      //  emit(AllBrandLoadingState());
       (await allBrandsSqlUsecase.execute()).fold((failure) {
         emit(AllBrandErrorState(failure: failure));
       }, (data) async {

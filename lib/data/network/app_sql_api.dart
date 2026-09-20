@@ -178,9 +178,6 @@ class AppSqlApi extends AppSqlApiAbs {
             brand.toMap(),
           );
         }
-        // for (var pharmacy in pharmacies) {
-        //   batch.insert('pharmacy', pharmacy.toMap());
-        // }
         for (var spec in specs) {
           batch.insert('specialization', spec.toMap());
         }
@@ -300,7 +297,6 @@ class AppSqlApi extends AppSqlApiAbs {
     } catch (error) {
       _log.severe('asyncData failed', error);
       return error.toString();
-      //throw error;
     }
   }
 
@@ -1626,7 +1622,6 @@ class AppSqlApi extends AppSqlApiAbs {
     // استخراج الأرقام من النتائج (الافتراضي 0 في حال كانت القائمة فارغة)
     UserInfo.numDoctor = Sqflite.firstIntValue(doctorCountResult) ?? 0;
     UserInfo.numHospital = Sqflite.firstIntValue(hospitalCountResult) ?? 0;
-    // initDoctorModule();
   }
 
   @override

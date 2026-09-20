@@ -15,18 +15,14 @@ part 'visit_event.dart';
 part 'visit_state.dart';
 
 class VisitBloc extends Bloc<VisitEvent, VisitState> {
-  // AllVisitPharmacySqlUsecase allVisitPharmacySqlUsecase;
   AllVisitDoctorSqlUsecase allVisitDoctorSqlUsecase;
   AllBrandsFlagSqlUsecase allBrandsFlagSqlUsecase;
-//  AllBrandsPharmacyVisitsSqlUsecase allBrandsPharmacyVisitsSqlUsecase;
   AllBrandsDoctorVisitsSqlUsecase allBrandsDoctorVisitsSqlUsecase;
   AllBrandsHospitalVisitsSqlUsecase allBrandsHospitalVisitsSqlUsecase;
   AllVisitHospitalSqlUsecase allVisitHospitalSqlUsecase;
-  // UpdatePharmacyUsecase updatePharmacyUsecase;
   UpdateDoctorUsecase updateDoctorUsecase;
   UpdateHospitalUsecase updateHospitalUsecase;
   int current = 0;
-  // List<VisitPharmacyAndPharmacy> pharmacies=[];
   List<VisitDoctorAndDoctor> doctors = [];
   List<VisitHospitalAndHospital> hospitals = [];
   List<PharmacyBrandModel> brands = [];

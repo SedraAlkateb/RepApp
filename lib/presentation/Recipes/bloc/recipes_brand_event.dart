@@ -24,11 +24,6 @@ class GetRepReciEvent extends RecipesBrandEvent {
   List<Object?> get props => [reciId];
 }
 
-class BrandRecipesEvent extends RecipesBrandEvent {
-  final BrandRes brandRes;
-  BrandRecipesEvent(this.brandRes);
-  List<Object?> get props => [brandRes];
-}
 
 class InsertReciEvent extends RecipesBrandEvent {
   final int docId;
@@ -52,27 +47,6 @@ class InsertReciEvent extends RecipesBrandEvent {
       [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
 
-class UpdateReciEvent extends RecipesBrandEvent {
-  final int docId;
-  final String doctorSp;
-
-  final String firstNote;
-
-  final String secondNote;
-
-  final String address;
-
-  final String connect;
-
-  final String specialNotes;
-  final String phone;
-
-  UpdateReciEvent(this.doctorSp, this.firstNote, this.secondNote, this.address,
-      this.connect, this.specialNotes, this.docId, this.phone);
-
-  List<Object?> get props =>
-      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
-}
 
 class InsertReciHospitalEvent extends RecipesBrandEvent {
   final int docId;
@@ -102,33 +76,6 @@ class InsertReciHospitalEvent extends RecipesBrandEvent {
       [doctorSp, firstNote, secondNote, address, connect, specialNotes];
 }
 
-class UpdateReciHospitalEvent extends RecipesBrandEvent {
-  final int docId;
-  final String doctorSp;
-
-  final String firstNote;
-
-  final String secondNote;
-
-  final String address;
-
-  final String connect;
-
-  final String specialNotes;
-
-  UpdateReciHospitalEvent(
-    this.docId,
-    this.doctorSp,
-    this.firstNote,
-    this.secondNote,
-    this.address,
-    this.connect,
-    this.specialNotes,
-  );
-
-  List<Object?> get props =>
-      [doctorSp, firstNote, secondNote, address, connect, specialNotes];
-}
 
 class SelectTypeEvent extends RecipesBrandEvent {
   final String selectedTypeDoctor;
@@ -196,12 +143,6 @@ class AllReciEvent extends RecipesBrandEvent {
   List<Object?> get props => [];
 }
 
-class GetReciEvent extends RecipesBrandEvent {
-  final String id;
-  @override
-  GetReciEvent(this.id);
-  List<Object?> get props => [];
-}
 
 class UpdateReciSEvent extends RecipesBrandEvent {
   final int reciId;

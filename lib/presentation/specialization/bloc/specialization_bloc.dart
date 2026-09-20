@@ -24,7 +24,6 @@ class SpecializationBloc
       this.allHospitalsSpSqlUsecase)
       : super(SpecializationInitial()) {
     on<SpecEvent>((event, emit) async {
-      //       emit(AllSpecLoadingState());
       (await allSpeUsecase.execute()).fold((failure) {
         emit(AllSpecErrorState(failure: failure));
       }, (data) async {

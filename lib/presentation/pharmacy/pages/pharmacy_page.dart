@@ -66,13 +66,6 @@ class _PharmacyPageState extends State<PharmacyPage> {
                             context, state.failure.massage, state.failure.code);
                       });
                     }
-                    /*
-                  if(state is AllPharmacyLoadingState){
-                    loading(context);
-                  }
-                  if(state is AllPharmacyState){
-    success(context);}
-                 */
                   },
                   builder: (context, state) {
                     if (state is AllPharmacyState) {

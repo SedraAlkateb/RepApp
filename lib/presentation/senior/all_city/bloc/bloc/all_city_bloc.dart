@@ -89,7 +89,6 @@ class AllCityBloc extends Bloc<AllCityEvent, AllCityState> {
     CheckUserEvent event,
     Emitter<AllCityState> emit,
   ) async {
-    //   emit(CheckRepLoadingState());
     (await checkRepUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(CheckUserErrorState(failure: failure));
     }, (data) async {

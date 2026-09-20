@@ -61,14 +61,6 @@ class _SpecSeniorPageState extends State<SpecSeniorPage> {
                 ),
                 BlocConsumer<SeniorProfBloc, SeniorProfState>(
                   listener: (context, state) {
-                    /*
-                            if (state is AllSpecLoadingState) {
-                              loading(context);
-                            }
-                            if (state is AllSpecState) {
-                              success(context);
-                            }
-                            */
                     if (state is SenAllSpecErrorState) {
                       error(context, state.failure.massage, state.failure.code);
                     }

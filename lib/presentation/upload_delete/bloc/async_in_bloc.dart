@@ -52,7 +52,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   List<VisitBrandPharmacyModel> visitBrandPharmacies = [];
   List<VisitBrandPharmacyModel> visitBrandDoctors = [];
   List<VisitBrandPharmacyModel> visitBrandHospitals = [];
-//  List<VisitPharmacyModel> visitPharmacies = [];
   List<VisitHospitalModel> visitHospitals = [];
   List<VisitDoctorModel> visitDoctors = [];
   List<ExceptionModel> exceptionModel = [];
@@ -107,10 +106,8 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   Future<bool> getData() async {
     try {
       planBrands = [];
-      //  visitBrandPharmacies = [];
       visitBrandDoctors = [];
       visitBrandHospitals = [];
-      // visitPharmacies = [];
       visitHospitals = [];
       visitDoctors = [];
       exceptionModel = [];
@@ -166,14 +163,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
 
       ///////////////////////////////////////////////////
 
-      // final pharmaciesResult = await getPharmacyVisitsSqlUsecase.execute();
-      // final pharmaciesFailureOrSuccess =
-      //     pharmaciesResult.fold((failure) => failure, (data) => data);
-      // if (pharmaciesFailureOrSuccess is Failure) {
-      //   emit(SyncData1ErrorState(failure: pharmaciesFailureOrSuccess));
-      //   return false;
-      // }
-      // visitPharmacies = pharmaciesFailureOrSuccess as List<VisitPharmacyModel>;
 
       ///////////////////////////////////////////////////
 
@@ -232,17 +221,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }
       }
-      // if (visitPharmacies.isNotEmpty || visitBrandPharmacies.isNotEmpty) {
-      //   final visitPharmacyResult = await visitPharmacyUsecase.execute(
-      //       VisitPharmacyRequestBody(visitPharmacies, visitBrandPharmacies));
-      //   final visitPharmacyFailureOrSuccess =
-      //       visitPharmacyResult.fold((failure) => failure, (data) => data);
-      //   if (visitPharmacyFailureOrSuccess is Failure) {
-      //     emit(SyncData1ErrorState(failure: visitPharmacyFailureOrSuccess));
-      //     return false;
-      //   }
-      //   print("Visit Pharmacy data sent successfully.");
-      // }
       if (visitDoctors.isNotEmpty || visitBrandDoctors.isNotEmpty) {
         // نُعلِّم كمُرسَلة فقط ما رُفع فعلاً (زيارات أُضيفت أثناء الرفع تبقى للمزامنة التالية).
         final uploadedVisitDoctorIds = visitDoctors.map((v) => v.id).toList();

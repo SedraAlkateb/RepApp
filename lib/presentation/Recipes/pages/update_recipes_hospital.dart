@@ -72,8 +72,6 @@ class _UpdateRecipesHospitalState
 
     if (widget.st == 1) {
 
-      // BlocProvider.of<RecipesBrandBloc>(context)
-      //     .add(CopyRecipesEvent(widget.HospitalId, 2));
 
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(

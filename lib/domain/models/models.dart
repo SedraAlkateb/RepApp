@@ -410,45 +410,6 @@ class VisitDoctorRequestBody {
   }
 }
 
-class VisitHospitalRequest {
-  String id;
-  String visitDate;
-  String note;
-  String issue;
-  String special;
-  String hospitalSpId;
-  String repPlanId;
-  String representativeId;
-
-  VisitHospitalRequest(this.id, this.visitDate, this.note, this.issue,
-      this.special, this.hospitalSpId, this.repPlanId, this.representativeId);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'repPlanId': repPlanId,
-      'representativeId': representativeId,
-      'hospitalSpId': hospitalSpId,
-      'visitDate': visitDate,
-      'note': note,
-      'issue': issue,
-      'special': special
-    };
-  }
-
-  factory VisitHospitalRequest.fromMap(Map<String, dynamic> map) {
-    return VisitHospitalRequest(
-      map['id'],
-      map['VisitDate'],
-      map['note'],
-      map['issue'],
-      map['special'],
-      map['hospitalSpId'],
-      map['repPlanId'],
-      map['representativeId'],
-    );
-  }
-}
 
 class VisitHospitalRequestBody {
   List<VisitHospitalModel> list1;
@@ -476,17 +437,6 @@ class ExceptionRequestBody {
   }
 }
 
-class ExceptionRequestBody2 {
-  ExceptionModel list1;
-
-  ExceptionRequestBody2(this.list1);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'list1': list1,
-    };
-  }
-}
 
 class VisitPharmacyAndPharmacy {
   PharmacyModel pharmacyModel;
@@ -781,45 +731,6 @@ class SpecDModel {
   }
 }
 
-class MedicalVisits {
-  int visID;
-  String visitDate;
-  String title;
-  String address;
-  String note;
-  String issue;
-  String spTitle;
-  String special;
-  String brands;
-
-  MedicalVisits(this.visID, this.visitDate, this.title, this.address, this.note,
-      this.issue, this.spTitle, this.special, this.brands); // from
-  Map<String, dynamic> toMap() {
-    return {
-      'visID': visID,
-      'visitDate': visitDate,
-      'title': title,
-      'address': address,
-      'note': issue,
-      'issue': note,
-      'spTitle': spTitle,
-      'brands': brands
-    };
-  }
-
-  factory MedicalVisits.fromMap(Map<String, dynamic> map) {
-    return MedicalVisits(
-        map['visID'],
-        map['visitDate'],
-        map['title'],
-        map['address'],
-        map['note'],
-        map['issue'],
-        map['spTitle'],
-        map['special'],
-        map['brands']);
-  }
-}
 
 class PharmacyModel {
   int id;
@@ -1495,65 +1406,6 @@ class PlanBrandModel {
   }
 }
 
-class PlanBrandsSp {
-  int id;
-  int spId;
-  int brandId;
-  Type brandType;
-  String titleAr;
-  String phTitle;
-  String totalAmount;
-
-  // Constructor
-  PlanBrandsSp(this.id, this.spId, this.brandId, this.brandType, this.titleAr,
-      this.phTitle, this.totalAmount);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'spId': spId,
-      'brandId': brandId,
-      'brandType': brandType.i,
-      'titleAr': titleAr,
-      'phTitle': phTitle,
-      'totalAmount': totalAmount,
-    };
-  }
-
-  factory PlanBrandsSp.fromMap(Map<String, dynamic> map) {
-    return PlanBrandsSp(
-        map['id'],
-        map['spId'],
-        map['brandId'],
-        Type.fromInt(map['brandType']),
-        map['titleAr'],
-        map['phTitle'],
-        map['totalAmount']);
-  }
-}
-
-class BrandPlanBrandsSpWithSamples {
-  int totalSamplesDoctors;
-  int totalSamplesHospitals;
-  int totalSamplesDepartments;
-
-  // Constructor
-  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors,
-      this.totalSamplesHospitals, this.totalSamplesDepartments);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'totalSamplesDoctors': totalSamplesDoctors,
-      'totalSamplesHospitals': totalSamplesHospitals,
-      'totalSamplesDepartments': totalSamplesDepartments,
-    };
-  }
-
-  factory BrandPlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
-    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'],
-        map['totalSamplesHospitals'], map['totalSamplesDepartments']);
-  }
-}
 
 class ExceptionModel {
   String exceptionModel;
@@ -1589,51 +1441,6 @@ class ExceptionModel {
   }
 }
 
-class PlanBrandSqlModel {
-  int id;
-  int repPlanId;
-  Type brandType;
-  int amount;
-  String phTitle;
-  String brandTitle;
-  int sampleCoast;
-  String specializationTitle;
-
-  PlanBrandSqlModel(
-      this.id,
-      this.repPlanId,
-      this.brandType,
-      this.amount,
-      this.phTitle,
-      this.brandTitle,
-      this.sampleCoast,
-      this.specializationTitle);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id.toString(),
-      'repPlanId': repPlanId.toString(),
-      'brandType': brandType.i.toString(),
-      'amount': amount.toString(),
-      'phTitle': phTitle.toString(),
-      'brandTitle': brandTitle.toString(),
-      'sampleCoast': sampleCoast.toString(),
-      'specializationTitle': specializationTitle.toString(),
-    };
-  }
-
-  factory PlanBrandSqlModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandSqlModel(
-        map['id'],
-        map['repPlanId'],
-        Type.fromInt(map['brandType']),
-        int.parse(convertArabicNumberToEnglish(map['amount'])),
-        map['phTitle'],
-        map['brandTitle'],
-        map['sampleCoast'],
-        map['specializationTitle']);
-  }
-}
 
 class ActiveModel {
   int id;
@@ -2087,44 +1894,6 @@ class RepVisitsModel {
       this.samples);
 }
 
-class RepVisitsModelSearch {
-  int index;
-  String visitId;
-  String visitDate;
-  String placeTitle;
-  String docTitle;
-  String rate;
-  String spTitle;
-  String note;
-  String issue;
-  String special;
-  String target;
-  bool flag;
-  List<String> samples;
-
-  RepVisitsModelSearch(
-      this.index,
-      this.visitId,
-      this.visitDate,
-      this.placeTitle,
-      this.docTitle,
-      this.rate,
-      this.spTitle,
-      this.note,
-      this.issue,
-      this.special,
-      this.target,
-      this.flag,
-      this.samples);
-}
-
-class BrandFlag {
-  int id;
-  String brand;
-  int flag;
-
-  BrandFlag(this.id, this.brand, this.flag);
-}
 
 class NumVisit {
   int visitDoctor;
@@ -2238,25 +2007,6 @@ class ActivePlanBrandModel {
       {this.total=0});
 }
 
-class Orders {
-  final String pharmacyName;
-  final List<OrderItem> items;
-
-  Orders({
-    required this.pharmacyName,
-    required this.items,
-  });
-}
-
-class OrderItem {
-  final int id;
-  final String name;
-
-  OrderItem({
-    required this.id,
-    required this.name,
-  });
-}
 
 class BrandAmountRequestBody {
   List<BrandAmountRequestModel> list1;

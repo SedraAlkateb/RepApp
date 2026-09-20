@@ -9,6 +9,7 @@ import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/plan_review/widget/card_hos_doc.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -154,7 +155,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
       ChangeFieldEvent(
         amount,
         widget.index1,
-        index,
+        // القائمة المعروضة مرتبة، أما الـ bloc فيخزن الترتيب الأصلي
+        widget.otherBrandSpPlanModel.brands.indexOf(_sortedBrands[index]),
         widget.otherBrandSpPlanModel.brandm,
       ),
     );
@@ -202,14 +204,6 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
       index,
       _parseAmount(controller.text),
     );
-  }
-
-  void _clearSearch() {
-    _searchController.clear();
-
-    setState(() {
-      _searchText = '';
-    });
   }
 
   @override
@@ -328,42 +322,13 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                         horizontal:
                         ui.pagePadding,
                       ),
-                      child: TextField(
-                        controller:
-                        _searchController,
-                        decoration:
-                        InputDecoration(
-                          hintText:
-                          'البحث باسم العينة',
-                          prefixIcon:
-                          const Icon(
-                            Icons.search,
-                          ),
-                          suffixIcon:
-                          _searchText.isEmpty
-                              ? null
-                              : IconButton(
-                            onPressed:
-                            _clearSearch,
-                            icon:
-                            const Icon(
-                              Icons.close,
-                            ),
-                          ),
-                          border:
-                          const OutlineInputBorder(),
-                          contentPadding:
-                          EdgeInsets.symmetric(
-                            vertical: ui.isMobile ? 10 : 12,
-                            horizontal:
-                            ui.mediumSpacing,
-                          ),
-                        ),
-                        onChanged:
-                            (value) {
+                      child: SearchField(
+                        searchController: _searchController,
+                        hintText: 'البحث باسم العينة',
+                        isIcon: true,
+                        onPressed: (value) {
                           setState(() {
-                            _searchText =
-                                value;
+                            _searchText = value;
                           });
                         },
                       ),

@@ -135,42 +135,6 @@ import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-//
-// Future<void> initAppModule() async {
-//   // 1. Core Module (Crashlytics, Analytics, NetworkInfo)
-//   await initCoreModule();
-//
-//   // 2. Local Module (SQLite Database & Local Repositories)
-//   await initLocalModule();
-//
-//   // 3. Network Module (Dio, Api Client & Remote Data Source)
-//   await initNetworkModule();
-//
-//   // =========================================================
-//   // Data Sources & General Repositories / UseCases
-//   // =========================================================
-//
-//   // Remote Data Source
-//   if (!instance.isRegistered<RemoteDataSource>()) {
-//     instance.registerLazySingleton<RemoteDataSource>(
-//           () => RemoteDataSourceImpl(instance<AppServiceClient>()),
-//     );
-//   }
-//
-//   // Main Repository (Combines Remote + Local + NetworkInfo)
-//   if (!instance.isRegistered<Repository>()) {
-//     instance.registerLazySingleton<Repository>(
-//           () => RepositoryImp(instance(), instance(), instance()),
-//     );
-//   }
-//
-//   // Common UseCases
-//   if (!instance.isRegistered<InsertExceptionSqlUsecase>()) {
-//     instance.registerLazySingleton<InsertExceptionSqlUsecase>(
-//           () => InsertExceptionSqlUsecase(instance<RepositorySql>()),
-//     );
-//   }
-//}
 import 'di_core.dart';
 import 'di_local.dart';
 import 'di_network.dart';
@@ -187,103 +151,9 @@ Future<void> ensureNetworkModule() async {
   await initNetworkModule();
 }
 
-//GetIt instance = GetIt.instance;
-// Future<void> initAppModule() async {
-//   if (!instance.isRegistered<FirebaseCrashlytics>()) {
-//     instance.registerLazySingleton<FirebaseCrashlytics>(
-//       () => FirebaseCrashlytics.instance,
-//     );
-//   }
-//
-//   if (!instance.isRegistered<CrashlyticsService>()) {
-//     instance.registerLazySingleton<CrashlyticsService>(
-//       () => FirebaseCrashlyticsService(
-//         instance<FirebaseCrashlytics>(),
-//       ),
-//     );
-//   }
-//
-//   if (!instance.isRegistered<ErrorReporter>()) {
-//     instance.registerLazySingleton<ErrorReporter>(
-//       () => ErrorReporter(
-//         instance<CrashlyticsService>(),
-//       ),
-//     );
-//   }
-//
-//   // ==========================
-//   // Analytics
-//   // ==========================
-//
-//   if (!instance.isRegistered<FirebaseAnalytics>()) {
-//     instance.registerLazySingleton<FirebaseAnalytics>(
-//       () => FirebaseAnalytics.instance,
-//     );
-//   }
-//
-//   if (!instance.isRegistered<AnalyticsService>()) {
-//     instance.registerLazySingleton<AnalyticsService>(
-//       () => FirebaseAnalyticsService(
-//         instance<FirebaseAnalytics>(),
-//       ),
-//     );
-//   }
-//
-//   // ==========================
-//   // Network
-//   // ==========================
-//
-//   instance.registerLazySingleton<NetworkInfo>(
-//     () => NetworkInfoImpl(
-//       Connectivity(),
-//     ),
-//   );
-//
-//   instance.registerLazySingleton<DioFactory>(
-//     () => DioFactory(
-//       instance<CrashlyticsService>(),
-//     ),
-//   );
-//
-//   Dio dio = await instance<DioFactory>().getDio();
-//
-//   instance.registerLazySingleton<AppServiceClient>(
-//     () => AppServiceClient(dio),
-//   );
-//
-//   instance.registerLazySingleton<RemoteDataSource>(
-//     () => RemoteDataSourceImpl(instance<AppServiceClient>()),
-//   );
-//
-//   DatabaseHelper databaseHelper = DatabaseHelper();
-//
-//   instance.registerLazySingleton<AppSqlApi>(
-//     () => AppSqlApi(databaseHelper),
-//   );
-//
-//   await instance<AppSqlApi>().initializeDatabase();
-//
-//   instance.registerLazySingleton<ExcRepository>(
-//     () => ExcRepository(instance()),
-//   );
-//
-//   instance.registerLazySingleton<RepositorySql>(
-//     () => RepositroySqlImp(instance(), instance()),
-//   );
-//
-//   instance.registerLazySingleton<Repository>(
-//     () => RepositoryImp(instance(), instance(), instance()),
-//   );
-//
-//   instance.registerLazySingleton<InsertExceptionSqlUsecase>(
-//     () => InsertExceptionSqlUsecase(instance()),
-//   );
-// }
 
 Future<void> initAsyncModule() async {
   if (!GetIt.I.isRegistered<AsyncBloc>()) {
-    // instance.registerFactory<AllPharmacyUsecase>(
-    //     () => AllPharmacyUsecase(instance()));
     if (!GetIt.I.isRegistered<AllBrandsUsecase>()) {
       instance.registerFactory<AllBrandsUsecase>(
           () => AllBrandsUsecase(instance()));
@@ -346,7 +216,6 @@ Future<void> initAsyncModule() async {
         instance(),
         instance(),
         instance(),
-        //   instance(),
         instance(),
         instance(),
         instance(),
@@ -361,7 +230,6 @@ Future<void> initLoginModule() async {
     instance.registerFactory<LoginUsecase>(() => LoginUsecase(instance()));
     instance
         .registerFactory<LoginSqlUsecase>(() => LoginSqlUsecase(instance()));
-    //  instance.registerFactory<DeleteSqlUsecase>(() =>DeleteSqlUsecase(instance()));
 
     instance.registerFactory<AuthBloc>(
       () => AuthBloc(
@@ -374,7 +242,6 @@ Future<void> initLoginModule() async {
 
 Future<void> initPlaceVisitModule() async {
   if (!GetIt.I.isRegistered<DoctorsByPlaceUsecase>()) {
-    //  instance.registerFactory<PharmaciesByPlaceUsecase>(() =>PharmaciesByPlaceUsecase(instance()));
     instance.registerFactory<DoctorsByPlaceUsecase>(
         () => DoctorsByPlaceUsecase(instance()));
   }
@@ -414,7 +281,6 @@ Future<void> initPlaceVisitModule() async {
 
 Future<void> initPlacesModule() async {
   if (!GetIt.I.isRegistered<DoctorsByPlaceUsecase>()) {
-    //  instance.registerFactory<PharmaciesByPlaceUsecase>(() =>PharmaciesByPlaceUsecase(instance()));
     instance.registerFactory<DoctorsByPlaceUsecase>(
         () => DoctorsByPlaceUsecase(instance()));
   }
@@ -458,13 +324,8 @@ Future<void> initVisitsModule() async {
         () => AllVisitHospitalSqlUsecase(instance()));
     instance.registerFactory<VisitBloc>(() => VisitBloc(instance(), instance(),
         instance(), instance(), instance(), instance(), instance()
-        //  ,instance(),instance(),instance()
         ));
   }
-  // instance.registerFactory<AllBrandsPharmacyVisitsSqlUsecase>(() =>AllBrandsPharmacyVisitsSqlUsecase(instance()));
-  //  instance.registerFactory<UpdateDoctorUsecase>(() =>UpdateDoctorUsecase(instance()));
-  //  instance.registerFactory<UpdateHospitalUsecase>(() =>UpdateHospitalUsecase(instance()));
-  //  instance.registerFactory<UpdatePharmacyUsecase>(() =>UpdatePharmacyUsecase(instance()));
 }
 
 Future<void> initSpecModule() async {
@@ -556,10 +417,6 @@ Future<void> initAsyncInModule() async {
     instance.registerFactory<UpdateFlagHospitalSqlUsecase>(
         () => UpdateFlagHospitalSqlUsecase(instance()));
 
-    // if (!GetIt.I.isRegistered<DeleteSqlUsecase>()) {
-    //   instance.registerFactory<DeleteSqlUsecase>(
-    //       () => DeleteSqlUsecase(instance()));
-    // }
     if (!GetIt.I.isRegistered<CheckActiveBrandPlanUsecase>()) {
       instance.registerFactory<CheckActiveBrandPlanUsecase>(
           () => CheckActiveBrandPlanUsecase(instance()));
@@ -895,19 +752,6 @@ Future<void> iniSearchDoctorsModule() async {
   }
 }
 
-// Future<void> initOrderBradModule() async {
-//   if (!GetIt.I.isRegistered<AllBrandsSqlUsecase>()) {
-//     instance.registerFactory<AllBrandsSqlUsecase>(
-//         () => AllBrandsSqlUsecase(instance()));
-//   }
-//   if (!GetIt.I.isRegistered<PharmacyOrderUsecase>()) {
-//     instance.registerFactory<PharmacyOrderUsecase>(
-//         () => PharmacyOrderUsecase(instance()));
-//
-//     instance
-//         .registerFactory<OrderBloc>(() => OrderBloc(instance(), instance()));
-//   }
-// }
 
 Future<void> initGeneralReportsModule() async {
   if (!GetIt.I.isRegistered<TeamLeaderAndCityUsecase>()) {

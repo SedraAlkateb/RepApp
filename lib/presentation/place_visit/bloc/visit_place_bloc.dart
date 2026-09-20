@@ -18,13 +18,10 @@ part 'visit_place_event.dart';
 part 'visit_place_state.dart';
 
 class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
-  // PharmaciesByPlaceUsecase pharmaciesByPlaceUsecase;
   AllBrandsFlagSqlUsecase allBrandsFlagSqlUsecase;
   DoctorsByPlaceUsecase doctorsByPlaceUsecase;
   HospitalsByPlaceUsecase hospitalsByPlaceUsecase;
-  // InsertVisitPharmacySqlUsecase insertVisitPharmacySqlUsecase;
   InsertVisitDoctorSqlUsecase insertVisitDoctorSqlUsecase;
-  // InsertVisitBrandPharmacySqlUsecase insertVisitBrandPharmacySqlUsecase;
   InsertVisitBrandDoctorSqlUsecase insertVisitBrandDoctorSqlUsecase;
   InsertVisitBrandHospitalSqlUsecase insertVisitBrandHospitalSqlUsecase;
   InsertVisitHospitalSqlUsecase insertVisitHospitalSqlUsecase;
@@ -34,8 +31,6 @@ class VisitPlaceBloc extends Bloc<VisitPlaceEvent, VisitPlaceState> {
   List<BrandAddition> selectAddBrand = [];
   List<BrandModel> bandFlag = [];
   List<BrandModel> allBandFlag = [];
-  // List<PharmacyModel> pharmacies = [];
-  //  List<PharmacyModel> pharmaSearchModel = [];
   List<DoctorModel> doctors = [];
   List<DoctorModel> doctorSearchModel = [];
   List<HospitalSpAllModel> hospitals = [];

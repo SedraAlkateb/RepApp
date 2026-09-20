@@ -98,9 +98,6 @@ class ImagePickedState extends RecipesBrandState {
   List<Object?> get props => [image];
 }
 
-final class CopyRecipesState extends RecipesBrandState {
-  List<Object?> get props => [];
-}
 
 class CheckboxImage1State extends RecipesBrandState {
   final int isChecked;

@@ -30,7 +30,6 @@ final _log = AppLogger.get('AsyncBloc');
 
 class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AllBrandsUsecase allBrandsUsecase;
-  //AllPharmacyUsecase allPharmacyUsecase;
   AllPlaceUsecase allPlaceUsecase;
   AllSpeUsecase allSpeUsecase;
   AsyncDataSqlUsecase asyncDataSqlUsecase;
@@ -454,7 +453,6 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
     });
 
     on<DeleteAllEvent>((event, emit) async {
-      //   emit(DeleteAllLoadingState());
       (await deleteAllSqlUsecase.execute()).fold((failure) {
         emit(DeleteAllErrorState(failure: failure));
         return false;
