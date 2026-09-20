@@ -58,6 +58,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   List<ExceptionModel> exceptionModel = [];
 
   bool suc = false;
+  bool _syncing = false;
   AsyncInBloc(
       this.checkActiveBrandPlanUsecase,
       this.isPlanSqlUsecase,
@@ -78,18 +79,28 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.allExceptionUsecase,
       this.allExceptionSqlUsecase)
       : super(AsyncInInitial()) {
+    // المزامنة تمتد على حدثين (getData ثم setData): نمنع بدء مزامنة ثانية قبل
+    // انتهاء الأولى لأن القوائم مشتركة، وإلا رُفعت الزيارات مرتين.
     on<Async1DataEvent>((event, emit) async {
+      if (_syncing) return;
+      _syncing = true;
       emit(SyncData1LoadingState());
-      await getData();
+      if (!await getData()) _syncing = false;
     });
 
     on<Async0DataEvent>((event, emit) async {
+      if (_syncing) return;
+      _syncing = true;
       emit(SyncData0LoadingState());
-      await getData();
+      if (!await getData()) _syncing = false;
     });
 
     on<GetEvent>((event, emit) async {
-      await setData();
+      try {
+        await setData();
+      } finally {
+        _syncing = false;
+      }
     });
   }
 
@@ -233,6 +244,10 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       //   print("Visit Pharmacy data sent successfully.");
       // }
       if (visitDoctors.isNotEmpty || visitBrandDoctors.isNotEmpty) {
+        // نُعلِّم كمُرسَلة فقط ما رُفع فعلاً (زيارات أُضيفت أثناء الرفع تبقى للمزامنة التالية).
+        final uploadedVisitDoctorIds = visitDoctors.map((v) => v.id).toList();
+        final uploadedBrandDoctorIds =
+            visitBrandDoctors.map((v) => v.id).toList();
         final visitDoctorResult = await visitDoctorUsecase
             .execute(VisitDoctorRequestBody(visitDoctors, visitBrandDoctors));
         final visitDoctorFailureOrSuccess =
@@ -244,7 +259,9 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }
         final visitDoctorFlagResult =
-            await updateFlagDoctorSqlUsecase.execute();
+            await updateFlagDoctorSqlUsecase.execute(
+                visitIds: uploadedVisitDoctorIds,
+                brandIds: uploadedBrandDoctorIds);
         final visitDoctorFlagFailureOrSuccess =
             visitDoctorFlagResult.fold((failure) => failure, (data) => data);
         if (visitDoctorFlagFailureOrSuccess is Failure) {
@@ -255,6 +272,9 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
         }
       }
       if (visitHospitals.isNotEmpty || visitBrandHospitals.isNotEmpty) {
+        final uploadedVisitHospitalIds = visitHospitals.map((v) => v.id).toList();
+        final uploadedBrandHospitalIds =
+            visitBrandHospitals.map((v) => v.id).toList();
         final visitHospitalResult = await visitHospitalUsecase.execute(
             VisitHospitalRequestBody(visitHospitals, visitBrandHospitals));
         final visitHospitalFailureOrSuccess =
@@ -266,7 +286,9 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }
         final visitHospitalFlagResult =
-            await updateFlagHospitalSqlUsecase.execute();
+            await updateFlagHospitalSqlUsecase.execute(
+                visitIds: uploadedVisitHospitalIds,
+                brandIds: uploadedBrandHospitalIds);
         final visitHospitalFlagFailureOrSuccess =
             visitHospitalFlagResult.fold((failure) => failure, (data) => data);
 

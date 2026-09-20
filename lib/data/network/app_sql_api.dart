@@ -152,7 +152,8 @@ class AppSqlApi extends AppSqlApiAbs {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
         Batch batch = txn.batch();
-        await txn.execute("PRAGMA foreign_keys = OFF");
+        // ملاحظة: PRAGMA foreign_keys لا يعمل داخل transaction في SQLite، لذلك أُزيل.
+        // الإدراج أدناه مرتّب بحيث تُدرج الجداول الأب قبل الأبناء.
         for (var place in places) {
           batch.insert(
             'place',
@@ -231,7 +232,6 @@ class AppSqlApi extends AppSqlApiAbs {
             conflictAlgorithm: ConflictAlgorithm.abort,
           );
         }
-        await txn.execute("PRAGMA foreign_keys = ON");
         await batch.commit(noResult: true);
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
@@ -446,12 +446,15 @@ class AppSqlApi extends AppSqlApiAbs {
 
     Batch batch = db.batch();
     await db.execute('PRAGMA foreign_keys = OFF;');
-
-    for (var table in tables) {
-      table != null ? batch.delete(table) : null;
+    try {
+      for (var table in tables) {
+        if (table != null) batch.delete(table);
+      }
+      await batch.commit(noResult: true);
+    } finally {
+      // نعيد تفعيل المفاتيح الأجنبية حتى لو فشل الحذف.
+      await db.execute('PRAGMA foreign_keys = ON;');
     }
-    await batch.commit(noResult: true);
-    await db.execute('PRAGMA foreign_keys = ON;');
   }
 
   Future<void> clearDatabaseAll() async {
@@ -1518,38 +1521,49 @@ class AppSqlApi extends AppSqlApiAbs {
     await batch.commit(noResult: true);
   }
 
-  Future<bool> updateFlagsToHospital() async {
-    Database? db = await databaseHelper.database;
+  /// تعليم الزيارات كمُرسَلة. عند تمرير [visitIds]/[brandIds] تُعلَّم هذه
+  /// الصفوف فقط (الزيارات التي أُضيفت أثناء الرفع تبقى flag = 0 لتُرسل لاحقاً).
+  /// إذا كانت القائمتان null يُعلَّم كل شيء (السلوك القديم).
+  Future<bool> updateFlagsToHospital(
+      {List<int>? visitIds, List<int>? brandIds}) async {
+    return _markSynced('visit_hospital', 'visit_brand_hospital', visitIds,
+        brandIds);
+  }
+
+  Future<bool> updateFlagsToDoctor(
+      {List<int>? visitIds, List<int>? brandIds}) async {
+    return _markSynced(
+        'visit_doctor', 'visit_brand_doctor', visitIds, brandIds);
+  }
+
+  Future<bool> _markSynced(String visitTable, String brandTable,
+      List<int>? visitIds, List<int>? brandIds) async {
+    final db = await databaseHelper.database;
     try {
+      // بدون try/catch داخلي: أي فشل يُلغي العملية كاملة (rollback) ويرجع false.
       await db.transaction((txn) async {
-        try {
-          await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
-          await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
-        } catch (e) {
-          return false;
-        }
+        await _setFlagSynced(txn, visitTable, visitIds);
+        await _setFlagSynced(txn, brandTable, brandIds);
       });
     } catch (e) {
+      _log.severe('markSynced failed for $visitTable', e);
       return false;
     }
     return true;
   }
 
-  Future<bool> updateFlagsToDoctor() async {
-    Database? db = await databaseHelper.database;
-    try {
-      await db.transaction((txn) async {
-        try {
-          await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
-          await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
-        } catch (e) {
-          return false;
-        }
-      });
-    } catch (e) {
-      return false;
+  Future<void> _setFlagSynced(
+      Transaction txn, String table, List<int>? ids) async {
+    if (ids == null) {
+      await txn.rawUpdate('UPDATE $table SET flag = 1');
+      return;
     }
-    return true;
+    // حد SQLite لعدد المتغيرات: نقسم القائمة إلى دفعات.
+    for (var i = 0; i < ids.length; i += 500) {
+      final chunk = ids.sublist(i, i + 500 > ids.length ? ids.length : i + 500);
+      final marks = List.filled(chunk.length, '?').join(',');
+      await txn.rawUpdate('UPDATE $table SET flag = 1 WHERE id IN ($marks)', chunk);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getAllUsers() async {

@@ -386,12 +386,20 @@ class RepositroySqlImp extends RepositorySql {
           'updateAmounts', () => _databaseHelper.updateAmounts(planBrands));
 
   @override
-  Future<Either<Failure, bool>> updateFlagsToDoctor() => _sqlCall(
-      'updateFlagsToDoctor', () => _databaseHelper.updateFlagsToDoctor());
+  Future<Either<Failure, bool>> updateFlagsToDoctor(
+          {List<int>? visitIds, List<int>? brandIds}) =>
+      _sqlCall(
+          'updateFlagsToDoctor',
+          () => _databaseHelper.updateFlagsToDoctor(
+              visitIds: visitIds, brandIds: brandIds));
 
   @override
-  Future<Either<Failure, bool>> updateFlagsToHospital() => _sqlCall(
-      'updateFlagsToHospital', () => _databaseHelper.updateFlagsToHospital());
+  Future<Either<Failure, bool>> updateFlagsToHospital(
+          {List<int>? visitIds, List<int>? brandIds}) =>
+      _sqlCall(
+          'updateFlagsToHospital',
+          () => _databaseHelper.updateFlagsToHospital(
+              visitIds: visitIds, brandIds: brandIds));
 
   @override
   Future<Either<Failure, Null>> updateOtherStatus(

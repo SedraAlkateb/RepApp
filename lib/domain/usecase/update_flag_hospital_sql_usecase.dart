@@ -6,8 +6,10 @@ import 'package:equatable/equatable.dart';
 class UpdateFlagHospitalSqlUsecase extends Equatable {
   final RepositorySql _repositorySql;
   UpdateFlagHospitalSqlUsecase(this._repositorySql);
-  Future<Either<Failure, bool>> execute() async {
-    return await _repositorySql.updateFlagsToHospital();
+  Future<Either<Failure, bool>> execute(
+      {List<int>? visitIds, List<int>? brandIds}) async {
+    return await _repositorySql.updateFlagsToHospital(
+        visitIds: visitIds, brandIds: brandIds);
   }
 
   @override
