@@ -7,13 +7,23 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NoVisitHos extends StatelessWidget {
-  NoVisitHos({
-    super.key,
-  });
+class NoVisitHos extends StatefulWidget {
+  const NoVisitHos({super.key});
+
+  @override
+  State<NoVisitHos> createState() => _NoVisitHosState();
+}
+
+class _NoVisitHosState extends State<NoVisitHos> {
 
   final TextEditingController searchNoteDoctorController =
   TextEditingController();
+
+  @override
+  void dispose() {
+    searchNoteDoctorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

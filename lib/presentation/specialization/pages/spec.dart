@@ -10,13 +10,23 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SpecializationsPage extends StatelessWidget {
-  SpecializationsPage({
-    super.key,
-  });
+class SpecializationsPage extends StatefulWidget {
+  const SpecializationsPage({super.key});
+
+  @override
+  State<SpecializationsPage> createState() => _SpecializationsPageState();
+}
+
+class _SpecializationsPageState extends State<SpecializationsPage> {
 
   final TextEditingController searchController =
   TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -27,6 +27,12 @@ class _InfoVisitPharmacyState extends State<InfoVisitPharmacy> {
     super.initState();
   }
   @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,

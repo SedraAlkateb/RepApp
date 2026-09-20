@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
@@ -27,12 +28,19 @@ class DatabaseHelper implements DatabaseAccessor {
   }
 
   // دالة مخصصة للحصول على مفتاح التشفير أو إنشائه إن لم يكن موجوداً
-  Future<String> _getOrCreateEncryptionKey() async {
+  Future<String> _getOrCreateEncryptionKey(String dbPath) async {
     const keyName = 'db_encryption_key';
 
     String? storedKey = await _secureStorage.read(key: keyName);
 
     if (storedKey == null) {
+      // ملف القاعدة موجود لكن المفتاح غير قابل للقراءة (استعادة نسخة احتياطية أو
+      // فشل مؤقت في Keystore): لا نولّد مفتاحاً جديداً ولا نستبدل القديم، لأن ذلك
+      // يجعل بيانات المندوب (زياراته غير المرسلة) غير قابلة للاسترجاع نهائياً.
+      if (await File(dbPath).exists()) {
+        throw StateError(
+            'Encrypted database exists but its key is unavailable in secure storage');
+      }
       // إذا لم يكن موجوداً، قم بتوليد مفتاح عشوائي قوي
       var random = Random.secure();
       var values = List<int>.generate(32, (i) => random.nextInt(256));
@@ -50,7 +58,7 @@ class DatabaseHelper implements DatabaseAccessor {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'task_database1.db');
 
-    final encryptionKey = await _getOrCreateEncryptionKey();
+    final encryptionKey = await _getOrCreateEncryptionKey(path);
 
     return await openDatabase(
       path,

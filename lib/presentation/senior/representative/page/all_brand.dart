@@ -10,13 +10,20 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AllBrand extends StatelessWidget {
-  AllBrand({
+class AllBrand extends StatefulWidget {
+  const AllBrand({
     super.key,
     required this.isPr,
   });
 
   final bool isPr;
+
+  @override
+  State<AllBrand> createState() => _AllBrandState();
+}
+
+class _AllBrandState extends State<AllBrand> {
+
   final TextEditingController searchDocController = TextEditingController();
 
   // =========================================================
@@ -149,6 +156,12 @@ class AllBrand extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchDocController.dispose();
+    super.dispose();
   }
 
   @override
@@ -303,13 +316,13 @@ class AllBrand extends StatelessWidget {
                                 SizedBox(height: stateTopSpacing),
                                 errorFullScreen(
                                   context,
-                                  func: isPr
+                                  func: widget.isPr
                                       ? () {
                                     BlocProvider.of<SeniorProfBloc>(
                                       context,
                                     ).add(
                                       SenAllBrandEvent(
-                                          UserInfo.activePlanId, isPr),
+                                          UserInfo.activePlanId, widget.isPr),
                                     );
                                   }
                                       : null,
@@ -349,13 +362,13 @@ class AllBrand extends StatelessWidget {
                                   brands: currentBrands,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  onTap: isPr
+                                  onTap: widget.isPr
                                       ? (selectedBrand) {
                                     _showBrandDetailsSheet(
                                         context, selectedBrand);
                                   }
                                       : null,
-                                  isPr: isPr,
+                                  isPr: widget.isPr,
                                 ),
                               ),
                             ],
