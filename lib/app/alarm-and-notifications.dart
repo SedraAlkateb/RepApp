@@ -64,6 +64,18 @@ class AlarmAndNotifications {
 
         // التحقق من أن الوقت المجدول في المستقبل
         if (scheduledTime.isAfter(DateTime.now())) {
+          // Android 14+ لا يمنح إذن التنبيه الدقيق افتراضياً: نرجع لتنبيه غير دقيق بدل الفشل.
+          var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
+          if (Platform.isAndroid) {
+            final canExact = await flutterLocalNotificationsPlugin
+                    .resolvePlatformSpecificImplementation<
+                        AndroidFlutterLocalNotificationsPlugin>()
+                    ?.canScheduleExactNotifications() ??
+                false;
+            if (!canExact) {
+              scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
+            }
+          }
           await flutterLocalNotificationsPlugin.zonedSchedule(
             id: 1001,
             title: '🔔 شركة دومِنا - تذكير هام',
@@ -80,7 +92,7 @@ class AlarmAndNotifications {
                 playSound: true,
               ),
             ),
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            androidScheduleMode: scheduleMode,
           );
           _log.info("تم جدولة الإشعار ليوم الانتهاء: $scheduledTime");
         }
