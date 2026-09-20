@@ -125,6 +125,10 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       this.getRepReciUsecase,
       this.editRecipeUsecase)
       : super(RecipesBrandInitial()) {
+    // الصفحات ترسل RestartEvent عند الفتح. سابقاً كان المعالج العام يتجاهله
+    // بصمت، ولا حالة يجب إصدارها؛ بدون معالج مسجّل يرمي Bloc.add خطأ StateError.
+    on<RestartEvent>((event, emit) {});
+
     on<AllReciEvent>((event, emit) async {
       emit(AllReciLoadingState());
       (await allReciUsecase.execute(UserInfo.repId)).fold((failure) {
