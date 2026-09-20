@@ -7,9 +7,7 @@ import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
-import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/senior/plan_review/widget/card_hos_doc.dart';
-import 'package:domina_app/presentation/senior/plan_review/widget/card_tar_ass.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +60,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
     // 1. المرور على العناصر، وبما أن الأهداف أولاً، فعند إيجاد أول مساعد نتوقف عن الفحص الفردي
     for (int i = 0; i < brandsList.length; i++) {
       final brand = brandsList[i];
-      final type = brand.brandType.name.toString() ?? '';
+      final type = brand.brandType.name.toString();
       if (type.contains('مساعد')) {
         firstAssistantIndex = i;
         break; // تم العثور على نقطة البداية للمساعدين، لا داعي لإكمال الفحص

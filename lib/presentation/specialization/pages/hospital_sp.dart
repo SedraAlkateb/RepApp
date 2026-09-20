@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/presentation/Recipes/widget/hospital_recipe.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
