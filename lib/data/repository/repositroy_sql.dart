@@ -113,7 +113,9 @@ class RepositroySqlImp extends RepositorySql {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands}) async {
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false}) async {
     try {
       final response = await _databaseHelper.asyncData(
         brands,
@@ -126,6 +128,8 @@ class RepositroySqlImp extends RepositorySql {
         brandSps,
         visitHospital, visitDoctor,
         planBrands: planBrands,
+        replaceExisting: replaceExisting,
+        keepPlanBrand: keepPlanBrand,
       );
       if (response == "") {
         return Right(response);

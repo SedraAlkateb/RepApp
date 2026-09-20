@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/async/widget/database_widget.dart';
+import 'package:domina_app/presentation/sync/widget/database_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 

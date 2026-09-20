@@ -406,12 +406,11 @@ List<DrawerMenuItem> getLogoutItem(BuildContext context) {
         title: "مزامنة البيانات",
         color: Colors.red,
         onTap: () {
-          initAsyncInModule();
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
               Navigator.pushNamed(
                 context,
-                Routes.asyncIn,
+                Routes.sync,
               );
             },
           );

@@ -71,11 +71,9 @@ class PlacesResponsiveLayout extends StatelessWidget {
               heroTag: 'places_sync_fab',
               backgroundColor: ColorManager.secondaryColor1,
               onPressed: () {
-                initAsyncInModule();
-
                 Navigator.pushNamed(
                   context,
-                  Routes.asyncIn,
+                  Routes.sync,
                 );
               },
               child: Icon(

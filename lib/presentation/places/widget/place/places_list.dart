@@ -105,8 +105,9 @@ class PlacesList extends StatelessWidget {
 
           Navigator.pushNamedAndRemoveUntil(
             context,
-            Routes.deleteLogout,
+            Routes.logout,
                 (route) => false,
+            arguments: true, // بدون رفع: المندوب غير موجود بالسيرفر
           );
         });
       }
