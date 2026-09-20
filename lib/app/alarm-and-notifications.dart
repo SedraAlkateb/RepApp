@@ -9,6 +9,9 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('AlarmAndNotifications');
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -79,10 +82,10 @@ class AlarmAndNotifications {
             ),
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           );
-          print("✅ تم جدولة الإشعار ليوم الانتهاء: $scheduledTime");
+          _log.info("تم جدولة الإشعار ليوم الانتهاء: $scheduledTime");
         }
       } catch (e) {
-        print("❌ فشل جدولة الإشعار: $e");
+        _log.warning("فشل جدولة الإشعار", e);
       }
     }
   }

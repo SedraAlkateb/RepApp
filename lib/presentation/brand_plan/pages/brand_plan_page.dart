@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_active_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/spec_plan_page.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -19,8 +18,6 @@ class BrandPlanPage extends StatelessWidget {
     // =========================================================
     // نفس الطباعة الموجودة سابقاً
     // =========================================================
-    print(UserInfo.otherstatus);
-    print(UserInfo.flag);
 
     final double contentMaxWidth =
     ui.isTabletLandscape ? 760 : ui.pageMaxWidth;

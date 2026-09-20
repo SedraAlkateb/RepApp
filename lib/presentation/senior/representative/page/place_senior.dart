@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -328,7 +329,7 @@ class _PlaceSeniorState
         child: Material(
           color: Colors.white,
 
-          child: InkWell(
+          child: AppInkWell(
             // =================================================
             // نفس السلوك الأصلي
             // =================================================

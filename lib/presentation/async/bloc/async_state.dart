@@ -48,9 +48,52 @@ final class EditStatusDErrorState extends AsyncState {
   List<Object?> get props => [failure];
 }
 
-final class getDataSucState extends AsyncState {
+/// البيانات المحمّلة من السيرفر بانتظار حفظها محلياً.
+class SyncPayload extends Equatable {
+  final List<BrandModel> brands;
+  final List<PlaceModel> places;
+  final List<SpecDModel> spec;
+  final List<DoctorModel> doctors;
+  final List<HospitalModel> hospitals;
+  final List<HospitalSpModel> hospitalSps;
+  final List<BrandSpModel> brandSpModel;
+  final List<PlanBrandModel> planBrands;
+  final VisitDoctorBase visitDoctor;
+  final VisitHospitalBase visitHospital;
+
+  const SyncPayload({
+    required this.brands,
+    required this.places,
+    required this.spec,
+    required this.doctors,
+    required this.hospitals,
+    required this.hospitalSps,
+    required this.brandSpModel,
+    required this.planBrands,
+    required this.visitDoctor,
+    required this.visitHospital,
+  });
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        brands,
+        places,
+        spec,
+        doctors,
+        hospitals,
+        hospitalSps,
+        brandSpModel,
+        planBrands,
+        visitDoctor,
+        visitHospital,
+      ];
+}
+
+final class getDataSucState extends AsyncState {
+  final SyncPayload payload;
+  getDataSucState(this.payload);
+  @override
+  List<Object?> get props => [payload];
 }
 
 ///////////////

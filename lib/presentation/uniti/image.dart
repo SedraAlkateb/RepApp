@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:image/image.dart' as img;
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('ImageUtils');
 
 Future<File> convertToPng(File inputFile) async {
   try {
@@ -14,7 +17,7 @@ Future<File> convertToPng(File inputFile) async {
 
     return outputFile;
   } catch (e) {
-    print("خطأ أثناء التحويل إلى PNG: $e");
+    _log.warning('convertToPng failed', e);
     rethrow;
   }
 }

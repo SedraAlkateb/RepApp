@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
@@ -412,7 +413,7 @@ class FuturePlacePage extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
 
-        child: InkWell(
+        child: AppInkWell(
           borderRadius:
           BorderRadius.circular(radius),
 

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/login_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/login_usecase.dart';
@@ -15,97 +15,89 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginSqlUsecase loginSqlUsecase;
   LoginModel? loginModel;
   AuthBloc(this.loginSqlUsecase, this.loginUsecase) : super(AuthInitial()) {
-    on<AuthEvent>((event, emit) async {
-      if (event is ShowPasswordEvent)
-        emit(ShowPasswordState(isObscured: event.isObscured));
-      if (event is LoginEvent) {
-        emit(LoginLoadingState());
+    on<ShowPasswordEvent>((event, emit) {
+      emit(ShowPasswordState(isObscured: event.isObscured));
+    });
 
-        final result = await loginUsecase.execute(
-          LoginRequest(
-            event.userName,
-            event.password,
-          ),
-        );
+    on<LoginEvent>((event, emit) async {
+      emit(LoginLoadingState());
 
-        await result.fold(
-          (failure) async {
-            emit(
-              LoginErrorState(
-                failure: failure,
-              ),
-            );
-          },
-          (data) async {
-            loginModel = data;
+      final result = await loginUsecase.execute(
+        LoginRequest(
+          event.userName,
+          event.password,
+        ),
+      );
 
-            UserInfo.repId = loginModel!.repId;
+      await result.fold(
+        (failure) async {
+          emit(
+            LoginErrorState(
+              failure: failure,
+            ),
+          );
+        },
+        (data) async {
+          loginModel = data;
 
-            UserInfo.otherPlanId = loginModel!.otherPlanId;
+          UserInfo.repId = loginModel!.repId;
 
-            UserInfo.activePlanId = loginModel!.activePlanId ?? -5;
+          UserInfo.otherPlanId = loginModel!.otherPlanId;
 
-            UserInfo.otherstatus = loginModel!.otherStatus;
+          UserInfo.activePlanId = loginModel!.activePlanId ?? -5;
 
-            UserInfo.percentage = loginModel!.percentage;
+          UserInfo.otherstatus = loginModel!.otherStatus;
 
-            UserInfo.recipesCount = loginModel!.recipesCount;
+          UserInfo.percentage = loginModel!.percentage;
 
-            UserInfo.token = loginModel!.token;
+          UserInfo.recipesCount = loginModel!.recipesCount;
 
-            UserInfo.name = loginModel!.name;
-            UserInfo.groupTitle = loginModel!.groupTitle;
+          UserInfo.token = loginModel!.token;
 
-            UserInfo.cityId = loginModel!.cityId;
+          UserInfo.name = loginModel!.name;
+          UserInfo.groupTitle = loginModel!.groupTitle;
 
-            UserInfo.cityTitle = loginModel!.cityTitle;
-            if (loginModel!.repType.i == 4 || loginModel!.repType.i == 5) {
-              UserInfo.isLogging = 2;
-            } else {
-              UserInfo.isLogging = 1;
-            }
+          UserInfo.cityId = loginModel!.cityId;
 
-            UserInfo.startDate = data.startDate;
+          UserInfo.cityTitle = loginModel!.cityTitle;
+          if (loginModel!.repType.i == 4 || loginModel!.repType.i == 5) {
+            UserInfo.isLogging = 2;
+          } else {
+            UserInfo.isLogging = 1;
+          }
 
-            UserInfo.endDate = data.endDate;
-            UserInfo.totDoc = data.totDoc;
+          UserInfo.startDate = data.startDate;
 
-            UserInfo.totHos = data.totHos;
-            UserInfo.totalReci = loginModel!.totalReci;
-            UserInfo.remainReci = loginModel!.remainReci;
-            UserInfo.usedReci = loginModel!.usedReci;
-            UserInfo.otherStartDate = data.otherStartDate;
+          UserInfo.endDate = data.endDate;
+          UserInfo.totDoc = data.totDoc;
 
-            UserInfo.otherEndDate = data.otherEndDate;
+          UserInfo.totHos = data.totHos;
+          UserInfo.totalReci = loginModel!.totalReci;
+          UserInfo.remainReci = loginModel!.remainReci;
+          UserInfo.usedReci = loginModel!.usedReci;
+          UserInfo.otherStartDate = data.otherStartDate;
 
-            loginModel?.flag1 = 0;
+          UserInfo.otherEndDate = data.otherEndDate;
 
-            UserInfo.flag1 = 0;
+          loginModel?.flag1 = 0;
 
-            UserInfo.repType = data.repType;
+          UserInfo.flag1 = 0;
 
-            UserInfo.initializeUserPlan();
+          UserInfo.repType = data.repType;
 
-            emit(LoginState());
-          },
-        );
-      } else if (event is LoginInsertEvent) {
-        (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
-          emit(InsertLoginErrorState(failure: failure));
-        }, (data) async {
-          emit(InsertLoginState());
-        });
-      }
-      /*
-      else if (event is DeleteDataEvent) {
-        (await deleteSqlUsecase.execute()).fold((failure) {
-          emit(DeleteStateError(failure: failure));
-          return false;
-        }, (data) async {
-          emit(DeleteState());
-        });
-      }
-      */
+          UserInfo.initializeUserPlan();
+
+          emit(LoginState());
+        },
+      );
+    });
+
+    on<LoginInsertEvent>((event, emit) async {
+      (await loginSqlUsecase.execute(loginModel!)).fold((failure) {
+        emit(InsertLoginErrorState(failure: failure));
+      }, (data) async {
+        emit(InsertLoginState());
+      });
     });
   }
 }

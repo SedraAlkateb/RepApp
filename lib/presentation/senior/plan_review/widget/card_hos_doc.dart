@@ -1,5 +1,6 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/plase_visit/visit_widget.dart';
+import 'package:domina_app/presentation/place_visit/visit_widget.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:domina_app/presentation/senior/plan_review/widget/dialog_doc_hos.dart';
@@ -111,7 +112,7 @@ Widget buildSampleStatisticsSummaryCard(
               children: [
                 // 1. زر المشافي والشعب
                 Expanded(
-                  child: InkWell(
+                  child: AppInkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
                       showHosDocSearchDialog(
@@ -144,7 +145,7 @@ Widget buildSampleStatisticsSummaryCard(
 
                 // 2. زر الأطباء
                 Expanded(
-                  child: InkWell(
+                  child: AppInkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
                       showHosDocSearchDialog(

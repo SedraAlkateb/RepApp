@@ -1,4 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/senior/plan_management/bloc/plan_management_bloc.dart';
@@ -717,7 +718,7 @@ class BrandPlanCard extends StatelessWidget {
                     0,
 
                     child:
-                    Type.buildBadge(
+                    TypeBadge(
                       model.type,
                     ),
                   ),

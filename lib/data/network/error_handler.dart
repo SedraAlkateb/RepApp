@@ -1,13 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dio/dio.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('ErrorHandler');
 
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {
-    print(error);
+    _log.warning('handled error', error);
     if (error is DioError) {
       failure = _handleError(error);
     } else if (error is DatabaseException) {
@@ -39,7 +42,6 @@ Failure _handleError(DioError error) {
       if (responseBody != null) {
         message =
             responseBody['message'] ?? responseBody['error'] ?? responseBody;
-        print('Error Message: $message');
         return Failure(error.response?.statusCode ?? 404, message);
       } else {
         return Failure(200, error.message ?? "badResponse${error.error}");

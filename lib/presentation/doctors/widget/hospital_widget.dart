@@ -1,4 +1,5 @@
-import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
+import 'package:domina_app/presentation/place_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -170,7 +171,7 @@ Widget hospitalWidget({
         Row(
           children: [
             const Spacer(),
-            InkWell(
+            AppInkWell(
               onTap: function,
               child: buildCardButton(context,
                 text,

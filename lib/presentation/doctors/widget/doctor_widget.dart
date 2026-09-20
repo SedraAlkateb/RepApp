@@ -1,4 +1,5 @@
-import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
+import 'package:domina_app/presentation/place_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
@@ -174,7 +175,7 @@ Widget doctorWidget({
               alignment: Alignment.centerLeft,
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
+                child: AppInkWell(
                   onTap: function,
                   borderRadius: BorderRadius.circular(
                     ui.smallRadius + 2,

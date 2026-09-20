@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, file_names
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -770,7 +771,7 @@ class _SeniorByCityIdState
           color:
           Colors.white,
 
-          child: InkWell(
+          child: AppInkWell(
             // =================================================
             // نفس السلوك الأصلي تماماً
             // =================================================
@@ -805,9 +806,6 @@ class _SeniorByCityIdState
                 ),
               );
 
-              print(
-                'rep_id:${senior.rep_id}',
-              );
 
               context
                   .read<

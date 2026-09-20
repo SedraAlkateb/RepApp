@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/presentation/resources/language_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:domina_app/app/number_utils.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -56,36 +54,8 @@ class BrandSpPlanModel {
 
   BrandSpPlanModel(this.brandModel, this.spPlan);
 
-  static void printBrandPlanActive(List<BrandSpPlanModel> data) {
-    print(
-        "=== 🚀 بدء طباعة مصفوفة planBrandActive (إجمالي العناصر: ${data.length}) ===");
-
-    for (int i = 0; i < data.length; i++) {
-      final mainItem = data[i];
-      print("\n---------------- [العنصر الرئيسي رقم: $i] ----------------");
-
-      // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
-      print("  🔹 Brand ID: ${mainItem.brandModel.id}");
-      print("  🔹 Brand Title: ${mainItem.brandModel.title}");
-
-      // طباعة مصفوفة الـ SpPlan الداخلية
-      print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan.length}");
-      for (int j = 0; j < mainItem.spPlan.length; j++) {
-        final sp = mainItem.spPlan[j];
-        print("     🔸 [$j] ID: ${sp.id}");
-        print("     🔸 [$j] Title: ${sp.title}");
-
-        // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
-        print("     🔸 [$j] BrandType: '${sp.brandType.name}'");
-
-        print("     🔸 [$j] Amount: ${sp.amount}");
-        print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
-        print(
-            "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
-      }
-    }
-    print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
-  }
+  /// مجموع الكميات (amount) على كل الاختصاصات لهذه العينة.
+  int get totalAmount => spPlan.fold(0, (sum, sp) => sum + sp.amount);
 }
 
 class OtherBrandSpPlanModel {
@@ -1352,48 +1322,32 @@ class LoginModel {
 class Type {
   int i;
   String name;
-  Color color;
 
-  Type(this.i, this.name, {this.color = Colors.grey});
+  Type(this.i, this.name);
 
   // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
   static Type fromInt(int value) {
     return switch (value) {
-      1 => Type(1, "هدف", color: Colors.blue),
-      2 => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "غير متوفر", color: Colors.grey),
+      1 => Type(1, "هدف"),
+      2 => Type(2, "مساعد"),
+      _ => Type(3, "غير متوفر"),
     };
-  }
-
-  static Widget buildBadge(Type brandType) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: brandType.color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(brandType.name,
-          style: TextStyle(
-              color: brandType.color,
-              fontSize: 10.sp,
-              fontWeight: FontWeight.bold)),
-    );
   }
 
   static Type fromIntS(String? value) {
     return switch (value) {
-      "1" => Type(1, "هدف", color: Colors.blue),
-      "2" => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "غير متوفر", color: Colors.grey),
+      "1" => Type(1, "هدف"),
+      "2" => Type(2, "مساعد"),
+      _ => Type(3, "غير متوفر"),
     };
   }
 
   // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
   static Type fromName(String name) {
     return switch (name) {
-      "هدف" => Type(1, "هدف", color: Colors.blue),
-      "مساعد" => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "غير متوفر", color: Colors.grey),
+      "هدف" => Type(1, "هدف"),
+      "مساعد" => Type(2, "مساعد"),
+      _ => Type(3, "غير متوفر"),
     };
   }
 
@@ -1406,32 +1360,29 @@ class Type {
 class RepType {
   int i;
   String name;
-  Color color;
 
-  RepType(this.i, this.name, {this.color = Colors.grey});
+  RepType(this.i, this.name);
 
   // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
   static RepType fromInt(int value) {
     return switch (value) {
-      4 => RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
-      5 => RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
-      6 => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      7 => RepType(7, "مندوب",
-          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
+      4 => RepType(4, "Supervisor"),
+      5 => RepType(5, "Team Leader"),
+      6 => RepType(6, "senior"),
+      7 => RepType(7, "مندوب"),
+      _ => RepType(8, "other"),
     };
   }
 
   static RepType fromIntS(String? value) {
     return switch (value) {
       "4" =>
-        RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "Supervisor"),
       "5" =>
-        RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
-      "6" => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      "7" => RepType(7, "مندوب",
-          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
+        RepType(5, "Team Leader"),
+      "6" => RepType(6, "senior"),
+      "7" => RepType(7, "مندوب"),
+      _ => RepType(8, "other"),
     };
   }
 
@@ -1439,14 +1390,13 @@ class RepType {
   static RepType fromName(String name) {
     return switch (name) {
       "Supervisor" =>
-        RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "Supervisor"),
       "Team Leader" =>
-        RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
+        RepType(5, "Team Leader"),
       "senior" =>
-        RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      "مندوب" => RepType(7, "مندوب",
-          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
+        RepType(6, "senior"),
+      "مندوب" => RepType(7, "مندوب"),
+      _ => RepType(8, "other"),
     };
   }
 
@@ -1457,14 +1407,14 @@ class RepType {
 }
 
 final List<Type> type = [
-  Type(0, "دفاتر", color: Colors.cyan),
-  Type(1, "عينات", color: Colors.lime),
-  Type(2, "لا شيء", color: Colors.teal),
+  Type(0, "دفاتر"),
+  Type(1, "عينات"),
+  Type(2, "لا شيء"),
 ];
 final List<Type> brandType = [
-  Type(1, "هدف", color: Colors.blue),
-  Type(2, "مساعد", color: Colors.orange),
-  Type(3, "غير متوفر", color: Colors.grey),
+  Type(1, "هدف"),
+  Type(2, "مساعد"),
+  Type(3, "غير متوفر"),
 ];
 
 class BrandSpModel {
@@ -2432,42 +2382,6 @@ List<FlagModel> getAllFlags(int repType) {
     );
   }
   return allFlag;
-}
-
-Color getColor(int flag) {
-  switch (flag) {
-    case 0:
-      // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
-      return const Color(0xFF0288D1);
-
-    case 1:
-      // بانتظار موافقة Supervisor: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
-      return const Color(0xFFE53935);
-
-    case 2:
-      // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
-      return const Color(0xFF43A047);
-
-    case 3:
-      // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
-      return const Color(0xFF37474F);
-
-    case 4:
-      // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
-      return const Color(0xFF00897B);
-
-    case 5:
-      // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
-      return const Color(0xFFFB8C00);
-
-    case 6:
-      // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
-      return const Color(0xFF5E35B1);
-
-    default:
-      // الحالة الافتراضية: الكحلي الأساسي للتطبيق
-      return const Color(0xFF0D47A1);
-  }
 }
 
 class StatusPlanModel {

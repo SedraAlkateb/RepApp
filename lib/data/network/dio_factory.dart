@@ -97,9 +97,6 @@ class MyApiInterceptor extends Interceptor {
 
       options.headers['lang'] = lang;
 
-      if (!kReleaseMode) {
-        print(authToken);
-      }
     }
 
     return handler.next(options);

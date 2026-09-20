@@ -1,5 +1,8 @@
 import 'package:domina_app/analytics/analytics_service.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+
+final _log = AppLogger.get('Analytics');
 
 class FirebaseAnalyticsService implements AnalyticsService {
   FirebaseAnalyticsService(this._analytics);
@@ -12,20 +15,14 @@ class FirebaseAnalyticsService implements AnalyticsService {
     Map<String, Object>? parameters,
   }) async {
     try {
-      print('🔥 Analytics Event Sending...');
-      print('📌 Event Name: $name');
-      print('📦 Parameters: $parameters');
+      _log.fine('logEvent: $name $parameters');
 
       await _analytics.logEvent(
         name: name,
         parameters: parameters,
       );
-
-      print('✅ Analytics Event Sent Successfully: $name');
     } catch (e, stackTrace) {
-      print('❌ Analytics Event Failed: $name');
-      print('Error: $e');
-      print(stackTrace);
+      _log.warning('logEvent failed: $name', e, stackTrace);
     }
   }
 
@@ -34,8 +31,7 @@ class FirebaseAnalyticsService implements AnalyticsService {
     try {
       await _analytics.setUserId(id: userId);
     } catch (e, stackTrace) {
-      print('❌ Failed to set user ID: $e');
-      print(stackTrace);
+      _log.warning('setUserId failed', e, stackTrace);
     }
   }
 
@@ -50,8 +46,7 @@ class FirebaseAnalyticsService implements AnalyticsService {
         value: value,
       );
     } catch (e, stackTrace) {
-      print('❌ Failed to set user property: $e');
-      print(stackTrace);
+      _log.warning('setUserProperty failed', e, stackTrace);
     }
   }
 
@@ -60,8 +55,7 @@ class FirebaseAnalyticsService implements AnalyticsService {
     try {
       await _analytics.setUserId(id: null);
     } catch (e, stackTrace) {
-      print('❌ Failed to clear user: $e');
-      print(stackTrace);
+      _log.warning('clearUser failed', e, stackTrace);
     }
   }
 
@@ -76,8 +70,7 @@ class FirebaseAnalyticsService implements AnalyticsService {
         loginMethod: loginMethod,
       );
     } catch (e, stackTrace) {
-      print('❌ Login analytics failed: $e');
-      print(stackTrace);
+      _log.warning('logUserLogin failed', e, stackTrace);
     }
   }
 
@@ -96,8 +89,7 @@ class FirebaseAnalyticsService implements AnalyticsService {
         },
       );
     } catch (e, stackTrace) {
-      print('❌ Survey analytics failed: $e');
-      print(stackTrace);
+      _log.warning('logSurveySubmitted failed', e, stackTrace);
     }
   }
 
@@ -109,8 +101,7 @@ class FirebaseAnalyticsService implements AnalyticsService {
         screenClass: '${screenName}Page',
       );
     } catch (e, stackTrace) {
-      print('❌ Screen analytics failed: $e');
-      print(stackTrace);
+      _log.warning('logScreenView failed', e, stackTrace);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'dart:io';
 
 import 'package:domina_app/app/constants.dart';
@@ -957,7 +958,7 @@ class _RecipesHospitalState extends State<RecipesHospital> {
     final double imageSize =
     ui.isMobile ? 135 : 155;
 
-    return InkWell(
+    return AppInkWell(
       borderRadius:
       BorderRadius.circular(
         ui.smallRadius + 2,

@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
@@ -379,7 +380,7 @@ class AllRecip extends StatelessWidget {
           child: Material(
             color: Colors.white,
 
-            child: InkWell(
+            child: AppInkWell(
               // ===============================================
               // نفس التنقل الأصلي تماماً
               // ===============================================

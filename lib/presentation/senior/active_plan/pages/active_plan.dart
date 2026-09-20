@@ -1,5 +1,6 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -765,7 +766,7 @@ class BrandPlanCard extends StatelessWidget {
                   // =============================================
                   // Existing Badge
                   // =============================================
-                  Type.buildBadge(
+                  TypeBadge(
                     model.type,
                   ),
                 ],

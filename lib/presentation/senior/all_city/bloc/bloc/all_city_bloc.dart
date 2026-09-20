@@ -1,32 +1,28 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_city_usecase.dart';
-import 'package:domina_app/domain/usecase/check_rep_usecase%20.dart';
+import 'package:domina_app/domain/usecase/check_rep_usecase.dart';
 import 'package:equatable/equatable.dart';
 
 part 'all_city_event.dart';
 part 'all_city_state.dart';
 
-class AllCityBloc
-    extends Bloc<AllCityEvent, AllCityState> {
+class AllCityBloc extends Bloc<AllCityEvent, AllCityState> {
   AllCityBloc(
-      this.allcityUsecase,
-      this.checkRepUsecase,
-      ) : super(
-     AllCityInitial(),
-  ) {
-
+    this.allcityUsecase,
+    this.checkRepUsecase,
+  ) : super(
+          AllCityInitial(),
+        ) {
     // =========================================================
     // Get Cities
     // =========================================================
     on<GetAllCityEvent>(
       _getAllCities,
     );
-    on<CheckUserEvent>(
-        _checkUser
-    );
+    on<CheckUserEvent>(_checkUser);
     // =========================================================
     // Select City
     // =========================================================
@@ -34,7 +30,7 @@ class AllCityBloc
       _selectCity,
     );
   }
-final  CheckRepUsecase checkRepUsecase;
+  final CheckRepUsecase checkRepUsecase;
   final AllCityUsecase allcityUsecase;
 
   // ===========================================================
@@ -54,49 +50,45 @@ final  CheckRepUsecase checkRepUsecase;
   // ===========================================================
 
   Future<void> _getAllCities(
-      GetAllCityEvent event,
-      Emitter<AllCityState> emit,
-      ) async {
+    GetAllCityEvent event,
+    Emitter<AllCityState> emit,
+  ) async {
     emit(
       const AllCityLoadingState(),
     );
 
-    final result =
-    await allcityUsecase.execute();
+    final result = await allcityUsecase.execute();
 
     result.fold(
-          (failure) {
+      (failure) {
         emit(
           AllCityErrorState(
             failure: failure,
           ),
         );
       },
-          (data) {
+      (data) {
         cities = data;
 
         // =====================================================
         // أول محافظة هي الافتراضية
         // =====================================================
-        selectedCity =
-        cities.isNotEmpty
-            ? cities.first
-            : null;
+        selectedCity = cities.isNotEmpty ? cities.first : null;
 
         emit(
           GetAllCityState(
             cities: cities,
-            selectedCity:
-            selectedCity,
+            selectedCity: selectedCity,
           ),
         );
       },
     );
   }
+
   Future<void> _checkUser(
-      CheckUserEvent event,
-      Emitter<AllCityState> emit,
-      ) async {
+    CheckUserEvent event,
+    Emitter<AllCityState> emit,
+  ) async {
     //   emit(CheckRepLoadingState());
     (await checkRepUsecase.execute(UserInfo.repId)).fold((failure) {
       emit(CheckUserErrorState(failure: failure));
@@ -105,32 +97,28 @@ final  CheckRepUsecase checkRepUsecase;
     });
   }
 
-
-
-
   // ===========================================================
   // Select City
   // ===========================================================
 
   void _selectCity(
-      SelectCityEvent event,
-      Emitter<AllCityState> emit,
-      ) {
-    selectedCity =
-        event.city;
+    SelectCityEvent event,
+    Emitter<AllCityState> emit,
+  ) {
+    selectedCity = event.city;
 
     emit(
       GetAllCityState(
         cities: cities,
-        selectedCity:
-        selectedCity,
+        selectedCity: selectedCity,
       ),
     );
   }
+
   int cityIdOf(CityModel city) {
     return int.tryParse(
-      city.id.toString(),
-    ) ??
+          city.id.toString(),
+        ) ??
         -1;
   }
 

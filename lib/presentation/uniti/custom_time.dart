@@ -48,7 +48,7 @@ class CustomTime extends StatelessWidget {
           hintStyle: TextStyle(
             fontSize: 14.sp,
             color: Color(0xFFD2D1D1),
-            fontFamily: 'Manrope',
+            fontFamily: 'Almarai',
             fontWeight: FontWeight.w400,
           ),
         ),

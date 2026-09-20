@@ -1,6 +1,6 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/domain/models/drawer_model.dart';
+import 'package:domina_app/presentation/drawer/model/drawer_model.dart';
 import 'package:domina_app/presentation/drawer/widget/custom_drawer_widget.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';

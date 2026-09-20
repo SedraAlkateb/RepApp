@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
@@ -323,7 +324,7 @@ class SpecPlanPage extends StatelessWidget {
       ) {
     return Material(
       color: Colors.transparent,
-      child: InkWell(
+      child: AppInkWell(
         borderRadius: BorderRadius.circular(
           ui.isMobile ? 20 : 22,
         ),

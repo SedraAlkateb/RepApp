@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'dart:io';
 
 import 'package:domina_app/app/constants.dart';
@@ -69,7 +70,6 @@ class _UpdateRecipesHospitalState
         .empty();
 
     if (widget.st == 1) {
-      print('object');
 
       BlocProvider.of<RecipesBrandBloc>(context)
           .add(
@@ -175,9 +175,6 @@ class _UpdateRecipesHospitalState
           if (state
           is RecipesRecipesErrorState &&
               widget.st == 1) {
-            print(
-              'sddddddddddddddddddd',
-            );
 
             return Center(
               child: emptyFullScreen(
@@ -1149,7 +1146,7 @@ class _UpdateRecipesHospitalState
     final double imageSize =
     ui.isMobile ? 135 : 155;
 
-    return InkWell(
+    return AppInkWell(
       borderRadius:
       BorderRadius.circular(
         ui.smallRadius + 2,

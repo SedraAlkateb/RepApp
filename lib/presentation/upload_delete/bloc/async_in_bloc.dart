@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_exception_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_exception_usecase.dart';
@@ -22,8 +22,11 @@ import 'package:domina_app/domain/usecase/visit_hospital_usecase.dart';
 import 'package:domina_app/domain/usecase/visit_pharmacy_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
 part 'async_in_event.dart';
 part 'async_in_state.dart';
+
+final _log = AppLogger.get('AsyncInBloc');
 
 class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
   VisitDoctorUsecase visitDoctorUsecase;
@@ -75,16 +78,18 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       this.allExceptionUsecase,
       this.allExceptionSqlUsecase)
       : super(AsyncInInitial()) {
-    on<AsyncInEvent>((event, emit) async {
-      if (event is Async1DataEvent) {
-        emit(SyncData1LoadingState());
-        await getData();
-      } else if (event is Async0DataEvent) {
-        emit(SyncData0LoadingState());
-        await getData();
-      } else if (event is GetEvent) {
-        await setData();
-      }
+    on<Async1DataEvent>((event, emit) async {
+      emit(SyncData1LoadingState());
+      await getData();
+    });
+
+    on<Async0DataEvent>((event, emit) async {
+      emit(SyncData0LoadingState());
+      await getData();
+    });
+
+    on<GetEvent>((event, emit) async {
+      await setData();
     });
   }
 
@@ -234,16 +239,14 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
             visitDoctorResult.fold((failure) => failure, (data) => data);
         if (visitDoctorFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(
-              failure: Failure(visitDoctorFailureOrSuccess.code, "${visitDoctorFailureOrSuccess.massage} 2")));
-          print("visitDoctorFailureOrSuccess.code:${visitDoctorFailureOrSuccess.code}");
+              failure: Failure(visitDoctorFailureOrSuccess.code,
+                  "${visitDoctorFailureOrSuccess.massage} 2")));
           return false;
         }
         final visitDoctorFlagResult =
             await updateFlagDoctorSqlUsecase.execute();
         final visitDoctorFlagFailureOrSuccess =
             visitDoctorFlagResult.fold((failure) => failure, (data) => data);
-        print(
-            "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
         if (visitDoctorFlagFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(
               failure:
@@ -266,8 +269,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
             await updateFlagHospitalSqlUsecase.execute();
         final visitHospitalFlagFailureOrSuccess =
             visitHospitalFlagResult.fold((failure) => failure, (data) => data);
-        print(
-            "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 
         if (visitHospitalFlagFailureOrSuccess is Failure) {
           emit(SyncData1ErrorState(
@@ -281,8 +282,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
             await checkActiveBrandPlanUsecase.execute(UserInfo.repId);
         final checkActiveBrandPlanFailureOrSuccess =
             isPlan.fold((failure) => failure, (data) {
-          print(
-              "UserInfo.flag ${UserInfo.flag} , UserInfo.otherstatus ${UserInfo.otherstatus} ,data.otherStatus  ${data.otherStatus} ");
           if (data.otherStatus != 0) {
             UserInfo.isChange = true;
           } else {
@@ -326,7 +325,6 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
           return false;
         }
         UserInfo.flag = 1;
-        print("Plan Brand data sent successfully.");
         if (UserInfo.isChange == true) {
           emit(IsActiveState());
         } else {
@@ -339,7 +337,7 @@ class AsyncInBloc extends Bloc<AsyncInEvent, AsyncInState> {
       return true;
     } catch (e) {
       emit(SyncData1ErrorState(failure: Failure(0, "حدث خطأ اثناء التخزين")));
-      print("Error occurred in setData: $e");
+      _log.severe('Error occurred in setData', e);
       return false;
     }
   }

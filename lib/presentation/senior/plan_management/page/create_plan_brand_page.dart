@@ -1,4 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';

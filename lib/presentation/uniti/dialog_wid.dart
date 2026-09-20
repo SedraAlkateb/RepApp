@@ -1,16 +1,29 @@
 import 'dart:ui';
-import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/place_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DialogFilter extends StatelessWidget {
-  DialogFilter({super.key, required this.text});
+class DialogFilter extends StatefulWidget {
+  const DialogFilter({super.key, required this.text});
+
+  final String text;
+
+  @override
+  State<DialogFilter> createState() => _DialogFilterState();
+}
+
+class _DialogFilterState extends State<DialogFilter> {
   final TextEditingController numController = TextEditingController();
   final formKey = new GlobalKey<FormState>();
-  final String text;
+
+  @override
+  void dispose() {
+    numController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +63,7 @@ class DialogFilter extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(right: AppPaddingW.p8),
                             child:
-                                Text(text, style: TextStyle(fontSize: 20.sp)),
+                                Text(widget.text, style: TextStyle(fontSize: 20.sp)),
                           ),
                           TextFormField(
                             keyboardType: TextInputType.number,

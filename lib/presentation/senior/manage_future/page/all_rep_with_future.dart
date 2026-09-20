@@ -1,8 +1,11 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
+import 'package:domina_app/presentation/resources/flag_color.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -353,7 +356,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
     final ui = AppUi.of(context);
     final bool isSelected = _lastLoadedCityId == index;
 
-    return GestureDetector(
+    return PressableEffect(child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         setState(() {
@@ -534,7 +537,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildMicroActionButton({
@@ -550,7 +553,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
 
     return Material(
       color: Colors.transparent,
-      child: InkWell(
+      child: AppInkWell(
         onTap: isActive ? onTap : null,
         borderRadius: BorderRadius.circular(ui.cardRadius - 2),
         child: AnimatedContainer(

@@ -1,5 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/plase_visit/visit_widget.dart';
+import 'package:domina_app/presentation/place_visit/visit_widget.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/plan_review/widget/stat_item.dart';
 import 'package:flutter/material.dart';

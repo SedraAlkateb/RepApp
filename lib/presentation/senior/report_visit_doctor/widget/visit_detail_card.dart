@@ -1,8 +1,10 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
 import 'package:domina_app/presentation/senior/report_visit_doctor/widget/text_info.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -125,6 +127,22 @@ class _OptimizedBottomSheetContentState
     extends State<_OptimizedBottomSheetContent> {
   late final DraggableScrollableController _sheetController;
   late final ValueNotifier<bool> _isTopNotifier;
+  bool _isClosing = false;
+  final ValueNotifier<double> _extentNotifier = ValueNotifier<double>(1.0);
+
+  Future<void> _closeSheet() async {
+    if (_isClosing) return;
+    _isClosing = true;
+    if (_sheetController.isAttached) {
+      await _sheetController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 240),
+        // تسارع نحو الأسفل: لا يتباطأ ولا يتوقف قبل الاختفاء
+        curve: Curves.easeInCubic,
+      );
+    }
+    if (mounted) widget.bloc.add(DocNoIsExpandedNoteEvent());
+  }
 
   @override
   void initState() {
@@ -137,6 +155,7 @@ class _OptimizedBottomSheetContentState
   void dispose() {
     _sheetController.dispose();
     _isTopNotifier.dispose();
+    _extentNotifier.dispose();
     super.dispose();
   }
 
@@ -146,7 +165,6 @@ class _OptimizedBottomSheetContentState
 
     double maxSheetWidth;
     double initialChildSize;
-    double minChildSize;
     double sheetRadius;
     double horizontalPadding;
     double contentTopPadding;
@@ -162,7 +180,6 @@ class _OptimizedBottomSheetContentState
       case AppDeviceType.mobilePortrait:
         maxSheetWidth = double.infinity;
         initialChildSize = 0.46;
-        minChildSize = 0.12;
         sheetRadius = 26;
         horizontalPadding = 18;
         contentTopPadding = 4;
@@ -178,7 +195,6 @@ class _OptimizedBottomSheetContentState
       case AppDeviceType.tabletPortrait:
         maxSheetWidth = 760;
         initialChildSize = 0.42;
-        minChildSize = 0.12;
         sheetRadius = 28;
         horizontalPadding = 28;
         contentTopPadding = 8;
@@ -194,7 +210,6 @@ class _OptimizedBottomSheetContentState
       case AppDeviceType.tabletLandscape:
         maxSheetWidth = 900;
         initialChildSize = 0.58;
-        minChildSize = 0.16;
         sheetRadius = 24;
         horizontalPadding = 28;
         contentTopPadding = 4;
@@ -213,9 +228,16 @@ class _OptimizedBottomSheetContentState
         // =================================================
         // Dark Background
         // =================================================
-        ModalBarrier(
-          color: Colors.black.withOpacity(0.42),
-          dismissible: false,
+        ValueListenableBuilder<double>(
+          valueListenable: _extentNotifier,
+          builder: (context, extent, _) {
+            final t = (extent / initialChildSize).clamp(0.0, 1.0);
+            return ModalBarrier(
+              color: Colors.black.withOpacity(0.42 * t),
+              dismissible: true,
+              onDismiss: _closeSheet,
+            );
+          },
         ),
 
         // =================================================
@@ -224,18 +246,32 @@ class _OptimizedBottomSheetContentState
         DraggableScrollableSheet(
           controller: _sheetController,
           initialChildSize: initialChildSize,
-          minChildSize: minChildSize,
+          minChildSize: 0,
           maxChildSize: 1.0,
           expand: true,
           snap: false,
           builder: (context, scrollController) {
-            return NotificationListener<DraggableScrollableNotification>(
-              onNotification: (notification) {
-                // إخفاء الـ Sheet بسلاسة تامة عند النزول لأقل حد
-                if (notification.extent <= minChildSize + 0.015) {
-                  widget.bloc.add(DocNoIsExpandedNoteEvent());
-                  return true;
+            return NotificationListener<Notification>(
+              onNotification: (n) {
+                // عند رفع الإصبع: إما إغلاق منساب أو رجوع للحجم الأولي
+                if (n is ScrollEndNotification && !_isClosing) {
+                  final extent = _sheetController.isAttached
+                      ? _sheetController.size
+                      : initialChildSize;
+                  if (extent < initialChildSize * 0.8) {
+                    _closeSheet();
+                  } else if (extent < initialChildSize) {
+                    _sheetController.animateTo(
+                      initialChildSize,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOutCubic,
+                    );
+                  }
+                  return false;
                 }
+                if (n is! DraggableScrollableNotification) return false;
+                final notification = n;
+                _extentNotifier.value = notification.extent;
 
                 // تحديث الحدود محلياً دون استدعاء BLoC لمنع أي تقطيع (Lag)
                 if (notification.extent >= 0.99) {
@@ -285,11 +321,21 @@ class _OptimizedBottomSheetContentState
                     },
                     child: SafeArea(
                       top: false,
-                      child: CustomScrollView(
-                        controller: scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(
-                          parent: BouncingScrollPhysics(),
+                      // السماح بالسحب بالماوس/القلم/التاتش باد (الافتراضي: لمس فقط)
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                            PointerDeviceKind.stylus,
+                            PointerDeviceKind.trackpad,
+                          },
+                          scrollbars: false,
                         ),
+                        child: CustomScrollView(
+                        controller: scrollController,
+                        // Clamping ضروري ليتكامل مع سحب الـ Sheet دون تعليق في المنتصف
+                        physics: const ClampingScrollPhysics(),
                         keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
                         slivers: [
@@ -300,17 +346,16 @@ class _OptimizedBottomSheetContentState
                             child: ValueListenableBuilder<bool>(
                               valueListenable: _isTopNotifier,
                               builder: (context, isTop, _) {
-                                return isTop
-                                    ? const SizedBox(height: 16)
-                                    : Center(
-                                  child: InkWell(
+                                // ارتفاع ثابت (33) حتى لا يتحرك المحتوى أثناء السحب
+                                return Opacity(
+                                  opacity: isTop ? 0 : 1,
+                                  child: IgnorePointer(
+                                    ignoring: isTop,
+                                    child: Center(
+                                  child: AppInkWell(
                                     borderRadius:
                                     BorderRadius.circular(12),
-                                    onTap: () {
-                                      widget.bloc.add(
-                                        DocNoIsExpandedNoteEvent(),
-                                      );
-                                    },
+                                    onTap: () => _closeSheet(),
                                     child: Padding(
                                       padding:
                                       const EdgeInsets.symmetric(
@@ -329,6 +374,8 @@ class _OptimizedBottomSheetContentState
                                         ),
                                       ),
                                     ),
+                                  ),
+                                ),
                                   ),
                                 );
                               },
@@ -466,6 +513,7 @@ class _OptimizedBottomSheetContentState
                             ),
                           ),
                         ],
+                      ),
                       ),
                     ),
                   ),
@@ -805,7 +853,7 @@ Widget _buildReadReportButton({
 
   return Material(
     color: Colors.transparent,
-    child: InkWell(
+    child: AppInkWell(
       borderRadius: BorderRadius.circular(12),
       onTap: state is AsReadLoadingState
           ? null
@@ -1515,7 +1563,7 @@ Widget buildActionBtn({
     color:
     Colors.transparent,
 
-    child: InkWell(
+    child: AppInkWell(
       onTap:
       onTap,
 

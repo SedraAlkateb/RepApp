@@ -1,5 +1,6 @@
 /*
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -39,7 +40,7 @@ class PharmacyVisitUser extends StatelessWidget {
                 ListView.builder
                   (
                     itemBuilder: (context, index) {
-                      return InkWell(
+                      return AppInkWell(
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return InfoVisitPharmacy(

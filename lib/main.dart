@@ -6,6 +6,7 @@ import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di/di.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/crashlytics/app_bloc_observer.dart';
 import 'package:domina_app/crashlytics/crashlytics_service.dart';
@@ -37,6 +38,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 @pragma('vm:entry-point')
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AppLogger.init();
 
   // جعل أشرطة النظام شفافة تماماً لتجنب ظهور المربعات السوداء
   SystemChrome.setSystemUIOverlayStyle(

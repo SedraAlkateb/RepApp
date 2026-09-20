@@ -1,9 +1,9 @@
 // import 'package:bloc/bloc.dart';
-// import 'package:domina_app/data/network/failure.dart';
+// import 'package:domina_app/domain/failure.dart';
 // import 'package:domina_app/data/responses/responses.dart';
 // import 'package:domina_app/domain/models/models.dart';
 // import 'package:domina_app/domain/usecase/all_brands_sql_usecase.dart';
-// import 'package:domina_app/domain/usecase/pharmacy_order_usecase%20.dart';
+// import 'package:domina_app/domain/usecase/pharmacy_order_usecase.dart';
 // import 'package:equatable/equatable.dart';
 // import 'package:meta/meta.dart';
 //

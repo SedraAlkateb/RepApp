@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repostitory/repository.dart';
+import 'package:domina_app/domain/repository/repository.dart';
 import 'package:equatable/equatable.dart';
 
 class VisitHosUsecase extends Equatable {

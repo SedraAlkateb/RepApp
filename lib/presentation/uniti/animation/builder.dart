@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:flutter/material.dart';
 
 class GrowTransition extends StatelessWidget {
@@ -48,7 +49,7 @@ class PhotoHero extends StatelessWidget {
         tag: widget,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
+          child: AppInkWell(
             onTap: onTap,
             child: widget,
           ),

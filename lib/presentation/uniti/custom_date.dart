@@ -37,9 +37,6 @@ class CustomDate extends StatelessWidget {
               }
             : validator,
         onTap: onChanged,
-        onChanged: (value) {
-          print(dateInput.toString());
-        },
         decoration: KTextField1Decoration.copyWith(
           filled: true,
           fillColor: ColorManager.grey,
@@ -52,7 +49,7 @@ class CustomDate extends StatelessWidget {
           hintStyle: TextStyle(
             fontSize: 15.sp,
             color: Color(0xFFD2D1D1),
-            fontFamily: 'Manrope',
+            fontFamily: 'Almarai',
             fontWeight: FontWeight.w400,
           ),
         ),

@@ -7,7 +7,7 @@ import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/place_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/them_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
@@ -25,6 +25,7 @@ import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctor
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/uniti/app_bar_theme.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,6 +33,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 void resetAppNavigatorKey() {
   appNavigatorKey = GlobalKey<NavigatorState>();
+}
+
+/// يسمح بالسحب بالماوس/القلم/التاتش باد في كل القوائم والـ sheets
+/// (الافتراضي في Flutter: اللمس فقط).
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.trackpad,
+      };
 }
 
 class MyApp extends StatelessWidget {
@@ -110,6 +125,7 @@ class MyApp extends StatelessWidget {
           localeResolutionCallback: (locale, supportedLocales) =>
               const Locale('ar'),
           debugShowCheckedModeBanner: false,
+          scrollBehavior: const AppScrollBehavior(),
           onGenerateRoute: RouteGenerator.getRoute,
           initialRoute: _getInitialRoute(),
           theme: getApplicationTheme().copyWith(

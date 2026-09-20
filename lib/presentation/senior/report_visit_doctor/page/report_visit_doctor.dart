@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -317,6 +318,10 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
                               BlocConsumer<
                                   ReportVisitDoctorBloc,
                                   ReportVisitDoctorState>(
+                                // فتح/إغلاق الـ sheet لا يجب أن يعيد بناء القائمة كاملة
+                                buildWhen: (previous, current) =>
+                                    current is! DocIsExpandedNoteState &&
+                                    current is! DocNoIsExpandedNoteState,
                                 listener:
                                     (context, state) {
                                   if (state
@@ -753,7 +758,7 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
       child: Material(
         color: Colors.transparent,
 
-        child: InkWell(
+        child: AppInkWell(
           borderRadius:
           BorderRadius.circular(
             cardRadius,
@@ -1257,6 +1262,9 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
     return BlocBuilder<
         ReportVisitDoctorBloc,
         ReportVisitDoctorState>(
+      buildWhen: (previous, current) =>
+          current is! DocIsExpandedNoteState &&
+          current is! DocNoIsExpandedNoteState,
       builder: (context, state) {
         return Row(
           mainAxisSize:

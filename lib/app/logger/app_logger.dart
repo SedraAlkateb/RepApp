@@ -1,11 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 class AppLogger {
+  /// يربط سجلّات `package:logging` بالـ console. يعمل في وضع التطوير فقط.
   static void init() {
+    if (!kDebugMode) return;
+
     Logger.root.level = Level.ALL;
 
     Logger.root.onRecord.listen((record) {
-      print(
+      debugPrint(
         '[${record.level.name}] '
         '${record.time} '
         '${record.loggerName}: '
@@ -13,11 +17,11 @@ class AppLogger {
       );
 
       if (record.error != null) {
-        print(record.error);
+        debugPrint('${record.error}');
       }
 
       if (record.stackTrace != null) {
-        print(record.stackTrace);
+        debugPrint('${record.stackTrace}');
       }
     });
   }

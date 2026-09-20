@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
@@ -61,7 +62,7 @@ Widget buildHeaderSection(
         Material(
           color: Colors.transparent,
 
-          child: InkWell(
+          child: AppInkWell(
             borderRadius: BorderRadius.circular(
               ui.smallRadius + 3,
             ),

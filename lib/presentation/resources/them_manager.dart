@@ -64,6 +64,50 @@ ThemeData getApplicationTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s14),
         ),
+      ).copyWith(
+        animationDuration: const Duration(milliseconds: 180),
+        elevation: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) return 1;
+          if (states.contains(WidgetState.hovered)) return 8;
+          return 2;
+        }),
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return Colors.white.withValues(alpha: 0.22);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return Colors.white.withValues(alpha: 0.12);
+          }
+          return null;
+        }),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        animationDuration: const Duration(milliseconds: 180),
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return ColorManager.secondaryColor1.withValues(alpha: 0.16);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return ColorManager.secondaryColor1.withValues(alpha: 0.08);
+          }
+          return null;
+        }),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        animationDuration: const Duration(milliseconds: 180),
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return ColorManager.secondaryColor1.withValues(alpha: 0.16);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return ColorManager.secondaryColor1.withValues(alpha: 0.08);
+          }
+          return null;
+        }),
       ),
     ),
     textTheme: TextTheme(

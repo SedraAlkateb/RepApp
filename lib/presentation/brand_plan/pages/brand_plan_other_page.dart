@@ -2,6 +2,7 @@
 
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/language_manager.dart';
@@ -497,7 +498,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                       .ellipsis,
                 ),
               ),
-              Type.buildBadge(
+              TypeBadge(
                 brandItem.brandType,
               ),
             ],

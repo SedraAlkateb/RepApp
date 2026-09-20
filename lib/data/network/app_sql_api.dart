@@ -1,10 +1,14 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/language_manager.dart';
+import 'package:domina_app/app/number_utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('AppSqlApi');
 
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
@@ -112,7 +116,9 @@ class AppSqlApi extends AppSqlApiAbs {
   Future<void> initializeDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     try {
-      await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
+      // تسجيل الاستعلامات بقيمها (توكن، بيانات زيارات) للتطوير فقط.
+      await databaseFactory.debugSetLogLevel(
+          kDebugMode ? sqfliteLogLevelVerbose : sqfliteLogLevelNone);
     } on MissingPluginException {
       // Some tests use the FFI SQLite implementation instead of the platform plugin.
     }
@@ -292,7 +298,7 @@ class AppSqlApi extends AppSqlApiAbs {
       });
       return "";
     } catch (error) {
-      print(error.toString());
+      _log.severe('asyncData failed', error);
       return error.toString();
       //throw error;
     }
@@ -823,7 +829,7 @@ class AppSqlApi extends AppSqlApiAbs {
           );
         }
       } catch (e) {
-        print('Error inserting visit and brands: $e');
+        _log.severe('Error inserting visit and brands', e);
         rethrow;
       }
     });
@@ -867,7 +873,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الخمسة أيام الماضية.');
         }
       } catch (e) {
-        print('Error inserting visit and brands: $e');
+        _log.severe('Error inserting visit and brands', e);
         rethrow;
       }
     });
@@ -919,7 +925,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال اليومين  الماضيين.');
         }
       } catch (e) {
-        print('Error inserting visit and brands: $e');
+        _log.severe('Error inserting visit and brands', e);
         rethrow;
       }
     });
@@ -961,7 +967,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال اليومين  الماضيين.');
         }
       } catch (e) {
-        print('Error inserting visit: $e');
+        _log.severe('Error inserting visit', e);
         rethrow;
       }
     });
@@ -1590,72 +1596,6 @@ class AppSqlApi extends AppSqlApiAbs {
     final tables = await mydb.rawQuery(
         "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
     return tables.map((t) => t['name'] as String).toList();
-  }
-
-  Future<void> debugOtherPlanBrandByRepPlanId(int repPlanId) async {
-    Database? mydb = await databaseHelper.database;
-
-    // ---- الاستعلام الأصلي ----
-    const query = '''
-  SELECT  
-    planBrand.id AS plan_id,
-    planBrand.repPlanId,
-    planBrand.brandType,
-    planBrand.amount,
-    brand.id AS brand_id,
-    brand.title AS brand_title,
-    brand.phTitle AS brand_phTitle,
-    brand.sampleCoast AS brand_sampleCost,
-    specialization.id AS specialization_id,
-    specialization.title AS specialization_title,
-    specialization.flag AS specialization_flag,
-    specialization.sumDoctor AS sumDoctor,
-    specialization.sumHospital AS sumHospital,
-    specialization.sumBrandHospital AS sumBrandHospital
-  FROM 
-    planBrand
-  JOIN  
-    brand ON planBrand.brandId = brand.id
-  JOIN 
-    specialization ON planBrand.spId = specialization.id
-  WHERE 
-    planBrand.repPlanId = ?;
-  ''';
-
-    print("🚀 Running SQL query:\n$query");
-    print("With repPlanId = $repPlanId");
-
-    final List<Map<String, dynamic>> maps =
-        await mydb.rawQuery(query, [repPlanId]);
-
-    print("📊 Query returned ${maps.length} rows:");
-    for (var row in maps) {
-      print(row);
-    }
-
-    // ---- محتويات الجداول ----
-    print("\n==============================");
-    print("📌 Table: planBrand");
-    var planBrands = await mydb.rawQuery("SELECT * FROM planBrand");
-    for (var row in planBrands) {
-      print(row);
-    }
-
-    // print("\n==============================");
-    // print("📌 Table: brand");
-    // var brands = await mydb.rawQuery("SELECT * FROM brand");
-    // for (var row in brands) {
-    //   print(row);
-    // }
-
-    print("\n==============================");
-    print("📌 Table: specialization");
-    var specs = await mydb.rawQuery("SELECT * FROM specialization");
-    for (var row in specs) {
-      print(row);
-    }
-
-    print("==============================\n");
   }
 
   @override

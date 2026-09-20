@@ -1,4 +1,5 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/report_Inventory/bloc/report_inventory_bloc.dart';
@@ -340,7 +341,7 @@ class InventoryCard extends StatelessWidget {
                     // =============================================
                     // Existing Type Badge
                     // =============================================
-                    Type.buildBadge(
+                    TypeBadge(
                       data.type,
                     ),
                   ],
@@ -714,13 +715,23 @@ class InventoryCard extends StatelessWidget {
 // Report Inventory
 // =======================================================
 
-class ReportInventory extends StatelessWidget {
-  ReportInventory({
-    super.key,
-  });
+class ReportInventory extends StatefulWidget {
+  const ReportInventory({super.key});
+
+  @override
+  State<ReportInventory> createState() => _ReportInventoryState();
+}
+
+class _ReportInventoryState extends State<ReportInventory> {
 
   final TextEditingController searchInventoryController =
   TextEditingController();
+
+  @override
+  void dispose() {
+    searchInventoryController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

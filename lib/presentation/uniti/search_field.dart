@@ -22,6 +22,8 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   Animation<double>? _secondaryAnimation;
+  TabController? _tabController;
+  int? _lastTabIndex;
 
   @override
   void didChangeDependencies() {
@@ -32,26 +34,45 @@ class _SearchFieldState extends State<SearchField> {
       _secondaryAnimation = route.secondaryAnimation;
       _secondaryAnimation?.addListener(_onRouteAnimationChanged);
     }
+
+    final tabController = DefaultTabController.maybeOf(context);
+    if (tabController != _tabController) {
+      _tabController?.removeListener(_onTabChanged);
+      _tabController = tabController;
+      _lastTabIndex = tabController?.index;
+      _tabController?.addListener(_onTabChanged);
+    }
   }
 
   void _onRouteAnimationChanged() {
     // عندما تعود الصفحة للظهور (إغلاق الصفحة التي فوقها وعودة الأنيميشن إلى 0)
     if (_secondaryAnimation != null && _secondaryAnimation!.value == 0.0) {
-      if (widget.searchController.text.isNotEmpty) {
-        widget.searchController.clear();
-        if (widget.onPressed != null) {
-          widget.onPressed!(''); // إرسال نص فارغ لإعادة جلب البيانات كاملة في البلوك
-        }
-        if (mounted) {
-          setState(() {});
-        }
-      }
+      _resetSearch();
+    }
+  }
+
+  void _onTabChanged() {
+    // عند الانتقال من تاب لتاب نفرّغ البحث ونعيد القائمة الأساسية
+    final index = _tabController?.index;
+    if (index != _lastTabIndex) {
+      _lastTabIndex = index;
+      _resetSearch();
+    }
+  }
+
+  void _resetSearch() {
+    if (widget.searchController.text.isEmpty) return;
+    widget.searchController.clear();
+    widget.onPressed?.call(''); // نص فارغ لإعادة القائمة الكاملة في البلوك
+    if (mounted) {
+      setState(() {});
     }
   }
 
   @override
   void dispose() {
     _secondaryAnimation?.removeListener(_onRouteAnimationChanged);
+    _tabController?.removeListener(_onTabChanged);
     super.dispose();
   }
 

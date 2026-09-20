@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -435,7 +436,7 @@ class _TeamLeaderState extends State<TeamLeader>
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: AppInkWell(
           borderRadius: BorderRadius.circular(
             cardRadius,
           ),

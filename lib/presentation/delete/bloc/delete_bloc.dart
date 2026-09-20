@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/usecase/delete_all_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/delete_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_is_login_sql_usecase.dart';
@@ -17,41 +17,36 @@ class DeleteBloc extends Bloc<DeleteEvent, DeleteState> {
   DeleteBloc(this.deleteAllSqlUsecase, this.deleteSqlUsecase,
       this.editIsLoginSqlUsecase)
       : super(DeleteInitial()) {
-    on<DeleteEvent>((event, emit) async {
-      if (event is DeleteBaseEvent) {
-        //   emit(DeleteBaseLoadingState());
-        (await deleteSqlUsecase.execute()).fold((failure) {
-          emit(DeleteBaseErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          emit(DeleteBaseState());
-        });
-      } else if (event is DeleteAllEvent) {
-        //   emit(DeleteAllLoadingState());
-        (await deleteAllSqlUsecase.execute()).fold((failure) {
-          emit(DeleteAllErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          UserInfo.flag1 = 0;
-          emit(DeleteAllState());
-        });
-      }
+    on<DeleteBaseEvent>((event, emit) async {
+      //   emit(DeleteBaseLoadingState());
+      (await deleteSqlUsecase.execute()).fold((failure) {
+        emit(DeleteBaseErrorState(failure: failure));
+        return false;
+      }, (data) async {
+        emit(DeleteBaseState());
+      });
+    });
 
+    on<DeleteAllEvent>((event, emit) async {
+      //   emit(DeleteAllLoadingState());
+      (await deleteAllSqlUsecase.execute()).fold((failure) {
+        emit(DeleteAllErrorState(failure: failure));
+        return false;
+      }, (data) async {
+        UserInfo.flag1 = 0;
+        emit(DeleteAllState());
+      });
+    });
 
-
-
-
-
-      else if (event is Edit1EventIn) {
-        (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
-            (failure) {
-          emit(Edit1StatusSErrorState(failure: failure));
-          return false;
-        }, (data) async {
-          UserInfo.isLogging = event.num;
-          emit(Edit1StatusState());
-        });
-      }
+    on<Edit1EventIn>((event, emit) async {
+      (await editIsLoginSqlUsecase.execute(UserInfo.repId, event.num)).fold(
+          (failure) {
+        emit(Edit1StatusSErrorState(failure: failure));
+        return false;
+      }, (data) async {
+        UserInfo.isLogging = event.num;
+        emit(Edit1StatusState());
+      });
     });
   }
 }
