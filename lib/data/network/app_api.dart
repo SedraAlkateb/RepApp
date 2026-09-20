@@ -267,6 +267,10 @@ abstract class AppServiceClient {
       {
     @Part(name: "status") int status=0,
   });
+  @POST("/admin/getinfoPlanBrands.php")
+  Future<PlanBrandsInfoBaseResponse> getInfoPlanBrands(
+    @Part(name: "repPlanId") int repPlanId,
+  );
   @POST("/pharmacyOrder.php")
   Future<Message1Response> pharmacyOrder(@Body() PharmacyOrderRequestBody list);
 

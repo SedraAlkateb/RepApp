@@ -967,6 +967,39 @@ extension ActivePlanBrandBaseMapper on ActiveBrandPlanBaseResponse? {
   }
 }
 
+extension PlanBrandInfoMapper on PlanBrandInfoResponse? {
+  ActivePlanBrandModel toDomain() {
+    List<SpecPlan> specPlans =
+        (this?.specializations?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<SpecPlan>()
+            .toList();
+    return ActivePlanBrandModel(
+      specPlans,
+      Type.fromName(this?.type?.trim() ?? Constants.empty),
+      this?.title ?? Constants.empty,
+      this?.pharmaceuticalFormTitle?.trim() ?? Constants.empty,
+      total: int.tryParse(this?.totalAmount?.toString() ?? "") ?? Constants.zero,
+    );
+  }
+}
+
+List<ActivePlanBrandModel> _mapPlanBrandsInfo(
+        List<PlanBrandInfoResponse>? list) =>
+    (list?.map((response) => response.toDomain()) ?? const Iterable.empty())
+        .cast<ActivePlanBrandModel>()
+        .toList();
+
+extension PlanBrandsInfoBaseMapper on PlanBrandsInfoBaseResponse? {
+  AllPlanBrandsInfo toDomain() {
+    return AllPlanBrandsInfo(
+      _mapPlanBrandsInfo(this?.data?.targetBrands),
+      _mapPlanBrandsInfo(this?.data?.targetBrandsWithoutAmount),
+      _mapPlanBrandsInfo(this?.data?.assistantBrands),
+    );
+  }
+}
+
 extension SeniorByCityidjsonMapper on SeniorByCityidBaseResponse? {
   List<SeniorCityModel> toDomain() {
     List<SeniorCityModel> data =

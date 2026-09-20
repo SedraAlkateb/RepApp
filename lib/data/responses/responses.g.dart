@@ -1778,6 +1778,79 @@ Map<String, dynamic> _$ActiveBrandPlanBaseResponseToJson(
       'data': instance.data,
     };
 
+PlanBrandInfoResponse _$PlanBrandInfoResponseFromJson(
+        Map<String, dynamic> json) =>
+    PlanBrandInfoResponse(
+      json['brandId'],
+      json['title'] as String?,
+      json['type'] as String?,
+      json['pharmaceuticalFormTitle'] as String?,
+      (json['specializations'] as List<dynamic>?)
+              ?.map((e) => SpecializationPlanResponse.fromJson(
+                  e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      json['totalAmount'],
+    );
+
+Map<String, dynamic> _$PlanBrandInfoResponseToJson(
+        PlanBrandInfoResponse instance) =>
+    <String, dynamic>{
+      'brandId': instance.brandId,
+      'title': instance.title,
+      'type': instance.type,
+      'pharmaceuticalFormTitle': instance.pharmaceuticalFormTitle,
+      'specializations': instance.specializations,
+      'totalAmount': instance.totalAmount,
+    };
+
+PlanBrandsInfoResponse _$PlanBrandsInfoResponseFromJson(
+        Map<String, dynamic> json) =>
+    PlanBrandsInfoResponse(
+      (json['targetBrands'] as List<dynamic>?)
+              ?.map((e) =>
+                  PlanBrandInfoResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      (json['targetBrandsWithoutAmount'] as List<dynamic>?)
+              ?.map((e) =>
+                  PlanBrandInfoResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      (json['assistantBrands'] as List<dynamic>?)
+              ?.map((e) =>
+                  PlanBrandInfoResponse.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$PlanBrandsInfoResponseToJson(
+        PlanBrandsInfoResponse instance) =>
+    <String, dynamic>{
+      'targetBrands': instance.targetBrands,
+      'targetBrandsWithoutAmount': instance.targetBrandsWithoutAmount,
+      'assistantBrands': instance.assistantBrands,
+    };
+
+PlanBrandsInfoBaseResponse _$PlanBrandsInfoBaseResponseFromJson(
+        Map<String, dynamic> json) =>
+    PlanBrandsInfoBaseResponse(
+      json['data'] == null
+          ? null
+          : PlanBrandsInfoResponse.fromJson(
+              json['data'] as Map<String, dynamic>),
+    )
+      ..status = json['status'] as String?
+      ..message = json['message'] as String?;
+
+Map<String, dynamic> _$PlanBrandsInfoBaseResponseToJson(
+        PlanBrandsInfoBaseResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
 AllSearchHospitalBaseResponse _$AllSearchHospitalBaseResponseFromJson(
         Map<String, dynamic> json) =>
     AllSearchHospitalBaseResponse(

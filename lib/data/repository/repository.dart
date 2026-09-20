@@ -514,6 +514,18 @@ class RepositoryImp implements Repository {
       );
 
   @override
+  Future<Either<Failure, AllPlanBrandsInfo>> getInfoPlanBrands(int repPlanId) =>
+      _remoteCall(
+        tag: 'getInfoPlanBrands',
+        call: () => _remoteDataSource.getInfoPlanBrands(repPlanId),
+        map: (response) => response.toDomain(),
+        isSuccess: (response) =>
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.message == ApiInternalStatus.SUCCESS ||
+            response.status == "200",
+      );
+
+  @override
   Future<Either<Failure, Message1Response>> pharmacyOrder(
           PharmacyOrderRequestBody order) =>
       _remoteCall(
