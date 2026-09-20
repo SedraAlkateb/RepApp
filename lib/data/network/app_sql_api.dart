@@ -22,7 +22,9 @@ abstract class AppSqlApiAbs {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands});
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false});
   /////////////////////////////////////////////////////////////////////////////////
   insertBrands(List<BrandModel> brands);
   insertHospitalSp(List<HospitalSpModel> hospitalSps);
@@ -147,10 +149,25 @@ class AppSqlApi extends AppSqlApiAbs {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands}) async {
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false}) async {
     try {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
+        // استبدال ذرّي: الحذف والإدخال في معاملة واحدة، فإذا فشل الإدخال يُتراجع
+        // عن الحذف وتبقى البيانات المحلية القديمة سليمة.
+        // planBrand تُحذف فقط إذا كانت ستُستبدل بخطة محمّلة أو لم تكن خطة المندوب
+        // المحفوظة محلياً (keepPlanBrand) — الخطة المحفوظة offline لا تُمسّ أبداً.
+        if (replaceExisting) {
+          final hasNewPlanBrands = planBrands != null && planBrands.isNotEmpty;
+          for (final table in _baseTablesToClear) {
+            if (table == 'planBrand' && keepPlanBrand && !hasNewPlanBrands) {
+              continue;
+            }
+            await txn.delete(table);
+          }
+        }
         Batch batch = txn.batch();
         // ملاحظة: PRAGMA foreign_keys لا يعمل داخل transaction في SQLite، لذلك أُزيل.
         // الإدراج أدناه مرتّب بحيث تُدرج الجداول الأب قبل الأبناء.
@@ -419,32 +436,37 @@ class AppSqlApi extends AppSqlApiAbs {
     UserInfo.flag1 = 0;
   }
 
+  /// الجداول الأساسية المُعاد تحميلها من السيرفر بالمزامنة (الأبناء قبل الآباء
+  /// لأن المفاتيح الأجنبية مفعّلة). الزيارات غير المرسلة يجب رفعها قبل الحذف.
+  static const List<String> _baseTablesToClear = [
+    'visit_brand_pharmacy',
+    'visit_brand_doctor',
+    'visit_brand_hospital',
+    'visit_doctor',
+    'visit_hospital',
+    'visit_pharmacy',
+    'brandSp',
+    'planBrand',
+    'hospitalSp',
+    'doctor',
+    'pharmacy',
+    'specialization',
+    'hospital',
+    'place',
+    'brand',
+    'exception_table',
+  ];
+
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
-    final tables = [
-      'visit_brand_pharmacy',
-      'visit_brand_doctor',
-      'visit_brand_hospital',
-      'visit_doctor',
-      'visit_hospital',
-      'visit_pharmacy',
-      'brandSp',
-      ((UserInfo.flag1 == 0)) ? 'planBrand' : null,
-      'hospitalSp',
-      'doctor',
-      'pharmacy',
-      'specialization',
-      'hospital',
-      'place',
-      'brand',
-      'exception_table'
-    ];
+    final keepPlanBrand = UserInfo.flag1 != 0;
 
     Batch batch = db.batch();
     await db.execute('PRAGMA foreign_keys = OFF;');
     try {
-      for (var table in tables) {
-        if (table != null) batch.delete(table);
+      for (var table in _baseTablesToClear) {
+        if (table == 'planBrand' && keepPlanBrand) continue;
+        batch.delete(table);
       }
       await batch.commit(noResult: true);
     } finally {

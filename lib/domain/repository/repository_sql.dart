@@ -30,7 +30,9 @@ abstract class RepositorySql {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands});
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false});
   Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag();
   Future<Either<Failure, Null>> insertDoctor(List<DoctorModel> doctorModel);
   Future<Either<Failure, List<DoctorModel>>> getDoctorSql();

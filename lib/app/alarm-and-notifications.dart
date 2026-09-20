@@ -3,7 +3,7 @@ import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/main.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
-import 'package:domina_app/presentation/upload_delete/page/async_page.dart';
+import 'package:domina_app/presentation/sync/pages/sync_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +43,9 @@ class AlarmAndNotifications {
   }
 
   static void _onNotificationTap(NotificationResponse response) {
-    initAsyncInModule();
+    initSyncModule();
     navigatorKey.currentState?.push(
-      MaterialPageRoute(builder: (_) => const AsyncPage()),
+      MaterialPageRoute(builder: (_) => const SyncPage()),
     );
   }
 

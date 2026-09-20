@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -310,14 +309,12 @@ class VisitsPage extends StatelessWidget {
         floatingActionButton:
         FloatingActionButton(
           onPressed: () {
-            initAsyncInModule();
-
             WidgetsBinding.instance
                 .addPostFrameCallback(
                   (_) {
                 Navigator.pushNamed(
                   context,
-                  Routes.asyncIn,
+                  Routes.sync,
                 );
               },
             );
