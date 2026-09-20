@@ -110,6 +110,8 @@ abstract class Repository {
   Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(
       int repPlan,{int status=0});
 
+  Future<Either<Failure, AllPlanBrandsInfo>> getInfoPlanBrands(int repPlanId);
+
   Future<Either<Failure, Message1Response>> pharmacyOrder(
       PharmacyOrderRequestBody order);
 

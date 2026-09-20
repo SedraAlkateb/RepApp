@@ -2008,6 +2008,15 @@ class ActivePlanBrandModel {
 }
 
 
+class AllPlanBrandsInfo {
+  List<ActivePlanBrandModel> targetBrands;
+  List<ActivePlanBrandModel> targetBrandsWithoutAmount;
+  List<ActivePlanBrandModel> assistantBrands;
+
+  AllPlanBrandsInfo(
+      this.targetBrands, this.targetBrandsWithoutAmount, this.assistantBrands);
+}
+
 class BrandAmountRequestBody {
   List<BrandAmountRequestModel> list1;
 

@@ -75,6 +75,7 @@ abstract class RemoteDataSource {
     int repPlanId,
       {int status=0}
   );
+  Future<PlanBrandsInfoBaseResponse> getInfoPlanBrands(int repPlanId);
   Future<Message1Response> pharmacyOrder(PharmacyOrderRequestBody list);
 
   Future<AllRepresentativeFutureBaseResponse> getRepsFuture(int id,
@@ -432,6 +433,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
       int repPlanId, {int status=0}) async {
     return await _appServiceClient.getinfoPlanBrandsType(repPlanId,status: status);
+  }
+
+  @override
+  Future<PlanBrandsInfoBaseResponse> getInfoPlanBrands(int repPlanId) async {
+    return await _appServiceClient.getInfoPlanBrands(repPlanId);
   }
 
   @override

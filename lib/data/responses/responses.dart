@@ -1656,6 +1656,56 @@ class ActiveBrandPlanBaseResponse extends BaseResponse {
 }
 
 @JsonSerializable()
+class PlanBrandInfoResponse {
+  @JsonKey(name: "brandId")
+  dynamic brandId;
+  @JsonKey(name: "title")
+  String? title;
+  @JsonKey(name: "type")
+  String? type;
+  @JsonKey(name: "pharmaceuticalFormTitle")
+  String? pharmaceuticalFormTitle;
+  @JsonKey(name: "specializations", defaultValue: [])
+  List<SpecializationPlanResponse>? specializations;
+  @JsonKey(name: "totalAmount")
+  dynamic totalAmount;
+
+  PlanBrandInfoResponse(this.brandId, this.title, this.type,
+      this.pharmaceuticalFormTitle, this.specializations, this.totalAmount);
+
+  factory PlanBrandInfoResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanBrandInfoResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$PlanBrandInfoResponseToJson(this);
+}
+
+@JsonSerializable()
+class PlanBrandsInfoResponse {
+  @JsonKey(name: "targetBrands", defaultValue: [])
+  List<PlanBrandInfoResponse>? targetBrands;
+  @JsonKey(name: "targetBrandsWithoutAmount", defaultValue: [])
+  List<PlanBrandInfoResponse>? targetBrandsWithoutAmount;
+  @JsonKey(name: "assistantBrands", defaultValue: [])
+  List<PlanBrandInfoResponse>? assistantBrands;
+
+  PlanBrandsInfoResponse(
+      this.targetBrands, this.targetBrandsWithoutAmount, this.assistantBrands);
+
+  factory PlanBrandsInfoResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanBrandsInfoResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$PlanBrandsInfoResponseToJson(this);
+}
+
+@JsonSerializable()
+class PlanBrandsInfoBaseResponse extends BaseResponse {
+  @JsonKey(name: "data")
+  PlanBrandsInfoResponse? data;
+  PlanBrandsInfoBaseResponse(this.data);
+  factory PlanBrandsInfoBaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$PlanBrandsInfoBaseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$PlanBrandsInfoBaseResponseToJson(this);
+}
+
+@JsonSerializable()
 class AllSearchHospitalBaseResponse extends BaseResponse {
   @JsonKey(name: 'Hospitals')
   AllSearchHospitalResponse allSearchHospitalResponse;
@@ -2052,3 +2102,4 @@ class ListHosSpSearchBaseResponse extends BaseResponse {
   // to json
   Map<String, dynamic> toJson() => _$ListHosSpSearchBaseResponseToJson(this);
 }
+
