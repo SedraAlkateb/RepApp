@@ -1371,7 +1371,7 @@ class _ReportVisitHospitalState extends State<ReportVisitHospital> {
                 shareReportToWhatsApp(
                   context:
                   context,
-
+type: 2,
                   doctorName:
                   doctorNoteModel
                       .docTitle,
