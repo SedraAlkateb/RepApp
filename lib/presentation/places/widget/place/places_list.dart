@@ -1,7 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/widget/animation_press.dart';
+import 'package:domina_app/presentation/place_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/place_visit/widget/animation_press.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -105,8 +105,9 @@ class PlacesList extends StatelessWidget {
 
           Navigator.pushNamedAndRemoveUntil(
             context,
-            Routes.deleteLogout,
+            Routes.logout,
                 (route) => false,
+            arguments: true, // بدون رفع: المندوب غير موجود بالسيرفر
           );
         });
       }

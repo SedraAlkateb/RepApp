@@ -7,13 +7,23 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NoVisitHos extends StatelessWidget {
-  NoVisitHos({
-    super.key,
-  });
+class NoVisitHos extends StatefulWidget {
+  const NoVisitHos({super.key});
+
+  @override
+  State<NoVisitHos> createState() => _NoVisitHosState();
+}
+
+class _NoVisitHosState extends State<NoVisitHos> {
 
   final TextEditingController searchNoteDoctorController =
   TextEditingController();
+
+  @override
+  void dispose() {
+    searchNoteDoctorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,6 @@ class NoVisitHos extends StatelessWidget {
     double listTopPadding;
     double listBottomPadding;
 
-   // double countFontSize;
     double countBottomSpacing;
 
     switch (deviceType) {
@@ -48,7 +57,6 @@ class NoVisitHos extends StatelessWidget {
         listTopPadding = 4;
         listBottomPadding = 24;
 
-        //countFontSize = 13;
         countBottomSpacing = 10;
         break;
 
@@ -66,7 +74,6 @@ class NoVisitHos extends StatelessWidget {
         listTopPadding = 6;
         listBottomPadding = 30;
 
-      //  countFontSize = 15;
         countBottomSpacing = 12;
         break;
 
@@ -84,7 +91,6 @@ class NoVisitHos extends StatelessWidget {
         listTopPadding = 4;
         listBottomPadding = 28;
 
-      //  countFontSize = 14;
         countBottomSpacing = 10;
         break;
     }

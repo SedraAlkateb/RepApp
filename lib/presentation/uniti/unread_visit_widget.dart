@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class _PersonProgressCardState
       _percentage,
     );
 
-    return GestureDetector(
+    return PressableEffect(pressedScale: 1.0, child: GestureDetector(
       behavior:
       HitTestBehavior.opaque,
 
@@ -611,7 +612,7 @@ class _PersonProgressCardState
           ),
         ),
       ),
-    );
+    ));
   }
 
   // =====================================================

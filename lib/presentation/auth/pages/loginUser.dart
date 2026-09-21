@@ -585,7 +585,7 @@ class _MyLoginState extends State<MyLogin> {
               } else {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  Routes.syncData,
+                  Routes.sync,
                       (route) => false,
                 );
               }

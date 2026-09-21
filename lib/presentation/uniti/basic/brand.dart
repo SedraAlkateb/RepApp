@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -138,7 +139,7 @@ class BrandListWidget extends StatelessWidget {
             color: Colors.white, // خلفية بيضاء ناصعة كما في التصميم الأصلي
             borderRadius: BorderRadius.circular(cardRadius),
             elevation: 0,
-            child: InkWell(
+            child: AppInkWell(
               borderRadius: BorderRadius.circular(cardRadius),
               onTap: (onTap != null&&isPr==true) ? () => onTap!(brand) : null,
               child: Container(

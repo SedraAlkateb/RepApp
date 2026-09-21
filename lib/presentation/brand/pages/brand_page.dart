@@ -4,14 +4,23 @@ import 'package:domina_app/presentation/brand/widget/brand_responsive_layout.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BrandPage extends StatelessWidget {
+class BrandPage extends StatefulWidget {
+  const BrandPage({super.key});
 
-  BrandPage({
-    super.key,
+  @override
+  State<BrandPage> createState() => _BrandPageState();
+}
 
-  });
+class _BrandPageState extends State<BrandPage> {
 
   final TextEditingController searchbrandController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchbrandController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BrandBloc>(
@@ -20,13 +29,12 @@ class BrandPage extends StatelessWidget {
           AllBrandEvent(),
         ),
       child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
         appBar: AppBar(
           title: const Text('الأصناف'),
         ),
         body: BrandResponsiveLayout(
           searchController: searchbrandController,
-
-          // ت مرير الدالة أو البارامترات لـ Responsive Layout إذا أردت استدعاء السحب عند الضغط على أحد العناصر
         ),
       ),
     );

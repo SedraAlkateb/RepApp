@@ -21,6 +21,7 @@ class FutureSpecializationsPage extends StatefulWidget {
     required this.flag,
     required this.sampleCount,
     required this.repType,
+    this.percent,
   });
 
   final int id;
@@ -28,27 +29,22 @@ class FutureSpecializationsPage extends StatefulWidget {
   final FlagModel flag;
   final int sampleCount;
   final RepType repType;
+  final int? percent;
 
   @override
   State<FutureSpecializationsPage> createState() =>
       _FutureSpecializationsPageState();
 }
 
-
-class _FutureSpecializationsPageState
-    extends State<FutureSpecializationsPage>
+class _FutureSpecializationsPageState extends State<FutureSpecializationsPage>
     with AutomaticKeepAliveClientMixin {
-
-  final TextEditingController searchController =
-  TextEditingController();
-
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       BlocProvider.of<FutureRepBloc>(
         context,
         listen: false,
@@ -58,10 +54,8 @@ class _FutureSpecializationsPageState
           widget.repPlanId,
         ),
       );
-
     });
   }
-
 
   @override
   void dispose() {
@@ -70,453 +64,191 @@ class _FutureSpecializationsPageState
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     super.build(context);
 
     final ui = AppUi.of(context);
 
-
     final bool isLandscape =
-        MediaQuery.orientationOf(context) ==
-            Orientation.landscape;
-
+        MediaQuery.orientationOf(context) == Orientation.landscape;
 
     final int crossAxisCount;
 
-
     if (ui.isTabletLandscape) {
       crossAxisCount = 4;
-
     } else if (ui.isTabletPortrait) {
       crossAxisCount = 3;
-
     } else {
       crossAxisCount = isLandscape ? 3 : 2;
     }
 
-
-
     return WillPopScope(
-
       onWillPop: () async {
-
         BlocProvider.of<ManageFutureBloc>(
           context,
         ).add(
           AllSeniorRepFutureEvent(
-            cityId:
-            context.read<AllCityBloc>()
-                .selectedCityId,
+            cityId: context.read<AllCityBloc>().selectedCityId,
           ),
         );
 
-
         return true;
       },
-
-
       child: Scaffold(
-
-        backgroundColor:
-        const Color(0xFFF8FAFC),
-
-
-
+        backgroundColor: const Color(0xFFF8FAFC),
         body: SafeArea(
-
           top: false,
-
-
           child: Center(
-
             child: ConstrainedBox(
-
               constraints: BoxConstraints(
-
-                maxWidth:
-                ui.isTabletLandscape
+                maxWidth: ui.isTabletLandscape
                     ? ui.widePageMaxWidth
                     : ui.pageMaxWidth,
-
               ),
-
-
-
               child: SingleChildScrollView(
-
-                physics:
-                const BouncingScrollPhysics(),
-
-
+                physics: const BouncingScrollPhysics(),
                 keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior
-                    .onDrag,
-
-
-                padding:
-
-                EdgeInsets.only(
-
-                  bottom:
-                  ui.pageBottomPadding + 70,
-
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: EdgeInsets.only(
+                  bottom: ui.pageBottomPadding + 70,
                 ),
-
-
-
                 child: Column(
-
-                  crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
-
-
-
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-
-
-
                     Padding(
-
-                      padding:
-
-                      EdgeInsets.fromLTRB(
-
+                      padding: EdgeInsets.fromLTRB(
                         ui.pagePadding,
-
                         ui.searchTopPadding,
-
                         ui.pagePadding,
-
                         ui.searchBottomPadding,
-
                       ),
-
-
-
                       child: SearchField(
-
-                        searchController:
-                        searchController,
-
-
-
+                        searchController: searchController,
                         onPressed: (value) {
-
-
                           BlocProvider.of<FutureRepBloc>(
                             context,
                           ).add(
-
                             FutureSearchSpecEvent(
                               value,
                             ),
-
                           );
-
-
                         },
-
                       ),
-
                     ),
-
-
-
-
-
-                    BlocBuilder<
-                        FutureRepBloc,
-                        FutureRepState>(
-
-
-                      builder:
-                          (context, state) {
-
-
-
+                    BlocBuilder<FutureRepBloc, FutureRepState>(
+                      builder: (context, state) {
                         List<SpecDModel> spModel =
+                            context.watch<FutureRepBloc>().specialization;
 
-                            context
-                                .watch<FutureRepBloc>()
-                                .specialization;
-
-
-
-                        if (state
-                        is FutureSpRepState) {
-
-                          spModel =
-                              state.Specs;
-
+                        if (state is FutureSpRepState) {
+                          spModel = state.Specs;
                         }
 
-
-
-
-
-                        if (state
-                        is FutureSpRepLoadingState) {
-
+                        if (state is FutureSpRepLoadingState) {
                           return _buildLoadingState(
                             context,
                           );
-
                         }
 
-
-
-
-
-
-                        if (state
-                        is FutureSpRepErrorState) {
-
-
+                        if (state is FutureSpRepErrorState) {
                           return Padding(
-
-                            padding:
-
-                            EdgeInsets.symmetric(
-
-                              horizontal:
-                              ui.pagePadding,
-
-                              vertical:
-                              ui.sectionSpacing,
-
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ui.pagePadding,
+                              vertical: ui.sectionSpacing,
                             ),
-
-
-
-                            child:
-                            errorFullScreen(
-
+                            child: errorFullScreen(
                               context,
-
-                              mes:
-                              state.failure.massage,
-
-
+                              mes: state.failure.massage,
                               func: () {
-
-
-                                BlocProvider.of<
-                                    FutureRepBloc>(
+                                BlocProvider.of<FutureRepBloc>(
                                   context,
                                 ).add(
-
                                   FutureSpEvent(
-
                                     widget.id,
-
                                     widget.repPlanId,
-
                                   ),
-
                                 );
-
-
                               },
-
                             ),
-
                           );
-
-
                         }
 
-
-
-
-
                         final filteredItems =
-
-                        spModel
-                            .where(
-                                (item) =>
-                            item.flag == 1)
-                            .toList();
-
-
-
-
+                            spModel.where((item) => item.flag == 1).toList();
 
                         return Padding(
-
-                          padding:
-
-                          EdgeInsets.fromLTRB(
-
+                          padding: EdgeInsets.fromLTRB(
                             ui.pagePadding,
-
                             ui.listTopPadding,
-
                             ui.pagePadding,
-
                             ui.listBottomPadding,
-
                           ),
-
-
-
-
-                          child:
-
-                          SpecGridWidget(
-
-                            items:
-                            filteredItems,
-
-
-                            isPr:
-                            true,
-
-
-                            crossAxisCount:
-                            crossAxisCount,
-
-
-
-                            onTap:
-                                (model) {
-
-
-
+                          child: SpecGridWidget(
+                            items: filteredItems,
+                            isPr: true,
+                            crossAxisCount: crossAxisCount,
+                            onTap: (model) {
                               iniFutureModule();
-
-
-
-                              BlocProvider.of<
-                                  FutureRepBloc>(
+                              BlocProvider.of<FutureRepBloc>(
                                 context,
                               ).add(
-
-
                                 FutureRepPlanBrandSpEvent(
-
-                                  RepSp(
-
-                                    widget.repPlanId,
-
-                                    model.id,
-
-                                    widget.id,
-
-                                  ),
-
-
-                                  widget.sampleCount,
-
-                                ),
-
-
+                                    RepSp(
+                                      widget.repPlanId,
+                                      model.id,
+                                      widget.id,
+                                    ),
+                                    widget.sampleCount,
+                                    percent: widget.percent ?? 0),
                               );
-
-
-
-
 
                               Navigator.pushNamed(
-
                                 context,
-
                                 Routes.RepPlanBrandSp,
-
-
                                 arguments: {
-
-                                  'title':
-                                  model.title,
-
-
-                                  'flag':
-                                  widget.flag.flag,
-
+                                  'title': model.title,
+                                  'flag': widget.flag.flag,
+                                  'percent': widget.percent,
+                                  'isRep': widget.repType.i == 7 ? true : false,
+                                  'sampleCount': widget.sampleCount,
+                                  'spId': model.id,
+                                  'repPlanId': widget.repPlanId,
                                 },
-
                               );
-
-
-
                             },
-
                           ),
-
-
                         );
-
-
                       },
-
                     ),
-
-
-
                   ],
-
                 ),
-
               ),
-
             ),
-
           ),
-
         ),
-
       ),
-
     );
-
-
   }
-
-
 
   Widget _buildLoadingState(
-      BuildContext context,
-      ) {
-
+    BuildContext context,
+  ) {
     final ui = AppUi.of(context);
 
-
     return Padding(
-
-      padding:
-
-      EdgeInsets.fromLTRB(
-
+      padding: EdgeInsets.fromLTRB(
         ui.pagePadding,
-
         70,
-
         ui.pagePadding,
-
         ui.pageBottomPadding,
-
       ),
-
-
-
-      child:
-      loadingFullScreen(
-
+      child: loadingFullScreen(
         context,
-
       ),
-
     );
-
-
   }
-
-
-
 
   @override
   bool get wantKeepAlive => true;
-
 }

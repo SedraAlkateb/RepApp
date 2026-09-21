@@ -1,6 +1,6 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/domain/models/drawer_model.dart';
+import 'package:domina_app/presentation/drawer/model/drawer_model.dart';
 import 'package:domina_app/presentation/drawer/widget/custom_drawer_widget.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
@@ -118,7 +118,6 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.assignment_outlined,
           title: "عرض الوصفات",
           onTap: () {
-            // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
             Navigator.pushNamed(
               context,
               Routes.allRecip,
@@ -206,7 +205,6 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.assignment_outlined,
           title: "عرض الوصفات",
           onTap: () {
-            // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
             Navigator.pushNamed(
               context,
               Routes.allRecip,
@@ -322,7 +320,6 @@ class DrawerPage extends StatelessWidget {
           icon: Icons.assignment_outlined,
           title: "عرض الوصفات",
           onTap: () {
-            // BlocProvider.of<RecipesBrandBloc>(context).add(AllReciEvent());
             Navigator.pushNamed(
               context,
               Routes.allRecip,
@@ -409,12 +406,11 @@ List<DrawerMenuItem> getLogoutItem(BuildContext context) {
         title: "مزامنة البيانات",
         color: Colors.red,
         onTap: () {
-          initAsyncInModule();
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
               Navigator.pushNamed(
                 context,
-                Routes.asyncIn,
+                Routes.sync,
               );
             },
           );

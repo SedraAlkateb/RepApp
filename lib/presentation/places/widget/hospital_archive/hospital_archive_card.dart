@@ -1,5 +1,6 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
+import 'package:domina_app/presentation/place_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -112,7 +113,7 @@ class HospitalArchiveCard extends StatelessWidget {
 
           Align(
             alignment: Alignment.centerLeft,
-            child: InkWell(
+            child: AppInkWell(
               borderRadius: BorderRadius.circular(10),
               onTap: () {
                 Navigator.pushNamed(

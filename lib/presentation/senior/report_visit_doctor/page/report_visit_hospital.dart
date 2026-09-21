@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -165,461 +166,435 @@ class _ReportVisitHospitalState extends State<ReportVisitHospital> {
 
     final Widget pageContent = SafeArea(
       top: false,
-      child: Stack(
-        alignment:
-        Alignment.bottomCenter,
-        children: [
-          // =================================================
-          // Main Content
-          // =================================================
-          Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: pageMaxWidth,
-              ),
-              child: CustomScrollView(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            alignment:
+            Alignment.bottomCenter,
+            children: [
+              // =================================================
+              // Main Scrollable Content
+              // =================================================
+              SingleChildScrollView(
                 keyboardDismissBehavior:
                 ScrollViewKeyboardDismissBehavior
                     .onDrag,
                 physics:
-                const BouncingScrollPhysics(),
-                slivers: [
-                  // ===========================================
-                  // Header
-                  // ===========================================
-                  SliverPadding(
-                    padding:
-                    EdgeInsets.fromLTRB(
-                      horizontalPadding,
-                      headerTopPadding,
-                      horizontalPadding,
-                      headerBottomPadding,
-                    ),
-                    sliver:
-                    SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
-                        children: [
-                          animatedEntry(
-                            delay: 0,
-                            child: Text(
-                              'تقارير الزيارات للمشافي',
-                              style: TextStyle(
-                                fontSize:
-                                titleFontSize,
-                                fontWeight:
-                                FontWeight
-                                    .w800,
-                                color:
-                                const Color(
-                                  0xFF0F172A,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 5,
-                          ),
-
-                          animatedEntry(
-                            delay: 100,
-                            child: Text(
-                              'مراجعة تفاصيل الزيارات الميدانية لمشافي للمندوب',
-                              style: TextStyle(
-                                fontSize:
-                                subtitleFontSize,
-                                color:
-                                const Color(
-                                  0xFF64748B,
-                                ),
-                                height: 1.4,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
                   ),
-                  // =================================
-                  // Search
-                  // =================================
-                  SliverPadding(
-                    padding:
-                    EdgeInsets.fromLTRB(
-                      horizontalPadding,
-                      headerTopPadding,
-                      horizontalPadding,
-                      headerBottomPadding,
-                    ),
-                    sliver:
-                    SliverToBoxAdapter(
-                      child:   animatedEntry(
-                        delay: 200,
-                        child:
-                        SearchField(
-                          searchController:
-                          searchNoteDoctorController,
-                          onPressed:
-                              (value) {
-                            BlocProvider.of<
-                                ReportVisitDoctorBloc>(
-                              context,
-                            ).add(
-                              SenSearchNoteVisitHospitalEvent(
-                                value,
-                              ),
-                            );
-                          },
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: pageMaxWidth,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: horizontalPadding,
                         ),
-                      ),
-                    ),
-                  ),
-
-
-                  // ===========================================
-                  // Bloc Content
-                  // ===========================================
-                  BlocConsumer<
-                      ReportVisitDoctorBloc,
-                      ReportVisitDoctorState>(
-                    // =========================================
-                    // Listener
-                    //
-                    // أي event جانبي يصير هون
-                    // مو داخل builder
-                    // =========================================
-                    listener:
-                        (context, state) {
-                      // =======================================
-                      // Error Toast / Dialog
-                      // =======================================
-                      if (state
-                      is AsReadErrorState) {
-                        error(
-                          context,
-                          state.failure.massage,
-                          state.failure.code,
-                        );
-                      }
-
-                      // =======================================
-                      // Refresh After Read All
-                      // =======================================
-                      if (state
-                      is AllReadSucState) {
-                        BlocProvider.of<
-                            ReportVisitDoctorBloc>(
-                          context,
-                        ).add(
-                          AllReportVisitHospitalEvent(
-                            VisitRepSen(
-                              widget.repId,
-                              widget.userId,
-                            ),
-                            widget.iscanedite,
-                          ),
-                        );
-                      }
-                    },
-
-                    // =========================================
-                    // Builder
-                    // =========================================
-                    builder:
-                        (context, state) {
-                      // =======================================
-                      // Default Data
-                      // =======================================
-                      List<RepVisitsModel>
-                      doctorNoteModel =
-                          context
-                              .watch<
-                              ReportVisitDoctorBloc>()
-                              .repVisitsSearch;
-
-                      // =======================================
-                      // Updated Read State
-                      // =======================================
-                      if (state
-                      is SenVisitDoctorAsReadState) {
-                        doctorNoteModel =
-                            state.doctorNoteModel;
-                      }
-
-                      // =======================================
-                      // Success
-                      // =======================================
-                      if (state
-                      is AllReportVisitHospitalsState) {
-                        doctorNoteModel =
-                            state.repVisitsModel;
-                      }
-
-                      // =======================================
-                      // Loading
-                      // =======================================
-                      if (state
-                      is AllReportVisitHospitalLoadingState ||
-                          state
-                          is AllReadLoadingState) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child:
-                          loadingFullScreen(
-                            context,
-                          ),
-                        );
-                      }
-
-                      // =======================================
-                      // Empty
-                      // =======================================
-                      if (state
-                      is AllReportVisitHospitalEmptyState ||
-                          doctorNoteModel
-                              .isEmpty) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child:
-                          emptyFullScreen(
-                            context,
-                          ),
-                        );
-                      }
-
-                      // =======================================
-                      // Error
-                      // =======================================
-                      if (state
-                      is AllReportVisitHospitalErrorState ||
-                          state
-                          is AllReadErrorState) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child:
-                          errorFullScreen(
-                            context,
-                            func: () {
-                              BlocProvider.of<
-                                  ReportVisitDoctorBloc>(
-                                context,
-                              ).add(
-                                AllReportVisitHospitalEvent(
-                                  VisitRepSen(
-                                    widget.repId,
-                                    widget.userId,
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            // ===========================================
+                            // Header
+                            // ===========================================
+                            Padding(
+                              padding:
+                              EdgeInsets.fromLTRB(
+                                0,
+                                headerTopPadding,
+                                0,
+                                headerBottomPadding,
+                              ),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment
+                                    .start,
+                                children: [
+                                  animatedEntry(
+                                    delay: 0,
+                                    child: Text(
+                                      'تقارير الزيارات للمشافي',
+                                      style: TextStyle(
+                                        fontSize:
+                                        titleFontSize,
+                                        fontWeight:
+                                        FontWeight
+                                            .w800,
+                                        color:
+                                        const Color(
+                                          0xFF0F172A,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  widget.iscanedite,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }
 
-                      // =======================================
-                      // Main Data
-                      // =======================================
-                      return SliverPadding(
-                        padding:
-                        EdgeInsets.symmetric(
-                          horizontal:
-                          horizontalPadding,
-                        ),
-                        sliver:
-                        SliverList(
-                          delegate:
-                          SliverChildListDelegate(
-                            [
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
 
-                              SizedBox(
-                                height:
+                                  animatedEntry(
+                                    delay: 100,
+                                    child: Text(
+                                      'مراجعة تفاصيل الزيارات الميدانية لمشافي للمندوب',
+                                      style: TextStyle(
+                                        fontSize:
+                                        subtitleFontSize,
+                                        color:
+                                        const Color(
+                                          0xFF64748B,
+                                        ),
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // =================================
+                            // Search
+                            // =================================
+                            Padding(
+                              padding:
+                              EdgeInsets.only(
+                                bottom:
                                 searchBottomSpacing,
                               ),
-
-                              // =================================
-                              // Total Reports
-                              // =================================
-                              animatedEntry(
-                                delay: 300,
+                              child: animatedEntry(
+                                delay: 200,
                                 child:
-                                buildTotalReportsCard(
-                                  doctorNoteModel
-                                      .length,
-                                  'إجمالي التقارير',
-                                  'لهذا الشهر',
+                                SearchField(
+                                  searchController:
+                                  searchNoteDoctorController,
+                                  onPressed:
+                                      (value) {
+                                    BlocProvider.of<
+                                        ReportVisitDoctorBloc>(
+                                      context,
+                                    ).add(
+                                      SenSearchNoteVisitHospitalEvent(
+                                        value,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
+                            ),
 
-                              // =================================
-                              // Read All Actions
-                              // =================================
-                              if (widget.iscanedite)
-                                animatedEntry(
-                                  delay: 400,
-                                  child:
-                                  Padding(
-                                    padding:
-                                    EdgeInsets.only(
-                                      top:
-                                      actionsTopSpacing,
-                                      bottom:
-                                      actionsBottomSpacing,
-                                    ),
-                                    child:
-                                    Wrap(
-                                      spacing: 10,
-                                      runSpacing:
-                                      10,
-                                      children: [
-                                        // =========================
-                                        // Read All
-                                        // =========================
-                                        buildActionBtn(
-                                          context:
-                                          context,
-                                          label:
-                                          'قراءة الكل',
-                                          icon: Icons
-                                              .bookmarks_rounded,
-                                          color:
-                                          ColorManager
-                                              .primary1,
-                                          onTap:
-                                              () {
-                                            BlocProvider.of<
-                                                ReportVisitDoctorBloc>(
-                                              context,
-                                            ).add(
-                                              AllReadDocNoteEvent(
-                                                readAll:
-                                                ReadAll(
-                                                  widget.repPlan,
-                                                  UserInfo
-                                                      .repId,
+                            // ===========================================
+                            // Bloc Content
+                            // ===========================================
+                            BlocConsumer<
+                                ReportVisitDoctorBloc,
+                                ReportVisitDoctorState>(
+                              buildWhen: (previous, current) =>
+          current is! DocIsExpandedNoteState &&
+          current is! DocNoIsExpandedNoteState,
+                              listener:
+                                  (context, state) {
+                                if (state
+                                is AsReadErrorState) {
+                                  error(
+                                    context,
+                                    state.failure.massage,
+                                    state.failure.code,
+                                  );
+                                }
 
-                                                  // Hospital
-                                                  2,
-
-                                                  // Read
-                                                  1,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-
-                                        // =========================
-                                        // Unread All
-                                        // =========================
-                                        buildActionBtn(
-                                          context:
-                                          context,
-                                          label:
-                                          'إلغاء قراءة الكل',
-                                          icon: Icons
-                                              .bookmark_remove_outlined,
-                                          color:
-                                          const Color(
-                                            0xFFEF4444,
-                                          ),
-                                          onTap:
-                                              () {
-                                            BlocProvider.of<
-                                                ReportVisitDoctorBloc>(
-                                              context,
-                                            ).add(
-                                              AllReadDocNoteEvent(
-                                                readAll:
-                                                ReadAll(
-                                                  widget.repPlan,
-                                                  UserInfo
-                                                      .repId,
-
-                                                  // Hospital
-                                                  2,
-
-                                                  // Unread
-                                                  0,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              else
-                                const SizedBox(
-                                  height: 4,
-                                ),
-
-                              // =================================
-                              // Cards
-                              // =================================
-                              ...doctorNoteModel
-                                  .asMap()
-                                  .entries
-                                  .map(
-                                    (entry) {
-                                  final int index =
-                                      entry.key;
-
-                                  final model =
-                                      entry.value;
-
-                                  return animatedEntry(
-                                    delay:
-                                    500 +
-                                        (index *
-                                            100),
-                                    child:
-                                    _buildHospitalVisitCard(
-                                      doctorNoteModel:
-                                      model,
-                                      index:
-                                      index,
-                                      indexRep:
-                                      widget.indexRep,
-                                      iscanedite:
+                                if (state
+                                is AllReadSucState) {
+                                  BlocProvider.of<
+                                      ReportVisitDoctorBloc>(
+                                    context,
+                                  ).add(
+                                    AllReportVisitHospitalEvent(
+                                      VisitRepSen(
+                                        widget.repId,
+                                        widget.userId,
+                                      ),
                                       widget.iscanedite,
-                                      context:
+                                    ),
+                                  );
+                                }
+                              },
+                              builder:
+                                  (context, state) {
+                                List<RepVisitsModel>
+                                doctorNoteModel =
+                                    context
+                                        .watch<
+                                        ReportVisitDoctorBloc>()
+                                        .repVisitsSearch;
+
+                                if (state
+                                is SenVisitDoctorAsReadState) {
+                                  doctorNoteModel =
+                                      state.doctorNoteModel;
+                                }
+
+                                if (state
+                                is AllReportVisitHospitalsState) {
+                                  doctorNoteModel =
+                                      state.repVisitsModel;
+                                }
+
+                                if (state
+                                is AllReportVisitHospitalLoadingState ||
+                                    state
+                                    is AllReadLoadingState) {
+                                  return Padding(
+                                    padding:
+                                    const EdgeInsets
+                                        .symmetric(
+                                      vertical: 40,
+                                    ),
+                                    child:
+                                    loadingFullScreen(
                                       context,
                                     ),
                                   );
-                                },
-                              ),
+                                }
 
-                              // =================================
-                              // Space For Bottom Sheet
-                              // =================================
-                              SizedBox(
-                                height:
-                                inputReservedSpace,
-                              ),
-                            ],
-                          ),
+                                if (state
+                                is AllReportVisitHospitalEmptyState ||
+                                    doctorNoteModel
+                                        .isEmpty) {
+                                  return Padding(
+                                    padding:
+                                    const EdgeInsets
+                                        .symmetric(
+                                      vertical: 40,
+                                    ),
+                                    child:
+                                    emptyFullScreen(
+                                      context,
+                                    ),
+                                  );
+                                }
+
+                                if (state
+                                is AllReportVisitHospitalErrorState ||
+                                    state
+                                    is AllReadErrorState) {
+                                  return Padding(
+                                    padding:
+                                    const EdgeInsets
+                                        .symmetric(
+                                      vertical: 40,
+                                    ),
+                                    child:
+                                    errorFullScreen(
+                                      context,
+                                      func: () {
+                                        BlocProvider.of<
+                                            ReportVisitDoctorBloc>(
+                                          context,
+                                        ).add(
+                                          AllReportVisitHospitalEvent(
+                                            VisitRepSen(
+                                              widget.repId,
+                                              widget.userId,
+                                            ),
+                                            widget.iscanedite,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+
+                                return Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment
+                                      .stretch,
+                                  children: [
+                                    SizedBox(
+                                      height:
+                                      searchBottomSpacing,
+                                    ),
+
+                                    // =================================
+                                    // Total Reports
+                                    // =================================
+                                    animatedEntry(
+                                      delay: 300,
+                                      child:
+                                      buildTotalReportsCard(
+                                        doctorNoteModel
+                                            .length,
+                                        'إجمالي التقارير',
+                                        'لهذا الشهر',
+                                      ),
+                                    ),
+
+                                    // =================================
+                                    // Read All Actions
+                                    // =================================
+                                    if (widget.iscanedite)
+                                      animatedEntry(
+                                        delay: 400,
+                                        child:
+                                        Padding(
+                                          padding:
+                                          EdgeInsets.only(
+                                            top:
+                                            actionsTopSpacing,
+                                            bottom:
+                                            actionsBottomSpacing,
+                                          ),
+                                          child:
+                                          Wrap(
+                                            spacing: 10,
+                                            runSpacing:
+                                            10,
+                                            children: [
+                                              buildActionBtn(
+                                                context:
+                                                context,
+                                                label:
+                                                'قراءة الكل',
+                                                icon: Icons
+                                                    .bookmarks_rounded,
+                                                color:
+                                                ColorManager
+                                                    .primary1,
+                                                onTap:
+                                                    () {
+                                                  BlocProvider.of<
+                                                      ReportVisitDoctorBloc>(
+                                                    context,
+                                                  ).add(
+                                                    AllReadDocNoteEvent(
+                                                      readAll:
+                                                      ReadAll(
+                                                        widget.repPlan,
+                                                        UserInfo
+                                                            .repId,
+                                                        2,
+                                                        1,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              buildActionBtn(
+                                                context:
+                                                context,
+                                                label:
+                                                'إلغاء قراءة الكل',
+                                                icon: Icons
+                                                    .bookmark_remove_outlined,
+                                                color:
+                                                const Color(
+                                                  0xFFEF4444,
+                                                ),
+                                                onTap:
+                                                    () {
+                                                  BlocProvider.of<
+                                                      ReportVisitDoctorBloc>(
+                                                    context,
+                                                  ).add(
+                                                    AllReadDocNoteEvent(
+                                                      readAll:
+                                                      ReadAll(
+                                                        widget.repPlan,
+                                                        UserInfo
+                                                            .repId,
+                                                        2,
+                                                        0,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    else
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+
+                                    // =================================
+                                    // Cards List
+                                    // =================================
+                                    ListView.builder(
+                                      padding:
+                                      EdgeInsets.zero,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
+                                      shrinkWrap:
+                                      true,
+                                      itemCount:
+                                      doctorNoteModel
+                                          .length,
+                                      itemBuilder:
+                                          (context,
+                                          index) {
+                                        final model =
+                                        doctorNoteModel[
+                                        index];
+
+                                        return animatedEntry(
+                                          delay:
+                                          500 +
+                                              (index *
+                                                  100),
+                                          child:
+                                          _buildHospitalVisitCard(
+                                            doctorNoteModel:
+                                            model,
+                                            index:
+                                            index,
+                                            indexRep:
+                                            widget
+                                                .indexRep,
+                                            iscanedite:
+                                            widget
+                                                .iscanedite,
+                                            context:
+                                            context,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+
+                            // =================================
+                            // Space For Bottom Sheet
+                            // =================================
+                            SizedBox(
+                              height:
+                              inputReservedSpace,
+                            ),
+                          ],
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
 
-          // =================================================
-          // Hospital Bottom Sheet
-          // =================================================
-          stackInputHospital(
-            indexRep: widget.indexRep,
-            iscanedite: widget.iscanedite,
-          ),
-        ],
+              // =================================================
+              // Hospital Bottom Sheet
+              // =================================================
+              stackInputHospital(
+                indexRep: widget.indexRep,
+                iscanedite: widget.iscanedite,
+              ),
+            ],
+          );
+        },
       ),
     );
 
@@ -834,7 +809,7 @@ class _ReportVisitHospitalState extends State<ReportVisitHospital> {
       child: Material(
         color:
         Colors.transparent,
-        child: InkWell(
+        child: AppInkWell(
           borderRadius:
           BorderRadius.circular(
             cardRadius,
@@ -1379,6 +1354,9 @@ class _ReportVisitHospitalState extends State<ReportVisitHospital> {
     return BlocBuilder<
         ReportVisitDoctorBloc,
         ReportVisitDoctorState>(
+      buildWhen: (previous, current) =>
+          current is! DocIsExpandedNoteState &&
+          current is! DocNoIsExpandedNoteState,
       builder:
           (context, state) {
         return Row(

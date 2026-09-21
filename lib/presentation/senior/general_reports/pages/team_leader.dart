@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -126,134 +127,149 @@ class _TeamLeaderState extends State<TeamLeader>
           "إدارة التقارير العامة",
         ),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              // =================================================
-              // Header
-              // =================================================
-              SliverToBoxAdapter(
-                child: _buildHeader(
-                  context,
-                  horizontalPadding: horizontalPadding,
-                  topPadding: headerTopPadding,
-                  bottomPadding: headerBottomPadding,
-                  titleFontSize: headerTitleFontSize,
-                  subtitleFontSize: headerSubtitleFontSize,
-                ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
               ),
-
-              // =================================================
-              // Data
-              // =================================================
-              BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
-                builder: (context, state) {
-                  final List<SeniorCityModel> seniors =
-                      context.read<GeneralReportsBloc>().dataseniors;
-
-                  // ===============================================
-                  // Loading (تم التعديل لاستخدام SliverToBoxAdapter)
-                  // ===============================================
-                  if (state is TeamLeaderAndCityLoadingState) {
-                    return SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding,
-                          vertical: listTopPadding,
-                        ),
-                        child: loadingShimmer(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: pageMaxWidth,
+                  ),
+                  child: SafeArea(
+                    top: false,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // =================================================
+                        // Header
+                        // =================================================
+                        _buildHeader(
                           context,
-                          5,
-                          loadingVerticalSpacing,
-                          loadingHeight,
-                          BorderRadius.circular(
-                            loadingRadius,
-                          ),
+                          horizontalPadding: horizontalPadding,
+                          topPadding: headerTopPadding,
+                          bottomPadding: headerBottomPadding,
+                          titleFontSize: headerTitleFontSize,
+                          subtitleFontSize: headerSubtitleFontSize,
                         ),
-                      ),
-                    );
-                  }
 
-                  // ===============================================
-                  // Error (تم التعديل لاستخدام SizedBox محدد)
-                  // ===============================================
-                  if (state is TeamLeaderAndCityErrorState) {
-                    return SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 400,
-                        child: errorFullScreen(
-                          context,
-                          func: () {},
-                        ),
-                      ),
-                    );
-                  }
+                        // =================================================
+                        // Data
+                        // =================================================
+                        BlocBuilder<GeneralReportsBloc, GeneralReportsState>(
+                          builder: (context, state) {
+                            final List<SeniorCityModel> seniors =
+                                context.read<GeneralReportsBloc>().dataseniors;
 
-                  // ===============================================
-                  // Empty (تم التعديل لاستخدام SizedBox محدد)
-                  // ===============================================
-                  if (seniors.isEmpty) {
-                    return SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 400,
-                        child: emptyFullScreen(
-                          context,
-                        ),
-                      ),
-                    );
-                  }
-
-                  // ===============================================
-                  // List
-                  // ===============================================
-                  return SliverPadding(
-                    padding: EdgeInsets.fromLTRB(
-                      horizontalPadding,
-                      listTopPadding,
-                      horizontalPadding,
-                      listBottomPadding,
-                    ),
-                    sliver: AnimationLimiter(
-                      child: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                              (
-                              context,
-                              index,
-                              ) {
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(
-                                milliseconds: 450,
-                              ),
-                              delay: const Duration(
-                                milliseconds: 40,
-                              ),
-                              child: SlideAnimation(
-                                verticalOffset: 22,
-                                child: FadeInAnimation(
-                                  child: _buildRepSmartCard(
-                                    context,
-                                    seniors[index],
+                            // ===============================================
+                            // Loading
+                            // ===============================================
+                            if (state is TeamLeaderAndCityLoadingState) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: horizontalPadding,
+                                  vertical: listTopPadding,
+                                ),
+                                child: loadingShimmer(
+                                  context,
+                                  5,
+                                  loadingVerticalSpacing,
+                                  loadingHeight,
+                                  BorderRadius.circular(
+                                    loadingRadius,
                                   ),
+                                ),
+                              );
+                            }
+
+                            // ===============================================
+                            // Error
+                            // ===============================================
+                            if (state is TeamLeaderAndCityErrorState) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: headerTopPadding * 2),
+                                child: SizedBox(
+                                  height: 400,
+                                  child: errorFullScreen(
+                                    context,
+                                    func: () {},
+                                  ),
+                                ),
+                              );
+                            }
+
+                            // ===============================================
+                            // Empty
+                            // ===============================================
+                            if (seniors.isEmpty) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: headerTopPadding * 2),
+                                child: SizedBox(
+                                  height: 400,
+                                  child: emptyFullScreen(
+                                    context,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            // ===============================================
+                            // List
+                            // ===============================================
+                            return Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                horizontalPadding,
+                                listTopPadding,
+                                horizontalPadding,
+                                listBottomPadding,
+                              ),
+                              child: AnimationLimiter(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: seniors.length,
+                                  itemBuilder: (
+                                      context,
+                                      index,
+                                      ) {
+                                    return AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      duration: const Duration(
+                                        milliseconds: 450,
+                                      ),
+                                      delay: const Duration(
+                                        milliseconds: 40,
+                                      ),
+                                      child: SlideAnimation(
+                                        verticalOffset: 22,
+                                        child: FadeInAnimation(
+                                          child: _buildRepSmartCard(
+                                            context,
+                                            seniors[index],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             );
                           },
-                          childCount: seniors.length,
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -420,7 +436,7 @@ class _TeamLeaderState extends State<TeamLeader>
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: AppInkWell(
           borderRadius: BorderRadius.circular(
             cardRadius,
           ),

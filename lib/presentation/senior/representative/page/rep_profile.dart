@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
@@ -2510,7 +2511,7 @@ class _InteractiveActionTileState
         ? 14
         : 13;
 
-    return GestureDetector(
+    return PressableEffect(pressedScale: 1.0, child: GestureDetector(
       onTapDown: (_) {
         setState(() {
           isPressed =
@@ -2815,6 +2816,6 @@ class _InteractiveActionTileState
           ),
         ),
       ),
-    );
+    ));
   }
 }

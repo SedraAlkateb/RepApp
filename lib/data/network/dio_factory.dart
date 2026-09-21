@@ -1,9 +1,6 @@
 // ignore_for_file: deprecated_member_use, prefer_interpolation_to_compose_strings, prefer_const_constructors, constant_identifier_names
 
-import 'dart:io';
-
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/crashlytics/crashlytics_service.dart';
@@ -27,14 +24,6 @@ class DioFactory {
   Future<Dio> getDio() async {
     Dio dio = Dio();
 
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-
-      return client;
-    };
-
     String to = UserInfo.token ?? "";
 
     String token = "Bearer " + to;
@@ -45,8 +34,6 @@ class DioFactory {
       "X-Requested-With": "XMLHttpRequest",
       AUTHORIZATION: token,
       DEFAULT_LANGUAGE: "ar",
-      "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
     };
 
     dio.options = BaseOptions(
@@ -97,9 +84,6 @@ class MyApiInterceptor extends Interceptor {
 
       options.headers['lang'] = lang;
 
-      if (!kReleaseMode) {
-        print(authToken);
-      }
     }
 
     return handler.next(options);

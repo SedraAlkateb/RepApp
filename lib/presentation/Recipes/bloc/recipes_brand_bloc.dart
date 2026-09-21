@@ -1,15 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/usecase/all_brands_res_usecase%20.dart';
-import 'package:domina_app/domain/usecase/all_reci_usecase%20.dart';
+import 'package:domina_app/domain/usecase/all_brands_res_usecase.dart';
+import 'package:domina_app/domain/usecase/all_reci_usecase.dart';
 import 'package:domina_app/domain/usecase/copyreci_usecase.dart';
 import 'package:domina_app/domain/usecase/edit_recipe_usecase.dart';
 import 'package:domina_app/domain/usecase/get_Rep_Reci.dart';
-import 'package:domina_app/domain/usecase/insert_reci_usecase%20.dart';
+import 'package:domina_app/domain/usecase/insert_reci_usecase.dart';
 import 'package:domina_app/domain/usecase/reci_num_usecase.dart';
-import 'package:domina_app/domain/usecase/update_reci_usecase%20.dart';
+import 'package:domina_app/domain/usecase/update_reci_usecase.dart';
 import 'package:domina_app/presentation/uniti/common/freezed_data.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
@@ -64,8 +64,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   Future<File?> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      print(pickedFile.path);
-      print("pickedFile.path");
       return File(pickedFile.path);
     }
 
@@ -75,7 +73,6 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
   void updateValue(String value) {
     final updatedUser = insertRecipesObject.copyWith(type: value);
     insertRecipesObject = updatedUser;
-    print(updatedUser);
   }
 
   void updateRecipes(CopyReciRequest recipes) {
@@ -128,286 +125,285 @@ class RecipesBrandBloc extends Bloc<RecipesBrandEvent, RecipesBrandState> {
       this.getRepReciUsecase,
       this.editRecipeUsecase)
       : super(RecipesBrandInitial()) {
-    on<RecipesBrandEvent>((event, emit) async {
-      if (event is AllReciEvent) {
-        emit(AllReciLoadingState());
-        (await allReciUsecase.execute(UserInfo.repId)).fold((failure) {
-          emit(AllReciErrorState(failure: failure));
-        }, (data) async {
-          if (data.isEmpty) {
-            emit(AllReciEmptyState());
-          } else {
-            emit(AllReciState(data));
-          }
-        });
-      }
-      if (event is AllRecipesEvent) {
-        emit(AllRecipesLoadingState());
-        (await allBrandsResUsecase.execute(UserInfo.repId)).fold((failure) {
-          emit(AllRecipesErrorState(failure: failure));
-        }, (data) async {
-          brandRecs = data;
-          emit(AllRecipesState(data));
-        });
-      }
-      if (event is CopyRecipesEvent) {
-        emit(RecipesRecipesLoadingState());
-        (await copyReciUsecase.execute(event.docId, event.recipeType)).fold(
-            (failure) {
-          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-          emit(RecipesRecipesErrorState(failure: failure));
-        }, (data) async {
-          updateRecipes(data);
-          emit(RecipesRecipesState());
-        });
-      }
-      if (event is GetRepReciEvent) {
-        emit(RecipesRecipesLoadingState());
-        (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
-          emit(RecipesRecipesErrorState(failure: failure));
-        }, (data) async {
-          updateRecipes(data);
-          emit(RecipesRecipesState());
-        });
-      }
-      if (event is AllNumEvent) {
-        emit(AllNumLoadingState());
-        (await reciNumUsecase.execute()).fold((failure) {
-          emit(AllNumErrorState(failure: failure));
-        }, (data) async {
-          numRec = data;
-          emit(AllNumState(data));
-        });
-      }
+    // الصفحات ترسل RestartEvent عند الفتح. سابقاً كان المعالج العام يتجاهله
+    // بصمت، ولا حالة يجب إصدارها؛ بدون معالج مسجّل يرمي Bloc.add خطأ StateError.
+    on<RestartEvent>((event, emit) {});
 
-      if (event is InsertReciEvent) {
-        emit(InsertRecipesLoadingState());
-        final updatedUser = insertRecipesObject.copyWith(
-            address: event.address,
-            docId: event.docId.toString(),
-            note1: event.firstNote,
-            note2: event.secondNote,
-            note_emp: event.specialNotes,
-            spName: event.doctorSp,
-            phone: event.phone);
-        insertRecipesObject = updatedUser;
-        print(insertRecipesObject.image1);
-        print(insertRecipesObject.image2);
-        (await insertReciUsecase.execute(ReciRequest(
-          1,
-          insertRecipesObject.repId,
-          insertRecipesObject.type,
-          insertRecipesObject.docId,
-          insertRecipesObject.spName,
-          insertRecipesObject.brand_1.id.toString(),
-          insertRecipesObject.address,
-          insertRecipesObject.phone,
-          insertRecipesObject.total,
-          flagImage1: isChecked1.toString(),
-          flagImage2: isChecked2.toString(),
-          note_emp: insertRecipesObject.note_emp,
-          note2: insertRecipesObject.note2,
-          note1: insertRecipesObject.note1,
-          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
-          brand_2: insertRecipesObject.brand_2?.id.toString(),
-          brand_3: insertRecipesObject.brand_3?.id.toString(),
-          brand_4: insertRecipesObject.brand_4?.id.toString(),
-          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-        )))
-            .fold((failure) {
-          emit(InsertRecipesErrorState(failure: failure));
-        }, (data) async {
-          emit(InsertRecipesState(data));
-        });
-      }
-      if (event is InsertReciHospitalEvent) {
-        emit(InsertRecipesLoadingState());
-        final updatedUser = insertRecipesObject.copyWith(
-            address: event.address,
-            docId: event.docId.toString(),
-            note1: event.firstNote,
-            note2: event.secondNote,
-            note_emp: event.specialNotes,
-            spName: event.doctorSp,
-            phone: event.connect);
-        insertRecipesObject = updatedUser;
-        print(insertRecipesObject.image1);
-        print(insertRecipesObject.image2);
-        (await insertReciUsecase.execute(ReciRequest(
-          2,
-          insertRecipesObject.repId,
-          "3",
-          insertRecipesObject.docId,
-          insertRecipesObject.spName,
-          insertRecipesObject.brand_1.id.toString(),
-          insertRecipesObject.address,
-          insertRecipesObject.phone,
-          insertRecipesObject.total,
-          flagImage1: isChecked1.toString(),
-          flagImage2: isChecked2.toString(),
-          note_emp: insertRecipesObject.note_emp,
-          note2: insertRecipesObject.note2,
-          note1: insertRecipesObject.note1,
-          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
-          brand_2: insertRecipesObject.brand_2?.id.toString(),
-          brand_3: insertRecipesObject.brand_3?.id.toString(),
-          brand_4: insertRecipesObject.brand_4?.id.toString(),
-          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-        )))
-            .fold((failure) {
-          emit(InsertRecipesErrorState(failure: failure));
-        }, (data) async {
-          emit(InsertRecipesState(data));
-        });
-      }
-      if (event is UpdateReciSEvent) {
-        print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-        print("DateFormat('yyyy-MM-dd').format(DateTime.now())");
-        emit(InsertRecipesLoadingState());
-        final updatedUser = insertRecipesObject.copyWith(
-            address: event.address,
-            docId: event.docId.toString(),
-            note1: event.firstNote,
-            note2: event.secondNote,
-            note_emp: event.specialNotes,
-            spName: event.doctorSp,
-            phone: event.phone);
-        insertRecipesObject = updatedUser;
-        (await updateReciUsecase.execute(UpdateReciRequest(
-          event.reciId,
-          1,
-          insertRecipesObject.repId,
-          insertRecipesObject.type,
-          insertRecipesObject.docId,
-          insertRecipesObject.spName,
-          insertRecipesObject.brand_1.id.toString(),
-          insertRecipesObject.address,
-          insertRecipesObject.phone,
-          insertRecipesObject.total,
-          DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          flagImage1:
-              ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
-                  ? "1"
-                  : "3"),
-          flagImage2:
-              ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
-                  ? "1"
-                  : "3"),
-          note_emp: insertRecipesObject.note_emp,
-          note2: insertRecipesObject.note2,
-          note1: insertRecipesObject.note1,
-          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
-          brand_2: insertRecipesObject.brand_2?.id.toString(),
-          brand_3: insertRecipesObject.brand_3?.id.toString(),
-          brand_4: insertRecipesObject.brand_4?.id.toString(),
-          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-        )))
-            .fold((failure) {
-          emit(InsertRecipesErrorState(failure: failure));
-        }, (data) async {
-          UserInfo.usedReci=data.usedReci;
-          UserInfo.remainReci=data.remainReci;
-          UserInfo.totalReci=data.totalReci;
-            emit(InsertRecipesState(data));
-        });
-      }
-      ///////////////////////editRecipeUsecase
-      if (event is EditeRecNumEvent) {
-        (await editRecipeUsecase.execute(event.num)).fold((failure) {
-          emit(InsertRecipesErrorState(failure: failure));
-        }, (data) async {
-
-
-        });
-      }
-      if (event is UpdateReciSHospitalEvent) {
-        emit(InsertRecipesLoadingState());
-        final updatedUser = insertRecipesObject.copyWith(
-            address: event.address,
-            docId: event.docId.toString(),
-            note1: event.firstNote,
-            note2: event.secondNote,
-            note_emp: event.specialNotes,
-            spName: event.doctorSp,
-            phone: event.connect);
-        insertRecipesObject = updatedUser;
-        print(insertRecipesObject.image1);
-        print(insertRecipesObject.image2);
-        (await updateReciUsecase.execute(UpdateReciRequest(
-          event.reciId,
-          2,
-          insertRecipesObject.repId,
-          "3",
-          insertRecipesObject.docId,
-          insertRecipesObject.spName,
-          insertRecipesObject.brand_1.id.toString(),
-          insertRecipesObject.address,
-          insertRecipesObject.phone,
-          insertRecipesObject.total,
-          DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          flagImage1:
-              ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
-                  ? "1"
-                  : "3"),
-          flagImage2:
-              ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
-                  ? "1"
-                  : "3"),
-          note_emp: insertRecipesObject.note_emp,
-          note2: insertRecipesObject.note2,
-          note1: insertRecipesObject.note1,
-          image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
-          brand_2: insertRecipesObject.brand_2?.id.toString(),
-          brand_3: insertRecipesObject.brand_3?.id.toString(),
-          brand_4: insertRecipesObject.brand_4?.id.toString(),
-          image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
-        )))
-            .fold((failure) {
-          emit(InsertRecipesErrorState(failure: failure));
-        }, (data) async {
-          UserInfo.usedReci=data.usedReci;
-          UserInfo.remainReci=data.remainReci;
-          UserInfo.totalReci=data.totalReci;
-              emit(InsertRecipesState(data));
-        });
-      }
-      if (event is SelectTypeEvent) {
-        print("object");
-        updateValue(event.selectedTypeDoctor);
-        emit(SelectTypeState(insertRecipesObject.type));
-      }
-      if (event is SelectBrandEvent) {
-        updateBrandValue(event.index, event.brandRecipeModel);
-      }
-      if (event is SelectNumRecEvent) {
-        totalNum = int.parse(event.num);
-        final updatedUser =
-            insertRecipesObject.copyWith(total: event.num.toString());
-        insertRecipesObject = updatedUser;
-      }
-      if (event is PickImageEvent) {
-        print(event.index);
-
-        if (event.index == 1) {
-          final updatedUser = insertRecipesObject.copyWith(image1: event.image);
-          insertRecipesObject = updatedUser;
-          isChecked1 = 2;
+    on<AllReciEvent>((event, emit) async {
+      emit(AllReciLoadingState());
+      (await allReciUsecase.execute(UserInfo.repId)).fold((failure) {
+        emit(AllReciErrorState(failure: failure));
+      }, (data) async {
+        if (data.isEmpty) {
+          emit(AllReciEmptyState());
         } else {
-          final updatedUser = insertRecipesObject.copyWith(image2: event.image);
-          insertRecipesObject = updatedUser;
-          isChecked2 = 2;
+          emit(AllReciState(data));
         }
-        print(isChecked2);
-        emit(ImagePickedState(event.image));
+      });
+    });
+
+    on<AllRecipesEvent>((event, emit) async {
+      emit(AllRecipesLoadingState());
+      (await allBrandsResUsecase.execute(UserInfo.repId)).fold((failure) {
+        emit(AllRecipesErrorState(failure: failure));
+      }, (data) async {
+        brandRecs = data;
+        emit(AllRecipesState(data));
+      });
+    });
+
+    on<CopyRecipesEvent>((event, emit) async {
+      emit(RecipesRecipesLoadingState());
+      (await copyReciUsecase.execute(event.docId, event.recipeType)).fold(
+          (failure) {
+        emit(RecipesRecipesErrorState(failure: failure));
+      }, (data) async {
+        updateRecipes(data);
+        emit(RecipesRecipesState());
+      });
+    });
+
+    on<GetRepReciEvent>((event, emit) async {
+      emit(RecipesRecipesLoadingState());
+      (await getRepReciUsecase.execute(event.reciId)).fold((failure) {
+        emit(RecipesRecipesErrorState(failure: failure));
+      }, (data) async {
+        updateRecipes(data);
+        emit(RecipesRecipesState());
+      });
+    });
+
+    on<AllNumEvent>((event, emit) async {
+      emit(AllNumLoadingState());
+      (await reciNumUsecase.execute()).fold((failure) {
+        emit(AllNumErrorState(failure: failure));
+      }, (data) async {
+        numRec = data;
+        emit(AllNumState(data));
+      });
+    });
+
+    on<InsertReciEvent>((event, emit) async {
+      emit(InsertRecipesLoadingState());
+      final updatedUser = insertRecipesObject.copyWith(
+          address: event.address,
+          docId: event.docId.toString(),
+          note1: event.firstNote,
+          note2: event.secondNote,
+          note_emp: event.specialNotes,
+          spName: event.doctorSp,
+          phone: event.phone);
+      insertRecipesObject = updatedUser;
+      (await insertReciUsecase.execute(ReciRequest(
+        1,
+        insertRecipesObject.repId,
+        insertRecipesObject.type,
+        insertRecipesObject.docId,
+        insertRecipesObject.spName,
+        insertRecipesObject.brand_1.id.toString(),
+        insertRecipesObject.address,
+        insertRecipesObject.phone,
+        insertRecipesObject.total,
+        flagImage1: isChecked1.toString(),
+        flagImage2: isChecked2.toString(),
+        note_emp: insertRecipesObject.note_emp,
+        note2: insertRecipesObject.note2,
+        note1: insertRecipesObject.note1,
+        image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+        brand_2: insertRecipesObject.brand_2?.id.toString(),
+        brand_3: insertRecipesObject.brand_3?.id.toString(),
+        brand_4: insertRecipesObject.brand_4?.id.toString(),
+        image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+      )))
+          .fold((failure) {
+        emit(InsertRecipesErrorState(failure: failure));
+      }, (data) async {
+        emit(InsertRecipesState(data));
+      });
+    });
+
+    on<InsertReciHospitalEvent>((event, emit) async {
+      emit(InsertRecipesLoadingState());
+      final updatedUser = insertRecipesObject.copyWith(
+          address: event.address,
+          docId: event.docId.toString(),
+          note1: event.firstNote,
+          note2: event.secondNote,
+          note_emp: event.specialNotes,
+          spName: event.doctorSp,
+          phone: event.connect);
+      insertRecipesObject = updatedUser;
+      (await insertReciUsecase.execute(ReciRequest(
+        2,
+        insertRecipesObject.repId,
+        "3",
+        insertRecipesObject.docId,
+        insertRecipesObject.spName,
+        insertRecipesObject.brand_1.id.toString(),
+        insertRecipesObject.address,
+        insertRecipesObject.phone,
+        insertRecipesObject.total,
+        flagImage1: isChecked1.toString(),
+        flagImage2: isChecked2.toString(),
+        note_emp: insertRecipesObject.note_emp,
+        note2: insertRecipesObject.note2,
+        note1: insertRecipesObject.note1,
+        image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+        brand_2: insertRecipesObject.brand_2?.id.toString(),
+        brand_3: insertRecipesObject.brand_3?.id.toString(),
+        brand_4: insertRecipesObject.brand_4?.id.toString(),
+        image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+      )))
+          .fold((failure) {
+        emit(InsertRecipesErrorState(failure: failure));
+      }, (data) async {
+        emit(InsertRecipesState(data));
+      });
+    });
+
+    on<UpdateReciSEvent>((event, emit) async {
+      emit(InsertRecipesLoadingState());
+      final updatedUser = insertRecipesObject.copyWith(
+          address: event.address,
+          docId: event.docId.toString(),
+          note1: event.firstNote,
+          note2: event.secondNote,
+          note_emp: event.specialNotes,
+          spName: event.doctorSp,
+          phone: event.phone);
+      insertRecipesObject = updatedUser;
+      (await updateReciUsecase.execute(UpdateReciRequest(
+        event.reciId,
+        1,
+        insertRecipesObject.repId,
+        insertRecipesObject.type,
+        insertRecipesObject.docId,
+        insertRecipesObject.spName,
+        insertRecipesObject.brand_1.id.toString(),
+        insertRecipesObject.address,
+        insertRecipesObject.phone,
+        insertRecipesObject.total,
+        DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        flagImage1:
+            ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+                ? "1"
+                : "3"),
+        flagImage2:
+            ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+                ? "1"
+                : "3"),
+        note_emp: insertRecipesObject.note_emp,
+        note2: insertRecipesObject.note2,
+        note1: insertRecipesObject.note1,
+        image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+        brand_2: insertRecipesObject.brand_2?.id.toString(),
+        brand_3: insertRecipesObject.brand_3?.id.toString(),
+        brand_4: insertRecipesObject.brand_4?.id.toString(),
+        image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+      )))
+          .fold((failure) {
+        emit(InsertRecipesErrorState(failure: failure));
+      }, (data) async {
+        UserInfo.usedReci = data.usedReci;
+        UserInfo.remainReci = data.remainReci;
+        UserInfo.totalReci = data.totalReci;
+        emit(InsertRecipesState(data));
+      });
+    });
+
+    on<EditeRecNumEvent>((event, emit) async {
+      (await editRecipeUsecase.execute(event.num)).fold((failure) {
+        emit(InsertRecipesErrorState(failure: failure));
+      }, (data) async {});
+    });
+
+    on<UpdateReciSHospitalEvent>((event, emit) async {
+      emit(InsertRecipesLoadingState());
+      final updatedUser = insertRecipesObject.copyWith(
+          address: event.address,
+          docId: event.docId.toString(),
+          note1: event.firstNote,
+          note2: event.secondNote,
+          note_emp: event.specialNotes,
+          spName: event.doctorSp,
+          phone: event.connect);
+      insertRecipesObject = updatedUser;
+      (await updateReciUsecase.execute(UpdateReciRequest(
+        event.reciId,
+        2,
+        insertRecipesObject.repId,
+        "3",
+        insertRecipesObject.docId,
+        insertRecipesObject.spName,
+        insertRecipesObject.brand_1.id.toString(),
+        insertRecipesObject.address,
+        insertRecipesObject.phone,
+        insertRecipesObject.total,
+        DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        flagImage1:
+            ((isChecked1 == 3 && insertRecipesObject.image1?.path != null)
+                ? "1"
+                : "3"),
+        flagImage2:
+            ((isChecked2 == 3 && insertRecipesObject.image2?.path != null)
+                ? "1"
+                : "3"),
+        note_emp: insertRecipesObject.note_emp,
+        note2: insertRecipesObject.note2,
+        note1: insertRecipesObject.note1,
+        image1: isChecked1 == 2 ? insertRecipesObject.image1 : null,
+        brand_2: insertRecipesObject.brand_2?.id.toString(),
+        brand_3: insertRecipesObject.brand_3?.id.toString(),
+        brand_4: insertRecipesObject.brand_4?.id.toString(),
+        image2: isChecked2 == 2 ? insertRecipesObject.image2 : null,
+      )))
+          .fold((failure) {
+        emit(InsertRecipesErrorState(failure: failure));
+      }, (data) async {
+        UserInfo.usedReci = data.usedReci;
+        UserInfo.remainReci = data.remainReci;
+        UserInfo.totalReci = data.totalReci;
+        emit(InsertRecipesState(data));
+      });
+    });
+
+    on<SelectTypeEvent>((event, emit) async {
+      updateValue(event.selectedTypeDoctor);
+      emit(SelectTypeState(insertRecipesObject.type));
+    });
+
+    on<SelectBrandEvent>((event, emit) async {
+      updateBrandValue(event.index, event.brandRecipeModel);
+    });
+
+    on<SelectNumRecEvent>((event, emit) async {
+      totalNum = int.parse(event.num);
+      final updatedUser =
+          insertRecipesObject.copyWith(total: event.num.toString());
+      insertRecipesObject = updatedUser;
+    });
+
+    on<PickImageEvent>((event, emit) async {
+      if (event.index == 1) {
+        final updatedUser = insertRecipesObject.copyWith(image1: event.image);
+        insertRecipesObject = updatedUser;
+        isChecked1 = 2;
+      } else {
+        final updatedUser = insertRecipesObject.copyWith(image2: event.image);
+        insertRecipesObject = updatedUser;
+        isChecked2 = 2;
       }
-      if (event is Checkbox1Event) {
-        isChecked1 = event.isChecked;
-        emit(CheckboxImage1State(isChecked1));
-      }
-      if (event is Checkbox2Event) {
-        isChecked2 = event.isChecked;
-        emit(CheckboxImage2State(isChecked2));
-      }
+      emit(ImagePickedState(event.image));
+    });
+
+    on<Checkbox1Event>((event, emit) async {
+      isChecked1 = event.isChecked;
+      emit(CheckboxImage1State(isChecked1));
+    });
+
+    on<Checkbox2Event>((event, emit) async {
+      isChecked2 = event.isChecked;
+      emit(CheckboxImage2State(isChecked2));
     });
   }
 }

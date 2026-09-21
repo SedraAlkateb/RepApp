@@ -1,5 +1,6 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
@@ -100,7 +101,6 @@ class _BrandPlanActivePageState
             double listTopPadding;
             double listBottomPadding;
 
-        //    double shimmerHorizontalPadding;
             double shimmerVerticalSpacing;
             double shimmerHeight;
             double shimmerRadius;
@@ -120,7 +120,6 @@ class _BrandPlanActivePageState
                 listTopPadding = 4;
                 listBottomPadding = 28;
 
-             //   shimmerHorizontalPadding = 16;
                 shimmerVerticalSpacing = 16;
                 shimmerHeight = 150;
                 shimmerRadius = 18;
@@ -140,7 +139,6 @@ class _BrandPlanActivePageState
                 listTopPadding = 6;
                 listBottomPadding = 34;
 
-              //  shimmerHorizontalPadding = 28;
                 shimmerVerticalSpacing = 18;
                 shimmerHeight = 170;
                 shimmerRadius = 20;
@@ -160,7 +158,6 @@ class _BrandPlanActivePageState
                 listTopPadding = 4;
                 listBottomPadding = 30;
 
-             //   shimmerHorizontalPadding = 32;
                 shimmerVerticalSpacing = 14;
                 shimmerHeight = 155;
                 shimmerRadius = 18;
@@ -181,149 +178,169 @@ class _BrandPlanActivePageState
                   .activePlanSearch,
             );
 
-            // =============================================
-            // Loading
-            // =============================================
-            if (state
-            is AllActivePlanLoadingState) {
-              return Center(
-                child: ConstrainedBox(
-                  constraints:
-                  BoxConstraints(
-                    maxWidth:
-                    pageMaxWidth,
-                  ),
-
-                  child: loadingShimmer(
-                    context,
-                    6,
-                    shimmerVerticalSpacing,
-                    shimmerHeight,
-                    BorderRadius.circular(
-                      shimmerRadius,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            return Center(
-              child: ConstrainedBox(
-                constraints:
-                BoxConstraints(
-                  maxWidth:
-                  pageMaxWidth,
-                ),
-
-                child:
-                CustomScrollView(
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
                   physics:
-                  const BouncingScrollPhysics(),
+                  const AlwaysScrollableScrollPhysics(),
 
                   keyboardDismissBehavior:
                   ScrollViewKeyboardDismissBehavior
                       .onDrag,
 
-                  slivers: [
-                    // ===========================================
-                    // Search
-                    // ===========================================
-                    SliverPadding(
-                      padding:
-                      EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        searchTopPadding,
-                        horizontalPadding,
-                        searchBottomPadding,
-                      ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
 
-                      sliver:
-                      SliverToBoxAdapter(
-                        child:
-                        _buildFluidAnimation(
-                          index: 0,
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints:
+                        BoxConstraints(
+                          maxWidth:
+                          pageMaxWidth,
+                        ),
 
-                          child:
-                          SearchField(
-                            searchController:
-                            searchController,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                          ),
 
-                            onPressed:
-                                (value) {
-                              BlocProvider.of<
-                                  ActivePlanBloc>(
-                                context,
-                              ).add(
-                                SearchActivePlanEvent(
-                                  value,
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.stretch,
+
+                            children: [
+                              // ===========================================
+                              // Search
+                              // ===========================================
+                              Padding(
+                                padding:
+                                EdgeInsets.fromLTRB(
+                                  0,
+                                  searchTopPadding,
+                                  0,
+                                  searchBottomPadding,
                                 ),
-                              );
-                            },
+
+                                child:
+                                _buildFluidAnimation(
+                                  index: 0,
+
+                                  child:
+                                  SearchField(
+                                    searchController:
+                                    searchController,
+
+                                    onPressed:
+                                        (value) {
+                                      BlocProvider.of<
+                                          ActivePlanBloc>(
+                                        context,
+                                      ).add(
+                                        SearchActivePlanEvent(
+                                          value,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+
+                              // =============================================
+                              // Loading State
+                              // =============================================
+                              if (state
+                              is AllActivePlanLoadingState)
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: listTopPadding,
+                                  ),
+
+                                  child: loadingShimmer(
+                                    context,
+                                    6,
+                                    shimmerVerticalSpacing,
+                                    shimmerHeight,
+                                    BorderRadius.circular(
+                                      shimmerRadius,
+                                    ),
+                                  ),
+                                )
+
+                              // ===========================================
+                              // Empty State
+                              // ===========================================
+                              else if (planBrandModel
+                                  .isEmpty)
+                                Padding(
+                                  padding:
+                                  const EdgeInsets
+                                      .symmetric(
+                                    vertical: 40,
+                                  ),
+
+                                  child: Center(
+                                    child:
+                                    emptyFullScreen(
+                                      context,
+                                    ),
+                                  ),
+                                )
+
+                              // ===========================================
+                              // List State
+                              // ===========================================
+                              else
+                                Padding(
+                                  padding:
+                                  EdgeInsets.fromLTRB(
+                                    0,
+                                    listTopPadding,
+                                    0,
+                                    listBottomPadding,
+                                  ),
+
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment
+                                        .stretch,
+
+                                    children:
+                                    planBrandModel
+                                        .asMap()
+                                        .entries
+                                        .map(
+                                          (entry) {
+                                        final index =
+                                            entry.key;
+
+                                        final model =
+                                            entry.value;
+
+                                        return _buildFluidAnimation(
+                                          index:
+                                          index +
+                                              1,
+
+                                          child:
+                                          BrandPlanCard(
+                                            model:
+                                            model,
+                                          ),
+                                        );
+                                      },
+                                    ).toList(),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-
-                    // ===========================================
-                    // Empty
-                    // ===========================================
-                    if (planBrandModel
-                        .isEmpty)
-                      SliverFillRemaining(
-                        hasScrollBody:
-                        false,
-
-                        child: Center(
-                          child:
-                          emptyFullScreen(
-                            context,
-                          ),
-                        ),
-                      )
-
-                    // ===========================================
-                    // List
-                    // ===========================================
-                    else
-                      SliverPadding(
-                        padding:
-                        EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          listTopPadding,
-                          horizontalPadding,
-                          listBottomPadding,
-                        ),
-
-                        sliver:
-                        SliverList(
-                          delegate:
-                          SliverChildBuilderDelegate(
-                                (
-                                context,
-                                index,
-                                ) {
-                              return _buildFluidAnimation(
-                                index:
-                                index + 1,
-
-                                child:
-                                BrandPlanCard(
-                                  model:
-                                  planBrandModel[
-                                  index],
-                                ),
-                              );
-                            },
-
-                            childCount:
-                            planBrandModel
-                                .length,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
           },
         ),
@@ -749,7 +766,7 @@ class BrandPlanCard extends StatelessWidget {
                   // =============================================
                   // Existing Badge
                   // =============================================
-                  Type.buildBadge(
+                  TypeBadge(
                     model.type,
                   ),
                 ],
@@ -862,8 +879,6 @@ class BrandPlanCard extends StatelessWidget {
 
                   // =============================================
                   // Specialties
-                  //
-                  // ما في ListView داخلي
                   // =============================================
                   else
                     ...model.spPlan

@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -34,209 +35,146 @@ class _PlaceSeniorState
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
     final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return Scaffold(
-      backgroundColor: const Color(
-        0xFFF8FAFC,
-      ),
-
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
-
         title: Text(
           'المناطق المتاحة',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color:
-            ColorManager.medicalPrimary,
+            color: ColorManager.medicalPrimary,
           ),
         ),
       ),
-
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: contentMaxWidth,
+      // إلغاء Center و ConstrainedBox من هنا لتأخذ المساحة كامل عرض الشاشة
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // =================================================
+          // Header (يستجيب للمقاس الداخلي)
+          // =================================================
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentMaxWidth),
+              child: _buildHeader(ui),
+            ),
           ),
 
-          child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
+          // =================================================
+          // Bloc Content
+          // =================================================
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              buildWhen: (previous, current) =>
+              current is SenAllPlaceState ||
+                  current is SenAllPlaceLoadingState ||
+                  current is SenAllPlaceErrorState,
+              builder: (context, state) {
+                if (state is SenAllPlaceLoadingState) {
+                  return loadingFullScreen(context);
+                }
 
-            children: [
-              // =================================================
-              // Header
-              // =================================================
-              _buildHeader(
-                ui,
-              ),
-
-              // =================================================
-              // Bloc Content
-              // =================================================
-              Expanded(
-                child: BlocBuilder<
-                    SeniorProfBloc,
-                    SeniorProfState>(
-                  buildWhen: (
-                      previous,
-                      current,
-                      ) =>
-                  current
-                  is SenAllPlaceState ||
-                      current
-                      is SenAllPlaceLoadingState ||
-                      current
-                      is SenAllPlaceErrorState,
-
-                  builder: (
-                      context,
-                      state,
-                      ) {
-                    // =============================================
-                    // Loading
-                    // =============================================
-                    if (state
-                    is SenAllPlaceLoadingState) {
-                      return loadingFullScreen(
-                        context,
+                if (state is SenAllPlaceErrorState) {
+                  return errorFullScreen(
+                    context,
+                    func: () {
+                      context.read<SeniorProfBloc>().add(
+                        SenAllPlaceEvent(203),
                       );
-                    }
+                    },
+                  );
+                }
 
-                    // =============================================
-                    // Error
-                    // نفس السلوك
-                    // =============================================
-                    if (state
-                    is SenAllPlaceErrorState) {
-                      return errorFullScreen(
-                        context,
-                        func: () {
-                          context
-                              .read<
-                              SeniorProfBloc>()
-                              .add(
-                            SenAllPlaceEvent(
-                              203,
-                            ),
-                          );
-                        },
-                      );
-                    }
+                if (state is SenAllPlaceState) {
+                  final List<PlaceModel> placeModel = state.placesSearch;
 
-                    // =============================================
-                    // Data
-                    // =============================================
-                    if (state
-                    is SenAllPlaceState) {
-                      final List<PlaceModel>
-                      placeModel =
-                          state.placesSearch;
-
-                      return Column(
-                        children: [
-                          // =========================================
-                          // Search
-                          // يبقى ظاهر حتى لو النتيجة فاضية
-                          // =========================================
-                          Padding(
-                            padding:
-                            EdgeInsets.fromLTRB(
+                  return Column(
+                    children: [
+                      // =========================================
+                      // Search
+                      // =========================================
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: contentMaxWidth),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
                               ui.pagePadding,
                               ui.searchTopPadding,
                               ui.pagePadding,
                               ui.searchBottomPadding,
                             ),
                             child: SearchField(
-                              searchController:
-                              searchController,
-
-                              onPressed:
-                                  (value) {
-                                // ===================================
-                                // نفس Event البحث الأصلي
-                                // ===================================
-                                context
-                                    .read<
-                                    SeniorProfBloc>()
-                                    .add(
+                              searchController: searchController,
+                              onPressed: (value) {
+                                context.read<SeniorProfBloc>().add(
                                   SearchSenAllPlaceEvent(
                                     value,
                                     state.places,
-
                                   ),
                                 );
                               },
                             ),
                           ),
+                        ),
+                      ),
 
-                          // =========================================
-                          // List / Empty
-                          // =========================================
-                          Expanded(
-                            child:
-                            placeModel.isEmpty
-                                ? emptyFullScreen(
-                              context,
-                            )
-                                : ListView.builder(
-                              keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior
-                                  .onDrag,
-
-                              physics:
-                              const BouncingScrollPhysics(),
-
-                              padding:
-                              EdgeInsets.fromLTRB(
-                                ui.pagePadding,
-                                ui.listTopPadding,
-                                ui.pagePadding,
-                                ui.listBottomPadding,
-                              ),
-
-                              itemCount:
-                              placeModel.length,
-
-                              itemBuilder:
-                                  (
-                                  context,
-                                  index,
-                                  ) {
-                                return _buildPlaceCard(
+                      // =========================================
+                      // List / Empty (السكرول هنا يأخذ العرض الكامل)
+                      // =========================================
+                      Expanded(
+                        child: placeModel.isEmpty
+                            ? emptyFullScreen(context)
+                            : ListView.builder(
+                          keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(
+                            ui.pagePadding,
+                            ui.listTopPadding,
+                            ui.pagePadding,
+                            ui.listBottomPadding,
+                          ),
+                          itemCount: placeModel.length,
+                          itemBuilder: (context, index) {
+                            // تقييد عرض الكرت فقط داخل عناصر الـ List
+                            return Center(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxWidth: contentMaxWidth),
+                                child: _buildPlaceCard(
                                   context,
                                   ui,
                                   placeModel[index],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    }
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }
 
-                    return const SizedBox.shrink();
-                  },
-                ),
-              ),
-            ],
+                return const SizedBox.shrink();
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
-
   // ===========================================================
   // Header
   // ===========================================================
@@ -391,7 +329,7 @@ class _PlaceSeniorState
         child: Material(
           color: Colors.white,
 
-          child: InkWell(
+          child: AppInkWell(
             // =================================================
             // نفس السلوك الأصلي
             // =================================================

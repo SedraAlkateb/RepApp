@@ -8,9 +8,21 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PharmacyPage extends StatelessWidget {
-  PharmacyPage({super.key});
+class PharmacyPage extends StatefulWidget {
+  const PharmacyPage({super.key});
+
+  @override
+  State<PharmacyPage> createState() => _PharmacyPageState();
+}
+
+class _PharmacyPageState extends State<PharmacyPage> {
   final TextEditingController searchphController = TextEditingController();
+  @override
+  void dispose() {
+    searchphController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,13 +66,6 @@ class PharmacyPage extends StatelessWidget {
                             context, state.failure.massage, state.failure.code);
                       });
                     }
-                    /*
-                  if(state is AllPharmacyLoadingState){
-                    loading(context);
-                  }
-                  if(state is AllPharmacyState){
-    success(context);}
-                 */
                   },
                   builder: (context, state) {
                     if (state is AllPharmacyState) {

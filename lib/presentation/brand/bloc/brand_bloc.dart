@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_brands_sql_usecase.dart';
 import 'package:domina_app/presentation/uniti/search.dart';
@@ -13,31 +13,30 @@ class BrandBloc extends Bloc<BrandEvent, BrandState> {
   AllBrandsSqlUsecase allBrandsSqlUsecase;
   List<BrandModel> brand = [];
   BrandBloc(this.allBrandsSqlUsecase) : super(BrandInitial()) {
-    on<BrandEvent>((event, emit) async {
-      if (event is AllBrandEvent) {
-        //  emit(AllBrandLoadingState());
-        (await allBrandsSqlUsecase.execute()).fold((failure) {
-          emit(AllBrandErrorState(failure: failure));
-        }, (data) async {
-          brand = data;
-          emit(AllBrandState(data));
-        });
-      } else if (event is SearchbradEvent) {
-        List<BrandModel> brandList;
-        String search = normalizeText(event.contant);
-        brandList = brand.where((value) {
-          if (normalizeText(value.title).contains(search)) {
-            return true;
-          }
-          if (normalizeText(value.phTitle).contains(search)) {
-            return true;
-          }
+    on<AllBrandEvent>((event, emit) async {
+      (await allBrandsSqlUsecase.execute()).fold((failure) {
+        emit(AllBrandErrorState(failure: failure));
+      }, (data) async {
+        brand = data;
+        emit(AllBrandState(data));
+      });
+    });
 
-          return false;
-        }).toList();
+    on<SearchbradEvent>((event, emit) async {
+      List<BrandModel> brandList;
+      String search = normalizeText(event.contant);
+      brandList = brand.where((value) {
+        if (normalizeText(value.title).contains(search)) {
+          return true;
+        }
+        if (normalizeText(value.phTitle).contains(search)) {
+          return true;
+        }
 
-        emit(AllBrandState(brandList));
-      }
+        return false;
+      }).toList();
+
+      emit(AllBrandState(brandList));
     });
   }
 }

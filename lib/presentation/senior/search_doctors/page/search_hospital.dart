@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
@@ -149,7 +150,7 @@ class _SearchHospitalState extends State<SearchHospital>
                       Material(
                         color: ColorManager.medicalPrimary,
                         borderRadius: BorderRadius.circular(ui.smallRadius + 4),
-                        child: InkWell(
+                        child: AppInkWell(
                           borderRadius:
                           BorderRadius.circular(ui.smallRadius + 4),
                           onTap: _triggerSearch,
@@ -484,7 +485,7 @@ class _SearchHospitalState extends State<SearchHospital>
                 alignment: Alignment.centerLeft,
                 child: Material(
                   color: Colors.transparent,
-                  child: InkWell(
+                  child: AppInkWell(
                     onTap: function,
                     borderRadius: BorderRadius.circular(ui.smallRadius + 2),
                     child: Container(

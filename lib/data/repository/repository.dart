@@ -3,12 +3,15 @@ import 'package:domina_app/data/mapper/mapper.dart';
 
 import 'package:domina_app/data/data_source/remote_data_source.dart';
 import 'package:domina_app/data/network/error_handler.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/data/network/network_info.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/ex.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repostitory/repository.dart';
+import 'package:domina_app/domain/repository/repository.dart';
+
+final _log = AppLogger.get('Repository');
 
 class RepositoryImp implements Repository {
   final RemoteDataSource _remoteDataSource;
@@ -18,884 +21,325 @@ class RepositoryImp implements Repository {
 
   RepositoryImp(this._remoteDataSource, this._networkInfo, this.excRepository);
 
-  @override
-  Future<Either<Failure, LoginModel>> login(LoginRequest loginRequest) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.login(loginRequest);
+  bool _isSuccess(BaseResponse response) =>
+      response.status == null ||
+      response.status == ApiInternalStatus.SUCCESS ||
+      response.status == "200";
 
-        if (response.status == "200" ||
-            response.status == ApiInternalStatus.SUCCESS) {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(
-              ExceptionRequestBody([ExceptionModel(failure.massage, "login")]));
-          return Left(failure);
-
-          // return Left(Failure(ApiInternalStatus.FAILURE,
-          //     response.message ?? ResponseMassage.DEFAULT));
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "login")]));
-      return Left(failure);
-    }
+  void _logRemote(Failure failure, String tag) {
+    insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, tag)]));
   }
 
-  @override
-  Future<Either<Failure, List<PlaceModel>>> allPlace(int id) async {
+  void _logLocal(Failure failure, String tag) {
+    excRepository.exceptionApi(ExceptionModel(failure.massage, tag));
+  }
+
+  /// النمط الموحّد لكل استدعاء بعيد:
+  /// فحص الاتصال ← تنفيذ الطلب ← فحص حالة الرد ← تحويل الرد إلى الـ domain،
+  /// وأي فشل (منطقي أو استثناء) يُسجَّل ويُرجَع كـ [Left].
+  ///
+  /// - [tag]: اسم العملية في سجل الأخطاء.
+  /// - [isSuccess]: لتخصيص شرط النجاح (الافتراضي [_isSuccess]).
+  /// - [failureCode]: لتخصيص كود الفشل المنطقي (الافتراضي [ApiInternalStatus.FAILURE]).
+  /// - [logNoInternet]: تسجيل حالة انعدام الاتصال أيضاً.
+  /// - [log]: وجهة السجل (الافتراضي: الخادم عبر [insertLog]).
+  Future<Either<Failure, T>> _remoteCall<T, R extends BaseResponse>({
+    required String tag,
+    required Future<R> Function() call,
+    required T Function(R response) map,
+    bool Function(R response)? isSuccess,
+    int Function(R response)? failureCode,
+    bool logNoInternet = false,
+    void Function(Failure failure, String tag)? log,
+  }) async {
+    void report(Failure failure) {
+      _log.warning('$tag failed: ${failure.massage}');
+      (log ?? _logRemote)(failure, tag);
+    }
+
     try {
       if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.allPlaces(id);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "AllPlace")]));
-          return Left(failure);
+        final response = await call();
+        if ((isSuccess ?? _isSuccess)(response)) {
+          return Right(map(response));
         }
-      } else {
-        Failure failure = DataSource.NO_INTERNET_CONNECTION.getFailure();
-        insertLog(ExceptionRequestBody(
-            [ExceptionModel(failure.massage, "allPlace")]));
+        final failure = Failure(
+            failureCode?.call(response) ?? ApiInternalStatus.FAILURE,
+            response.message ?? ResponseMassage.DEFAULT);
+        report(failure);
         return Left(failure);
       }
+      final failure = DataSource.NO_INTERNET_CONNECTION.getFailure();
+      if (logNoInternet) report(failure);
+      return Left(failure);
     } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "allPlace")]));
+      final failure = ErrorHandler.handle(error).failure;
+      report(failure);
       return Left(failure);
     }
   }
+
+  @override
+  Future<Either<Failure, LoginModel>> login(LoginRequest loginRequest) =>
+      _remoteCall(
+        tag: 'login',
+        call: () => _remoteDataSource.login(loginRequest),
+        map: (response) => response.toDomain(),
+        isSuccess: (response) =>
+            response.status == "200" ||
+            response.status == ApiInternalStatus.SUCCESS,
+      );
+
+  @override
+  Future<Either<Failure, List<PlaceModel>>> allPlace(int id) => _remoteCall(
+        tag: 'allPlace',
+        call: () => _remoteDataSource.allPlaces(id),
+        map: (response) => response.toDomain(),
+        logNoInternet: true,
+      );
 
   @override
   Future<Either<Failure, List<SpecDModel>>> allSpec(int repDet,
-      {int? planId}) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.allSpecializations(repDet, planId: planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          //return either left
-          //failure --business error
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "allSpec")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "allSpec")]));
-      return Left(failure);
-    }
-  }
+          {int? planId}) =>
+      _remoteCall(
+        tag: 'allSpec',
+        call: () =>
+            _remoteDataSource.allSpecializations(repDet, planId: planId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<BrandModel>>> allBrand(int id) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.allBrand(id);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "allBrand")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "allBrand")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<BrandModel>>> allBrand(int id) => _remoteCall(
+        tag: 'allBrand',
+        call: () => _remoteDataSource.allBrand(id),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<CityModel>>> allCity() async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.allCity();
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "allCity")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "allCity")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<CityModel>>> allCity() => _remoteCall(
+        tag: 'allCity',
+        call: () => _remoteDataSource.allCity(),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(
-      int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllPharmacy(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllPharmacy")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllPharmacy")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<PharmacyModel>>> getAllPharmacy(int repDet) =>
+      _remoteCall(
+        tag: 'getAllPharmacy',
+        call: () => _remoteDataSource.getAllPharmacy(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<DoctorModel>>> getAllDoctor(int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllDoctor(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllDoctor")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllDoctor")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DoctorModel>>> getAllDoctor(int repDet) =>
+      _remoteCall(
+        tag: 'getAllDoctor',
+        call: () => _remoteDataSource.getAllDoctor(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<HospitalModel>>> getAllHospital(
-      int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllHospital(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllHospital")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllHospital")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<HospitalModel>>> getAllHospital(int repDet) =>
+      _remoteCall(
+        tag: 'getAllHospital',
+        call: () => _remoteDataSource.getAllHospital(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<HospitalSpModel>>> getAllHospitalSp(
-      int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllHospitalSp(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllHospitalSp")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllHospitalSp")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<HospitalSpModel>>> getAllHospitalSp(int repDet) =>
+      _remoteCall(
+        tag: 'getAllHospitalSp',
+        call: () => _remoteDataSource.getAllHospitalSp(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, Message1Response>> visitPharmacy(
-      VisitPharmacyRequestBody list1) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitPharmacy(list1);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "visitPharmacy")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "visitPharmacy")]));
-      return Left(failure);
-    }
-  }
+          VisitPharmacyRequestBody list1) =>
+      _remoteCall(
+        tag: 'visitPharmacy',
+        call: () => _remoteDataSource.visitPharmacy(list1),
+        map: (response) => response,
+      );
 
   @override
   Future<Either<Failure, Message1Response>> visitDoctor(
-      VisitDoctorRequestBody list1) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitDoctor(list1);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "visitDoctor")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "visitDoctor")]));
-      return Left(failure);
-    }
-  }
+          VisitDoctorRequestBody list1) =>
+      _remoteCall(
+        tag: 'visitDoctor',
+        call: () => _remoteDataSource.visitDoctor(list1),
+        map: (response) => response,
+      );
 
   @override
   Future<Either<Failure, Message1Response>> visitHospital(
-      VisitHospitalRequestBody list1) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitHospital(list1);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "visitHospital")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "visitHospital")]));
-      return Left(failure);
-    }
-  }
+          VisitHospitalRequestBody list1) =>
+      _remoteCall(
+        tag: 'visitHospital',
+        call: () => _remoteDataSource.visitHospital(list1),
+        map: (response) => response,
+      );
 
   @override
-  Future<Either<Failure, List<BrandSpModel>>> getBrandsSp(int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getBrandsSp(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getBrandsSp")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getBrandsSp")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<BrandSpModel>>> getBrandsSp(int repDet) =>
+      _remoteCall(
+        tag: 'getBrandsSp',
+        call: () => _remoteDataSource.getBrandsSp(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrands(
-      Rep rep) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource
-            .getAllPlanBrands(rep.activeRepId, repPlanIdOther: rep.otherRepId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllPlanBrands")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllPlanBrands")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrands(Rep rep) =>
+      _remoteCall(
+        tag: 'getAllPlanBrands',
+        call: () => _remoteDataSource.getAllPlanBrands(rep.activeRepId,
+            repPlanIdOther: rep.otherRepId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, Message1Response>> repPlanBrand(
-      RepPlanBrandBody list1) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.repPlanBrand(list1);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "repPlanBrand")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "repPlanBrand")]));
-      return Left(failure);
-    }
-  }
+          RepPlanBrandBody list1) =>
+      _remoteCall(
+        tag: 'repPlanBrand',
+        call: () => _remoteDataSource.repPlanBrand(list1),
+        map: (response) => response,
+      );
 
   @override
-  Future<Either<Failure, LoginModel>> checkActivePlanBrand(int repDe) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.checkActivePlanBrand(repDe);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "checkActivePlanBrand")]));
-
-          return Left(failure);
-        }
-      } else {
-        Failure failure = DataSource.NO_INTERNET_CONNECTION.getFailure();
-        insertLog(ExceptionRequestBody(
-            [ExceptionModel(failure.massage, "checkActivePlanBrand")]));
-
-        return Left(failure);
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "checkActivePlanBrand")]));
-
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, LoginModel>> checkActivePlanBrand(int repDe) =>
+      _remoteCall(
+        tag: 'checkActivePlanBrand',
+        call: () => _remoteDataSource.checkActivePlanBrand(repDe),
+        map: (response) => response.toDomain(),
+        logNoInternet: true,
+      );
 
   @override
   Future<Either<Failure, VisitDoctorBase>> getDocVisit(
-      String repPlanId, String representativeId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.getDocVisit(repPlanId, representativeId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getDocVisit")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getDocVisit")]));
-      return Left(failure);
-    }
-  }
+          String repPlanId, String representativeId) =>
+      _remoteCall(
+        tag: 'getDocVisit',
+        call: () => _remoteDataSource.getDocVisit(repPlanId, representativeId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, VisitHospitalBase>> getHosVisit(
-      int repPlanId, int representativeId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.getHosVisit(repPlanId, representativeId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getHosVisit")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getHosVisit")]));
-      return Left(failure);
-    }
-  }
+          int repPlanId, int representativeId) =>
+      _remoteCall(
+        tag: 'getHosVisit',
+        call: () => _remoteDataSource.getHosVisit(repPlanId, representativeId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<BrandRes>>> getBrandRes(int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getBrandRes(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getBrandRes")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getBrandRes")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<BrandRes>>> getBrandRes(int repDet) =>
+      _remoteCall(
+        tag: 'getBrandRes',
+        call: () => _remoteDataSource.getBrandRes(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, InsertRecResponse>> insertReci(
-      ReciRequest reciReq) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.insertReci(reciReq);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "insertReci")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "insertReci")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, InsertRecResponse>> insertReci(ReciRequest reciReq) =>
+      _remoteCall(
+        tag: 'insertReci',
+        call: () => _remoteDataSource.insertReci(reciReq),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, CheckReResponse>> checkRe(int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.checkRe(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "checkRe")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "checkRe")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, CheckReResponse>> checkRe(int repDet) => _remoteCall(
+        tag: 'checkRe',
+        call: () => _remoteDataSource.checkRe(repDet),
+        map: (response) => response,
+      );
 
   @override
-  Future<Either<Failure, List<int>>> reciNum() async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.reciNum();
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "reciNum")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "reciNum")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<int>>> reciNum() => _remoteCall(
+        tag: 'reciNum',
+        call: () => _remoteDataSource.reciNum(),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, CopyReciRequest>> copyReci(
-      int docId, String recipeType) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.copyReci(docId, recipeType);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "copyReci")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "copyReci")]));
-      return Left(failure);
-    }
-  }
+          int docId, String recipeType) =>
+      _remoteCall(
+        tag: 'copyReci',
+        call: () => _remoteDataSource.copyReci(docId, recipeType),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, CopyReciRequest>> getRepReci(int reciId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepReci(reciId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getRepReci")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getRepReci")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, CopyReciRequest>> getRepReci(int reciId) =>
+      _remoteCall(
+        tag: 'getRepReci',
+        call: () => _remoteDataSource.getRepReci(reciId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, CheckRepResponse>> checkRep(int repId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.checkRep(repId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "checkRep")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "checkRep")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, CheckRepResponse>> checkRep(int repId) => _remoteCall(
+        tag: 'checkRep',
+        call: () => _remoteDataSource.checkRep(repId),
+        map: (response) => response,
+      );
 
   @override
-  Future<Either<Failure, List<DoctorNoteModel>>> visitNotes(int repId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitNotes(repId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "visitNotes")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "visitNotes")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DoctorNoteModel>>> visitNotes(int repId) =>
+      _remoteCall(
+        tag: 'visitNotes',
+        call: () => _remoteDataSource.visitNotes(repId),
+        map: (response) => response.toDomain(),
+      );
 
-  //
   @override
-  Future<Either<Failure, List<DoctorIssueModel>>> getVisitIssue(
-      int repId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getVisitIssue(repId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getVisitIssue")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getVisitIssue")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DoctorIssueModel>>> getVisitIssue(int repId) =>
+      _remoteCall(
+        tag: 'getVisitIssue',
+        call: () => _remoteDataSource.getVisitIssue(repId),
+        map: (response) => response.toDomain(),
+      );
 
-  //
   @override
   Future<Either<Failure, List<AllRepresentative>>> getReps(
-      int id, int cityId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getReps(id, cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getReps")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "getReps")]));
-      return Left(failure);
-    }
-  }
+          int id, int cityId) =>
+      _remoteCall(
+        tag: 'getReps',
+        call: () => _remoteDataSource.getReps(id, cityId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedDoctorVisits(
-      int repDet, int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.getUnfinishedDoctorVisits(repDet, planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(int.parse(response.status??"0"),
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "noVisitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-
-      Failure failure = ErrorHandler.handle(error).failure;
-      print(failure.massage);
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "noVisitDoc")]));
-      return Left(failure);
-    }
-
-  }
+          int repDet, int planId) =>
+      _remoteCall(
+        tag: 'noVisitDoc',
+        call: () => _remoteDataSource.getUnfinishedDoctorVisits(repDet, planId),
+        map: (response) => response.toDomain(),
+        failureCode: (response) => int.parse(response.status ?? "0"),
+      );
 
   @override
   Future<Either<Failure, List<NoVisitDocModel>>> noVisitDoc(
-      int repDet, int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.noVisitDoc(repDet, planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "noVisitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "noVisitDoc")]));
-      return Left(failure);
-    }
-  }
+          int repDet, int planId) =>
+      _remoteCall(
+        tag: 'noVisitDoc',
+        call: () => _remoteDataSource.noVisitDoc(repDet, planId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<NoVisitDocModel>>> visitDoc(
-      int repDet, int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitDoc(repDet, planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "visitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "visitDoc")]));
-      return Left(failure);
-    }
-  }
+          int repDet, int planId) =>
+      _remoteCall(
+        tag: 'visitDoc',
+        call: () => _remoteDataSource.visitDoc(repDet, planId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, Message1Response>> insertLog(
@@ -923,851 +367,321 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, List<InventoryModel>>> getInventory(
-      int repDet, int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getInventory(repDet, planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "getInventory"));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getInventory"));
-      return Left(failure);
-    }
-  }
+          int repDet, int planId) =>
+      _remoteCall(
+        tag: 'getInventory',
+        call: () => _remoteDataSource.getInventory(repDet, planId),
+        map: (response) => response.toDomain(),
+        log: _logLocal,
+      );
 
   @override
-  Future<Either<Failure, InfoRep>> getInfoRep(int repDet, int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepInfo(repDet, planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "getInfoRep"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, InfoRep>> getInfoRep(int repDet, int planId) =>
+      _remoteCall(
+        tag: 'getInfoRep',
+        call: () => _remoteDataSource.getRepInfo(repDet, planId),
+        map: (response) => response.toDomain(),
+        log: _logLocal,
+      );
 
   @override
   Future<Either<Failure, List<RepVisitsModel>>> getRepVisits(
-      VisitRepSen visitRepSen) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepVisits(visitRepSen);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "getRepVisits"));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getRepVisits"));
-      return Left(failure);
-    }
-  }
+          VisitRepSen visitRepSen) =>
+      _remoteCall(
+        tag: 'getRepVisits',
+        call: () => _remoteDataSource.getRepVisits(visitRepSen),
+        map: (response) => response.toDomain(),
+        log: _logLocal,
+      );
 
   @override
-  Future<Either<Failure, Message1Response>> readVisit(AsRead asRead) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.readVisit(asRead);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "readVisit"));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "readVisit"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Message1Response>> readVisit(AsRead asRead) =>
+      _remoteCall(
+        tag: 'readVisit',
+        call: () => _remoteDataSource.readVisit(asRead),
+        map: (response) => response,
+        log: _logLocal,
+      );
 
   @override
   Future<Either<Failure, List<RepVisitsModel>>> getRepVisitsHos(
-      VisitRepSen visitRepSen) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepVisitsHos(visitRepSen);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          excRepository
-              .exceptionApi(ExceptionModel(failure.massage, "getRepVisitsHos"));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getRepVisitsHos"));
-      return Left(failure);
-    }
-  }
+          VisitRepSen visitRepSen) =>
+      _remoteCall(
+        tag: 'getRepVisitsHos',
+        call: () => _remoteDataSource.getRepVisitsHos(visitRepSen),
+        map: (response) => response.toDomain(),
+        log: _logLocal,
+      );
 
   @override
   Future<Either<Failure, Message1Response>> changePlanBrandType(
-      ChangePlanBrandType changePlanBrandType) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.changePlanBrandType(changePlanBrandType);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          excRepository.exceptionApi(
-              ExceptionModel(failure.massage, "changePlanBrandType"));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "changePlanBrandType"));
-      return Left(failure);
-    }
-  }
+          ChangePlanBrandType changePlanBrandType) =>
+      _remoteCall(
+        tag: 'changePlanBrandType',
+        call: () => _remoteDataSource.changePlanBrandType(changePlanBrandType),
+        map: (response) => response,
+        log: _logLocal,
+      );
 
   @override
-  Future<Either<Failure, AllPlanBrandSp?>> getRepPlanBrandSp(RepSp rep) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepPlanBrandSp(
-            rep.repPlanId, rep.spId, rep.repId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getRepPlanBrandSp")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getRepPlanBrandSp")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, AllPlanBrandSp?>> getRepPlanBrandSp(RepSp rep) =>
+      _remoteCall(
+        tag: 'getRepPlanBrandSp',
+        call: () => _remoteDataSource.getRepPlanBrandSp(
+            rep.repPlanId, rep.spId, rep.repId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<doctorsModel>>> docSearch(
-      String name, int repDet, {int? cityId}) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.docSearch( name, repDet,cityId: cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "docSearch")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "docSearch")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<doctorsModel>>> docSearch(String name, int repDet,
+          {int? cityId}) =>
+      _remoteCall(
+        tag: 'docSearch',
+        call: () => _remoteDataSource.docSearch(name, repDet, cityId: cityId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, Message1Response>> readAllVisits(
-      ReadAll readAll) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.readAllVisits(readAll);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "readAllVisits")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "readAllVisits")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Message1Response>> readAllVisits(ReadAll readAll) =>
+      _remoteCall(
+        tag: 'readAllVisits',
+        call: () => _remoteDataSource.readAllVisits(readAll),
+        map: (response) => response,
+      );
 
   @override
-  Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrandsType(
-      Rep rep) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllPlanBrandsType(
+  Future<Either<Failure, List<PlanBrandModel>>> getAllPlanBrandsType(Rep rep) =>
+      _remoteCall(
+        tag: 'getAllPlanBrands',
+        call: () => _remoteDataSource.getAllPlanBrandsType(
             rep.activeRepId, rep.flag,
-            repPlanIdOther: rep.otherRepId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllPlanBrands")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllPlanBrands")]));
-      return Left(failure);
-    }
-  }
+            repPlanIdOther: rep.otherRepId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<DocdoctorsModel>>> docReport(int docId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.docReport(docId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "docReport")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "docReport")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DocdoctorsModel>>> docReport(int docId) =>
+      _remoteCall(
+        tag: 'docReport',
+        call: () => _remoteDataSource.docReport(docId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<ReciModel>>> getAllRepReci(int repDet) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getAllRepReci(repDet);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getAllRepReci")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getAllRepReci")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<ReciModel>>> getAllRepReci(int repDet) =>
+      _remoteCall(
+        tag: 'getAllRepReci',
+        call: () => _remoteDataSource.getAllRepReci(repDet),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, InsertRecResponse>> updateReci(
-      UpdateReciRequest reciReq) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.updateReci(reciReq);
-        if (response.message == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "updateReci")]));
-
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "updateReci")]));
-      return Left(failure);
-    }
-  }
+          UpdateReciRequest reciReq) =>
+      _remoteCall(
+        tag: 'updateReci',
+        call: () => _remoteDataSource.updateReci(reciReq),
+        map: (response) => response.toDomain(),
+        isSuccess: (response) =>
+            response.message == ApiInternalStatus.SUCCESS ||
+            response.status == "200",
+      );
 
   @override
-  Future<Either<Failure, DoctorModel>> getDocInfo(int docId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getDocInfo(docId);
-        if (response.status == ApiInternalStatus.SUCCESS ||
+  Future<Either<Failure, DoctorModel>> getDocInfo(int docId) => _remoteCall(
+        tag: 'getDocInfo',
+        call: () => _remoteDataSource.getDocInfo(docId),
+        map: (response) => response.toDomain(),
+        isSuccess: (response) =>
+            response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getDocInfo")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getDocInfo")]));
-      return Left(failure);
-    }
-  }
+            response.status == "200",
+      );
 
   @override
   Future<Either<Failure, List<ActivePlanBrandModel>>> getInfoPlanBrandsType(
-      int repPlan) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getinfoPlanBrandsType(repPlan);
-        if (response.status == ApiInternalStatus.SUCCESS ||
+          int repPlan,
+          {int status = 0}) =>
+      _remoteCall(
+        tag: 'getInfoPlanBrandsType',
+        call: () =>
+            _remoteDataSource.getinfoPlanBrandsType(repPlan, status: status),
+        map: (response) => response.toDomain(),
+        isSuccess: (response) =>
+            response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
-      return Left(failure);
-    }
-  }
+            response.status == "200",
+      );
+
+  @override
+  Future<Either<Failure, AllPlanBrandsInfo>> getInfoPlanBrands(int repPlanId) =>
+      _remoteCall(
+        tag: 'getInfoPlanBrands',
+        call: () => _remoteDataSource.getInfoPlanBrands(repPlanId),
+        map: (response) => response.toDomain(),
+        isSuccess: (response) =>
+            response.status == ApiInternalStatus.SUCCESS ||
+            response.message == ApiInternalStatus.SUCCESS ||
+            response.status == "200",
+      );
 
   @override
   Future<Either<Failure, Message1Response>> pharmacyOrder(
-      PharmacyOrderRequestBody order) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.pharmacyOrder(order);
-        if (response.status == ApiInternalStatus.SUCCESS ||
+          PharmacyOrderRequestBody order) =>
+      _remoteCall(
+        tag: 'getInfoPlanBrandsType',
+        call: () => _remoteDataSource.pharmacyOrder(order),
+        map: (response) => response,
+        isSuccess: (response) =>
+            response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getInfoPlanBrandsType")]));
-      return Left(failure);
-    }
-  }
+            response.status == "200",
+      );
 
   @override
   Future<Either<Failure, Message1Response>> changeRepPlanStatus(
-      int id, int status) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.changeRepPlanStatus(id, status);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "docReport")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "docReport")]));
-      return Left(failure);
-    }
-  }
+          int id, int status) =>
+      _remoteCall(
+        tag: 'docReport',
+        call: () => _remoteDataSource.changeRepPlanStatus(id, status),
+        map: (response) => response,
+      );
 
   @override
-  Future<Either<Failure, List<SeniorCityModel>>> getCityAndTeamleader() async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getCityAndTeamleader();
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getCityAndTeamleader")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getCityAndTeamleader")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<SeniorCityModel>>> getCityAndTeamleader() =>
+      _remoteCall(
+        tag: 'getCityAndTeamleader',
+        call: () => _remoteDataSource.getCityAndTeamleader(),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(
-      int id, {int ?cityId}) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getRepsFuture(id,cityId: cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getRepsFuture")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getRepsFuture")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<AllRepresentativeFuture>>> getRepsFuture(int id,
+          {int? cityId}) =>
+      _remoteCall(
+        tag: 'getRepsFuture',
+        call: () => _remoteDataSource.getRepsFuture(id, cityId: cityId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<SearchHospitalModel>>> getSearchHospitals(
-      String name, int repDet,
-      {int? cityId}
-
-      ) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.getSearchHospitals(name, repDet,cityId: cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getRepReci")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getRepReci")]));
-      return Left(failure);
-    }
-  }
+          String name, int repDet,
+          {int? cityId}) =>
+      _remoteCall(
+        tag: 'getRepReci',
+        call: () =>
+            _remoteDataSource.getSearchHospitals(name, repDet, cityId: cityId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<SearchHospitalNoteModel>>>
-      getSearchHospitalsNotes(int hosId, int spId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.getSearchHospitalsNotes(hosId, spId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getRepReci")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getRepReci")]));
-      return Left(failure);
-    }
-  }
+      getSearchHospitalsNotes(int hosId, int spId) => _remoteCall(
+            tag: 'getRepReci',
+            call: () => _remoteDataSource.getSearchHospitalsNotes(hosId, spId),
+            map: (response) => response.toDomain(),
+          );
 
   @override
   Future<Either<Failure, List<SeniorCityModel>>> getSeniorByCityid(
-      int cityId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getSeniorByCityid(cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getSeniorByCityid")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getSeniorByCityid")]));
-      return Left(failure);
-    }
-  }
+          int cityId) =>
+      _remoteCall(
+        tag: 'getSeniorByCityid',
+        call: () => _remoteDataSource.getSeniorByCityid(cityId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<WhoReadModel>>> getVisitReadStatus(
     String visitId,
     String visitType,
     int repType,
-  ) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getVisitReadStatus(
-            visitId, visitType, repType);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getSeniorByCityid")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getSeniorByCityid")]));
-      return Left(failure);
-    }
-  }
+  ) =>
+      _remoteCall(
+        tag: 'getSeniorByCityid',
+        call: () =>
+            _remoteDataSource.getVisitReadStatus(visitId, visitType, repType),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(
-      BrandAmountRequestBody list) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.updateRepPlanBrandAmount(list);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response);
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "docReport")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "docReport")]));
-      return Left(failure);
-    }
-  }
+          BrandAmountRequestBody list) =>
+      _remoteCall(
+        tag: 'docReport',
+        call: () => _remoteDataSource.updateRepPlanBrandAmount(list),
+        map: (response) => response,
+      );
 
   @override
   Future<Either<Failure, List<FinishedPlanModel>>> getFinishedPlans(
-      int cityId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getFinishedPlans(cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "docReport")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(
-          ExceptionRequestBody([ExceptionModel(failure.massage, "docReport")]));
-      return Left(failure);
-    }
-  }
+          int cityId) =>
+      _remoteCall(
+        tag: 'docReport',
+        call: () => _remoteDataSource.getFinishedPlans(cityId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<PlanRepsModel>>> getPlanReps(int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getPlanReps(planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "getSeniorByCityid")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "getSeniorByCityid")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<PlanRepsModel>>> getPlanReps(int planId) =>
+      _remoteCall(
+        tag: 'getSeniorByCityid',
+        call: () => _remoteDataSource.getPlanReps(planId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<NoVisitDocModel>>> getUnfinishedHosVisits(
-      int repPlanId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response =
-            await _remoteDataSource.getUnfinishedHosVisits(repPlanId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "noVisitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "noVisitDoc")]));
-      return Left(failure);
-    }
-  }
+          int repPlanId) =>
+      _remoteCall(
+        tag: 'noVisitDoc',
+        call: () => _remoteDataSource.getUnfinishedHosVisits(repPlanId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, List<NoVisitDocModel>>> noVisitHos(
-      int repDet, int planId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.noVisitHos(repDet, planId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "noVisitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "noVisitDoc")]));
-      return Left(failure);
-    }
-  }
+          int repDet, int planId) =>
+      _remoteCall(
+        tag: 'noVisitDoc',
+        call: () => _remoteDataSource.noVisitHos(repDet, planId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
-  Future<Either<Failure, List<NoVisitDocModel>>> visitHos(int repPlanId) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.visitHos(repPlanId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "noVisitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "noVisitDoc")]));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<NoVisitDocModel>>> visitHos(int repPlanId) =>
+      _remoteCall(
+        tag: 'noVisitDoc',
+        call: () => _remoteDataSource.visitHos(repPlanId),
+        map: (response) => response.toDomain(),
+      );
 
   @override
   Future<Either<Failure, DocHosByPlaceAndSp>> getSpDocHos(int repDet,
-      {int? spId, int? placeId
-      , int? cityId
-      }) async {
-    try {
-      if (await _networkInfo.isConnected) {
-        final response = await _remoteDataSource.getSpDocHos(repDet, spId: spId,placeId: placeId,cityId: cityId);
-        if (response.status == null ||
-            response.status == ApiInternalStatus.SUCCESS ||
-            response.status == "200") {
-          return Right(response.toDomain());
-        } else {
-          Failure failure = Failure(ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMassage.DEFAULT);
-          insertLog(ExceptionRequestBody(
-              [ExceptionModel(failure.massage, "noVisitDoc")]));
-          return Left(failure);
-        }
-      } else {
-        return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
-      }
-    } catch (error) {
-      Failure failure = ErrorHandler.handle(error).failure;
-      insertLog(ExceptionRequestBody(
-          [ExceptionModel(failure.massage, "noVisitDoc")]));
-      return Left(failure);
-    }
-  }
+          {int? spId, int? placeId, int? cityId}) =>
+      _remoteCall(
+        tag: 'noVisitDoc',
+        call: () => _remoteDataSource.getSpDocHos(repDet,
+            spId: spId, placeId: placeId, cityId: cityId),
+        map: (response) => response.toDomain(),
+      );
+
+  @override
+  Future<Either<Failure, List<HosDocSpSearchModel>>> docSpSearch(
+          int repPlanId, int spId) =>
+      _remoteCall(
+        tag: 'docHosSpSearch',
+        call: () => _remoteDataSource.docSpSearch(repPlanId, spId),
+        map: (response) => response.toDomain(),
+      );
+
+  @override
+  Future<Either<Failure, List<HosDocSpSearchModel>>> hosSpSearch(
+          int repPlanId, int spId) =>
+      _remoteCall(
+        tag: 'hosSpSearch',
+        call: () => _remoteDataSource.hosSpSearch(repPlanId, spId),
+        map: (response) => response.toDomain(),
+      );
 }

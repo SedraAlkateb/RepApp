@@ -1,7 +1,9 @@
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
-import 'package:domina_app/presentation/senior/active_plan/bloc/bloc/active_plan_bloc.dart';
+import 'package:domina_app/presentation/senior/plan_review/bloc/plan_brands_info/plan_brands_info_bloc.dart';
 import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -36,15 +38,15 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
 
     return BlocProvider(
       lazy: false,
-      create: (context) => instance<ActivePlanBloc>()
+      create: (context) => instance<PlanBrandsInfoBloc>()
         ..add(
-          GetActivePlanEvent(
+          GetPlanBrandsInfoEvent(
             widget.planId,
           ),
         ),
-      child: BlocConsumer<ActivePlanBloc, ActivePlanState>(
+      child: BlocConsumer<PlanBrandsInfoBloc, PlanBrandsInfoState>(
         listener: (context, state) {
-          if (state is AllActivePlanErrorState) {
+          if (state is PlanBrandsInfoErrorState) {
             error(
               context,
               state.failure.massage,
@@ -106,19 +108,12 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
               break;
           }
 
-          final activePlanBloc = BlocProvider.of<ActivePlanBloc>(
-            context,
-          );
-
-          final List<ActivePlanBrandModel> planBrandModel =
-          List<ActivePlanBrandModel>.from(
-            activePlanBloc.activePlanSearch,
-          );
+          final loaded = state is PlanBrandsInfoLoadedState ? state : null;
 
           // =============================================
           // Loading
           // =============================================
-          if (state is AllActivePlanLoadingState) {
+          if (state is PlanBrandsInfoLoadingState) {
             return Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -148,8 +143,8 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
               child: RefreshIndicator(
                 onRefresh: () async {
                   searchController.clear();
-                  BlocProvider.of<ActivePlanBloc>(context).add(
-                    GetActivePlanEvent(widget.planId),
+                  BlocProvider.of<PlanBrandsInfoBloc>(context).add(
+                    GetPlanBrandsInfoEvent(widget.planId),
                   );
                 },
                 color: const Color(0xFF2563EB),
@@ -175,17 +170,26 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
                       sliver: SliverToBoxAdapter(
                         child: _buildFluidAnimation(
                           index: 0,
-                          child: SearchField(
-                            searchController: searchController,
-                            onPressed: (value) {
-                              BlocProvider.of<ActivePlanBloc>(
-                                context,
-                              ).add(
-                                SearchActivePlanEvent(
-                                  value,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: SearchField(
+                                  searchController: searchController,
+                                  onPressed: (value) {
+                                    BlocProvider.of<PlanBrandsInfoBloc>(
+                                      context,
+                                    ).add(
+                                      SearchPlanBrandsInfoEvent(
+                                        value,
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
+                              ),
+                              const SizedBox(width: 12),
+                              _buildFilterButton(context, loaded),
+                            ],
                           ),
                         ),
                       ),
@@ -194,7 +198,7 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
                     // ===========================================
                     // Empty
                     // ===========================================
-                    if (planBrandModel.isEmpty)
+                    if (loaded == null || loaded.brands.isEmpty)
                       SliverFillRemaining(
                         hasScrollBody: false,
                         child: Center(
@@ -217,18 +221,15 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
                         ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
-                                (
-                                context,
-                                index,
-                                ) {
+                            (context, index) {
                               return _buildFluidAnimation(
                                 index: index + 1,
                                 child: BrandPlanCard(
-                                  model: planBrandModel[index],
+                                  model: loaded.brands[index],
                                 ),
                               );
                             },
-                            childCount: planBrandModel.length,
+                            childCount: loaded.brands.length,
                           ),
                         ),
                       ),
@@ -239,6 +240,132 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
           );
         },
       ),
+    );
+  }
+
+  // =====================================================
+  // Filter (هدف ممتلئ / هدف صفري / مساعد)
+  // =====================================================
+
+  static const Map<PlanBrandsInfoFilter, String> _filterTitles = {
+    PlanBrandsInfoFilter.target: 'الهدف الممتلئ',
+    PlanBrandsInfoFilter.zeroTarget: 'الهدف الصفري',
+    PlanBrandsInfoFilter.assistant: 'المساعد',
+  };
+
+  Widget _buildFilterButton(
+    BuildContext context,
+    PlanBrandsInfoLoadedState? loaded,
+  ) {
+    final active = loaded?.activeFilters ?? PlanBrandsInfoFilter.values.toSet();
+    final bool isFiltered = loaded != null && !loaded.isAllFiltersActive;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: loaded == null ? null : () => _showFilterSheet(context, active),
+      child: Container(
+        height: 48,
+        width: 48,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isFiltered
+                ? ColorManager.medicalPrimary
+                : const Color(0xFFE2E8F0),
+          ),
+        ),
+        child: Icon(
+          Icons.filter_alt_outlined,
+          size: 22,
+          color: ColorManager.medicalPrimary,
+        ),
+      ),
+    );
+  }
+
+  // اختيار أكثر من نوع ثم «تم» لتطبيق الفلتر وإغلاق القائمة
+  Future<void> _showFilterSheet(
+    BuildContext context,
+    Set<PlanBrandsInfoFilter> current,
+  ) {
+    final bloc = BlocProvider.of<PlanBrandsInfoBloc>(context);
+    final selected = Set<PlanBrandsInfoFilter>.of(current);
+
+    return showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: StatefulBuilder(
+            builder: (context, setSheetState) {
+              return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'فلترة الأصناف',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1E3A8A),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      for (final entry in _filterTitles.entries)
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          activeColor: ColorManager.medicalPrimary,
+                          title: Text(entry.value),
+                          value: selected.contains(entry.key),
+                          onChanged: (value) {
+                            setSheetState(() {
+                              if (value == true) {
+                                selected.add(entry.key);
+                              } else {
+                                selected.remove(entry.key);
+                              }
+                            });
+                          },
+                        ),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.medicalPrimary,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          bloc.add(ApplyInfoFiltersEvent(selected));
+                          Navigator.pop(sheetContext);
+                        },
+                        child: const Text(
+                          'تم',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -323,6 +450,11 @@ class BrandPlanCard extends StatelessWidget {
     double specialtyFontSize;
     double amountFontSize;
 
+    // قيم تجاوب جديدة خاصة بـ Total
+    double totalBadgeFontSize;
+    double totalBadgePaddingH;
+    double totalBadgePaddingV;
+
     switch (deviceType) {
       case AppDeviceType.mobilePortrait:
         cardBottomSpacing = 14;
@@ -344,6 +476,9 @@ class BrandPlanCard extends StatelessWidget {
         itemBottomSpacing = 8;
         specialtyFontSize = 13;
         amountFontSize = 16;
+        totalBadgeFontSize = 11.5;
+        totalBadgePaddingH = 8;
+        totalBadgePaddingV = 3;
         break;
 
       case AppDeviceType.tabletPortrait:
@@ -366,6 +501,9 @@ class BrandPlanCard extends StatelessWidget {
         itemBottomSpacing = 10;
         specialtyFontSize = 15;
         amountFontSize = 19;
+        totalBadgeFontSize = 13.5;
+        totalBadgePaddingH = 10;
+        totalBadgePaddingV = 4;
         break;
 
       case AppDeviceType.tabletLandscape:
@@ -388,6 +526,9 @@ class BrandPlanCard extends StatelessWidget {
         itemBottomSpacing = 8;
         specialtyFontSize = 14;
         amountFontSize = 17;
+        totalBadgeFontSize = 12.5;
+        totalBadgePaddingH = 9;
+        totalBadgePaddingV = 3.5;
         break;
     }
 
@@ -424,7 +565,9 @@ class BrandPlanCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // ===========================================
             // Header
+            // ===========================================
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: headerHorizontalPadding,
@@ -500,14 +643,16 @@ class BrandPlanCard extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  Type.buildBadge(
+                  TypeBadge(
                     model.type,
                   ),
                 ],
               ),
             ),
 
+            // ===========================================
             // Content
+            // ===========================================
             Padding(
               padding: EdgeInsets.all(
                 contentPadding,
@@ -554,8 +699,46 @@ class BrandPlanCard extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (model.spPlan.isNotEmpty && model.total > 0)
+                        Text(
+                          "(${model.spPlan.length} اختصاصات)",
+                          style: TextStyle(
+                            fontSize: sectionTitleFontSize * 0.9,
+                            color: const Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                     ],
                   ),
+
+                  if (model.total > 0) ...[
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: totalBadgePaddingH,
+                        vertical: totalBadgePaddingV,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3A8A).withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: const Color(0xFF1E3A8A).withOpacity(0.15),
+                        ),
+                      ),
+                      child: Text(
+                        "المجموع: ${model.total}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: totalBadgeFontSize,
+                          color: const Color(0xFF1E3A8A),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                   SizedBox(
                     height: sectionSpacing,
                   ),

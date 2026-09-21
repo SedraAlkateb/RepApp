@@ -17,10 +17,6 @@ class LoginInsertEvent extends AuthEvent {
   List<Object?> get props => [];
 }
 
-class DeleteDataEvent extends AuthEvent {
-  @override
-  List<Object?> get props => [];
-}
 
 class ShowPasswordEvent extends AuthEvent {
   final bool isObscured;

@@ -22,12 +22,6 @@ final class VisitHospitalErrorState extends VisitState {
   List<Object?> get props => [failure];
 }
 
-final class SearchState extends VisitState {
-  final List<VisitDoctorAndDoctor> doctors;
-  SearchState({required this.doctors});
-  @override
-  List<Object?> get props => [doctors];
-}
 // final class VisitPharmacyState extends VisitState {
 //   @override
 //   VisitPharmacyState();
@@ -136,19 +130,6 @@ final class UpdateVisitHospitalState extends VisitState {
   List<Object?> get props => [];
 }
 
-final class UpdateVisitPharmacyErrorState extends VisitState {
-  final Failure failure;
-  UpdateVisitPharmacyErrorState({required this.failure});
-  @override
-  List<Object?> get props => [failure];
-}
-
-final class UpdateVisitPharmacyState extends VisitState {
-  @override
-  UpdateVisitPharmacyState();
-  @override
-  List<Object?> get props => [];
-}
 
 class DeleteBrandState extends VisitState {
   final List<PharmacyBrandModel> brands;

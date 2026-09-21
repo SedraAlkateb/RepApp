@@ -1,171 +1,105 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
 import 'package:domina_app/data/network/error_handler.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/ex.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repostitory/repository_sql.dart';
+import 'package:domina_app/domain/repository/repository_sql.dart';
+
+final _log = AppLogger.get('RepositorySql');
 
 class RepositroySqlImp extends RepositorySql {
   final AppSqlApi _databaseHelper;
   final ExcRepository excRepository;
   RepositroySqlImp(this._databaseHelper, this.excRepository);
 
-  @override
-  Future<Either<Failure, List<BrandModel>>> getBrandsSql() async {
+  /// ينفّذ عملية قاعدة البيانات المحلية ويحوّل أي استثناء إلى [Left]
+  /// مع تسجيله محلياً عبر [excRepository] تحت الوسم [tag].
+  ///
+  /// نوع [call] `dynamic` عمداً: عدة دوال في `AppSqlApi` (insertLogin وأخواتها)
+  /// معرّفة بلا نوع إرجاع فتُرجع `Future<dynamic>`، ولا يصح إسناد هذا الـ Future
+  /// إلى `FutureOr<T>` قبل انتظاره. لذلك ننتظر القيمة أولاً ثم نحوّلها إلى [T]
+  /// داخل `try`، تماماً كما كانت تفعل الدوال قبل توحيدها.
+  Future<Either<Failure, T>> _sqlCall<T>(
+    String tag,
+    FutureOr<dynamic> Function() call,
+  ) async {
     try {
-      final response = await _databaseHelper.getBrands();
-      return Right(response);
+      final response = await call();
+      return Right(response as T);
     } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getBrandsSql"));
+      final failure = ErrorHandler.handle(e).failure;
+      _log.warning('$tag failed: ${failure.massage}');
+      excRepository.exceptionApi(ExceptionModel(failure.massage, tag));
       return Left(failure);
     }
   }
 
-  @override
-  Future<Either<Failure, List<PharmacyModel>>> getPharmacySql() async {
-    try {
-      final response = await _databaseHelper.getPharmacy();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getPharmacySql"));
-      return Left(failure);
-    }
-  }
+  /// مثل [_sqlCall] للعمليات التي لا تُرجع قيمة.
+  Future<Either<Failure, Null>> _sqlRun(
+    String tag,
+    FutureOr<void> Function() call,
+  ) =>
+      _sqlCall<Null>(tag, () async {
+        await call();
+        return null;
+      });
 
   @override
-  Future<Either<Failure, List<PlaceModel>>> getPlaceSql() async {
-    try {
-      final response = await _databaseHelper.getPlace();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getPlaceSql"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<BrandModel>>> getBrandsSql() =>
+      _sqlCall('getBrandsSql', () => _databaseHelper.getBrands());
 
   @override
-  Future<Either<Failure, List<SpecDModel>>> getSpecSql() async {
-    try {
-      final response = await _databaseHelper.getSpec();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "getSpecSql"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<PharmacyModel>>> getPharmacySql() =>
+      _sqlCall('getPharmacySql', () => _databaseHelper.getPharmacy());
 
   @override
-  Future<Either<Failure, Null>> insertBrandsSql(
-      List<BrandModel> brandModel) async {
-    try {
-      final response = await _databaseHelper.insertBrands(brandModel);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertBrandsSql"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<PlaceModel>>> getPlaceSql() =>
+      _sqlCall('getPlaceSql', () => _databaseHelper.getPlace());
+
+  @override
+  Future<Either<Failure, List<SpecDModel>>> getSpecSql() =>
+      _sqlCall('getSpecSql', () => _databaseHelper.getSpec());
+
+  @override
+  Future<Either<Failure, Null>> insertBrandsSql(List<BrandModel> brandModel) =>
+      _sqlCall(
+          'insertBrandsSql', () => _databaseHelper.insertBrands(brandModel));
 
   @override
   Future<Either<Failure, Null>> insertPharmacy(
-      List<PharmacyModel> pharmacyModel) async {
-    try {
-      final response = await _databaseHelper.insertPharmacy(pharmacyModel);
-      return Right(response);
-    } catch (e) {
-      print(e);
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertPharmacy"));
-      return Left(failure);
-    }
-  }
+          List<PharmacyModel> pharmacyModel) =>
+      _sqlCall('insertPharmacy',
+          () => _databaseHelper.insertPharmacy(pharmacyModel));
 
   @override
-  Future<Either<Failure, Null>> insertPlace(List<PlaceModel> placeModel) async {
-    try {
-      final response = await _databaseHelper.insertPlace(placeModel);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertPlace"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> insertPlace(List<PlaceModel> placeModel) =>
+      _sqlCall('insertPlace', () => _databaseHelper.insertPlace(placeModel));
 
   @override
-  Future<Either<Failure, Null>> insertSpec(List<SpecDModel> specModel) async {
-    try {
-      final response = await _databaseHelper.insertSpec(specModel);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "insertSpec"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> insertSpec(List<SpecDModel> specModel) =>
+      _sqlCall('insertSpec', () => _databaseHelper.insertSpec(specModel));
 
   @override
-  Future<Either<Failure, Null>> clearDatabase() async {
-    try {
-      await _databaseHelper.clearDatabase();
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "clearDatabase"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> clearDatabase() =>
+      _sqlRun('clearDatabase', () => _databaseHelper.clearDatabase());
 
   @override
-  Future<Either<Failure, Null>> loginSql(LoginModel loginModel) async {
-    try {
-      final response = await _databaseHelper.insertLogin(loginModel);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "loginSql"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> loginSql(LoginModel loginModel) =>
+      _sqlCall('loginSql', () => _databaseHelper.insertLogin(loginModel));
 
   @override
-  Future<Either<Failure, LoginModel?>> getRep() async {
-    try {
-      final response = await _databaseHelper.getRep();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "getRep"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, LoginModel?>> getRep() =>
+      _sqlCall('getRep', () => _databaseHelper.getRep());
 
   @override
   Future<Either<Failure, List<PharmacyModel>>> getPharmaciesByPlaceId(
-      int placeId) async {
-    try {
-      final response = await _databaseHelper.getPharmaciesByPlaceId(placeId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "getPharmaciesByPlaceId"));
-      return Left(failure);
-    }
-  }
+          int placeId) =>
+      _sqlCall('getPharmaciesByPlaceId',
+          () => _databaseHelper.getPharmaciesByPlaceId(placeId));
 
   @override
   Future<Either<Failure, String>> asyncData(
@@ -179,7 +113,9 @@ class RepositroySqlImp extends RepositorySql {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands}) async {
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false}) async {
     try {
       final response = await _databaseHelper.asyncData(
         brands,
@@ -192,6 +128,8 @@ class RepositroySqlImp extends RepositorySql {
         brandSps,
         visitHospital, visitDoctor,
         planBrands: planBrands,
+        replaceExisting: replaceExisting,
+        keepPlanBrand: keepPlanBrand,
       );
       if (response == "") {
         return Right(response);
@@ -209,733 +147,307 @@ class RepositroySqlImp extends RepositorySql {
   }
 
   @override
-  Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag() async {
-    try {
-      final response = await _databaseHelper.getBrandsWithFlag();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getBrandsWithFlag"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<BrandModel>>> getBrandsWithFlag() =>
+      _sqlCall('getBrandsWithFlag', () => _databaseHelper.getBrandsWithFlag());
 
   @override
-  Future<Either<Failure, Null>> insertDoctor(
-      List<DoctorModel> doctorModel) async {
-    try {
-      final response = await _databaseHelper.insertdoctor(doctorModel);
-      return Right(response);
-    } catch (e) {
-      print(e);
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertDoctor"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> insertDoctor(List<DoctorModel> doctorModel) =>
+      _sqlCall('insertDoctor', () => _databaseHelper.insertdoctor(doctorModel));
 
   @override
-  Future<Either<Failure, List<HospitalModel>>> getHospitalSql() async {
-    try {
-      final response = await _databaseHelper.getHospital();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getHospitalSql"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<HospitalModel>>> getHospitalSql() =>
+      _sqlCall('getHospitalSql', () => _databaseHelper.getHospital());
 
   @override
   Future<Either<Failure, Null>> insertHospital(
-      List<HospitalModel> hospitalModel) async {
-    try {
-      final response = await _databaseHelper.inserthospital(hospitalModel);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertHospital"));
-      return Left(failure);
-    }
-  }
+          List<HospitalModel> hospitalModel) =>
+      _sqlCall('insertHospital',
+          () => _databaseHelper.inserthospital(hospitalModel));
 
   @override
-  Future<Either<Failure, List<DoctorModel>>> getDoctorSql() async {
-    try {
-      final response = await _databaseHelper.getDoctors();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getDoctorSql"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DoctorModel>>> getDoctorSql() =>
+      _sqlCall('getDoctorSql', () => _databaseHelper.getDoctors());
 
   @override
-  Future<Either<Failure, List<DoctorModel>>> getDoctorByPlaceId(
-      int placeId) async {
-    try {
-      final response = await _databaseHelper.getDoctorByPlaceId(placeId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getDoctorByPlaceId"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DoctorModel>>> getDoctorByPlaceId(int placeId) =>
+      _sqlCall('getDoctorByPlaceId',
+          () => _databaseHelper.getDoctorByPlaceId(placeId));
 
   @override
   Future<Either<Failure, List<HospitalSpAllModel>>> getHospitalByPlaceId(
-      int placeId) async {
-    try {
-      final response = await _databaseHelper.getHospitalByPlaceId(placeId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "getHospitalByPlaceId"));
-      return Left(failure);
-    }
-  }
+          int placeId) =>
+      _sqlCall('getHospitalByPlaceId',
+          () => _databaseHelper.getHospitalByPlaceId(placeId));
 
   @override
   Future<Either<Failure, Null>> insertVisitPharmacy(
-      VisitPharmacyModel visitPharmacyModel) async {
-    try {
-      await _databaseHelper.insertVisitPharmacy(visitPharmacyModel);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertVisitPharmacy"));
-      return Left(failure);
-    }
-  }
+          VisitPharmacyModel visitPharmacyModel) =>
+      _sqlRun('insertVisitPharmacy',
+          () => _databaseHelper.insertVisitPharmacy(visitPharmacyModel));
 
   @override
-  Future<Either<Failure, List<VisitPharmacyAndPharmacy>>>
-      getVisitPharmacy() async {
-    try {
-      final response = await _databaseHelper.getVisitPharmacy();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getVisitPharmacy"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<VisitPharmacyAndPharmacy>>> getVisitPharmacy() =>
+      _sqlCall('getVisitPharmacy', () => _databaseHelper.getVisitPharmacy());
 
   @override
-  Future<Either<Failure, List<VisitDoctorAndDoctor>>> getVisitDoctor() async {
-    try {
-      final response = await _databaseHelper.getVisitDoctor();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getVisitDoctor"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<VisitDoctorAndDoctor>>> getVisitDoctor() =>
+      _sqlCall('getVisitDoctor', () => _databaseHelper.getVisitDoctor());
 
   @override
   Future<Either<Failure, Null>> insertVisitDoctor(
-      VisitDoctorModel visitDoctorModel) async {
-    try {
-      final response =
-          await _databaseHelper.insertVisitDoctor(visitDoctorModel);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertVisitDoctor"));
-      return Left(failure);
-    }
-  }
+          VisitDoctorModel visitDoctorModel) =>
+      _sqlCall('insertVisitDoctor',
+          () => _databaseHelper.insertVisitDoctor(visitDoctorModel));
 
   @override
   Future<Either<Failure, Null>> insertHospitalSp(
-      List<HospitalSpModel> hospitalSps) async {
-    try {
-      final response = await _databaseHelper.insertHospitalSp(hospitalSps);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertHospitalSp"));
-      return Left(failure);
-    }
-  }
+          List<HospitalSpModel> hospitalSps) =>
+      _sqlCall('insertHospitalSp',
+          () => _databaseHelper.insertHospitalSp(hospitalSps));
 
   @override
   Future<Either<Failure, Null>> insertVisitBrandPharmacy(
     List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
     VisitPharmacyModel visitPharmacyModel,
-  ) async {
-    try {
-      await _databaseHelper.insertVisitBrandPharmacy(
-          visitPharmacyModel, visitBrandPharmacyModels);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "insertVisitBrandPharmacy"));
-      return Left(failure);
-    }
-  }
+  ) =>
+      _sqlRun(
+          'insertVisitBrandPharmacy',
+          () => _databaseHelper.insertVisitBrandPharmacy(
+              visitPharmacyModel, visitBrandPharmacyModels));
 
   @override
   Future<Either<Failure, List<PharmacyBrandModel>>> getBrandsPharmacyByVisitId(
-      int visitId) async {
-    try {
-      final response =
-          await _databaseHelper.getBrandsPharmacyByVisitId(visitId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "getBrandsPharmacyByVisitId"));
-      return Left(failure);
-    }
-  }
+          int visitId) =>
+      _sqlCall('getBrandsPharmacyByVisitId',
+          () => _databaseHelper.getBrandsPharmacyByVisitId(visitId));
 
   @override
   Future<Either<Failure, List<PharmacyBrandModel>>> getBrandsDoctorByVisitId(
-      int visitId) async {
-    try {
-      final response = await _databaseHelper.getBrandsDoctorByVisitId(visitId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "getBrandsDoctorByVisitId"));
-      return Left(failure);
-    }
-  }
+          int visitId) =>
+      _sqlCall('getBrandsDoctorByVisitId',
+          () => _databaseHelper.getBrandsDoctorByVisitId(visitId));
 
   @override
   Future<Either<Failure, Null>> insertVisitBrandDoctor(
-      List<VisitBrandPharmacyModel> visitBrandDoctorModels,
-      VisitDoctorModel visitDoctorModel) async {
-    try {
-      await _databaseHelper.insertVisitBrandDoctor(
-          visitDoctorModel, visitBrandDoctorModels);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "insertVisitBrandDoctor"));
-      return Left(failure);
-    }
-  }
+          List<VisitBrandPharmacyModel> visitBrandDoctorModels,
+          VisitDoctorModel visitDoctorModel) =>
+      _sqlRun(
+          'insertVisitBrandDoctor',
+          () => _databaseHelper.insertVisitBrandDoctor(
+              visitDoctorModel, visitBrandDoctorModels));
 
   @override
   Future<Either<Failure, List<SpecHospitalSp>>> specializationByHospitalId(
-      int hospitalId) async {
-    try {
-      final response =
-          await _databaseHelper.specializationByHospitalId(hospitalId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "specializationByHospitalId"));
-      return Left(failure);
-    }
-  }
+          int hospitalId) =>
+      _sqlCall('specializationByHospitalId',
+          () => _databaseHelper.specializationByHospitalId(hospitalId));
 
   @override
   Future<Either<Failure, Null>> insertVisitBrandHospital(
-      VisitHospitalModel visitHospitalModel,
-      List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
-      int hos,
-      int spec) async {
-    try {
-      await _databaseHelper.insertVisitBrandHospital(
-          visitHospitalModel, visitBrandPharmacyModels, hos, spec);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "insertVisitBrandHospital"));
-      return Left(failure);
-    }
-  }
+          VisitHospitalModel visitHospitalModel,
+          List<VisitBrandPharmacyModel> visitBrandPharmacyModels,
+          int hos,
+          int spec) =>
+      _sqlRun(
+          'insertVisitBrandHospital',
+          () => _databaseHelper.insertVisitBrandHospital(
+              visitHospitalModel, visitBrandPharmacyModels, hos, spec));
 
   @override
   Future<Either<Failure, Null>> insertVisitHospital(
-      VisitHospitalModel visitHospitalModel, int hos, int spec) async {
-    try {
-      await _databaseHelper.insertVisitHospital(visitHospitalModel, hos, spec);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "insertVisitHospital"));
-      return Left(failure);
-    }
-  }
+          VisitHospitalModel visitHospitalModel, int hos, int spec) =>
+      _sqlRun(
+          'insertVisitHospital',
+          () => _databaseHelper.insertVisitHospital(
+              visitHospitalModel, hos, spec));
 
   @override
-  Future<Either<Failure, Null>> editIsLogin(int repId, int isLogin) async {
-    try {
-      await _databaseHelper.editIsLogin(repId, isLogin);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "editIsLogin"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> editIsLogin(int repId, int isLogin) =>
+      _sqlRun('editIsLogin', () => _databaseHelper.editIsLogin(repId, isLogin));
 
   @override
   Future<Either<Failure, List<PharmacyBrandModel>>> getBrandsHospitalByVisitId(
-      int visitId) async {
-    try {
-      final response =
-          await _databaseHelper.getBrandsHospitalByVisitId(visitId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "getBrandsHospitalByVisitId"));
-      return Left(failure);
-    }
-  }
+          int visitId) =>
+      _sqlCall('getBrandsHospitalByVisitId',
+          () => _databaseHelper.getBrandsHospitalByVisitId(visitId));
 
   @override
-  Future<Either<Failure, List<VisitHospitalAndHospital>>>
-      getVisitHospital() async {
-    try {
-      final response = await _databaseHelper.getVisitHospital();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getVisitHospital"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<VisitHospitalAndHospital>>> getVisitHospital() =>
+      _sqlCall('getVisitHospital', () => _databaseHelper.getVisitHospital());
 
   @override
   Future<Either<Failure, Null>> updateVisitDoctorFields(
-      {required int id,
-      String? kaswn,
-      String? science,
-      String? target,
-      List<PharmacyBrandModel>? selectBrand}) async {
-    try {
-      ;
-      await _databaseHelper.updateVisitDoctorFields(
-          id: id,
-          kaswn: kaswn,
-          science: science,
-          target: target,
-          selectBrand: selectBrand);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "updateVisitDoctorFields"));
-      return Left(failure);
-    }
-  }
+          {required int id,
+          String? kaswn,
+          String? science,
+          String? target,
+          List<PharmacyBrandModel>? selectBrand}) =>
+      _sqlRun(
+          'updateVisitDoctorFields',
+          () => _databaseHelper.updateVisitDoctorFields(
+              id: id,
+              kaswn: kaswn,
+              science: science,
+              target: target,
+              selectBrand: selectBrand));
 
   @override
   Future<Either<Failure, Null>> updateVisitHospitalFields(
-      {required int id,
-      String? kaswn,
-      String? science,
-      String? target,
-      List<PharmacyBrandModel>? selectBrand}) async {
-    try {
-      await _databaseHelper.updateVisitHospitalFields(
-          id: id,
-          kaswn: kaswn,
-          science: science,
-          target: target,
-          selectBrand: selectBrand);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "updateVisitHospitalFields"));
-      return Left(failure);
-    }
-  }
+          {required int id,
+          String? kaswn,
+          String? science,
+          String? target,
+          List<PharmacyBrandModel>? selectBrand}) =>
+      _sqlRun(
+          'updateVisitHospitalFields',
+          () => _databaseHelper.updateVisitHospitalFields(
+              id: id,
+              kaswn: kaswn,
+              science: science,
+              target: target,
+              selectBrand: selectBrand));
 
   @override
   Future<Either<Failure, Null>> updateVisitPharmacy(
-      {required int visitId, String? newNote}) async {
-    try {
-      await _databaseHelper.updateVisitPharmacy(
-          visitId: visitId, newNote: newNote);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "updateVisitPharmacy"));
-      return Left(failure);
-    }
-  }
+          {required int visitId, String? newNote}) =>
+      _sqlRun(
+          'updateVisitPharmacy',
+          () => _databaseHelper.updateVisitPharmacy(
+              visitId: visitId, newNote: newNote));
 
   @override
-  Future<Either<Failure, List<DoctorModel>>> getDoctorBySpec(int spId) async {
-    try {
-      final response = await _databaseHelper.getDoctorBySpec(spId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getDoctorBySpec"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<DoctorModel>>> getDoctorBySpec(int spId) =>
+      _sqlCall('getDoctorBySpec', () => _databaseHelper.getDoctorBySpec(spId));
 
   @override
-  Future<Either<Failure, List<HospitalModel>>> getHospitalBySpec(
-      int spId) async {
-    try {
-      final response = await _databaseHelper.getHospitalBySpec(spId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "getHospitalBySpec"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<HospitalModel>>> getHospitalBySpec(int spId) =>
+      _sqlCall(
+          'getHospitalBySpec', () => _databaseHelper.getHospitalBySpec(spId));
 
   @override
-  Future<Either<Failure, List<PlanBrandModel>>> planBrandsAs() async {
-    try {
-      final response = await _databaseHelper.planBrandsAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "planBrandsAs"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<PlanBrandModel>>> planBrandsAs() =>
+      _sqlCall('planBrandsAs', () => _databaseHelper.planBrandsAs());
+
+  @override
+  Future<Either<Failure, List<VisitBrandPharmacyModel>>> visitBrandDoctorAs() =>
+      _sqlCall(
+          'visitBrandDoctorAs', () => _databaseHelper.visitBrandDoctorAs());
 
   @override
   Future<Either<Failure, List<VisitBrandPharmacyModel>>>
-      visitBrandDoctorAs() async {
-    try {
-      final response = await _databaseHelper.visitBrandDoctorAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "visitBrandDoctorAs"));
-      return Left(failure);
-    }
-  }
+      visitBrandHospitalAs() => _sqlCall(
+          'visitBrandHospitalAs', () => _databaseHelper.visitBrandHospitalAs());
 
   @override
   Future<Either<Failure, List<VisitBrandPharmacyModel>>>
-      visitBrandHospitalAs() async {
-    try {
-      final response = await _databaseHelper.visitBrandHospitalAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "visitBrandHospitalAs"));
-      return Left(failure);
-    }
-  }
+      visitBrandPharmacyAs() => _sqlCall(
+          'visitBrandPharmacyAs', () => _databaseHelper.visitBrandPharmacyAs());
 
   @override
-  Future<Either<Failure, List<VisitBrandPharmacyModel>>>
-      visitBrandPharmacyAs() async {
-    try {
-      final response = await _databaseHelper.visitBrandPharmacyAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "visitBrandPharmacyAs"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<VisitDoctorModel>>> visitDoctorAs() =>
+      _sqlCall('visitDoctorAs', () => _databaseHelper.visitDoctorAs());
 
   @override
-  Future<Either<Failure, List<VisitDoctorModel>>> visitDoctorAs() async {
-    try {
-      final response = await _databaseHelper.visitDoctorAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "visitDoctorAs"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<VisitHospitalModel>>> visitHospitalAs() =>
+      _sqlCall('visitHospitalAs', () => _databaseHelper.visitHospitalAs());
 
   @override
-  Future<Either<Failure, List<VisitHospitalModel>>> visitHospitalAs() async {
-    try {
-      final response = await _databaseHelper.visitHospitalAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "visitHospitalAs"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<HospitalSpModel>>> visitHospitalSpAs() =>
+      _sqlCall('visitHospitalSpAs', () => _databaseHelper.visitHospitalSpAs());
 
   @override
-  Future<Either<Failure, List<HospitalSpModel>>> visitHospitalSpAs() async {
-    try {
-      final response = await _databaseHelper.visitHospitalSpAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "visitHospitalSpAs"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<VisitPharmacyModel>>> visitPharmacyAs() =>
+      _sqlCall('visitPharmacyAs', () => _databaseHelper.visitPharmacyAs());
 
   @override
-  Future<Either<Failure, List<VisitPharmacyModel>>> visitPharmacyAs() async {
-    try {
-      final response = await _databaseHelper.visitPharmacyAs();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "visitPharmacyAs"));
-      return Left(failure);
-    }
-  }
-
-  @override
-  Future<Either<Failure, Null>> clearDatabaseAll() async {
-    try {
-      await _databaseHelper.clearDatabaseAll();
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "clearDatabaseAll"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> clearDatabaseAll() =>
+      _sqlRun('clearDatabaseAll', () => _databaseHelper.clearDatabaseAll());
 
   @override
   Future<Either<Failure, Null>> updateRep(
-      int repId,
-      int otherPlanId,
-      int activePlanId,
-      int otherStatus,
-      String startDate,
-      String endDate,
-      String otherStartDate,
-      String otherEndDate) async {
-    try {
-      await _databaseHelper.updateRep(repId, otherPlanId, activePlanId,
-          otherStatus, startDate, endDate, otherStartDate, otherEndDate);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateRep"));
-      return Left(failure);
-    }
-  }
+          int repId,
+          int otherPlanId,
+          int activePlanId,
+          int otherStatus,
+          String startDate,
+          String endDate,
+          String otherStartDate,
+          String otherEndDate) =>
+      _sqlRun(
+          'updateRep',
+          () => _databaseHelper.updateRep(repId, otherPlanId, activePlanId,
+              otherStatus, startDate, endDate, otherStartDate, otherEndDate));
 
   @override
   Future<Either<Failure, List<HospitalSpAllModel>>>
-      getAllHospitalSpecialization() async {
-    try {
-      final response = await _databaseHelper.getAllHospitalSpecialization();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "getAllHospitalSpecialization"));
-      return Left(failure);
-    }
-  }
+      getAllHospitalSpecialization() => _sqlCall('getAllHospitalSpecialization',
+          () => _databaseHelper.getAllHospitalSpecialization());
 
   @override
   Future<Either<Failure, Null>> updateAmounts(
-      List<OtherBrandSpPlanModel> planBrands) async {
-    try {
-      final response = await _databaseHelper.updateAmounts(planBrands);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "updateAmounts"));
-      return Left(failure);
-    }
-  }
+          List<OtherBrandSpPlanModel> planBrands) =>
+      _sqlCall(
+          'updateAmounts', () => _databaseHelper.updateAmounts(planBrands));
 
   @override
-  Future<Either<Failure, bool>> updateFlagsToDoctor() async {
-    try {
-      final response = await _databaseHelper.updateFlagsToDoctor();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "updateFlagsToDoctor"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, bool>> updateFlagsToDoctor(
+          {List<int>? visitIds, List<int>? brandIds}) =>
+      _sqlCall(
+          'updateFlagsToDoctor',
+          () => _databaseHelper.updateFlagsToDoctor(
+              visitIds: visitIds, brandIds: brandIds));
 
   @override
-  Future<Either<Failure, bool>> updateFlagsToHospital() async {
-    try {
-      final response = await _databaseHelper.updateFlagsToHospital();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "updateFlagsToHospital"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, bool>> updateFlagsToHospital(
+          {List<int>? visitIds, List<int>? brandIds}) =>
+      _sqlCall(
+          'updateFlagsToHospital',
+          () => _databaseHelper.updateFlagsToHospital(
+              visitIds: visitIds, brandIds: brandIds));
 
   @override
   Future<Either<Failure, Null>> updateOtherStatus(
-      int repId, int status, List<OtherBrandSpPlanModel> planBrands) async {
-    try {
-      final response =
-          await _databaseHelper.updateOtherStatus(repId, status, planBrands);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "updateOtherStatus"));
-      return Left(failure);
-    }
-  }
+          int repId, int status, List<OtherBrandSpPlanModel> planBrands) =>
+      _sqlCall('updateOtherStatus',
+          () => _databaseHelper.updateOtherStatus(repId, status, planBrands));
 
   @override
   Future<Either<Failure, List<BrandSpPlanModel>>> planBrandByRepPlanId(
-      int repPlanId) async {
-    try {
-      final response = await _databaseHelper.planBrandByRepPlanId(repPlanId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "planBrandByRepPlanId"));
-      return Left(failure);
-    }
-  }
+          int repPlanId) =>
+      _sqlCall('planBrandByRepPlanId',
+          () => _databaseHelper.planBrandByRepPlanId(repPlanId));
 
   @override
   Future<Either<Failure, List<OtherBrandSpPlanModel>>>
-      otherPlanBrandByRepPlanId(int repPlanId) async {
-    try {
-      final response =
-          await _databaseHelper.otherPlanBrandByRepPlanId(repPlanId);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(
-          ExceptionModel(failure.massage, "otherPlanBrandByRepPlanId"));
-      return Left(failure);
-    }
-  }
+      otherPlanBrandByRepPlanId(int repPlanId) => _sqlCall(
+          'otherPlanBrandByRepPlanId',
+          () => _databaseHelper.otherPlanBrandByRepPlanId(repPlanId));
 
   @override
-  Future<Either<Failure, Null>> editIsPlan(int repId, int flag) async {
-    try {
-      await _databaseHelper.editIsPlan(repId, flag);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "editIsPlan"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> editIsPlan(int repId, int flag) =>
+      _sqlRun('editIsPlan', () => _databaseHelper.editIsPlan(repId, flag));
 
   @override
-  Future<Either<Failure, Null>> updateSave(int repId, int flag1) async {
-    try {
-      await _databaseHelper.updateSave(repId, flag1);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> updateSave(int repId, int flag1) =>
+      _sqlRun('updateSave', () => _databaseHelper.updateSave(repId, flag1));
 
   @override
-  Future<Either<Failure, Null>> exceptionApi(
-      ExceptionModel exceptionModel) async {
-    try {
-      await _databaseHelper.exceptionApi(exceptionModel);
-      return Right(null);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, Null>> exceptionApi(ExceptionModel exceptionModel) =>
+      _sqlRun('updateSave', () => _databaseHelper.exceptionApi(exceptionModel));
 
   @override
-  Future<Either<Failure, List<ExceptionModel>>> allException() async {
-    try {
-      final response = await _databaseHelper.allException();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "updateSave"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, List<ExceptionModel>>> allException() =>
+      _sqlCall('updateSave', () => _databaseHelper.allException());
 
   @override
-  Future<Either<Failure, NumVisit>> numVisit() async {
-    try {
-      final response = await _databaseHelper.numVisit();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "numVisit"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, NumVisit>> numVisit() =>
+      _sqlCall('numVisit', () => _databaseHelper.numVisit());
 
   @override
-  Future<Either<Failure, void>> numDocAndHos() async {
-    try {
-      final response = await _databaseHelper.numDocAndHos();
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository
-          .exceptionApi(ExceptionModel(failure.massage, "numDocAndHos"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, void>> numDocAndHos() =>
+      _sqlCall('numDocAndHos', () => _databaseHelper.numDocAndHos());
 
   @override
-  Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum) async {
-    try {
-      final response = await _databaseHelper.editRecipe(recNum);
-      return Right(response);
-    } catch (e) {
-      Failure failure = ErrorHandler.handle(e).failure;
-      excRepository.exceptionApi(ExceptionModel(failure.massage, "editRecipe"));
-      return Left(failure);
-    }
-  }
+  Future<Either<Failure, void>> editRecipe(InsertRecResponse recNum) =>
+      _sqlCall('editRecipe', () => _databaseHelper.editRecipe(recNum));
 }

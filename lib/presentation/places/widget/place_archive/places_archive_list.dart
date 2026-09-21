@@ -1,6 +1,6 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/widget/animation_press.dart';
+import 'package:domina_app/presentation/place_visit/widget/animation_press.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +21,7 @@ class PlacesArchiveList extends StatelessWidget {
     return BlocConsumer<PlaceBloc, PlaceState>(
       listener: _listener,
       builder: (context, state) {
-        List<PlaceModel> places =
-            context.watch<PlaceBloc>().placeSearchModel;
+        List<PlaceModel> places = context.watch<PlaceBloc>().placeSearchModel;
 
         if (state is AllPlaceState) {
           places = state.places;
@@ -33,7 +32,10 @@ class PlacesArchiveList extends StatelessWidget {
         }
 
         if (places.isEmpty) {
-          return SingleChildScrollView(child: emptyFullScreen(context));
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            child: emptyFullScreen(context),
+          );
         }
 
         return Center(
@@ -42,13 +44,11 @@ class PlacesArchiveList extends StatelessWidget {
               maxWidth: maxWidth,
             ),
             child: ListView.separated(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                0,
-                horizontalPadding,
-                32,
+              shrinkWrap: true, // ضروري لكي تتكيف القائمة مع الـ SingleChildScrollView الخارجي
+              physics: const NeverScrollableScrollPhysics(), // التمرير يتم عبر السكرول الخارجي للشاشة
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
               ),
-              physics: const BouncingScrollPhysics(),
               itemCount: places.length,
               separatorBuilder: (context, index) {
                 return const SizedBox(
@@ -99,15 +99,15 @@ class PlacesArchiveList extends StatelessWidget {
       });
     }
 
-    if (state is CheckRepState &&
-        state.isCheck == false) {
+    if (state is CheckRepState && state.isCheck == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!context.mounted) return;
 
         Navigator.pushNamedAndRemoveUntil(
           context,
-          Routes.deleteLogout,
+          Routes.logout,
               (route) => false,
+            arguments: true, // بدون رفع: المندوب غير موجود بالسيرفر
         );
       });
     }

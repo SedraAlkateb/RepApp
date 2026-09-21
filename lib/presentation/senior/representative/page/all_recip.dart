@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
@@ -381,7 +382,7 @@ Widget _buildSmartCard(
       child: Material(
         color: Colors.white,
 
-        child: InkWell(
+        child: AppInkWell(
           // ===================================================
           // نفس السلوك الأصلي تماماً
           // ===================================================

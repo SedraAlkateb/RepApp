@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'dart:io';
 
 import 'package:domina_app/app/constants.dart';
@@ -6,6 +7,7 @@ import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_num.dart';
 import 'package:domina_app/presentation/Recipes/widget/drop_down_recipes.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/language_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/uniti/box_filed.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
@@ -956,7 +958,7 @@ class _RecipesHospitalState extends State<RecipesHospital> {
     final double imageSize =
     ui.isMobile ? 135 : 155;
 
-    return InkWell(
+    return AppInkWell(
       borderRadius:
       BorderRadius.circular(
         ui.smallRadius + 2,
@@ -1304,7 +1306,7 @@ class _RecipesHospitalState extends State<RecipesHospital> {
                   firstNoteController.text,
                   _secondNoteController.text,
                   _addressController.text,
-                  _connectController.text,
+                  convertArabicNumberToEnglish( _connectController.text),
                   _specialNotesController.text,
                 ),
               );

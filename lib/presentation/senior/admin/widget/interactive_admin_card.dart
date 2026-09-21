@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
     final double landscapeIconSize = isTabletLandscape ? 19.sp : 20.sp;
     final double landscapeTitleSize = isTabletLandscape ? 14.sp : 14.sp;
     final double landscapeSubtitleSize = isTabletLandscape ? 11.sp : 10.sp;
-    return GestureDetector(
+    return PressableEffect(pressedScale: 1.0, child: GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) {
         setState(() => _isPressed = false);
@@ -91,7 +92,7 @@ class _InteractiveAdminCardState extends State<InteractiveAdminCard> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildPortraitLayout(

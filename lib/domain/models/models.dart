@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/presentation/resources/language_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:domina_app/app/number_utils.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -56,36 +54,8 @@ class BrandSpPlanModel {
 
   BrandSpPlanModel(this.brandModel, this.spPlan);
 
-  static void printBrandPlanActive(List<BrandSpPlanModel> data) {
-    print(
-        "=== 🚀 بدء طباعة مصفوفة planBrandActive (إجمالي العناصر: ${data.length}) ===");
-
-    for (int i = 0; i < data.length; i++) {
-      final mainItem = data[i];
-      print("\n---------------- [العنصر الرئيسي رقم: $i] ----------------");
-
-      // طباعة بيانات الـ BrandModel وتأمينها من الـ Null
-      print("  🔹 Brand ID: ${mainItem.brandModel.id}");
-      print("  🔹 Brand Title: ${mainItem.brandModel.title}");
-
-      // طباعة مصفوفة الـ SpPlan الداخلية
-      print("  🔹 عدد الـ SpPlan المرتبطة: ${mainItem.spPlan.length}");
-      for (int j = 0; j < mainItem.spPlan.length; j++) {
-        final sp = mainItem.spPlan[j];
-        print("     🔸 [$j] ID: ${sp.id}");
-        print("     🔸 [$j] Title: ${sp.title}");
-
-        // هنا فحص الحقل المسبب للمشكلة للتأكد إن كان Null
-        print("     🔸 [$j] BrandType: '${sp.brandType.name}'");
-
-        print("     🔸 [$j] Amount: ${sp.amount}");
-        print("     🔸 [$j] idSp: ${sp.idSp} | flagSp: ${sp.flagSp}");
-        print(
-            "     🔸 [$j] سيكولايت دكتور: ${sp.sumDoctor} | مشفى: ${sp.sumHospital} | براند مشفى: ${sp.sumBrandHospital}");
-      }
-    }
-    print("\n=== ✨ نهاية طباعة مصفوفة planBrandActive ===");
-  }
+  /// مجموع الكميات (amount) على كل الاختصاصات لهذه العينة.
+  int get totalAmount => spPlan.fold(0, (sum, sp) => sum + sp.amount);
 }
 
 class OtherBrandSpPlanModel {
@@ -440,45 +410,6 @@ class VisitDoctorRequestBody {
   }
 }
 
-class VisitHospitalRequest {
-  String id;
-  String visitDate;
-  String note;
-  String issue;
-  String special;
-  String hospitalSpId;
-  String repPlanId;
-  String representativeId;
-
-  VisitHospitalRequest(this.id, this.visitDate, this.note, this.issue,
-      this.special, this.hospitalSpId, this.repPlanId, this.representativeId);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'repPlanId': repPlanId,
-      'representativeId': representativeId,
-      'hospitalSpId': hospitalSpId,
-      'visitDate': visitDate,
-      'note': note,
-      'issue': issue,
-      'special': special
-    };
-  }
-
-  factory VisitHospitalRequest.fromMap(Map<String, dynamic> map) {
-    return VisitHospitalRequest(
-      map['id'],
-      map['VisitDate'],
-      map['note'],
-      map['issue'],
-      map['special'],
-      map['hospitalSpId'],
-      map['repPlanId'],
-      map['representativeId'],
-    );
-  }
-}
 
 class VisitHospitalRequestBody {
   List<VisitHospitalModel> list1;
@@ -506,17 +437,6 @@ class ExceptionRequestBody {
   }
 }
 
-class ExceptionRequestBody2 {
-  ExceptionModel list1;
-
-  ExceptionRequestBody2(this.list1);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'list1': list1,
-    };
-  }
-}
 
 class VisitPharmacyAndPharmacy {
   PharmacyModel pharmacyModel;
@@ -811,45 +731,6 @@ class SpecDModel {
   }
 }
 
-class MedicalVisits {
-  int visID;
-  String visitDate;
-  String title;
-  String address;
-  String note;
-  String issue;
-  String spTitle;
-  String special;
-  String brands;
-
-  MedicalVisits(this.visID, this.visitDate, this.title, this.address, this.note,
-      this.issue, this.spTitle, this.special, this.brands); // from
-  Map<String, dynamic> toMap() {
-    return {
-      'visID': visID,
-      'visitDate': visitDate,
-      'title': title,
-      'address': address,
-      'note': issue,
-      'issue': note,
-      'spTitle': spTitle,
-      'brands': brands
-    };
-  }
-
-  factory MedicalVisits.fromMap(Map<String, dynamic> map) {
-    return MedicalVisits(
-        map['visID'],
-        map['visitDate'],
-        map['title'],
-        map['address'],
-        map['note'],
-        map['issue'],
-        map['spTitle'],
-        map['special'],
-        map['brands']);
-  }
-}
 
 class PharmacyModel {
   int id;
@@ -1352,48 +1233,32 @@ class LoginModel {
 class Type {
   int i;
   String name;
-  Color color;
 
-  Type(this.i, this.name, {this.color = Colors.grey});
+  Type(this.i, this.name);
 
   // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
   static Type fromInt(int value) {
     return switch (value) {
-      1 => Type(1, "هدف", color: Colors.blue),
-      2 => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "غير متوفر", color: Colors.grey),
+      1 => Type(1, "هدف"),
+      2 => Type(2, "مساعد"),
+      _ => Type(3, "غير متوفر"),
     };
-  }
-
-  static Widget buildBadge(Type brandType) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: brandType.color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(brandType.name,
-          style: TextStyle(
-              color: brandType.color,
-              fontSize: 10.sp,
-              fontWeight: FontWeight.bold)),
-    );
   }
 
   static Type fromIntS(String? value) {
     return switch (value) {
-      "1" => Type(1, "هدف", color: Colors.blue),
-      "2" => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "غير متوفر", color: Colors.grey),
+      "1" => Type(1, "هدف"),
+      "2" => Type(2, "مساعد"),
+      _ => Type(3, "غير متوفر"),
     };
   }
 
   // 2️⃣ التابع الثاني: تعطيه اسم -> يعطيك الـ Type مباشرة
   static Type fromName(String name) {
     return switch (name) {
-      "هدف" => Type(1, "هدف", color: Colors.blue),
-      "مساعد" => Type(2, "مساعد", color: Colors.orange),
-      _ => Type(3, "غير متوفر", color: Colors.grey),
+      "هدف" => Type(1, "هدف"),
+      "مساعد" => Type(2, "مساعد"),
+      _ => Type(3, "غير متوفر"),
     };
   }
 
@@ -1406,32 +1271,29 @@ class Type {
 class RepType {
   int i;
   String name;
-  Color color;
 
-  RepType(this.i, this.name, {this.color = Colors.grey});
+  RepType(this.i, this.name);
 
   // 1️⃣ التابع الأول: تعطيه رقم -> يعطيك الـ Type مباشرة
   static RepType fromInt(int value) {
     return switch (value) {
-      4 => RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
-      5 => RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
-      6 => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      7 => RepType(7, "مندوب",
-          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
+      4 => RepType(4, "Supervisor"),
+      5 => RepType(5, "Team Leader"),
+      6 => RepType(6, "senior"),
+      7 => RepType(7, "مندوب"),
+      _ => RepType(8, "other"),
     };
   }
 
   static RepType fromIntS(String? value) {
     return switch (value) {
       "4" =>
-        RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "Supervisor"),
       "5" =>
-        RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
-      "6" => RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      "7" => RepType(7, "مندوب",
-          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
+        RepType(5, "Team Leader"),
+      "6" => RepType(6, "senior"),
+      "7" => RepType(7, "مندوب"),
+      _ => RepType(8, "other"),
     };
   }
 
@@ -1439,14 +1301,13 @@ class RepType {
   static RepType fromName(String name) {
     return switch (name) {
       "Supervisor" =>
-        RepType(4, "Supervisor", color: const Color(0xFF3A5A75)), // primary
+        RepType(4, "Supervisor"),
       "Team Leader" =>
-        RepType(5, "Team Leader", color: const Color(0xFF3F7FBF)), // splash2
+        RepType(5, "Team Leader"),
       "senior" =>
-        RepType(6, "senior", color: const Color(0xFF4A7FA7)), // splash1
-      "مندوب" => RepType(7, "مندوب",
-          color: const Color(0xFFD4AF37)), // secondary (الذهبي)
-      _ => RepType(8, "other", color: const Color(0xFF94A3B8)), // رمادي ناعم
+        RepType(6, "senior"),
+      "مندوب" => RepType(7, "مندوب"),
+      _ => RepType(8, "other"),
     };
   }
 
@@ -1457,14 +1318,14 @@ class RepType {
 }
 
 final List<Type> type = [
-  Type(0, "دفاتر", color: Colors.cyan),
-  Type(1, "عينات", color: Colors.lime),
-  Type(2, "لا شيء", color: Colors.teal),
+  Type(0, "دفاتر"),
+  Type(1, "عينات"),
+  Type(2, "لا شيء"),
 ];
 final List<Type> brandType = [
-  Type(1, "هدف", color: Colors.blue),
-  Type(2, "مساعد", color: Colors.orange),
-  Type(3, "غير متوفر", color: Colors.grey),
+  Type(1, "هدف"),
+  Type(2, "مساعد"),
+  Type(3, "غير متوفر"),
 ];
 
 class BrandSpModel {
@@ -1545,65 +1406,6 @@ class PlanBrandModel {
   }
 }
 
-class PlanBrandsSp {
-  int id;
-  int spId;
-  int brandId;
-  Type brandType;
-  String titleAr;
-  String phTitle;
-  String totalAmount;
-
-  // Constructor
-  PlanBrandsSp(this.id, this.spId, this.brandId, this.brandType, this.titleAr,
-      this.phTitle, this.totalAmount);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'spId': spId,
-      'brandId': brandId,
-      'brandType': brandType.i,
-      'titleAr': titleAr,
-      'phTitle': phTitle,
-      'totalAmount': totalAmount,
-    };
-  }
-
-  factory PlanBrandsSp.fromMap(Map<String, dynamic> map) {
-    return PlanBrandsSp(
-        map['id'],
-        map['spId'],
-        map['brandId'],
-        Type.fromInt(map['brandType']),
-        map['titleAr'],
-        map['phTitle'],
-        map['totalAmount']);
-  }
-}
-
-class BrandPlanBrandsSpWithSamples {
-  int totalSamplesDoctors;
-  int totalSamplesHospitals;
-  int totalSamplesDepartments;
-
-  // Constructor
-  BrandPlanBrandsSpWithSamples(this.totalSamplesDoctors,
-      this.totalSamplesHospitals, this.totalSamplesDepartments);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'totalSamplesDoctors': totalSamplesDoctors,
-      'totalSamplesHospitals': totalSamplesHospitals,
-      'totalSamplesDepartments': totalSamplesDepartments,
-    };
-  }
-
-  factory BrandPlanBrandsSpWithSamples.fromMap(Map<String, dynamic> map) {
-    return BrandPlanBrandsSpWithSamples(map['totalSamplesDoctors'],
-        map['totalSamplesHospitals'], map['totalSamplesDepartments']);
-  }
-}
 
 class ExceptionModel {
   String exceptionModel;
@@ -1639,51 +1441,6 @@ class ExceptionModel {
   }
 }
 
-class PlanBrandSqlModel {
-  int id;
-  int repPlanId;
-  Type brandType;
-  int amount;
-  String phTitle;
-  String brandTitle;
-  int sampleCoast;
-  String specializationTitle;
-
-  PlanBrandSqlModel(
-      this.id,
-      this.repPlanId,
-      this.brandType,
-      this.amount,
-      this.phTitle,
-      this.brandTitle,
-      this.sampleCoast,
-      this.specializationTitle);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id.toString(),
-      'repPlanId': repPlanId.toString(),
-      'brandType': brandType.i.toString(),
-      'amount': amount.toString(),
-      'phTitle': phTitle.toString(),
-      'brandTitle': brandTitle.toString(),
-      'sampleCoast': sampleCoast.toString(),
-      'specializationTitle': specializationTitle.toString(),
-    };
-  }
-
-  factory PlanBrandSqlModel.fromMap(Map<String, dynamic> map) {
-    return PlanBrandSqlModel(
-        map['id'],
-        map['repPlanId'],
-        Type.fromInt(map['brandType']),
-        int.parse(convertArabicNumberToEnglish(map['amount'])),
-        map['phTitle'],
-        map['brandTitle'],
-        map['sampleCoast'],
-        map['specializationTitle']);
-  }
-}
 
 class ActiveModel {
   int id;
@@ -2137,44 +1894,6 @@ class RepVisitsModel {
       this.samples);
 }
 
-class RepVisitsModelSearch {
-  int index;
-  String visitId;
-  String visitDate;
-  String placeTitle;
-  String docTitle;
-  String rate;
-  String spTitle;
-  String note;
-  String issue;
-  String special;
-  String target;
-  bool flag;
-  List<String> samples;
-
-  RepVisitsModelSearch(
-      this.index,
-      this.visitId,
-      this.visitDate,
-      this.placeTitle,
-      this.docTitle,
-      this.rate,
-      this.spTitle,
-      this.note,
-      this.issue,
-      this.special,
-      this.target,
-      this.flag,
-      this.samples);
-}
-
-class BrandFlag {
-  int id;
-  String brand;
-  int flag;
-
-  BrandFlag(this.id, this.brand, this.flag);
-}
 
 class NumVisit {
   int visitDoctor;
@@ -2282,29 +2001,20 @@ class ActivePlanBrandModel {
   Type type;
   String title;
   String pharmaceuticalFormTitle;
-
+  int total;
   ActivePlanBrandModel(
-      this.spPlan, this.type, this.title, this.pharmaceuticalFormTitle);
+      this.spPlan, this.type, this.title, this.pharmaceuticalFormTitle,
+      {this.total=0});
 }
 
-class Orders {
-  final String pharmacyName;
-  final List<OrderItem> items;
 
-  Orders({
-    required this.pharmacyName,
-    required this.items,
-  });
-}
+class AllPlanBrandsInfo {
+  List<ActivePlanBrandModel> targetBrands;
+  List<ActivePlanBrandModel> targetBrandsWithoutAmount;
+  List<ActivePlanBrandModel> assistantBrands;
 
-class OrderItem {
-  final int id;
-  final String name;
-
-  OrderItem({
-    required this.id,
-    required this.name,
-  });
+  AllPlanBrandsInfo(
+      this.targetBrands, this.targetBrandsWithoutAmount, this.assistantBrands);
 }
 
 class BrandAmountRequestBody {
@@ -2338,9 +2048,10 @@ class AllRepresentativeFuture {
   int samplesCount;
   RepType reptype;
   String planDate;
+  int percent;
 
   AllRepresentativeFuture(this.id, this.name, this.flag, this.activePlan,
-      this.samplesCount, this.reptype, this.planDate);
+      this.samplesCount, this.reptype, this.planDate,this.percent);
 }
 
 class WhoReadModel {
@@ -2432,42 +2143,6 @@ List<FlagModel> getAllFlags(int repType) {
   return allFlag;
 }
 
-Color getColor(int flag) {
-  switch (flag) {
-    case 0:
-      // بانتظار موافقة المندوب: أزرق سماوي هادئ وعميق
-      return const Color(0xFF0288D1);
-
-    case 1:
-      // بانتظار موافقة Supervisor: أحمر مرجاني أنيق (وليس فاقعاً) يعبر عن أهمية الإجراء
-      return const Color(0xFFE53935);
-
-    case 2:
-      // مكتمل / تمت الموافقة: أخضر عشبي مريح للعين يعكس النجاح
-      return const Color(0xFF43A047);
-
-    case 3:
-      // ملغي أو مرفوض: رمادي داكن يميل للفحمي يعبر عن حالة الإغلاق
-      return const Color(0xFF37474F);
-
-    case 4:
-      // بانتظار موافقة المستودع: لون فيروزي (Teal) عميق واحترافي بدلاً من الـ Accent الفسفوري
-      return const Color(0xFF00897B);
-
-    case 5:
-      // بانتظار TeamLeader: برتقالي خريفي دافئ يعبر عن الانتظار والتحذير الخفيف
-      return const Color(0xFFFB8C00);
-
-    case 6:
-      // بانتظار موافقة Senior: بنفسجي ملكي هادئ يعكس الرتبة الأعلى
-      return const Color(0xFF5E35B1);
-
-    default:
-      // الحالة الافتراضية: الكحلي الأساسي للتطبيق
-      return const Color(0xFF0D47A1);
-  }
-}
-
 class StatusPlanModel {
   String name;
   int id;
@@ -2529,4 +2204,15 @@ class DoctorSenModel {
 
   DoctorSenModel(this.docId, this.title, this.address, this.spId, this.place,
       this.visit, this.note, this.rate, this.spTitle);
+}
+class HosDocSpSearchModel {
+  String name;
+  String spTitle;
+  String placeTitle;
+  String rate;
+  String visits;
+  String? totalDocs;
+
+  HosDocSpSearchModel(this.name, this.spTitle, this.placeTitle, this.rate,
+      this.visits, {this.totalDocs});
 }

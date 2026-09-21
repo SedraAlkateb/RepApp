@@ -17,8 +17,3 @@ final class AllPharmacyErrorState extends PharmacyState {
   List<Object?> get props => [failure];
 }
 
-final class AllPharmacyLoadingState extends PharmacyState {
-  @override
-  AllPharmacyLoadingState();
-  List<Object?> get props => [];
-}

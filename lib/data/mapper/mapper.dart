@@ -967,6 +967,39 @@ extension ActivePlanBrandBaseMapper on ActiveBrandPlanBaseResponse? {
   }
 }
 
+extension PlanBrandInfoMapper on PlanBrandInfoResponse? {
+  ActivePlanBrandModel toDomain() {
+    List<SpecPlan> specPlans =
+        (this?.specializations?.map((response) => response.toDomain()) ??
+                const Iterable.empty())
+            .cast<SpecPlan>()
+            .toList();
+    return ActivePlanBrandModel(
+      specPlans,
+      Type.fromName(this?.type?.trim() ?? Constants.empty),
+      this?.title ?? Constants.empty,
+      this?.pharmaceuticalFormTitle?.trim() ?? Constants.empty,
+      total: int.tryParse(this?.totalAmount?.toString() ?? "") ?? Constants.zero,
+    );
+  }
+}
+
+List<ActivePlanBrandModel> _mapPlanBrandsInfo(
+        List<PlanBrandInfoResponse>? list) =>
+    (list?.map((response) => response.toDomain()) ?? const Iterable.empty())
+        .cast<ActivePlanBrandModel>()
+        .toList();
+
+extension PlanBrandsInfoBaseMapper on PlanBrandsInfoBaseResponse? {
+  AllPlanBrandsInfo toDomain() {
+    return AllPlanBrandsInfo(
+      _mapPlanBrandsInfo(this?.data?.targetBrands),
+      _mapPlanBrandsInfo(this?.data?.targetBrandsWithoutAmount),
+      _mapPlanBrandsInfo(this?.data?.assistantBrands),
+    );
+  }
+}
+
 extension SeniorByCityidjsonMapper on SeniorByCityidBaseResponse? {
   List<SeniorCityModel> toDomain() {
     List<SeniorCityModel> data =
@@ -1011,6 +1044,7 @@ extension RepresentativeFutureMapper on RepresentativeFutureResponse? {
       int.parse(this?.samplesCount ?? "0"),
       RepType.fromIntS(this?.reptype),
       this?.planDate ?? Constants.empty,
+      int.parse(this?.percent ?? "0"),
     );
   }
 }
@@ -1147,5 +1181,31 @@ extension DocHosByPlaceAndSpMapper on GetDocHosByPlaceOrSpBaseResponse? {
             .cast<HospitalSpModel>()
             .toList();
     return DocHosByPlaceAndSp(doctors, hospitals);
+  }
+}
+
+extension HosDocSpSearchMapper on HosSpSearchResponse? {
+  HosDocSpSearchModel toDomain() {
+    return HosDocSpSearchModel(
+      this?.name ?? Constants.empty,
+      this?.spTitle ?? Constants.empty,
+      this?.placeTitle ?? Constants.empty,
+      this?.rate ?? Constants.empty,
+      this?.visits ?? Constants.empty,
+      totalDocs: this?.totalDocs ?? Constants.empty,
+    );
+  }
+}
+
+extension ListHosDocSpSearchMapper on
+ListHosSpSearchBaseResponse? {
+  List<HosDocSpSearchModel> toDomain() {
+    List<HosDocSpSearchModel> allSearchHospital = (this
+        ?.doctors?.doctors
+        ?.map((response) => response.toDomain()) ??
+        const Iterable.empty())
+        .cast<HosDocSpSearchModel>()
+        .toList();
+    return allSearchHospital;
   }
 }

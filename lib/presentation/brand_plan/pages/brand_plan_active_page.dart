@@ -2,6 +2,7 @@
 
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/uniti/type_style.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
@@ -659,7 +660,7 @@ class ActiveBrandPlanCard
                   // =============================================
                   // نفس الـBadge الأصلي
                   // =============================================
-                  Type.buildBadge(
+                  TypeBadge(
                     model
                         .spPlan[0]
                         .brandType,
@@ -733,6 +734,36 @@ class ActiveBrandPlanCard
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height:
+                    ui.sectionSpacing,
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E3A8A).withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFF1E3A8A).withOpacity(0.15),
+                      ),
+                    ),
+                    child: Text(
+                      "المجموع: ${model.totalAmount}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: const Color(0xFF1E3A8A),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
 
                   SizedBox(
@@ -872,6 +903,12 @@ class ActiveBrandPlanCard
                       );
                     },
                   ),
+
+                  // =============================================
+                  // Total
+                  // مجموع الكميات لكل الاختصاصات
+                  // =============================================
+
                 ],
               ),
             ),

@@ -1,18 +1,19 @@
+import 'package:domina_app/presentation/sync/pages/logout_page.dart';
+import 'package:domina_app/presentation/sync/pages/sync_page.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/pages/all_recip.dart';
 import 'package:domina_app/presentation/Recipes/pages/recipe_d_h.dart';
-import 'package:domina_app/presentation/async/pages/async_login_page.dart';
 import 'package:domina_app/presentation/brand_plan/pages/brand_plan_page.dart';
-import 'package:domina_app/presentation/doctors/pages/doctor_page/doctor_details%20.dart';
+import 'package:domina_app/presentation/doctors/pages/doctor_page/doctor_details.dart';
 import 'package:domina_app/presentation/doctors/pages/doctor_page/doctors.dart';
 import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital.dart';
 import 'package:domina_app/presentation/doctors/pages/hospital_page/hospital_details.dart';
 import 'package:domina_app/presentation/places/pages/place_visit_archive_page.dart';
 import 'package:domina_app/presentation/places/pages/places_archive.dart';
-import 'package:domina_app/presentation/plase_visit/pages/visit_doctor.dart';
-import 'package:domina_app/presentation/plase_visit/pages/visit_hospital.dart';
+import 'package:domina_app/presentation/place_visit/pages/visit_doctor.dart';
+import 'package:domina_app/presentation/place_visit/pages/visit_hospital.dart';
 import 'package:domina_app/presentation/senior/active_plan/pages/active_plan.dart';
 import 'package:domina_app/presentation/senior/admin/page/admin_dashboard_page.dart';
 import 'package:domina_app/presentation/senior/all_city/pages/all_city_for_rep_super.dart';
@@ -43,16 +44,12 @@ import 'package:domina_app/presentation/senior/representative/page/view_recipe.d
 import 'package:domina_app/presentation/senior/representative/widget/visits_type_page.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/doctor_info.dart';
 import 'package:domina_app/presentation/senior/search_doctors/page/main_search.dart';
-import 'package:domina_app/presentation/uniti/animation/curve%20.dart';
-import 'package:domina_app/presentation/upload_delete/page/async_logout_page.dart';
-import 'package:domina_app/presentation/upload_delete//page/async_page.dart';
-import 'package:domina_app/presentation/delete/page/delete_logout_page.dart';
-import 'package:domina_app/presentation/delete/page/delete_page.dart';
+import 'package:domina_app/presentation/uniti/animation/curve.dart';
 import 'package:domina_app/presentation/auth/pages/loginUser.dart';
 import 'package:domina_app/presentation/brand/pages/brand_page.dart';
 import 'package:domina_app/presentation/pharmacy/pages/pharmacy_page.dart';
 import 'package:domina_app/presentation/places/pages/places.dart';
-import 'package:domina_app/presentation/plase_visit/pages/place_visit_page.dart';
+import 'package:domina_app/presentation/place_visit/pages/place_visit_page.dart';
 import 'package:domina_app/presentation/resources/strings_manager.dart';
 import 'package:domina_app/presentation/specialization/pages/spec.dart';
 import 'package:domina_app/presentation/specialization/pages/spec_d_h.dart';
@@ -75,19 +72,15 @@ class Routes {
   static const String hospital = "/hospital";
   static const String brand = "/brand";
   static const String pharmacy = "/pharmacy";
-  static const String syncData = "/syncData";
+  static const String sync = "/sync";
   static const String visitPharmacy = "/visitPharmacy";
   static const String visits = "/visits";
-  static const String asyncIn = "/asyncIn";
   static const String specDH = "/specDH";
   static const String logout = "/logout";
   static const String brandPlan = "/brandPlan";
-  static const String delete = "/delete";
-  static const String deleteLogout = "/deleteLogout";
   static const String Recipes = "/Recipes";
   static const String fadeInWidget = "/fadeInWidget";
   static const String AllRepSenior = "/AllRepSenior";
-  // static const String cities = "/cities";
 
   static const String repProfile = "/RepProfile";
   static const String seniorPlaces = "/seniorPlaces";
@@ -120,7 +113,6 @@ class Routes {
   static const String recipesHospital = "/recipesHospital";
   static const String recipesDoctor = "/recipesDoctor";
 
-  // static const String createOrder = "/createOrder";
   static const String recipeDH = "/recipeDH";
 
   static const String allRepWithFuture = "/allRepWithFuture";
@@ -159,9 +151,6 @@ class RouteGenerator {
           spId: args['spId'],
         ));
 
-      // case Routes.createOrder:
-      //   initOrderBradModule();
-      //   return _animatedRoute(CreateOrderPage());
       case Routes.placeVisitPage:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
@@ -213,7 +202,6 @@ class RouteGenerator {
         return _animatedRoute(Places());
       case Routes.placesArchive:
         initPlacesModule();
-        // initPlaceVisitModule();
         initDoctorAndHospitalModule();
         return _animatedRoute(PlacesArchive());
       case Routes.spec:
@@ -235,24 +223,23 @@ class RouteGenerator {
         initPharmacyModule();
         return _animatedRoute(PharmacyPage());
 
-      case Routes.syncData:
-        initAsyncModule();
-        return _animatedRoute(AsyncLoginPage());
+      case Routes.sync:
+        initSyncModule();
+        return _animatedRoute(SyncPage());
 
       case Routes.visits:
         initVisitsModule();
         return _animatedRoute(VisitsPage());
 
-      case Routes.asyncIn:
-        initAsyncInModule();
-        return _animatedRoute(AsyncPage());
       case Routes.inventory:
         initSeniorReportInventoryModule();
         return _animatedRoute(ReportInventory());
 
       case Routes.logout:
-        initAsyncInModule();
-        return _animatedRoute(AsyncLogoutPage());
+        initSyncModule();
+        // arguments: true = تسجيل خروج بدون رفع (المندوب غير موجود بالسيرفر).
+        return _animatedRoute(
+            LogoutPage(withoutUpload: settings.arguments == true));
 
       case Routes.specDH:
         return _animatedRoute(SpecDH(spId: 0));
@@ -260,10 +247,6 @@ class RouteGenerator {
       case Routes.brandPlan:
         initBrandPlanModule();
         return _animatedRoute(BrandPlanPage());
-
-      case Routes.delete:
-        initDeleteModule();
-        return _animatedRoute(DeletePage());
 
       case Routes.allRecip:
         initBrandRecModule();
@@ -280,9 +263,6 @@ class RouteGenerator {
         UserInfo.repType.i==6?     iniAllCityModule():null;
         return _animatedRoute(AllRepSenior(
         ));
-      // case Routes.cities:
-      //
-      //   return _animatedRoute( AllCitySenior());
 
       case Routes.seniorPlaces:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
@@ -297,8 +277,6 @@ class RouteGenerator {
         return _animatedRoute(HospitalSenior());
       case Routes.seniorDoc:
         return _animatedRoute(DoctorSenior());
-      // case Routes.seniorNoteDoc:
-      //   return MaterialPageRoute(builder: (_) => NoteDoctor());
       case Routes.noVisitDoctor:
         return _animatedRoute(NoVisitDoctor());
       case Routes.remainingVisitsDoctor:
@@ -333,13 +311,20 @@ class RouteGenerator {
         final args = settings.arguments as Map<String, dynamic>?;
         final title = args?['title'];
         final flag = args?['flag'];
+        final percent = args?['percent'];
+        final isRep = args?['isRep'];
+        final sampleCount = args?['sampleCount'];
+        final spId = args?['spId'];
+        final repPlanId = args?['repPlanId'];
         return _animatedRoute(RepPlanBrandSpPage(
           title: title,
           flag: flag,
+          percent: percent,
+            isRep:isRep,
+          sampleCount: sampleCount,
+          spId:spId ,
+          repPlanId: repPlanId,
         ));
-      case Routes.deleteLogout:
-        initDeleteModule();
-        return _animatedRoute(DeleteLogoutPage());
       case Routes.doctorInfo:
         return _animatedRoute(DoctorInfo());
       case Routes.allRecipe:

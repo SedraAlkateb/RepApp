@@ -8,11 +8,6 @@ final class ActivePlanBlocInitial extends ActivePlanState {
   List<Object> get props => [];
 }
 
-final class AllActivePlanEmptyState extends ActivePlanState {
-  AllActivePlanEmptyState();
-  @override
-  List<Object?> get props => [];
-}
 
 final class AllActivePlanErrorState extends ActivePlanState {
   final Failure failure;

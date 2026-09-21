@@ -6,6 +6,7 @@ import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/app/alarm-and-notifications.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di/di.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/crashlytics/app_bloc_observer.dart';
 import 'package:domina_app/crashlytics/crashlytics_service.dart';
@@ -35,12 +36,28 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
+final _log = AppLogger.get('Main');
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // debugPrint لا يُحذف في release: نُسكته حتى لا تتسرب رسائل التطبيق إلى logcat.
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
+  AppLogger.init();
 
-// ------------------------------------------------------------
-// Firebase
-// ------------------------------------------------------------
+  // جعل أشرطة النظام شفافة تماماً لتجنب ظهور المربعات السوداء
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // شفاف لشريط الأعلى (الساعة والشحن)
+      statusBarIconBrightness: Brightness.dark, // لون أيقونات الساعة (dark أو light)
+      systemNavigationBarColor: Colors.transparent, // شفاف للشريط السفلي
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  // إذا كنت تريد أن يتمدد التطبيق تحت أشرطة النظام بالكامل (Edge-to-Edge):
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -98,7 +115,9 @@ Future<void> main() async {
           reason: 'App requirements initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (app requirements init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -112,7 +131,9 @@ Future<void> main() async {
 
     try {
       UserInfo.isLogging = 0;
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('failed to reset isLogging', e);
+    }
 
     try {
       if (Firebase.apps.isNotEmpty) {
@@ -123,7 +144,9 @@ Future<void> main() async {
           reason: 'User data initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (user data init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -168,7 +191,9 @@ Future<void> _setupAppRequirements() async {
           reason: 'DI initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (DI init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -214,7 +239,9 @@ Future<void> _setupAppRequirements() async {
           reason: 'Notifications initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (notifications init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -279,9 +306,7 @@ class MyResponsiveApp extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     final double deviceWidth = mq.size.width;
-
     final bool isTabletDevice = deviceWidth > 450;
-
     final bool isTabletLandscape =
         isTabletDevice && mq.orientation == Orientation.landscape;
 
@@ -289,33 +314,31 @@ class MyResponsiveApp extends StatelessWidget {
       designSize: isTabletDevice ? const Size(500, 800) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-
-// ----------------------------------------------------------
-// Font scaling
-// ----------------------------------------------------------
       fontSizeResolver: (fontSize, instance) {
         if (isTabletLandscape) {
           return (fontSize * instance.scaleText) * 2;
         }
-
         return fontSize * instance.scaleText;
       },
-
-// ----------------------------------------------------------
-// App
-// ----------------------------------------------------------
       builder: (context, child) {
-        return SafeArea(
-          bottom: true,
+        // جلب مساحة شريط الحالة بالأعلى والشريط السفلي دون استخدام SafeArea
+        final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
+        return Container(
+          color: const Color(0xFFFFFFFF), // نفس لون خلفية التطبيق أو الـ Scaffold لديك
+                child: Padding(
+                padding: EdgeInsets.only(
+                bottom: bottomPadding,
+                ),
           child: const MyApp(
             key: ValueKey('app_root'),
           ),
-        );
+        ),
+                );
       },
     );
   }
 }
-
 // ============================================================
 // USER DATA
 // ============================================================
@@ -401,7 +424,9 @@ Future<void> _prepareUserData() async {
               stackTrace: stack,
               reason: 'Check Plan Expiration',
             );
-          } catch (_) {}
+          } catch (e) {
+            _log.warning('crashlytics report failed (check plan expiration)', e);
+          }
         }
 
 // ------------------------------------------------------
@@ -517,7 +542,9 @@ Future<void> _checkPlanExpiration() async {
         stackTrace: stack,
         reason: "Check Plan Expiration",
       );
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (check plan expiration)', e);
+    }
 
     debugPrint(
       'Check plan expiration error: $e',
@@ -540,7 +567,8 @@ class MyHttpOverrides extends HttpOverrides {
         String host,
         int port,
       ) {
-        if (host == '192.168.1.50' || host == 'localhost') {
+        // تجاوز الشهادة لبيئة التطوير المحلية فقط، وليس في release.
+        if (!kReleaseMode && (host == '192.168.1.50' || host == 'localhost')) {
           return true;
         }
 

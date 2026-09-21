@@ -2,12 +2,10 @@ import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 
 import 'package:domina_app/presentation/Recipes/bloc/recipes_brand_bloc.dart';
-import 'package:domina_app/presentation/async/bloc/async_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
-import 'package:domina_app/presentation/delete/bloc/delete_bloc.dart';
 import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
-import 'package:domina_app/presentation/plase_visit/bloc/visit_place_bloc.dart';
+import 'package:domina_app/presentation/place_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/resources/them_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
@@ -25,6 +23,7 @@ import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctor
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/uniti/app_bar_theme.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,6 +31,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 void resetAppNavigatorKey() {
   appNavigatorKey = GlobalKey<NavigatorState>();
+}
+
+/// يسمح بالسحب بالماوس/القلم/التاتش باد في كل القوائم والـ sheets
+/// (الافتراضي في Flutter: اللمس فقط).
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.trackpad,
+      };
 }
 
 class MyApp extends StatelessWidget {
@@ -44,7 +57,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => instance<FinishedPlanBloc>()),
 
         BlocProvider(create: (_) => instance<PlanManagementBloc>()),
-        BlocProvider(create: (_) => instance<DeleteBloc>()),
         BlocProvider(create: (_) => instance<ReportVisitDoctorBloc>()),
         BlocProvider<EditBrandPlanBloc>(
             create: (_) => instance<EditBrandPlanBloc>()),
@@ -83,7 +95,6 @@ class MyApp extends StatelessWidget {
             ..add(VisitDoctorEvent())
             ..add(BrandFlagEditeEvent()),
         ),
-        BlocProvider(create: (_) => instance<AsyncBloc>()),
         BlocProvider(create: (_) => instance<SearchDoctorsBloc>()),
         BlocProvider<ManageFutureBloc>(
             create: (_) => instance<ManageFutureBloc>()),
@@ -110,6 +121,7 @@ class MyApp extends StatelessWidget {
           localeResolutionCallback: (locale, supportedLocales) =>
               const Locale('ar'),
           debugShowCheckedModeBanner: false,
+          scrollBehavior: const AppScrollBehavior(),
           onGenerateRoute: RouteGenerator.getRoute,
           initialRoute: _getInitialRoute(),
           theme: getApplicationTheme().copyWith(
@@ -134,9 +146,12 @@ class MyApp extends StatelessWidget {
         return Routes.AllRepSenior;
       }
     }
-    if (UserInfo.isLogging == 1) return Routes.syncData;
-    if (UserInfo.isLogging == 4) return Routes.syncData;
-    if (UserInfo.isLogging == 5) return Routes.asyncIn;
+    // 1/4: تحميل فقط، 5: خطة منتهية => مزامنة كاملة (رفع ثم تحميل).
+    if (UserInfo.isLogging == 1 ||
+        UserInfo.isLogging == 4 ||
+        UserInfo.isLogging == 5) {
+      return Routes.sync;
+    }
 
     return Routes.places;
   }

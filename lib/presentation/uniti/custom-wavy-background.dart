@@ -56,17 +56,6 @@ class WavyHeader3 extends StatelessWidget {
   }
 }
 
-class Wavybottum extends StatelessWidget {
-  const Wavybottum({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: RPSCustomPainter3(),
-      size: const Size(double.infinity, double.infinity),
-    );
-  }
-}
 
 class Wavybottum2 extends StatelessWidget {
   const Wavybottum2({super.key});
@@ -168,81 +157,6 @@ class RPSCustomPainter2 extends CustomPainter {
   }
 }
 
-class RPSCustomPainter3 extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Layer 1
-
-    Paint paint_fill_0 = Paint()
-      ..color = const Color(0xFF3A434D)
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.butt
-      ..strokeJoin = StrokeJoin.miter;
-
-    Path path_0 = Path();
-    path_0.moveTo(size.width * -0.0771333, size.height * 0.6668000);
-    path_0.quadraticBezierTo(size.width * 0.0833167, size.height * 0.8995667,
-        size.width * 0.1280917, size.height * 0.9168000);
-    path_0.cubicTo(
-        size.width * 0.1665250,
-        size.height * 0.9538000,
-        size.width * 0.2268167,
-        size.height * 0.9382667,
-        size.width * 0.2739000,
-        size.height * 0.9096667);
-    path_0.cubicTo(
-        size.width * 0.3469083,
-        size.height * 0.8539833,
-        size.width * 0.3914833,
-        size.height * 0.8100167,
-        size.width * 0.4591667,
-        size.height * 0.7601167);
-    path_0.cubicTo(
-        size.width * 0.5069417,
-        size.height * 0.7238833,
-        size.width * 0.5312167,
-        size.height * 0.7049167,
-        size.width * 0.5825000,
-        size.height * 0.6633333);
-    path_0.cubicTo(
-        size.width * 0.6223333,
-        size.height * 0.6313667,
-        size.width * 0.6753500,
-        size.height * 0.5955667,
-        size.width * 0.7525000,
-        size.height * 0.5866667);
-    path_0.cubicTo(
-        size.width * 0.8005250,
-        size.height * 0.5795333,
-        size.width * 0.8564500,
-        size.height * 0.5777500,
-        size.width * 0.9125000,
-        size.height * 0.5866667);
-    path_0.quadraticBezierTo(size.width * 0.9804250, size.height * 0.5968167,
-        size.width * 1.0700000, size.height * 0.6416667);
-    path_0.lineTo(size.width * 1.0658333, size.height * 1.1966667);
-    path_0.lineTo(size.width * -0.0675000, size.height * 1.2216667);
-
-    canvas.drawPath(path_0, paint_fill_0);
-
-    // Layer 1
-
-    Paint paint_stroke_0 = Paint()
-      ..color = const Color(0xFFF4AC47)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.butt
-      ..strokeJoin = StrokeJoin.miter;
-
-    canvas.drawPath(path_0, paint_stroke_0);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
-}
 
 class RPSCustomPainter4 extends CustomPainter {
   @override

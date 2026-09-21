@@ -409,23 +409,6 @@ class _HospitalSpState
 
                     const Spacer(),
 
-                    /*
-                    InkWell(
-                      onTap: () =>
-                          Navigator.pushNamed(
-                        context,
-                        Routes.hospitalDetails,
-                        arguments: hospital,
-                      ),
-                      child: buildCardButton(
-                        context,
-                        "عرض التفاصيل",
-                        ColorManager.medicalPrimary,
-                        Colors.white,
-                        Icons.directions_run,
-                      ),
-                    ),
-                    */
                   ],
                 ),
               ],

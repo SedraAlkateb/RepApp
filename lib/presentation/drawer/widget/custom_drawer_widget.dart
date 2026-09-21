@@ -1,5 +1,5 @@
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/domain/models/drawer_model.dart';
+import 'package:domina_app/presentation/drawer/model/drawer_model.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';

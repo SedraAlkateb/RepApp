@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
 import 'package:domina_app/presentation/brand_plan/widget/dialog_plan.dart';
@@ -15,9 +16,8 @@ class SaveSendBottom extends StatelessWidget {
         left: 10,
         child: Column(
           children: [
-            InkWell(
+            AppInkWell(
               onTap: () {
-                print(UserInfo.otherstatus);
                 UserInfo.otherstatus == 0
                     ? showDialog(
                         context: context,
@@ -54,11 +54,8 @@ class SaveSendBottom extends StatelessWidget {
                 ),
               ),
             ),
-            InkWell(
+            AppInkWell(
               onTap: () {
-                print("UserInfo.otherstatus ${UserInfo.otherstatus}");
-                print("UserInfo.flag ${UserInfo.flag}");
-                print("UserInfo.flag1${UserInfo.flag1}");
                 UserInfo.otherstatus == 0
                     ? showDialog(
                         context: context,

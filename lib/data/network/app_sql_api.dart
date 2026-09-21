@@ -1,10 +1,14 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/language_manager.dart';
+import 'package:domina_app/app/number_utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('AppSqlApi');
 
 abstract class AppSqlApiAbs {
   Future<String> asyncData(
@@ -18,7 +22,9 @@ abstract class AppSqlApiAbs {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands});
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false});
   /////////////////////////////////////////////////////////////////////////////////
   insertBrands(List<BrandModel> brands);
   insertHospitalSp(List<HospitalSpModel> hospitalSps);
@@ -112,7 +118,9 @@ class AppSqlApi extends AppSqlApiAbs {
   Future<void> initializeDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     try {
-      await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
+      // تسجيل الاستعلامات بقيمها (توكن، بيانات زيارات) للتطوير فقط.
+      await databaseFactory.debugSetLogLevel(
+          kDebugMode ? sqfliteLogLevelVerbose : sqfliteLogLevelNone);
     } on MissingPluginException {
       // Some tests use the FFI SQLite implementation instead of the platform plugin.
     }
@@ -141,12 +149,28 @@ class AppSqlApi extends AppSqlApiAbs {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands}) async {
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false}) async {
     try {
       Database? mydb = await databaseHelper.database;
       await mydb.transaction((txn) async {
+        // استبدال ذرّي: الحذف والإدخال في معاملة واحدة، فإذا فشل الإدخال يُتراجع
+        // عن الحذف وتبقى البيانات المحلية القديمة سليمة.
+        // planBrand تُحذف فقط إذا كانت ستُستبدل بخطة محمّلة أو لم تكن خطة المندوب
+        // المحفوظة محلياً (keepPlanBrand) — الخطة المحفوظة offline لا تُمسّ أبداً.
+        if (replaceExisting) {
+          final hasNewPlanBrands = planBrands != null && planBrands.isNotEmpty;
+          for (final table in _baseTablesToClear) {
+            if (table == 'planBrand' && keepPlanBrand && !hasNewPlanBrands) {
+              continue;
+            }
+            await txn.delete(table);
+          }
+        }
         Batch batch = txn.batch();
-        await txn.execute("PRAGMA foreign_keys = OFF");
+        // ملاحظة: PRAGMA foreign_keys لا يعمل داخل transaction في SQLite، لذلك أُزيل.
+        // الإدراج أدناه مرتّب بحيث تُدرج الجداول الأب قبل الأبناء.
         for (var place in places) {
           batch.insert(
             'place',
@@ -171,9 +195,6 @@ class AppSqlApi extends AppSqlApiAbs {
             brand.toMap(),
           );
         }
-        // for (var pharmacy in pharmacies) {
-        //   batch.insert('pharmacy', pharmacy.toMap());
-        // }
         for (var spec in specs) {
           batch.insert('specialization', spec.toMap());
         }
@@ -225,7 +246,6 @@ class AppSqlApi extends AppSqlApiAbs {
             conflictAlgorithm: ConflictAlgorithm.abort,
           );
         }
-        await txn.execute("PRAGMA foreign_keys = ON");
         await batch.commit(noResult: true);
         final List<Map<String, dynamic>> maps = await txn.rawQuery('''
         SELECT 
@@ -292,9 +312,8 @@ class AppSqlApi extends AppSqlApiAbs {
       });
       return "";
     } catch (error) {
-      print(error.toString());
+      _log.severe('asyncData failed', error);
       return error.toString();
-      //throw error;
     }
   }
 
@@ -417,35 +436,43 @@ class AppSqlApi extends AppSqlApiAbs {
     UserInfo.flag1 = 0;
   }
 
+  /// الجداول الأساسية المُعاد تحميلها من السيرفر بالمزامنة (الأبناء قبل الآباء
+  /// لأن المفاتيح الأجنبية مفعّلة). الزيارات غير المرسلة يجب رفعها قبل الحذف.
+  static const List<String> _baseTablesToClear = [
+    'visit_brand_pharmacy',
+    'visit_brand_doctor',
+    'visit_brand_hospital',
+    'visit_doctor',
+    'visit_hospital',
+    'visit_pharmacy',
+    'brandSp',
+    'planBrand',
+    'hospitalSp',
+    'doctor',
+    'pharmacy',
+    'specialization',
+    'hospital',
+    'place',
+    'brand',
+    'exception_table',
+  ];
+
   Future<void> clearDatabase() async {
     final db = await databaseHelper.database;
-    final tables = [
-      'visit_brand_pharmacy',
-      'visit_brand_doctor',
-      'visit_brand_hospital',
-      'visit_doctor',
-      'visit_hospital',
-      'visit_pharmacy',
-      'brandSp',
-      ((UserInfo.flag1 == 0)) ? 'planBrand' : null,
-      'hospitalSp',
-      'doctor',
-      'pharmacy',
-      'specialization',
-      'hospital',
-      'place',
-      'brand',
-      'exception_table'
-    ];
+    final keepPlanBrand = UserInfo.flag1 != 0;
 
     Batch batch = db.batch();
     await db.execute('PRAGMA foreign_keys = OFF;');
-
-    for (var table in tables) {
-      table != null ? batch.delete(table) : null;
+    try {
+      for (var table in _baseTablesToClear) {
+        if (table == 'planBrand' && keepPlanBrand) continue;
+        batch.delete(table);
+      }
+      await batch.commit(noResult: true);
+    } finally {
+      // نعيد تفعيل المفاتيح الأجنبية حتى لو فشل الحذف.
+      await db.execute('PRAGMA foreign_keys = ON;');
     }
-    await batch.commit(noResult: true);
-    await db.execute('PRAGMA foreign_keys = ON;');
   }
 
   Future<void> clearDatabaseAll() async {
@@ -823,7 +850,7 @@ class AppSqlApi extends AppSqlApiAbs {
           );
         }
       } catch (e) {
-        print('Error inserting visit and brands: $e');
+        _log.severe('Error inserting visit and brands', e);
         rethrow;
       }
     });
@@ -867,7 +894,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'لا يمكن إضافة زيارة جديدة. تم زيارة الطبيب خلال الخمسة أيام الماضية.');
         }
       } catch (e) {
-        print('Error inserting visit and brands: $e');
+        _log.severe('Error inserting visit and brands', e);
         rethrow;
       }
     });
@@ -919,7 +946,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال اليومين  الماضيين.');
         }
       } catch (e) {
-        print('Error inserting visit and brands: $e');
+        _log.severe('Error inserting visit and brands', e);
         rethrow;
       }
     });
@@ -961,7 +988,7 @@ class AppSqlApi extends AppSqlApiAbs {
               'لا يمكن إضافة زيارة جديدة. تم زيارة المشفى خلال اليومين  الماضيين.');
         }
       } catch (e) {
-        print('Error inserting visit: $e');
+        _log.severe('Error inserting visit', e);
         rethrow;
       }
     });
@@ -1512,38 +1539,49 @@ class AppSqlApi extends AppSqlApiAbs {
     await batch.commit(noResult: true);
   }
 
-  Future<bool> updateFlagsToHospital() async {
-    Database? db = await databaseHelper.database;
+  /// تعليم الزيارات كمُرسَلة. عند تمرير [visitIds]/[brandIds] تُعلَّم هذه
+  /// الصفوف فقط (الزيارات التي أُضيفت أثناء الرفع تبقى flag = 0 لتُرسل لاحقاً).
+  /// إذا كانت القائمتان null يُعلَّم كل شيء (السلوك القديم).
+  Future<bool> updateFlagsToHospital(
+      {List<int>? visitIds, List<int>? brandIds}) async {
+    return _markSynced('visit_hospital', 'visit_brand_hospital', visitIds,
+        brandIds);
+  }
+
+  Future<bool> updateFlagsToDoctor(
+      {List<int>? visitIds, List<int>? brandIds}) async {
+    return _markSynced(
+        'visit_doctor', 'visit_brand_doctor', visitIds, brandIds);
+  }
+
+  Future<bool> _markSynced(String visitTable, String brandTable,
+      List<int>? visitIds, List<int>? brandIds) async {
+    final db = await databaseHelper.database;
     try {
+      // بدون try/catch داخلي: أي فشل يُلغي العملية كاملة (rollback) ويرجع false.
       await db.transaction((txn) async {
-        try {
-          await txn.rawUpdate('UPDATE visit_hospital SET flag = 1');
-          await txn.rawUpdate('UPDATE visit_brand_hospital SET flag = 1');
-        } catch (e) {
-          return false;
-        }
+        await _setFlagSynced(txn, visitTable, visitIds);
+        await _setFlagSynced(txn, brandTable, brandIds);
       });
     } catch (e) {
+      _log.severe('markSynced failed for $visitTable', e);
       return false;
     }
     return true;
   }
 
-  Future<bool> updateFlagsToDoctor() async {
-    Database? db = await databaseHelper.database;
-    try {
-      await db.transaction((txn) async {
-        try {
-          await txn.rawUpdate('UPDATE visit_doctor SET flag = 1');
-          await txn.rawUpdate('UPDATE visit_brand_doctor SET flag = 1');
-        } catch (e) {
-          return false;
-        }
-      });
-    } catch (e) {
-      return false;
+  Future<void> _setFlagSynced(
+      Transaction txn, String table, List<int>? ids) async {
+    if (ids == null) {
+      await txn.rawUpdate('UPDATE $table SET flag = 1');
+      return;
     }
-    return true;
+    // حد SQLite لعدد المتغيرات: نقسم القائمة إلى دفعات.
+    for (var i = 0; i < ids.length; i += 500) {
+      final chunk = ids.sublist(i, i + 500 > ids.length ? ids.length : i + 500);
+      final marks = List.filled(chunk.length, '?').join(',');
+      await txn.rawUpdate('UPDATE $table SET flag = 1 WHERE id IN ($marks)', chunk);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getAllUsers() async {
@@ -1592,72 +1630,6 @@ class AppSqlApi extends AppSqlApiAbs {
     return tables.map((t) => t['name'] as String).toList();
   }
 
-  Future<void> debugOtherPlanBrandByRepPlanId(int repPlanId) async {
-    Database? mydb = await databaseHelper.database;
-
-    // ---- الاستعلام الأصلي ----
-    const query = '''
-  SELECT  
-    planBrand.id AS plan_id,
-    planBrand.repPlanId,
-    planBrand.brandType,
-    planBrand.amount,
-    brand.id AS brand_id,
-    brand.title AS brand_title,
-    brand.phTitle AS brand_phTitle,
-    brand.sampleCoast AS brand_sampleCost,
-    specialization.id AS specialization_id,
-    specialization.title AS specialization_title,
-    specialization.flag AS specialization_flag,
-    specialization.sumDoctor AS sumDoctor,
-    specialization.sumHospital AS sumHospital,
-    specialization.sumBrandHospital AS sumBrandHospital
-  FROM 
-    planBrand
-  JOIN  
-    brand ON planBrand.brandId = brand.id
-  JOIN 
-    specialization ON planBrand.spId = specialization.id
-  WHERE 
-    planBrand.repPlanId = ?;
-  ''';
-
-    print("🚀 Running SQL query:\n$query");
-    print("With repPlanId = $repPlanId");
-
-    final List<Map<String, dynamic>> maps =
-        await mydb.rawQuery(query, [repPlanId]);
-
-    print("📊 Query returned ${maps.length} rows:");
-    for (var row in maps) {
-      print(row);
-    }
-
-    // ---- محتويات الجداول ----
-    print("\n==============================");
-    print("📌 Table: planBrand");
-    var planBrands = await mydb.rawQuery("SELECT * FROM planBrand");
-    for (var row in planBrands) {
-      print(row);
-    }
-
-    // print("\n==============================");
-    // print("📌 Table: brand");
-    // var brands = await mydb.rawQuery("SELECT * FROM brand");
-    // for (var row in brands) {
-    //   print(row);
-    // }
-
-    print("\n==============================");
-    print("📌 Table: specialization");
-    var specs = await mydb.rawQuery("SELECT * FROM specialization");
-    for (var row in specs) {
-      print(row);
-    }
-
-    print("==============================\n");
-  }
-
   @override
   Future<void> numDocAndHos() async {
     Database? mydb = await databaseHelper.database;
@@ -1672,7 +1644,6 @@ class AppSqlApi extends AppSqlApiAbs {
     // استخراج الأرقام من النتائج (الافتراضي 0 في حال كانت القائمة فارغة)
     UserInfo.numDoctor = Sqflite.firstIntValue(doctorCountResult) ?? 0;
     UserInfo.numHospital = Sqflite.firstIntValue(hospitalCountResult) ?? 0;
-    // initDoctorModule();
   }
 
   @override

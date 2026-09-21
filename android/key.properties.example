@@ -1,0 +1,6 @@
+# انسخ هذا الملف إلى key.properties (مُتجاهَل في git) واملأ القيم.
+# يجب أن يكون نفس keystore/upload key المستخدم في النسخة المنشورة، وإلا سيرفض Play التحديث.
+storePassword=
+keyPassword=
+keyAlias=
+storeFile=C:/path/to/upload-keystore.jks

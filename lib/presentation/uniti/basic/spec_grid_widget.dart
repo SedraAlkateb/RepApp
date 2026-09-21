@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
@@ -102,7 +103,7 @@ class SpecGridWidget extends StatelessWidget {
 
         return Material(
           color: Colors.transparent,
-          child: InkWell(
+          child: AppInkWell(
             onTap:
             isPr==false?null:
             onTap != null

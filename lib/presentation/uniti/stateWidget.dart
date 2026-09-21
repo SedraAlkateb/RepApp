@@ -5,6 +5,9 @@ import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('StateWidget');
 Widget loadingFullScreen(BuildContext context) {
   return LoadingState(
           stateRendererType: StateRendererType.fullScreenLoadingState)
@@ -571,7 +574,11 @@ void error(BuildContext context, String massage, int code) async {
   ErrorState(StateRendererType.popupErrorState, massage)
       .showPopup(context, StateRendererType.popupErrorState, massage);
 }
+void errorWithoutPop(BuildContext context, String massage, int code) async {
 
+  ErrorState(StateRendererType.popupErrorState, massage)
+      .showPopup(context, StateRendererType.popupErrorState, massage);
+}
 void loading(BuildContext context, {String? text}) {
   LoadingState(stateRendererType: StateRendererType.popupLoadingState)
       .showPopup(context, StateRendererType.popupLoadingState, "loading $text");
@@ -582,7 +589,7 @@ Future<bool> success(BuildContext context) async {
     dismissDialog(context);
     return true;
   } catch (e) {
-    print("ssssssssssssssssss: $e");
+    _log.warning('success() failed', e);
     return false;
   }
 }
@@ -597,16 +604,14 @@ Future<bool> dismissDialog(BuildContext context) async {
     // نتحقق مباشرة من الـ rootNavigator إذا كان لديه أي Dialog مفتوح يمكن إغلاقه
     if (Navigator.of(context, rootNavigator: true).canPop()) {
       Navigator.of(context, rootNavigator: true).pop(true);
-      print("Dialog dismissed successfully33.");
 
       // نمنح المعالج 50 ملي ثانية لإنهاء حركة الإغلاق والتأكد من استقرار الـ Context
       await Future.delayed(const Duration(milliseconds: 50));
       return true;
     }
-    print("No dialog found to dismiss.");
     return false;
   } catch (e) {
-    print("Error during dismissDialog: $e");
+    _log.warning('dismissDialog failed', e);
     return false;
   }
 }

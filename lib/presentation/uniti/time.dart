@@ -1,8 +1,9 @@
 import 'package:intl/intl.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('TimeUtils');
 
 String formatDateTime(String dateTimeString) {
-  print(dateTimeString);
-  print("dateTimeString");
   DateTime dateTime = DateTime.parse(dateTimeString);
   return DateFormat('MMM d, yyyy').format(dateTime);
 }
@@ -16,7 +17,7 @@ DateTime formatStringToDataTime(String dateString) {
     DateFormat format = DateFormat("dd-MM-yyyy");
     return format.parse(dateString);
   } catch (e) {
-    print("خطأ في تحليل التاريخ: $e");
+    _log.warning('formatStringToDataTime failed for "$dateString"', e);
     return DateTime(2000, 1, 1); // قيمة افتراضية لتجنب الكراش
   }
 }

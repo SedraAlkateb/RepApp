@@ -134,8 +134,6 @@ abstract class AppServiceClient {
   });
   @POST("/reci/reciNum.php") //
   Future<ReciNumResponse> reciNum();
-  // @POST("/hosVisit.php")
-  // Future<List<VisitHospitalRequestBody>> uploadVisitHospital();
   @POST("/reci/copyRe.php") //
   Future<CopyRecResponse> copyReci(
     @Part(name: "docId") int docId,
@@ -266,6 +264,12 @@ abstract class AppServiceClient {
   @POST("/admin/getinfoPlanBrandsType.php")
   Future<ActiveBrandPlanBaseResponse> getinfoPlanBrandsType(
     @Part(name: "repPlanId") int repPlanId,
+      {
+    @Part(name: "status") int status=0,
+  });
+  @POST("/admin/getinfoPlanBrands.php")
+  Future<PlanBrandsInfoBaseResponse> getInfoPlanBrands(
+    @Part(name: "repPlanId") int repPlanId,
   );
   @POST("/pharmacyOrder.php")
   Future<Message1Response> pharmacyOrder(@Body() PharmacyOrderRequestBody list);
@@ -330,6 +334,18 @@ abstract class AppServiceClient {
     @Part(name: "placeId") int? placeId,
    @Part(name: "cityId") int? cityId
   });
+
+  @POST("/admin/hosSpSearch.php")
+  Future<ListHosSpSearchBaseResponse> hosSpSearch(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "spId") int spId,
+      );
+  @POST("/admin/docSpSearch.php")
+  Future<ListHosSpSearchBaseResponse> docSpSearch(
+      @Part(name: "repPlanId") int repPlanId,
+      @Part(name: "spId") int spId,
+      );
 }
+
 
 ///admin/getinfoPlanBrandsType.php

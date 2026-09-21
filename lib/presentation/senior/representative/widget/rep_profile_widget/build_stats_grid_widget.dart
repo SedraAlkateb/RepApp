@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
@@ -479,7 +480,7 @@ Widget buildIconBtn(
       break;
   }
 
-  return InkWell(
+  return AppInkWell(
     // =================================================
     // نفس السلوك
     // =================================================

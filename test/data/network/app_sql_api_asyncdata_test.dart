@@ -28,12 +28,26 @@ class FakeDatabaseHelper implements DatabaseAccessor {
          await db.execute('CREATE TABLE place (placeId INTEGER PRIMARY KEY, title TEXT NOT NULL,totalVisit INTEGER NOT NULL DEFAULT 0 );');
          await db.execute('CREATE TABLE doctor (id INTEGER PRIMARY KEY, title TEXT NOT NULL, placeId INTEGER NOT NULL, address TEXT NOT NULL, placeTitle TEXT NOT NULL, visits INTEGER NOT NULL, spTitle TEXT NOT NULL, workHours TEXT NOT NULL, note TEXT NOT NULL, rate TEXT NOT NULL, spId INTEGER NOT NULL);');
          await db.execute('CREATE TABLE hospital (id INTEGER PRIMARY KEY, title TEXT NOT NULL, address TEXT NOT NULL, placeId INTEGER NOT NULL, note TEXT NOT NULL, placeTitle TEXT NOT NULL);');
-         await db.execute('CREATE TABLE brand (id INTEGER PRIMARY KEY, title TEXT NOT NULL, phTitle TEXT NOT NULL, falg INTEGER NOT NULL, sampleCoast INTEGER NOT NULL);');
+
+         // ✅ تعديل جدول brand ليطابق البنية الفعلية ويحتوي على الأعمدة المطلوبة
+         await db.execute('''
+           CREATE TABLE brand (
+             id INTEGER PRIMARY KEY,
+             title TEXT NOT NULL,
+             phTitle TEXT NOT NULL,
+             falg INTEGER NOT NULL,
+             sampleCoast INTEGER NOT NULL,
+             features TEXT,
+             generalCoast TEXT,
+             phCoast TEXT
+           );
+         ''');
+
          await db.execute('CREATE TABLE hospitalSp (id INTEGER PRIMARY KEY, hospitalId INTEGER NOT NULL, spId INTEGER NOT NULL, totalDocs INTEGER NOT NULL, rate TEXT NOT NULL, visit INTEGER NOT NULL, flag INTEGER NOT NULL DEFAULT 0);');
          await db.execute('CREATE TABLE brandSp (id INTEGER PRIMARY KEY, spId INTEGER NOT NULL, brandId INTEGER NOT NULL, brandType TEXT NOT NULL);');
          await db.execute('CREATE TABLE visit_hospital (id INTEGER PRIMARY KEY, data TEXT NOT NULL, hospitalSpId INTEGER NOT NULL);');
          await db.execute('CREATE TABLE visit_doctor (id INTEGER PRIMARY KEY, data TEXT NOT NULL, doctorId INTEGER NOT NULL);');
-       },
+         },
       ),
     );
     return db;

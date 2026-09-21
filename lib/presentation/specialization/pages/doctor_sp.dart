@@ -304,23 +304,6 @@ class _DoctorSpState extends State<DoctorSp> {
                     ),
                     const Spacer(),
 
-                    /*
-                    InkWell(
-                      onTap: () =>
-                          Navigator.pushNamed(
-                        context,
-                        Routes.doctorDetails,
-                        arguments: doctor,
-                      ),
-                      child: buildCardButton(
-                        context,
-                        "عرض التفاصيل",
-                        ColorManager.medicalPrimary,
-                        Colors.white,
-                        Icons.directions_run,
-                      ),
-                    ),
-                    */
                   ],
                 ),
               ],

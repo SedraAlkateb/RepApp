@@ -7,10 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SpecSeniorPage extends StatelessWidget {
+class SpecSeniorPage extends StatefulWidget {
+  const SpecSeniorPage({super.key, required this.isPr});
+
   final bool isPr;
-  SpecSeniorPage({super.key, required this.isPr});
+
+  @override
+  State<SpecSeniorPage> createState() => _SpecSeniorPageState();
+}
+
+class _SpecSeniorPageState extends State<SpecSeniorPage> {
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +61,6 @@ class SpecSeniorPage extends StatelessWidget {
                 ),
                 BlocConsumer<SeniorProfBloc, SeniorProfState>(
                   listener: (context, state) {
-                    /*
-                            if (state is AllSpecLoadingState) {
-                              loading(context);
-                            }
-                            if (state is AllSpecState) {
-                              success(context);
-                            }
-                            */
                     if (state is SenAllSpecErrorState) {
                       error(context, state.failure.massage, state.failure.code);
                     }
@@ -70,7 +75,7 @@ class SpecSeniorPage extends StatelessWidget {
                       return loadingFullScreen(context);
                     }
                     return SpecGridWidget(
-                        isPr:isPr,
+                        isPr:widget.isPr,
                         items: placeModel, crossAxisCount: crossAxisCount);
                   },
                 ),

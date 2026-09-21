@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/brand_plan/bloc/brand_plan_bloc.dart';
@@ -8,14 +9,30 @@ import 'package:domina_app/presentation/brand_plan/widget/save_send_bottom.dart'
 import 'package:domina_app/presentation/resources/assets_manager.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
+import 'package:domina_app/presentation/uniti/search.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SpecPlanPage extends StatelessWidget {
+class SpecPlanPage extends StatefulWidget {
   const SpecPlanPage({
     super.key,
   });
+
+  @override
+  State<SpecPlanPage> createState() => _SpecPlanPageState();
+}
+
+class _SpecPlanPageState extends State<SpecPlanPage> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchText = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +81,16 @@ class SpecPlanPage extends StatelessWidget {
                   ),
                 );
               }
+
+              // الفهارس الأصلية للاختصاصات المطابقة للبحث (الفهرس الأصلي مطلوب للـ bloc)
+              final query = normalizeText(_searchText.trim());
+              final filteredIndexes = <int>[
+                for (int i = 0; i < planBrandModel.length; i++)
+                  if (query.isEmpty ||
+                      normalizeText(planBrandModel[i].specModel.title)
+                          .contains(query))
+                    i,
+              ];
 
               return OrientationBuilder(
                 builder: (
@@ -149,7 +176,20 @@ class SpecPlanPage extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: ui.isMobile ? 25 : 28,
+                                    height: ui.isMobile ? 20 : 22,
+                                  ),
+                                  SearchField(
+                                    searchController: _searchController,
+                                    hintText: 'البحث باسم الاختصاص',
+                                    isIcon: true,
+                                    onPressed: (value) {
+                                      setState(() {
+                                        _searchText = value;
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: ui.isMobile ? 20 : 22,
                                   ),
                                   Text(
                                     'توزيع العينات حسب الاختصاص',
@@ -209,7 +249,8 @@ class SpecPlanPage extends StatelessWidget {
                                     context,
                                     index,
                                     ) {
-                                  final item = planBrandModel[index];
+                                  final realIndex = filteredIndexes[index];
+                                  final item = planBrandModel[realIndex];
 
                                   if (item.brandk == 0) {
                                     return const SizedBox.shrink();
@@ -219,14 +260,13 @@ class SpecPlanPage extends StatelessWidget {
                                     context,
                                     ui,
                                     item,
-                                    index,
+                                    realIndex,
                                   );
                                 },
-                                childCount: planBrandModel.length,
+                                childCount: filteredIndexes.length,
                               ),
                             ),
                           ),
-
                           SliverToBoxAdapter(
                             child: SizedBox(
                               height: ui.isMobile ? 120 : 130,
@@ -324,7 +364,7 @@ class SpecPlanPage extends StatelessWidget {
       ) {
     return Material(
       color: Colors.transparent,
-      child: InkWell(
+      child: AppInkWell(
         borderRadius: BorderRadius.circular(
           ui.isMobile ? 20 : 22,
         ),
@@ -440,38 +480,6 @@ class SpecPlanPage extends StatelessWidget {
                             fontSize: ui.isMobile ? 13 : 15,
                           ),
                         ),
-
-                        SizedBox(
-                          height: ui.isMobile ? 4 : 8,
-                        ),
-
-                        // Stats
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: ui.isMobile ? 2 : 4,
-                          ),
-                          child: Column(
-                            children: [
-                              _buildStatItem(
-                                ui,
-                                'زيارات أطباء',
-                                '${model.specModel.sumDoctor}',
-                              ),
-                              _buildDivider(ui),
-                              _buildStatItem(
-                                ui,
-                                'زيارات المشافي',
-                                '${model.specModel.sumHospital}',
-                              ),
-                              _buildDivider(ui),
-                              _buildStatItem(
-                                ui,
-                                'عينات',
-                                '${model.brandk / UserInfo.samplesCount}',
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -484,53 +492,4 @@ class SpecPlanPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(AppUi ui) {
-    return Divider(
-      height: ui.isMobile ? 8 : 12,
-      color: const Color(0xFFE2E8F0).withOpacity(0.65),
-      thickness: 1,
-    );
-  }
-
-  Widget _buildStatItem(
-      AppUi ui,
-      String label,
-      String value,
-      ) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ui.isMobile ? 10 : 11.5,
-              color: const Color(
-                0xFF94A3B8,
-              ),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: ui.smallSpacing,
-        ),
-        Flexible(
-          child: Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ui.isMobile ? 11 : 13,
-              color: const Color(
-                0xFF0F172A,
-              ),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }

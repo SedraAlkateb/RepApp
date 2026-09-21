@@ -89,7 +89,6 @@ class UserInfo {
     remainReci = data.remainReci ?? 0;
     totHos=data.totHos??0;
     totDoc=data.totDoc??0;
-    print("totHos:${totHos} ??? totDoc:${totDoc}");
     totalReci = data.totalReci ?? 0;
     // منطق التحقق من الـ Flag كما كان في ملف المين
     flag1 = otherstatus == -1 ? 0 : (data.flag1 ?? 0);

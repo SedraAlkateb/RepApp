@@ -159,174 +159,198 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
           _loadSelectedCity();
         }
       },
-
       child: Scaffold(
         backgroundColor:
         const Color(
           0xFFF8FAFC,
         ),
-
         appBar: AppBar(
           elevation: 0,
-
           scrolledUnderElevation:
           0,
-
           surfaceTintColor:
           Colors.transparent,
-
           title:
           const Text(
             "سجل الخطط",
           ),
         ),
-
-        body: Center(
-          child: ConstrainedBox(
-            constraints:
-            BoxConstraints(
-              maxWidth:
-              pageMaxWidth,
-            ),
-
-            child:
-            CustomScrollView(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
               physics:
-              const BouncingScrollPhysics(),
+              const AlwaysScrollableScrollPhysics(),
+              keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag,
+              child: ConstrainedBox(
+                constraints:
+                BoxConstraints(
+                  minHeight:
+                  constraints.maxHeight,
+                ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints:
+                    BoxConstraints(
+                      maxWidth:
+                      pageMaxWidth,
+                    ),
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.stretch,
+                      children: [
+                        // =================================================
+                        // Header
+                        // =================================================
+                        Padding(
+                          padding:
+                          EdgeInsets.fromLTRB(
+                            horizontalPadding,
+                            headerTopPadding,
+                            horizontalPadding,
+                            headerBottomPadding,
+                          ),
+                          child:
+                          _buildHeader(
+                            titleFontSize:
+                            titleFontSize,
+                            subtitleFontSize:
+                            subtitleFontSize,
+                          ),
+                        ),
 
-              slivers: [
-                // =================================================
-                // Header
-                // =================================================
-                SliverPadding(
-                  padding:
-                  EdgeInsets.fromLTRB(
-                    horizontalPadding,
-                    headerTopPadding,
-                    horizontalPadding,
-                    headerBottomPadding,
-                  ),
+                        // =================================================
+                        // Bloc Content
+                        // =================================================
+                        BlocBuilder<
+                            FinishedPlanBloc,
+                            FinishedPlanState>(
+                          buildWhen:
+                              (previous,
+                              current,) {
+                            return current
+                            is FinishedPlanLoading ||
+                                current
+                                is FinishedPlanLoaded ||
+                                current
+                                is FinishedPlanError;
+                          },
+                          builder:
+                              (context, state) {
+                            // ===============================================
+                            // Loading
+                            // ===============================================
+                            if (state
+                            is FinishedPlanLoading) {
+                              return SizedBox(
+                                height:
+                                (constraints.maxHeight - 200)
+                                    .clamp(
+                                    250,
+                                    double
+                                        .infinity),
+                                child:
+                                const Center(
+                                  child:
+                                  CircularProgressIndicator(),
+                                ),
+                              );
+                            }
 
-                  sliver:
-                  SliverToBoxAdapter(
-                    child:
-                    _buildHeader(
-                      titleFontSize:
-                      titleFontSize,
+                            // ===============================================
+                            // Loaded
+                            // ===============================================
+                            if (state
+                            is FinishedPlanLoaded) {
+                              if (state
+                                  .plans
+                                  .isEmpty) {
+                                return SizedBox(
+                                  height:
+                                  (constraints.maxHeight - 200)
+                                      .clamp(
+                                      250,
+                                      double
+                                          .infinity),
+                                  child:
+                                  Center(
+                                    child:
+                                    _buildEmptyState(
+                                      context,
+                                    ),
+                                  ),
+                                );
+                              }
 
-                      subtitleFontSize:
-                      subtitleFontSize,
+                              return Padding(
+                                padding:
+                                EdgeInsets.fromLTRB(
+                                  horizontalPadding,
+                                  listTopPadding,
+                                  horizontalPadding,
+                                  listBottomPadding,
+                                ),
+                                child:
+                                Column(
+                                  children:
+                                  state
+                                      .plans
+                                      .map(
+                                        (plan) =>
+                                        Padding(
+                                          padding:
+                                          const EdgeInsets
+                                              .only(
+                                            bottom:
+                                            12,
+                                          ),
+                                          child:
+                                          PlanCard(
+                                            plan:
+                                            plan,
+                                          ),
+                                        ),
+                                  )
+                                      .toList(),
+                                ),
+                              );
+                            }
+
+                            // ===============================================
+                            // Error
+                            // ===============================================
+                            if (state
+                            is FinishedPlanError) {
+                              return SizedBox(
+                                height:
+                                (constraints.maxHeight - 200)
+                                    .clamp(
+                                    250,
+                                    double
+                                        .infinity),
+                                child:
+                                Center(
+                                  child:
+                                  _buildErrorState(
+                                    context,
+                                    state
+                                        .message,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return const SizedBox
+                                .shrink();
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-
-                // =================================================
-                // Bloc
-                // =================================================
-                BlocBuilder<
-                    FinishedPlanBloc,
-                    FinishedPlanState>(
-                  buildWhen:
-                      (previous,
-                      current,) {
-                    return current
-                    is FinishedPlanLoading ||
-                        current
-                        is FinishedPlanLoaded ||
-                        current
-                        is FinishedPlanError;
-                  },
-
-                  builder:
-                      (context, state) {
-                    // ===============================================
-                    // Loading
-                    // ===============================================
-                    if (state
-                    is FinishedPlanLoading) {
-                      return const SliverFillRemaining(
-                        hasScrollBody:
-                        false,
-
-                        child:
-                        Center(
-                          child:
-                          CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-
-                    // ===============================================
-                    // Loaded
-                    // ===============================================
-                    if (state
-                    is FinishedPlanLoaded) {
-                      if (state.plans.isEmpty) {
-                        return SliverFillRemaining(
-                          hasScrollBody:
-                          false,
-
-                          child:
-                          _buildEmptyState(
-                            context,
-                          ),
-                        );
-                      }
-
-                      return SliverPadding(
-                        padding:
-                        EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          listTopPadding,
-                          horizontalPadding,
-                          listBottomPadding,
-                        ),
-
-                        sliver:
-                        SliverList(
-                          delegate:
-                          SliverChildBuilderDelegate(
-                                (context,
-                                index,) {
-                              return PlanCard(
-                                plan:
-                                state.plans[index],
-                              );
-                            },
-
-                            childCount:
-                            state.plans.length,
-                          ),
-                        ),
-                      );
-                    }
-
-                    // ===============================================
-                    // Error
-                    // ===============================================
-                    if (state
-                    is FinishedPlanError) {
-                      return SliverFillRemaining(
-                        hasScrollBody:
-                        false,
-
-                        child:
-                        _buildErrorState(
-                          context,
-                          state.message,
-                        ),
-                      );
-                    }
-
-                    return const SliverToBoxAdapter(
-                      child:
-                      SizedBox.shrink(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -343,74 +367,56 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
     return Row(
       crossAxisAlignment:
       CrossAxisAlignment.center,
-
       children: [
         Expanded(
           child: Column(
             crossAxisAlignment:
             CrossAxisAlignment.start,
-
             children: [
               Text(
                 'سجل الخطط السابقة',
-
                 maxLines: 1,
-
                 overflow:
                 TextOverflow.ellipsis,
-
                 style:
                 TextStyle(
                   fontSize:
                   titleFontSize,
-
                   fontWeight:
                   FontWeight.w800,
-
                   color:
                   ColorManager
                       .medicalPrimary,
-
                   height: 1.25,
                 ),
               ),
-
               const SizedBox(
                 height: 5,
               ),
-
               Text(
                 'تصفح تقارير ونتائج الدورات المنتهية',
-
                 maxLines: 2,
-
                 overflow:
                 TextOverflow.ellipsis,
-
                 style:
                 TextStyle(
                   fontSize:
                   subtitleFontSize,
-
                   color:
                   const Color(
                     0xFF64748B,
                   ),
-
                   fontWeight:
                   FontWeight.w500,
-
                   height: 1.4,
                 ),
               ),
             ],
           ),
         ),
-
         const SizedBox(
           width: 16,
         ),
-
         CityFilterWidget()
       ],
     );
@@ -420,7 +426,9 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
   // Empty State
   // =====================================================
 
-  Widget _buildEmptyState(BuildContext context,) {
+  Widget _buildEmptyState(
+      BuildContext context,
+      ) {
     final deviceType =
     AppResponsive.deviceType(context);
 
@@ -454,85 +462,66 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
         const EdgeInsets.all(
           24,
         ),
-
         child: Column(
           mainAxisSize:
           MainAxisSize.min,
-
           children: [
             Container(
               width:
               iconSize + 24,
-
               height:
               iconSize + 24,
-
               alignment:
               Alignment.center,
-
               decoration:
               BoxDecoration(
                 color:
                 const Color(
                   0xFFEFF6FF,
                 ),
-
                 borderRadius:
                 BorderRadius.circular(
                   20,
                 ),
               ),
-
               child: Icon(
                 Icons
                     .history_rounded,
-
                 size:
                 iconSize,
-
                 color:
                 ColorManager
                     .medicalPrimary,
               ),
             ),
-
             const SizedBox(
               height: 14,
             ),
-
             Text(
               'لا توجد خطط سابقة',
-
               style:
               TextStyle(
                 fontSize:
                 titleSize,
-
                 fontWeight:
                 FontWeight.w700,
-
                 color:
                 const Color(
                   0xFF334155,
                 ),
               ),
             ),
-
             const SizedBox(
               height: 5,
             ),
-
             Text(
               'ستظهر الخطط المنتهية هنا عند توفرها',
-
               textAlign:
               TextAlign.center,
-
               style:
               TextStyle(
                 fontSize:
                 subtitleSize,
-
                 color:
                 const Color(
                   0xFF94A3B8,
@@ -549,49 +538,42 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
   // Error State
   // =====================================================
 
-  Widget _buildErrorState(BuildContext context,
-      String message,) {
+  Widget _buildErrorState(
+      BuildContext context,
+      String message,
+      ) {
     return Center(
       child: Padding(
         padding:
         const EdgeInsets.all(
           24,
         ),
-
         child: Column(
           mainAxisSize:
           MainAxisSize.min,
-
           children: [
             const Icon(
               Icons
                   .error_outline_rounded,
-
               size: 42,
-
               color:
               Color(
                 0xFFEF4444,
               ),
             ),
-
             const SizedBox(
               height: 12,
             ),
-
             Text(
               message,
-
               textAlign:
               TextAlign.center,
-
               style:
               const TextStyle(
                 color:
                 Color(
                   0xFF64748B,
                 ),
-
                 height: 1.5,
               ),
             ),
@@ -601,8 +583,3 @@ class _FinishedPlanPageState extends State<FinishedPlanPage> {
     );
   }
 }
-
-// =======================================================
-// Plan Card
-// =======================================================
-

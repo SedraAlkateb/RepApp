@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_place_usecase.dart';
 import 'package:domina_app/domain/usecase/all_reps_future_usecase.dart';
@@ -18,97 +18,100 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
   AllRepsFutureUsecase allRepsFutureUsecase;
   ChangeRepPlanStatus changeRepPlanStatus;
   AllPlaceUsecase allPlaceUsecase;
-  String dateTime="";
+  String dateTime = "";
   ManageFutureBloc(
       this.allRepsFutureUsecase, this.changeRepPlanStatus, this.allPlaceUsecase)
       : super(ManageFutureInitial()) {
-    on<ManageFutureEvent>((event, emit) async {
-      if (event is AllSeniorRepFutureEvent) {
-        emit(AllSeniorRepLoadingState());
-        (await allRepsFutureUsecase.execute(UserInfo.repId,cityId: event.cityId))
-            .fold((failure) {
-          emit(
-              AllSeniorRepErrorState(failure: failure));
-        }, (data) async {
-         if( data.isNotEmpty){
-           dateTime=data[0].planDate;
-         }
-          data.sort((a, b) {
-            // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
-            int getTeamLeaderWeight(int flagValue) {
-              switch (flagValue) {
-                case 5:
-                  return 1;
-                case 0:
-                  return 2;
-                case 6:
-                  return 3;
-                case 1:
-                  return 4;
-                default:
-                  return 99;
-              }
+    on<AllSeniorRepFutureEvent>((event, emit) async {
+      emit(AllSeniorRepLoadingState());
+      (await allRepsFutureUsecase.execute(UserInfo.repId, cityId: event.cityId))
+          .fold((failure) {
+        emit(AllSeniorRepErrorState(failure: failure));
+      }, (data) async {
+        if (data.isNotEmpty) {
+          dateTime = data[0].planDate;
+        }
+        data.sort((a, b) {
+          // أوزان التيم ليدر (5 -> 0 -> 6 -> 1)
+          int getTeamLeaderWeight(int flagValue) {
+            switch (flagValue) {
+              case 5:
+                return 1;
+              case 0:
+                return 2;
+              case 6:
+                return 3;
+              case 1:
+                return 4;
+              default:
+                return 99;
             }
-
-            // أوزان السوبرفايزر (1 -> 5 -> 0 -> 6 -> 4)
-            int getSupervisorWeight(int flagValue) {
-              switch (flagValue) {
-                case 1:
-                  return 1;
-                case 5:
-                  return 2;
-                case 0:
-                  return 3;
-                case 6:
-                  return 4;
-                case 4:
-                  return 5;
-                default:
-                  return 99;
-              }
-            }
-
-            int weightA = 0;
-            int weightB = 0;
-            if (UserInfo.repType.i == 5) {
-              weightA = getTeamLeaderWeight(a.flag.flag);
-              weightB = getTeamLeaderWeight(b.flag.flag);
-            } else if (UserInfo.repType.i == 4) {
-              weightA = getSupervisorWeight(a.flag.flag);
-              weightB = getSupervisorWeight(b.flag.flag);
-            } else {
-              weightA = a.flag.flag;
-              weightB = b.flag.flag;
-            }
-            return weightA.compareTo(weightB);
-          });
-         allRepresentativeSearch=data;
-          allRepresentative = data;
-          emit(AllSeniorRepState(data));
-        });
-      } else if (event is SenSearchRepFutureEvent) {
-        List<AllRepresentativeFuture> allRepresentativeModel = [];
-        String search = normalizeText(event.contant);
-        allRepresentativeModel = allRepresentative.where((value) {
-          if (normalizeText(value.name).contains(search)) {
-            return true;
           }
-          return false;
-        }).toList();
-        allRepresentativeSearch=allRepresentativeModel;
-        emit(AllSeniorRepState(allRepresentativeSearch));
-      } else if (event is ChangPlanStatusEvent) {
-        emit(ChangPlanStatusLoadingState());
-        (await changeRepPlanStatus.execute(event.id, event.brandType)).fold(
-            (failure) {
-          emit(ChangPlanStatusErrorState(failure: failure));
-            }, (data) async {
-          // 1. البحث عن فهرس العنصر الأصلي في القائمة الكبيرة باستخدام الـ ID
-          final targetIndex = allRepresentativeSearch.indexWhere((rep) => rep.activePlan == event.id);
 
-          if (targetIndex != -1) {
-            final currentRep = allRepresentativeSearch[targetIndex];
-            allRepresentativeSearch[targetIndex] = AllRepresentativeFuture(
+          // أوزان السوبرفايزر (1 -> 5 -> 0 -> 6 -> 4)
+          int getSupervisorWeight(int flagValue) {
+            switch (flagValue) {
+              case 1:
+                return 1;
+              case 5:
+                return 2;
+              case 0:
+                return 3;
+              case 6:
+                return 4;
+              case 4:
+                return 5;
+              default:
+                return 99;
+            }
+          }
+
+          int weightA = 0;
+          int weightB = 0;
+          if (UserInfo.repType.i == 5) {
+            weightA = getTeamLeaderWeight(a.flag.flag);
+            weightB = getTeamLeaderWeight(b.flag.flag);
+          } else if (UserInfo.repType.i == 4) {
+            weightA = getSupervisorWeight(a.flag.flag);
+            weightB = getSupervisorWeight(b.flag.flag);
+          } else {
+            weightA = a.flag.flag;
+            weightB = b.flag.flag;
+          }
+          return weightA.compareTo(weightB);
+        });
+        allRepresentativeSearch = data;
+        allRepresentative = data;
+        emit(AllSeniorRepState(data));
+      });
+    });
+
+    on<SenSearchRepFutureEvent>((event, emit) async {
+      List<AllRepresentativeFuture> allRepresentativeModel = [];
+      String search = normalizeText(event.contant);
+      allRepresentativeModel = allRepresentative.where((value) {
+        if (normalizeText(value.name).contains(search)) {
+          return true;
+        }
+        return false;
+      }).toList();
+      allRepresentativeSearch = allRepresentativeModel;
+      emit(AllSeniorRepState(allRepresentativeSearch));
+    });
+
+    on<ChangPlanStatusEvent>((event, emit) async {
+      emit(ChangPlanStatusLoadingState());
+      (await changeRepPlanStatus.execute(event.id, event.brandType)).fold(
+          (failure) {
+        emit(ChangPlanStatusErrorState(failure: failure));
+      }, (data) async {
+        // 1. البحث عن فهرس العنصر الأصلي في القائمة الكبيرة باستخدام الـ ID
+        final targetIndex = allRepresentativeSearch
+            .indexWhere((rep) => rep.activePlan == event.id);
+
+        if (targetIndex != -1) {
+          final currentRep = allRepresentativeSearch[targetIndex];
+          allRepresentativeSearch[targetIndex] = AllRepresentativeFuture(
               currentRep.id,
               currentRep.name,
               FlagModel(event.brandType),
@@ -116,22 +119,23 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
               currentRep.samplesCount,
               currentRep.reptype,
               currentRep.planDate,
-            );
+              currentRep.percent);
 
-            dateTime = currentRep.planDate;
+          dateTime = currentRep.planDate;
 
-            // 3. إرسال نسخة جديدة من القائمة المحدثة
-            emit(AllSeniorRepState(allRepresentativeSearch));
-          }
-        });
-      } else if (event is GetPlaceEvent) {
-        emit(GetPlaceStatusLoadingState());
-        (await allPlaceUsecase.execute(event.id)).fold((failure) {
-          emit(GetPlaceStatusErrorState(failure: failure));
-        }, (data) async {
-          emit(GetPlaceStatusState(data));
-        });
-      }
+          // 3. إرسال نسخة جديدة من القائمة المحدثة
+          emit(AllSeniorRepState(allRepresentativeSearch));
+        }
+      });
+    });
+
+    on<GetPlaceEvent>((event, emit) async {
+      emit(GetPlaceStatusLoadingState());
+      (await allPlaceUsecase.execute(event.id)).fold((failure) {
+        emit(GetPlaceStatusErrorState(failure: failure));
+      }, (data) async {
+        emit(GetPlaceStatusState(data));
+      });
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
@@ -459,7 +460,7 @@ class _AllCityForRepSuperState
           ),
         ],
       ),
-      child: InkWell(
+      child: AppInkWell(
         borderRadius:
         BorderRadius.circular(radius),
 

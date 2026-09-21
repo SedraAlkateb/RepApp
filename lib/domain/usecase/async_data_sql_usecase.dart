@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repostitory/repository_sql.dart';
+import 'package:domina_app/domain/repository/repository_sql.dart';
 import 'package:equatable/equatable.dart';
 
 class AsyncDataSqlUsecase extends Equatable {
@@ -18,7 +18,9 @@ class AsyncDataSqlUsecase extends Equatable {
       List<BrandSpModel> brandSps,
       VisitHospitalBase visitHospital,
       VisitDoctorBase visitDoctor,
-      {List<PlanBrandModel>? planBrands}) async {
+      {List<PlanBrandModel>? planBrands,
+      bool replaceExisting = false,
+      bool keepPlanBrand = false}) async {
     return await _repositorySql.asyncData(
         brands,
         //    pharmacies,
@@ -30,7 +32,9 @@ class AsyncDataSqlUsecase extends Equatable {
         brandSps,
         visitHospital,
         visitDoctor,
-        planBrands: planBrands);
+        planBrands: planBrands,
+        replaceExisting: replaceExisting,
+        keepPlanBrand: keepPlanBrand);
   }
 
   @override

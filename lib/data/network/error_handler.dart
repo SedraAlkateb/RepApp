@@ -1,13 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dio/dio.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('ErrorHandler');
 
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {
-    print(error);
+    _log.warning('handled error', error);
     if (error is DioError) {
       failure = _handleError(error);
     } else if (error is DatabaseException) {
@@ -35,11 +38,12 @@ Failure _handleError(DioError error) {
       return Failure(200, error.message ?? "badCertificate${error.error}");
     case DioErrorType.badResponse:
       final responseBody = error.response?.data;
-      String message = "";
       if (responseBody != null) {
-        message =
-            responseBody['message'] ?? responseBody['error'] ?? responseBody;
-        print('Error Message: $message');
+        // قد يكون الرد Map (JSON) أو نصاً (مثل صفحة HTML لخطأ 502/500).
+        final String message = responseBody is Map
+            ? (responseBody['message'] ?? responseBody['error'] ?? responseBody)
+                .toString()
+            : responseBody.toString();
         return Failure(error.response?.statusCode ?? 404, message);
       } else {
         return Failure(200, error.message ?? "badResponse${error.error}");
@@ -49,8 +53,7 @@ Failure _handleError(DioError error) {
     case DioErrorType.unknown:
       return Failure(200, error.message ?? "unknown ${error.error}");
     case DioExceptionType.transformTimeout:
-      // TODO: Handle this case.
-      throw UnimplementedError();
+      return Failure(200, error.message ?? "transformTimeout");
   }
 }
 

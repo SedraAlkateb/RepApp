@@ -3,12 +3,15 @@ import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/main.dart';
 import 'package:domina_app/presentation/uniti/time.dart';
-import 'package:domina_app/presentation/upload_delete/page/async_page.dart';
+import 'package:domina_app/presentation/sync/pages/sync_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('AlarmAndNotifications');
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -40,9 +43,9 @@ class AlarmAndNotifications {
   }
 
   static void _onNotificationTap(NotificationResponse response) {
-    initAsyncInModule();
+    initSyncModule();
     navigatorKey.currentState?.push(
-      MaterialPageRoute(builder: (_) => const AsyncPage()),
+      MaterialPageRoute(builder: (_) => const SyncPage()),
     );
   }
 
@@ -61,6 +64,18 @@ class AlarmAndNotifications {
 
         // التحقق من أن الوقت المجدول في المستقبل
         if (scheduledTime.isAfter(DateTime.now())) {
+          // Android 14+ لا يمنح إذن التنبيه الدقيق افتراضياً: نرجع لتنبيه غير دقيق بدل الفشل.
+          var scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
+          if (Platform.isAndroid) {
+            final canExact = await flutterLocalNotificationsPlugin
+                    .resolvePlatformSpecificImplementation<
+                        AndroidFlutterLocalNotificationsPlugin>()
+                    ?.canScheduleExactNotifications() ??
+                false;
+            if (!canExact) {
+              scheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
+            }
+          }
           await flutterLocalNotificationsPlugin.zonedSchedule(
             id: 1001,
             title: '🔔 شركة دومِنا - تذكير هام',
@@ -77,12 +92,12 @@ class AlarmAndNotifications {
                 playSound: true,
               ),
             ),
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            androidScheduleMode: scheduleMode,
           );
-          print("✅ تم جدولة الإشعار ليوم الانتهاء: $scheduledTime");
+          _log.info("تم جدولة الإشعار ليوم الانتهاء: $scheduledTime");
         }
       } catch (e) {
-        print("❌ فشل جدولة الإشعار: $e");
+        _log.warning("فشل جدولة الإشعار", e);
       }
     }
   }

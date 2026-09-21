@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/mapper/mapper.dart';
-import 'package:domina_app/data/network/failure.dart';
+import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
@@ -85,13 +85,13 @@ class PlanManagementBloc
         UserInfo.repType = data.repType; // حالة الخطة (مفتوحة 0 أو مغلقة)
         UserInfo.endDate = data.endDate; // حالة الخطة (مفتوحة 0 أو مغلقة)
         UserInfo.startDate = data.startDate; // حالة الخطة (مفتوحة 0 أو مغلقة)
-        UserInfo.totDoc=data.totDoc;
-        UserInfo.usedReci=data.usedReci;
-        UserInfo.totalReci=data.totalReci;
-        UserInfo.remainReci=data.remainReci;
+        UserInfo.totDoc = data.totDoc;
+        UserInfo.usedReci = data.usedReci;
+        UserInfo.totalReci = data.totalReci;
+        UserInfo.remainReci = data.remainReci;
         UserInfo.groupTitle = data.groupTitle;
 
-        UserInfo.totHos=data.totHos;
+        UserInfo.totHos = data.totHos;
         UserInfo.initializeUserPlan();
         add(RepPlanBrandSpEvent(
             RepSp(UserInfo.otherPlanId ?? -1, 38, UserInfo.repId)));

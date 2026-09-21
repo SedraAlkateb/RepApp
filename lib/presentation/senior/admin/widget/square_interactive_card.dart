@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
@@ -138,7 +139,7 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
 
 
 
-    return GestureDetector(
+    return PressableEffect(pressedScale: 1.0, child: GestureDetector(
 
       onTapDown: (_) {
         controller.forward();
@@ -258,7 +259,7 @@ class _SquareInteractiveCardState extends State<SquareInteractiveCard>
           ),
         ),
       ),
-    );
+    ));
   }
 
 

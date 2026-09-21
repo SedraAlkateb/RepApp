@@ -96,13 +96,6 @@ class UpdateVisitHospitalEvent extends VisitEvent {
   List<Object?> get props => [kas, sc];
 }
 
-class UpdateVisitPharmacyEvent extends VisitEvent {
-  final int id;
-  final String data;
-  UpdateVisitPharmacyEvent({required this.data, required this.id});
-  @override
-  List<Object?> get props => [data];
-}
 
 class IsBrandEvent extends VisitEvent {
   @override

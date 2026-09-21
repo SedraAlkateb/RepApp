@@ -1,6 +1,9 @@
 import 'package:domina_app/app/constants.dart';
 import 'package:domina_app/presentation/uniti/common/state_renderer/state_renderer.dart';
 import 'package:flutter/material.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+
+final _log = AppLogger.get('StateRenderer');
 
 abstract class FlowState {
   StateRendererType getStateRendererType();
@@ -81,9 +84,7 @@ extension FlowStateExtension on FlowState {
       case ErrorState:
         {
           if (getStateRendererType() == StateRendererType.popupErrorState) {
-            //  dismissDialog(context);
             showPopup(context, getStateRendererType(), getMessage());
-            print("Ddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
             return contentScreenWidget;
           } else {
             //full screen state loading
@@ -129,11 +130,10 @@ extension FlowStateExtension on FlowState {
     try {
       if (_isCurrentDialogShowing(context)) {
         Navigator.of(context, rootNavigator: true).pop(true);
-        print("Dialog dismissed successfully22.");
       }
       return true;
     } catch (e) {
-      print("ssssssssssssssssss: $e");
+      _log.warning('dismissDialog failed', e);
       return false;
     }
   }

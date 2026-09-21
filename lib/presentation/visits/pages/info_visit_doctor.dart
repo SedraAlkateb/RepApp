@@ -32,11 +32,19 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
     _issueController.text = widget.doctorModel.visitDoctorModel.kaswn ?? "";
     _noteeController.text = widget.doctorModel.visitDoctorModel.additaion ?? "";
     _targetController.text = widget.doctorModel.visitDoctorModel.target ?? "";
-    print(_targetController.text);
     BlocProvider.of<VisitBloc>(context)
         .add(BrandDoctorVisitEvent(widget.doctorModel.visitDoctorModel.id));
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    _issueController.dispose();
+    _noteeController.dispose();
+    _targetController.dispose();
+    super.dispose();
   }
 
   @override
@@ -329,8 +337,6 @@ class _InfoVisitPharmacyState extends State<InfoVisitDoctor> {
                                   current is EditAmountBrandState;
                             },
                             builder: (context, state) {
-                              print(
-                                  "sssssssssssssssss: ${context.watch<VisitBloc>().brands}");
                               List<PharmacyBrandModel> selectBrand =
                                   context.watch<VisitBloc>().brands;
                               if (state is BrandPharmacyVisitState) {

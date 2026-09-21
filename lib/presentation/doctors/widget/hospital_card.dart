@@ -1,8 +1,9 @@
 // presentation/doctors/widget/hospital_card_item.dart
 
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/Recipes/widget/hospital_recipe.dart';
-import 'package:domina_app/presentation/plase_visit/widget/build_card_buttom.dart';
+import 'package:domina_app/presentation/place_visit/widget/build_card_buttom.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -167,7 +168,7 @@ class HospitalCardItem extends StatelessWidget {
                 hospitalId: hospital.id ?? hospital.hospitalId,
               ),
               const Spacer(),
-              InkWell(
+              AppInkWell(
                 borderRadius: BorderRadius.circular(
                   ui.smallRadius,
                 ),

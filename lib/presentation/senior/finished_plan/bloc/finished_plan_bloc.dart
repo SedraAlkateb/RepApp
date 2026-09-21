@@ -63,9 +63,7 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
         emit(PlanRepsError(message: failure.massage));
       },
       (data) {
-
         emit(PlanRepsLoaded(allOriginalReps: data, reps: data));
-        print("ssssssssssssss");
       },
     );
   }
@@ -83,9 +81,7 @@ class FinishedPlanBloc extends Bloc<FinishedPlanEvent, FinishedPlanState> {
         final filteredList = originalList.where((rep) {
           return rep.name.toLowerCase().contains(event.query.toLowerCase());
         }).toList();
-        print("filteredList.length");
 
-        print(filteredList.length);
         emit(PlanRepsLoaded(reps: filteredList, allOriginalReps: originalList));
       }
     }
