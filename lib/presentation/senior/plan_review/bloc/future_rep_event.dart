@@ -38,10 +38,13 @@ class FutureRepPlanBrandSpEvent extends FutureRepEvent {
   final RepSp rep;
   final int sampleCount;
   final int ?percent;
-  FutureRepPlanBrandSpEvent(this.rep, this.sampleCount, {this.percent});
+  // المندوب المُدقَّقة خطته (repType 7): يُطبَّق عليه حد الاختصاص
+  final bool isRep;
+  FutureRepPlanBrandSpEvent(this.rep, this.sampleCount,
+      {this.percent, this.isRep = false});
 
   @override
-  List<Object?> get props => [rep, sampleCount];
+  List<Object?> get props => [rep, sampleCount, isRep];
 }
 
 class FutureSearchSpecEvent extends FutureRepEvent {

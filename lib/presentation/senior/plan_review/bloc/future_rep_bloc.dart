@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/usecase/all_spec_usecase.dart';
@@ -29,6 +28,9 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
   SumBrandAmountModel sumTargetAss = SumBrandAmountModel(0, 0, 0);
   int baseAmount = 0;
   int calculatedMaxAmount = 0;
+  // حد الاختصاص brandM = X + X/4 ، حيث X = (زيارات الأطباء + المشافي والشعب) × عدد العينات
+  int maxAllowedAmount = 0;
+  bool limitEnabled = false;
   int percent = 0;
   int sampleCount = 0;
   FutureRepBloc(
@@ -112,10 +114,13 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
       (data) {
         if (data == null) return;
         sampleCount = event.sampleCount;
+        limitEnabled = event.isRep;
         percent = event.percent ?? 0;
         planBrandSp = data;
         baseAmount = data.amount;
         calculatedMaxAmount = data.amount * event.sampleCount;
+        maxAllowedAmount =
+            (calculatedMaxAmount + calculatedMaxAmount / 4).toInt();
 
         if (data.planBrandSps.isEmpty) {
           emit(FutureRepPlanBrandSpEmptyState(data));
@@ -158,12 +163,13 @@ class FutureRepBloc extends Bloc<FutureRepEvent, FutureRepState> {
     // التحقق من حد المندوب في حال كان repType == 7
     // التخفيض مسموح دائماً حتى لو بقي الاختصاص متجاوزاً للحد،
     // حتى يتمكن المستخدم من النزول تدريجياً والعودة تحت الحد
-    if (UserInfo.repType == 7) {
+    if (limitEnabled) {
       int sumF = sumBrandsAmount - targetItem.totalAmount + event.number;
 
-      if (sumF > planBrandSp.amount && event.number > targetItem.totalAmount) {
+      if (sumF > maxAllowedAmount && event.number > targetItem.totalAmount) {
         emit(SumErrorState(
-          failure: Failure(4, "لقد تجاوزت الحد المسموح لهذا الاختصاص"),
+          failure: Failure(
+              4, "لقد تجاوزت الحد المسموح للعينات في هذا الإختصاص"),
         ));
         return;
       }
