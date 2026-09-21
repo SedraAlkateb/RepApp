@@ -1275,7 +1275,7 @@ class _ReportVisitDoctorPageState extends State<ReportVisitDoctorPage> {
               onPressed: () {
                 shareReportToWhatsApp(
                   context: context,
-
+type: 1,
                   doctorName:
                   doctorNoteModel
                       .docTitle,

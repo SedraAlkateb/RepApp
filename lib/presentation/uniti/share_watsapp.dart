@@ -11,11 +11,15 @@ Future<void> shareReportToWhatsApp({
   required String visitDate, // تاريخ الزيارة
   required String phoneNumber, // رقم جوال الطبيب أو الشخص المعني
   required String repName, // اسم المندوب
+  required int type,
+  //  type= 1 : الطبيب
+  // type= 2:المشفى
 }) async {
   // 1. صياغة النص وتنسيقه بأسلوب تقرير إداري رسمي خالٍ من الرموز التعبيرية
-  final String reportText = "تقرير زيارة طبيب - تطبيق دومنا\n"
+  final String reportText =
+      "تقرير زيارة ${type == 1 ? "طبيب" : "مشفى"} - تطبيق دومنا\n"
       "===================================\n"
-      "اسم الطبيب: $doctorName\n"
+      "اسم ${type == 1 ? "الطبيب" : "المشفى"}: $doctorName\n"
       "الاختصاص الطبي: $specialty\n"
       "تاريخ الزيارة: $visitDate\n"
       "اسم المندوب:  $repName\n"
