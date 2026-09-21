@@ -200,7 +200,8 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage>
                                       widget.id,
                                     ),
                                     widget.sampleCount,
-                                    percent: widget.percent ?? 0),
+                                    percent: widget.percent ?? 0,
+                                    isRep: widget.repType.i == 7),
                               );
 
                               Navigator.pushNamed(
