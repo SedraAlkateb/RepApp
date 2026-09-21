@@ -610,6 +610,8 @@ SpecResponse _$SpecResponseFromJson(Map<String, dynamic> json) => SpecResponse(
       json['id'] as String?,
       json['title'] as String?,
       (json['flag'] as num?)?.toInt(),
+      (json['DocVisit'] as num?)?.toInt(),
+      (json['HosVisit'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SpecResponseToJson(SpecResponse instance) =>
@@ -617,6 +619,8 @@ Map<String, dynamic> _$SpecResponseToJson(SpecResponse instance) =>
       'id': instance.id,
       'title': instance.title,
       'flag': instance.flag,
+      'DocVisit': instance.docVisit,
+      'HosVisit': instance.hosVisit,
     };
 
 AllSpcResponse _$AllSpcResponseFromJson(Map<String, dynamic> json) =>
