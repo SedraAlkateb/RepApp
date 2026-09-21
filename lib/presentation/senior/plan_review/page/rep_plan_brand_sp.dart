@@ -129,7 +129,15 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                     error(context, state.failure.massage, state.failure.code);
                   }
                   if (state is SumErrorState) {
-                    error(context, state.failure.massage, state.failure.code);
+                    // تجاوز الحد: نعرض الرسالة فقط. error() تستدعي dismissDialog
+                    // الذي يغلق الصفحة نفسها عند عدم وجود حوار مفتوح، فيُرفع
+                    // ما تغيّر ويبقى اللودينغ ظاهراً.
+                    final route = ModalRoute.of(context);
+                    if (route != null && !route.isCurrent) {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    }
+                    errorWithoutPop(
+                        context, state.failure.massage, state.failure.code);
                   }
                   if (state is FutureSpRepErrorState) {
                     error(context, state.failure.massage, state.failure.code);
