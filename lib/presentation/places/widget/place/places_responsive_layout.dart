@@ -1,4 +1,3 @@
-import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/presentation/places/widget/place/places_content.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';

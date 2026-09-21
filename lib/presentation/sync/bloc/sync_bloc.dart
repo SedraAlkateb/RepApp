@@ -524,7 +524,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           reason: 'Local DB save error: ${saveFailure.massage}',
           fatal: false,
         );
-      } catch (_) {}
+      } catch (e) {
+        _log.warning('crashlytics report failed (db save)', e);
+      }
       await _failAfterPlanUpdate(emit, saveFailure);
       return;
     }
@@ -744,7 +746,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     try {
       await FirebaseCrashlytics.instance
           .recordError(error, stackTrace, reason: reason, fatal: false);
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics recordError failed', e);
+    }
   }
 
   Future<void> logSyncStep({

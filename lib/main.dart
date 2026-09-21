@@ -36,6 +36,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
+final _log = AppLogger.get('Main');
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // debugPrint لا يُحذف في release: نُسكته حتى لا تتسرب رسائل التطبيق إلى logcat.
@@ -113,7 +115,9 @@ Future<void> main() async {
           reason: 'App requirements initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (app requirements init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -127,7 +131,9 @@ Future<void> main() async {
 
     try {
       UserInfo.isLogging = 0;
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('failed to reset isLogging', e);
+    }
 
     try {
       if (Firebase.apps.isNotEmpty) {
@@ -138,7 +144,9 @@ Future<void> main() async {
           reason: 'User data initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (user data init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -183,7 +191,9 @@ Future<void> _setupAppRequirements() async {
           reason: 'DI initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (DI init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -229,7 +239,9 @@ Future<void> _setupAppRequirements() async {
           reason: 'Notifications initialization',
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (notifications init)', e);
+    }
   }
 
 // ------------------------------------------------------------
@@ -412,7 +424,9 @@ Future<void> _prepareUserData() async {
               stackTrace: stack,
               reason: 'Check Plan Expiration',
             );
-          } catch (_) {}
+          } catch (e) {
+            _log.warning('crashlytics report failed (check plan expiration)', e);
+          }
         }
 
 // ------------------------------------------------------
@@ -528,7 +542,9 @@ Future<void> _checkPlanExpiration() async {
         stackTrace: stack,
         reason: "Check Plan Expiration",
       );
-    } catch (_) {}
+    } catch (e) {
+      _log.warning('crashlytics report failed (check plan expiration)', e);
+    }
 
     debugPrint(
       'Check plan expiration error: $e',
