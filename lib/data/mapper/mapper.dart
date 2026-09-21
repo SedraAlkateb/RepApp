@@ -184,7 +184,11 @@ extension PlaceResponseMapper on PlaceResponse? {
 extension SpecResponseMapper on SpecResponse? {
   SpecDModel toDomain() {
     return SpecDModel(int.parse(this?.id ?? "0"),
-        this?.title ?? Constants.empty, this?.flag ?? Constants.zero, 0, 0, 0);
+        this?.title ?? Constants.empty, this?.flag ?? Constants.zero,
+        this?.docVisit ?? Constants.zero,
+        this?.hosVisit ?? Constants.zero,
+        0
+    );
   }
 }
 
