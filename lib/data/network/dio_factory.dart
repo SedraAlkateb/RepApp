@@ -34,8 +34,6 @@ class DioFactory {
       "X-Requested-With": "XMLHttpRequest",
       AUTHORIZATION: token,
       DEFAULT_LANGUAGE: "ar",
-      "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
     };
 
     dio.options = BaseOptions(

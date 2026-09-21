@@ -12,14 +12,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // =======================================================
 // Doctor Bottom Sheet
 // =======================================================
-import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
-import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
-import 'package:domina_app/presentation/senior/report_visit_doctor/bloc/report_visit_doctor_bloc.dart';
-import 'package:domina_app/presentation/senior/report_visit_doctor/widget/text_info.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // =======================================================
 // Doctor Bottom Sheet
