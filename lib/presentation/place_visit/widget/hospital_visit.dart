@@ -17,7 +17,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HospitalVisit extends StatefulWidget {
   const HospitalVisit({
     super.key,
+    required this.placeId,
   });
+
+  // HospitalSpAllModel ما بيحمل placeId أصلاً (الاستعلام ما بيرجعه)، فـ
+  // HospitalModel.toDomain() كانت دايماً تحط -1 مكانه. هيك صفحة الزيارة
+  // كانت ترجّع تحديث بعد الحفظ لمكان غلط (placeId = -1) فما كان التعديل
+  // يظهر أبداً بقائمة الزيارات. منمرّره هون من نفس مصدره الصحيح (الصفحة
+  // الأم) ونصحّح فيه الموديل قبل ما ننتقل لصفحة الزيارة.
+  final int placeId;
 
   @override
   State<HospitalVisit> createState() => _HospitalVisitState();
@@ -141,7 +149,12 @@ class _HospitalVisitState extends State<HospitalVisit>
 
                 // ===============================================
                 // Hospitals List
+                //
+                // hospitals قائمة أزواج (مشفى + اختصاص)، فنجمّعها هون
+                // حسب hospitalId فقط للعرض حتى ما يتكرر اسم المشفى
                 // ===============================================
+                final groupedHospitals = _groupByHospital(hospitals);
+
                 return ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   keyboardDismissBehavior:
@@ -152,24 +165,29 @@ class _HospitalVisitState extends State<HospitalVisit>
                     ui.pagePadding,
                     ui.listBottomPadding,
                   ),
-                  itemCount: hospitals.length,
+                  itemCount: groupedHospitals.length,
                   itemBuilder: (
                     context,
                     index,
                   ) {
-                    final hospital = hospitals[index];
+                    final group = groupedHospitals[index];
 
                     return _HospitalVisitCard(
-                      hospital: hospital,
+                      group: group,
                       ui: ui,
-                      onVisit: () {
+                      onVisit: (hospital) {
                         // =========================================
-                        // نفس Navigation الأصلي
+                        // نفس Navigation الأصلي + تصحيح placeId
+                        // (كانت -1 دايماً، فتحديث القائمة بعد الزيارة
+                        // كان يروح لمكان غلط ولا يظهر أثره)
                         // =========================================
+                        final hospitalModel = hospital.toDomain()
+                          ..placeId = widget.placeId;
+
                         Navigator.pushNamed(
                           context,
                           Routes.visitHospital,
-                          arguments: hospital.toDomain(),
+                          arguments: hospitalModel,
                         );
                       },
                     );
@@ -188,19 +206,58 @@ class _HospitalVisitState extends State<HospitalVisit>
 }
 
 // ============================================================================
+// Grouping helper
+//
+// hospitals قائمة أزواج (مشفى + اختصاص) قادمة من الـ BLoC كما هي، ولا نغيّرها؛
+// هون بس نجمّعها حسب hospitalId للعرض فقط، فيضل ترتيب أول ظهور لكل مشفى.
+// ============================================================================
+List<List<HospitalSpAllModel>> _groupByHospital(
+  List<HospitalSpAllModel> hospitals,
+) {
+  final Map<int, List<HospitalSpAllModel>> byId = {};
+  final List<int> order = [];
+
+  for (final h in hospitals) {
+    if (!byId.containsKey(h.hospitalId)) {
+      byId[h.hospitalId] = [];
+      order.add(h.hospitalId);
+    }
+    byId[h.hospitalId]!.add(h);
+  }
+
+  return order.map((id) => byId[id]!).toList();
+}
+
+// ============================================================================
 // Hospital Visit Card
 // ============================================================================
 
 class _HospitalVisitCard extends StatelessWidget {
   const _HospitalVisitCard({
-    required this.hospital,
+    required this.group,
     required this.ui,
     required this.onVisit,
   });
 
-  final HospitalSpAllModel hospital;
+  final List<HospitalSpAllModel> group;
   final AppUi ui;
-  final VoidCallback onVisit;
+  final ValueChanged<HospitalSpAllModel> onVisit;
+
+  // نفس المشفى بكل صفوفه، نأخذ البيانات المشتركة (الاسم/العنوان) من أول صف
+  HospitalSpAllModel get hospital => group.first;
+
+  int get _totalVisited =>
+      group.fold(0, (sum, h) => sum + (h.visited ?? 0));
+
+  int get _totalVisit => group.fold(0, (sum, h) => sum + h.visit);
+
+  // اختيار الاختصاص فعلياً بيصير داخل صفحة "إجراء زيارة" نفسها
+  // (فيها dropdown خاص يجيب كل اختصاصات المشفى عبر hospitalId)، فما في
+  // داعي نسأل هون قبل الانتقال. أي عنصر من المجموعة يكفي لأنه كل الحقول
+  // المشتركة (hospitalId, title, address...) نفسها بكل صفوف نفس المشفى.
+  void _handleVisitTap(BuildContext context) {
+    onVisit(group.first);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +348,11 @@ class _HospitalVisitCard extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  hospital.titleSp!,
+                  // اختصاص واحد: نعرضه بالاسم كما كان سابقاً
+                  // أكثر من اختصاص: نعرض العدد فقط، والاختيار يصير عند الضغط على "بدء زيارة"
+                  group.length == 1
+                      ? (hospital.titleSp ?? '')
+                      : '${group.length} اختصاصات',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -345,7 +406,7 @@ class _HospitalVisitCard extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: '${hospital.visited ?? 0}',
+                        text: '$_totalVisited',
                         style: TextStyle(
                           fontSize: ui.bodyTextSize,
                           fontWeight: FontWeight.bold,
@@ -353,7 +414,7 @@ class _HospitalVisitCard extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: ' / ${hospital.visit}',
+                        text: ' / $_totalVisit',
                         style: TextStyle(
                           fontSize: ui.bodyTextSize,
                           fontWeight: FontWeight.w600,
@@ -469,7 +530,7 @@ class _HospitalVisitCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(
                   ui.smallRadius,
                 ),
-                onTap: onVisit,
+                onTap: () => _handleVisitTap(context),
                 child: buildCardButton(
                   context,
                   'بدء زيارة',

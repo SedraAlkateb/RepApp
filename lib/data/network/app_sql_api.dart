@@ -574,14 +574,15 @@ class AppSqlApi extends AppSqlApiAbs {
       specialization.title as titleSp,
       specialization.flag as flagSp,
       -- حساب عدد الزيارات الفعلي لهذا الاختصاص بالتحديد داخل المشفى
-      (SELECT COUNT(*) FROM visit_hospital WHERE visit_hospital.hospitalSpId = hospitalSp.id) as current_visits
+      -- (الاسم لازم يكون "visited" لأن HospitalSpAllModel.fromMap بيقرأ map['visited'])
+      (SELECT COUNT(*) FROM visit_hospital WHERE visit_hospital.hospitalSpId = hospitalSp.id) as visited
     FROM hospital
     JOIN hospitalSp ON hospitalSp.hospitalId = hospital.id
     JOIN specialization ON hospitalSp.spId = specialization.id
     WHERE hospital.placeId = ?
     -- الشرط: جلب الاختصاصات التي لم يكتمل هدف زياراتها بعد
     GROUP BY hospitalSp.id
-    HAVING current_visits < hospitalSp.visit
+    HAVING visited < hospitalSp.visit
   ''', [placeId]);
 
     // صب البيانات وتحويلها إلى مصفوفة الموديل المطلوب

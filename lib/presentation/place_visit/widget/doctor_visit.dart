@@ -382,6 +382,69 @@ class _DoctorVisitCard
           ),
 
           // =====================================================
+          // Visit Counter Badge
+          // =====================================================
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: ui.mediumSpacing,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(ui.smallRadius),
+              border: Border.all(
+                color: const Color(0xFFCBD5E1),
+                width: 0.8,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  size: ui.smallIconSize,
+                  color: ColorManager.medicalPrimary,
+                ),
+                SizedBox(width: ui.smallSpacing),
+                Text(
+                  'عدد الزيارات: ',
+                  style: TextStyle(
+                    fontSize: ui.bodyTextSize,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF475569),
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${doctor.visited ?? 0}',
+                        style: TextStyle(
+                          fontSize: ui.bodyTextSize,
+                          fontWeight: FontWeight.bold,
+                          color: ColorManager.medicalPrimary,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' / ${doctor.visits}',
+                        style: TextStyle(
+                          fontSize: ui.bodyTextSize,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF64748B),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: ui.sectionSpacing,
+          ),
+
+          // =====================================================
           // Address
           // =====================================================
           Container(
