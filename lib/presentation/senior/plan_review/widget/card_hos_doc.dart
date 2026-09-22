@@ -113,7 +113,9 @@ Widget buildSampleStatisticsSummaryCard(
                 // 1. زر المشافي والشعب
                 Expanded(
                   child: AppInkWell(
-                    borderRadius: BorderRadius.circular(12),
+
+                    borderRadius: BorderRadius.circular(50),
+
                     onTap: () {
                       showHosDocSearchDialog(
                         context: context,
@@ -132,7 +134,7 @@ Widget buildSampleStatisticsSummaryCard(
                         count: planBrandSp.numHospital + planBrandSp.numDepartment,
                         icon: Icons.local_hospital_outlined,
                         color: const Color(0xFF0D9488),
-                        bgColor: const Color(0xFFF0FDFA),
+                        bgColor:  Colors.transparent,
                         labelSize: labelFontSize,
                         countSize: countFontSize,
                         iconSize: iconSize,
