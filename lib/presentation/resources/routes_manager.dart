@@ -138,15 +138,15 @@ class RouteGenerator {
       case Routes.login:
         initLoginModule();
         iniAllCityModule();
-        return _animatedRoute(const MyLogin());
+        return _animatedRoute(settings,const MyLogin());
       case Routes.allBrand:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(AllBrand(isPr:args ,));
+        return _animatedRoute(settings,AllBrand(isPr:args ,));
       case Routes.docHos:
         final args = settings.arguments as Map<String, dynamic>;
 
-        return _animatedRoute(DocHosByPlaceOrSpPage(
+        return _animatedRoute(settings,DocHosByPlaceOrSpPage(
           placeId: args['placeId'],
           spId: args['spId'],
         ));
@@ -154,137 +154,137 @@ class RouteGenerator {
       case Routes.placeVisitPage:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(
+        return _animatedRoute(settings,
           PlaceVisitPage(placeId: args),
         );
       case Routes.visitDoctor:
         final args =
             settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(
+        return _animatedRoute(settings,
           VisitDoctor(doctorModel: args),
         );
       case Routes.hospitalDetails:
         final args =
             settings.arguments as HospitalSpAllModel; // ننتظر الـ ID هنا كـ
-        return _animatedRoute(
+        return _animatedRoute(settings,
           HospitalDetails(hospital: args),
         );
       case Routes.doctorDetails:
         final args = settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ
-        return _animatedRoute(
+        return _animatedRoute(settings,
           DoctorDetails(doctor: args),
         );
       case Routes.infoVisitHospital:
         final args = settings.arguments
             as VisitHospitalAndHospital; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(
+        return _animatedRoute(settings,
           InfoVisitHospital(hospitalModel: args),
         );
       case Routes.infoVisitDoctor:
         final args = settings.arguments
             as VisitDoctorAndDoctor; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(
+        return _animatedRoute(settings,
           InfoVisitDoctor(doctorModel: args),
         );
       case Routes.visitHospital:
         final args =
             settings.arguments as HospitalModel; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(
+        return _animatedRoute(settings,
           VisitHospital(hospitalModel: args),
         );
       case Routes.fadeInWidget:
-        return _animatedRoute(FadeInWidget());
+        return _animatedRoute(settings,FadeInWidget());
 
       case Routes.places:
         initPlacesModule();
         initPlaceVisitModule();
         initDoctorAndHospitalModule();
-        return _animatedRoute(Places());
+        return _animatedRoute(settings,Places());
       case Routes.placesArchive:
         initPlacesModule();
         initDoctorAndHospitalModule();
-        return _animatedRoute(PlacesArchive());
+        return _animatedRoute(settings,PlacesArchive());
       case Routes.spec:
         initSpecModule();
-        return _animatedRoute(SpecializationsPage());
+        return _animatedRoute(settings,SpecializationsPage());
 
       case Routes.doctors:
-        return _animatedRoute(Doctors());
+        return _animatedRoute(settings,Doctors());
 
       case Routes.hospital:
-        return _animatedRoute(Hospital());
+        return _animatedRoute(settings,Hospital());
 
       case Routes.brand:
         initBrandModule();
 
-        return _animatedRoute(BrandPage());
+        return _animatedRoute(settings,BrandPage());
 
       case Routes.pharmacy:
         initPharmacyModule();
-        return _animatedRoute(PharmacyPage());
+        return _animatedRoute(settings,PharmacyPage());
 
       case Routes.sync:
         initSyncModule();
-        return _animatedRoute(SyncPage());
+        return _animatedRoute(settings,SyncPage());
 
       case Routes.visits:
         initVisitsModule();
-        return _animatedRoute(VisitsPage());
+        return _animatedRoute(settings,VisitsPage());
 
       case Routes.inventory:
         initSeniorReportInventoryModule();
-        return _animatedRoute(ReportInventory());
+        return _animatedRoute(settings,ReportInventory());
 
       case Routes.logout:
         initSyncModule();
         // arguments: true = تسجيل خروج بدون رفع (المندوب غير موجود بالسيرفر).
-        return _animatedRoute(
+        return _animatedRoute(settings,
             LogoutPage(withoutUpload: settings.arguments == true));
 
       case Routes.specDH:
-        return _animatedRoute(SpecDH(spId: 0));
+        return _animatedRoute(settings,SpecDH(spId: 0));
 
       case Routes.brandPlan:
         initBrandPlanModule();
-        return _animatedRoute(BrandPlanPage());
+        return _animatedRoute(settings,BrandPlanPage());
 
       case Routes.allRecip:
         initBrandRecModule();
-        return _animatedRoute(AllRecip());
+        return _animatedRoute(settings,AllRecip());
 
       case Routes.Recipes:
         initBrandRecModule();
-        return _animatedRoute(RecipesPage(
+        return _animatedRoute(settings,RecipesPage(
           docId: 0,
           st: 433,
         ));
       case Routes.AllRepSenior:
         initSeniorModule();
         UserInfo.repType.i==6?     iniAllCityModule():null;
-        return _animatedRoute(AllRepSenior(
+        return _animatedRoute(settings,AllRepSenior(
         ));
 
       case Routes.seniorPlaces:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(PlaceSenior(isPr: args,));
+        return _animatedRoute(settings,PlaceSenior(isPr: args,));
       case Routes.seniorFuturePlaces:
-        return _animatedRoute(FuturePlacePage());
+        return _animatedRoute(settings,FuturePlacePage());
       case Routes.seniorSpec:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(SpecSeniorPage(isPr: args,));
+        return _animatedRoute(settings,SpecSeniorPage(isPr: args,));
       case Routes.seniorHos:
-        return _animatedRoute(HospitalSenior());
+        return _animatedRoute(settings,HospitalSenior());
       case Routes.seniorDoc:
-        return _animatedRoute(DoctorSenior());
+        return _animatedRoute(settings,DoctorSenior());
       case Routes.noVisitDoctor:
-        return _animatedRoute(NoVisitDoctor());
+        return _animatedRoute(settings,NoVisitDoctor());
       case Routes.remainingVisitsDoctor:
-        return _animatedRoute(RemainingVisits());
+        return _animatedRoute(settings,RemainingVisits());
       case Routes.senVisitDoctor:
-        return _animatedRoute(SenVisitDoctor());
+        return _animatedRoute(settings,SenVisitDoctor());
       case Routes.senVisitHospital:
-        return _animatedRoute(SenVisitHospital());
+        return _animatedRoute(settings,SenVisitHospital());
       case Routes.senVisit:
         final args = settings.arguments as Map<String, dynamic>;
 
@@ -293,7 +293,7 @@ class RouteGenerator {
         final String title = args['title'];
         final Widget doctor = args['doctor'];
         final Widget hospital = args['hospital'];
-        return _animatedRoute(
+        return _animatedRoute(settings,
           VisitsTypePage(
             title: title,
             doctor: doctor,
@@ -305,7 +305,7 @@ class RouteGenerator {
 
       case Routes.searchdoctors:
         iniSearchDoctorsModule();
-        return _animatedRoute(MainSearchPage());
+        return _animatedRoute(settings,MainSearchPage());
       case Routes.RepPlanBrandSp:
         iniFutureModule();
         final args = settings.arguments as Map<String, dynamic>?;
@@ -316,7 +316,7 @@ class RouteGenerator {
         final sampleCount = args?['sampleCount'];
         final spId = args?['spId'];
         final repPlanId = args?['repPlanId'];
-        return _animatedRoute(RepPlanBrandSpPage(
+        return _animatedRoute(settings,RepPlanBrandSpPage(
           title: title,
           flag: flag,
           percent: percent,
@@ -326,65 +326,65 @@ class RouteGenerator {
           repPlanId: repPlanId,
         ));
       case Routes.doctorInfo:
-        return _animatedRoute(DoctorInfo());
+        return _animatedRoute(settings,DoctorInfo());
       case Routes.allRecipe:
         initBrandRecModule();
 
-        return _animatedRoute(AllRecipesForView());
+        return _animatedRoute(settings,AllRecipesForView());
       case Routes.viewRecipe:
-        return _animatedRoute(ViewRecipePage());
+        return _animatedRoute(settings,ViewRecipePage());
       case Routes.recipeDH:
         initDoctorAndHospitalModule();
-        return _animatedRoute(RecipeDH());
+        return _animatedRoute(settings,RecipeDH());
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
-        return _animatedRoute(AllRepWithFuture());
+        return _animatedRoute(settings,AllRepWithFuture());
       case Routes.seniorByCityId:
         initGeneralReportsModule();
-        return _animatedRoute(SeniorByCityId());
+        return _animatedRoute(settings,SeniorByCityId());
       case Routes.adminControl:
         iniAllCityModule();
 
-        return _animatedRoute(AdminDashboardPage());
+        return _animatedRoute(settings,AdminDashboardPage());
       case Routes.doctorAndHospitalArchive:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(PlaceVisitArchivePage(placeId: args));
+        return _animatedRoute(settings,PlaceVisitArchivePage(placeId: args));
       case Routes.teamLeader:
         initGeneralReportsModule();
-        return _animatedRoute(TeamLeader());
+        return _animatedRoute(settings,TeamLeader());
       case Routes.allCitySeniors:
         iniAllCityModule();
-        return _animatedRoute(AllCitySeniors());
+        return _animatedRoute(settings,AllCitySeniors());
       case Routes.allCitySupervisor:
         iniAllCityModule();
-        return _animatedRoute(AllCityForRepSuper());
+        return _animatedRoute(settings,AllCityForRepSuper());
       case Routes.finishedPlan:
         initFinishedPlan();
-        return _animatedRoute(FinishedPlanPage());
+        return _animatedRoute(settings,FinishedPlanPage());
       case Routes.planReps:
-        return _animatedRoute(PlanRepsPage());
+        return _animatedRoute(settings,PlanRepsPage());
       case Routes.createCurrentPlan:
         initCurrentPlanModule();
-        return _animatedRoute(PlanHelpGoalTap());
+        return _animatedRoute(settings,PlanHelpGoalTap());
       case Routes.cityPlan:
         iniAllCityModule();
-        return _animatedRoute(AllCityPlan());
+        return _animatedRoute(settings,AllCityPlan());
       case Routes.activePlanPage:
         initActivePlanModule();
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(ActivePlanPage(
+        return _animatedRoute(settings,ActivePlanPage(
           planId: args,
         ));
 
       default:
-        return unDefinedRoute();
+        return unDefinedRoute(settings);
     }
   }
 
-  static Route<dynamic> unDefinedRoute() {
-    return _animatedRoute(
+  static Route<dynamic> unDefinedRoute(RouteSettings settings) {
+    return _animatedRoute(settings,
       Scaffold(
         appBar: AppBar(title: const Text(StringsManager.noRouteFound)),
         body: const Center(child: Text(StringsManager.noRouteFound)),
@@ -392,8 +392,14 @@ class RouteGenerator {
     );
   }
 
-  static Route<dynamic> _animatedRoute(Widget page) {
+  static Route<dynamic> _animatedRoute(
+    RouteSettings settings,
+    Widget page,
+  ) {
     return PageRouteBuilder(
+      // بدونه route.settings.name بيضل null، وFirebaseAnalyticsObserver
+      // (يلي بيسجل screen_view تلقائياً) ما بيعرف اسم الشاشة أبداً.
+      settings: settings,
       transitionDuration: const Duration(milliseconds: 600),
       pageBuilder: (_, __, ___) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {

@@ -233,6 +233,7 @@ Future<void> initLoginModule() async {
       () => AuthBloc(
         instance(),
         instance(),
+        instance(),
       ),
     );
   }

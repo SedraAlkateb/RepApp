@@ -220,6 +220,37 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   // ===========================================================
+  // Analytics: مراقبة الحالة بس (onChange)، بدون أي تعديل على منطق
+  // المزامنة نفسه، وبدون await (unawaited) حتى ما نأخر ولا نبطّئ شي.
+  // ===========================================================
+  @override
+  void onChange(Change<SyncState> change) {
+    super.onChange(change);
+
+    final next = change.nextState;
+
+    if (next is SyncSuccess) {
+      unawaited(
+        analyticsService.logEvent(
+          name: 'sync_completed',
+          parameters: {
+            'mode': next.mode.name,
+          },
+        ),
+      );
+    } else if (next is SyncFailureState) {
+      unawaited(
+        analyticsService.logEvent(
+          name: 'sync_failed',
+          parameters: {
+            'error_code': next.failure.code.toString(),
+          },
+        ),
+      );
+    }
+  }
+
+  // ===========================================================
   // نقاط الدخول
   // ===========================================================
 
@@ -489,6 +520,18 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       return;
     }
     _planStateChanged = !_PlanSnapshot().samePlanState(before);
+
+    // تدقيق: مقارنة حالة الخطة المحلية (أوفلاين، قبل هذا التحميل) مع حالتها
+    // بعد التحقق من السيرفر (أونلاين) — نفس القيمة المستخدمة بمنطق المزامنة
+    // أعلاه، هون بس نرسلها كحدث إحصائي بدون أي تأثير على القرار نفسه.
+    unawaited(
+      analyticsService.logEvent(
+        name: 'plan_audit',
+        parameters: {
+          'changed': _planStateChanged.toString(),
+        },
+      ),
+    );
 
     // --- ج) تحميل كل البيانات بالتوازي (بدل 10 طلبات متتالية) ---
     final SyncPayload payload;
