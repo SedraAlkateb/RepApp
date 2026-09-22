@@ -295,7 +295,7 @@ class PlaceVisitPage extends StatelessWidget {
 
                 children: [
                   DoctorVisit(),
-                  HospitalVisit(),
+                  HospitalVisit(placeId: placeId),
                 ],
               ),
             ),
