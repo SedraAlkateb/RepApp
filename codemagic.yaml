@@ -9,12 +9,34 @@ scripts:
 
   - name: Set Build Number
     script: |
-      echo "Codemagic Build Number: $BUILD_NUMBER"
+      # كنا نعتمد على $BUILD_NUMBER كمتغيّر ثابت مضبوط يدوياً من إعدادات
+      # Codemagic، وهاد سبب فشل الرفع (رقم البناء صار أقل من/يساوي آخر رقم
+      # مرفوع فعلياً على App Store Connect). هلأ منجيبه تلقائياً من App Store
+      # Connect نفسها (آخر رقم مرفوع + 1)، فما في حاجة نحدّثه يدوياً بعد اليوم.
+      #
+      # يتطلب: App Store Connect API integration مفعّل لهذا الـ workflow من
+      # إعدادات Codemagic (Publishing) — نفس التكامل يلي يرفع الـ ipa أصلاً.
+      set -e
 
-      if [ -z "$BUILD_NUMBER" ]; then
-        echo "ERROR: BUILD_NUMBER is not available"
+      BUNDLE_ID="com.example.dominaApp"
+
+      APP_ID=$(app-store-connect apps list --bundle-id-identifier "$BUNDLE_ID" --json | jq -r '.[0].id')
+
+      if [ -z "$APP_ID" ] || [ "$APP_ID" = "null" ]; then
+        echo "ERROR: تعذر إيجاد تطبيق App Store Connect بالـ bundle id: $BUNDLE_ID"
+        echo "تأكد إنه App Store Connect API integration مفعّل لهذا الـ workflow."
         exit 1
       fi
+
+      LATEST_BUILD_NUMBER=$(app-store-connect get-latest-build-number "$APP_ID")
+      BUILD_NUMBER=$((LATEST_BUILD_NUMBER + 1))
+
+      echo "Latest build number on App Store Connect: $LATEST_BUILD_NUMBER"
+      echo "Using build number: $BUILD_NUMBER"
+
+      # لازم يُكتب بـ CM_ENV حتى يوصل لخطوة "Build iOS" التالية (كل خطوة
+      # بتشتغل بعملية shell منفصلة عند Codemagic).
+      echo "BUILD_NUMBER=$BUILD_NUMBER" >> $CM_ENV
 
   - name: Install CocoaPods
     script: |
