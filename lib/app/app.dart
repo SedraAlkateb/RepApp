@@ -23,6 +23,7 @@ import 'package:domina_app/presentation/senior/search_doctors/bloc/search_doctor
 import 'package:domina_app/presentation/specialization/bloc/specialization_bloc.dart';
 import 'package:domina_app/presentation/uniti/app_bar_theme.dart';
 import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -122,6 +123,14 @@ class MyApp extends StatelessWidget {
               const Locale('ar'),
           debugShowCheckedModeBanner: false,
           scrollBehavior: const AppScrollBehavior(),
+          // يسجّل حدث screen_view تلقائياً لكل صفحة (route) بتتفتح، بالاعتماد
+          // على اسم الـ route نفسه. بدونه فايربيس ما بيعرف المستخدم رايح على
+          // أي شاشة، لأن تطبيقات Flutter عادةً Activity واحدة على أندرويد.
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(
+              analytics: instance<FirebaseAnalytics>(),
+            ),
+          ],
           onGenerateRoute: RouteGenerator.getRoute,
           initialRoute: _getInitialRoute(),
           theme: getApplicationTheme().copyWith(
