@@ -12,13 +12,16 @@ import 'package:flutter/material.dart';
 class HospitalCardItem extends StatelessWidget {
   const HospitalCardItem({
     super.key,
-    required this.hospital,
+    required this.hospitalGroup,
   });
 
-  final HospitalSpAllModel hospital;
+  /// كل عناصر هذه القائمة تخص نفس المشفى وتختلف بالاختصاص/الشعبة (titleSp).
+  final List<HospitalSpAllModel> hospitalGroup;
 
   @override
   Widget build(BuildContext context) {
+    final HospitalSpAllModel hospital = hospitalGroup.first;
+
     final ui = AppUi.of(context);
 
     return Container(
@@ -60,43 +63,6 @@ class HospitalCardItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // =================================================
-              // Specialization
-              // =================================================
-              if (hospital.titleSp != null &&
-                  hospital.titleSp!.trim().isNotEmpty) ...[
-                Flexible(
-                  flex: 0,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ui.mediumSpacing,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: ColorManager.medicalPrimary.withOpacity(
-                        0.08,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        ui.smallRadius,
-                      ),
-                    ),
-                    child: Text(
-                      hospital.titleSp!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: ColorManager.medicalPrimary,
-                        fontSize: ui.smallTextSize,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: ui.mediumSpacing,
-                ),
-              ],
-
-              // =================================================
               // Hospital Name
               // =================================================
               Expanded(
@@ -135,13 +101,6 @@ class HospitalCardItem extends StatelessWidget {
             text: hospital.address,
           ),
 
-          _buildInfoRow(
-            ui: ui,
-            icon: Icons.star_rate_outlined,
-            text: hospital.rate,
-            iconColor: ColorManager.medicalSecondary,
-          ),
-
           SizedBox(
             height: ui.mediumSpacing,
           ),
@@ -176,7 +135,7 @@ class HospitalCardItem extends StatelessWidget {
                   Navigator.pushNamed(
                     context,
                     Routes.hospitalDetails,
-                    arguments: hospital,
+                    arguments: hospitalGroup,
                   );
                 },
                 child: buildCardButton(

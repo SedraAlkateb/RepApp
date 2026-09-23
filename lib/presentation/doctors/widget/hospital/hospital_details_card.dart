@@ -44,17 +44,6 @@ class HospitalDetailsCard extends StatelessWidget {
             'العنوان',
             hospital.address ?? '',
           ),
-
-          const Divider(
-            height: 30,
-            thickness: 0.1,
-          ),
-
-          buildInfoRow(
-            Icons.medical_services_outlined,
-            'الإختصاص',
-            hospital.titleSp ?? '',
-          ),
         ],
       ),
     );

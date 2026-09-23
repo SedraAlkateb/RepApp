@@ -416,9 +416,13 @@ Future<void> initCurrentPlanModule() async {
       instance.registerFactory<RepPlanBrandSpUsecase>(
           () => RepPlanBrandSpUsecase(instance()));
     }
-    if (!GetIt.I.isRegistered<PlanBrandUsecase>()) {
-      instance.registerFactory<PlanBrandUsecase>(
-          () => PlanBrandUsecase(instance()));
+    if (!GetIt.I.isRegistered<UpdateRepPlanBrandAmount>()) {
+      instance.registerFactory<UpdateRepPlanBrandAmount>(
+          () => UpdateRepPlanBrandAmount(instance()));
+    }
+    if (!GetIt.I.isRegistered<ChangeRepPlanStatus>()) {
+      instance.registerFactory<ChangeRepPlanStatus>(
+          () => ChangeRepPlanStatus(instance()));
     }
     if (!GetIt.I.isRegistered<CheckActiveBrandPlanUsecase>()) {
       instance.registerFactory<CheckActiveBrandPlanUsecase>(
@@ -429,8 +433,8 @@ Future<void> initCurrentPlanModule() async {
           () => GetInfoPlanBrandsUsecase(instance()));
     }
 
-    instance.registerFactory<PlanManagementBloc>(() =>
-        PlanManagementBloc(instance(), instance(), instance(), instance()));
+    instance.registerFactory<PlanManagementBloc>(() => PlanManagementBloc(
+        instance(), instance(), instance(), instance(), instance()));
   }
 }
 

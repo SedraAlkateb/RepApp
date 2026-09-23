@@ -1046,6 +1046,25 @@ class HospitalSpModel {
   }
 }
 
+extension HospitalSpModelMapper on HospitalSpModel {
+  HospitalSpAllModel toHospitalSpAllModel() {
+    return HospitalSpAllModel(
+      hospitalId,
+      title,
+      address,
+      placeTitle,
+      note,
+      rate,
+      totalDocs,
+      visit,
+      SpName,
+      null,
+      visited: visited,
+      id: id,
+    );
+  }
+}
+
 class HospitalModel {
   int id;
   int placeId;

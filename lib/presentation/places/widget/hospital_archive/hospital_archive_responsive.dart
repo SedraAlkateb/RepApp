@@ -129,6 +129,15 @@ class _HospitalArchiveSuccess extends StatelessWidget {
       state.searchData,
     );
 
+    final Map<int, List<HospitalSpAllModel>> groupedByHospitalId = {};
+    for (final hospital in hospitals) {
+      groupedByHospitalId
+          .putIfAbsent(hospital.hospitalId, () => [])
+          .add(hospital);
+    }
+    final List<List<HospitalSpAllModel>> hospitalGroups =
+        groupedByHospitalId.values.toList();
+
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -181,7 +190,7 @@ class _HospitalArchiveSuccess extends StatelessWidget {
                   14,
                 ),
                 child: _HospitalArchiveHeader(
-                  count: hospitals.length,
+                  count: hospitalGroups.length,
                   titleSize: titleSize,
                 ),
               ),
@@ -192,7 +201,7 @@ class _HospitalArchiveSuccess extends StatelessWidget {
         // =========================
         // القائمة فارغة بعد البحث
         // =========================
-        if (hospitals.isEmpty)
+        if (hospitalGroups.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
             child: Center(
@@ -217,14 +226,14 @@ class _HospitalArchiveSuccess extends StatelessWidget {
               32,
             ),
             sliver: SliverList.separated(
-              itemCount: hospitals.length,
+              itemCount: hospitalGroups.length,
               separatorBuilder: (context, index) {
                 return SizedBox(
                   height: cardSpacing,
                 );
               },
               itemBuilder: (context, index) {
-                final hospital = hospitals[index];
+                final hospitalGroup = hospitalGroups[index];
 
                 return Center(
                   child: ConstrainedBox(
@@ -232,7 +241,7 @@ class _HospitalArchiveSuccess extends StatelessWidget {
                       maxWidth: maxWidth,
                     ),
                     child: HospitalArchiveCard(
-                      hospital: hospital,
+                      hospitalGroup: hospitalGroup,
                     ),
                   ),
                 );

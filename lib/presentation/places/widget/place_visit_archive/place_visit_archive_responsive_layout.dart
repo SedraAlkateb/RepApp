@@ -50,9 +50,9 @@ class PlaceVisitArchiveResponsiveLayout extends StatelessWidget {
 
     return NestedScrollView(
       headerSliverBuilder: (
-          context,
-          innerBoxIsScrolled,
-          ) {
+        context,
+        innerBoxIsScrolled,
+      ) {
         return [
           SliverAppBar(
             elevation: 0,
@@ -79,7 +79,6 @@ class PlaceVisitArchiveResponsiveLayout extends StatelessWidget {
               ),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(
@@ -104,19 +103,15 @@ class PlaceVisitArchiveResponsiveLayout extends StatelessWidget {
         ];
       },
 
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: maxWidth,
-          ),
-          child:  TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              DoctorArchive(),
-              HospitalArchive(),
-            ],
-          ),
-        ),
+      // TabBarView على كامل العرض حتى يبقى السكرول شغّال فوق الفراغ الجانبي
+      // بالعرض (landscape)؛ DoctorArchive/HospitalArchive يطبّقان maxWidth
+      // على محتواهما الداخلي فقط عبر CustomScrollView + ConstrainedBox لكل عنصر.
+      body: const TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          DoctorArchive(),
+          HospitalArchive(),
+        ],
       ),
     );
   }

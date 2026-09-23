@@ -129,7 +129,6 @@ class Routes {
   static const String allCitySupervisor = "/allCitySupervisor"; /////////ToDo
   static const String activePlanPage = "/activePlanPage";
   static const String inventory = "/inventory";
-
 }
 
 class RouteGenerator {
@@ -138,153 +137,178 @@ class RouteGenerator {
       case Routes.login:
         initLoginModule();
         iniAllCityModule();
-        return _animatedRoute(settings,const MyLogin());
+        return _animatedRoute(settings, const MyLogin());
       case Routes.allBrand:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(settings,AllBrand(isPr:args ,));
+        return _animatedRoute(
+            settings,
+            AllBrand(
+              isPr: args,
+            ));
       case Routes.docHos:
         final args = settings.arguments as Map<String, dynamic>;
 
-        return _animatedRoute(settings,DocHosByPlaceOrSpPage(
-          placeId: args['placeId'],
-          spId: args['spId'],
-        ));
+        initDoctorAndHospitalModule();
+
+        return _animatedRoute(
+            settings,
+            DocHosByPlaceOrSpPage(
+              placeId: args['placeId'],
+              spId: args['spId'],
+            ));
 
       case Routes.placeVisitPage:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           PlaceVisitPage(placeId: args),
         );
       case Routes.visitDoctor:
         final args =
             settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           VisitDoctor(doctorModel: args),
         );
       case Routes.hospitalDetails:
         final args =
-            settings.arguments as HospitalSpAllModel; // ننتظر الـ ID هنا كـ
-        return _animatedRoute(settings,
-          HospitalDetails(hospital: args),
+            settings.arguments as List<HospitalSpAllModel>; // نفس المشفى بكل اختصاصاته
+        return _animatedRoute(
+          settings,
+          HospitalDetails(hospitalGroup: args),
         );
       case Routes.doctorDetails:
         final args = settings.arguments as DoctorModel; // ننتظر الـ ID هنا كـ
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           DoctorDetails(doctor: args),
         );
       case Routes.infoVisitHospital:
         final args = settings.arguments
             as VisitHospitalAndHospital; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           InfoVisitHospital(hospitalModel: args),
         );
       case Routes.infoVisitDoctor:
         final args = settings.arguments
             as VisitDoctorAndDoctor; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           InfoVisitDoctor(doctorModel: args),
         );
       case Routes.visitHospital:
         final args =
             settings.arguments as HospitalModel; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           VisitHospital(hospitalModel: args),
         );
       case Routes.fadeInWidget:
-        return _animatedRoute(settings,FadeInWidget());
+        return _animatedRoute(settings, FadeInWidget());
 
       case Routes.places:
         initPlacesModule();
         initPlaceVisitModule();
         initDoctorAndHospitalModule();
-        return _animatedRoute(settings,Places());
+        return _animatedRoute(settings, Places());
       case Routes.placesArchive:
         initPlacesModule();
         initDoctorAndHospitalModule();
-        return _animatedRoute(settings,PlacesArchive());
+        return _animatedRoute(settings, PlacesArchive());
       case Routes.spec:
         initSpecModule();
-        return _animatedRoute(settings,SpecializationsPage());
+        return _animatedRoute(settings, SpecializationsPage());
 
       case Routes.doctors:
-        return _animatedRoute(settings,Doctors());
+        return _animatedRoute(settings, Doctors());
 
       case Routes.hospital:
-        return _animatedRoute(settings,Hospital());
+        return _animatedRoute(settings, Hospital());
 
       case Routes.brand:
         initBrandModule();
 
-        return _animatedRoute(settings,BrandPage());
+        return _animatedRoute(settings, BrandPage());
 
       case Routes.pharmacy:
         initPharmacyModule();
-        return _animatedRoute(settings,PharmacyPage());
+        return _animatedRoute(settings, PharmacyPage());
 
       case Routes.sync:
         initSyncModule();
-        return _animatedRoute(settings,SyncPage());
+        return _animatedRoute(settings, SyncPage());
 
       case Routes.visits:
         initVisitsModule();
-        return _animatedRoute(settings,VisitsPage());
+        return _animatedRoute(settings, VisitsPage());
 
       case Routes.inventory:
         initSeniorReportInventoryModule();
-        return _animatedRoute(settings,ReportInventory());
+        return _animatedRoute(settings, ReportInventory());
 
       case Routes.logout:
         initSyncModule();
         // arguments: true = تسجيل خروج بدون رفع (المندوب غير موجود بالسيرفر).
-        return _animatedRoute(settings,
-            LogoutPage(withoutUpload: settings.arguments == true));
+        return _animatedRoute(
+            settings, LogoutPage(withoutUpload: settings.arguments == true));
 
       case Routes.specDH:
-        return _animatedRoute(settings,SpecDH(spId: 0));
+        return _animatedRoute(settings, SpecDH(spId: 0));
 
       case Routes.brandPlan:
         initBrandPlanModule();
-        return _animatedRoute(settings,BrandPlanPage());
+        return _animatedRoute(settings, BrandPlanPage());
 
       case Routes.allRecip:
         initBrandRecModule();
-        return _animatedRoute(settings,AllRecip());
+        return _animatedRoute(settings, AllRecip());
 
       case Routes.Recipes:
         initBrandRecModule();
-        return _animatedRoute(settings,RecipesPage(
-          docId: 0,
-          st: 433,
-        ));
+        return _animatedRoute(
+            settings,
+            RecipesPage(
+              docId: 0,
+              st: 433,
+            ));
       case Routes.AllRepSenior:
         initSeniorModule();
-        UserInfo.repType.i==6?     iniAllCityModule():null;
-        return _animatedRoute(settings,AllRepSenior(
-        ));
+        UserInfo.repType.i == 6 ? iniAllCityModule() : null;
+        return _animatedRoute(settings, AllRepSenior());
 
       case Routes.seniorPlaces:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(settings,PlaceSenior(isPr: args,));
+        return _animatedRoute(
+            settings,
+            PlaceSenior(
+              isPr: args,
+            ));
       case Routes.seniorFuturePlaces:
-        return _animatedRoute(settings,FuturePlacePage());
+        return _animatedRoute(settings, FuturePlacePage());
       case Routes.seniorSpec:
         final args = settings.arguments as bool; // ننتظر الـ ID هنا كـ Integer
-        return _animatedRoute(settings,SpecSeniorPage(isPr: args,));
+        return _animatedRoute(
+            settings,
+            SpecSeniorPage(
+              isPr: args,
+            ));
       case Routes.seniorHos:
-        return _animatedRoute(settings,HospitalSenior());
+        initDoctorAndHospitalModule();
+        return _animatedRoute(settings, HospitalSenior());
       case Routes.seniorDoc:
-        return _animatedRoute(settings,DoctorSenior());
+        return _animatedRoute(settings, DoctorSenior());
       case Routes.noVisitDoctor:
-        return _animatedRoute(settings,NoVisitDoctor());
+        return _animatedRoute(settings, NoVisitDoctor());
       case Routes.remainingVisitsDoctor:
-        return _animatedRoute(settings,RemainingVisits());
+        return _animatedRoute(settings, RemainingVisits());
       case Routes.senVisitDoctor:
-        return _animatedRoute(settings,SenVisitDoctor());
+        return _animatedRoute(settings, SenVisitDoctor());
       case Routes.senVisitHospital:
-        return _animatedRoute(settings,SenVisitHospital());
+        return _animatedRoute(settings, SenVisitHospital());
       case Routes.senVisit:
         final args = settings.arguments as Map<String, dynamic>;
 
@@ -293,7 +317,8 @@ class RouteGenerator {
         final String title = args['title'];
         final Widget doctor = args['doctor'];
         final Widget hospital = args['hospital'];
-        return _animatedRoute(settings,
+        return _animatedRoute(
+          settings,
           VisitsTypePage(
             title: title,
             doctor: doctor,
@@ -305,7 +330,7 @@ class RouteGenerator {
 
       case Routes.searchdoctors:
         iniSearchDoctorsModule();
-        return _animatedRoute(settings,MainSearchPage());
+        return _animatedRoute(settings, MainSearchPage());
       case Routes.RepPlanBrandSp:
         iniFutureModule();
         final args = settings.arguments as Map<String, dynamic>?;
@@ -316,67 +341,73 @@ class RouteGenerator {
         final sampleCount = args?['sampleCount'];
         final spId = args?['spId'];
         final repPlanId = args?['repPlanId'];
-        return _animatedRoute(settings,RepPlanBrandSpPage(
-          title: title,
-          flag: flag,
-          percent: percent,
-            isRep:isRep,
-          sampleCount: sampleCount,
-          spId:spId ,
-          repPlanId: repPlanId,
-        ));
+        return _animatedRoute(
+            settings,
+            RepPlanBrandSpPage(
+              title: title,
+              flag: flag,
+              percent: percent,
+              isRep: isRep,
+              sampleCount: sampleCount,
+              spId: spId,
+              repPlanId: repPlanId,
+            ));
       case Routes.doctorInfo:
-        return _animatedRoute(settings,DoctorInfo());
+        return _animatedRoute(settings, DoctorInfo());
       case Routes.allRecipe:
         initBrandRecModule();
 
-        return _animatedRoute(settings,AllRecipesForView());
+        return _animatedRoute(settings, AllRecipesForView());
       case Routes.viewRecipe:
-        return _animatedRoute(settings,ViewRecipePage());
+        return _animatedRoute(settings, ViewRecipePage());
       case Routes.recipeDH:
         initDoctorAndHospitalModule();
-        return _animatedRoute(settings,RecipeDH());
+        return _animatedRoute(settings, RecipeDH());
       case Routes.allRepWithFuture:
         initSeniorManageFutureModule();
-        return _animatedRoute(settings,AllRepWithFuture());
+        return _animatedRoute(settings, AllRepWithFuture());
       case Routes.seniorByCityId:
         initGeneralReportsModule();
-        return _animatedRoute(settings,SeniorByCityId());
+        return _animatedRoute(settings, SeniorByCityId());
       case Routes.adminControl:
         iniAllCityModule();
 
-        return _animatedRoute(settings,AdminDashboardPage());
+        return _animatedRoute(settings, AdminDashboardPage());
       case Routes.doctorAndHospitalArchive:
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(settings,PlaceVisitArchivePage(placeId: args));
+        initDoctorAndHospitalModule();
+
+        return _animatedRoute(settings, PlaceVisitArchivePage(placeId: args));
       case Routes.teamLeader:
         initGeneralReportsModule();
-        return _animatedRoute(settings,TeamLeader());
+        return _animatedRoute(settings, TeamLeader());
       case Routes.allCitySeniors:
         iniAllCityModule();
-        return _animatedRoute(settings,AllCitySeniors());
+        return _animatedRoute(settings, AllCitySeniors());
       case Routes.allCitySupervisor:
         iniAllCityModule();
-        return _animatedRoute(settings,AllCityForRepSuper());
+        return _animatedRoute(settings, AllCityForRepSuper());
       case Routes.finishedPlan:
         initFinishedPlan();
-        return _animatedRoute(settings,FinishedPlanPage());
+        return _animatedRoute(settings, FinishedPlanPage());
       case Routes.planReps:
-        return _animatedRoute(settings,PlanRepsPage());
+        return _animatedRoute(settings, PlanRepsPage());
       case Routes.createCurrentPlan:
         initCurrentPlanModule();
-        return _animatedRoute(settings,PlanHelpGoalTap());
+        return _animatedRoute(settings, PlanHelpGoalTap());
       case Routes.cityPlan:
         iniAllCityModule();
-        return _animatedRoute(settings,AllCityPlan());
+        return _animatedRoute(settings, AllCityPlan());
       case Routes.activePlanPage:
         initActivePlanModule();
         final args = settings.arguments as int; // ننتظر الـ ID هنا كـ Integer
 
-        return _animatedRoute(settings,ActivePlanPage(
-          planId: args,
-        ));
+        return _animatedRoute(
+            settings,
+            ActivePlanPage(
+              planId: args,
+            ));
 
       default:
         return unDefinedRoute(settings);
@@ -384,7 +415,8 @@ class RouteGenerator {
   }
 
   static Route<dynamic> unDefinedRoute(RouteSettings settings) {
-    return _animatedRoute(settings,
+    return _animatedRoute(
+      settings,
       Scaffold(
         appBar: AppBar(title: const Text(StringsManager.noRouteFound)),
         body: const Center(child: Text(StringsManager.noRouteFound)),
@@ -403,7 +435,9 @@ class RouteGenerator {
       transitionDuration: const Duration(milliseconds: 600),
       pageBuilder: (_, __, ___) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final begin = const Offset(1.0, 0.0); // تغيير الاتجاه إلى اليمين لليسار
+        // التطبيق عربي بالكامل (RTL)، فالصفحة الجديدة تدخل من جهة اليسار
+        // (عكس اتجاه القراءة/التقدّم الإنجليزي) لتتوافق مع اتجاه التنقل بالعربي.
+        final begin = const Offset(-1.0, 0.0);
         final end = Offset.zero;
         final curve = Curves.easeInOut;
         final tween = Tween(

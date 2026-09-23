@@ -44,6 +44,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
 
   // الربط بواسطة item.id بدلاً من index لتفادي مشاكل الفلترة والبحث
   final Map<int, TextEditingController> amountControllers = {};
+  final Map<int, FocusNode> amountFocusNodes = {};
 
   @override
   void dispose() {
@@ -51,7 +52,31 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     for (final controller in amountControllers.values) {
       controller.dispose();
     }
+    for (final focusNode in amountFocusNodes.values) {
+      focusNode.dispose();
+    }
     super.dispose();
+  }
+
+  // ترتيب البطاقات: هدف ممتلئ، ثم هدف صفري، ثم مساعد ممتلئ، ثم مساعد صفري،
+  // وكل مجموعة من الأربعة مرتبة أبجدياً حسب الاسم
+  List<PlanBrandSp> _sortPlanBrands(List<PlanBrandSp> items) {
+    int groupOf(PlanBrandSp item) {
+      final bool isTarget = item.brandType.i == 1;
+      final bool isZero = item.totalAmount == 0;
+      if (isTarget && !isZero) return 0;
+      if (isTarget && isZero) return 1;
+      if (!isTarget && !isZero) return 2;
+      return 3;
+    }
+
+    final sorted = List<PlanBrandSp>.from(items);
+    sorted.sort((a, b) {
+      final int groupCompare = groupOf(a).compareTo(groupOf(b));
+      if (groupCompare != 0) return groupCompare;
+      return a.titleAr.compareTo(b.titleAr);
+    });
+    return sorted;
   }
 
   @override
@@ -63,6 +88,13 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) {
+        // onPopInvokedWithResult بينادى مع كل محاولة pop، بما فيها الـ
+        // Navigator.pop(context) اللي منسويه بنفسنا بالـ listener بعد نجاح
+        // الحفظ (didPop=true بهاي الحالة). إذا تجاهلنا هاد الشرط، رح نعيد
+        // إطلاق UpdateAmountEvent بعد الحفظ مباشرة، وبما إنو planBrandSpSend
+        // صار فاضي رح يرجع ISEmptyState ويعمل Navigator.pop تاني، يعني رجوع
+        // خطوتين بدل خطوة. نعالج فقط محاولات الرجوع الممنوعة فعلياً (didPop=false).
+        if (didPop) return;
         BlocProvider.of<FutureRepBloc>(context).add(UpdateAmountEvent());
       },
       child: Scaffold(
@@ -118,99 +150,157 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
               ),
             ];
           },
-          body: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: ui.pageMaxWidth,
-              ),
-              child: BlocConsumer<FutureRepBloc, FutureRepState>(
-                listener: (context, state) {
-                  if (state is FutureRepPlanBrandSpErrorState) {
-                    error(context, state.failure.massage, state.failure.code);
-                  }
-                  if (state is SumErrorState) {
-                    // تجاوز الحد: نعرض الرسالة فقط. error() تستدعي dismissDialog
-                    // الذي يغلق الصفحة نفسها عند عدم وجود حوار مفتوح، فيُرفع
-                    // ما تغيّر ويبقى اللودينغ ظاهراً.
-                    final route = ModalRoute.of(context);
-                    if (route != null && !route.isCurrent) {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    }
-                    errorWithoutPop(
-                        context, state.failure.massage, state.failure.code);
-                  }
-                  if (state is FutureSpRepErrorState) {
-                    error(context, state.failure.massage, state.failure.code);
-                  }
-                  if (state is UpdateAmountLoadingState) {
-                    loading(context);
-                  } else if (state is ISEmptyState) {
-                    Navigator.pop(context);
-                  } else if (state is UpdateAmountState) {
+          body: BlocConsumer<FutureRepBloc, FutureRepState>(
+            listener: (context, state) async {
+              if (state is FutureRepPlanBrandSpErrorState) {
+                error(context, state.failure.massage, state.failure.code);
+              }
+              if (state is SumErrorState) {
+                // تجاوز الحد: نعرض الرسالة فقط. error() تستدعي dismissDialog
+                // الذي يغلق الصفحة نفسها عند عدم وجود حوار مفتوح، فيُرفع
+                // ما تغيّر ويبقى اللودينغ ظاهراً.
+                final route = ModalRoute.of(context);
+                if (route != null && !route.isCurrent) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                }
+                errorWithoutPop(
+                    context, state.failure.massage, state.failure.code);
+              }
+              if (state is FutureSpRepErrorState) {
+                error(context, state.failure.massage, state.failure.code);
+              }
+              if (state is UpdateAmountLoadingState) {
+                loading(context);
+              } else if (state is ISEmptyState) {
+                Navigator.pop(context);
+              } else if (state is UpdateAmountState) {
+                await success(context);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+            // AmountState بينطلق مع كل حرف يُكتب بحقل الكمية. لو تركنا الـ
+            // builder الرئيسي يعيد البناء معه، رح تنعاد بناء كل الـ
+            // ListView (كل البطاقات، لأنها eager بسبب shrinkWrap) بكل ضغطة،
+            // وهاد التزامن الثقيل بين كل حرف وإعادة بناء طويلة هو اللي بيخلي
+            // لوحة المفاتيح تبين "معلّقة". نستثني AmountState هون، وبطاقات
+            // الملخص فقط هي يلي بتتحدث لحظياً عبر BlocBuilder متداخل تحت.
+            buildWhen: (previous, current) => current is! AmountState,
+            builder: (context, state) {
+              if (state is FutureRepPlanBrandSpState) {
+                planBrandsp = _sortPlanBrands(state.planBrandSp);
+                brandAmount = state.brandAmountModel;
+                sumTargetAss = state.sum;
+              }
+              if (state is FutureRepPlanBrandSpLoadingState) {
+                return loadingFullScreen(context);
+              }
+              if (state is FutureRepPlanBrandSpEmptyState) {
+                return emptyFullScreen(context);
+              }
 
-                    success(context);
-                 Navigator.pop(context);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is FutureRepPlanBrandSpState) {
-                    planBrandsp = state.planBrandSp;
-                    brandAmount = state.brandAmountModel;
-                    sumTargetAss = state.sum;
-                  }
-                  if (state is AmountState) {
-                    sumTargetAss = SumBrandAmountModel(
-                      state.targetAmount,
-                      state.assistantAmount,
-                      state.totalAmount,
-                    );
-                  }
-                  if (state is FutureRepPlanBrandSpLoadingState) {
-                    return loadingFullScreen(context);
-                  }
-                  if (state is FutureRepPlanBrandSpEmptyState) {
-                    return emptyFullScreen(context);
-                  }
-
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.manual,
+              // CustomScrollView + SliverList.builder بدل SingleChildScrollView
+              // مع ListView.builder(shrinkWrap:true): shrinkWrap كان يفرض بناء
+              // كل البطاقات (مو بس الظاهرة) بكل مرة يتغير فيها ارتفاع المساحة
+              // المتاحة — وهاد بالضبط اللي بيصير لما الكيبورد يطلع/ينزل
+              // (MediaQuery.viewInsets بيتغير)، فيعيد بناء وترتيب كل القائمة
+              // بشكل متزامن ويسبب تعليق ظاهري بحركة الكيبورد. الـ Sliver لازي
+              // (بيبني بس العناصر الظاهرة) فبيلغي هاد التعليق.
+              return CustomScrollView(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.manual,
+                slivers: [
+                  SliverPadding(
                     padding: EdgeInsets.fromLTRB(
                       ui.pagePadding,
                       ui.listTopPadding + 8,
                       ui.pagePadding,
+                      0,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: ui.pageMaxWidth,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // بطاقات الملخص فقط بتتحدث لحظياً مع كل حرف
+                              // (AmountState)، بمعزل عن قائمة البطاقات الثقيلة
+                              // تحتها يلي بتضل ثابتة أثناء الكتابة.
+                              BlocBuilder<FutureRepBloc, FutureRepState>(
+                                buildWhen: (previous, current) =>
+                                    current is AmountState ||
+                                    current is FutureRepPlanBrandSpState,
+                                builder: (context, summaryState) {
+                                  BrandAmountModel amount = brandAmount;
+                                  SumBrandAmountModel sum = sumTargetAss;
+                                  if (summaryState
+                                      is FutureRepPlanBrandSpState) {
+                                    amount = summaryState.brandAmountModel;
+                                    sum = summaryState.sum;
+                                  }
+                                  if (summaryState is AmountState) {
+                                    sum = SumBrandAmountModel(
+                                      summaryState.targetAmount,
+                                      summaryState.assistantAmount,
+                                      summaryState.totalAmount,
+                                    );
+                                  }
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      widget.isRep == true
+                                          ? buildSampleStatisticsSummaryCard(
+                                              amount, widget.sampleCount ?? 1,
+                                              spId: widget.spId ?? 0,
+                                              repPlanId: widget.repPlanId ?? 0)
+                                          : const SizedBox(),
+                                      buildSampleStatisticsTypeSummaryCard(
+                                        sum,
+                                        widget.sampleCount ?? 1,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              SizedBox(height: ui.sectionSpacing),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      0,
+                      ui.pagePadding,
                       ui.pageBottomPadding + 90,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        widget.isRep == true
-                            ? buildSampleStatisticsSummaryCard(
-                                brandAmount, widget.sampleCount ?? 1,
-                                spId: widget.spId ?? 0,
-                                repPlanId: widget.repPlanId ?? 0)
-                            : const SizedBox(),
-                        buildSampleStatisticsTypeSummaryCard(
-                          sumTargetAss,
-                          widget.sampleCount ?? 1,
-                        ),
-                        SizedBox(height: ui.sectionSpacing),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          itemCount: planBrandsp.length,
-                          itemBuilder: (context, index) {
-                            return _buildModernCard(context, index, state);
-                          },
-                        ),
-                      ],
+                    sliver: SliverList.builder(
+                      itemCount: planBrandsp.length,
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: ui.pageMaxWidth,
+                            ),
+                            child: _buildModernCard(context, index, state),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -231,9 +321,17 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
       item.id,
       () => TextEditingController(text: item.totalAmount.toString()),
     );
+    final FocusNode amountFocusNode = amountFocusNodes.putIfAbsent(
+      item.id,
+      () => FocusNode(),
+    );
 
-    // تحديث نص الحقل إذا تغيرت القيمة برمجياً
-    if (amountController.text != item.totalAmount.toString()) {
+    // تحديث نص الحقل إذا تغيرت القيمة برمجياً (فقط عندما لا يكون الحقل
+    // مركّزاً عليه حالياً). إعادة كتابة النص والـ selection أثناء الكتابة
+    // نفسها (كل حرف يُطلق ChangeFieldEvent → AmountState → rebuild) تصطدم
+    // بحالة الـ IME الحيّة وتُشعر المستخدم بأن لوحة المفاتيح "علّقت".
+    if (!amountFocusNode.hasFocus &&
+        amountController.text != item.totalAmount.toString()) {
       amountController.text = item.totalAmount.toString();
       amountController.selection = TextSelection.fromPosition(
         TextPosition(offset: amountController.text.length),
@@ -382,6 +480,7 @@ class _RepPlanBrandSpPageState extends State<RepPlanBrandSpPage>
                         height: ui.isMobile ? 42 : 46,
                         child: TextField(
                           controller: amountController,
+                          focusNode: amountFocusNode,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           enabled: isEditable,

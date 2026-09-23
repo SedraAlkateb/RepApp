@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/data/mapper/mapper.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/usecase/change_rep_plan_status.dart';
 import 'package:domina_app/domain/usecase/check_active_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/get_info_plan_brands_usecase.dart';
-import 'package:domina_app/domain/usecase/plan_brand_usecase.dart';
 import 'package:domina_app/domain/usecase/rep_plan_brand_sp_usecase.dart';
+import 'package:domina_app/domain/usecase/update_rep_plan_brand_amount.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -16,15 +16,26 @@ part 'plan_management_state.dart';
 class PlanManagementBloc
     extends Bloc<PlanManagementEvent, PlanManagementState> {
   final RepPlanBrandSpUsecase repPlanBrandSpUsecase;
-  final PlanBrandUsecase planBrandUsecase;
+  final UpdateRepPlanBrandAmount updateRepPlanBrandAmount;
+  final ChangeRepPlanStatus changeRepPlanStatus;
   final CheckActiveBrandPlanUsecase checkActiveBrandPlanUsecase;
   GetInfoPlanBrandsUsecase getInfoPlanBrandsUsecase;
-  PlanManagementBloc(this.repPlanBrandSpUsecase, this.planBrandUsecase,
-      this.checkActiveBrandPlanUsecase, this.getInfoPlanBrandsUsecase)
+
+  // الكميات المعدَّلة الجاهزة للرفع كمصفوفة amount/id (نفس أسلوب
+  // FutureRepBloc)، بمعزل عن قائمة futureBrands الكاملة المعروضة بالواجهة
+  List<BrandAmountRequestModel> planBrandSpSend = [];
+
+  PlanManagementBloc(
+      this.repPlanBrandSpUsecase,
+      this.updateRepPlanBrandAmount,
+      this.changeRepPlanStatus,
+      this.checkActiveBrandPlanUsecase,
+      this.getInfoPlanBrandsUsecase)
       : super(const PlanManagementState()) {
     on<RepPlanBrandSpEvent>(_onFetchBrands);
     on<UpdateBrandQuantityEvent>(_onUpdateQuantity);
     on<SubmitPlanEvent>(_onSubmitPlan);
+    on<SaveFutureAmountEvent>(_onSaveFutureAmount);
     on<GetRepInfoEvent>(_getRepInfo);
     on<RepActivePlanBrandEvent>(_onActiveFetchBrands);
     on<SearchPlanBrandEvent>(_onSearchBrands);
@@ -101,36 +112,79 @@ class PlanManagementBloc
     );
   }
 
-  // 3. الموافقة النهائية
+  // 3. الموافقة النهائية: يرفع الكميات المعدَّلة أولاً (نفس مصفوفة
+  // amount/id المستخدمة بالتراجع)، ثم يغيّر حالة الخطة حسب دور المستخدم
+  // الحالي: Senior(6) → 5 (بانتظار موافقة Team Leader)،
+  // Team Leader(5) → 1 (بانتظار موافقة Supervisor)، Supervisor(4) → 2
   Future<void> _onSubmitPlan(
       SubmitPlanEvent event, Emitter<PlanManagementState> emit) async {
     emit(state.copyWith(futureStatus: PlanStatus.submitting));
 
-    // هنا البيانات النهائية الجاهزة للإرسال مع الكميات المحدثة
-    final finalDataToSend = state.futureBrands;
+    if (planBrandSpSend.isNotEmpty) {
+      final amountResult = await updateRepPlanBrandAmount.execute(
+        BrandAmountRequestBody(planBrandSpSend),
+      );
 
-    try {
-      int status = (UserInfo.repType.i == 5
-          ? 1
-          : UserInfo.repType.i == 4
-              ? 2
-              : UserInfo.repType.i == 6
-                  ? 5
-                  : -6);
-      await planBrandUsecase.execute(RepPlanBrandBody(
-          finalDataToSend.toDomain(UserInfo.otherPlanId ?? -1), status));
-      UserInfo.otherstatus = status;
-      emit(state.copyWith(
-          futureStatus: PlanStatus.submitSuccess,
-          isEnable: UserInfo.otherstatus == UserInfo.statusPlan));
-    } catch (e) {
-      emit(state.copyWith(futureStatus: PlanStatus.error));
+      Failure? amountFailure;
+      amountResult.fold((failure) => amountFailure = failure, (_) {});
+      if (amountFailure != null) {
+        emit(state.copyWith(
+            futureStatus: PlanStatus.actionError,
+            futureFailure: amountFailure));
+        return;
+      }
+      planBrandSpSend = [];
     }
+
+    final int status = UserInfo.repType.i == 5
+        ? 1
+        : UserInfo.repType.i == 4
+            ? 2
+            : UserInfo.repType.i == 6
+                ? 5
+                : -6;
+
+    final result =
+        await changeRepPlanStatus.execute(UserInfo.otherPlanId ?? -1, status);
+
+    result.fold(
+      (failure) => emit(state.copyWith(
+          futureStatus: PlanStatus.actionError, futureFailure: failure)),
+      (data) {
+        UserInfo.otherstatus = status;
+        emit(state.copyWith(
+            futureStatus: PlanStatus.submitSuccess,
+            isEnable: UserInfo.otherstatus == UserInfo.statusPlan));
+      },
+    );
+  }
+
+  // حفظ الكميات المعدَّلة فقط (بدون تغيير الحالة) — نفس مصفوفة amount/id،
+  // يُستدعى عند محاولة الرجوع عن الصفحة قبل الإرسال النهائي
+  Future<void> _onSaveFutureAmount(
+      SaveFutureAmountEvent event, Emitter<PlanManagementState> emit) async {
+    if (planBrandSpSend.isEmpty) return;
+
+    emit(state.copyWith(futureStatus: PlanStatus.savingAmounts));
+
+    final result = await updateRepPlanBrandAmount.execute(
+      BrandAmountRequestBody(planBrandSpSend),
+    );
+
+    result.fold(
+      (failure) => emit(state.copyWith(
+          futureStatus: PlanStatus.actionError, futureFailure: failure)),
+      (data) {
+        planBrandSpSend = [];
+        emit(state.copyWith(futureStatus: PlanStatus.amountsSaved));
+      },
+    );
   }
 
 // 2. تحديث دالة جلب البيانات لتملأ القائمتين معاً في البداية:
   Future<void> _onFetchBrands(
       RepPlanBrandSpEvent event, Emitter<PlanManagementState> emit) async {
+    planBrandSpSend = [];
     emit(state.copyWith(futureStatus: PlanStatus.loading));
     final result = await repPlanBrandSpUsecase.execute(event.rep);
     result.fold(
@@ -185,6 +239,17 @@ class PlanManagementBloc
         fullList.indexWhere((element) => element.id == currentBrand.id);
     if (originalIndex != -1) {
       fullList[originalIndex] = updatedBrand;
+    }
+
+    // تحديث مصفوفة amount/id الجاهزة للرفع (نفس أسلوب FutureRepBloc)
+    final sendIndex =
+        planBrandSpSend.indexWhere((item) => item.id == currentBrand.id);
+    if (sendIndex == -1) {
+      planBrandSpSend.add(
+        BrandAmountRequestModel(currentBrand.id, event.quantity),
+      );
+    } else {
+      planBrandSpSend[sendIndex].amount = event.quantity;
     }
 
     // عمل emit بدون تغيير الحالة (Status) لكي لا يتم إعادة بناء الشاشة بالكامل بقيمة الـ Loading

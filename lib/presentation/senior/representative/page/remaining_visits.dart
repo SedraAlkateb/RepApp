@@ -16,9 +16,8 @@ class RemainingVisits extends StatefulWidget {
 }
 
 class _RemainingVisitsState extends State<RemainingVisits> {
-
   final TextEditingController searchNoteDoctorController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   void dispose() {
@@ -28,8 +27,7 @@ class _RemainingVisitsState extends State<RemainingVisits> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
 
@@ -41,9 +39,9 @@ class _RemainingVisitsState extends State<RemainingVisits> {
     double listBottomPadding;
     double headerVerticalPadding;
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -56,9 +54,9 @@ class _RemainingVisitsState extends State<RemainingVisits> {
         listBottomPadding = 24;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
 
@@ -72,9 +70,9 @@ class _RemainingVisitsState extends State<RemainingVisits> {
         listBottomPadding = 30;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
 
@@ -88,151 +86,144 @@ class _RemainingVisitsState extends State<RemainingVisits> {
         break;
     }
 
+    // ملاحظة: SingleChildScrollView على كامل العرض هون (بدون ConstrainedBox
+    // خارجي) حتى يبقى السكرول بالماوس يعمل فوق الفراغ الجانبي بالعرض، وقيد
+    // pageMaxWidth يُطبَّق داخلياً على المحتوى فقط.
     return ColoredBox(
       color: const Color(
         0xFFF8FAFC,
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // =================================================
-                // Search
-                // =================================================
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    horizontalPadding,
-                    searchTopPadding,
-                    horizontalPadding,
-                    searchBottomPadding,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: pageMaxWidth,
                   ),
-                  child: SearchField(
-                    searchController:
-                    searchNoteDoctorController,
-
-                    // =============================================
-                    // نفس سلوك البحث
-                    // =============================================
-                    onPressed: (value) {
-                      BlocProvider.of<
-                          SeniorProfBloc>(
-                        context,
-                      ).add(
-                        SenSearchRemainingVisitsDoctorEvent(
-                          value,
+                  child: Column(
+                    children: [
+                      // =================================================
+                      // Search
+                      // =================================================
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          searchTopPadding,
+                          horizontalPadding,
+                          searchBottomPadding,
                         ),
-                      );
-                    },
-                  ),
-                ),
+                        child: SearchField(
+                          searchController: searchNoteDoctorController,
 
-                // =================================================
-                // List
-                // =================================================
-                BlocBuilder<
-                    SeniorProfBloc,
-                    SeniorProfState>(
-                  builder: (context, state) {
-                    // ===========================================
-                    // نفس fallback الموجود عندك
-                    // ===========================================
-                    List<NoVisitDocModel>
-                    noVisitDoc =
-                        context
-                            .watch<
-                            SeniorProfBloc>()
-                            .remainingVisits;
-
-                    if (state
-                    is SenNoVisitDocsState) {
-                      noVisitDoc =
-                          state.noVisitDoc;
-                    }
-
-                    // ===========================================
-                    // Loading
-                    // ===========================================
-                    if (state
-                    is SenNoVisitDocLoadingState) {
-                      return loadingFullScreen(
-                        context,
-                      );
-                    }
-
-                    // ===========================================
-                    // Empty
-                    // ===========================================
-                    if (state
-                    is SenNoVisitDocEmptyState ||
-                        noVisitDoc.isEmpty) {
-                      return emptyFullScreen(
-                        context,
-                      );
-                    }
-
-                    // ===========================================
-                    // Error
-                    // نفس الكود الأصلي بدون إضافة retry
-                    // ===========================================
-                    if (state
-                    is SenNoVisitDocErrorState) {
-                      return errorFullScreen(
-                        context,
-                      );
-                    }
-
-                    // ===========================================
-                    // Data
-                    // ===========================================
-                    return     Column(
-                      children: [
-                        // =================================================
-                        // Header + Count
-                        // =================================================
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding,
-                            vertical: headerVerticalPadding,
-                          ),
-                          child: buildTotalReportsCard(
-                            noVisitDoc
-                                .length,
-                            "عدد الأطباء",
-                            'قائمة الأطباء الذين تمت زيارتهم ولم تكتمل',
-                          ),
-                        ),
-                        ListView.builder(
-                          padding: EdgeInsets.fromLTRB(
-                            horizontalPadding,
-                            listTopPadding,
-                            horizontalPadding,
-                            listBottomPadding,
-                          ),
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount:
-                          noVisitDoc.length,
-
-                          itemBuilder:
-                              (context, index) {
-                            return RemainingVisitCard(
-                              data:
-                              noVisitDoc[index],
+                          // =============================================
+                          // نفس سلوك البحث
+                          // =============================================
+                          onPressed: (value) {
+                            BlocProvider.of<SeniorProfBloc>(
+                              context,
+                            ).add(
+                              SenSearchRemainingVisitsDoctorEvent(
+                                value,
+                              ),
                             );
                           },
                         ),
-                      ],
-                    );
-                  },
+                      ),
+
+                      // =================================================
+                      // List
+                      // =================================================
+                      BlocBuilder<SeniorProfBloc, SeniorProfState>(
+                        builder: (context, state) {
+                          // ===========================================
+                          // نفس fallback الموجود عندك
+                          // ===========================================
+                          List<NoVisitDocModel> noVisitDoc =
+                              context.watch<SeniorProfBloc>().remainingVisits;
+
+                          if (state is SenNoVisitDocsState) {
+                            noVisitDoc = state.noVisitDoc;
+                          }
+
+                          // ===========================================
+                          // Loading
+                          // ===========================================
+                          if (state is SenNoVisitDocLoadingState) {
+                            return loadingFullScreen(
+                              context,
+                            );
+                          }
+
+                          // ===========================================
+                          // Empty
+                          // ===========================================
+                          if (state is SenNoVisitDocEmptyState ||
+                              noVisitDoc.isEmpty) {
+                            return emptyFullScreen(
+                              context,
+                            );
+                          }
+
+                          // ===========================================
+                          // Error
+                          // نفس الكود الأصلي بدون إضافة retry
+                          // ===========================================
+                          if (state is SenNoVisitDocErrorState) {
+                            return errorFullScreen(
+                              context,
+                            );
+                          }
+
+                          // ===========================================
+                          // Data
+                          // ===========================================
+                          return Column(
+                            children: [
+                              // =================================================
+                              // Header + Count
+                              // =================================================
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: horizontalPadding,
+                                  vertical: headerVerticalPadding,
+                                ),
+                                child: buildTotalReportsCard(
+                                  noVisitDoc.length,
+                                  "عدد الأطباء",
+                                  'قائمة الأطباء الذين تمت زيارتهم ولم تكتمل',
+                                ),
+                              ),
+                              ListView.builder(
+                                padding: EdgeInsets.fromLTRB(
+                                  horizontalPadding,
+                                  listTopPadding,
+                                  horizontalPadding,
+                                  listBottomPadding,
+                                ),
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: noVisitDoc.length,
+                                itemBuilder: (context, index) {
+                                  return RemainingVisitCard(
+                                    data: noVisitDoc[index],
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

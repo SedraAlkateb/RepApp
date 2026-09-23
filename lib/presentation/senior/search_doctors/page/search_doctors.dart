@@ -111,18 +111,21 @@ class _SearchDoctorsState extends State<SearchDoctors>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: ui.pageMaxWidth,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // =================================================
-                // Search Field + City Filter + Search Button
-                // =================================================
-                Padding(
+        // ملاحظة: بدون ConstrainedBox خارجي حول المحتوى، حتى يضل السكرول
+        // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد pageMaxWidth يُطبَّق
+        // داخلياً على السيرش وعلى كل عنصر بنتائج البحث لحاله.
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // =================================================
+            // Search Field + City Filter + Search Button
+            // =================================================
+            Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: ui.pageMaxWidth,
+                ),
+                child: Padding(
                   padding: EdgeInsets.fromLTRB(
                     ui.pagePadding,
                     ui.searchTopPadding,
@@ -166,16 +169,16 @@ class _SearchDoctorsState extends State<SearchDoctors>
                     ],
                   ),
                 ),
-
-                // =================================================
-                // Content
-                // =================================================
-                Expanded(
-                  child: _buildContent(context, ui),
-                ),
-              ],
+              ),
             ),
-          ),
+
+            // =================================================
+            // Content
+            // =================================================
+            Expanded(
+              child: _buildContent(context, ui),
+            ),
+          ],
         ),
       ),
     );
@@ -235,12 +238,17 @@ class _SearchDoctorsState extends State<SearchDoctors>
                   horizontal: ui.pagePadding,
                 ),
                 sliver: SliverToBoxAdapter(
-                  child: errorFullScreen(
-                    context,
-                    mes: state.failure.massage,
-                    func: () {
-                      _loadSelectedCity(force: true);
-                    },
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
+                      child: errorFullScreen(
+                        context,
+                        mes: state.failure.massage,
+                        func: () {
+                          _loadSelectedCity(force: true);
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -261,12 +269,17 @@ class _SearchDoctorsState extends State<SearchDoctors>
                   ui.listBottomPadding,
                 ),
                 sliver: SliverToBoxAdapter(
-                  child: loadingShimmer(
-                    context,
-                    20,
-                    100,
-                    100,
-                    BorderRadius.circular(ui.cardRadius),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
+                      child: loadingShimmer(
+                        context,
+                        20,
+                        100,
+                        100,
+                        BorderRadius.circular(ui.cardRadius),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -308,29 +321,35 @@ class _SearchDoctorsState extends State<SearchDoctors>
                     (context, index) {
                       final doctor = state.representative[index];
 
-                      return doctorWidget(
-                        text: "عرض التقارير",
-                        spTitle: doctor.spTitle,
-                        title: doctor.name,
-                        placeTitle: doctor.placeTitle,
-                        id: doctor.id,
-                        context: context,
-                        function: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return DoctorDetails(
-                                  doctorModel: doctor,
-                                );
-                              },
-                            ),
-                          );
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxWidth: ui.pageMaxWidth),
+                          child: doctorWidget(
+                            text: "عرض التقارير",
+                            spTitle: doctor.spTitle,
+                            title: doctor.name,
+                            placeTitle: doctor.placeTitle,
+                            id: doctor.id,
+                            context: context,
+                            function: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return DoctorDetails(
+                                      doctorModel: doctor,
+                                    );
+                                  },
+                                ),
+                              );
 
-                          BlocProvider.of<SearchDoctorsBloc>(context).add(
-                            FutureDocDoctorsEvent(doctor.id),
-                          );
-                        },
+                              BlocProvider.of<SearchDoctorsBloc>(context).add(
+                                FutureDocDoctorsEvent(doctor.id),
+                              );
+                            },
+                          ),
+                        ),
                       );
                     },
                     childCount: state.representative.length,

@@ -2106,4 +2106,3 @@ class ListHosSpSearchBaseResponse extends BaseResponse {
   // to json
   Map<String, dynamic> toJson() => _$ListHosSpSearchBaseResponseToJson(this);
 }
-

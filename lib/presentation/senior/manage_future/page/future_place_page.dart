@@ -44,9 +44,9 @@ class FuturePlacePage extends StatelessWidget {
     double titleFontSize;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -73,9 +73,9 @@ class FuturePlacePage extends StatelessWidget {
         titleFontSize = 17;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
 
@@ -102,9 +102,9 @@ class FuturePlacePage extends StatelessWidget {
         titleFontSize = 19;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
 
@@ -142,66 +142,69 @@ class FuturePlacePage extends StatelessWidget {
         ),
       ),
 
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: bodyBuild(
-            context,
-            headerHorizontalPadding: headerHorizontalPadding,
-            headerTopPadding: headerTopPadding,
-            headerBottomPadding: headerBottomPadding,
-            listHorizontalPadding: listHorizontalPadding,
-            listVerticalPadding: listVerticalPadding,
-            headerTitleFontSize: headerTitleFontSize,
-            headerSubtitleFontSize: headerSubtitleFontSize,
-            cardHorizontalPadding: cardHorizontalPadding,
-            cardVerticalPadding: cardVerticalPadding,
-            cardBottomSpacing: cardBottomSpacing,
-            cardRadius: cardRadius,
-            iconBoxSize: iconBoxSize,
-            iconSize: iconSize,
-            iconSpacing: iconSpacing,
-            labelFontSize: labelFontSize,
-            titleFontSize: titleFontSize,
-          ),
-        ),
+      // ملاحظة: بدون ConstrainedBox خارجي حول bodyBuild، حتى يضل السكرول
+      // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد pageMaxWidth يُطبَّق
+      // داخلياً على الهيدر وعلى كل بطاقة لحالها.
+      body: bodyBuild(
+        context,
+        pageMaxWidth: pageMaxWidth,
+        headerHorizontalPadding: headerHorizontalPadding,
+        headerTopPadding: headerTopPadding,
+        headerBottomPadding: headerBottomPadding,
+        listHorizontalPadding: listHorizontalPadding,
+        listVerticalPadding: listVerticalPadding,
+        headerTitleFontSize: headerTitleFontSize,
+        headerSubtitleFontSize: headerSubtitleFontSize,
+        cardHorizontalPadding: cardHorizontalPadding,
+        cardVerticalPadding: cardVerticalPadding,
+        cardBottomSpacing: cardBottomSpacing,
+        cardRadius: cardRadius,
+        iconBoxSize: iconBoxSize,
+        iconSize: iconSize,
+        iconSpacing: iconSpacing,
+        labelFontSize: labelFontSize,
+        titleFontSize: titleFontSize,
       ),
     );
   }
 
   Widget bodyBuild(
-      BuildContext context, {
-        required double headerHorizontalPadding,
-        required double headerTopPadding,
-        required double headerBottomPadding,
-        required double listHorizontalPadding,
-        required double listVerticalPadding,
-        required double headerTitleFontSize,
-        required double headerSubtitleFontSize,
-        required double cardHorizontalPadding,
-        required double cardVerticalPadding,
-        required double cardBottomSpacing,
-        required double cardRadius,
-        required double iconBoxSize,
-        required double iconSize,
-        required double iconSpacing,
-        required double labelFontSize,
-        required double titleFontSize,
-      }) {
+    BuildContext context, {
+    required double pageMaxWidth,
+    required double headerHorizontalPadding,
+    required double headerTopPadding,
+    required double headerBottomPadding,
+    required double listHorizontalPadding,
+    required double listVerticalPadding,
+    required double headerTitleFontSize,
+    required double headerSubtitleFontSize,
+    required double cardHorizontalPadding,
+    required double cardVerticalPadding,
+    required double cardBottomSpacing,
+    required double cardRadius,
+    required double iconBoxSize,
+    required double iconSize,
+    required double iconSpacing,
+    required double labelFontSize,
+    required double titleFontSize,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // =================================================
         // Header
         // =================================================
-        _buildHeader(
-          horizontalPadding: headerHorizontalPadding,
-          topPadding: headerTopPadding,
-          bottomPadding: headerBottomPadding,
-          titleFontSize: headerTitleFontSize,
-          subtitleFontSize: headerSubtitleFontSize,
+        Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: pageMaxWidth),
+            child: _buildHeader(
+              horizontalPadding: headerHorizontalPadding,
+              topPadding: headerTopPadding,
+              bottomPadding: headerBottomPadding,
+              titleFontSize: headerTitleFontSize,
+              subtitleFontSize: headerSubtitleFontSize,
+            ),
+          ),
         ),
 
         // =================================================
@@ -211,45 +214,39 @@ class FuturePlacePage extends StatelessWidget {
           child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
             builder: (context, state) {
               if (state is SenAllPlaceState) {
-                final List<PlaceModel> placeModel =
-                    state.placesSearch;
+                final List<PlaceModel> placeModel = state.placesSearch;
 
                 return placeModel.isEmpty
                     ? emptyFullScreen(context)
                     : ListView.builder(
-                  physics:
-                  const BouncingScrollPhysics(),
-
-                  padding: EdgeInsets.symmetric(
-                    horizontal:
-                    listHorizontalPadding,
-                    vertical:
-                    listVerticalPadding,
-                  ),
-
-                  itemCount: placeModel.length,
-
-                  itemBuilder: (context, index) {
-                    return _buildPlaceCard(
-                      context,
-                      placeModel[index],
-                      horizontalPadding:
-                      cardHorizontalPadding,
-                      verticalPadding:
-                      cardVerticalPadding,
-                      bottomSpacing:
-                      cardBottomSpacing,
-                      radius: cardRadius,
-                      iconBoxSize: iconBoxSize,
-                      iconSize: iconSize,
-                      iconSpacing: iconSpacing,
-                      labelFontSize:
-                      labelFontSize,
-                      titleFontSize:
-                      titleFontSize,
-                    );
-                  },
-                );
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: listHorizontalPadding,
+                          vertical: listVerticalPadding,
+                        ),
+                        itemCount: placeModel.length,
+                        itemBuilder: (context, index) {
+                          return Center(
+                            child: ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: pageMaxWidth),
+                              child: _buildPlaceCard(
+                                context,
+                                placeModel[index],
+                                horizontalPadding: cardHorizontalPadding,
+                                verticalPadding: cardVerticalPadding,
+                                bottomSpacing: cardBottomSpacing,
+                                radius: cardRadius,
+                                iconBoxSize: iconBoxSize,
+                                iconSize: iconSize,
+                                iconSpacing: iconSpacing,
+                                labelFontSize: labelFontSize,
+                                titleFontSize: titleFontSize,
+                              ),
+                            ),
+                          );
+                        },
+                      );
               }
 
               // =================================================
@@ -307,13 +304,11 @@ class FuturePlacePage extends StatelessWidget {
         bottomPadding,
       ),
       child: Row(
-        mainAxisAlignment:
-        MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'دليل المناطق',
@@ -325,11 +320,9 @@ class FuturePlacePage extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 4,
                 ),
-
                 Text(
                   'اختر المنطقة لإدارة الخطط القادمة',
                   style: TextStyle(
@@ -353,8 +346,7 @@ class FuturePlacePage extends StatelessWidget {
               color: const Color(
                 0xFF42A5F5,
               ),
-              borderRadius:
-              BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ],
@@ -367,35 +359,30 @@ class FuturePlacePage extends StatelessWidget {
   // =====================================================
 
   Widget _buildPlaceCard(
-      BuildContext context,
-      PlaceModel place, {
-        required double horizontalPadding,
-        required double verticalPadding,
-        required double bottomSpacing,
-        required double radius,
-        required double iconBoxSize,
-        required double iconSize,
-        required double iconSpacing,
-        required double labelFontSize,
-        required double titleFontSize,
-      }) {
+    BuildContext context,
+    PlaceModel place, {
+    required double horizontalPadding,
+    required double verticalPadding,
+    required double bottomSpacing,
+    required double radius,
+    required double iconBoxSize,
+    required double iconSize,
+    required double iconSpacing,
+    required double labelFontSize,
+    required double titleFontSize,
+  }) {
     return Container(
       margin: EdgeInsets.only(
         bottom: bottomSpacing,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(radius),
-
+        borderRadius: BorderRadius.circular(radius),
         border: Border.all(
           color: Colors.black.withOpacity(
             0.035,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(
@@ -409,13 +396,10 @@ class FuturePlacePage extends StatelessWidget {
           ),
         ],
       ),
-
       child: Material(
         color: Colors.transparent,
-
         child: AppInkWell(
-          borderRadius:
-          BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius),
 
           // =================================================
           // نفس السلوك الأصلي تماماً
@@ -427,8 +411,7 @@ class FuturePlacePage extends StatelessWidget {
               context,
             ).add(
               AllSeniorRepFutureEvent(
-                  cityId:    context.watch<AllCityBloc>().cities[0].id
-              ),
+                  cityId: context.watch<AllCityBloc>().cities[0].id),
             );
 
             Navigator.pushNamed(
@@ -442,7 +425,6 @@ class FuturePlacePage extends StatelessWidget {
               horizontal: horizontalPadding,
               vertical: verticalPadding,
             ),
-
             child: Row(
               children: [
                 // =============================================
@@ -451,20 +433,15 @@ class FuturePlacePage extends StatelessWidget {
                 Container(
                   width: iconBoxSize,
                   height: iconBoxSize,
-
                   alignment: Alignment.center,
-
                   decoration: BoxDecoration(
                     color: const Color(
                       0xFFE3F2FD,
                     ),
-
-                    borderRadius:
-                    BorderRadius.circular(
+                    borderRadius: BorderRadius.circular(
                       14,
                     ),
                   ),
-
                   child: Icon(
                     Icons.location_on_rounded,
                     color: const Color(
@@ -483,37 +460,27 @@ class FuturePlacePage extends StatelessWidget {
                 // =============================================
                 Expanded(
                   child: Column(
-                    mainAxisSize:
-                    MainAxisSize.min,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "اسم المنطقة",
                         style: TextStyle(
-                          fontSize:
-                          labelFontSize,
-                          color:
-                          Colors.grey.shade500,
-                          fontWeight:
-                          FontWeight.w500,
+                          fontSize: labelFontSize,
+                          color: Colors.grey.shade500,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-
                       const SizedBox(
                         height: 3,
                       ),
-
                       Text(
                         place.title,
                         maxLines: 1,
-                        overflow:
-                        TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize:
-                          titleFontSize,
-                          fontWeight:
-                          FontWeight.w700,
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.w700,
                           color: const Color(
                             0xFF263238,
                           ),
