@@ -15,9 +15,8 @@ class SenVisitHospital extends StatefulWidget {
 }
 
 class _SenVisitHospitalState extends State<SenVisitHospital> {
-
   final TextEditingController searchteDoctorController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   void dispose() {
@@ -27,8 +26,7 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
 
@@ -40,9 +38,9 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
     double listBottomPadding;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -55,9 +53,9 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
         listBottomPadding = 24;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
 
@@ -70,9 +68,9 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
         listBottomPadding = 30;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
 
@@ -86,21 +84,24 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
         break;
     }
 
+    // ملاحظة: ConstrainedBox(maxWidth) بتطبّق على السيرش وعلى كل عنصر
+    // بالقائمة لحالهم، مو على الـ ListView كامل، حتى يضل الـ Scrollable
+    // بعرض الشاشة الكامل ويشتغل السكرول بالماوس فوق الفراغ الجانبي بالعرض.
     return ColoredBox(
       color: const Color(
         0xFFF8FAFC,
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: Column(
-            children: [
-              // =================================================
-              // Search
-              // =================================================
-              Padding(
+      child: Column(
+        children: [
+          // =================================================
+          // Search
+          // =================================================
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: pageMaxWidth,
+              ),
+              child: Padding(
                 padding: EdgeInsets.fromLTRB(
                   horizontalPadding,
                   searchTopPadding,
@@ -108,13 +109,11 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
                   searchBottomPadding,
                 ),
                 child: SearchField(
-                  searchController:
-                  searchteDoctorController,
+                  searchController: searchteDoctorController,
 
                   // نفس السلوك الموجود عندك
                   onPressed: (value) {
-                    BlocProvider.of<
-                        SeniorProfBloc>(
+                    BlocProvider.of<SeniorProfBloc>(
                       context,
                     ).add(
                       SenSearchVisitDoctorEvent(
@@ -124,119 +123,102 @@ class _SenVisitHospitalState extends State<SenVisitHospital> {
                   },
                 ),
               ),
+            ),
+          ),
 
-              // =================================================
-              // List
-              // =================================================
-              Expanded(
-                child: BlocBuilder<
-                    SeniorProfBloc,
-                    SeniorProfState>(
-                  builder: (context, state) {
-                     List<NoVisitDocModel>
-                    visitDoc =
-                        context
-                            .watch<
-                            SeniorProfBloc>()
-                            .visitDoc;
+          // =================================================
+          // List
+          // =================================================
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              builder: (context, state) {
+                List<NoVisitDocModel> visitDoc =
+                    context.watch<SeniorProfBloc>().visitDoc;
 
-                    // ===========================================
-                    // Loading
-                    // ===========================================
-                    if (state
-                    is SenVisitDocLoadingState) {
-                      return loadingFullScreen(
+                // ===========================================
+                // Loading
+                // ===========================================
+                if (state is SenVisitDocLoadingState) {
+                  return loadingFullScreen(
+                    context,
+                  );
+                }
+                if (state is SenVisitDocsState) {
+                  visitDoc = state.visitDoc;
+                }
+                // ===========================================
+                // Empty
+                // ===========================================
+                if (state is SenVisitDocEmptyState || visitDoc.isEmpty) {
+                  return emptyFullScreen(
+                    context,
+                  );
+                }
+
+                // ===========================================
+                // Error
+                // نفس السلوك الأصلي
+                // ===========================================
+                if (state is SenVisitDocErrorState) {
+                  return errorFullScreen(
+                    context,
+                    func: () {
+                      BlocProvider.of<SeniorProfBloc>(
                         context,
+                      ).add(
+                        VisitDocEvent(
+                          156,
+                          state.planId,
+                        ),
                       );
-                    }
-                    if (state
-                    is SenVisitDocsState) {
-                      visitDoc=state.visitDoc;
-                    }
-                    // ===========================================
-                    // Empty
-                    // ===========================================
-                    if (state
-                    is SenVisitDocEmptyState ||
-                        visitDoc.isEmpty) {
-                      return emptyFullScreen(
-                        context,
-                      );
-                    }
+                    },
+                  );
+                }
 
-                    // ===========================================
-                    // Error
-                    // نفس السلوك الأصلي
-                    // ===========================================
-                    if (state
-                    is SenVisitDocErrorState) {
-                      return errorFullScreen(
-                        context,
-                        func: () {
-                          BlocProvider.of<
-                              SeniorProfBloc>(
-                            context,
-                          ).add(
-                            VisitDocEvent(
-                              156,
-                              state.planId,
-                            ),
-                          );
-                        },
-                      );
-                    }
-
-                    // ===========================================
-                    // Data
-                    // ===========================================
-                    return ListView.builder(
-                      keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior
-                          .onDrag,
-
-                      physics:
-                      const BouncingScrollPhysics(),
-
-                      padding:
-                      EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        listTopPadding,
-                        horizontalPadding,
-                        listBottomPadding,
-                      ),
-
-                      itemCount:
-                      visitDoc.length + 1,
-
-                      itemBuilder:
-                          (context, index) {
-                        if (index == 0) {
-                          return Padding(
-                            padding:
-                            const EdgeInsets.only(
+                // ===========================================
+                // Data
+                // ===========================================
+                return ListView.builder(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    listTopPadding,
+                    horizontalPadding,
+                    listBottomPadding,
+                  ),
+                  itemCount: visitDoc.length + 1,
+                  itemBuilder: (context, index) {
+                    final Widget item = index == 0
+                        ? Padding(
+                            padding: const EdgeInsets.only(
                               bottom: 12,
                             ),
-                            child:
-                            buildTotalReportsCard(
+                            child: buildTotalReportsCard(
                               visitDoc.length,
                               'إجمالي الزيارات الناجحة',
                               'لهذا الشهر',
                             ),
+                          )
+                        : VisitedHospitalCard(
+                            data: visitDoc[index - 1],
                           );
-                        }
 
-                        return VisitedHospitalCard(
-                          data:
-                          visitDoc[index - 1],
-                        );
-                      },
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: pageMaxWidth,
+                        ),
+                        child: item,
+                      ),
                     );
                   },
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -256,24 +238,19 @@ class VisitedHospitalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     // =====================================================
     // نفس الحسابات الأصلية
     // =====================================================
-    final int total =
-        int.tryParse(
+    final int total = int.tryParse(
           data.visits ?? '0',
         ) ??
-            0;
+        0;
 
-    final int remaining =
-        data.remainingVisits ?? 0;
+    final int remaining = data.remainingVisits ?? 0;
 
-    final int done =
-    (total - remaining)
-        .clamp(0, total);
+    final int done = (total - remaining).clamp(0, total);
 
     // =====================================================
     // Responsive Values
@@ -306,9 +283,9 @@ class VisitedHospitalCard extends StatelessWidget {
     double progressHeight;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         cardBottomSpacing = 12;
 
@@ -338,9 +315,9 @@ class VisitedHospitalCard extends StatelessWidget {
         progressHeight = 7;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         cardBottomSpacing = 14;
 
@@ -370,9 +347,9 @@ class VisitedHospitalCard extends StatelessWidget {
         progressHeight = 8;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         cardBottomSpacing = 12;
 
@@ -405,17 +382,14 @@ class VisitedHospitalCard extends StatelessWidget {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-
       child: Container(
         margin: EdgeInsets.only(
           bottom: cardBottomSpacing,
         ),
-
         decoration: BoxDecoration(
           color: Colors.white,
 
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius,
           ),
 
@@ -432,8 +406,7 @@ class VisitedHospitalCard extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color:
-              Colors.black.withOpacity(
+              color: Colors.black.withOpacity(
                 0.03,
               ),
               blurRadius: 12,
@@ -444,10 +417,8 @@ class VisitedHospitalCard extends StatelessWidget {
             ),
           ],
         ),
-
         child: ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius - 1,
           ),
 
@@ -465,70 +436,46 @@ class VisitedHospitalCard extends StatelessWidget {
                   cardPadding,
 
                   // مساحة إضافية بسبب الشريط
-                  cardPadding +
-                      sideBarWidth,
+                  cardPadding + sideBarWidth,
 
                   cardPadding,
                 ),
-
                 child: Column(
-                  mainAxisSize:
-                  MainAxisSize.min,
-
-                  crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
-
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // =========================================
                     // Header
                     // =========================================
                     Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // =====================================
                         // Hospital Icon
                         // =====================================
                         Container(
-                          width:
-                          iconBoxSize,
-                          height:
-                          iconBoxSize,
-
-                          alignment:
-                          Alignment.center,
-
-                          decoration:
-                          BoxDecoration(
-                            color:
-                            const Color(
+                          width: iconBoxSize,
+                          height: iconBoxSize,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(
                               0xFFE0F2F1,
                             ),
-
-                            borderRadius:
-                            BorderRadius
-                                .circular(
+                            borderRadius: BorderRadius.circular(
                               iconRadius,
                             ),
                           ),
-
                           child: Icon(
-                            Icons
-                                .local_hospital_outlined,
-
-                            color:
-                            const Color(
+                            Icons.local_hospital_outlined,
+                            color: const Color(
                               0xFF00897B,
                             ),
-
                             size: iconSize,
                           ),
                         ),
 
                         SizedBox(
-                          width:
-                          iconSpacing,
+                          width: iconSpacing,
                         ),
 
                         // =====================================
@@ -536,66 +483,33 @@ class VisitedHospitalCard extends StatelessWidget {
                         // =====================================
                         Expanded(
                           child: Column(
-                            mainAxisSize:
-                            MainAxisSize.min,
-
-                            crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 data.docTitle,
-
                                 maxLines: 2,
-
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-
-                                style:
-                                TextStyle(
-                                  fontSize:
-                                  titleFontSize,
-
-                                  fontWeight:
-                                  FontWeight
-                                      .w700,
-
-                                  color:
-                                  const Color(
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: titleFontSize,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(
                                     0xFF1F4E79,
                                   ),
-
                                   height: 1.25,
                                 ),
                               ),
-
                               const SizedBox(
                                 height: 4,
                               ),
-
                               Text(
                                 data.spTitle,
-
                                 maxLines: 1,
-
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-
-                                style:
-                                TextStyle(
-                                  fontSize:
-                                  subtitleFontSize,
-
-                                  color: Colors
-                                      .grey
-                                      .shade600,
-
-                                  fontWeight:
-                                  FontWeight
-                                      .w500,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: subtitleFontSize,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -612,19 +526,15 @@ class VisitedHospitalCard extends StatelessWidget {
                         _buildVisitCounter(
                           done: done,
                           total: total,
-                          labelFontSize:
-                          visitLabelFontSize,
-                          numberFontSize:
-                          visitNumberFontSize,
-                          totalFontSize:
-                          visitTotalFontSize,
+                          labelFontSize: visitLabelFontSize,
+                          numberFontSize: visitNumberFontSize,
+                          totalFontSize: visitTotalFontSize,
                         ),
                       ],
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
@@ -638,25 +548,20 @@ class VisitedHospitalCard extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
                     // Address
                     // =========================================
                     _buildAddressRow(
-                      iconSize:
-                      addressIconSize,
-                      fontSize:
-                      addressFontSize,
-                      spacing:
-                      addressSpacing,
+                      iconSize: addressIconSize,
+                      fontSize: addressFontSize,
+                      spacing: addressSpacing,
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
@@ -665,8 +570,7 @@ class VisitedHospitalCard extends StatelessWidget {
                     _buildProgressBar(
                       done,
                       total,
-                      height:
-                      progressHeight,
+                      height: progressHeight,
                     ),
                   ],
                 ),
@@ -679,11 +583,8 @@ class VisitedHospitalCard extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 right: 0,
-
                 child: Container(
-                  width:
-                  sideBarWidth,
-
+                  width: sideBarWidth,
                   color: const Color(
                     0xFF2D947A,
                   ),
@@ -711,92 +612,61 @@ class VisitedHospitalCard extends StatelessWidget {
       constraints: const BoxConstraints(
         minWidth: 58,
       ),
-
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
         vertical: 6,
       ),
-
       decoration: BoxDecoration(
         color: const Color(
           0xFFF0FDFA,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           12,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFCCFBF1,
           ),
         ),
       ),
-
       child: Column(
-        mainAxisSize:
-        MainAxisSize.min,
-
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "تمت الزيارة",
-
             maxLines: 1,
-
             style: TextStyle(
-              fontSize:
-              labelFontSize,
-
+              fontSize: labelFontSize,
               color: const Color(
                 0xFF2D947A,
               ),
-
-              fontWeight:
-              FontWeight.w500,
+              fontWeight: FontWeight.w500,
             ),
           ),
-
           const SizedBox(
             height: 2,
           ),
-
           Text(
             "$done",
-
             style: TextStyle(
-              fontSize:
-              numberFontSize,
-
+              fontSize: numberFontSize,
               height: 1,
-
-              fontWeight:
-              FontWeight.w800,
-
+              fontWeight: FontWeight.w800,
               color: const Color(
                 0xFF2D947A,
               ),
             ),
           ),
-
           const SizedBox(
             height: 3,
           ),
-
           Text(
             "من أصل $total",
-
             maxLines: 1,
-
             style: TextStyle(
-              fontSize:
-              totalFontSize,
-
-              color:
-              Colors.grey.shade600,
-
-              fontWeight:
-              FontWeight.w500,
+              fontSize: totalFontSize,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -809,103 +679,71 @@ class VisitedHospitalCard extends StatelessWidget {
   // =====================================================
 
   Widget _buildProgressBar(
-      int done,
-      int total, {
-        required double height,
-      }) {
-    final double percent =
-    total == 0
+    int done,
+    int total, {
+    required double height,
+  }) {
+    final double percent = total == 0
         ? 0
-        : (done / total)
-        .clamp(
-      0.0,
-      1.0,
-    );
+        : (done / total).clamp(
+            0.0,
+            1.0,
+          );
 
     return Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Text(
               "نسبة الإنجاز",
-
               style: TextStyle(
                 fontSize: 11,
-
-                color:
-                Colors.grey.shade600,
-
-                fontWeight:
-                FontWeight.w500,
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w500,
               ),
             ),
-
             const Spacer(),
-
             Container(
-              padding:
-              const EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 8,
                 vertical: 3,
               ),
-
               decoration: BoxDecoration(
                 color: const Color(
                   0xFFF0FDFA,
                 ),
-
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   7,
                 ),
               ),
-
               child: Text(
                 "${(percent * 100).round()}%",
-
-                style:
-                const TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
-
                   color: Color(
                     0xFF2D947A,
                   ),
-
-                  fontWeight:
-                  FontWeight.w700,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
           ],
         ),
-
         const SizedBox(
           height: 7,
         ),
-
         ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             10,
           ),
-
-          child:
-          LinearProgressIndicator(
+          child: LinearProgressIndicator(
             value: percent,
-
             minHeight: height,
-
-            backgroundColor:
-            const Color(
+            backgroundColor: const Color(
               0xFFE0F2F1,
             ),
-
-            valueColor:
-            const AlwaysStoppedAnimation<
-                Color>(
+            valueColor: const AlwaysStoppedAnimation<Color>(
               Color(
                 0xFF2D947A,
               ),
@@ -926,68 +764,41 @@ class VisitedHospitalCard extends StatelessWidget {
     required double spacing,
   }) {
     return Row(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width:
-          iconSize + 12,
-          height:
-          iconSize + 12,
-
-          alignment:
-          Alignment.center,
-
-          decoration:
-          BoxDecoration(
+          width: iconSize + 12,
+          height: iconSize + 12,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
             color: const Color(
               0xFFEFF6FF,
             ),
-
-            borderRadius:
-            BorderRadius.circular(
+            borderRadius: BorderRadius.circular(
               8,
             ),
           ),
-
           child: Icon(
-            Icons
-                .location_on_outlined,
-
+            Icons.location_on_outlined,
             size: iconSize,
-
             color: const Color(
               0xFF64B5F6,
             ),
           ),
         ),
-
         SizedBox(
           width: spacing,
         ),
-
         Expanded(
           child: Text(
-            data.address.isEmpty
-                ? "العنوان غير محدد"
-                : data.address,
-
+            data.address.isEmpty ? "العنوان غير محدد" : data.address,
             maxLines: 2,
-
-            overflow:
-            TextOverflow.ellipsis,
-
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: fontSize,
-
-              color:
-              Colors.grey.shade700,
-
+              color: Colors.grey.shade700,
               height: 1.4,
-
-              fontWeight:
-              FontWeight.w500,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

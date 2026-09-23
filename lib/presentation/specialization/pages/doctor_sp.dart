@@ -32,60 +32,62 @@ class _DoctorSpState extends State<DoctorSp> {
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
+      // ملاحظة: بدون ConstrainedBox خارجي حول الـ CustomScrollView، حتى يضل
+      // السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد contentMaxWidth
+      // يُطبَّق داخلياً على كل sliver لحاله.
       body: SafeArea(
         top: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: contentMaxWidth,
-            ),
-            child: BlocConsumer<SpecializationBloc, SpecializationState>(
-              // =================================================
-              // نفس listener الأصلي
-              // =================================================
-              listener: (
-                context,
-                state,
-              ) {
-                if (state is AllSpecDoctorErrorState) {
-                  WidgetsBinding.instance.addPostFrameCallback(
-                    (_) {
-                      error(
-                        context,
-                        state.failure.massage,
-                        state.failure.code,
-                      );
-                    },
+        child: BlocConsumer<SpecializationBloc, SpecializationState>(
+          // =================================================
+          // نفس listener الأصلي
+          // =================================================
+          listener: (
+            context,
+            state,
+          ) {
+            if (state is AllSpecDoctorErrorState) {
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) {
+                  error(
+                    context,
+                    state.failure.massage,
+                    state.failure.code,
                   );
-                }
-              },
+                },
+              );
+            }
+          },
 
-              builder: (
-                context,
-                state,
-              ) {
-                // =================================================
-                // نفس شرط العرض الأصلي
-                // =================================================
-                if (state is AllDoctorSpState) {
-                  final doctors = state.doctors;
+          builder: (
+            context,
+            state,
+          ) {
+            // =================================================
+            // نفس شرط العرض الأصلي
+            // =================================================
+            if (state is AllDoctorSpState) {
+              final doctors = state.doctors;
 
-                  return CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    slivers: [
-                      // =============================================
-                      // Count / Header
-                      // =============================================
-                      SliverPadding(
-                        padding: EdgeInsets.fromLTRB(
-                          ui.pagePadding,
-                          ui.listTopPadding,
-                          ui.pagePadding,
-                          ui.sectionSpacing,
-                        ),
-                        sliver: SliverToBoxAdapter(
+              return CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                slivers: [
+                  // =============================================
+                  // Count / Header
+                  // =============================================
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(
+                      ui.pagePadding,
+                      ui.listTopPadding,
+                      ui.pagePadding,
+                      ui.sectionSpacing,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxWidth: contentMaxWidth),
                           child: buildTotalReportsCard(
                             doctors.length,
                             'قائمة الأطباء المسجلين',
@@ -93,56 +95,62 @@ class _DoctorSpState extends State<DoctorSp> {
                           ),
                         ),
                       ),
+                    ),
+                  ),
 
-                      // =============================================
-                      // Empty
-                      // =============================================
-                      if (doctors.isEmpty)
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: emptyFullScreen(
-                            context,
-                          ),
-                        )
+                  // =============================================
+                  // Empty
+                  // =============================================
+                  if (doctors.isEmpty)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: emptyFullScreen(
+                        context,
+                      ),
+                    )
 
-                      // =============================================
-                      // Doctors
-                      // =============================================
-                      else
-                        SliverPadding(
-                          padding: EdgeInsets.fromLTRB(
-                            ui.pagePadding,
-                            0,
-                            ui.pagePadding,
-                            ui.listBottomPadding,
-                          ),
-                          sliver: SliverList.builder(
-                            itemCount: doctors.length,
-                            itemBuilder: (
-                              context,
-                              index,
-                            ) {
-                              final doctor = doctors[index];
+                  // =============================================
+                  // Doctors
+                  // =============================================
+                  else
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        0,
+                        ui.pagePadding,
+                        ui.listBottomPadding,
+                      ),
+                      sliver: SliverList.builder(
+                        itemCount: doctors.length,
+                        itemBuilder: (
+                          context,
+                          index,
+                        ) {
+                          final doctor = doctors[index];
 
-                              return _buildDoctorCard(
+                          return Center(
+                            child: ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: contentMaxWidth),
+                              child: _buildDoctorCard(
                                 context,
                                 ui,
                                 doctor,
-                              );
-                            },
-                          ),
-                        ),
-                    ],
-                  );
-                }
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              );
+            }
 
-                // =================================================
-                // نفس السلوك السابق لباقي الـStates
-                // =================================================
-                return const SizedBox.shrink();
-              },
-            ),
-          ),
+            // =================================================
+            // نفس السلوك السابق لباقي الـStates
+            // =================================================
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );
@@ -303,7 +311,6 @@ class _DoctorSpState extends State<DoctorSp> {
                       doctorId: doctor.id,
                     ),
                     const Spacer(),
-
                   ],
                 ),
               ],

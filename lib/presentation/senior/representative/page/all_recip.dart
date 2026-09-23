@@ -48,20 +48,15 @@ class AllRecipesForView extends StatelessWidget {
         ),
       ),
 
+      // ملاحظة: بدون ConstrainedBox خارجي حول الـ CustomScrollView، حتى يضل
+      // السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد contentMaxWidth
+      // يُطبَّق داخلياً على كل sliver لحاله (العنوان، وكل بطاقة بالقائمة).
       body: SafeArea(
         top: false,
-
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: contentMaxWidth,
-            ),
-
-            child: _bodyBuild(
-              context,
-              ui,
-            ),
-          ),
+        child: _bodyBuild(
+          context,
+          ui,
+          contentMaxWidth,
         ),
       ),
     );
@@ -74,6 +69,7 @@ class AllRecipesForView extends StatelessWidget {
   Widget _bodyBuild(
       BuildContext context,
       AppUi ui,
+      double contentMaxWidth,
       ) {
     return BlocBuilder<
         SeniorProfBloc,
@@ -120,8 +116,15 @@ class AllRecipesForView extends StatelessWidget {
               // Header
               // =================================================
               SliverToBoxAdapter(
-                child: _buildTitleSection(
-                  ui,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: contentMaxWidth,
+                    ),
+                    child: _buildTitleSection(
+                      ui,
+                    ),
+                  ),
                 ),
               ),
 
@@ -173,12 +176,18 @@ class AllRecipesForView extends StatelessWidget {
 
                             child:
                             FadeInAnimation(
-                              child:
-                              _buildSmartCard(
-                                context,
-                                ui,
-                                item,
-                                isClinic,
+                              child: Center(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: contentMaxWidth,
+                                  ),
+                                  child: _buildSmartCard(
+                                    context,
+                                    ui,
+                                    item,
+                                    isClinic,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

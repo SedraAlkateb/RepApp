@@ -99,133 +99,147 @@ class _FutureSpecializationsPageState extends State<FutureSpecializationsPage>
         backgroundColor: const Color(0xFFF8FAFC),
         body: SafeArea(
           top: false,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: ui.isTabletLandscape
-                    ? ui.widePageMaxWidth
-                    : ui.pageMaxWidth,
-              ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: EdgeInsets.only(
                   bottom: ui.pageBottomPadding + 70,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        ui.pagePadding,
-                        ui.searchTopPadding,
-                        ui.pagePadding,
-                        ui.searchBottomPadding,
+                child: ConstrainedBox(
+                  // يضمن تغطية الشاشة بالكامل وتفعيل السكرول من الفراغ
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Center(
+                    child: ConstrainedBox(
+                      // تطبيق قيود العرض الأقصى على المحتوى الداخلي فقط
+                      constraints: BoxConstraints(
+                        maxWidth: ui.isTabletLandscape
+                            ? ui.widePageMaxWidth
+                            : ui.pageMaxWidth,
                       ),
-                      child: SearchField(
-                        searchController: searchController,
-                        onPressed: (value) {
-                          BlocProvider.of<FutureRepBloc>(
-                            context,
-                          ).add(
-                            FutureSearchSpecEvent(
-                              value,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              ui.pagePadding,
+                              ui.searchTopPadding,
+                              ui.pagePadding,
+                              ui.searchBottomPadding,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    BlocBuilder<FutureRepBloc, FutureRepState>(
-                      builder: (context, state) {
-                        List<SpecDModel> spModel =
-                            context.watch<FutureRepBloc>().specialization;
-
-                        if (state is FutureSpRepState) {
-                          spModel = state.Specs;
-                        }
-
-                        if (state is FutureSpRepLoadingState) {
-                          return _buildLoadingState(
-                            context,
-                          );
-                        }
-
-                        if (state is FutureSpRepErrorState) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ui.pagePadding,
-                              vertical: ui.sectionSpacing,
-                            ),
-                            child: errorFullScreen(
-                              context,
-                              mes: state.failure.massage,
-                              func: () {
+                            child: SearchField(
+                              searchController: searchController,
+                              onPressed: (value) {
                                 BlocProvider.of<FutureRepBloc>(
                                   context,
                                 ).add(
-                                  FutureSpEvent(
-                                    widget.id,
-                                    widget.repPlanId,
+                                  FutureSearchSpecEvent(
+                                    value,
                                   ),
                                 );
                               },
                             ),
-                          );
-                        }
-
-                        final filteredItems =
-                            spModel.where((item) => item.flag == 1).toList();
-
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(
-                            ui.pagePadding,
-                            ui.listTopPadding,
-                            ui.pagePadding,
-                            ui.listBottomPadding,
                           ),
-                          child: SpecGridWidget(
-                            items: filteredItems,
-                            isPr: true,
-                            crossAxisCount: crossAxisCount,
-                            onTap: (model) {
-                              iniFutureModule();
-                              BlocProvider.of<FutureRepBloc>(
-                                context,
-                              ).add(
-                                FutureRepPlanBrandSpEvent(
-                                    RepSp(
-                                      widget.repPlanId,
-                                      model.id,
-                                      widget.id,
-                                    ),
-                                    widget.sampleCount,
-                                    percent: widget.percent ?? 0,
-                                    isRep: widget.repType.i == 7),
-                              );
+                          BlocBuilder<FutureRepBloc, FutureRepState>(
+                            builder: (context, state) {
+                              List<SpecDModel> spModel =
+                                  context.watch<FutureRepBloc>().specialization;
 
-                              Navigator.pushNamed(
-                                context,
-                                Routes.RepPlanBrandSp,
-                                arguments: {
-                                  'title': model.title,
-                                  'flag': widget.flag.flag,
-                                  'percent': widget.percent,
-                                  'isRep': widget.repType.i == 7 ? true : false,
-                                  'sampleCount': widget.sampleCount,
-                                  'spId': model.id,
-                                  'repPlanId': widget.repPlanId,
-                                },
+                              if (state is FutureSpRepState) {
+                                spModel = state.Specs;
+                              }
+
+                              if (state is FutureSpRepLoadingState) {
+                                return _buildLoadingState(
+                                  context,
+                                );
+                              }
+
+                              if (state is FutureSpRepErrorState) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: ui.pagePadding,
+                                    vertical: ui.sectionSpacing,
+                                  ),
+                                  child: errorFullScreen(
+                                    context,
+                                    mes: state.failure.massage,
+                                    func: () {
+                                      BlocProvider.of<FutureRepBloc>(
+                                        context,
+                                      ).add(
+                                        FutureSpEvent(
+                                          widget.id,
+                                          widget.repPlanId,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+
+                              final filteredItems = spModel
+                                  .where((item) => item.flag == 1)
+                                  .toList();
+
+                              return Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                  ui.pagePadding,
+                                  ui.listTopPadding,
+                                  ui.pagePadding,
+                                  ui.listBottomPadding,
+                                ),
+                                child: SpecGridWidget(
+                                  items: filteredItems,
+                                  isPr: true,
+                                  crossAxisCount: crossAxisCount,
+                                  onTap: (model) {
+                                    iniFutureModule();
+                                    BlocProvider.of<FutureRepBloc>(
+                                      context,
+                                    ).add(
+                                      FutureRepPlanBrandSpEvent(
+                                          RepSp(
+                                            widget.repPlanId,
+                                            model.id,
+                                            widget.id,
+                                          ),
+                                          widget.sampleCount,
+                                          percent: widget.percent ?? 0,
+                                          isRep: widget.repType.i == 7),
+                                    );
+
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.RepPlanBrandSp,
+                                      arguments: {
+                                        'title': model.title,
+                                        'flag': widget.flag.flag,
+                                        'percent': widget.percent,
+                                        'isRep': widget.repType.i == 7
+                                            ? true
+                                            : false,
+                                        'sampleCount': widget.sampleCount,
+                                        'spId': model.id,
+                                        'repPlanId': widget.repPlanId,
+                                      },
+                                    );
+                                  },
+                                ),
                               );
                             },
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),

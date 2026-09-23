@@ -65,6 +65,7 @@ class RecipeDH extends StatelessWidget {
                   'إنشاء وصفة',
 
                   maxLines: 1,
+
                   overflow:
                   TextOverflow.ellipsis,
 

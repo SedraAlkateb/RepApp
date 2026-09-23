@@ -1,7 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/doctors/widget/header.dart';
 import 'package:domina_app/presentation/doctors/widget/hospital/hospital_details_card.dart';
-import 'package:domina_app/presentation/doctors/widget/hospital/hospital_state.dart';
+import 'package:domina_app/presentation/doctors/widget/hospital/hospital_specializations_list.dart';
 import 'package:domina_app/presentation/doctors/widget/note.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class HospitalDetailsContent extends StatelessWidget {
   const HospitalDetailsContent({
     super.key,
-    required this.hospital,
+    required this.hospitalGroup,
     required this.deviceType,
     required this.pageMaxWidth,
     required this.horizontalPadding,
@@ -20,7 +20,8 @@ class HospitalDetailsContent extends StatelessWidget {
     required this.stateSpacing
   });
 
-  final HospitalSpAllModel hospital;
+  /// كل عناصر هذه القائمة تخص نفس المشفى وتختلف بالاختصاص/الشعبة (titleSp).
+  final List<HospitalSpAllModel> hospitalGroup;
   final AppDeviceType deviceType;
 
   final double pageMaxWidth;
@@ -30,6 +31,8 @@ class HospitalDetailsContent extends StatelessWidget {
   final double statsMaxWidth;
   final double bottomSafeSpace;
   final double stateSpacing;
+
+  HospitalSpAllModel get hospital => hospitalGroup.first;
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +52,25 @@ class HospitalDetailsContent extends StatelessWidget {
             hospital.title,
           ),
 
+          SizedBox(
+            height: sectionSpacing,
+          ),
+
           // ==========================================
-          // Statistics
+          // الاختصاصات/الشعب التابعة لهذا المشفى
+          // كل اختصاص مع rate و visit و totalDocs الخاصين به
           // ==========================================
           Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: statsMaxWidth,
+                maxWidth: pageMaxWidth,
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: horizontalPadding,
                 ),
-                child: HospitalStats(
-                  hospital: hospital,
+                child: HospitalSpecializationsList(
+                  hospitalGroup: hospitalGroup,
                   spacing: stateSpacing,
                 ),
               ),

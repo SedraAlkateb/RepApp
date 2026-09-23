@@ -18,9 +18,7 @@ class SpecializationsPage extends StatefulWidget {
 }
 
 class _SpecializationsPageState extends State<SpecializationsPage> {
-
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void dispose() {
@@ -30,8 +28,7 @@ class _SpecializationsPageState extends State<SpecializationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
 
@@ -48,9 +45,9 @@ class _SpecializationsPageState extends State<SpecializationsPage> {
     int crossAxisCount;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -67,9 +64,9 @@ class _SpecializationsPageState extends State<SpecializationsPage> {
         crossAxisCount = 2;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 800;
 
@@ -86,9 +83,9 @@ class _SpecializationsPageState extends State<SpecializationsPage> {
         crossAxisCount = 3;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 1100;
 
@@ -107,179 +104,135 @@ class _SpecializationsPageState extends State<SpecializationsPage> {
     }
 
     return Scaffold(
-      backgroundColor:
-      ColorManager.background,
+      backgroundColor: ColorManager.background,
 
       appBar: AppBar(
         elevation: 0,
-
         scrolledUnderElevation: 0,
-
-        surfaceTintColor:
-        Colors.transparent,
-
+        surfaceTintColor: Colors.transparent,
         title: Text(
           'الإختصاصات',
-
           style: TextStyle(
-            fontSize:
-            appBarTitleFontSize,
-
-            fontWeight:
-            FontWeight.w700,
+            fontSize: appBarTitleFontSize,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
 
+      // ملاحظة: SingleChildScrollView على كامل العرض هون (بدون ConstrainedBox
+      // خارجي) حتى يبقى السكرول بالماوس يعمل فوق الفراغ الجانبي بالعرض، وقيد
+      // pageMaxWidth يُطبَّق داخلياً على المحتوى فقط.
       body: SafeArea(
         top: false,
-
-        child: Center(
-          child: ConstrainedBox(
-            constraints:
-            BoxConstraints(
-              maxWidth:
-              pageMaxWidth,
-            ),
-
-            child:
-            SingleChildScrollView(
-              keyboardDismissBehavior:
-              ScrollViewKeyboardDismissBehavior
-                  .onDrag,
-
-              child: Padding(
-                padding:
-                EdgeInsets.symmetric(
-                  horizontal:
-                  horizontalPadding,
-                ),
-
-                child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
-
-                  children: [
-                    // =================================================
-                    // Search
-                    // =================================================
-                    Padding(
-                      padding:
-                      EdgeInsets.only(
-                        top:
-                        searchTopPadding,
-
-                        bottom:
-                        searchBottomPadding,
-                      ),
-
-                      child:
-                      SearchField(
-                        searchController:
-                        searchController,
-
-                        onPressed:
-                            (value) {
-                          BlocProvider.of<
-                              SpecializationBloc>(
-                            context,
-                          ).add(
-                            SearchSpecEvent(
-                              value,
-                            ),
-                          );
-                        },
-                      ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: pageMaxWidth,
                     ),
-
-                    // =================================================
-                    // Specializations
-                    // =================================================
-                    BlocConsumer<
-                        SpecializationBloc,
-                        SpecializationState>(
-                      listener:
-                          (context, state) {
-                        if (state
-                        is AllSpecErrorState) {
-                          error(
-                            context,
-                            state.failure.massage,
-                            state.failure.code,
-                          );
-                        }
-                      },
-
-                      builder:
-                          (context, state) {
-                        List<SpecDModel>
-                        placeModel =
-                            context
-                                .watch<
-                                SpecializationBloc>()
-                                .specialization;
-
-                        if (state
-                        is AllSpecState) {
-                          placeModel =
-                              state.Specs;
-                        }
-
-                        return Padding(
-                          padding:
-                          EdgeInsets.fromLTRB(
-                            gridHorizontalPadding,
-                            4,
-                            gridHorizontalPadding,
-                            gridBottomPadding,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalPadding,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // =================================================
+                          // Search
+                          // =================================================
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: searchTopPadding,
+                              bottom: searchBottomPadding,
+                            ),
+                            child: SearchField(
+                              searchController: searchController,
+                              onPressed: (value) {
+                                BlocProvider.of<SpecializationBloc>(
+                                  context,
+                                ).add(
+                                  SearchSpecEvent(
+                                    value,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
 
-                          child:
-                          SpecGridWidget(
-                            items:
-                            placeModel,
+                          // =================================================
+                          // Specializations
+                          // =================================================
+                          BlocConsumer<SpecializationBloc, SpecializationState>(
+                            listener: (context, state) {
+                              if (state is AllSpecErrorState) {
+                                error(
+                                  context,
+                                  state.failure.massage,
+                                  state.failure.code,
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              List<SpecDModel> placeModel = context
+                                  .watch<SpecializationBloc>()
+                                  .specialization;
 
-                            crossAxisCount:
-                            crossAxisCount,
-                            isPr: true,
-                            onTap:
-                                (model) {
-                              // =======================================
-                              // نفس ترتيب المنطق الموجود عندك
-                              // =======================================
-                              initDoctorAndHospitalModule();
+                              if (state is AllSpecState) {
+                                placeModel = state.Specs;
+                              }
 
-                              Navigator.push(
-                                context,
+                              return Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                  gridHorizontalPadding,
+                                  4,
+                                  gridHorizontalPadding,
+                                  gridBottomPadding,
+                                ),
+                                child: SpecGridWidget(
+                                  items: placeModel,
+                                  crossAxisCount: crossAxisCount,
+                                  isPr: true,
+                                  onTap: (model) {
+                                    // =======================================
+                                    // نفس ترتيب المنطق الموجود عندك
+                                    // =======================================
+                                    initDoctorAndHospitalModule();
 
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                      SpecDH(
-                                        spId:
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SpecDH(
+                                          spId: model.id,
+                                        ),
+                                      ),
+                                    );
+
+                                    BlocProvider.of<SpecializationBloc>(
+                                      context,
+                                    ).add(
+                                      DoctorSpEvent(
                                         model.id,
                                       ),
-                                ),
-                              );
-
-                              BlocProvider.of<
-                                  SpecializationBloc>(
-                                context,
-                              ).add(
-                                DoctorSpEvent(
-                                  model.id,
+                                    );
+                                  },
                                 ),
                               );
                             },
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

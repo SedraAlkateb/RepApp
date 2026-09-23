@@ -14,13 +14,11 @@ class Doctors extends StatefulWidget {
   });
 
   @override
-  State<Doctors> createState() =>
-      _DoctorsState();
+  State<Doctors> createState() => _DoctorsState();
 }
 
 class _DoctorsState extends State<Doctors> {
-  final TextEditingController searchDocController =
-  TextEditingController();
+  final TextEditingController searchDocController = TextEditingController();
 
   @override
   void dispose() {
@@ -36,15 +34,12 @@ class _DoctorsState extends State<Doctors> {
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
-      body: BlocBuilder<
-          DoctorsBloc,
-          DoctorsState>(
+      body: BlocBuilder<DoctorsBloc, DoctorsState>(
         // =====================================================
         // نفس buildWhen الأصلي تماماً
         // =====================================================
         buildWhen: (previous, current) =>
-        current is AllDoctorState ||
+            current is AllDoctorState ||
             current is AllDoctorEmptyState ||
             current is AllDoctorErrorState ||
             current is AllDoctorLoadingState,
@@ -53,16 +48,12 @@ class _DoctorsState extends State<Doctors> {
           // =====================================================
           // نفس مصدر البيانات الأصلي
           // =====================================================
-          List<DoctorModel> doctorModel =
-              context
-                  .read<DoctorsBloc>()
-                  .doctor;
+          List<DoctorModel> doctorModel = context.read<DoctorsBloc>().doctor;
 
           // =====================================================
           // Loading
           // =====================================================
-          if (state
-          is AllDoctorLoadingState) {
+          if (state is AllDoctorLoadingState) {
             return loadingFullScreen(
               context,
             );
@@ -71,8 +62,7 @@ class _DoctorsState extends State<Doctors> {
           // =====================================================
           // Error
           // =====================================================
-          if (state
-          is AllDoctorErrorState) {
+          if (state is AllDoctorErrorState) {
             return errorFullScreen(
               context,
               mes: state.failure.massage,
@@ -83,9 +73,7 @@ class _DoctorsState extends State<Doctors> {
           // =====================================================
           // Empty
           // =====================================================
-          if (state
-          is AllDoctorEmptyState ||
-              doctorModel.isEmpty) {
+          if (state is AllDoctorEmptyState || doctorModel.isEmpty) {
             return emptyFullScreen(
               context,
             );
@@ -94,70 +82,53 @@ class _DoctorsState extends State<Doctors> {
           // =====================================================
           // Loaded
           // =====================================================
-          if (state
-          is AllDoctorState) {
-            doctorModel =
-                state.doctor;
+          if (state is AllDoctorState) {
+            doctorModel = state.doctor;
           }
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: ui.pageMaxWidth,
-              ),
-
-              child: CustomScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-
-                keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior
-                    .onDrag,
-
-                slivers: [
-                  // =================================================
-                  // Search + Header
-                  // =================================================
-                  SliverToBoxAdapter(
+          // ملاحظة: بدون ConstrainedBox خارجي حول الـ CustomScrollView، حتى
+          // يضل السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد
+          // pageMaxWidth يُطبَّق داخلياً على كل sliver لحاله.
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            slivers: [
+              // =================================================
+              // Search + Header
+              // =================================================
+              SliverToBoxAdapter(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
                     child: Padding(
-                      padding:
-                      EdgeInsets.fromLTRB(
+                      padding: EdgeInsets.fromLTRB(
                         ui.pagePadding,
                         ui.searchTopPadding,
                         ui.pagePadding,
                         ui.searchBottomPadding,
                       ),
-
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // =========================================
                           // Search
                           // =========================================
                           SearchField(
-                            searchController:
-                            searchDocController,
-
+                            searchController: searchDocController,
                             onPressed: (value) {
                               // =====================================
                               // نفس Event البحث الأصلي
                               // =====================================
-                              context
-                                  .read<
-                                  DoctorsBloc>()
-                                  .add(
-                                SearchDocEvent(
-                                  value,
-                                ),
-                              );
+                              context.read<DoctorsBloc>().add(
+                                    SearchDocEvent(
+                                      value,
+                                    ),
+                                  );
                             },
                           ),
 
                           SizedBox(
-                            height:
-                            ui.sectionSpacing,
+                            height: ui.sectionSpacing,
                           ),
 
                           // =========================================
@@ -172,53 +143,46 @@ class _DoctorsState extends State<Doctors> {
                       ),
                     ),
                   ),
-
-                  // =================================================
-                  // Doctors List
-                  // =================================================
-                  SliverPadding(
-                    padding:
-                    EdgeInsets.fromLTRB(
-                      ui.pagePadding,
-                      ui.listTopPadding,
-                      ui.pagePadding,
-                      ui.listBottomPadding,
-                    ),
-
-                    sliver:
-                    SliverList.builder(
-                      itemCount:
-                      doctorModel.length,
-
-                      itemBuilder:
-                          (
-                          context,
-                          index,
-                          ) {
-                        return Padding(
-                          padding:
-                          EdgeInsets.only(
-                            bottom:
-                            ui.cardSpacing,
-                          ),
-
-                          child:
-                          DoctorCardItem(
-                            doctor:
-                            doctorModel[
-                            index],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+
+              // =================================================
+              // Doctors List
+              // =================================================
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.listTopPadding,
+                  ui.pagePadding,
+                  ui.listBottomPadding,
+                ),
+                sliver: SliverList.builder(
+                  itemCount: doctorModel.length,
+                  itemBuilder: (
+                    context,
+                    index,
+                  ) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: ui.cardSpacing,
+                      ),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxWidth: ui.pageMaxWidth),
+                          child: DoctorCardItem(
+                            doctor: doctorModel[index],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
     );
   }
-
 }

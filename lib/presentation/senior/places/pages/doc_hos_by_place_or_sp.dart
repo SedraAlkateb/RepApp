@@ -370,6 +370,15 @@ class _HospitalsSection extends StatelessWidget {
       );
     }
 
+    final Map<int, List<HospitalSpModel>> groupedByHospitalId = {};
+    for (final hospital in hospitals) {
+      groupedByHospitalId
+          .putIfAbsent(hospital.hospitalId, () => [])
+          .add(hospital);
+    }
+    final List<List<HospitalSpModel>> hospitalGroups =
+        groupedByHospitalId.values.toList();
+
     return Column(
       children: [
         Padding(
@@ -380,7 +389,7 @@ class _HospitalsSection extends StatelessWidget {
             ui.sectionSpacing,
           ),
           child: buildTotalReportsCard(
-            hospitals.length,
+            hospitalGroups.length,
             'قائمة المشافي المسجلة',
             '',
           ),
@@ -395,10 +404,10 @@ class _HospitalsSection extends StatelessWidget {
           child: ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: hospitals.length,
+            itemCount: hospitalGroups.length,
             itemBuilder: (context, index) {
               return HospitalCardWidget(
-                hospital: hospitals[index],
+                hospitalGroup: hospitalGroups[index],
               );
             },
           ),

@@ -46,14 +46,17 @@ class EditingPlanAssistantState extends State<EditingPlanAssistant>
     super.build(context);
     final ui = AppUi.of(context);
 
+    // ملاحظة: ConstrainedBox(maxWidth) هون بتطبّق على السيرش وعلى كل بطاقة
+    // بالقائمة لحالها (مو على الـ ListView كامل)، حتى يضل الـ Scrollable
+    // بعرض الشاشة الكامل ويشتغل السكرول بالماوس فوق الفراغ الجانبي بالعرض.
     return ColoredBox(
       color: Colors.transparent,
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
-          child: Column(
-            children: [
-              Padding(
+      child: Column(
+        children: [
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
+              child: Padding(
                 padding: EdgeInsets.fromLTRB(
                   ui.pagePadding,
                   ui.searchTopPadding,
@@ -69,55 +72,62 @@ class EditingPlanAssistantState extends State<EditingPlanAssistant>
                   },
                 ),
               ),
-              Expanded(
-                child: BlocBuilder<EditBrandPlanBloc, EditBrandPlanState>(
-                  builder: (context, state) {
-                    List<PlanBrandModel> planBrand =
-                        context.watch<EditBrandPlanBloc>().planBrands;
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<EditBrandPlanBloc, EditBrandPlanState>(
+              builder: (context, state) {
+                List<PlanBrandModel> planBrand =
+                    context.watch<EditBrandPlanBloc>().planBrands;
 
-                    if (state is FuturePlanBrandState) {
-                      planBrand = state.planbrand;
-                    }
-                    if (state is FutureSpRepLoadingState) {
-                      return loadingFullScreen(context);
-                    }
-                    if (state is FutureSpRepErrorState) {
-                      return errorFullScreen(context, func: () {});
-                    }
-                    if (planBrand.isEmpty) {
-                      return emptyFullScreen(context);
-                    }
+                if (state is FuturePlanBrandState) {
+                  planBrand = state.planbrand;
+                }
+                if (state is FutureSpRepLoadingState) {
+                  return loadingFullScreen(context);
+                }
+                if (state is FutureSpRepErrorState) {
+                  return errorFullScreen(context, func: () {});
+                }
+                if (planBrand.isEmpty) {
+                  return emptyFullScreen(context);
+                }
 
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      keyboardDismissBehavior:
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
+                  keyboardDismissBehavior:
                       ScrollViewKeyboardDismissBehavior.onDrag,
-                      padding: EdgeInsets.fromLTRB(
-                        ui.pagePadding,
-                        ui.listTopPadding,
-                        ui.pagePadding,
-                        ui.listBottomPadding + 24,
+                  padding: EdgeInsets.fromLTRB(
+                    ui.pagePadding,
+                    ui.listTopPadding,
+                    ui.pagePadding,
+                    ui.listBottomPadding + 24,
+                  ),
+                  itemCount: planBrand.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
+                        child: _buildElegantCard(context, index, planBrand),
                       ),
-                      itemCount: planBrand.length,
-                      itemBuilder: (context, index) {
-                        return _buildElegantCard(context, index, planBrand);
-                      },
                     );
                   },
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildElegantCard(
-      BuildContext context,
-      int index,
-      List<PlanBrandModel> planBrand,
-      ) {
+    BuildContext context,
+    int index,
+    List<PlanBrandModel> planBrand,
+  ) {
     final ui = AppUi.of(context);
     final PlanBrandModel item = planBrand[index];
     final int brandTypeId = item.brandType.i;
@@ -274,8 +284,7 @@ class EditingPlanAssistantState extends State<EditingPlanAssistant>
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: const Color(0xFFF8FAFC),
-                        borderRadius:
-                        BorderRadius.circular(ui.smallRadius + 2),
+                        borderRadius: BorderRadius.circular(ui.smallRadius + 2),
                         border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
                       child: SpinKitThreeBounce(

@@ -145,7 +145,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
+      (_) {
         _loadSelectedCity();
       },
     );
@@ -173,10 +173,10 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
     searchController.clear();
 
     context.read<ManageFutureBloc>().add(
-      AllSeniorRepFutureEvent(
-        cityId: cityId,
-      ),
-    );
+          AllSeniorRepFutureEvent(
+            cityId: cityId,
+          ),
+        );
   }
 
   @override
@@ -211,7 +211,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior.onDrag,
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: constraints.maxHeight,
@@ -227,8 +227,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                           buildDateTimeCard(
                             context: context,
                             ui: ui,
-                            dateTime:
-                            context.read<ManageFutureBloc>().dateTime,
+                            dateTime: context.read<ManageFutureBloc>().dateTime,
                           ),
                           BlocListener<AllCityBloc, AllCityState>(
                             listener: (context, state) {
@@ -246,7 +245,8 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                               child: SearchWithCityFilter(
                                 searchController: searchController,
                                 onSearch: (value) {
-                                  BlocProvider.of<ManageFutureBloc>(context).add(
+                                  BlocProvider.of<ManageFutureBloc>(context)
+                                      .add(
                                     SenSearchRepFutureEvent(value),
                                   );
                                 },
@@ -320,7 +320,7 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                                 child: Column(
                                   children: List.generate(
                                     allRepresentative.length,
-                                        (index) => Padding(
+                                    (index) => Padding(
                                       padding: EdgeInsets.only(
                                         bottom: ui.cardSpacing,
                                       ),
@@ -349,14 +349,15 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
   }
 
   Widget _buildRepItem(
-      BuildContext context,
-      AllRepresentativeFuture rep,
-      int index,
-      ) {
+    BuildContext context,
+    AllRepresentativeFuture rep,
+    int index,
+  ) {
     final ui = AppUi.of(context);
     final bool isSelected = _lastLoadedCityId == index;
 
-    return PressableEffect(child: GestureDetector(
+    return PressableEffect(
+        child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         setState(() {
@@ -492,47 +493,45 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
               child: !isSelected
                   ? const SizedBox.shrink()
                   : Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: ui.sectionSpacing,
-                    ),
-                    child: const Divider(
-                      color: Color(0xFFF1F5F9),
-                      thickness: 1,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildMicroActionButton(
-                          context: context,
-                          title: "تدقيق الخطة",
-                          subtitle: "مراجعة شاملة",
-                          icon: Icons.fact_check_rounded,
-                          isActive:
-                          rep.flag.flag == UserInfo.statusPlan,
-                          color: ColorManager.secondaryColor1,
-                          onTap: () => _handleAuditing(rep),
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ui.sectionSpacing,
+                          ),
+                          child: const Divider(
+                            color: Color(0xFFF1F5F9),
+                            thickness: 1,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: ui.mediumSpacing),
-                      Expanded(
-                        child: _buildMicroActionButton(
-                          context: context,
-                          title: "الأصناف",
-                          subtitle: "تعديل القائمة",
-                          icon: Icons.auto_awesome_motion_rounded,
-                          isActive:
-                          rep.flag.flag == UserInfo.statusPlan,
-                          color: const Color(0xFF3F7FBF),
-                          onTap: () => _handleEditBrands(rep),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildMicroActionButton(
+                                context: context,
+                                title: "تدقيق الخطة",
+                                subtitle: "مراجعة شاملة",
+                                icon: Icons.fact_check_rounded,
+                                isActive: rep.flag.flag == UserInfo.statusPlan,
+                                color: ColorManager.secondaryColor1,
+                                onTap: () => _handleAuditing(rep),
+                              ),
+                            ),
+                            SizedBox(width: ui.mediumSpacing),
+                            Expanded(
+                              child: _buildMicroActionButton(
+                                context: context,
+                                title: "الأصناف",
+                                subtitle: "تعديل القائمة",
+                                icon: Icons.auto_awesome_motion_rounded,
+                                isActive: rep.flag.flag == UserInfo.statusPlan,
+                                color: const Color(0xFF3F7FBF),
+                                onTap: () => _handleEditBrands(rep),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
             ),
           ],
         ),
@@ -566,7 +565,8 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
             color: isActive ? color.withOpacity(0.05) : const Color(0xFFF8FAFC),
             borderRadius: BorderRadius.circular(ui.cardRadius - 2),
             border: Border.all(
-              color: isActive ? color.withOpacity(0.24) : const Color(0xFFE2E8F0),
+              color:
+                  isActive ? color.withOpacity(0.24) : const Color(0xFFE2E8F0),
             ),
           ),
           child: Column(
@@ -577,7 +577,9 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
                 height: ui.iconBoxSize - 6,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: isActive ? color.withOpacity(0.09) : const Color(0xFFF1F5F9),
+                  color: isActive
+                      ? color.withOpacity(0.09)
+                      : const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(ui.smallRadius + 2),
                 ),
                 child: Icon(
@@ -618,10 +620,10 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
   }
 
   Widget _buildPulseDot(
-      BuildContext context,
-      int flag,
-      RepType repType,
-      ) {
+    BuildContext context,
+    int flag,
+    RepType repType,
+  ) {
     final ui = AppUi.of(context);
     final double dotSize = ui.isMobile ? 10 : 11;
 
@@ -673,7 +675,6 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
         FutureRepPlanBrandSpEvent(
           RepSp(rep.activePlan, 38, rep.id),
           rep.samplesCount,
-
         ),
       );
 
@@ -714,7 +715,8 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
         return page;
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1, 0);
+        // توحيد اتجاه الانتقال مع باقي التطبيق العربي (RTL): يدخل من اليسار
+        const begin = Offset(-1, 0);
         const end = Offset.zero;
         const curve = Curves.easeOutQuart;
 

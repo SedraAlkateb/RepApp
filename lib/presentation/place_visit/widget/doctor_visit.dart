@@ -19,15 +19,12 @@ class DoctorVisit extends StatefulWidget {
   });
 
   @override
-  State<DoctorVisit> createState() =>
-      _DoctorVisitState();
+  State<DoctorVisit> createState() => _DoctorVisitState();
 }
 
-class _DoctorVisitState
-    extends State<DoctorVisit>
+class _DoctorVisitState extends State<DoctorVisit>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void dispose() {
@@ -40,40 +37,43 @@ class _DoctorVisitState
     super.build(context);
 
     final ui = AppUi.of(context);
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
+    // ملاحظة: بدون ConstrainedBox خارجي حول القائمة، حتى يضل السكرول
+    // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد contentMaxWidth يُطبَّق
+    // داخلياً على السيرش وعلى كل بطاقة لحالها.
     return Scaffold(
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       body: Column(
         children: [
           // =====================================================
           // Search
           // يبقى ظاهر حتى لو ما في نتائج
           // =====================================================
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              ui.pagePadding,
-              ui.searchTopPadding,
-              ui.pagePadding,
-              ui.searchBottomPadding,
-            ),
-
-            child: SearchField(
-              searchController:
-              searchController,
-
-              onPressed: (value) {
-                // نفس السلوك الأصلي
-                context
-                    .read<VisitPlaceBloc>()
-                    .add(
-                  SearchDoctorVisitEvent(
-                    value: value,
-                  ),
-                );
-              },
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentMaxWidth),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.searchTopPadding,
+                  ui.pagePadding,
+                  ui.searchBottomPadding,
+                ),
+                child: SearchField(
+                  searchController: searchController,
+                  onPressed: (value) {
+                    // نفس السلوك الأصلي
+                    context.read<VisitPlaceBloc>().add(
+                          SearchDoctorVisitEvent(
+                            value: value,
+                          ),
+                        );
+                  },
+                ),
+              ),
             ),
           ),
 
@@ -81,20 +81,15 @@ class _DoctorVisitState
           // Content
           // =====================================================
           Expanded(
-            child: BlocConsumer<
-                VisitPlaceBloc,
-                VisitPlaceState>(
+            child: BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
               listener: (
-                  context,
-                  state,
-                  ) {
+                context,
+                state,
+              ) {
                 // نفس السلوك الأصلي
-                if (state
-                is AllDoctorByPlaceErrorState) {
-                  WidgetsBinding
-                      .instance
-                      .addPostFrameCallback(
-                        (_) {
+                if (state is AllDoctorByPlaceErrorState) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) {
                       error(
                         context,
                         state.failure.massage,
@@ -104,40 +99,32 @@ class _DoctorVisitState
                   );
                 }
               },
-
               builder: (
-                  context,
-                  state,
-                  ) {
+                context,
+                state,
+              ) {
                 List<DoctorModel> doctors =
-                    context
-                        .watch<VisitPlaceBloc>()
-                        .doctors;
+                    context.watch<VisitPlaceBloc>().doctors;
 
                 // ===============================================
                 // Search Result
                 // ===============================================
-                if (state
-                is SearchVisitDoctorState) {
-                  doctors =
-                      state.doctorVisit;
+                if (state is SearchVisitDoctorState) {
+                  doctors = state.doctorVisit;
                 }
 
                 // ===============================================
                 // All Doctors
                 // ===============================================
-                if (state
-                is AllDoctorByPlaceState) {
-                  doctors =
-                      state.data;
+                if (state is AllDoctorByPlaceState) {
+                  doctors = state.data;
                 }
 
                 // ===============================================
                 // Empty
                 // السيرش ما بيروح لأنه برا هالـExpanded
                 // ===============================================
-                if (state is EmptyState ||
-                    doctors.isEmpty) {
+                if (state is EmptyState || doctors.isEmpty) {
                   return emptyFullScreen(
                     context,
                   );
@@ -147,42 +134,37 @@ class _DoctorVisitState
                 // Doctors List
                 // ===============================================
                 return ListView.builder(
-                  physics:
-                  const BouncingScrollPhysics(),
-
+                  physics: const BouncingScrollPhysics(),
                   keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior
-                      .onDrag,
-
-                  padding:
-                  EdgeInsets.fromLTRB(
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.fromLTRB(
                     ui.pagePadding,
                     ui.listTopPadding,
                     ui.pagePadding,
                     ui.listBottomPadding,
                   ),
-
-                  itemCount:
-                  doctors.length,
-
+                  itemCount: doctors.length,
                   itemBuilder: (
-                      context,
-                      index,
-                      ) {
-                    final doctor =
-                    doctors[index];
+                    context,
+                    index,
+                  ) {
+                    final doctor = doctors[index];
 
-                    return _DoctorVisitCard(
-                      doctor: doctor,
-                      ui: ui,
-                      onVisit: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.visitDoctor,
-                          arguments:
-                          doctor,
-                        );
-                      },
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: contentMaxWidth),
+                        child: _DoctorVisitCard(
+                          doctor: doctor,
+                          ui: ui,
+                          onVisit: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.visitDoctor,
+                              arguments: doctor,
+                            );
+                          },
+                        ),
+                      ),
                     );
                   },
                 );
@@ -202,8 +184,7 @@ class _DoctorVisitState
 // Doctor Visit Card
 // ============================================================================
 
-class _DoctorVisitCard
-    extends StatelessWidget {
+class _DoctorVisitCard extends StatelessWidget {
   const _DoctorVisitCard({
     required this.doctor,
     required this.ui,
@@ -220,98 +201,65 @@ class _DoctorVisitCard
       margin: EdgeInsets.only(
         bottom: ui.cardSpacing,
       ),
-
       padding: EdgeInsets.all(
         ui.cardPadding,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
-            color:
-            Colors.black.withOpacity(
+            color: Colors.black.withOpacity(
               0.03,
             ),
-
             blurRadius: 12,
-
-            offset:
-            const Offset(
+            offset: const Offset(
               0,
               4,
             ),
           ),
         ],
       ),
-
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // =====================================================
           // Header
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // ===============================================
               // Doctor Icon
               // ===============================================
               Container(
-                width:
-                ui.iconBoxSize,
-
-                height:
-                ui.iconBoxSize,
-
-                alignment:
-                Alignment.center,
-
-                decoration:
-                BoxDecoration(
-                  color: ColorManager
-                      .medicalPrimary
-                      .withOpacity(
+                width: ui.iconBoxSize,
+                height: ui.iconBoxSize,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: ColorManager.medicalPrimary.withOpacity(
                     0.08,
                   ),
-
-                  borderRadius:
-                  BorderRadius.circular(
+                  borderRadius: BorderRadius.circular(
                     ui.smallRadius + 2,
                   ),
                 ),
-
                 child: Icon(
-                  Icons
-                      .person_outline_rounded,
-
-                  size:
-                  ui.iconSize,
-
-                  color: ColorManager
-                      .medicalPrimary,
+                  Icons.person_outline_rounded,
+                  size: ui.iconSize,
+                  color: ColorManager.medicalPrimary,
                 ),
               ),
 
               SizedBox(
-                width:
-                ui.mediumSpacing,
+                width: ui.mediumSpacing,
               ),
 
               // ===============================================
@@ -319,51 +267,29 @@ class _DoctorVisitCard
               // ===============================================
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(
                             doctor.title,
-
                             maxLines: 2,
-
-                            overflow:
-                            TextOverflow
-                                .ellipsis,
-
-                            style:
-                            TextStyle(
-                              fontSize:
-                              ui.cardTitleSize,
-
-                              fontWeight:
-                              FontWeight
-                                  .w700,
-
-                              color:
-                              ColorManager
-                                  .medicalPrimary,
-
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: ui.cardTitleSize,
+                              fontWeight: FontWeight.w700,
+                              color: ColorManager.medicalPrimary,
                               height: 1.3,
                             ),
                           ),
                         ),
-
                         SizedBox(
-                          width:
-                          ui.smallSpacing,
+                          width: ui.smallSpacing,
                         ),
-
                         Flexible(
                           flex: 0,
-
                           child: _buildSpecializationBadge(
                             doctor.spTitle,
                           ),
@@ -377,8 +303,7 @@ class _DoctorVisitCard
           ),
 
           SizedBox(
-            height:
-            ui.sectionSpacing,
+            height: ui.sectionSpacing,
           ),
 
           // =====================================================
@@ -449,80 +374,47 @@ class _DoctorVisitCard
           // =====================================================
           Container(
             width: double.infinity,
-
-            padding:
-            EdgeInsets.symmetric(
-              horizontal:
-              ui.mediumSpacing,
-              vertical:
-              ui.isMobile ? 10 : 11,
+            padding: EdgeInsets.symmetric(
+              horizontal: ui.mediumSpacing,
+              vertical: ui.isMobile ? 10 : 11,
             ),
-
-            decoration:
-            BoxDecoration(
+            decoration: BoxDecoration(
               color: const Color(
                 0xFFF8FAFC,
               ),
-
-              borderRadius:
-              BorderRadius.circular(
+              borderRadius: BorderRadius.circular(
                 ui.smallRadius + 1,
               ),
-
               border: Border.all(
                 color: const Color(
                   0xFFE2E8F0,
                 ),
               ),
             ),
-
             child: Row(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  Icons
-                      .location_on_outlined,
-
-                  size:
-                  ui.smallIconSize +
-                      1,
-
-                  color:
-                  const Color(
+                  Icons.location_on_outlined,
+                  size: ui.smallIconSize + 1,
+                  color: const Color(
                     0xFF94A3B8,
                   ),
                 ),
-
                 SizedBox(
-                  width:
-                  ui.smallSpacing,
+                  width: ui.smallSpacing,
                 ),
-
                 Expanded(
                   child: Text(
                     doctor.address,
-
                     maxLines: 3,
-
-                    overflow:
-                    TextOverflow
-                        .ellipsis,
-
-                    style:
-                    TextStyle(
-                      color:
-                      const Color(
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: const Color(
                         0xFF64748B,
                       ),
-
-                      fontSize:
-                      ui.bodyTextSize,
-
-                      fontWeight:
-                      FontWeight.w500,
-
+                      fontSize: ui.bodyTextSize,
+                      fontWeight: FontWeight.w500,
                       height: 1.4,
                     ),
                   ),
@@ -532,8 +424,7 @@ class _DoctorVisitCard
           ),
 
           SizedBox(
-            height:
-            ui.sectionSpacing,
+            height: ui.sectionSpacing,
           ),
 
           const Divider(
@@ -545,33 +436,27 @@ class _DoctorVisitCard
           ),
 
           SizedBox(
-            height:
-            ui.sectionSpacing,
+            height: ui.sectionSpacing,
           ),
 
           // =====================================================
           // Actions
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // ===============================================
               // Prescription
               // نفس السلوك الأصلي
               // ===============================================
               Flexible(
-                child:
-                PrescriptionMenuWidget(
-                  doctorId:
-                  doctor.id,
+                child: PrescriptionMenuWidget(
+                  doctorId: doctor.id,
                 ),
               ),
 
               SizedBox(
-                width:
-                ui.mediumSpacing,
+                width: ui.mediumSpacing,
               ),
 
               const Spacer(),
@@ -580,23 +465,16 @@ class _DoctorVisitCard
               // Start Visit
               // ===============================================
               AppInkWell(
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   ui.smallRadius,
                 ),
-
-                onTap:
-                onVisit,
-
-                child:
-                buildCardButton(
+                onTap: onVisit,
+                child: buildCardButton(
                   context,
                   'بدء زيارة',
-                  ColorManager
-                      .medicalPrimary,
+                  ColorManager.medicalPrimary,
                   Colors.white,
-                  Icons
-                      .directions_run,
+                  Icons.directions_run,
                 ),
               ),
             ],
@@ -611,53 +489,32 @@ class _DoctorVisitCard
   // ===========================================================
 
   Widget _buildSpecializationBadge(
-      String specialization,
-      ) {
+    String specialization,
+  ) {
     return Container(
-      constraints:
-      const BoxConstraints(
+      constraints: const BoxConstraints(
         maxWidth: 150,
       ),
-
-      padding:
-      EdgeInsets.symmetric(
-        horizontal:
-        ui.mediumSpacing,
+      padding: EdgeInsets.symmetric(
+        horizontal: ui.mediumSpacing,
         vertical: 5,
       ),
-
-      decoration:
-      BoxDecoration(
-        color: ColorManager
-            .medicalPrimary
-            .withOpacity(
+      decoration: BoxDecoration(
+        color: ColorManager.medicalPrimary.withOpacity(
           0.08,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.smallRadius,
         ),
       ),
-
       child: Text(
         specialization,
-
         maxLines: 1,
-
-        overflow:
-        TextOverflow.ellipsis,
-
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color:
-          ColorManager
-              .medicalPrimary,
-
-          fontSize:
-          ui.smallTextSize,
-
-          fontWeight:
-          FontWeight.w600,
+          color: ColorManager.medicalPrimary,
+          fontSize: ui.smallTextSize,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

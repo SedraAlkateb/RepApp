@@ -25,11 +25,9 @@ class AllRecip extends StatelessWidget {
     // =========================================================
     Future.microtask(() {
       if (context.mounted) {
-        context
-            .read<RecipesBrandBloc>()
-            .add(
-          AllReciEvent(),
-        );
+        context.read<RecipesBrandBloc>().add(
+              AllReciEvent(),
+            );
       }
     });
 
@@ -37,13 +35,11 @@ class AllRecip extends StatelessWidget {
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
-
         title: Text(
           'سجل الوصفات',
           maxLines: 1,
@@ -55,7 +51,6 @@ class AllRecip extends StatelessWidget {
           ),
         ),
       ),
-
       body: _bodyBuild(
         context,
         ui,
@@ -68,17 +63,15 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _bodyBuild(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    return BlocBuilder<
-        RecipesBrandBloc,
-        RecipesBrandState>(
+    BuildContext context,
+    AppUi ui,
+  ) {
+    return BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
       // =====================================================
       // نفس buildWhen الأصلي
       // =====================================================
       buildWhen: (previous, current) =>
-      current is AllReciLoadingState ||
+          current is AllReciLoadingState ||
           current is AllReciState ||
           current is AllReciErrorState ||
           current is AllReciEmptyState,
@@ -117,88 +110,76 @@ class AllRecip extends StatelessWidget {
         // Data
         // =====================================================
         if (state is AllReciState) {
-          final List<ReciModel> recis =
-              state.reci;
+          final List<ReciModel> recis = state.reci;
 
           // نفس النمط المتفق عليه:
           // صفحات الـ List لا تتمدد كثيراً بالتابلت Landscape.
           final double contentMaxWidth =
-          ui.isTabletLandscape
-              ? 760
-              : ui.pageMaxWidth;
+              ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: contentMaxWidth,
-              ),
-
-              child: CustomScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-
-                slivers: [
-                  // =================================================
-                  // Header
-                  // =================================================
-                  SliverToBoxAdapter(
+          // ملاحظة: بدون ConstrainedBox خارجي حول الـ CustomScrollView، حتى
+          // يضل السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد
+          // contentMaxWidth يُطبَّق داخلياً على كل sliver لحاله.
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              // =================================================
+              // Header
+              // =================================================
+              SliverToBoxAdapter(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: contentMaxWidth,
+                    ),
                     child: _buildTitleSection(
                       ui,
                     ),
                   ),
+                ),
+              ),
 
-                  // =================================================
-                  // Recipes
-                  // =================================================
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(
-                      ui.pagePadding,
-                      ui.listTopPadding,
-                      ui.pagePadding,
-                      ui.listBottomPadding,
-                    ),
+              // =================================================
+              // Recipes
+              // =================================================
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.listTopPadding,
+                  ui.pagePadding,
+                  ui.listBottomPadding,
+                ),
+                sliver: AnimationLimiter(
+                  child: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (
+                        context,
+                        index,
+                      ) {
+                        final item = recis[index];
 
-                    sliver: AnimationLimiter(
-                      child: SliverList(
-                        delegate:
-                        SliverChildBuilderDelegate(
-                              (
-                              context,
-                              index,
-                              ) {
-                            final item =
-                            recis[index];
+                        final bool isClinic = item.recipeType == '1';
 
-                            final bool isClinic =
-                                item.recipeType ==
-                                    '1';
-
-                            // =========================================
-                            // نفس Animation الأصلي
-                            // =========================================
-                            return AnimationConfiguration
-                                .staggeredList(
-                              position: index,
-                              duration:
-                              const Duration(
-                                milliseconds:
-                                600,
-                              ),
-                              delay:
-                              const Duration(
-                                milliseconds:
-                                50,
-                              ),
-
-                              child:
-                              SlideAnimation(
-                                verticalOffset:
-                                30,
-
-                                child:
-                                FadeInAnimation(
-                                  child:
-                                  _buildSmartCard(
+                        // =========================================
+                        // نفس Animation الأصلي
+                        // =========================================
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(
+                            milliseconds: 600,
+                          ),
+                          delay: const Duration(
+                            milliseconds: 50,
+                          ),
+                          child: SlideAnimation(
+                            verticalOffset: 30,
+                            child: FadeInAnimation(
+                              child: Center(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: contentMaxWidth,
+                                  ),
+                                  child: _buildSmartCard(
                                     context,
                                     ui,
                                     item,
@@ -206,18 +187,16 @@ class AllRecip extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            );
-                          },
-
-                          childCount:
-                          recis.length,
-                        ),
-                      ),
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: recis.length,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           );
         }
 
@@ -231,8 +210,8 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _buildTitleSection(
-      AppUi ui,
-      ) {
+    AppUi ui,
+  ) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         ui.pagePadding,
@@ -240,56 +219,39 @@ class AllRecip extends StatelessWidget {
         ui.pagePadding,
         ui.headerBottomPadding,
       ),
-
       child: Row(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // =================================================
           // Title
           // =================================================
           Expanded(
             child: Column(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'قائمة الوصفات',
                   maxLines: 1,
-                  overflow:
-                  TextOverflow.ellipsis,
-
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize:
-                    ui.pageTitleSize,
-                    fontWeight:
-                    FontWeight.w800,
-                    color:
-                    ColorManager.medicalText,
+                    fontSize: ui.pageTitleSize,
+                    fontWeight: FontWeight.w800,
+                    color: ColorManager.medicalText,
                   ),
                 ),
-
                 SizedBox(
-                  height:
-                  ui.smallSpacing,
+                  height: ui.smallSpacing,
                 ),
-
                 Text(
                   'استعراض كافة الوصفات الصادرة لهذا المندوب',
                   maxLines: 2,
-                  overflow:
-                  TextOverflow.ellipsis,
-
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: const Color(
                       0xFF64748B,
                     ),
-                    fontSize:
-                    ui.pageSubtitleSize,
-                    fontWeight:
-                    FontWeight.w500,
+                    fontSize: ui.pageSubtitleSize,
+                    fontWeight: FontWeight.w500,
                     height: 1.4,
                   ),
                 ),
@@ -311,10 +273,8 @@ class AllRecip extends StatelessWidget {
             height: 5,
             width: 42,
             decoration: BoxDecoration(
-              color:
-              ColorManager.medicalPrimary,
-              borderRadius:
-              BorderRadius.circular(
+              color: ColorManager.medicalPrimary,
+              borderRadius: BorderRadius.circular(
                 20,
               ),
             ),
@@ -329,37 +289,30 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _buildSmartCard(
-      BuildContext context,
-      AppUi ui,
-      ReciModel item,
-      bool isClinic,
-      ) {
+    BuildContext context,
+    AppUi ui,
+    ReciModel item,
+    bool isClinic,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
         bottom: ui.cardSpacing,
       ),
-
       child: Container(
         width: double.infinity,
-
         decoration: BoxDecoration(
           color: Colors.white,
-
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             ui.cardRadius,
           ),
-
           border: Border.all(
             color: const Color(
               0xFFE2E8F0,
             ),
           ),
-
           boxShadow: [
             BoxShadow(
-              color:
-              Colors.black.withOpacity(
+              color: Colors.black.withOpacity(
                 0.03,
               ),
               blurRadius: 12,
@@ -370,171 +323,120 @@ class AllRecip extends StatelessWidget {
             ),
           ],
         ),
-
         child: ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             ui.cardRadius - 1,
           ),
-
           child: Material(
             color: Colors.white,
-
             child: AppInkWell(
               // ===============================================
               // نفس التنقل الأصلي تماماً
               // ===============================================
-              onTap: item.recipeStatus=="1"?() {
-                initBrandRecModule();
+              onTap: item.recipeStatus == "1"
+                  ? () {
+                      initBrandRecModule();
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                    isClinic
-                        ? UpdateRecipesPage(
-                      recipeId:
-                      int.parse(
-                        item.id ?? '0',
-                      ),
-                      docId:
-                      int.parse(
-                        item.docId,
-                      ),
-                      st: 1,
-                    )
-                        : UpdateRecipesHospital(
-                      recipeId:
-                      int.parse(
-                        item.id ?? '0',
-                      ),
-                      HospitalId:
-                      int.parse(
-                        item.docId,
-                      ),
-                      st: 1,
-                    ),
-                  ),
-                );
-              }:null,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => isClinic
+                              ? UpdateRecipesPage(
+                                  recipeId: int.parse(
+                                    item.id ?? '0',
+                                  ),
+                                  docId: int.parse(
+                                    item.docId,
+                                  ),
+                                  st: 1,
+                                )
+                              : UpdateRecipesHospital(
+                                  recipeId: int.parse(
+                                    item.id ?? '0',
+                                  ),
+                                  HospitalId: int.parse(
+                                    item.docId,
+                                  ),
+                                  st: 1,
+                                ),
+                        ),
+                      );
+                    }
+                  : null,
 
               child: Padding(
                 padding: EdgeInsets.all(
                   ui.cardPadding,
                 ),
-
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // =========================================
                     // Badge + Date
                     // =========================================
                     Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.center,
-
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _buildTypeBadge(
                           ui,
                           isClinic,
                         ),
-
                         const Spacer(),
-
                         Flexible(
-                          child:
-                          _buildDateSection(
+                          child: _buildDateSection(
                             ui,
-                            item.create_date ??
-                                '',
+                            item.create_date ?? '',
                           ),
                         ),
                       ],
                     ),
 
                     SizedBox(
-                      height:
-                      ui.sectionSpacing,
+                      height: ui.sectionSpacing,
                     ),
 
                     // =========================================
                     // Doctor / Hospital
                     // =========================================
                     Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.center,
-
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                           width: ui.iconBoxSize - 8,
                           height: ui.iconBoxSize - 8,
-
-                          alignment:
-                          Alignment.center,
-
-                          decoration:
-                          BoxDecoration(
-                            color: ColorManager
-                                .medicalPrimary
-                                .withOpacity(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: ColorManager.medicalPrimary.withOpacity(
                               0.07,
                             ),
-
-                            borderRadius:
-                            BorderRadius.circular(
+                            borderRadius: BorderRadius.circular(
                               ui.smallRadius,
                             ),
                           ),
-
                           child: Icon(
                             isClinic
-                                ? Icons
-                                .person_outline_rounded
-                                : Icons
-                                .apartment_outlined,
-
-                            size:
-                            ui.smallIconSize +
-                                3,
-
-                            color: ColorManager
-                                .medicalPrimary,
+                                ? Icons.person_outline_rounded
+                                : Icons.apartment_outlined,
+                            size: ui.smallIconSize + 3,
+                            color: ColorManager.medicalPrimary,
                           ),
                         ),
-
                         SizedBox(
-                          width:
-                          ui.mediumSpacing,
+                          width: ui.mediumSpacing,
                         ),
-
                         Expanded(
                           child: Text(
                             isClinic
                                 ? 'د. ${item.docName ?? ''}'
-                                : item.docName ??
-                                '',
-
+                                : item.docName ?? '',
                             maxLines: 2,
-                            overflow:
-                            TextOverflow
-                                .ellipsis,
-
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize:
-                              ui.isMobile
-                                  ? 14
-                                  : 16,
-
-                              color:
-                              const Color(
+                              fontSize: ui.isMobile ? 14 : 16,
+                              color: const Color(
                                 0xFF475569,
                               ),
-
-                              fontWeight:
-                              FontWeight.w600,
-
+                              fontWeight: FontWeight.w600,
                               height: 1.35,
                             ),
                           ),
@@ -543,23 +445,19 @@ class AllRecip extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      height:
-                      ui.sectionSpacing,
+                      height: ui.sectionSpacing,
                     ),
 
                     Divider(
                       height: 1,
                       thickness: 1,
-                      color: ColorManager
-                          .medicalPrimary
-                          .withOpacity(
+                      color: ColorManager.medicalPrimary.withOpacity(
                         0.12,
                       ),
                     ),
 
                     SizedBox(
-                      height:
-                      ui.sectionSpacing,
+                      height: ui.sectionSpacing,
                     ),
 
                     // =========================================
@@ -584,62 +482,47 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _buildBottomSection(
-      AppUi ui,
-      ReciModel item,
-      ) {
-    final String note =
-    item.note_emp?.trim().isNotEmpty ==
-        true
+    AppUi ui,
+    ReciModel item,
+  ) {
+    final String note = item.note_emp?.trim().isNotEmpty == true
         ? item.note_emp!.trim()
         : 'لا توجد ملاحظات مدونة';
 
     return Row(
-      crossAxisAlignment:
-      CrossAxisAlignment.center,
-
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: Text(
             'ملاحظات مدونة: $note',
-
             maxLines: 2,
-            overflow:
-            TextOverflow.ellipsis,
-
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize:
-              ui.smallTextSize,
+              fontSize: ui.smallTextSize,
               color: const Color(
                 0xFF64748B,
               ),
-              fontStyle:
-              FontStyle.italic,
+              fontStyle: FontStyle.italic,
               height: 1.4,
             ),
           ),
         ),
-
         SizedBox(
           width: ui.mediumSpacing,
         ),
-
         Text(
           'وحدة',
           style: TextStyle(
-            fontSize:
-            ui.smallTextSize,
+            fontSize: ui.smallTextSize,
             color: const Color(
               0xFF94A3B8,
             ),
-            fontWeight:
-            FontWeight.w500,
+            fontWeight: FontWeight.w500,
           ),
         ),
-
         SizedBox(
           width: ui.smallSpacing,
         ),
-
         _buildQuantityBubble(
           ui,
           item.total ?? '0',
@@ -653,41 +536,31 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _buildTypeBadge(
-      AppUi ui,
-      bool isClinic,
-      ) {
-    final Color color = isClinic
-        ? const Color(0xFF3F7FBF)
-        : const Color(0xFF2D947A);
+    AppUi ui,
+    bool isClinic,
+  ) {
+    final Color color =
+        isClinic ? const Color(0xFF3F7FBF) : const Color(0xFF2D947A);
 
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ui.mediumSpacing,
         vertical: 6,
       ),
-
       decoration: BoxDecoration(
         color: color.withOpacity(
           0.10,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.smallRadius,
         ),
       ),
-
       child: Text(
-        isClinic
-            ? 'وصفة عيادة'
-            : 'وصفة مشفى',
-
+        isClinic ? 'وصفة عيادة' : 'وصفة مشفى',
         style: TextStyle(
           color: color,
-          fontSize:
-          ui.smallTextSize,
-          fontWeight:
-          FontWeight.w700,
+          fontSize: ui.smallTextSize,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -698,16 +571,12 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _buildDateSection(
-      AppUi ui,
-      String date,
-      ) {
+    AppUi ui,
+    String date,
+  ) {
     return Row(
-      mainAxisSize:
-      MainAxisSize.min,
-
-      mainAxisAlignment:
-      MainAxisAlignment.end,
-
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Icon(
           Icons.calendar_today_outlined,
@@ -716,26 +585,20 @@ class AllRecip extends StatelessWidget {
             0xFF94A3B8,
           ),
         ),
-
         SizedBox(
           width: ui.smallSpacing,
         ),
-
         Flexible(
           child: Text(
             date,
             maxLines: 1,
-            overflow:
-            TextOverflow.ellipsis,
-
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: const Color(
                 0xFF64748B,
               ),
-              fontSize:
-              ui.smallTextSize,
-              fontWeight:
-              FontWeight.w500,
+              fontSize: ui.smallTextSize,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -748,42 +611,31 @@ class AllRecip extends StatelessWidget {
   // ===========================================================
 
   Widget _buildQuantityBubble(
-      AppUi ui,
-      String quantity,
-      ) {
+    AppUi ui,
+    String quantity,
+  ) {
     return Container(
       constraints: const BoxConstraints(
         minWidth: 38,
       ),
-
       padding: EdgeInsets.symmetric(
         horizontal: ui.mediumSpacing,
         vertical: 6,
       ),
-
       alignment: Alignment.center,
-
       decoration: BoxDecoration(
-        color:
-        ColorManager.medicalPrimary,
-
-        borderRadius:
-        BorderRadius.circular(
+        color: ColorManager.medicalPrimary,
+        borderRadius: BorderRadius.circular(
           ui.smallRadius,
         ),
       ),
-
       child: Text(
         quantity,
-
         maxLines: 1,
-
         style: TextStyle(
           color: Colors.white,
-          fontWeight:
-          FontWeight.w700,
-          fontSize:
-          ui.isMobile ? 13 : 14,
+          fontWeight: FontWeight.w700,
+          fontSize: ui.isMobile ? 13 : 14,
         ),
       ),
     );

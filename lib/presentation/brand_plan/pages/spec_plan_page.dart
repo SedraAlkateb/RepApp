@@ -49,9 +49,9 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
           // =====================================================
           BlocConsumer<BrandPlanBloc, BrandPlanState>(
             listener: (
-                context,
-                state,
-                ) {
+              context,
+              state,
+            ) {
               if (state is AllBrandPlanErrorState) {
                 error(
                   context,
@@ -61,9 +61,9 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
               }
             },
             builder: (
-                context,
-                state,
-                ) {
+              context,
+              state,
+            ) {
               List<OtherBrandSpPlanModel> planBrandModel =
                   context.watch<BrandPlanBloc>().planBrand;
 
@@ -94,9 +94,9 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
 
               return OrientationBuilder(
                 builder: (
-                    context,
-                    orientation,
-                    ) {
+                  context,
+                  orientation,
+                ) {
                   // تحسين توزيع الأعمدة لمنع الضغط على أجهزة الموبايل
                   final int crossAxisCount;
 
@@ -105,122 +105,140 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
                   } else if (ui.isTabletPortrait) {
                     crossAxisCount = 3;
                   } else {
-                    crossAxisCount = 2; // تثبيت الموبايل على العمودين لتجنب الانضغاط
+                    crossAxisCount =
+                        2; // تثبيت الموبايل على العمودين لتجنب الانضغاط
                   }
 
-                  return Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: ui.widePageMaxWidth,
-                      ),
-                      child: CustomScrollView(
+                  // ملاحظة: CustomScrollView على كامل العرض هون (بدون
+                  // ConstrainedBox خارجي) حتى يبقى السكرول بالماوس يعمل فوق
+                  // الفراغ الجانبي بالعرض. الـ SliverGrid ما بينلف بـ
+                  // Center/ConstrainedBox عادي لأنه sliver مباشر (مو Widget
+                  // داخل SliverToBoxAdapter)، فبنحسب هامش أفقي إضافي يدوياً
+                  // عبر LayoutBuilder لنفس تأثير التوسيط/تحديد العرض الأقصى.
+                  return LayoutBuilder(
+                    builder: (context, outerConstraints) {
+                      final double extraHorizontalInset =
+                          ((outerConstraints.maxWidth - ui.widePageMaxWidth) /
+                                  2)
+                              .clamp(0, double.infinity);
+
+                      return CustomScrollView(
                         physics: const BouncingScrollPhysics(),
                         slivers: [
                           // =========================================
                           // Header
                           // =========================================
                           SliverToBoxAdapter(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: ui.pagePadding,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: ui.isMobile ? 14 : 16,
+                            child: Center(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: ui.widePageMaxWidth,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: ui.pagePadding,
                                   ),
-                                  Center(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: ui.isMobile ? 24 : 30,
-                                        vertical: ui.isMobile ? 10 : 12,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: ui.isMobile ? 14 : 16,
                                       ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(
-                                          ui.isMobile ? 15 : 17,
-                                        ),
-                                        border: Border.all(
-                                          color: const Color(
-                                            0xFFF1F5F9,
+                                      Center(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: ui.isMobile ? 24 : 30,
+                                            vertical: ui.isMobile ? 10 : 12,
                                           ),
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withOpacity(
-                                              0.01,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              ui.isMobile ? 15 : 17,
                                             ),
-                                            blurRadius: 10,
-                                            offset: const Offset(
-                                              0,
-                                              2,
+                                            border: Border.all(
+                                              color: const Color(
+                                                0xFFF1F5F9,
+                                              ),
                                             ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.01,
+                                                ),
+                                                blurRadius: 10,
+                                                offset: const Offset(
+                                                  0,
+                                                  2,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      child: Text(
-                                        'تاريخ الخطة: '
+                                          child: Text(
+                                            'تاريخ الخطة: '
                                             '${UserInfo.otherStartDate} - '
                                             '${UserInfo.otherEndDate}',
-                                        textAlign: TextAlign.center,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: ui.isMobile ? 14 : 15,
+                                              color:
+                                                  ColorManager.medicalPrimary,
+                                              fontWeight: FontWeight.w900,
+                                              height: 1.3,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: ui.isMobile ? 20 : 22,
+                                      ),
+                                      SearchField(
+                                        searchController: _searchController,
+                                        hintText: 'البحث باسم الاختصاص',
+                                        isIcon: true,
+                                        onPressed: (value) {
+                                          setState(() {
+                                            _searchText = value;
+                                          });
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: ui.isMobile ? 20 : 22,
+                                      ),
+                                      Text(
+                                        'توزيع العينات حسب الاختصاص',
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          fontSize: ui.isMobile ? 14 : 15,
-                                          color: ColorManager.medicalPrimary,
-                                          fontWeight: FontWeight.w900,
+                                          fontSize: ui.pageTitleSize,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(
+                                            0xFF0F172A,
+                                          ),
                                           height: 1.3,
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: ui.isMobile ? 20 : 22,
-                                  ),
-                                  SearchField(
-                                    searchController: _searchController,
-                                    hintText: 'البحث باسم الاختصاص',
-                                    isIcon: true,
-                                    onPressed: (value) {
-                                      setState(() {
-                                        _searchText = value;
-                                      });
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: ui.isMobile ? 20 : 22,
-                                  ),
-                                  Text(
-                                    'توزيع العينات حسب الاختصاص',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: ui.pageTitleSize,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(
-                                        0xFF0F172A,
+                                      SizedBox(
+                                        height: ui.smallSpacing,
                                       ),
-                                      height: 1.3,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: ui.smallSpacing,
-                                  ),
-                                  Text(
-                                    'يمكنك استعراض عدد العينات المتاحة لكل اختصاص وتعديلها أو إرسالها للمراجعة',
-                                    style: TextStyle(
-                                      fontSize: ui.pageSubtitleSize,
-                                      color: const Color(
-                                        0xFF64748B,
+                                      Text(
+                                        'يمكنك استعراض عدد العينات المتاحة لكل اختصاص وتعديلها أو إرسالها للمراجعة',
+                                        style: TextStyle(
+                                          fontSize: ui.pageSubtitleSize,
+                                          color: const Color(
+                                            0xFF64748B,
+                                          ),
+                                          height: 1.4,
+                                        ),
                                       ),
-                                      height: 1.4,
-                                    ),
+                                      SizedBox(
+                                        height: ui.isMobile ? 20 : 22,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: ui.isMobile ? 20 : 22,
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
@@ -230,12 +248,12 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
                           // =========================================
                           SliverPadding(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ui.pagePadding,
+                              horizontal: ui.pagePadding + extraHorizontalInset,
                               vertical: ui.isMobile ? 10 : 12,
                             ),
                             sliver: SliverGrid(
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: crossAxisCount,
                                 crossAxisSpacing: ui.gridSpacing,
                                 mainAxisSpacing: ui.gridSpacing,
@@ -245,10 +263,10 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
                                 ),
                               ),
                               delegate: SliverChildBuilderDelegate(
-                                    (
-                                    context,
-                                    index,
-                                    ) {
+                                (
+                                  context,
+                                  index,
+                                ) {
                                   final realIndex = filteredIndexes[index];
                                   final item = planBrandModel[realIndex];
 
@@ -273,8 +291,8 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               );
@@ -286,46 +304,46 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
           // =====================================================
           context.watch<BrandPlanBloc>().planBrand.isNotEmpty
               ? BlocListener<BrandPlanBloc, BrandPlanState>(
-            listener: (
-                context,
-                state,
-                ) {
-              if (state is UpdateAmountErrorState) {
-                error(
-                  context,
-                  state.failure.massage,
-                  state.failure.code,
-                );
-              }
+                  listener: (
+                    context,
+                    state,
+                  ) {
+                    if (state is UpdateAmountErrorState) {
+                      error(
+                        context,
+                        state.failure.massage,
+                        state.failure.code,
+                      );
+                    }
 
-              if (state is UpdateAmountState) {
-                context.read<BrandPlanBloc>().add(
-                  UpdateSaveEvent(),
-                );
+                    if (state is UpdateAmountState) {
+                      context.read<BrandPlanBloc>().add(
+                            UpdateSaveEvent(),
+                          );
 
-                dismissDialog(
-                  context,
-                );
+                      dismissDialog(
+                        context,
+                      );
 
-                successWithMessage(
-                  context,
-                  'تم حفظ التغيرات',
-                );
-              }
+                      successWithMessage(
+                        context,
+                        'تم حفظ التغيرات',
+                      );
+                    }
 
-              if (state is UpdateAmountSendState) {
-                dismissDialog(
-                  context,
-                );
+                    if (state is UpdateAmountSendState) {
+                      dismissDialog(
+                        context,
+                      );
 
-                successWithMessage(
-                  context,
-                  'تم الارسال يرجى المزامنة ',
-                );
-              }
-            },
-            child: const SaveSendBottom(),
-          )
+                      successWithMessage(
+                        context,
+                        'تم الارسال يرجى المزامنة ',
+                      );
+                    }
+                  },
+                  child: const SaveSendBottom(),
+                )
               : const SizedBox.shrink(),
         ],
       ),
@@ -337,9 +355,9 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
   // ===========================================================
 
   double _getChildAspectRatio(
-      AppUi ui,
-      Orientation orientation,
-      ) {
+    AppUi ui,
+    Orientation orientation,
+  ) {
     if (ui.isMobile) {
       // إعطاء ارتفاع أكبر إضافي لتجنب طفح النصوص داخل البطاقة
       return orientation == Orientation.landscape ? 0.75 : 0.62;
@@ -357,11 +375,11 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
   // ===========================================================
 
   Widget _buildSpecItem(
-      BuildContext context,
-      AppUi ui,
-      OtherBrandSpPlanModel model,
-      int index,
-      ) {
+    BuildContext context,
+    AppUi ui,
+    OtherBrandSpPlanModel model,
+    int index,
+  ) {
     return Material(
       color: Colors.transparent,
       child: AppInkWell(
@@ -373,12 +391,12 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
             context,
             MaterialPageRoute(
               builder: (
-                  context,
-                  ) =>
+                context,
+              ) =>
                   BrandPlanOtherPage(
-                    otherBrandSpPlanModel: model,
-                    index1: index,
-                  ),
+                otherBrandSpPlanModel: model,
+                index1: index,
+              ),
             ),
           );
         },
@@ -449,10 +467,10 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
                             ),
                             colorBlendMode: BlendMode.modulate,
                             errorBuilder: (
-                                context,
-                                error,
-                                stackTrace,
-                                ) {
+                              context,
+                              error,
+                              stackTrace,
+                            ) {
                               return Icon(
                                 Icons.medical_services,
                                 size: ui.iconSize,
@@ -491,5 +509,4 @@ class _SpecPlanPageState extends State<SpecPlanPage> {
       ),
     );
   }
-
 }

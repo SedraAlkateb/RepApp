@@ -101,7 +101,7 @@ class _PlanHelpGoalTapState
 
                   onPressed:
                       () {
-                    Navigator.pop(
+                    Navigator.maybePop(
                       context,
                     );
                   },

@@ -17,15 +17,12 @@ class BrandPlanActivePage extends StatefulWidget {
   });
 
   @override
-  State<BrandPlanActivePage> createState() =>
-      _BrandPlanActivePageState();
+  State<BrandPlanActivePage> createState() => _BrandPlanActivePageState();
 }
 
-class _BrandPlanActivePageState
-    extends State<BrandPlanActivePage>
+class _BrandPlanActivePageState extends State<BrandPlanActivePage>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +34,17 @@ class _BrandPlanActivePageState
     // صفحة List بعمود واحد
     // لذلك لا نسمح لها بالتمدد الزائد على Tablet Landscape
     // =========================================================
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return Scaffold(
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
-      body: BlocConsumer<
-          BrandPlanBloc,
-          BrandPlanState>(
+      body: BlocConsumer<BrandPlanBloc, BrandPlanState>(
         listener: (
-            context,
-            state,
-            ) {
+          context,
+          state,
+        ) {
           // =====================================================
           // نفس السلوك الأصلي
           // =====================================================
@@ -65,64 +56,49 @@ class _BrandPlanActivePageState
             );
           }
         },
-
         builder: (
-            context,
-            state,
-            ) {
+          context,
+          state,
+        ) {
           // =====================================================
           // نفس مصدر البيانات الأصلي
           // =====================================================
           List<BrandSpPlanModel> planBrandModel =
-              context
-                  .read<BrandPlanBloc>()
-                  .planBrandActive;
+              context.read<BrandPlanBloc>().planBrandActive;
 
           // =====================================================
           // نفس سلوك البحث الأصلي
           // =====================================================
           if (state is SearchBrandState) {
-            planBrandModel =
-                state.brand;
+            planBrandModel = state.brand;
           }
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth:
-                contentMaxWidth,
-              ),
-
-              child: CustomScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-
-                keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior
-                    .onDrag,
-
-                slivers: [
-                  // =================================================
-                  // Header
-                  // نفس ترتيب الويدجت الأصلي
-                  // =================================================
-                  SliverToBoxAdapter(
+          // ملاحظة: بدون ConstrainedBox خارجي حول الـ CustomScrollView، حتى
+          // يضل السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد
+          // contentMaxWidth يُطبَّق داخلياً على كل sliver لحاله.
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            slivers: [
+              // =================================================
+              // Header
+              // نفس ترتيب الويدجت الأصلي
+              // =================================================
+              SliverToBoxAdapter(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: contentMaxWidth,
+                    ),
                     child: Padding(
-                      padding:
-                      EdgeInsets.symmetric(
-                        horizontal:
-                        ui.pagePadding,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ui.pagePadding,
                       ),
-
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
-
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height:
-                            ui.pageTopPadding,
+                            height: ui.pageTopPadding,
                           ),
 
                           // =========================================
@@ -130,95 +106,49 @@ class _BrandPlanActivePageState
                           // =========================================
                           _buildFluidAnimation(
                             index: 0,
-
                             child: Center(
                               child: Container(
-                                constraints:
-                                const BoxConstraints(
+                                constraints: const BoxConstraints(
                                   maxWidth: 560,
                                 ),
-
-                                padding:
-                                EdgeInsets.symmetric(
-                                  horizontal:
-                                  ui.isMobile
-                                      ? 18
-                                      : 24,
-
-                                  vertical:
-                                  ui.isMobile
-                                      ? 10
-                                      : 12,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: ui.isMobile ? 18 : 24,
+                                  vertical: ui.isMobile ? 10 : 12,
                                 ),
-
-                                decoration:
-                                BoxDecoration(
-                                  color:
-                                  Colors.white,
-
-                                  borderRadius:
-                                  BorderRadius
-                                      .circular(
-                                    ui.smallRadius +
-                                        3,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(
+                                    ui.smallRadius + 3,
                                   ),
-
-                                  border:
-                                  Border.all(
-                                    color:
-                                    const Color(
+                                  border: Border.all(
+                                    color: const Color(
                                       0xFFE2E8F0,
                                     ),
                                   ),
-
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors
-                                          .black
-                                          .withOpacity(
+                                      color: Colors.black.withOpacity(
                                         0.025,
                                       ),
-
-                                      blurRadius:
-                                      10,
-
-                                      offset:
-                                      const Offset(
+                                      blurRadius: 10,
+                                      offset: const Offset(
                                         0,
                                         3,
                                       ),
                                     ),
                                   ],
                                 ),
-
                                 child: Text(
                                   'تاريخ الخطة: '
-                                      '${UserInfo.startDate} - '
-                                      '${UserInfo.endDate}',
-
-                                  textAlign:
-                                  TextAlign
-                                      .center,
-
+                                  '${UserInfo.startDate} - '
+                                  '${UserInfo.endDate}',
+                                  textAlign: TextAlign.center,
                                   maxLines: 2,
-
-                                  overflow:
-                                  TextOverflow
-                                      .ellipsis,
-
-                                  style:
-                                  TextStyle(
-                                    fontSize: ui
-                                        .bodyTextSize,
-
-                                    color:
-                                    ColorManager
-                                        .medicalPrimary,
-
-                                    fontWeight:
-                                    FontWeight
-                                        .w800,
-
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: ui.bodyTextSize,
+                                    color: ColorManager.medicalPrimary,
+                                    fontWeight: FontWeight.w800,
                                     height: 1.35,
                                   ),
                                 ),
@@ -227,10 +157,7 @@ class _BrandPlanActivePageState
                           ),
 
                           SizedBox(
-                            height:
-                            ui.isMobile
-                                ? 22
-                                : 25,
+                            height: ui.isMobile ? 22 : 25,
                           ),
 
                           // =========================================
@@ -238,38 +165,23 @@ class _BrandPlanActivePageState
                           // =========================================
                           _buildFluidAnimation(
                             index: 1,
-
                             child: Text(
                               'أصناف الخطة الحالية',
-
                               maxLines: 2,
-
-                              overflow:
-                              TextOverflow
-                                  .ellipsis,
-
-                              style:
-                              TextStyle(
-                                fontSize: ui
-                                    .pageTitleSize,
-
-                                fontWeight:
-                                FontWeight
-                                    .w800,
-
-                                color:
-                                const Color(
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: ui.pageTitleSize,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(
                                   0xFF0F172A,
                                 ),
-
                                 height: 1.3,
                               ),
                             ),
                           ),
 
                           SizedBox(
-                            height:
-                            ui.smallSpacing,
+                            height: ui.smallSpacing,
                           ),
 
                           // =========================================
@@ -277,29 +189,21 @@ class _BrandPlanActivePageState
                           // =========================================
                           _buildFluidAnimation(
                             index: 2,
-
                             child: Text(
                               'عرض جميع الأصناف المدرجة في الخطة الحالية '
-                                  'مع امكانية البحث',
-
-                              style:
-                              TextStyle(
-                                fontSize: ui
-                                    .pageSubtitleSize,
-
-                                color:
-                                const Color(
+                              'مع امكانية البحث',
+                              style: TextStyle(
+                                fontSize: ui.pageSubtitleSize,
+                                color: const Color(
                                   0xFF64748B,
                                 ),
-
                                 height: 1.45,
                               ),
                             ),
                           ),
 
                           SizedBox(
-                            height:
-                            ui.largeSpacing,
+                            height: ui.largeSpacing,
                           ),
 
                           // =========================================
@@ -308,109 +212,86 @@ class _BrandPlanActivePageState
                           // =========================================
                           _buildFluidAnimation(
                             index: 3,
-
                             child: SearchField(
-                              searchController:
-                              searchController,
-
-                              onPressed:
-                                  (value) {
-                                context
-                                    .read<
-                                    BrandPlanBloc>()
-                                    .add(
-                                  SearchBrandEvent(
-                                    value:
-                                    value,
-
-                                    brand:
-                                    planBrandModel,
-                                  ),
-                                );
+                              searchController: searchController,
+                              onPressed: (value) {
+                                context.read<BrandPlanBloc>().add(
+                                      SearchBrandEvent(
+                                        value: value,
+                                        brand: planBrandModel,
+                                      ),
+                                    );
                               },
                             ),
                           ),
 
                           SizedBox(
-                            height:
-                            ui.sectionSpacing,
+                            height: ui.sectionSpacing,
                           ),
                         ],
                       ),
                     ),
                   ),
+                ),
+              ),
 
-                  // =================================================
-                  // Empty
-                  // السيرش والهيدر يظلون ظاهرين
-                  // =================================================
-                  planBrandModel.isEmpty
-                      ? SliverFillRemaining(
-                    hasScrollBody:
-                    false,
-
-                    child: Center(
-                      child:
-                      emptyFullScreen(
-                        context,
+              // =================================================
+              // Empty
+              // السيرش والهيدر يظلون ظاهرين
+              // =================================================
+              planBrandModel.isEmpty
+                  ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: emptyFullScreen(
+                          context,
+                        ),
                       ),
-                    ),
-                  )
-
+                    )
                   // =================================================
                   // Brands List
                   // =================================================
-                      : SliverPadding(
-                    padding:
-                    EdgeInsets.fromLTRB(
-                      ui.pagePadding,
-                      0,
-                      ui.pagePadding,
-                      0,
-                    ),
-
-                    sliver:
-                    SliverList(
-                      delegate:
-                      SliverChildBuilderDelegate(
-                            (
+                  : SliverPadding(
+                      padding: EdgeInsets.fromLTRB(
+                        ui.pagePadding,
+                        0,
+                        ui.pagePadding,
+                        0,
+                      ),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (
                             context,
                             index,
-                            ) {
-                          return _buildFluidAnimation(
-                            index:
-                            index + 4,
-
-                            child:
-                            ActiveBrandPlanCard(
-                              model:
-                              planBrandModel[
-                              index],
-                            ),
-                          );
-                        },
-
-                        childCount:
-                        planBrandModel
-                            .length,
+                          ) {
+                            return _buildFluidAnimation(
+                              index: index + 4,
+                              child: Center(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: contentMaxWidth,
+                                  ),
+                                  child: ActiveBrandPlanCard(
+                                    model: planBrandModel[index],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          childCount: planBrandModel.length,
+                        ),
                       ),
                     ),
-                  ),
 
-                  // =================================================
-                  // نفس المساحة السفلية الأصلية
-                  // =================================================
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height:
-                      ui.isMobile
-                          ? 100
-                          : 110,
-                    ),
-                  ),
-                ],
+              // =================================================
+              // نفس المساحة السفلية الأصلية
+              // =================================================
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: ui.isMobile ? 100 : 110,
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
@@ -430,42 +311,33 @@ class _BrandPlanActivePageState
         begin: 0,
         end: 1,
       ),
-
       duration: const Duration(
         milliseconds: 600,
       ),
-
       curve: Interval(
         (index * 0.05).clamp(
           0.0,
           0.5,
         ),
         1,
-        curve:
-        Curves.easeOutCubic,
+        curve: Curves.easeOutCubic,
       ),
-
       builder: (
-          context,
-          value,
-          child,
-          ) {
+        context,
+        value,
+        child,
+      ) {
         return Transform.translate(
           offset: Offset(
             0,
             40 * (1 - value),
           ),
-
           child: Transform.scale(
-            scale:
-            0.95 +
-                (0.05 * value),
-
+            scale: 0.95 + (0.05 * value),
             child: child,
           ),
         );
       },
-
       child: child,
     );
   }
@@ -485,8 +357,7 @@ class _BrandPlanActivePageState
 // نفس بناء الكرت ومواقع المحتوى الأصلي
 // ============================================================================
 
-class ActiveBrandPlanCard
-    extends StatelessWidget {
+class ActiveBrandPlanCard extends StatelessWidget {
   const ActiveBrandPlanCard({
     super.key,
     required this.model,
@@ -500,34 +371,25 @@ class ActiveBrandPlanCard
 
     return Container(
       width: double.infinity,
-
       margin: EdgeInsets.only(
         bottom: ui.cardSpacing,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
-            color:
-            Colors.black.withOpacity(
+            color: Colors.black.withOpacity(
               0.03,
             ),
-
             blurRadius: 12,
-
             offset: const Offset(
               0,
               4,
@@ -535,17 +397,12 @@ class ActiveBrandPlanCard
           ),
         ],
       ),
-
       child: ClipRRect(
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         child: Column(
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // =================================================
             // Header
@@ -553,98 +410,51 @@ class ActiveBrandPlanCard
             // =================================================
             Container(
               width: double.infinity,
-
               padding: EdgeInsets.symmetric(
-                horizontal:
-                ui.cardPadding,
-
-                vertical:
-                ui.isMobile
-                    ? 14
-                    : 16,
+                horizontal: ui.cardPadding,
+                vertical: ui.isMobile ? 14 : 16,
               ),
-
-              decoration:
-              const BoxDecoration(
-                color:
-                Color(0xFFE2E8F0),
-
+              decoration: const BoxDecoration(
+                color: Color(0xFFE2E8F0),
                 border: Border(
                   bottom: BorderSide(
-                    color:
-                    Color(0xFFCBD5E1),
+                    color: Color(0xFFCBD5E1),
                     width: 1,
                   ),
                 ),
               ),
-
               child: Row(
-                crossAxisAlignment:
-                CrossAxisAlignment
-                    .center,
-
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          model.brandModel
-                              .title,
-
+                          model.brandModel.title,
                           maxLines: 2,
-
-                          overflow:
-                          TextOverflow
-                              .ellipsis,
-
-                          style:
-                          TextStyle(
-                            fontSize: ui
-                                .cardTitleSize,
-
-                            fontWeight:
-                            FontWeight
-                                .w700,
-
-                            color:
-                            const Color(
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ui.cardTitleSize,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(
                               0xFF1E3A8A,
                             ),
-
                             height: 1.3,
                           ),
                         ),
-
                         SizedBox(
-                          height:
-                          ui.smallSpacing /
-                              2,
+                          height: ui.smallSpacing / 2,
                         ),
-
                         Text(
-                          model.brandModel
-                              .phTitle,
-
+                          model.brandModel.phTitle,
                           maxLines: 2,
-
-                          overflow:
-                          TextOverflow
-                              .ellipsis,
-
-                          style:
-                          TextStyle(
-                            fontSize: ui
-                                .bodyTextSize,
-
-                            color:
-                            const Color(
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ui.bodyTextSize,
+                            color: const Color(
                               0xFF64748B,
                             ),
-
                             height: 1.3,
                           ),
                         ),
@@ -653,17 +463,14 @@ class ActiveBrandPlanCard
                   ),
 
                   SizedBox(
-                    width:
-                    ui.mediumSpacing,
+                    width: ui.mediumSpacing,
                   ),
 
                   // =============================================
                   // نفس الـBadge الأصلي
                   // =============================================
                   TypeBadge(
-                    model
-                        .spPlan[0]
-                        .brandType,
+                    model.spPlan[0].brandType,
                   ),
                 ],
               ),
@@ -676,12 +483,8 @@ class ActiveBrandPlanCard
               padding: EdgeInsets.all(
                 ui.cardPadding,
               ),
-
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment
-                    .start,
-
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // =============================================
                   // Section Title
@@ -689,55 +492,33 @@ class ActiveBrandPlanCard
                   Row(
                     children: [
                       Icon(
-                        Icons
-                            .bar_chart_rounded,
-
-                        size:
-                        ui.smallIconSize +
-                            1,
-
-                        color:
-                        const Color(
+                        Icons.bar_chart_rounded,
+                        size: ui.smallIconSize + 1,
+                        color: const Color(
                           0xFF94A3B8,
                         ),
                       ),
-
                       SizedBox(
-                        width:
-                        ui.smallSpacing,
+                        width: ui.smallSpacing,
                       ),
-
                       Expanded(
                         child: Text(
                           'توزيع الصنف حسب الاختصاص',
-
                           maxLines: 1,
-
-                          overflow:
-                          TextOverflow
-                              .ellipsis,
-
-                          style:
-                          TextStyle(
-                            fontSize: ui
-                                .smallTextSize,
-
-                            color:
-                            const Color(
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ui.smallTextSize,
+                            color: const Color(
                               0xFF64748B,
                             ),
-
-                            fontWeight:
-                            FontWeight
-                                .w600,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height:
-                    ui.sectionSpacing,
+                    height: ui.sectionSpacing,
                   ),
                   const SizedBox(
                     height: 6,
@@ -767,8 +548,7 @@ class ActiveBrandPlanCard
                   ),
 
                   SizedBox(
-                    height:
-                    ui.sectionSpacing,
+                    height: ui.sectionSpacing,
                   ),
 
                   // =============================================
@@ -777,62 +557,32 @@ class ActiveBrandPlanCard
                   // =============================================
                   ListView.builder(
                     shrinkWrap: true,
-
-                    padding:
-                    EdgeInsets.zero,
-
-                    physics:
-                    const NeverScrollableScrollPhysics(),
-
-                    itemCount:
-                    model.spPlan.length,
-
+                    padding: EdgeInsets.zero,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: model.spPlan.length,
                     itemBuilder: (
-                        context,
-                        i,
-                        ) {
+                      context,
+                      i,
+                    ) {
                       return Container(
-                        margin:
-                        EdgeInsets.only(
-                          bottom:
-                          ui.smallSpacing +
-                              2,
+                        margin: EdgeInsets.only(
+                          bottom: ui.smallSpacing + 2,
                         ),
-
-                        padding:
-                        EdgeInsets.symmetric(
-                          horizontal:
-                          ui.isMobile
-                              ? 12
-                              : 14,
-
-                          vertical:
-                          ui.isMobile
-                              ? 10
-                              : 12,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ui.isMobile ? 12 : 14,
+                          vertical: ui.isMobile ? 10 : 12,
                         ),
-
-                        decoration:
-                        BoxDecoration(
-                          color:
-                          Colors.white,
-
-                          borderRadius:
-                          BorderRadius
-                              .circular(
-                            ui.smallRadius +
-                                1,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(
+                            ui.smallRadius + 1,
                           ),
-
-                          border:
-                          Border.all(
-                            color:
-                            const Color(
+                          border: Border.all(
+                            color: const Color(
                               0xFFF1F5F9,
                             ),
                           ),
                         ),
-
                         child: Row(
                           children: [
                             // ===================================
@@ -840,39 +590,22 @@ class ActiveBrandPlanCard
                             // ===================================
                             Expanded(
                               child: Text(
-                                model
-                                    .spPlan[i]
-                                    .title,
-
+                                model.spPlan[i].title,
                                 maxLines: 2,
-
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-
-                                style:
-                                TextStyle(
-                                  fontSize: ui
-                                      .bodyTextSize,
-
-                                  color:
-                                  const Color(
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: ui.bodyTextSize,
+                                  color: const Color(
                                     0xFF334155,
                                   ),
-
-                                  fontWeight:
-                                  FontWeight
-                                      .w500,
-
-                                  height:
-                                  1.3,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.3,
                                 ),
                               ),
                             ),
 
                             SizedBox(
-                              width: ui
-                                  .mediumSpacing,
+                              width: ui.mediumSpacing,
                             ),
 
                             // ===================================
@@ -880,20 +613,11 @@ class ActiveBrandPlanCard
                             // ===================================
                             Text(
                               '${model.spPlan[i].amount}',
-
                               maxLines: 1,
-
-                              style:
-                              TextStyle(
-                                fontSize: ui
-                                    .cardTitleSize,
-
-                                fontWeight:
-                                FontWeight
-                                    .w700,
-
-                                color:
-                                const Color(
+                              style: TextStyle(
+                                fontSize: ui.cardTitleSize,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(
                                   0xFF1E3A8A,
                                 ),
                               ),
@@ -908,7 +632,6 @@ class ActiveBrandPlanCard
                   // Total
                   // مجموع الكميات لكل الاختصاصات
                   // =============================================
-
                 ],
               ),
             ),

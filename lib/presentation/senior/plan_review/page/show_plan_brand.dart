@@ -9,7 +9,6 @@ import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class ShowPlanBrand extends StatefulWidget {
   const ShowPlanBrand({
     super.key,
@@ -132,42 +131,42 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
             );
           }
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: pageMaxWidth,
+          // ملاحظة: CustomScrollView على كامل العرض هنا (بدون ConstrainedBox
+          // خارجي) حتى يبقى السكرول بالماوس يعمل فوق الفراغ الجانبي بالعرض
+          // (landscape/tablet)؛ قيد pageMaxWidth يُطبَّق داخلياً على محتوى كل
+          // sliver فقط (مثل نمط DoctorArchiveResponsive/HospitalArchiveResponsive).
+          return RefreshIndicator(
+            onRefresh: () async {
+              searchController.clear();
+              BlocProvider.of<PlanBrandsInfoBloc>(context).add(
+                GetPlanBrandsInfoEvent(widget.planId),
+              );
+            },
+            color: const Color(0xFF2563EB),
+            backgroundColor: Colors.white,
+            child: CustomScrollView(
+              // BouncingScrollPhysics تضمن عمل الـ Refresh بسلاسة على iOS و Android
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
               ),
-              // =========================================================
-              // إضافة RefreshIndicator للسحب والإعادة
-              // =========================================================
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  searchController.clear();
-                  BlocProvider.of<PlanBrandsInfoBloc>(context).add(
-                    GetPlanBrandsInfoEvent(widget.planId),
-                  );
-                },
-                color: const Color(0xFF2563EB),
-                backgroundColor: Colors.white,
-                child: CustomScrollView(
-                  // BouncingScrollPhysics تضمن عمل الـ Refresh بسلاسة على iOS و Android
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              slivers: [
+                // ===========================================
+                // Search
+                // ===========================================
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    searchTopPadding,
+                    horizontalPadding,
+                    searchBottomPadding,
                   ),
-                  keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior.onDrag,
-                  slivers: [
-                    // ===========================================
-                    // Search
-                    // ===========================================
-                    SliverPadding(
-                      padding: EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        searchTopPadding,
-                        horizontalPadding,
-                        searchBottomPadding,
-                      ),
-                      sliver: SliverToBoxAdapter(
+                  sliver: SliverToBoxAdapter(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: pageMaxWidth,
+                        ),
                         child: _buildFluidAnimation(
                           index: 0,
                           child: Row(
@@ -194,48 +193,60 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
                         ),
                       ),
                     ),
+                  ),
+                ),
 
-                    // ===========================================
-                    // Empty
-                    // ===========================================
-                    if (loaded == null || loaded.brands.isEmpty)
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Center(
-                          child: emptyFullScreen(
-                            context,
-                          ),
+                // ===========================================
+                // Empty
+                // ===========================================
+                if (loaded == null || loaded.brands.isEmpty)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: pageMaxWidth,
                         ),
-                      )
+                        child: emptyFullScreen(
+                          context,
+                        ),
+                      ),
+                    ),
+                  )
 
-                    // ===========================================
-                    // List
-                    // ===========================================
-                    else
-                      SliverPadding(
-                        padding: EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          listTopPadding,
-                          horizontalPadding,
-                          listBottomPadding,
-                        ),
-                        sliver: SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              return _buildFluidAnimation(
+                // ===========================================
+                // List
+                // ===========================================
+                else
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(
+                      horizontalPadding,
+                      listTopPadding,
+                      horizontalPadding,
+                      listBottomPadding,
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: pageMaxWidth,
+                              ),
+                              child: _buildFluidAnimation(
                                 index: index + 1,
                                 child: BrandPlanCard(
                                   model: loaded.brands[index],
                                 ),
-                              );
-                            },
-                            childCount: loaded.brands.length,
-                          ),
-                        ),
+                              ),
+                            ),
+                          );
+                        },
+                        childCount: loaded.brands.length,
                       ),
-                  ],
-                ),
-              ),
+                    ),
+                  ),
+              ],
             ),
           );
         },
@@ -387,10 +398,10 @@ class _ShowPlanBrandState extends State<ShowPlanBrand>
       ),
       curve: Curves.easeOutCubic,
       builder: (
-          context,
-          value,
-          child,
-          ) {
+        context,
+        value,
+        child,
+      ) {
         return Opacity(
           opacity: value,
           child: Transform.translate(
@@ -620,7 +631,9 @@ class BrandPlanCard extends StatelessWidget {
                             height: 1.25,
                           ),
                         ),
-                        if (model.pharmaceuticalFormTitle.trim().isNotEmpty) ...[
+                        if (model.pharmaceuticalFormTitle
+                            .trim()
+                            .isNotEmpty) ...[
                           const SizedBox(
                             height: 4,
                           ),
@@ -710,7 +723,6 @@ class BrandPlanCard extends StatelessWidget {
                         ),
                     ],
                   ),
-
                   if (model.total > 0) ...[
                     const SizedBox(
                       height: 6,
@@ -748,7 +760,7 @@ class BrandPlanCard extends StatelessWidget {
                     )
                   else
                     ...model.spPlan.asMap().entries.map(
-                          (entry) {
+                      (entry) {
                         final item = entry.value;
                         final isLast = entry.key == model.spPlan.length - 1;
 
@@ -839,15 +851,15 @@ class BrandPlanCard extends StatelessWidget {
   }
 
   Widget _buildEmptySpecialties(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     final deviceType = AppResponsive.deviceType(context);
 
     final double fontSize = deviceType == AppDeviceType.mobilePortrait
         ? 11.5
         : deviceType == AppDeviceType.tabletPortrait
-        ? 13
-        : 12;
+            ? 13
+            : 12;
 
     return Container(
       width: double.infinity,

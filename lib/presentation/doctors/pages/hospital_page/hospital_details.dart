@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 class HospitalDetails extends StatelessWidget {
   const HospitalDetails({
     super.key,
-    required this.hospital,
+    required this.hospitalGroup,
   });
 
-  final HospitalSpAllModel hospital;
+  /// كل عناصر هذه القائمة تخص نفس المشفى وتختلف بالاختصاص/الشعبة (titleSp).
+  final List<HospitalSpAllModel> hospitalGroup;
 
   @override
   Widget build(BuildContext context) {
     return HospitalDetailsResponsiveLayout(
-      hospital: hospital,
+      hospitalGroup: hospitalGroup,
     );
   }
 }

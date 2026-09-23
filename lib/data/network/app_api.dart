@@ -346,6 +346,8 @@ abstract class AppServiceClient {
       @Part(name: "spId") int spId,
       );
 }
-
+// @POST("/getHosInfo.php")
+// Future<LoginResponse> getHosInfo(
+//     @Part(name: "repDet") int repDet, @Part(name: "ver") int ver);
 
 ///admin/getinfoPlanBrandsType.php

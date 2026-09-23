@@ -32,6 +32,12 @@ class _VisitHospitalState extends State<VisitHospital>
   final TextEditingController _noteeController = TextEditingController();
   final TextEditingController _targetController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  // الربط بواسطة brand.id بدلاً من إنشاء TextEditingController جديد بكل
+  // rebuild (كان يعلّق لوحة المفاتيح لأن الجدول يعيد بناء نفسه مع كل حرف).
+  final Map<int, TextEditingController> _amountControllers = {};
+  final Map<int, FocusNode> _amountFocusNodes = {};
+
   @override
   void initState() {
     BlocProvider.of<VisitPlaceBloc>(context).selectBrand = [];
@@ -50,6 +56,12 @@ class _VisitHospitalState extends State<VisitHospital>
     _issueController.dispose();
     _noteeController.dispose();
     _targetController.dispose();
+    for (final controller in _amountControllers.values) {
+      controller.dispose();
+    }
+    for (final focusNode in _amountFocusNodes.values) {
+      focusNode.dispose();
+    }
     super.dispose();
   }
 
@@ -72,495 +84,582 @@ class _VisitHospitalState extends State<VisitHospital>
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: contentMaxWidth,
-          ),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildFullHeader(),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 18.w),
+      // ملاحظة: SingleChildScrollView على كامل العرض هون (بدون ConstrainedBox
+      // خارجي) حتى يبقى السكرول بالماوس يعمل فوق الفراغ الجانبي بالعرض، وقيد
+      // contentMaxWidth يُطبَّق داخلياً على محتوى الفورم فقط.
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: contentMaxWidth,
+                  ),
+                  child: Form(
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "اختر الاختصاص:",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        SizedBox(
-                          height: 0.9,
-                        ),
-                        BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
-                            listener: (context, state) {
-                          if (state is BrandFlagErrorState) {
-                            error(context, state.failure.massage,
-                                state.failure.code);
-                          }
-                        }, builder: (context, state) {
-                          List<SpecHospitalSp> specialization =
-                              context.watch<VisitPlaceBloc>().specialization;
-                          if (state is SpecializationHospitalState) {
-                            specialization = state.specialization;
-                          }
-                          return Customdropdownsearchspec(
-                            hintText: "الإختصاصات",
-                            items: specialization,
-                            onChanged: (value) {
-                              SpecHospitalSp specModel = value;
-                              BlocProvider.of<VisitPlaceBloc>(context)
-                                  .add(SelectSpecEvent(specModel));
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return "اختر الإختصاص";
-                              }
-                              return null;
-                            },
-                            errorText: 'لايوجد نتيجة',
-                          );
-                        }),
-                        BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                          buildWhen: (previous, current) {
-                            return current is SpecState;
-                          },
-                          builder: (context, state) {
-                            if (state is SpecState) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: AppPaddingH.p8,
-                                    horizontal: AppPaddingW.p8),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "اجمالي الزيارات: ${state.visits}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge,
-                                    ),
-                                    Text(
-                                      "تمت الزيارة: ${state.visited}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge,
-                                    ),
-                                    Text(
-                                      "عدد الأطباء: ${state.total}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Container();
-                              // واجهة بديلة عند عدم تطابق الحالة
-                            }
-                          },
-                        ),
-                        Text(
-                          " الهدف من الزيارة:",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        BoxTextField(
-                          keyboardType: TextInputType.text,
-                          prefixIcon: null,
-                          maxLines: 4,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                          controller: _targetController,
-                          obscureText: false,
-                          minLines: 3,
-                          inputFormatters: [],
-                        ),
-                        Text(
-                          " ملاحظة للمكتب العلمي:",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        BoxTextField(
-                          keyboardType: TextInputType.text,
-                          prefixIcon: null,
-                          maxLines: 4,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                          controller: _noteController,
-                          obscureText: false,
-                          minLines: 3,
-                          inputFormatters: [],
-                        ),
-                        Text(
-                          "ملاحظة صيدلية مجاورة:",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        BoxTextField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.text,
-                          prefixIcon: null,
-                          maxLines: 4,
-                          controller: _issueController,
-                          obscureText: false,
-                          minLines: 3,
-                          inputFormatters: [],
-                        ),
-                        PersonalOrder(noteeController: _noteeController),
-                        Text(
-                          "اختر العينات المقدمة:",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        SizedBox(
-                          height: 0.9,
-                        ),
-                        BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                          builder: (context, state) {
-                            return Row(
-                              children: [
-                                Checkbox(
-                                  focusColor: ColorManager.secondaryColor,
-                                  activeColor: ColorManager.secondaryColor2,
-                                  value: context.read<VisitPlaceBloc>().isBrand,
+                        _buildFullHeader(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 18.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "اختر الاختصاص:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              SizedBox(
+                                height: 0.9,
+                              ),
+                              BlocConsumer<VisitPlaceBloc, VisitPlaceState>(
+                                  listener: (context, state) {
+                                if (state is BrandFlagErrorState) {
+                                  error(context, state.failure.massage,
+                                      state.failure.code);
+                                }
+                              }, builder: (context, state) {
+                                List<SpecHospitalSp> specialization = context
+                                    .watch<VisitPlaceBloc>()
+                                    .specialization;
+                                if (state is SpecializationHospitalState) {
+                                  specialization = state.specialization;
+                                }
+                                return Customdropdownsearchspec(
+                                  hintText: "الإختصاصات",
+                                  items: specialization,
                                   onChanged: (value) {
+                                    SpecHospitalSp specModel = value;
                                     BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(IsBrandEvent());
-                                  },
-                                ),
-                                Text('لم يتم توزيع العينات'),
-                              ],
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          height: AppSize.s8,
-                        ),
-                        context.read<VisitPlaceBloc>().isBrand == false
-                            ? BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                                listener: (context, state) {
-                                  if (state is BrandFlagErrorState) {
-                                    error(context, state.failure.massage,
-                                        state.failure.code);
-                                  }
-                                },
-                                child: CustomDropDownSearch(
-                                  hintText: "العينات",
-                                  items:
-                                      context.watch<VisitPlaceBloc>().bandFlag,
-                                  onChanged: (value) {
-                                    BrandModel brand = value;
-                                    BlocProvider.of<VisitPlaceBloc>(context)
-                                        .add(SelectBrandEvent(
-                                            brand, widget.hospitalModel.id));
+                                        .add(SelectSpecEvent(specModel));
                                   },
                                   validator: (value) {
                                     if (value == null) {
-                                      return "اختر نوع الطلب";
+                                      return "اختر الإختصاص";
                                     }
                                     return null;
                                   },
                                   errorText: 'لايوجد نتيجة',
-                                ),
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
-                          buildWhen: (previous, current) {
-                            return current is SelectBrandState ||
-                                current is DeleteBrandState ||
-                                current is EditAmountBrandState;
-                          },
-                          builder: (context, state) {
-                            final selectBrand =
-                                context.watch<VisitPlaceBloc>().selectBrand;
-                            final visitBrand = context
-                                .watch<VisitPlaceBloc>()
-                                .visitBrandPharmacys;
-
-                            if (state is SelectBrandState ||
-                                state is DeleteBrandState ||
-                                state is EditAmountBrandState) {
-                              return selectBrand.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Table(
-                                        border: TableBorder.all(
-                                            width: 1,
-                                            color: ColorManager.grey1,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15))),
-                                        columnWidths: {
-                                          0: FlexColumnWidth(1),
-                                          1: FlexColumnWidth(1),
-                                          2: FlexColumnWidth(1),
-                                          3: FlexColumnWidth(1),
-                                        },
+                                );
+                              }),
+                              BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                                buildWhen: (previous, current) {
+                                  return current is SpecState;
+                                },
+                                builder: (context, state) {
+                                  if (state is SpecState) {
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: AppPaddingH.p8,
+                                          horizontal: AppPaddingW.p8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          TableRow(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                child: Center(
-                                                  child: Text('الصنف',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                child: Center(
-                                                  child: Text('الشكل الصيدلاني',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                child: Center(
-                                                  child: Text('الكمية',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                child: Center(
-                                                  child: Text('حذف العينة',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                              ),
-                                            ],
+                                          Text(
+                                            "اجمالي الزيارات: ${state.visits}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineLarge,
                                           ),
-                                          ...selectBrand
-                                              .asMap()
-                                              .entries
-                                              .map((entry) {
-                                            final index = entry.key;
-                                            final brand = entry.value;
-                                            TextEditingController amount =
-                                                TextEditingController();
-                                            amount.text = visitBrand[index]
-                                                .amount
-                                                .toString();
-                                            return TableRow(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: Text(
-                                                    brand.title,
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: Text(brand.phTitle,
-                                                      textAlign:
-                                                          TextAlign.center),
-                                                ),
-                                                IntrinsicHeight(
-                                                  child: TextField(
-                                                    controller: amount,
-                                                    onChanged: (v) {
-                                                      String value =
-                                                          convertArabicNumberToEnglish(
-                                                              v);
-                                                      if (value.isEmpty) {
-                                                        BlocProvider.of<
-                                                                    VisitPlaceBloc>(
-                                                                context)
-                                                            .add(
-                                                                EditAmountBrandEvent(
-                                                                    index, 1));
-                                                      } else {
-                                                        BlocProvider.of<
-                                                                    VisitPlaceBloc>(
-                                                                context)
-                                                            .add(EditAmountBrandEvent(
-                                                                index,
-                                                                int.parse(
-                                                                    convertArabicNumberToEnglish(
-                                                                        value))));
-                                                      }
-                                                    },
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      hintText: '1',
-                                                      hintStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .labelSmall,
-                                                      errorText: null,
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: AppSize.s1_5,
-                                                        ),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: AppSize.s1_5,
-                                                        ),
-                                                      ),
-                                                      focusedErrorBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: AppSize.s1_5,
-                                                        ),
-                                                      ),
-                                                      fillColor:
-                                                          ColorManager.white,
-                                                      filled: true,
-                                                    ),
-                                                    cursorColor: Colors.black,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: IconButton(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 155, 23, 14),
-                                                      icon: Icon(
-                                                          Icons.delete_forever),
-                                                      onPressed: () {
-                                                        BlocProvider.of<
-                                                                    VisitPlaceBloc>(
-                                                                context)
-                                                            .add(
-                                                                RemoveBrandEvent(
-                                                                    brand));
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          }).toList(),
+                                          Text(
+                                            "تمت الزيارة: ${state.visited}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineLarge,
+                                          ),
+                                          Text(
+                                            "عدد الأطباء: ${state.total}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineLarge,
+                                          ),
                                         ],
                                       ),
+                                    );
+                                  } else {
+                                    return Container();
+                                    // واجهة بديلة عند عدم تطابق الحالة
+                                  }
+                                },
+                              ),
+                              Text(
+                                " الهدف من الزيارة:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              BoxTextField(
+                                keyboardType: TextInputType.text,
+                                prefixIcon: null,
+                                maxLines: 4,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "الحقل مطلوب";
+                                  }
+                                  return null;
+                                },
+                                controller: _targetController,
+                                obscureText: false,
+                                minLines: 3,
+                                inputFormatters: [],
+                              ),
+                              Text(
+                                " ملاحظة للمكتب العلمي:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              BoxTextField(
+                                keyboardType: TextInputType.text,
+                                prefixIcon: null,
+                                maxLines: 4,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "الحقل مطلوب";
+                                  }
+                                  return null;
+                                },
+                                controller: _noteController,
+                                obscureText: false,
+                                minLines: 3,
+                                inputFormatters: [],
+                              ),
+                              Text(
+                                "ملاحظة صيدلية مجاورة:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              BoxTextField(
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "الحقل مطلوب";
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.text,
+                                prefixIcon: null,
+                                maxLines: 4,
+                                controller: _issueController,
+                                obscureText: false,
+                                minLines: 3,
+                                inputFormatters: [],
+                              ),
+                              PersonalOrder(noteeController: _noteeController),
+                              Text(
+                                "اختر العينات المقدمة:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              SizedBox(
+                                height: 0.9,
+                              ),
+                              BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                                builder: (context, state) {
+                                  return Row(
+                                    children: [
+                                      Checkbox(
+                                        focusColor: ColorManager.secondaryColor,
+                                        activeColor:
+                                            ColorManager.secondaryColor2,
+                                        value: context
+                                            .read<VisitPlaceBloc>()
+                                            .isBrand,
+                                        onChanged: (value) {
+                                          BlocProvider.of<VisitPlaceBloc>(
+                                                  context)
+                                              .add(IsBrandEvent());
+                                        },
+                                      ),
+                                      Text('لم يتم توزيع العينات'),
+                                    ],
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: AppSize.s8,
+                              ),
+                              context.read<VisitPlaceBloc>().isBrand == false
+                                  ? BlocListener<VisitPlaceBloc,
+                                      VisitPlaceState>(
+                                      listener: (context, state) {
+                                        if (state is BrandFlagErrorState) {
+                                          error(context, state.failure.massage,
+                                              state.failure.code);
+                                        }
+                                      },
+                                      child: CustomDropDownSearch(
+                                        hintText: "العينات",
+                                        items: context
+                                            .watch<VisitPlaceBloc>()
+                                            .bandFlag,
+                                        onChanged: (value) {
+                                          BrandModel brand = value;
+                                          BlocProvider.of<VisitPlaceBloc>(
+                                                  context)
+                                              .add(SelectBrandEvent(brand,
+                                                  widget.hospitalModel.id));
+                                        },
+                                        validator: (value) {
+                                          if (value == null) {
+                                            return "اختر نوع الطلب";
+                                          }
+                                          return null;
+                                        },
+                                        errorText: 'لايوجد نتيجة',
+                                      ),
                                     )
-                                  : SizedBox();
-                            }
-                            return SizedBox();
-                          },
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        BlocListener<VisitPlaceBloc, VisitPlaceState>(
-                          listener: (context, state) {
-                            if (state is InsertVisitHospitalErrorState) {
-                              error(context, state.failure.massage,
-                                  state.failure.code);
-                            }
-                            if (state is InsertVisitHospitalState) {
-                              SnackBarMessage().showAlertSScaffoldMessenger(
-                                  context: context, message: "تم حفظ التغيرات");
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  HospitalByPlace(
-                                      widget.hospitalModel.placeId, 1));
-                              Navigator.pop(context);
-                            }
-                            if (state is AllVisitBrandHospitalErrorState) {
-                              error(context, state.failure.massage,
-                                  state.failure.code);
-                            }
-                            if (state is AllVisitBrandHospitalState) {
-                              SnackBarMessage().showAlertSScaffoldMessenger(
-                                  context: context, message: "تم حفظ التغيرات");
-                              BlocProvider.of<VisitPlaceBloc>(context).add(
-                                  HospitalByPlace(
-                                      widget.hospitalModel.placeId, 1));
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: ButtonWidget(() {
-                            if (_formKey.currentState!.validate()) {
-                              DateTime now = DateTime.now();
-                              VisitHospitalModel visitHospitalModel =
-                                  VisitHospitalModel(
-                                0,
-                                now.toIso8601String(),
-                                _issueController.text,
-                                _noteController.text,
-                                _noteeController.text,
-                                0,
-                                0,
-                                _targetController.text,
-                              );
-                              if (context
-                                  .read<VisitPlaceBloc>()
-                                  .selectBrand
-                                  .isNotEmpty) {
-                                BlocProvider.of<VisitPlaceBloc>(context).add(
-                                    InsertBrandVisitHospitalEvent(
-                                        visitHospitalModel,
-                                        widget.hospitalModel.id));
-                              } else {
-                                BlocProvider.of<VisitPlaceBloc>(context).add(
-                                    InsertVisitHospitalEvent(visitHospitalModel,
-                                        widget.hospitalModel.id));
-                              }
-                            }
-                          }, "تمت الزيارة"),
+                                  : SizedBox(),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              BlocBuilder<VisitPlaceBloc, VisitPlaceState>(
+                                buildWhen: (previous, current) {
+                                  return current is SelectBrandState ||
+                                      current is DeleteBrandState ||
+                                      current is EditAmountBrandState;
+                                },
+                                builder: (context, state) {
+                                  final selectBrand = context
+                                      .watch<VisitPlaceBloc>()
+                                      .selectBrand;
+                                  final visitBrand = context
+                                      .watch<VisitPlaceBloc>()
+                                      .visitBrandPharmacys;
+
+                                  if (state is SelectBrandState ||
+                                      state is DeleteBrandState ||
+                                      state is EditAmountBrandState) {
+                                    return selectBrand.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Table(
+                                              border: TableBorder.all(
+                                                  width: 1,
+                                                  color: ColorManager.grey1,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(15))),
+                                              columnWidths: {
+                                                0: FlexColumnWidth(1),
+                                                1: FlexColumnWidth(1),
+                                                2: FlexColumnWidth(1),
+                                                3: FlexColumnWidth(1),
+                                              },
+                                              children: [
+                                                TableRow(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15),
+                                                      child: Center(
+                                                        child: Text('الصنف',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15),
+                                                      child: Center(
+                                                        child: Text(
+                                                            'الشكل الصيدلاني',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15),
+                                                      child: Center(
+                                                        child: Text('الكمية',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15),
+                                                      child: Center(
+                                                        child: Text(
+                                                            'حذف العينة',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                ...selectBrand
+                                                    .asMap()
+                                                    .entries
+                                                    .map((entry) {
+                                                  final index = entry.key;
+                                                  final brand = entry.value;
+                                                  final TextEditingController
+                                                      amount =
+                                                      _amountControllers
+                                                          .putIfAbsent(
+                                                    brand.id,
+                                                    () => TextEditingController(
+                                                      text: visitBrand[index]
+                                                          .amount
+                                                          .toString(),
+                                                    ),
+                                                  );
+                                                  final FocusNode
+                                                      amountFocusNode =
+                                                      _amountFocusNodes
+                                                          .putIfAbsent(
+                                                    brand.id,
+                                                    () => FocusNode(),
+                                                  );
+                                                  final String
+                                                      latestAmountText =
+                                                      visitBrand[index]
+                                                          .amount
+                                                          .toString();
+                                                  if (!amountFocusNode
+                                                          .hasFocus &&
+                                                      amount.text !=
+                                                          latestAmountText) {
+                                                    amount.text =
+                                                        latestAmountText;
+                                                    amount.selection =
+                                                        TextSelection
+                                                            .fromPosition(
+                                                      TextPosition(
+                                                        offset:
+                                                            amount.text.length,
+                                                      ),
+                                                    );
+                                                  }
+                                                  return TableRow(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: Text(
+                                                          brand.title,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: Text(
+                                                            brand.phTitle,
+                                                            textAlign: TextAlign
+                                                                .center),
+                                                      ),
+                                                      IntrinsicHeight(
+                                                        child: TextField(
+                                                          controller: amount,
+                                                          focusNode:
+                                                              amountFocusNode,
+                                                          onChanged: (v) {
+                                                            String value =
+                                                                convertArabicNumberToEnglish(
+                                                                    v);
+                                                            if (value.isEmpty) {
+                                                              BlocProvider.of<
+                                                                          VisitPlaceBloc>(
+                                                                      context)
+                                                                  .add(
+                                                                      EditAmountBrandEvent(
+                                                                          index,
+                                                                          1));
+                                                            } else {
+                                                              BlocProvider.of<
+                                                                          VisitPlaceBloc>(
+                                                                      context)
+                                                                  .add(EditAmountBrandEvent(
+                                                                      index,
+                                                                      int.parse(
+                                                                          convertArabicNumberToEnglish(
+                                                                              value))));
+                                                            }
+                                                          },
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            hintText: '1',
+                                                            hintStyle: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .labelSmall,
+                                                            errorText: null,
+                                                            enabledBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: AppSize
+                                                                    .s1_5,
+                                                              ),
+                                                            ),
+                                                            focusedBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: AppSize
+                                                                    .s1_5,
+                                                              ),
+                                                            ),
+                                                            focusedErrorBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: AppSize
+                                                                    .s1_5,
+                                                              ),
+                                                            ),
+                                                            fillColor:
+                                                                ColorManager
+                                                                    .white,
+                                                            filled: true,
+                                                          ),
+                                                          cursorColor:
+                                                              Colors.black,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Center(
+                                                          child: IconButton(
+                                                            color: const Color
+                                                                .fromARGB(255,
+                                                                155, 23, 14),
+                                                            icon: Icon(Icons
+                                                                .delete_forever),
+                                                            onPressed: () {
+                                                              BlocProvider.of<
+                                                                          VisitPlaceBloc>(
+                                                                      context)
+                                                                  .add(RemoveBrandEvent(
+                                                                      brand));
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                }).toList(),
+                                              ],
+                                            ),
+                                          )
+                                        : SizedBox();
+                                  }
+                                  return SizedBox();
+                                },
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              BlocListener<VisitPlaceBloc, VisitPlaceState>(
+                                listener: (context, state) {
+                                  if (state is InsertVisitHospitalErrorState) {
+                                    error(context, state.failure.massage,
+                                        state.failure.code);
+                                  }
+                                  if (state is InsertVisitHospitalState) {
+                                    SnackBarMessage()
+                                        .showAlertSScaffoldMessenger(
+                                            context: context,
+                                            message: "تم حفظ التغيرات");
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(HospitalByPlace(
+                                            widget.hospitalModel.placeId, 1));
+                                    Navigator.pop(context);
+                                  }
+                                  if (state
+                                      is AllVisitBrandHospitalErrorState) {
+                                    error(context, state.failure.massage,
+                                        state.failure.code);
+                                  }
+                                  if (state is AllVisitBrandHospitalState) {
+                                    SnackBarMessage()
+                                        .showAlertSScaffoldMessenger(
+                                            context: context,
+                                            message: "تم حفظ التغيرات");
+                                    BlocProvider.of<VisitPlaceBloc>(context)
+                                        .add(HospitalByPlace(
+                                            widget.hospitalModel.placeId, 1));
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: ButtonWidget(() {
+                                  if (_formKey.currentState!.validate()) {
+                                    DateTime now = DateTime.now();
+                                    VisitHospitalModel visitHospitalModel =
+                                        VisitHospitalModel(
+                                      0,
+                                      now.toIso8601String(),
+                                      _issueController.text,
+                                      _noteController.text,
+                                      _noteeController.text,
+                                      0,
+                                      0,
+                                      _targetController.text,
+                                    );
+                                    if (context
+                                        .read<VisitPlaceBloc>()
+                                        .selectBrand
+                                        .isNotEmpty) {
+                                      BlocProvider.of<VisitPlaceBloc>(context)
+                                          .add(InsertBrandVisitHospitalEvent(
+                                              visitHospitalModel,
+                                              widget.hospitalModel.id));
+                                    } else {
+                                      BlocProvider.of<VisitPlaceBloc>(context)
+                                          .add(InsertVisitHospitalEvent(
+                                              visitHospitalModel,
+                                              widget.hospitalModel.id));
+                                    }
+                                  }
+                                }, "تمت الزيارة"),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

@@ -16,7 +16,6 @@ class SenVisitDoctor extends StatefulWidget {
 }
 
 class _SenVisitDoctorState extends State<SenVisitDoctor> {
-
   final TextEditingController searchteDoctorController =
       TextEditingController();
 
@@ -89,22 +88,25 @@ class _SenVisitDoctorState extends State<SenVisitDoctor> {
     // =====================================================
     // لا يوجد Scaffold
     // لأن الصفحة مستخدمة داخل TabBarView
+    // ملاحظة: ConstrainedBox(maxWidth) بتطبّق على السيرش وعلى كل عنصر
+    // بالقائمة لحالهم، مو على الـ ListView كامل، حتى يضل الـ Scrollable
+    // بعرض الشاشة الكامل ويشتغل السكرول بالماوس فوق الفراغ الجانبي بالعرض.
     // =====================================================
     return ColoredBox(
       color: const Color(
         0xFFF8FAFC,
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: Column(
-            children: [
-              // =================================================
-              // Search
-              // =================================================
-              Padding(
+      child: Column(
+        children: [
+          // =================================================
+          // Search
+          // =================================================
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: pageMaxWidth,
+              ),
+              child: Padding(
                 padding: EdgeInsets.fromLTRB(
                   horizontalPadding,
                   searchTopPadding,
@@ -124,74 +126,76 @@ class _SenVisitDoctorState extends State<SenVisitDoctor> {
                   },
                 ),
               ),
+            ),
+          ),
 
-              // =================================================
-              // List
-              // =================================================
-              Expanded(
-                child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
-                  builder: (context, state) {
-                    List<NoVisitDocModel> visitDoc =
-                        context.watch<SeniorProfBloc>().visitDoc;
+          // =================================================
+          // List
+          // =================================================
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              builder: (context, state) {
+                List<NoVisitDocModel> visitDoc =
+                    context.watch<SeniorProfBloc>().visitDoc;
 
-                    // ===========================================
-                    // Loading
-                    // ===========================================
-                    if (state is SenVisitDocLoadingState) {
-                      return loadingFullScreen(
+                // ===========================================
+                // Loading
+                // ===========================================
+                if (state is SenVisitDocLoadingState) {
+                  return loadingFullScreen(
+                    context,
+                  );
+                }
+                if (state is SenVisitDocsState) {
+                  visitDoc = state.visitDoc;
+                }
+
+                // ===========================================
+                // Empty
+                // ===========================================
+                if (state is SenVisitDocEmptyState || visitDoc.isEmpty) {
+                  return emptyFullScreen(
+                    context,
+                  );
+                }
+
+                // ===========================================
+                // Error
+                // نفس السلوك الأصلي
+                // ===========================================
+                if (state is SenVisitDocErrorState) {
+                  return errorFullScreen(
+                    context,
+                    func: () {
+                      BlocProvider.of<SeniorProfBloc>(
                         context,
+                      ).add(
+                        VisitDocEvent(
+                          156,
+                          state.planId,
+                        ),
                       );
-                    }
-                    if (state is SenVisitDocsState) {
-                      visitDoc = state.visitDoc;
-                    }
+                    },
+                  );
+                }
 
-                    // ===========================================
-                    // Empty
-                    // ===========================================
-                    if (state is SenVisitDocEmptyState || visitDoc.isEmpty) {
-                      return emptyFullScreen(
-                        context,
-                      );
-                    }
-
-                    // ===========================================
-                    // Error
-                    // نفس السلوك الأصلي
-                    // ===========================================
-                    if (state is SenVisitDocErrorState) {
-                      return errorFullScreen(
-                        context,
-                        func: () {
-                          BlocProvider.of<SeniorProfBloc>(
-                            context,
-                          ).add(
-                            VisitDocEvent(
-                              156,
-                              state.planId,
-                            ),
-                          );
-                        },
-                      );
-                    }
-
-                    // ===========================================
-                    // Data
-                    // ===========================================
-                    return ListView.builder(
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        listTopPadding,
-                        horizontalPadding,
-                        listBottomPadding,
-                      ),
-                      itemCount: visitDoc.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return Padding(
+                // ===========================================
+                // Data
+                // ===========================================
+                return ListView.builder(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    listTopPadding,
+                    horizontalPadding,
+                    listBottomPadding,
+                  ),
+                  itemCount: visitDoc.length + 1,
+                  itemBuilder: (context, index) {
+                    final Widget item = index == 0
+                        ? Padding(
                             padding: const EdgeInsets.only(
                               bottom: 12,
                             ),
@@ -200,20 +204,25 @@ class _SenVisitDoctorState extends State<SenVisitDoctor> {
                               'إجمالي الزيارات الناجحة',
                               'لهذا الشهر',
                             ),
+                          )
+                        : VisitedDoctorCard(
+                            data: visitDoc[index - 1],
                           );
-                        }
 
-                        return VisitedDoctorCard(
-                          data: visitDoc[index - 1],
-                        );
-                      },
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: pageMaxWidth,
+                        ),
+                        child: item,
+                      ),
                     );
                   },
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

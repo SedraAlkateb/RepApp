@@ -18,15 +18,12 @@ class HospitalVisitUser extends StatefulWidget {
   });
 
   @override
-  State<HospitalVisitUser> createState() =>
-      _HospitalVisitUserState();
+  State<HospitalVisitUser> createState() => _HospitalVisitUserState();
 }
 
-class _HospitalVisitUserState
-    extends State<HospitalVisitUser>
+class _HospitalVisitUserState extends State<HospitalVisitUser>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController searchController =
-  TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void dispose() {
@@ -39,33 +36,41 @@ class _HospitalVisitUserState
     super.build(context);
 
     final ui = AppUi.of(context);
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
+    // ملاحظة: بدون ConstrainedBox خارجي حول القائمة، حتى يضل السكرول
+    // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد contentMaxWidth يُطبَّق
+    // داخلياً على السيرش وعلى كل بطاقة لحالها.
     return Scaffold(
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       body: Column(
         children: [
           // =====================================================
           // Search
           // =====================================================
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              ui.pagePadding,
-              ui.searchTopPadding,
-              ui.pagePadding,
-              ui.searchBottomPadding,
-            ),
-            child: SearchField(
-              searchController: searchController,
-              onPressed: (value) {
-                context.read<VisitBloc>().add(
-                  SearchHospitalVisitEvent(
-                    value: value,
-                  ),
-                );
-              },
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentMaxWidth),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.searchTopPadding,
+                  ui.pagePadding,
+                  ui.searchBottomPadding,
+                ),
+                child: SearchField(
+                  searchController: searchController,
+                  onPressed: (value) {
+                    context.read<VisitBloc>().add(
+                          SearchHospitalVisitEvent(
+                            value: value,
+                          ),
+                        );
+                  },
+                ),
+              ),
             ),
           ),
 
@@ -73,17 +78,14 @@ class _HospitalVisitUserState
           // Content
           // =====================================================
           Expanded(
-            child: BlocConsumer<
-                VisitBloc,
-                VisitState>(
+            child: BlocConsumer<VisitBloc, VisitState>(
               listener: (
-                  context,
-                  state,
-                  ) {
+                context,
+                state,
+              ) {
                 if (state is VisitHospitalErrorState) {
-                  WidgetsBinding.instance
-                      .addPostFrameCallback(
-                        (_) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) {
                       error(
                         context,
                         state.failure.massage,
@@ -93,39 +95,32 @@ class _HospitalVisitUserState
                   );
                 }
               },
-
               builder: (
-                  context,
-                  state,
-                  ) {
-                List<VisitHospitalAndHospital>
-                hospitals =
-                    context
-                        .watch<VisitBloc>()
-                        .hospitals;
+                context,
+                state,
+              ) {
+                List<VisitHospitalAndHospital> hospitals =
+                    context.watch<VisitBloc>().hospitals;
 
                 // ===============================================
                 // All Hospitals
                 // ===============================================
                 if (state is VisitHospitalState) {
-                  hospitals =
-                      state.hospitals;
+                  hospitals = state.hospitals;
                 }
 
                 // ===============================================
                 // Search
                 // ===============================================
                 if (state is SearchVisitHospitalState) {
-                  hospitals =
-                      state.hospitals;
+                  hospitals = state.hospitals;
                 }
 
                 // ===============================================
                 // Empty
                 // السيرش بيضل ظاهر لأنه خارج الـ Expanded
                 // ===============================================
-                if (state is EmptyVisitHospitalState ||
-                    hospitals.isEmpty) {
+                if (state is EmptyVisitHospitalState || hospitals.isEmpty) {
                   return emptyFullScreen(
                     context,
                   );
@@ -135,41 +130,37 @@ class _HospitalVisitUserState
                 // List
                 // ===============================================
                 return ListView.builder(
-                  physics:
-                  const BouncingScrollPhysics(),
-
+                  physics: const BouncingScrollPhysics(),
                   keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior
-                      .onDrag,
-
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: EdgeInsets.fromLTRB(
                     ui.pagePadding,
                     ui.listTopPadding,
                     ui.pagePadding,
                     ui.listBottomPadding,
                   ),
-
-                  itemCount:
-                  hospitals.length,
-
+                  itemCount: hospitals.length,
                   itemBuilder: (
-                      context,
-                      index,
-                      ) {
-                    final item =
-                    hospitals[index];
+                    context,
+                    index,
+                  ) {
+                    final item = hospitals[index];
 
-                    return _HospitalVisitUserCard(
-                      item: item,
-                      ui: ui,
-
-                      onDetails: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.infoVisitHospital,
-                          arguments: item,
-                        );
-                      },
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: contentMaxWidth),
+                        child: _HospitalVisitUserCard(
+                          item: item,
+                          ui: ui,
+                          onDetails: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.infoVisitHospital,
+                              arguments: item,
+                            );
+                          },
+                        ),
+                      ),
                     );
                   },
                 );
@@ -189,8 +180,7 @@ class _HospitalVisitUserState
 // Hospital Visit User Card
 // ============================================================================
 
-class _HospitalVisitUserCard
-    extends StatelessWidget {
+class _HospitalVisitUserCard extends StatelessWidget {
   const _HospitalVisitUserCard({
     required this.item,
     required this.ui,
@@ -207,24 +197,19 @@ class _HospitalVisitUserCard
       margin: EdgeInsets.only(
         bottom: ui.cardSpacing,
       ),
-
       padding: EdgeInsets.all(
         ui.cardPadding,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(
@@ -238,93 +223,59 @@ class _HospitalVisitUserCard
           ),
         ],
       ),
-
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // =====================================================
           // Header
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: ui.iconBoxSize,
                 height: ui.iconBoxSize,
-
                 alignment: Alignment.center,
-
                 decoration: BoxDecoration(
-                  color: ColorManager
-                      .medicalPrimary
-                      .withOpacity(
+                  color: ColorManager.medicalPrimary.withOpacity(
                     0.08,
                   ),
-
-                  borderRadius:
-                  BorderRadius.circular(
+                  borderRadius: BorderRadius.circular(
                     ui.smallRadius + 2,
                   ),
                 ),
-
                 child: Icon(
                   Icons.local_hospital_outlined,
-
                   size: ui.iconSize,
-
-                  color:
-                  ColorManager.medicalPrimary,
+                  color: ColorManager.medicalPrimary,
                 ),
               ),
-
               SizedBox(
                 width: ui.mediumSpacing,
               ),
-
               Expanded(
                 child: Row(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Text(
                         item.hospitalModel.title,
-
                         maxLines: 2,
-
-                        overflow:
-                        TextOverflow.ellipsis,
-
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize:
-                          ui.cardTitleSize,
-
-                          fontWeight:
-                          FontWeight.w700,
-
-                          color:
-                          ColorManager
-                              .medicalPrimary,
-
+                          fontSize: ui.cardTitleSize,
+                          fontWeight: FontWeight.w700,
+                          color: ColorManager.medicalPrimary,
                           height: 1.3,
                         ),
                       ),
                     ),
-
                     SizedBox(
-                      width:
-                      ui.smallSpacing,
+                      width: ui.smallSpacing,
                     ),
-
                     Flexible(
                       flex: 0,
-                      child:
-                      _buildSpecializationBadge(
+                      child: _buildSpecializationBadge(
                         item.specModel.title,
                       ),
                     ),
@@ -343,71 +294,48 @@ class _HospitalVisitUserCard
           // =====================================================
           Container(
             width: double.infinity,
-
             padding: EdgeInsets.symmetric(
               horizontal: ui.mediumSpacing,
-              vertical:
-              ui.isMobile ? 10 : 11,
+              vertical: ui.isMobile ? 10 : 11,
             ),
-
             decoration: BoxDecoration(
               color: const Color(
                 0xFFF8FAFC,
               ),
-
-              borderRadius:
-              BorderRadius.circular(
+              borderRadius: BorderRadius.circular(
                 ui.smallRadius + 1,
               ),
-
               border: Border.all(
                 color: const Color(
                   0xFFE2E8F0,
                 ),
               ),
             ),
-
             child: Row(
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
                   Icons.location_on_outlined,
-
-                  size:
-                  ui.smallIconSize + 1,
-
+                  size: ui.smallIconSize + 1,
                   color: const Color(
                     0xFF94A3B8,
                   ),
                 ),
-
                 SizedBox(
                   width: ui.smallSpacing,
                 ),
-
                 Expanded(
                   child: Text(
                     '${item.hospitalModel.placeTitle} - '
-                        '${item.hospitalModel.address}',
-
+                    '${item.hospitalModel.address}',
                     maxLines: 3,
-
-                    overflow:
-                    TextOverflow.ellipsis,
-
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: const Color(
                         0xFF64748B,
                       ),
-
-                      fontSize:
-                      ui.bodyTextSize,
-
-                      fontWeight:
-                      FontWeight.w500,
-
+                      fontSize: ui.bodyTextSize,
+                      fontWeight: FontWeight.w500,
                       height: 1.4,
                     ),
                   ),
@@ -436,73 +364,48 @@ class _HospitalVisitUserCard
           // Date + Details
           // =====================================================
           Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: Row(
-                  mainAxisSize:
-                  MainAxisSize.min,
-
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.access_time_rounded,
-
-                      size:
-                      ui.smallIconSize + 1,
-
+                      size: ui.smallIconSize + 1,
                       color: const Color(
                         0xFF94A3B8,
                       ),
                     ),
-
                     SizedBox(
-                      width:
-                      ui.smallSpacing,
+                      width: ui.smallSpacing,
                     ),
-
                     Flexible(
                       child: Text(
                         item.visitHospitalModel.data,
-
                         maxLines: 1,
-
-                        overflow:
-                        TextOverflow
-                            .ellipsis,
-
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: const Color(
                             0xFF64748B,
                           ),
-
-                          fontWeight:
-                          FontWeight.w600,
-
-                          fontSize:
-                          ui.bodyTextSize,
+                          fontWeight: FontWeight.w600,
+                          fontSize: ui.bodyTextSize,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-
               SizedBox(
                 width: ui.mediumSpacing,
               ),
-
               const Spacer(),
-
               AppInkWell(
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   ui.smallRadius,
                 ),
-
                 onTap: onDetails,
-
                 child: buildCardButton(
                   context,
                   'عرض التفاصيل',
@@ -523,46 +426,32 @@ class _HospitalVisitUserCard
   // ===========================================================
 
   Widget _buildSpecializationBadge(
-      String specialization,
-      ) {
+    String specialization,
+  ) {
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 150,
       ),
-
       padding: EdgeInsets.symmetric(
         horizontal: ui.mediumSpacing,
         vertical: 5,
       ),
-
       decoration: BoxDecoration(
-        color: ColorManager.medicalPrimary
-            .withOpacity(
+        color: ColorManager.medicalPrimary.withOpacity(
           0.08,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.smallRadius,
         ),
       ),
-
       child: Text(
         specialization,
-
         maxLines: 1,
-
-        overflow:
-        TextOverflow.ellipsis,
-
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color:
-          ColorManager.medicalPrimary,
-
+          color: ColorManager.medicalPrimary,
           fontSize: ui.smallTextSize,
-
-          fontWeight:
-          FontWeight.w600,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
