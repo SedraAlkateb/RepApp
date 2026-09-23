@@ -46,7 +46,11 @@ class _HospitalVisitState extends State<HospitalVisit>
     super.build(context);
 
     final ui = AppUi.of(context);
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
+    // ملاحظة: بدون ConstrainedBox خارجي حول القائمة، حتى يضل السكرول
+    // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد contentMaxWidth يُطبَّق
+    // داخلياً على السيرش وعلى كل بطاقة لحالها.
     return Scaffold(
       backgroundColor: const Color(
         0xFFF8FAFC,
@@ -57,25 +61,30 @@ class _HospitalVisitState extends State<HospitalVisit>
           // Search
           // دائماً ظاهر حتى لو ما في نتائج
           // =====================================================
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              ui.pagePadding,
-              ui.searchTopPadding,
-              ui.pagePadding,
-              ui.searchBottomPadding,
-            ),
-            child: SearchField(
-              searchController: searchController,
-              onPressed: (value) {
-                // =================================================
-                // نفس سلوك البحث الأصلي
-                // =================================================
-                context.read<VisitPlaceBloc>().add(
-                      SearchHospitalVisitEvent(
-                        value: value,
-                      ),
-                    );
-              },
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentMaxWidth),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  ui.pagePadding,
+                  ui.searchTopPadding,
+                  ui.pagePadding,
+                  ui.searchBottomPadding,
+                ),
+                child: SearchField(
+                  searchController: searchController,
+                  onPressed: (value) {
+                    // =================================================
+                    // نفس سلوك البحث الأصلي
+                    // =================================================
+                    context.read<VisitPlaceBloc>().add(
+                          SearchHospitalVisitEvent(
+                            value: value,
+                          ),
+                        );
+                  },
+                ),
+              ),
             ),
           ),
 
@@ -172,24 +181,29 @@ class _HospitalVisitState extends State<HospitalVisit>
                   ) {
                     final group = groupedHospitals[index];
 
-                    return _HospitalVisitCard(
-                      group: group,
-                      ui: ui,
-                      onVisit: (hospital) {
-                        // =========================================
-                        // نفس Navigation الأصلي + تصحيح placeId
-                        // (كانت -1 دايماً، فتحديث القائمة بعد الزيارة
-                        // كان يروح لمكان غلط ولا يظهر أثره)
-                        // =========================================
-                        final hospitalModel = hospital.toDomain()
-                          ..placeId = widget.placeId;
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: contentMaxWidth),
+                        child: _HospitalVisitCard(
+                          group: group,
+                          ui: ui,
+                          onVisit: (hospital) {
+                            // =========================================
+                            // نفس Navigation الأصلي + تصحيح placeId
+                            // (كانت -1 دايماً، فتحديث القائمة بعد الزيارة
+                            // كان يروح لمكان غلط ولا يظهر أثره)
+                            // =========================================
+                            final hospitalModel = hospital.toDomain()
+                              ..placeId = widget.placeId;
 
-                        Navigator.pushNamed(
-                          context,
-                          Routes.visitHospital,
-                          arguments: hospitalModel,
-                        );
-                      },
+                            Navigator.pushNamed(
+                              context,
+                              Routes.visitHospital,
+                              arguments: hospitalModel,
+                            );
+                          },
+                        ),
+                      ),
                     );
                   },
                 );
@@ -246,8 +260,7 @@ class _HospitalVisitCard extends StatelessWidget {
   // نفس المشفى بكل صفوفه، نأخذ البيانات المشتركة (الاسم/العنوان) من أول صف
   HospitalSpAllModel get hospital => group.first;
 
-  int get _totalVisited =>
-      group.fold(0, (sum, h) => sum + (h.visited ?? 0));
+  int get _totalVisited => group.fold(0, (sum, h) => sum + (h.visited ?? 0));
 
   int get _totalVisit => group.fold(0, (sum, h) => sum + h.visit);
 
@@ -547,8 +560,8 @@ class _HospitalVisitCard extends StatelessWidget {
   }
 
   String _addressText(
-      String? address,
-      ) {
+    String? address,
+  ) {
     if (address == null || address.trim().isEmpty) {
       return 'العنوان غير محدد';
     }

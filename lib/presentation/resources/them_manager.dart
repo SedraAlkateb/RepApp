@@ -197,7 +197,7 @@ ThemeData getApplicationTheme() {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: ColorManager.medicalSecondary, // لون الإبراز الأساسي
-          width: 2.0,                           // تعريض الإطار قليلاً للتمييز
+          width: 2.0, // تعريض الإطار قليلاً للتمييز
         ),
         borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
       ),

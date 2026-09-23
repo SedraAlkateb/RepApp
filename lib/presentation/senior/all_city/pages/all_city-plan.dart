@@ -151,70 +151,73 @@ class _AllCityState extends State<AllCityPlan> {
           'المناطق والمدن',
         ),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: bodyBuild(
-            context,
-            headerHorizontalPadding: headerHorizontalPadding,
-            headerTopPadding: headerTopPadding,
-            headerBottomPadding: headerBottomPadding,
-            listHorizontalPadding: listHorizontalPadding,
-            listTopPadding: listTopPadding,
-            listBottomPadding: listBottomPadding,
-            headerTitleFontSize: headerTitleFontSize,
-            headerSubtitleFontSize: headerSubtitleFontSize,
-            cardHorizontalPadding: cardHorizontalPadding,
-            cardVerticalPadding: cardVerticalPadding,
-            cardBottomMargin: cardBottomMargin,
-            cardRadius: cardRadius,
-            cityTitleFontSize: cityTitleFontSize,
-            citySubtitleFontSize: citySubtitleFontSize,
-            iconContainerPadding: iconContainerPadding,
-            iconSize: iconSize,
-            iconSpacing: iconSpacing,
-            arrowSize: arrowSize,
-          ),
-        ),
+      // ملاحظة: بدون ConstrainedBox خارجي حول bodyBuild، حتى يضل السكرول
+      // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد pageMaxWidth يُطبَّق
+      // داخلياً على الهيدر وعلى كل بطاقة لحالها.
+      body: bodyBuild(
+        context,
+        pageMaxWidth: pageMaxWidth,
+        headerHorizontalPadding: headerHorizontalPadding,
+        headerTopPadding: headerTopPadding,
+        headerBottomPadding: headerBottomPadding,
+        listHorizontalPadding: listHorizontalPadding,
+        listTopPadding: listTopPadding,
+        listBottomPadding: listBottomPadding,
+        headerTitleFontSize: headerTitleFontSize,
+        headerSubtitleFontSize: headerSubtitleFontSize,
+        cardHorizontalPadding: cardHorizontalPadding,
+        cardVerticalPadding: cardVerticalPadding,
+        cardBottomMargin: cardBottomMargin,
+        cardRadius: cardRadius,
+        cityTitleFontSize: cityTitleFontSize,
+        citySubtitleFontSize: citySubtitleFontSize,
+        iconContainerPadding: iconContainerPadding,
+        iconSize: iconSize,
+        iconSpacing: iconSpacing,
+        arrowSize: arrowSize,
       ),
     );
   }
 
   Widget bodyBuild(
-      BuildContext context, {
-        required double headerHorizontalPadding,
-        required double headerTopPadding,
-        required double headerBottomPadding,
-        required double listHorizontalPadding,
-        required double listTopPadding,
-        required double listBottomPadding,
-        required double headerTitleFontSize,
-        required double headerSubtitleFontSize,
-        required double cardHorizontalPadding,
-        required double cardVerticalPadding,
-        required double cardBottomMargin,
-        required double cardRadius,
-        required double cityTitleFontSize,
-        required double citySubtitleFontSize,
-        required double iconContainerPadding,
-        required double iconSize,
-        required double iconSpacing,
-        required double arrowSize,
-      }) {
+    BuildContext context, {
+    required double pageMaxWidth,
+    required double headerHorizontalPadding,
+    required double headerTopPadding,
+    required double headerBottomPadding,
+    required double listHorizontalPadding,
+    required double listTopPadding,
+    required double listBottomPadding,
+    required double headerTitleFontSize,
+    required double headerSubtitleFontSize,
+    required double cardHorizontalPadding,
+    required double cardVerticalPadding,
+    required double cardBottomMargin,
+    required double cardRadius,
+    required double cityTitleFontSize,
+    required double citySubtitleFontSize,
+    required double iconContainerPadding,
+    required double iconSize,
+    required double iconSpacing,
+    required double arrowSize,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // ==========================================
         // Header
         // ==========================================
-        _buildHeader(
-          horizontalPadding: headerHorizontalPadding,
-          topPadding: headerTopPadding,
-          bottomPadding: headerBottomPadding,
-          titleFontSize: headerTitleFontSize,
-          subtitleFontSize: headerSubtitleFontSize,
+        Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: pageMaxWidth),
+            child: _buildHeader(
+              horizontalPadding: headerHorizontalPadding,
+              topPadding: headerTopPadding,
+              bottomPadding: headerBottomPadding,
+              titleFontSize: headerTitleFontSize,
+              subtitleFontSize: headerSubtitleFontSize,
+            ),
+          ),
         ),
 
         // ==========================================
@@ -223,7 +226,7 @@ class _AllCityState extends State<AllCityPlan> {
         Expanded(
           child: BlocBuilder<AllCityBloc, AllCityState>(
             buildWhen: (previous, current) =>
-            current is GetAllCityState ||
+                current is GetAllCityState ||
                 current is AllCityLoadingState ||
                 current is AllCityErrorState,
             builder: (context, state) {
@@ -233,52 +236,51 @@ class _AllCityState extends State<AllCityPlan> {
                 return cities.isEmpty
                     ? emptyFullScreen(context)
                     : AnimationLimiter(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.fromLTRB(
-                      listHorizontalPadding,
-                      listTopPadding,
-                      listHorizontalPadding,
-                      listBottomPadding,
-                    ),
-                    itemCount: cities.length,
-                    itemBuilder: (context, index) {
-                      return AnimationConfiguration
-                          .staggeredList(
-                        position: index,
-                        duration:
-                        const Duration(milliseconds: 500),
-                        delay:
-                        const Duration(milliseconds: 50),
-                        child: SlideAnimation(
-                          verticalOffset: 30,
-                          child: FadeInAnimation(
-                            child: _buildCitySmartCard(
-                              cities[index],
-                              index,
-                              horizontalPadding:
-                              cardHorizontalPadding,
-                              verticalPadding:
-                              cardVerticalPadding,
-                              bottomMargin:
-                              cardBottomMargin,
-                              radius: cardRadius,
-                              titleFontSize:
-                              cityTitleFontSize,
-                              subtitleFontSize:
-                              citySubtitleFontSize,
-                              iconContainerPadding:
-                              iconContainerPadding,
-                              iconSize: iconSize,
-                              iconSpacing: iconSpacing,
-                              arrowSize: arrowSize,
-                            ),
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(
+                            listHorizontalPadding,
+                            listTopPadding,
+                            listHorizontalPadding,
+                            listBottomPadding,
                           ),
+                          itemCount: cities.length,
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 500),
+                              delay: const Duration(milliseconds: 50),
+                              child: SlideAnimation(
+                                verticalOffset: 30,
+                                child: FadeInAnimation(
+                                  child: Center(
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                          maxWidth: pageMaxWidth),
+                                      child: _buildCitySmartCard(
+                                        cities[index],
+                                        index,
+                                        horizontalPadding:
+                                            cardHorizontalPadding,
+                                        verticalPadding: cardVerticalPadding,
+                                        bottomMargin: cardBottomMargin,
+                                        radius: cardRadius,
+                                        titleFontSize: cityTitleFontSize,
+                                        subtitleFontSize: citySubtitleFontSize,
+                                        iconContainerPadding:
+                                            iconContainerPadding,
+                                        iconSize: iconSize,
+                                        iconSpacing: iconSpacing,
+                                        arrowSize: arrowSize,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
-                );
               }
 
               if (state is AllCityLoadingState) {
@@ -343,11 +345,9 @@ class _AllCityState extends State<AllCityPlan> {
                     color: ColorManager.medicalPrimary,
                   ),
                 ),
-
                 const SizedBox(
                   height: 4,
                 ),
-
                 Text(
                   "اختر المنطقة لاستعراض الخطط المنتهية فيها",
                   style: TextStyle(
@@ -358,11 +358,9 @@ class _AllCityState extends State<AllCityPlan> {
               ],
             ),
           ),
-
           const SizedBox(
             width: 16,
           ),
-
           Container(
             height: 5,
             width: 40,
@@ -381,19 +379,19 @@ class _AllCityState extends State<AllCityPlan> {
   // =====================================================
 
   Widget _buildCitySmartCard(
-      CityModel city,
-      int index, {
-        required double horizontalPadding,
-        required double verticalPadding,
-        required double bottomMargin,
-        required double radius,
-        required double titleFontSize,
-        required double subtitleFontSize,
-        required double iconContainerPadding,
-        required double iconSize,
-        required double iconSpacing,
-        required double arrowSize,
-      }) {
+    CityModel city,
+    int index, {
+    required double horizontalPadding,
+    required double verticalPadding,
+    required double bottomMargin,
+    required double radius,
+    required double titleFontSize,
+    required double subtitleFontSize,
+    required double iconContainerPadding,
+    required double iconSize,
+    required double iconSpacing,
+    required double arrowSize,
+  }) {
     return Container(
       margin: EdgeInsets.only(
         bottom: bottomMargin,
@@ -418,7 +416,6 @@ class _AllCityState extends State<AllCityPlan> {
           ),
         ],
       ),
-
       child: AppInkWell(
         borderRadius: BorderRadius.circular(
           radius,
@@ -431,7 +428,6 @@ class _AllCityState extends State<AllCityPlan> {
           Navigator.pushNamed(
             context,
             Routes.finishedPlan,
-
           );
         },
 
@@ -450,8 +446,7 @@ class _AllCityState extends State<AllCityPlan> {
                   iconContainerPadding,
                 ),
                 decoration: BoxDecoration(
-                  color: ColorManager.secondaryColor1
-                      .withOpacity(0.1),
+                  color: ColorManager.secondaryColor1.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -470,8 +465,7 @@ class _AllCityState extends State<AllCityPlan> {
               // ====================================
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       city.title,
@@ -480,15 +474,12 @@ class _AllCityState extends State<AllCityPlan> {
                       style: TextStyle(
                         fontSize: titleFontSize,
                         fontWeight: FontWeight.bold,
-                        color:
-                        ColorManager.secondaryColor1,
+                        color: ColorManager.secondaryColor1,
                       ),
                     ),
-
                     const SizedBox(
                       height: 3,
                     ),
-
                     Text(
                       "استعراض كافة البيانات",
                       style: TextStyle(

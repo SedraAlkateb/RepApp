@@ -6,12 +6,35 @@ import 'package:domina_app/presentation/visits/bloc/visit_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TableVisitDynamic extends StatelessWidget {
+class TableVisitDynamic extends StatefulWidget {
   const TableVisitDynamic({super.key, required this.selectBrand});
   final List<PharmacyBrandModel> selectBrand;
+
+  @override
+  State<TableVisitDynamic> createState() => _TableVisitDynamicState();
+}
+
+class _TableVisitDynamicState extends State<TableVisitDynamic> {
+  // الربط بواسطة item.id بدلاً من index لضمان بقاء نفس الـ controller/FocusNode
+  // عبر عمليات إعادة البناء (بدل إنشاء TextEditingController جديد بكل
+  // rebuild، وهو اللي كان يسبب تعليق لوحة المفاتيح أثناء الكتابة).
+  final Map<int, TextEditingController> _amountControllers = {};
+  final Map<int, FocusNode> _amountFocusNodes = {};
+
+  @override
+  void dispose() {
+    for (final controller in _amountControllers.values) {
+      controller.dispose();
+    }
+    for (final focusNode in _amountFocusNodes.values) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return selectBrand.isNotEmpty
+    return widget.selectBrand.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.all(8.0),
             child: Table(
@@ -62,11 +85,33 @@ class TableVisitDynamic extends StatelessWidget {
                     ),
                   ],
                 ),
-                ...selectBrand.asMap().entries.map((entry) {
+                ...widget.selectBrand.asMap().entries.map((entry) {
                   final index = entry.key;
                   final brand = entry.value;
-                  TextEditingController amount = TextEditingController();
-                  amount.text = selectBrand[index].amount.toString();
+
+                  final TextEditingController amount =
+                      _amountControllers.putIfAbsent(
+                    brand.id,
+                    () => TextEditingController(text: brand.amount),
+                  );
+                  final FocusNode amountFocusNode =
+                      _amountFocusNodes.putIfAbsent(
+                    brand.id,
+                    () => FocusNode(),
+                  );
+
+                  // تحديث نص الحقل من البيانات الخارجية فقط عندما لا يكون
+                  // الحقل مركّزاً عليه حالياً، حتى لا نصطدم بحالة الـ IME
+                  // الحيّة أثناء الكتابة (نفس سبب تعليق الكيبورد بصفحة تدقيق
+                  // الخطة).
+                  if (!amountFocusNode.hasFocus &&
+                      amount.text != brand.amount) {
+                    amount.text = brand.amount;
+                    amount.selection = TextSelection.fromPosition(
+                      TextPosition(offset: amount.text.length),
+                    );
+                  }
+
                   return TableRow(
                     children: [
                       Padding(
@@ -83,10 +128,10 @@ class TableVisitDynamic extends StatelessWidget {
                       IntrinsicHeight(
                         child: TextField(
                           controller: amount,
+                          focusNode: amountFocusNode,
                           onChanged: (v) {
-                            String  value=   convertArabicNumberToEnglish( v);
+                            String value = convertArabicNumberToEnglish(v);
                             if (value.isEmpty) {
-
                               BlocProvider.of<VisitBloc>(context)
                                   .add(EditAmountBrandEvent(index, 1));
                             } else {

@@ -586,8 +586,7 @@ void loading(BuildContext context, {String? text}) {
 
 Future<bool> success(BuildContext context) async {
   try {
-    dismissDialog(context);
-    return true;
+    return await dismissDialog(context);
   } catch (e) {
     _log.warning('success() failed', e);
     return false;
@@ -601,8 +600,12 @@ void successWithMessage(BuildContext context, String message) {
 
 Future<bool> dismissDialog(BuildContext context) async {
   try {
-    // نتحقق مباشرة من الـ rootNavigator إذا كان لديه أي Dialog مفتوح يمكن إغلاقه
-    if (Navigator.of(context, rootNavigator: true).canPop()) {
+    // canPop() يكون true دائماً طالما توجد صفحة تحتنا في الستاك، حتى لو لم
+    // يكن هناك أي Dialog مفتوح فعلياً، فيؤدي لإغلاق الصفحة نفسها بدل الحوار.
+    // لذلك نتحقق أن هناك Route فوق صفحتنا الحالية (أي حوار مفتوح فعلاً) قبل
+    // تنفيذ pop على الـ rootNavigator.
+    final bool isDialogShowing = ModalRoute.of(context)?.isCurrent != true;
+    if (isDialogShowing) {
       Navigator.of(context, rootNavigator: true).pop(true);
 
       // نمنح المعالج 50 ملي ثانية لإنهاء حركة الإغلاق والتأكد من استقرار الـ Context

@@ -20,24 +20,19 @@ class PlaceVisitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return DefaultTabController(
       length: 2,
-
       child: Scaffold(
         backgroundColor: const Color(
           0xFFF8FAFC,
         ),
-
         body: NestedScrollView(
           headerSliverBuilder: (
-              context,
-              innerBoxIsScrolled,
-              ) {
+            context,
+            innerBoxIsScrolled,
+          ) {
             return [
               // =================================================
               // AppBar
@@ -45,51 +40,32 @@ class PlaceVisitPage extends StatelessWidget {
               SliverAppBar(
                 elevation: 0,
                 scrolledUnderElevation: 0,
-                surfaceTintColor:
-                Colors.transparent,
-
-                backgroundColor:
-                Colors.white,
-
+                surfaceTintColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 pinned: false,
                 floating: true,
                 snap: true,
-
                 leading: IconButton(
                   tooltip: 'رجوع',
-
                   onPressed: () {
                     Navigator.pop(
                       context,
                     );
                   },
-
                   icon: Icon(
                     Icons.arrow_back_rounded,
-                    size:
-                    ui.isMobile ? 24 : 27,
-                    color: ColorManager
-                        .medicalPrimary,
+                    size: ui.isMobile ? 24 : 27,
+                    color: ColorManager.medicalPrimary,
                   ),
                 ),
-
                 title: Text(
                   'قائمة الزيارات',
-
                   maxLines: 1,
-
-                  overflow:
-                  TextOverflow.ellipsis,
-
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize:
-                    ui.isMobile ? 18 : 21,
-
-                    fontWeight:
-                    FontWeight.w700,
-
-                    color: ColorManager
-                        .medicalPrimary,
+                    fontSize: ui.isMobile ? 18 : 21,
+                    fontWeight: FontWeight.w700,
+                    color: ColorManager.medicalPrimary,
                   ),
                 ),
               ),
@@ -100,120 +76,72 @@ class PlaceVisitPage extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Center(
                   child: ConstrainedBox(
-                    constraints:
-                    BoxConstraints(
-                      maxWidth:
-                      contentMaxWidth,
+                    constraints: BoxConstraints(
+                      maxWidth: contentMaxWidth,
                     ),
-
                     child: Padding(
-                      padding:
-                      EdgeInsets.fromLTRB(
+                      padding: EdgeInsets.fromLTRB(
                         ui.pagePadding,
                         ui.searchTopPadding,
                         ui.pagePadding,
                         ui.searchBottomPadding,
                       ),
-
                       child: Container(
-                        height:
-                        ui.isMobile
-                            ? 56
-                            : 60,
-
-                        padding:
-                        const EdgeInsets.all(
+                        height: ui.isMobile ? 56 : 60,
+                        padding: const EdgeInsets.all(
                           4,
                         ),
-
-                        decoration:
-                        BoxDecoration(
-                          color:
-                          Colors.white,
-
-                          borderRadius:
-                          BorderRadius.circular(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(
                             16,
                           ),
-
                           border: Border.all(
-                            color:
-                            const Color(
+                            color: const Color(
                               0xFFE2E8F0,
                             ),
                           ),
-
                           boxShadow: [
                             BoxShadow(
-                              color:
-                              Colors.black
-                                  .withOpacity(
+                              color: Colors.black.withOpacity(
                                 0.025,
                               ),
-
                               blurRadius: 12,
-
-                              offset:
-                              const Offset(
+                              offset: const Offset(
                                 0,
                                 4,
                               ),
                             ),
                           ],
                         ),
-
                         child: TabBar(
-                          padding:
-                          EdgeInsets.zero,
+                          padding: EdgeInsets.zero,
 
-                          dividerColor:
-                          Colors.transparent,
+                          dividerColor: Colors.transparent,
 
-                          labelPadding:
-                          EdgeInsets.zero,
+                          labelPadding: EdgeInsets.zero,
 
-                          indicatorSize:
-                          TabBarIndicatorSize
-                              .tab,
+                          indicatorSize: TabBarIndicatorSize.tab,
 
-                          labelColor:
-                          Colors.white,
+                          labelColor: Colors.white,
 
-                          unselectedLabelColor:
-                          const Color(
+                          unselectedLabelColor: const Color(
                             0xFF64748B,
                           ),
 
-                          labelStyle:
-                          TextStyle(
-                            fontSize:
-                            ui.isMobile
-                                ? 14.5
-                                : 16,
-
-                            fontWeight:
-                            FontWeight.w700,
+                          labelStyle: TextStyle(
+                            fontSize: ui.isMobile ? 14.5 : 16,
+                            fontWeight: FontWeight.w700,
                           ),
 
-                          unselectedLabelStyle:
-                          TextStyle(
-                            fontSize:
-                            ui.isMobile
-                                ? 14.5
-                                : 16,
-
-                            fontWeight:
-                            FontWeight.w500,
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: ui.isMobile ? 14.5 : 16,
+                            fontWeight: FontWeight.w500,
                           ),
 
-                          indicator:
-                          BoxDecoration(
-                            color:
-                            ColorManager
-                                .medicalPrimary,
-
-                            borderRadius:
-                            BorderRadius.circular(
+                          indicator: BoxDecoration(
+                            color: ColorManager.medicalPrimary,
+                            borderRadius: BorderRadius.circular(
                               12,
                             ),
                           ),
@@ -223,48 +151,33 @@ class PlaceVisitPage extends StatelessWidget {
                           // =====================================
                           onTap: (value) {
                             if (value == 0) {
-                              context
-                                  .read<
-                                  VisitPlaceBloc>()
-                                  .add(
-                                DoctorByPlace(
-                                  placeId,
-                                  0,
-                                ),
-                              );
+                              context.read<VisitPlaceBloc>().add(
+                                    DoctorByPlace(
+                                      placeId,
+                                      0,
+                                    ),
+                                  );
                             } else {
-                              context
-                                  .read<
-                                  VisitPlaceBloc>()
-                                  .add(
-                                HospitalByPlace(
-                                  placeId,
-                                  1,
-                                ),
-                              );
+                              context.read<VisitPlaceBloc>().add(
+                                    HospitalByPlace(
+                                      placeId,
+                                      1,
+                                    ),
+                                  );
                             }
                           },
 
                           tabs: [
                             Tab(
-                              child:
-                              _VisitTabItem(
-                                icon: Icons
-                                    .groups_outlined,
-
-                                title:
-                                'الأطباء',
+                              child: _VisitTabItem(
+                                icon: Icons.groups_outlined,
+                                title: 'الأطباء',
                               ),
                             ),
-
                             Tab(
-                              child:
-                              _VisitTabItem(
-                                icon: Icons
-                                    .local_hospital_outlined,
-
-                                title:
-                                'المشافي',
+                              child: _VisitTabItem(
+                                icon: Icons.local_hospital_outlined,
+                                title: 'المشافي',
                               ),
                             ),
                           ],
@@ -279,26 +192,16 @@ class PlaceVisitPage extends StatelessWidget {
 
           // =====================================================
           // Tab Pages
-          // نفس السلوك الأصلي
+          // DoctorVisit/HospitalVisit بيطبّقوا contentMaxWidth بأنفسهم
+          // داخلياً، فلا داعي نكرره هون (كان يمنع السكرول بالماوس
+          // بالفراغ الجانبي).
           // =====================================================
-          body: Center(
-            child: ConstrainedBox(
-              constraints:
-              BoxConstraints(
-                maxWidth:
-                contentMaxWidth,
-              ),
-
-              child:  TabBarView(
-                physics:
-                NeverScrollableScrollPhysics(),
-
-                children: [
-                  DoctorVisit(),
-                  HospitalVisit(placeId: placeId),
-                ],
-              ),
-            ),
+          body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              DoctorVisit(),
+              HospitalVisit(placeId: placeId),
+            ],
           ),
         ),
       ),
@@ -324,35 +227,21 @@ class _VisitTabItem extends StatelessWidget {
     final ui = AppUi.of(context);
 
     return Row(
-      mainAxisAlignment:
-      MainAxisAlignment.center,
-
-      mainAxisSize:
-      MainAxisSize.min,
-
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           icon,
-
-          size:
-          ui.isMobile
-              ? 20
-              : 22,
+          size: ui.isMobile ? 20 : 22,
         ),
-
         SizedBox(
-          width:
-          ui.smallSpacing,
+          width: ui.smallSpacing,
         ),
-
         Flexible(
           child: Text(
             title,
-
             maxLines: 1,
-
-            overflow:
-            TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

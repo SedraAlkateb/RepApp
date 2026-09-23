@@ -1,6 +1,18 @@
 part of 'plan_management_bloc.dart';
 
-enum PlanStatus { initial, loading, success, error, submitting, submitSuccess }
+enum PlanStatus {
+  initial,
+  loading,
+  success,
+  error,
+  submitting,
+  submitSuccess,
+  savingAmounts,
+  amountsSaved,
+  // فشل إرسال/حفظ لا يجب أن يخفي القائمة المعروضة (بعكس error الذي يعني
+  // فشل تحميل الصفحة نفسها) — يُعرض كـ popup فقط وتبقى القائمة كما هي
+  actionError,
+}
 
 class PlanManagementState extends Equatable {
   // ======= 🟢 أولاً: الحالات الخاصة بالخطة المستقبلية (Create / Future Plan) =======

@@ -36,6 +36,12 @@ class SubmitPlanEvent extends PlanManagementEvent {
   SubmitPlanEvent();
 }
 
+// حفظ الكميات المعدَّلة فقط (نفس مصفوفة amount/id) دون تغيير حالة الخطة،
+// يُستخدم عند التراجع/الخروج من الصفحة قبل الإرسال النهائي
+class SaveFutureAmountEvent extends PlanManagementEvent {
+  SaveFutureAmountEvent();
+}
+
 class GetRepInfoEvent extends PlanManagementEvent {
   GetRepInfoEvent();
 }

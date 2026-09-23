@@ -127,44 +127,15 @@ Widget buildSampleStatisticsTypeSummaryCard(SumBrandAmountModel sumTargetAss,int
                 ),
                 buildDivider(),
                 Expanded(
-                  child: Tooltip(
-                    padding: const EdgeInsets.all(
-                      8,
-                    ),
-                    triggerMode: TooltipTriggerMode.tap,
-                    message: "${sumTargetAss.totalAmount * samplesCount}",
-                    waitDuration: const Duration(
-                      milliseconds: 100,
-                    ),
-                    showDuration: const Duration(
-                      seconds: 1,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black87,
-                      borderRadius: BorderRadius.circular(
-                        8,
-                      ),
-                    ),
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(
-                        18,
-                      ),
-
-                      child: buildStatItem(
-                        title: "الكلي",
-                        count: sumTargetAss.totalAmount,
-                        icon: Icons.medication_outlined,
-                        color: const Color(0xFFD97706),
-                        bgColor: const Color(0xFFFFFBEB),
-                        labelSize: labelFontSize,
-                        countSize: countFontSize,
-                        iconSize: iconSize,
-                      ),
-                    ),
+                  child: buildStatItem(
+                    title: "الكلي",
+                    count: sumTargetAss.totalAmount,
+                    icon: Icons.medication_outlined,
+                    color: const Color(0xFFD97706),
+                    bgColor: const Color(0xFFFFFBEB),
+                    labelSize: labelFontSize,
+                    countSize: countFontSize,
+                    iconSize: iconSize,
                   ),
                 ),
               ],

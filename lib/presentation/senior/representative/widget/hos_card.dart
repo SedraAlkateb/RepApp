@@ -1,17 +1,23 @@
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/presentation/place_visit/widget/build_card_buttom.dart';
+import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
+import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:flutter/material.dart';
 
 class HospitalCardWidget extends StatelessWidget {
-  final HospitalSpModel hospital;
+  final List<HospitalSpModel> hospitalGroup;
 
   const HospitalCardWidget({
     super.key,
-    required this.hospital,
+    required this.hospitalGroup,
   });
 
   @override
   Widget build(BuildContext context) {
+    final HospitalSpModel hospital = hospitalGroup.first;
+
     final deviceType = AppResponsive.deviceType(context);
 
     double cardBottomSpacing;
@@ -24,7 +30,6 @@ class HospitalCardWidget extends StatelessWidget {
     double hospitalIconSpacing;
 
     double hospitalNameFontSize;
-    double rateFontSize;
 
     double sectionSpacing;
     double infoTileSpacing;
@@ -34,17 +39,6 @@ class HospitalCardWidget extends StatelessWidget {
     double infoTileRadius;
     double infoIconSize;
     double infoFontSize;
-
-    double badgeHorizontalPadding;
-    double badgeVerticalPadding;
-    double badgeRadius;
-    double badgeFontSize;
-
-    double notePadding;
-    double noteRadius;
-    double noteTitleFontSize;
-    double noteTextFontSize;
-    double noteIconSize;
 
     switch (deviceType) {
     // =================================================
@@ -61,7 +55,6 @@ class HospitalCardWidget extends StatelessWidget {
         hospitalIconSpacing = 12;
 
         hospitalNameFontSize = 16;
-        rateFontSize = 12;
 
         sectionSpacing = 12;
         infoTileSpacing = 8;
@@ -71,17 +64,6 @@ class HospitalCardWidget extends StatelessWidget {
         infoTileRadius = 12;
         infoIconSize = 15;
         infoFontSize = 11;
-
-        badgeHorizontalPadding = 8;
-        badgeVerticalPadding = 4;
-        badgeRadius = 8;
-        badgeFontSize = 10;
-
-        notePadding = 12;
-        noteRadius = 14;
-        noteTitleFontSize = 11;
-        noteTextFontSize = 12;
-        noteIconSize = 18;
         break;
 
     // =================================================
@@ -98,7 +80,6 @@ class HospitalCardWidget extends StatelessWidget {
         hospitalIconSpacing = 16;
 
         hospitalNameFontSize = 19;
-        rateFontSize = 13;
 
         sectionSpacing = 16;
         infoTileSpacing = 12;
@@ -108,17 +89,6 @@ class HospitalCardWidget extends StatelessWidget {
         infoTileRadius = 14;
         infoIconSize = 18;
         infoFontSize = 13;
-
-        badgeHorizontalPadding = 10;
-        badgeVerticalPadding = 5;
-        badgeRadius = 10;
-        badgeFontSize = 11;
-
-        notePadding = 14;
-        noteRadius = 16;
-        noteTitleFontSize = 13;
-        noteTextFontSize = 13;
-        noteIconSize = 20;
         break;
 
     // =================================================
@@ -135,7 +105,6 @@ class HospitalCardWidget extends StatelessWidget {
         hospitalIconSpacing = 14;
 
         hospitalNameFontSize = 18;
-        rateFontSize = 12.5;
 
         sectionSpacing = 14;
         infoTileSpacing = 10;
@@ -145,17 +114,6 @@ class HospitalCardWidget extends StatelessWidget {
         infoTileRadius = 13;
         infoIconSize = 16;
         infoFontSize = 12;
-
-        badgeHorizontalPadding = 9;
-        badgeVerticalPadding = 4;
-        badgeRadius = 9;
-        badgeFontSize = 10.5;
-
-        notePadding = 13;
-        noteRadius = 15;
-        noteTitleFontSize = 12;
-        noteTextFontSize = 12.5;
-        noteIconSize = 19;
         break;
     }
 
@@ -235,80 +193,20 @@ class HospitalCardWidget extends StatelessWidget {
                   ),
 
                   // =============================================
-                  // Hospital data
+                  // Hospital name
                   // =============================================
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            // ===================================
-                            // Hospital name
-                            // ===================================
-                            Expanded(
-                              child: Text(
-                                hospital.title ?? "",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: hospitalNameFontSize,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(
-                                    0xFF1E293B,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(
-                              width: 8,
-                            ),
-
-                            // ===================================
-                            // Specialization Badge
-                            // نفس الشرط الأصلي
-                            // ===================================
-                            if (hospital.rate != null &&
-                                hospital.rate!.isNotEmpty)
-                              _buildBadge(
-                                text: hospital.SpName ?? "عام",
-                                bgColor: const Color(
-                                  0xFFFEF3C7,
-                                ),
-                                textColor: const Color(
-                                  0xFFD97706,
-                                ),
-                                horizontalPadding:
-                                badgeHorizontalPadding,
-                                verticalPadding:
-                                badgeVerticalPadding,
-                                radius: badgeRadius,
-                                fontSize: badgeFontSize,
-                              ),
-                          ],
+                    child: Text(
+                      hospital.title ?? "",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: hospitalNameFontSize,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(
+                          0xFF1E293B,
                         ),
-
-                        const SizedBox(
-                          height: 4,
-                        ),
-
-                        // =======================================
-                        // Rate
-                        // =======================================
-                        Text(
-                          "تصنيف ${hospital.rate}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: rateFontSize,
-                            color: const Color(
-                              0xFF7C3AED,
-                            ),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -354,166 +252,36 @@ class HospitalCardWidget extends StatelessWidget {
               ),
 
               SizedBox(
-                height: infoTileSpacing,
+                height: sectionSpacing,
               ),
 
               // =================================================
-              // Visits
+              // عرض التفاصيل
               // =================================================
-              _buildFullAddressTile(
-                Icons.map_outlined,
-                "الزيارات: ${hospital.visit}",
-                bgColor: const Color(
-                  0xFFF0FDF4,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: AppInkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.hospitalDetails,
+                      arguments: hospitalGroup
+                          .map((sp) => sp.toHospitalSpAllModel())
+                          .toList(),
+                    );
+                  },
+                  child: buildCardButton(
+                    context,
+                    'عرض التفاصيل',
+                    ColorManager.medicalPrimary,
+                    Colors.white,
+                    Icons.directions_run,
+                  ),
                 ),
-                textColor: const Color(
-                  0xFF16A34A,
-                ),
-                iconColor: const Color(
-                  0xFF16A34A,
-                ),
-                verticalPadding:
-                infoTileVerticalPadding,
-                horizontalPadding:
-                infoTileHorizontalPadding,
-                radius: infoTileRadius,
-                iconSize: infoIconSize,
-                fontSize: infoFontSize,
               ),
-
-              // =================================================
-              // Notes
-              // نفس الشرط الأصلي
-              // =================================================
-              if (hospital.note != null &&
-                  hospital.note!.isNotEmpty) ...[
-                SizedBox(
-                  height: sectionSpacing,
-                ),
-
-                Container(
-                  width: double.infinity,
-
-                  padding: EdgeInsets.all(
-                    notePadding,
-                  ),
-
-                  decoration: BoxDecoration(
-                    color: const Color(
-                      0xFFFFFBEB,
-                    ),
-
-                    borderRadius: BorderRadius.circular(
-                      noteRadius,
-                    ),
-
-                    border: Border.all(
-                      color: const Color(
-                        0xFFFEF3C7,
-                      ),
-                    ),
-                  ),
-
-                  child: Row(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.info_outline_rounded,
-                        size: noteIconSize,
-                        color: const Color(
-                          0xFFD97706,
-                        ),
-                      ),
-
-                      const SizedBox(
-                        width: 8,
-                      ),
-
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "توجيهات وملاحظات",
-                              style: TextStyle(
-                                fontSize:
-                                noteTitleFontSize,
-                                fontWeight:
-                                FontWeight.bold,
-                                color: const Color(
-                                  0xFFB45309,
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height: 3,
-                            ),
-
-                            Text(
-                              hospital.note!,
-                              style: TextStyle(
-                                fontSize:
-                                noteTextFontSize,
-                                color: const Color(
-                                  0xFF451A03,
-                                ),
-                                height: 1.35,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  // =====================================================
-  // Badge
-  // =====================================================
-
-  Widget _buildBadge({
-    required String text,
-    required Color bgColor,
-    required Color textColor,
-    required double horizontalPadding,
-    required double verticalPadding,
-    required double radius,
-    required double fontSize,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: verticalPadding,
-      ),
-
-      decoration: BoxDecoration(
-        color: bgColor,
-
-        borderRadius: BorderRadius.circular(
-          radius,
-        ),
-      ),
-
-      child: Text(
-        text,
-
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-
-        style: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.w600,
-          color: textColor,
         ),
       ),
     );
@@ -586,70 +354,6 @@ class HospitalCardWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // =====================================================
-  // Full Width Info Tile
-  // =====================================================
-
-  Widget _buildFullAddressTile(
-      IconData icon,
-      String text, {
-        Color bgColor = const Color(0xFFF8FAFC),
-        Color textColor = const Color(0xFF475569),
-        Color iconColor = const Color(0xFF94A3B8),
-        required double verticalPadding,
-        required double horizontalPadding,
-        required double radius,
-        required double iconSize,
-        required double fontSize,
-      }) {
-    return Container(
-      width: double.infinity,
-
-      padding: EdgeInsets.symmetric(
-        vertical: verticalPadding,
-        horizontal: horizontalPadding,
-      ),
-
-      decoration: BoxDecoration(
-        color: bgColor,
-
-        borderRadius: BorderRadius.circular(
-          radius,
-        ),
-      ),
-
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            icon,
-            size: iconSize,
-            color: iconColor,
-          ),
-
-          const SizedBox(
-            width: 6,
-          ),
-
-          Expanded(
-            child: Text(
-              text.isEmpty
-                  ? "غير محدد"
-                  : text,
-
-              style: TextStyle(
-                fontSize: fontSize,
-                color: textColor,
-                fontWeight: FontWeight.w500,
-                height: 1.3,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -95,7 +95,7 @@ Widget buildSampleStatisticsSummaryCard(
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  "إجمالي توزيع الزيارات",
+                  "إجمالي عدد الزيارات",
                   style: TextStyle(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,

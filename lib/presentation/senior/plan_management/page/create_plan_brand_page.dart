@@ -30,242 +30,31 @@ class _CreatePlanBrandPageState
     super.dispose();
   }
 
-  // ===========================================================
-  // Confirmation Dialog
-  // ===========================================================
-
-  void _showConfirmationDialog(
-      BuildContext context,
-      ) {
-    final ui = AppUi.of(context);
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.symmetric(
-            horizontal: ui.pagePadding,
-            vertical: ui.sectionSpacing,
-          ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: ui.isMobile ? 420 : 500,
-            ),
-            child: Container(
-              padding: EdgeInsets.all(
-                ui.cardPadding,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(
-                  ui.cardRadius,
-                ),
-                border: Border.all(
-                  color: const Color(
-                    0xFFE2E8F0,
-                  ),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(
-                      0.06,
-                    ),
-                    blurRadius: 20,
-                    offset: const Offset(
-                      0,
-                      8,
-                    ),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: ui.iconBoxSize,
-                        height: ui.iconBoxSize,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: ColorManager
-                              .medicalPrimary
-                              .withOpacity(
-                            0.08,
-                          ),
-                          borderRadius:
-                          BorderRadius.circular(
-                            ui.smallRadius + 2,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.help_outline_rounded,
-                          size: ui.iconSize,
-                          color: ColorManager
-                              .medicalPrimary,
-                        ),
-                      ),
-                      SizedBox(
-                        width: ui.sectionSpacing,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'تأكيد إرسال الخطة',
-                          maxLines: 2,
-                          overflow:
-                          TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize:
-                            ui.cardTitleSize,
-                            fontWeight:
-                            FontWeight.w700,
-                            color: const Color(
-                              0xFF1E293B,
-                            ),
-                            height: 1.3,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ui.sectionSpacing,
-                  ),
-                  Text(
-                    'هل أنت متأكد من حفظ التعديلات وإرسال الخطة المستقبلية؟',
-                    style: TextStyle(
-                      fontSize: ui.bodyTextSize,
-                      color: const Color(
-                        0xFF64748B,
-                      ),
-                      fontWeight:
-                      FontWeight.w500,
-                      height: 1.6,
-                    ),
-                  ),
-                  SizedBox(
-                    height: ui.largeSpacing,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style:
-                          OutlinedButton.styleFrom(
-                            foregroundColor:
-                            const Color(
-                              0xFF64748B,
-                            ),
-                            side: const BorderSide(
-                              color: Color(
-                                0xFFE2E8F0,
-                              ),
-                            ),
-                            padding:
-                            EdgeInsets.symmetric(
-                              vertical:
-                              ui.mediumSpacing +
-                                  3,
-                            ),
-                            shape:
-                            RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(
-                                ui.smallRadius + 2,
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(
-                              dialogContext,
-                            ).pop();
-                          },
-                          child: Text(
-                            'تراجع',
-                            style: TextStyle(
-                              fontSize:
-                              ui.bodyTextSize,
-                              fontWeight:
-                              FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: ui.mediumSpacing,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style:
-                          ElevatedButton.styleFrom(
-                            backgroundColor:
-                            ColorManager
-                                .medicalPrimary,
-                            foregroundColor:
-                            Colors.white,
-                            elevation: 0,
-                            padding:
-                            EdgeInsets.symmetric(
-                              vertical:
-                              ui.mediumSpacing +
-                                  3,
-                            ),
-                            shape:
-                            RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(
-                                ui.smallRadius + 2,
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(
-                              dialogContext,
-                            ).pop();
-
-                            context
-                                .read<
-                                PlanManagementBloc>()
-                                .add(
-                              SubmitPlanEvent(),
-                            );
-                          },
-                          child: Text(
-                            'نعم، إرسال',
-                            style: TextStyle(
-                              fontSize:
-                              ui.bodyTextSize,
-                              fontWeight:
-                              FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+  // عند محاولة الرجوع عن الصفحة: إذا فيه كميات معدَّلة لم تُرسل بعد،
+  // نرفعها أولاً (نفس مصفوفة amount/id) قبل السماح بالخروج فعلياً
+  void _handlePopAttempt(BuildContext context) {
+    final bloc = context.read<PlanManagementBloc>();
+    if (bloc.planBrandSpSend.isEmpty) {
+      Navigator.of(context).pop();
+    } else {
+      bloc.add(SaveFutureAmountEvent());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
-    return BlocConsumer<
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
+        _handlePopAttempt(context);
+      },
+      child: BlocConsumer<
         PlanManagementBloc,
         PlanManagementState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.futureStatus ==
             PlanStatus.submitSuccess) {
           ScaffoldMessenger.of(context)
@@ -286,6 +75,20 @@ class _CreatePlanBrandPageState
 
           searchController.clear();
           FocusScope.of(context).unfocus();
+        }
+
+        if (state.futureStatus == PlanStatus.savingAmounts) {
+          loading(context);
+        } else if (state.futureStatus == PlanStatus.amountsSaved) {
+          await success(context);
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
+        } else if (state.futureStatus == PlanStatus.actionError &&
+            state.futureFailure != null) {
+          // فشل إرسال/حفظ فقط — القائمة تبقى ظاهرة، نعرض رسالة الخطأ كـ popup
+          error(context, state.futureFailure!.massage,
+              state.futureFailure!.code);
         }
       },
       builder: (context, state) {
@@ -395,6 +198,7 @@ class _CreatePlanBrandPageState
           ),
         );
       },
+      ),
     );
   }
 
@@ -734,8 +538,10 @@ class _CreatePlanBrandPageState
             onPressed: isSubmitting
                 ? null
                 : () {
-              _showConfirmationDialog(
-                context,
+              context
+                  .read<PlanManagementBloc>()
+                  .add(
+                SubmitPlanEvent(),
               );
             },
             child: isSubmitting
@@ -749,7 +555,7 @@ class _CreatePlanBrandPageState
               ),
             )
                 : Text(
-              'حفظ الخطة والموافقة النهائية',
+              'إرسال',
               textAlign:
               TextAlign.center,
               style: TextStyle(

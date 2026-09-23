@@ -25,8 +25,7 @@ class BrandPlanOtherPage extends StatefulWidget {
   });
 
   @override
-  State<BrandPlanOtherPage> createState() =>
-      _BrandPlanOtherPageState();
+  State<BrandPlanOtherPage> createState() => _BrandPlanOtherPageState();
 }
 
 class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
@@ -37,16 +36,14 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
   late List<dynamic> _sortedBrands;
 
   final List<TextEditingController> _controllers = [];
-  final TextEditingController _searchController =
-  TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   final Map<int, int> _typingVersions = {};
   final Map<int, int> _lastSentAmounts = {};
 
   String _searchText = '';
 
-  static const Duration _typingDelay =
-  Duration(milliseconds: 700);
+  static const Duration _typingDelay = Duration(milliseconds: 700);
 
   @override
   void initState() {
@@ -75,34 +72,32 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
       assistantBrands.add(brandsList[i]);
     }
 
-    // دالة مقارنة للترتيب حسب الكمية (amount) تنازلياً، ثم حسب العنوان
+    // دالة مقارنة: الأولوية للممتلئ (amount != 0) قبل الصفري، وكل مجموعة
+    // (ممتلئ / صفري) مرتبة أبجدياً حسب العنوان
     int compareBrands(a, b) {
-      int amountComparison = (b.amount as num).compareTo(a.amount as num);
-      if (amountComparison != 0) {
-        return amountComparison;
+      final bool aIsZero = (a.amount as num) == 0;
+      final bool bIsZero = (b.amount as num) == 0;
+      if (aIsZero != bIsZero) {
+        return aIsZero ? 1 : -1;
       }
       return (a.title ?? '').compareTo(b.title ?? '');
     }
 
-    // 2. ترتيب كل مصفوفة على حدة حسب الكمية
+    // 2. ترتيب كل مصفوفة على حدة: الممتلئ أولاً ثم الصفري، وأبجدياً ضمن كل مجموعة
     targetBrands.sort(compareBrands);
     assistantBrands.sort(compareBrands);
 
     // 3. دمج المصفوفتين بحيث تأتي مصفوفة الهدف أولاً ثم مصفوفة المساعد
     _sortedBrands = [...targetBrands, ...assistantBrands];
 
-    for (int index = 0;
-    index < _sortedBrands.length;
-    index++) {
+    for (int index = 0; index < _sortedBrands.length; index++) {
       final brand = _sortedBrands[index];
 
       summ += (brand.amount as num).toInt();
 
       _controllers.add(
         TextEditingController(
-          text: brand.amount == 0
-              ? ''
-              : brand.amount.toString(),
+          text: brand.amount == 0 ? '' : brand.amount.toString(),
         ),
       );
 
@@ -118,14 +113,13 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
     if (query.isEmpty) {
       return List<int>.generate(
         _sortedBrands.length,
-            (index) => index,
+        (index) => index,
       );
     }
 
     return [
       for (int index = 0; index < _sortedBrands.length; index++)
-        if (normalizeText(_sortedBrands[index].title).contains(query))
-          index,
+        if (normalizeText(_sortedBrands[index].title).contains(query)) index,
     ];
   }
 
@@ -136,8 +130,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
       return 0;
     }
 
-    final englishValue =
-    convertArabicNumberToEnglish(cleanValue);
+    final englishValue = convertArabicNumberToEnglish(cleanValue);
 
     return int.tryParse(englishValue) ?? 0;
   }
@@ -152,22 +145,21 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
     _lastSentAmounts[index] = amount;
 
     context.read<BrandPlanBloc>().add(
-      ChangeFieldEvent(
-        amount,
-        widget.index1,
-        // القائمة المعروضة مرتبة، أما الـ bloc فيخزن الترتيب الأصلي
-        widget.otherBrandSpPlanModel.brands.indexOf(_sortedBrands[index]),
-        widget.otherBrandSpPlanModel.brandm,
-      ),
-    );
+          ChangeFieldEvent(
+            amount,
+            widget.index1,
+            // القائمة المعروضة مرتبة، أما الـ bloc فيخزن الترتيب الأصلي
+            widget.otherBrandSpPlanModel.brands.indexOf(_sortedBrands[index]),
+            widget.otherBrandSpPlanModel.brandm,
+          ),
+        );
   }
 
   void _sendAfterTypingStops(
-      int index,
-      String value,
-      ) async {
-    final currentVersion =
-        (_typingVersions[index] ?? 0) + 1;
+    int index,
+    String value,
+  ) async {
+    final currentVersion = (_typingVersions[index] ?? 0) + 1;
 
     _typingVersions[index] = currentVersion;
 
@@ -188,8 +180,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
   void _finishEditing(int index) {
     if (!mounted) return;
 
-    _typingVersions[index] =
-        (_typingVersions[index] ?? 0) + 1;
+    _typingVersions[index] = (_typingVersions[index] ?? 0) + 1;
 
     final controller = _controllers[index];
 
@@ -223,10 +214,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
 
     final ui = AppUi.of(context);
 
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -253,8 +241,8 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
             );
 
             context.read<BrandPlanBloc>().add(
-              UpdateEvent(),
-            );
+                  UpdateEvent(),
+                );
           }
         },
         buildWhen: (previous, current) => false,
@@ -265,62 +253,53 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
             return emptyFullScreen(context);
           }
 
-          final filteredIndexes =
-              _filteredBrandIndexes;
+          final filteredIndexes = _filteredBrandIndexes;
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth:
-                contentMaxWidth,
-              ),
-              child: CustomScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-                keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior
-                    .onDrag,
-                slivers: [
-                  // ===============================
-                  // Summary
-                  // ===============================
-                  SliverToBoxAdapter(
+          // ملاحظة: بدون ConstrainedBox خارجي حول الـ CustomScrollView، حتى
+          // يضل السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد
+          // contentMaxWidth يُطبَّق داخلياً على كل sliver لحاله.
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            slivers: [
+              // ===============================
+              // Summary
+              // ===============================
+              SliverToBoxAdapter(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: contentMaxWidth),
                     child: Padding(
-                      padding:
-                      EdgeInsets.all(
+                      padding: EdgeInsets.all(
                         ui.pagePadding,
                       ),
-                      child:
-                      buildSampleStatisticsSummaryCard(
+                      child: buildSampleStatisticsSummaryCard(
                         BrandAmountModel(
-                          widget.otherBrandSpPlanModel
-                              .specModel.sumDoctor,
-                          widget.otherBrandSpPlanModel
-                              .specModel.sumHospital,
-                          widget.otherBrandSpPlanModel
-                              .specModel.sumDoctor +
-                              widget.otherBrandSpPlanModel
-                                  .specModel.sumHospital,
+                          widget.otherBrandSpPlanModel.specModel.sumDoctor,
+                          widget.otherBrandSpPlanModel.specModel.sumHospital,
+                          widget.otherBrandSpPlanModel.specModel.sumDoctor +
+                              widget
+                                  .otherBrandSpPlanModel.specModel.sumHospital,
                         ),
                         UserInfo.samplesCount,
-                        repPlanId:
-                        UserInfo.activePlanId,
-                        spId:
-                        widget.otherBrandSpPlanModel
-                            .specModel.id,
+                        repPlanId: UserInfo.activePlanId,
+                        spId: widget.otherBrandSpPlanModel.specModel.id,
                       ),
                     ),
                   ),
+                ),
+              ),
 
-                  // ===============================
-                  // Search
-                  // ===============================
-                  SliverToBoxAdapter(
+              // ===============================
+              // Search
+              // ===============================
+              SliverToBoxAdapter(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: contentMaxWidth),
                     child: Padding(
-                      padding:
-                      EdgeInsets.symmetric(
-                        horizontal:
-                        ui.pagePadding,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ui.pagePadding,
                       ),
                       child: SearchField(
                         searchController: _searchController,
@@ -334,65 +313,61 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                       ),
                     ),
                   ),
+                ),
+              ),
 
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height:
-                      ui.sectionSpacing,
-                    ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: ui.sectionSpacing,
+                ),
+              ),
+
+              // ===============================
+              // Empty Search
+              // ===============================
+              if (filteredIndexes.isEmpty)
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: emptyFullScreen(
+                    context,
                   ),
+                )
+              else
+                // ===============================
+                // Brands
+                // ===============================
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ui.pagePadding,
+                  ),
+                  sliver: SliverList.builder(
+                    itemCount: filteredIndexes.length,
+                    itemBuilder: (context, index) {
+                      final realIndex = filteredIndexes[index];
+                      final brandItem = brands[realIndex];
 
-                  // ===============================
-                  // Empty Search
-                  // ===============================
-                  if (filteredIndexes.isEmpty)
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child:
-                      emptyFullScreen(
-                        context,
-                      ),
-                    )
-                  else
-                  // ===============================
-                  // Brands
-                  // ===============================
-                    SliverPadding(
-                      padding:
-                      EdgeInsets.symmetric(
-                        horizontal:
-                        ui.pagePadding,
-                      ),
-                      sliver:
-                      SliverList.builder(
-                        itemCount:
-                        filteredIndexes.length,
-                        itemBuilder:
-                            (context, index) {
-                          final realIndex =
-                          filteredIndexes[index];
-                          final brandItem =
-                          brands[realIndex];
-
-                          return _buildBrandOtherCard(
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxWidth: contentMaxWidth),
+                          child: _buildBrandOtherCard(
                             context,
                             ui,
                             brandItem,
                             realIndex,
-                          );
-                        },
-                      ),
-                    ),
-
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height:
-                      ui.listBottomPadding,
-                    ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
+                ),
+
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: ui.listBottomPadding,
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
@@ -400,11 +375,11 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
   }
 
   Widget _buildBrandOtherCard(
-      BuildContext context,
-      AppUi ui,
-      dynamic brandItem,
-      int index,
-      ) {
+    BuildContext context,
+    AppUi ui,
+    dynamic brandItem,
+    int index,
+  ) {
     return Container(
       margin: EdgeInsets.all(
         ui.smallSpacing,
@@ -415,34 +390,26 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: ColorManager
-                .secondaryColor
-                .withOpacity(0.05),
+            color: ColorManager.secondaryColor.withOpacity(0.05),
             blurRadius: 4,
           ),
         ],
         color: ColorManager.white,
         border: Border.all(
-          color: ColorManager
-              .secondaryColor7,
+          color: ColorManager.secondaryColor7,
         ),
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.smallRadius,
         ),
       ),
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment
-            .start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Icon(
-                Icons
-                    .medication_outlined,
-                color: ColorManager
-                    .secondaryColor4,
+                Icons.medication_outlined,
+                color: ColorManager.secondaryColor4,
                 size: ui.smallIconSize + 3,
               ),
               const SizedBox(
@@ -452,13 +419,11 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                 child: Text(
                   'العينة : ${brandItem.title}',
                   style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(fontSize: ui.bodyTextSize) ??
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontSize: ui.bodyTextSize) ??
                       TextStyle(fontSize: ui.bodyTextSize),
-                  overflow:
-                  TextOverflow
-                      .ellipsis,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               TypeBadge(
@@ -467,16 +432,13 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
             ],
           ),
           Divider(
-            color: ColorManager
-                .secondaryColor7,
+            color: ColorManager.secondaryColor7,
           ),
           Row(
             children: [
               Icon(
-                Icons
-                    .medical_information_outlined,
-                color: ColorManager
-                    .secondaryColor4,
+                Icons.medical_information_outlined,
+                color: ColorManager.secondaryColor4,
                 size: ui.smallIconSize + 3,
               ),
               const SizedBox(
@@ -486,26 +448,25 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                 child: Text(
                   'الشكل الصيدلاني: ${brandItem.phTitle}',
                   style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(fontSize: ui.bodyTextSize) ??
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontSize: ui.bodyTextSize) ??
                       TextStyle(fontSize: ui.bodyTextSize),
                 ),
               ),
             ],
           ),
           Divider(
-            color: ColorManager
-                .secondaryColor7,
+            color: ColorManager.secondaryColor7,
           ),
           Row(
             children: [
               Text(
                 'العدد ',
                 style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontSize: ui.bodyTextSize) ??
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(fontSize: ui.bodyTextSize) ??
                     TextStyle(fontSize: ui.bodyTextSize),
               ),
               const SizedBox(
@@ -513,58 +474,38 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
               ),
               Expanded(
                 child: Focus(
-                  onFocusChange:
-                      (hasFocus) {
+                  onFocusChange: (hasFocus) {
                     if (!hasFocus) {
                       _finishEditing(
                         index,
                       );
                     }
                   },
-                  child:
-                  TextFormField(
-                    controller:
-                    _controllers[
-                    index],
-                    enabled: UserInfo
-                        .otherstatus ==
-                        0,
-                    keyboardType:
-                    TextInputType
-                        .number,
-                    textInputAction:
-                    TextInputAction
-                        .done,
-                    decoration:
-                    const InputDecoration(
-                      border:
-                      OutlineInputBorder(),
-                      contentPadding:
-                      EdgeInsets
-                          .symmetric(
+                  child: TextFormField(
+                    controller: _controllers[index],
+                    enabled: UserInfo.otherstatus == 0,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(
                         vertical: 8,
-                        horizontal:
-                        10,
+                        horizontal: 10,
                       ),
                     ),
-                    onChanged:
-                        (value) {
+                    onChanged: (value) {
                       _sendAfterTypingStops(
                         index,
                         value,
                       );
                     },
-                    onFieldSubmitted:
-                        (_) {
+                    onFieldSubmitted: (_) {
                       _finishEditing(
                         index,
                       );
                     },
                     onTapOutside: (_) {
-                      FocusManager
-                          .instance
-                          .primaryFocus
-                          ?.unfocus();
+                      FocusManager.instance.primaryFocus?.unfocus();
                     },
                   ),
                 ),

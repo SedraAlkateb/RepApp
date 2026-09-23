@@ -27,62 +27,47 @@ class UpdateRecipesPage extends StatefulWidget {
   final int recipeId;
 
   @override
-  State<UpdateRecipesPage> createState() =>
-      _UpdateRecipesHospitalState();
+  State<UpdateRecipesPage> createState() => _UpdateRecipesHospitalState();
 }
 
-class _UpdateRecipesHospitalState
-    extends State<UpdateRecipesPage> {
-  final TextEditingController _doctorSpController =
-  TextEditingController();
+class _UpdateRecipesHospitalState extends State<UpdateRecipesPage> {
+  final TextEditingController _doctorSpController = TextEditingController();
 
-  final TextEditingController firstNoteController =
-  TextEditingController(
+  final TextEditingController firstNoteController = TextEditingController(
     text: 'يرجى عدم تبديل الدواء',
   );
 
-  final TextEditingController _secondNoteController =
-  TextEditingController();
+  final TextEditingController _secondNoteController = TextEditingController();
 
-  final TextEditingController _addressController =
-  TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
-  final TextEditingController _connectController =
-  TextEditingController();
+  final TextEditingController _connectController = TextEditingController();
 
-  final TextEditingController _specialNotesController =
-  TextEditingController();
+  final TextEditingController _specialNotesController = TextEditingController();
 
-  final GlobalKey<FormState> _formKey =
-  GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     // =========================================================
     // نفس السلوك والترتيب الأصلي تماماً
     // =========================================================
-    BlocProvider.of<RecipesBrandBloc>(context)
-        .add(
+    BlocProvider.of<RecipesBrandBloc>(context).add(
       RestartEvent(),
     );
 
-    BlocProvider.of<RecipesBrandBloc>(context)
-        .empty();
+    BlocProvider.of<RecipesBrandBloc>(context).empty();
 
     if (widget.st == 1) {
-
-      BlocProvider.of<RecipesBrandBloc>(context)
-          .add(
+      BlocProvider.of<RecipesBrandBloc>(context).add(
         GetRepReciEvent(
           widget.recipeId,
         ),
       );
 
-      BlocProvider.of<RecipesBrandBloc>(context)
-          .isChecked2 = 3;
+      BlocProvider.of<RecipesBrandBloc>(context).isChecked2 = 3;
 
-      BlocProvider.of<RecipesBrandBloc>(context)
-          .isChecked1 = 3;
+      BlocProvider.of<RecipesBrandBloc>(context).isChecked1 = 3;
     }
 
     super.initState();
@@ -103,45 +88,34 @@ class _UpdateRecipesHospitalState
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
-
         leading: IconButton(
           onPressed: () {
             // نفس السلوك الأصلي
-            WidgetsBinding.instance
-                .addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.pop(context);
             });
           },
-
           iconSize: ui.isMobile ? 26 : 28,
-
           padding: EdgeInsets.only(
             right: ui.smallSpacing,
           ),
-
           icon: Icon(
             Icons.arrow_back_sharp,
             color: ColorManager.secondaryColor,
           ),
         ),
-
         title: Text(
           'تفاصيل الوصفة',
           maxLines: 1,
@@ -153,16 +127,12 @@ class _UpdateRecipesHospitalState
           ),
         ),
       ),
-
-      body: BlocBuilder<
-          RecipesBrandBloc,
-          RecipesBrandState>(
+      body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
           // =====================================================
           // Loading
           // =====================================================
-          if (state
-          is RecipesRecipesLoadingState) {
+          if (state is RecipesRecipesLoadingState) {
             return loadingFullScreen(
               context,
             );
@@ -172,15 +142,11 @@ class _UpdateRecipesHospitalState
           // Error
           // نفس الشرط والسلوك الأصلي
           // =====================================================
-          if (state
-          is RecipesRecipesErrorState &&
-              widget.st == 1) {
-
+          if (state is RecipesRecipesErrorState && widget.st == 1) {
             return Center(
               child: emptyFullScreen(
                 context,
-                message:
-                ' لم يتم ادخال وصفات لهذا الطبيب من قبل',
+                message: ' لم يتم ادخال وصفات لهذا الطبيب من قبل',
               ),
             );
           }
@@ -189,434 +155,393 @@ class _UpdateRecipesHospitalState
           // تعبئة بيانات الوصفة
           // نفس الحقول الأصلية
           // =====================================================
-          if (state
-          is RecipesRecipesState) {
-            final recipeObject = context
-                .watch<RecipesBrandBloc>()
-                .insertRecipesObject;
+          if (state is RecipesRecipesState) {
+            final recipeObject =
+                context.watch<RecipesBrandBloc>().insertRecipesObject;
 
-            _doctorSpController.text =
-                recipeObject.spName;
+            _doctorSpController.text = recipeObject.spName;
 
-            firstNoteController.text =
-                recipeObject.note1 ?? '';
+            firstNoteController.text = recipeObject.note1 ?? '';
 
-            _secondNoteController.text =
-                recipeObject.note2 ?? '';
+            _secondNoteController.text = recipeObject.note2 ?? '';
 
-            _addressController.text =
-                recipeObject.address;
+            _addressController.text = recipeObject.address;
 
-            _connectController.text =
-                recipeObject.phone;
+            _connectController.text = recipeObject.phone;
 
-            _specialNotesController.text =
-                recipeObject.note_emp ?? '';
+            _specialNotesController.text = recipeObject.note_emp ?? '';
           }
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: contentMaxWidth,
-              ),
-
-              child: SingleChildScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-
+          // ملاحظة: SingleChildScrollView على كامل العرض هون (بدون
+          // ConstrainedBox خارجي) حتى يبقى السكرول بالماوس يعمل فوق الفراغ
+          // الجانبي بالعرض، وقيد contentMaxWidth يُطبَّق داخلياً فقط.
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior
-                    .onDrag,
-
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: EdgeInsets.fromLTRB(
                   ui.pagePadding,
                   ui.pageTopPadding,
                   ui.pagePadding,
                   ui.pageBottomPadding,
                 ),
-
-                child: Form(
-                  key: _formKey,
-
-                  child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.stretch,
-
-                    children: [
-                      // =================================================
-                      // Doctor Type
-                      // =================================================
-                      BlocBuilder<
-                          RecipesBrandBloc,
-                          RecipesBrandState>(
-                        builder: (
-                            context,
-                            state,
-                            ) {
-                          return _buildDoctorTypeSection(
-                            context,
-                            ui,
-                          );
-                        },
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: contentMaxWidth,
                       ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // =================================================
+                            // Doctor Type
+                            // =================================================
+                            BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                              builder: (
+                                context,
+                                state,
+                              ) {
+                                return _buildDoctorTypeSection(
+                                  context,
+                                  ui,
+                                );
+                              },
+                            ),
 
-                      SizedBox(
-                        height: ui.sectionSpacing,
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Doctor Specialization
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'اختصاص الطبيب',
+                              required: true,
+                            ),
+
+                            BoxTextField(
+                              inputFormatters: const [],
+                              controller: _doctorSpController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال اختصاص الطبيب';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              prefixIcon: null,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 1
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الأول',
+                              required: true,
+                            ),
+
+                            _buildFirstBrandField(
+                              context,
+                              ui,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 2
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الثاني',
+                            ),
+
+                            BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                              builder: (
+                                context,
+                                state,
+                              ) {
+                                return _buildOptionalBrandField(
+                                  context: context,
+                                  state: state,
+                                  index: 2,
+                                );
+                              },
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 3
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الثالث',
+                            ),
+
+                            BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                              builder: (
+                                context,
+                                state,
+                              ) {
+                                return _buildOptionalBrandField(
+                                  context: context,
+                                  state: state,
+                                  index: 3,
+                                );
+                              },
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 4
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الرابع',
+                            ),
+
+                            BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                              builder: (
+                                context,
+                                state,
+                              ) {
+                                return _buildOptionalBrandField(
+                                  context: context,
+                                  state: state,
+                                  index: 4,
+                                );
+                              },
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // First Note
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'الملاحظة الأولى',
+                              required: true,
+                            ),
+
+                            BoxTextField(
+                              prefixIcon: null,
+                              controller: firstNoteController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال الملاحظة الأولى';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              inputFormatters: const [],
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Second Note
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'الملاحظة الثانية',
+                            ),
+
+                            BoxTextField(
+                              inputFormatters: const [],
+                              controller: _secondNoteController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              prefixIcon: null,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Address
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'العنوان',
+                              required: true,
+                            ),
+
+                            BoxTextField(
+                              controller: _addressController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال العنوان';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              inputFormatters: const [],
+                              prefixIcon: null,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Contact
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'التواصل',
+                              required: true,
+                            ),
+
+                            BoxTextField(
+                              inputFormatters: const [],
+                              prefixIcon: null,
+                              controller: _connectController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال رقم التواصل';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Printed Recipes Count
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'عدد الوصفات المطبوعة',
+                              required: true,
+                            ),
+
+                            BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                              builder: (
+                                context,
+                                state,
+                              ) {
+                                return _buildRecipeCountField(
+                                  context,
+                                  state,
+                                );
+                              },
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Representative Notes
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'ملاحظات خاصة للمندوب',
+                            ),
+
+                            BoxTextField(
+                              prefixIcon: null,
+                              inputFormatters: const [],
+                              controller: _specialNotesController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                            ),
+
+                            SizedBox(
+                              height: ui.largeSpacing,
+                            ),
+
+                            // =================================================
+                            // Images
+                            // =================================================
+                            BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
+                              builder: (
+                                context,
+                                state,
+                              ) {
+                                return _buildImagesSection(
+                                  context,
+                                  ui,
+                                );
+                              },
+                            ),
+
+                            SizedBox(
+                              height: ui.largeSpacing,
+                            ),
+
+                            // =================================================
+                            // Update Button
+                            // =================================================
+                            _buildUpdateSection(
+                              context,
+                              ui,
+                            ),
+                          ],
+                        ),
                       ),
-
-                      // =================================================
-                      // Doctor Specialization
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'اختصاص الطبيب',
-                        required: true,
-                      ),
-
-                      BoxTextField(
-                        inputFormatters: const [],
-                        controller:
-                        _doctorSpController,
-                        keyboardType:
-                        TextInputType.text,
-
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال اختصاص الطبيب';
-                          }
-
-                          return null;
-                        },
-
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        prefixIcon: null,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 1
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الأول',
-                        required: true,
-                      ),
-
-                      _buildFirstBrandField(
-                        context,
-                        ui,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 2
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الثاني',
-                      ),
-
-                      BlocBuilder<
-                          RecipesBrandBloc,
-                          RecipesBrandState>(
-                        builder: (
-                            context,
-                            state,
-                            ) {
-                          return _buildOptionalBrandField(
-                            context: context,
-                            state: state,
-                            index: 2,
-                          );
-                        },
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 3
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الثالث',
-                      ),
-
-                      BlocBuilder<
-                          RecipesBrandBloc,
-                          RecipesBrandState>(
-                        builder: (
-                            context,
-                            state,
-                            ) {
-                          return _buildOptionalBrandField(
-                            context: context,
-                            state: state,
-                            index: 3,
-                          );
-                        },
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 4
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الرابع',
-                      ),
-
-                      BlocBuilder<
-                          RecipesBrandBloc,
-                          RecipesBrandState>(
-                        builder: (
-                            context,
-                            state,
-                            ) {
-                          return _buildOptionalBrandField(
-                            context: context,
-                            state: state,
-                            index: 4,
-                          );
-                        },
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // First Note
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'الملاحظة الأولى',
-                        required: true,
-                      ),
-
-                      BoxTextField(
-                        prefixIcon: null,
-                        controller:
-                        firstNoteController,
-                        keyboardType:
-                        TextInputType.text,
-
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال الملاحظة الأولى';
-                          }
-
-                          return null;
-                        },
-
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        inputFormatters: const [],
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Second Note
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'الملاحظة الثانية',
-                      ),
-
-                      BoxTextField(
-                        inputFormatters: const [],
-                        controller:
-                        _secondNoteController,
-                        keyboardType:
-                        TextInputType.text,
-
-                        validator: (value) {
-                          return null;
-                        },
-
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        prefixIcon: null,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Address
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'العنوان',
-                        required: true,
-                      ),
-
-                      BoxTextField(
-                        controller:
-                        _addressController,
-                        keyboardType:
-                        TextInputType.text,
-
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال العنوان';
-                          }
-
-                          return null;
-                        },
-
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        inputFormatters: const [],
-                        prefixIcon: null,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Contact
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'التواصل',
-                        required: true,
-                      ),
-
-                      BoxTextField(
-                        inputFormatters: const [],
-                        prefixIcon: null,
-                        controller:
-                        _connectController,
-                        keyboardType:
-                        TextInputType.number,
-
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال رقم التواصل';
-                          }
-
-                          return null;
-                        },
-
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Printed Recipes Count
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'عدد الوصفات المطبوعة',
-                        required: true,
-                      ),
-
-                      BlocBuilder<
-                          RecipesBrandBloc,
-                          RecipesBrandState>(
-                        builder: (
-                            context,
-                            state,
-                            ) {
-                          return _buildRecipeCountField(
-                            context,
-                            state,
-                          );
-                        },
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Representative Notes
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'ملاحظات خاصة للمندوب',
-                      ),
-
-                      BoxTextField(
-                        prefixIcon: null,
-                        inputFormatters: const [],
-                        controller:
-                        _specialNotesController,
-                        keyboardType:
-                        TextInputType.text,
-
-                        validator: (value) {
-                          return null;
-                        },
-
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                      ),
-
-                      SizedBox(
-                        height: ui.largeSpacing,
-                      ),
-
-                      // =================================================
-                      // Images
-                      // =================================================
-                      BlocBuilder<
-                          RecipesBrandBloc,
-                          RecipesBrandState>(
-                        builder: (
-                            context,
-                            state,
-                            ) {
-                          return _buildImagesSection(
-                            context,
-                            ui,
-                          );
-                        },
-                      ),
-
-                      SizedBox(
-                        height: ui.largeSpacing,
-                      ),
-
-                      // =================================================
-                      // Update Button
-                      // =================================================
-                      _buildUpdateSection(
-                        context,
-                        ui,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         },
       ),
@@ -628,21 +553,17 @@ class _UpdateRecipesHospitalState
   // =============================================================
 
   Widget _buildDoctorTypeSection(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    final selectedType = context
-        .watch<RecipesBrandBloc>()
-        .insertRecipesObject
-        .type;
+    BuildContext context,
+    AppUi ui,
+  ) {
+    final selectedType =
+        context.watch<RecipesBrandBloc>().insertRecipesObject.type;
 
     return Wrap(
       alignment: WrapAlignment.center,
-      crossAxisAlignment:
-      WrapCrossAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       spacing: ui.mediumSpacing,
       runSpacing: ui.smallSpacing,
-
       children: [
         _buildTypeOption(
           context: context,
@@ -651,7 +572,6 @@ class _UpdateRecipesHospitalState
           label: 'الدكتور',
           groupValue: selectedType,
         ),
-
         _buildTypeOption(
           context: context,
           ui: ui,
@@ -659,7 +579,6 @@ class _UpdateRecipesHospitalState
           label: 'الدكتورة',
           groupValue: selectedType,
         ),
-
       ],
     );
   }
@@ -673,20 +592,14 @@ class _UpdateRecipesHospitalState
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-
       children: [
         Radio<String>(
-          activeColor:
-          ColorManager.secondaryColor2,
-
+          activeColor: ColorManager.secondaryColor2,
           value: value,
-
           groupValue: groupValue,
-
           onChanged: (newValue) {
             // نفس Event الأصلي
-            BlocProvider.of<
-                RecipesBrandBloc>(
+            BlocProvider.of<RecipesBrandBloc>(
               context,
             ).add(
               SelectTypeEvent(
@@ -695,17 +608,14 @@ class _UpdateRecipesHospitalState
             );
           },
         ),
-
         Text(
           label,
           style: TextStyle(
-            fontSize:
-            ui.isMobile ? 14 : 16,
+            fontSize: ui.isMobile ? 14 : 16,
             color: const Color(
               0xFF334155,
             ),
-            fontWeight:
-            FontWeight.w600,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -717,43 +627,31 @@ class _UpdateRecipesHospitalState
   // =============================================================
 
   Widget _buildFieldLabel(
-      AppUi ui,
-      String label, {
-        bool required = false,
-      }) {
+    AppUi ui,
+    String label, {
+    bool required = false,
+  }) {
     return Padding(
       padding: EdgeInsets.only(
         bottom: ui.smallSpacing,
         right: 2,
       ),
-
       child: Align(
-        alignment:
-        AlignmentDirectional.centerStart,
-
+        alignment: AlignmentDirectional.centerStart,
         child: Text.rich(
           TextSpan(
             children: [
               TextSpan(
                 text: label,
-
                 style: TextStyle(
-                  fontSize:
-                  ui.isMobile
-                      ? 14.5
-                      : 16,
-
-                  fontWeight:
-                  FontWeight.w600,
-
+                  fontSize: ui.isMobile ? 14.5 : 16,
+                  fontWeight: FontWeight.w600,
                   color: const Color(
                     0xFF334155,
                   ),
-
                   height: 1.3,
                 ),
               ),
-
               if (required)
                 const TextSpan(
                   text: '  *',
@@ -761,8 +659,7 @@ class _UpdateRecipesHospitalState
                     color: Color(
                       0xFFEF4444,
                     ),
-                    fontWeight:
-                    FontWeight.w700,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
             ],
@@ -777,18 +674,15 @@ class _UpdateRecipesHospitalState
   // =============================================================
 
   Widget _buildFirstBrandField(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    BuildContext context,
+    AppUi ui,
+  ) {
+    final bloc = context.watch<RecipesBrandBloc>();
 
     // مهم:
     // initialValue محفوظ كما في الكود الأصلي
     return FormField<BrandRes>(
-      initialValue:
-      bloc.insertRecipesObject.brand_1,
-
+      initialValue: bloc.insertRecipesObject.brand_1,
       validator: (value) {
         if (value == null) {
           return 'يرجى اختيار المستحضر الأول';
@@ -796,42 +690,31 @@ class _UpdateRecipesHospitalState
 
         return null;
       },
-
-      builder:
-          (FormFieldState<BrandRes> formState) {
+      builder: (FormFieldState<BrandRes> formState) {
         return Column(
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DropDownRecipesSearch(
-              brandRes:
-              bloc.insertRecipesObject.brand_1,
+              brandRes: bloc.insertRecipesObject.brand_1,
 
               // نفس النتيجة الفعلية في الكود الأصلي
               // لأن state داخل FormField هو FormFieldState
-              hintText: bloc
-                  .insertRecipesObject
-                  .brand_1
-                  .title_en,
+              hintText: bloc.insertRecipesObject.brand_1.title_en,
 
               items: bloc.brandRecs,
 
               onChanged: (value) {
-                final BrandRes brand =
-                    value;
+                final BrandRes brand = value;
 
                 formState.didChange(
                   brand,
                 );
 
-                BlocProvider.of<
-                    RecipesBrandBloc>(
+                BlocProvider.of<RecipesBrandBloc>(
                   context,
                 ).add(
                   SelectBrandEvent(
-                    brandRecipeModel:
-                    brand,
+                    brandRecipeModel: brand,
                     index: 1,
                   ),
                 );
@@ -841,20 +724,16 @@ class _UpdateRecipesHospitalState
                 return null;
               },
             ),
-
             if (formState.hasError)
               Padding(
                 padding: EdgeInsets.only(
                   top: ui.smallSpacing,
                 ),
-
                 child: Text(
                   formState.errorText ?? '',
-
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize:
-                    ui.smallTextSize,
+                    fontSize: ui.smallTextSize,
                   ),
                 ),
               ),
@@ -873,57 +752,44 @@ class _UpdateRecipesHospitalState
     required RecipesBrandState state,
     required int index,
   }) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    final bloc = context.watch<RecipesBrandBloc>();
 
     BrandRes? brand;
 
     switch (index) {
       case 2:
-        brand =
-            bloc.insertRecipesObject.brand_2;
+        brand = bloc.insertRecipesObject.brand_2;
         break;
 
       case 3:
-        brand =
-            bloc.insertRecipesObject.brand_3;
+        brand = bloc.insertRecipesObject.brand_3;
         break;
 
       case 4:
-        brand =
-            bloc.insertRecipesObject.brand_4;
+        brand = bloc.insertRecipesObject.brand_4;
         break;
     }
 
     return DropDownRecipesSearch(
       brandRes: brand,
-
-      hintText:
-      (state is AllRecipesLoadingState ||
-          state is AllNumLoadingState)
+      hintText: (state is AllRecipesLoadingState || state is AllNumLoadingState)
           ? 'loading'
           : widget.st == 1
-          ? brand?.title_en ?? ''
-          : 'اختر المستحضر',
-
+              ? brand?.title_en ?? ''
+              : 'اختر المستحضر',
       items: bloc.brandRecs,
-
       onChanged: (value) {
-        final BrandRes selectedBrand =
-            value;
+        final BrandRes selectedBrand = value;
 
-        BlocProvider.of<
-            RecipesBrandBloc>(
+        BlocProvider.of<RecipesBrandBloc>(
           context,
         ).add(
           SelectBrandEvent(
-            brandRecipeModel:
-            selectedBrand,
+            brandRecipeModel: selectedBrand,
             index: index,
           ),
         );
       },
-
       validator: (value) {
         return null;
       },
@@ -935,27 +801,21 @@ class _UpdateRecipesHospitalState
   // =============================================================
 
   Widget _buildRecipeCountField(
-      BuildContext context,
-      RecipesBrandState state,
-      ) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    BuildContext context,
+    RecipesBrandState state,
+  ) {
+    final bloc = context.watch<RecipesBrandBloc>();
 
     return DropDownNum(
-      hintText:
-      (state is AllRecipesLoadingState ||
-          state is AllNumLoadingState)
+      hintText: (state is AllRecipesLoadingState || state is AllNumLoadingState)
           ? 'loading'
           : widget.st == 1
-          ? bloc.insertRecipesObject.total
-          : 'اختر العدد',
-
+              ? bloc.insertRecipesObject.total
+              : 'اختر العدد',
       items: bloc.numRec,
-
       onChanged: (value) {
         // نفس Event الأصلي
-        BlocProvider.of<
-            RecipesBrandBloc>(
+        BlocProvider.of<RecipesBrandBloc>(
           context,
         ).add(
           SelectNumRecEvent(
@@ -963,20 +823,14 @@ class _UpdateRecipesHospitalState
           ),
         );
       },
-
       validator: (value) {
         if (value == null &&
-            context
-                .read<RecipesBrandBloc>()
-                .insertRecipesObject
-                .total ==
-                '') {
+            context.read<RecipesBrandBloc>().insertRecipesObject.total == '') {
           return 'يرجى اختيار العدد';
         }
 
         return null;
       },
-
       prefixIcon: null,
     );
   }
@@ -986,27 +840,24 @@ class _UpdateRecipesHospitalState
   // =============================================================
 
   Widget _buildImagesSection(
-      BuildContext context,
-      AppUi ui,
-      ) {
+    BuildContext context,
+    AppUi ui,
+  ) {
     return LayoutBuilder(
       builder: (
-          context,
-          constraints,
-          ) {
+        context,
+        constraints,
+      ) {
         final bool showSideBySide =
-            ui.isTabletLandscape &&
-                constraints.maxWidth >= 650;
+            ui.isTabletLandscape && constraints.maxWidth >= 650;
 
-        final firstImage =
-        _buildSingleImageSection(
+        final firstImage = _buildSingleImageSection(
           context: context,
           ui: ui,
           imageNumber: 1,
         );
 
-        final secondImage =
-        _buildSingleImageSection(
+        final secondImage = _buildSingleImageSection(
           context: context,
           ui: ui,
           imageNumber: 2,
@@ -1014,18 +865,14 @@ class _UpdateRecipesHospitalState
 
         if (showSideBySide) {
           return Row(
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
-
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: firstImage,
               ),
-
               SizedBox(
                 width: ui.cardSpacing,
               ),
-
               Expanded(
                 child: secondImage,
               ),
@@ -1036,11 +883,9 @@ class _UpdateRecipesHospitalState
         return Column(
           children: [
             firstImage,
-
             SizedBox(
               height: ui.cardSpacing,
             ),
-
             secondImage,
           ],
         );
@@ -1053,41 +898,31 @@ class _UpdateRecipesHospitalState
     required AppUi ui,
     required int imageNumber,
   }) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    final bloc = context.watch<RecipesBrandBloc>();
 
-    final File? image =
-    imageNumber == 1
+    final File? image = imageNumber == 1
         ? bloc.insertRecipesObject.image1
         : bloc.insertRecipesObject.image2;
 
     final int checkedValue =
-    imageNumber == 1
-        ? bloc.isChecked1
-        : bloc.isChecked2;
+        imageNumber == 1 ? bloc.isChecked1 : bloc.isChecked2;
 
     return Container(
       width: double.infinity,
-
       padding: EdgeInsets.all(
         ui.cardPadding,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
       ),
-
       child: Column(
         children: [
           _buildImagePicker(
@@ -1097,38 +932,28 @@ class _UpdateRecipesHospitalState
             image: image,
             checkedValue: checkedValue,
           ),
-
           SizedBox(
             height: ui.smallSpacing,
           ),
-
           Text(
             'صورة $imageNumber',
-
             style: TextStyle(
               color: const Color(
                 0xFF64748B,
               ),
-              fontSize:
-              ui.bodyTextSize,
-              fontWeight:
-              FontWeight.w600,
+              fontSize: ui.bodyTextSize,
+              fontWeight: FontWeight.w600,
             ),
           ),
-
           if (widget.st == 1) ...[
             SizedBox(
-              height:
-              ui.mediumSpacing,
+              height: ui.mediumSpacing,
             ),
-
             _buildImageOptions(
               context: context,
               ui: ui,
-              imageNumber:
-              imageNumber,
-              checkedValue:
-              checkedValue,
+              imageNumber: imageNumber,
+              checkedValue: checkedValue,
             ),
           ],
         ],
@@ -1143,24 +968,18 @@ class _UpdateRecipesHospitalState
     required File? image,
     required int checkedValue,
   }) {
-    final double imageSize =
-    ui.isMobile ? 135 : 155;
+    final double imageSize = ui.isMobile ? 135 : 155;
 
     return AppInkWell(
-      borderRadius:
-      BorderRadius.circular(
+      borderRadius: BorderRadius.circular(
         ui.smallRadius + 2,
       ),
-
       onTap: () async {
         final File? pickedImage =
-        await context
-            .read<RecipesBrandBloc>()
-            .pickImage();
+            await context.read<RecipesBrandBloc>().pickImage();
 
         // نفس PickImageEvent الأصلي
-        BlocProvider.of<
-            RecipesBrandBloc>(
+        BlocProvider.of<RecipesBrandBloc>(
           context,
         ).add(
           PickImageEvent(
@@ -1169,67 +988,47 @@ class _UpdateRecipesHospitalState
           ),
         );
       },
-
       child: Container(
         width: imageSize,
         height: imageSize,
-
         alignment: Alignment.center,
-
         decoration: BoxDecoration(
           color: const Color(
             0xFFF8FAFC,
           ),
-
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             ui.smallRadius + 2,
           ),
-
           border: Border.all(
             color: const Color(
               0xFFE2E8F0,
             ),
           ),
         ),
-
         child: image == null
             ? Column(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
-
-          children: [
-            Icon(
-              Icons.camera_alt,
-
-              size:
-              ui.iconSize + 14,
-
-              color: ColorManager
-                  .secondaryColor,
-            ),
-
-            SizedBox(
-              height:
-              ui.smallSpacing,
-            ),
-          ],
-        )
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.camera_alt,
+                    size: ui.iconSize + 14,
+                    color: ColorManager.secondaryColor,
+                  ),
+                  SizedBox(
+                    height: ui.smallSpacing,
+                  ),
+                ],
+              )
             : ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
-            ui.smallRadius + 1,
-          ),
-
-          child:
-          _buildSelectedImage(
-            image: image,
-            checkedValue:
-            checkedValue,
-            imageSize:
-            imageSize,
-          ),
-        ),
+                borderRadius: BorderRadius.circular(
+                  ui.smallRadius + 1,
+                ),
+                child: _buildSelectedImage(
+                  image: image,
+                  checkedValue: checkedValue,
+                  imageSize: imageSize,
+                ),
+              ),
       ),
     );
   }
@@ -1255,41 +1054,32 @@ class _UpdateRecipesHospitalState
     if (checkedValue != 2) {
       return Image.network(
         '${Constants.imageUrl}${image.path}',
-
         width: imageSize,
         height: imageSize,
         fit: BoxFit.cover,
-
         loadingBuilder: (
-            context,
-            child,
-            loadingProgress,
-            ) {
+          context,
+          child,
+          loadingProgress,
+        ) {
           if (loadingProgress == null) {
             return child;
           }
 
           return Center(
-            child:
-            CircularProgressIndicator(
-              value: loadingProgress
-                  .expectedTotalBytes !=
-                  null
-                  ? loadingProgress
-                  .cumulativeBytesLoaded /
-                  (loadingProgress
-                      .expectedTotalBytes ??
-                      1)
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      (loadingProgress.expectedTotalBytes ?? 1)
                   : null,
             ),
           );
         },
-
         errorBuilder: (
-            context,
-            error,
-            stackTrace,
-            ) {
+          context,
+          error,
+          stackTrace,
+        ) {
           return const Icon(
             Icons.error,
             size: 50,
@@ -1313,31 +1103,24 @@ class _UpdateRecipesHospitalState
     required int imageNumber,
     required int checkedValue,
   }) {
-    final bool disabled =
-        checkedValue == 2;
+    final bool disabled = checkedValue == 2;
 
     return Column(
       children: [
         _buildImageRadio(
           context: context,
           ui: ui,
-          imageNumber:
-          imageNumber,
-          checkedValue:
-          checkedValue,
+          imageNumber: imageNumber,
+          checkedValue: checkedValue,
           optionIndex: 0,
           disabled: disabled,
-          autofocus:
-          imageNumber == 1,
+          autofocus: imageNumber == 1,
         ),
-
         _buildImageRadio(
           context: context,
           ui: ui,
-          imageNumber:
-          imageNumber,
-          checkedValue:
-          checkedValue,
+          imageNumber: imageNumber,
+          checkedValue: checkedValue,
           optionIndex: 1,
           disabled: disabled,
           autofocus: false,
@@ -1357,64 +1140,46 @@ class _UpdateRecipesHospitalState
   }) {
     return RadioListTile<int>(
       autofocus: autofocus,
-
       dense: true,
-
-      contentPadding:
-      EdgeInsets.zero,
-
-      activeColor:
-      ColorManager.secondaryColor2,
-
+      contentPadding: EdgeInsets.zero,
+      activeColor: ColorManager.secondaryColor2,
       title: Text(
         stateImage[optionIndex].type,
-
         maxLines: 2,
-
-        overflow:
-        TextOverflow.ellipsis,
-
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: ui.bodyTextSize,
           color: const Color(
             0xFF334155,
           ),
-          fontWeight:
-          FontWeight.w500,
+          fontWeight: FontWeight.w500,
         ),
       ),
-
-      value:
-      stateImage[optionIndex].id,
-
-      groupValue:
-      checkedValue,
-
+      value: stateImage[optionIndex].id,
+      groupValue: checkedValue,
       onChanged: disabled
           ? null
           : (int? value) {
-        if (imageNumber == 1) {
-          // نفس Checkbox1Event
-          BlocProvider.of<
-              RecipesBrandBloc>(
-            context,
-          ).add(
-            Checkbox1Event(
-              value ?? 2,
-            ),
-          );
-        } else {
-          // نفس Checkbox2Event
-          BlocProvider.of<
-              RecipesBrandBloc>(
-            context,
-          ).add(
-            Checkbox2Event(
-              value ?? 2,
-            ),
-          );
-        }
-      },
+              if (imageNumber == 1) {
+                // نفس Checkbox1Event
+                BlocProvider.of<RecipesBrandBloc>(
+                  context,
+                ).add(
+                  Checkbox1Event(
+                    value ?? 2,
+                  ),
+                );
+              } else {
+                // نفس Checkbox2Event
+                BlocProvider.of<RecipesBrandBloc>(
+                  context,
+                ).add(
+                  Checkbox2Event(
+                    value ?? 2,
+                  ),
+                );
+              }
+            },
     );
   }
 
@@ -1423,33 +1188,27 @@ class _UpdateRecipesHospitalState
   // =============================================================
 
   Widget _buildUpdateSection(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    return BlocListener<
-        RecipesBrandBloc,
-        RecipesBrandState>(
+    BuildContext context,
+    AppUi ui,
+  ) {
+    return BlocListener<RecipesBrandBloc, RecipesBrandState>(
       listener: (context, state) async {
         // =====================================================
         // نفس Listener وتسلسل الحالات الأصلي تماماً
         // =====================================================
 
-        if (state
-        is InsertRecipesLoadingState) {
+        if (state is InsertRecipesLoadingState) {
           loading(
             context,
           );
-        } else if (state
-        is InsertRecipesState) {
+        } else if (state is InsertRecipesState) {
           await dismissDialog(
             context,
           );
 
-          Navigator.of(context)
-              .pop();
+          Navigator.of(context).pop();
 
-          ScaffoldMessenger.of(context)
-              .showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
                 'تم إرسال البيانات بنجاح',
@@ -1457,16 +1216,14 @@ class _UpdateRecipesHospitalState
             ),
           );
 
-          BlocProvider.of<
-              RecipesBrandBloc>(
+          BlocProvider.of<RecipesBrandBloc>(
             context,
           ).add(
             EditeRecNumEvent(
               state.num,
             ),
           );
-        } else if (state
-        is InsertRecipesErrorState) {
+        } else if (state is InsertRecipesErrorState) {
           error(
             context,
             state.failure.massage,
@@ -1474,43 +1231,27 @@ class _UpdateRecipesHospitalState
           );
         }
       },
-
       child: SizedBox(
         width: double.infinity,
-
         child: ElevatedButton(
-          style:
-          ElevatedButton.styleFrom(
-            backgroundColor:
-            ColorManager.medicalPrimary,
-
-            foregroundColor:
-            Colors.white,
-
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ColorManager.medicalPrimary,
+            foregroundColor: Colors.white,
             elevation: 0,
-
-            padding:
-            EdgeInsets.symmetric(
-              vertical:
-              ui.isMobile ? 14 : 16,
+            padding: EdgeInsets.symmetric(
+              vertical: ui.isMobile ? 14 : 16,
             ),
-
-            shape:
-            RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
                 ui.cardRadius - 4,
               ),
             ),
           ),
-
           onPressed: () {
             // لا تغيير بالسلوك:
             // لا unfocus إضافي ولا event إضافي
-            if (_formKey.currentState!
-                .validate()) {
-              BlocProvider.of<
-                  RecipesBrandBloc>(
+            if (_formKey.currentState!.validate()) {
+              BlocProvider.of<RecipesBrandBloc>(
                 context,
               ).add(
                 UpdateReciSEvent(
@@ -1519,35 +1260,28 @@ class _UpdateRecipesHospitalState
                   firstNoteController.text,
                   _secondNoteController.text,
                   _addressController.text,
-                  convertArabicNumberToEnglish( _connectController.text),
+                  convertArabicNumberToEnglish(_connectController.text),
                   _specialNotesController.text,
                   widget.docId,
-                  convertArabicNumberToEnglish( _connectController.text),
+                  convertArabicNumberToEnglish(_connectController.text),
                 ),
               );
             } else {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text(
                     'يرجى تعبئة جميع الحقول المطلوبة',
                   ),
-                  backgroundColor:
-                  ColorManager
-                      .secondaryColor,
+                  backgroundColor: ColorManager.secondaryColor,
                 ),
               );
             }
           },
-
           child: Text(
             'تعديل',
-
             style: TextStyle(
-              fontSize:
-              ui.isMobile ? 15 : 17,
-              fontWeight:
-              FontWeight.w700,
+              fontSize: ui.isMobile ? 15 : 17,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),

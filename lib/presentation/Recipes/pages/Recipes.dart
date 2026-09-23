@@ -29,28 +29,21 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
-  final TextEditingController _doctorSpController =
-  TextEditingController();
+  final TextEditingController _doctorSpController = TextEditingController();
 
-  final TextEditingController firstNoteController =
-  TextEditingController(
+  final TextEditingController firstNoteController = TextEditingController(
     text: 'يرجى عدم تبديل الدواء',
   );
 
-  final TextEditingController _secondNoteController =
-  TextEditingController();
+  final TextEditingController _secondNoteController = TextEditingController();
 
-  final TextEditingController _addressController =
-  TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
-  final TextEditingController _connectController =
-  TextEditingController();
+  final TextEditingController _connectController = TextEditingController();
 
-  final TextEditingController _specialNotesController =
-  TextEditingController();
+  final TextEditingController _specialNotesController = TextEditingController();
 
-  final GlobalKey<FormState> _formKey =
-  GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -59,33 +52,23 @@ class _RecipesPageState extends State<RecipesPage> {
     // =========================================================
     // نفس التسلسل والمنطق الأصلي
     // =========================================================
-    context
-        .read<RecipesBrandBloc>()
-        .add(
-      RestartEvent(),
-    );
+    context.read<RecipesBrandBloc>().add(
+          RestartEvent(),
+        );
 
-    context
-        .read<RecipesBrandBloc>()
-        .empty();
+    context.read<RecipesBrandBloc>().empty();
 
     if (widget.st == 1) {
-      context
-          .read<RecipesBrandBloc>()
-          .add(
-        CopyRecipesEvent(
-          widget.docId,
-          1,
-        ),
-      );
+      context.read<RecipesBrandBloc>().add(
+            CopyRecipesEvent(
+              widget.docId,
+              1,
+            ),
+          );
 
-      context
-          .read<RecipesBrandBloc>()
-          .isChecked2 = 3;
+      context.read<RecipesBrandBloc>().isChecked2 = 3;
 
-      context
-          .read<RecipesBrandBloc>()
-          .isChecked1 = 3;
+      context.read<RecipesBrandBloc>().isChecked1 = 3;
     }
   }
 
@@ -104,24 +87,18 @@ class _RecipesPageState extends State<RecipesPage> {
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
 
-    final double contentMaxWidth =
-    ui.isTabletLandscape
-        ? 760
-        : ui.pageMaxWidth;
+    final double contentMaxWidth = ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-
       backgroundColor: const Color(
         0xFFF8FAFC,
       ),
-
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
-
         leading: IconButton(
           tooltip: 'رجوع',
           onPressed: () {
@@ -132,7 +109,6 @@ class _RecipesPageState extends State<RecipesPage> {
             color: ColorManager.medicalPrimary,
           ),
         ),
-
         title: Text(
           'تفاصيل الوصفة',
           maxLines: 1,
@@ -144,16 +120,12 @@ class _RecipesPageState extends State<RecipesPage> {
           ),
         ),
       ),
-
-      body: BlocBuilder<
-          RecipesBrandBloc,
-          RecipesBrandState>(
+      body: BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
         builder: (context, state) {
           // =====================================================
           // Loading
           // =====================================================
-          if (state
-          is RecipesRecipesLoadingState) {
+          if (state is RecipesRecipesLoadingState) {
             return loadingFullScreen(
               context,
             );
@@ -163,14 +135,11 @@ class _RecipesPageState extends State<RecipesPage> {
           // Copy recipe error
           // نفس السلوك الأصلي
           // =====================================================
-          if (state
-          is RecipesRecipesErrorState &&
-              widget.st == 1) {
+          if (state is RecipesRecipesErrorState && widget.st == 1) {
             return Center(
               child: emptyFullScreen(
                 context,
-                message:
-                'لم يتم ادخال وصفات لهذا الطبيب من قبل',
+                message: 'لم يتم ادخال وصفات لهذا الطبيب من قبل',
               ),
             );
           }
@@ -179,361 +148,343 @@ class _RecipesPageState extends State<RecipesPage> {
           // Populate copied recipe
           // نفس البيانات الأصلية
           // =====================================================
-          if (state
-          is RecipesRecipesState) {
-            final recipeObject = context
-                .read<RecipesBrandBloc>()
-                .insertRecipesObject;
+          if (state is RecipesRecipesState) {
+            final recipeObject =
+                context.read<RecipesBrandBloc>().insertRecipesObject;
 
-            _doctorSpController.text =
-                recipeObject.spName;
+            _doctorSpController.text = recipeObject.spName;
 
-            firstNoteController.text =
-                recipeObject.note1 ?? '';
+            firstNoteController.text = recipeObject.note1 ?? '';
 
-            _secondNoteController.text =
-                recipeObject.note2 ?? '';
+            _secondNoteController.text = recipeObject.note2 ?? '';
 
-            _addressController.text =
-                recipeObject.address;
+            _addressController.text = recipeObject.address;
 
-            _connectController.text =
-                recipeObject.phone;
+            _connectController.text = recipeObject.phone;
 
-            _specialNotesController.text =
-                recipeObject.note_emp ?? '';
+            _specialNotesController.text = recipeObject.note_emp ?? '';
           }
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: contentMaxWidth,
-              ),
-
-              child: SingleChildScrollView(
-                physics:
-                const BouncingScrollPhysics(),
-
+          // ملاحظة: SingleChildScrollView على كامل العرض هون (بدون
+          // ConstrainedBox خارجي) حتى يبقى السكرول بالماوس يعمل فوق الفراغ
+          // الجانبي بالعرض، وقيد contentMaxWidth يُطبَّق داخلياً فقط.
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior
-                    .onDrag,
-
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: EdgeInsets.fromLTRB(
                   ui.pagePadding,
                   ui.pageTopPadding,
                   ui.pagePadding,
                   ui.pageBottomPadding,
                 ),
-
-                child: Form(
-                  key: _formKey,
-
-                  child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.stretch,
-
-                    children: [
-                      // =================================================
-                      // Doctor title type
-                      // =================================================
-                      _buildDoctorTypeSection(
-                        context,
-                        ui,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: contentMaxWidth,
                       ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // =================================================
+                            // Doctor title type
+                            // =================================================
+                            _buildDoctorTypeSection(
+                              context,
+                              ui,
+                            ),
 
-                      SizedBox(
-                        height: ui.sectionSpacing,
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Doctor specialization
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'اختصاص الطبيب',
+                            ),
+
+                            BoxTextField(
+                              inputFormatters: const [],
+                              controller: _doctorSpController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال اختصاص الطبيب';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              prefixIcon: null,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 1
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الأول',
+                            ),
+
+                            _buildFirstBrandField(
+                              context,
+                              state,
+                              ui,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 2
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الثاني',
+                            ),
+
+                            _buildOptionalBrandField(
+                              context: context,
+                              state: state,
+                              index: 2,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 3
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الثالث',
+                            ),
+
+                            _buildOptionalBrandField(
+                              context: context,
+                              state: state,
+                              index: 3,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Brand 4
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'المستحضر الرابع',
+                            ),
+
+                            _buildOptionalBrandField(
+                              context: context,
+                              state: state,
+                              index: 4,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Notes
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'الملاحظة الأولى',
+                            ),
+
+                            BoxTextField(
+                              prefixIcon: null,
+                              controller: firstNoteController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال الملاحظة الأولى';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              inputFormatters: const [],
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            _buildFieldLabel(
+                              ui,
+                              'الملاحظة الثانية',
+                            ),
+
+                            BoxTextField(
+                              inputFormatters: const [],
+                              controller: _secondNoteController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              prefixIcon: null,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Address
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'العنوان',
+                            ),
+
+                            BoxTextField(
+                              controller: _addressController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال العنوان';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                              inputFormatters: const [],
+                              prefixIcon: null,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Contact
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'التواصل',
+                            ),
+
+                            BoxTextField(
+                              inputFormatters: const [],
+                              prefixIcon: null,
+                              controller: _connectController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'يرجى إدخال رقم التواصل';
+                                }
+
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Printed recipe count
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'عدد الوصفات المطبوعة',
+                            ),
+
+                            _buildRecipeCountField(
+                              context,
+                              state,
+                            ),
+
+                            SizedBox(
+                              height: ui.sectionSpacing,
+                            ),
+
+                            // =================================================
+                            // Employee notes
+                            // =================================================
+                            _buildFieldLabel(
+                              ui,
+                              'ملاحظات خاصة للمندوب',
+                            ),
+
+                            BoxTextField(
+                              prefixIcon: null,
+                              inputFormatters: const [],
+                              controller: _specialNotesController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                return null;
+                              },
+                              obscureText: false,
+                              maxLines: 15,
+                              minLines: 1,
+                            ),
+
+                            SizedBox(
+                              height: ui.largeSpacing,
+                            ),
+
+                            // =================================================
+                            // Images
+                            // =================================================
+                            _buildImagesSection(
+                              context,
+                              ui,
+                            ),
+
+                            SizedBox(
+                              height: ui.largeSpacing,
+                            ),
+
+                            // =================================================
+                            // Submit
+                            // =================================================
+                            _buildSubmitSection(
+                              context,
+                              ui,
+                            ),
+                          ],
+                        ),
                       ),
-
-                      // =================================================
-                      // Doctor specialization
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'اختصاص الطبيب',
-                      ),
-
-                      BoxTextField(
-                        inputFormatters: const [],
-                        controller:
-                        _doctorSpController,
-                        keyboardType:
-                        TextInputType.text,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال اختصاص الطبيب';
-                          }
-
-                          return null;
-                        },
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        prefixIcon: null,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 1
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الأول',
-                      ),
-
-                      _buildFirstBrandField(
-                        context,
-                        state,
-                        ui,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 2
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الثاني',
-                      ),
-
-                      _buildOptionalBrandField(
-                        context: context,
-                        state: state,
-                        index: 2,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 3
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الثالث',
-                      ),
-
-                      _buildOptionalBrandField(
-                        context: context,
-                        state: state,
-                        index: 3,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Brand 4
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'المستحضر الرابع',
-                      ),
-
-                      _buildOptionalBrandField(
-                        context: context,
-                        state: state,
-                        index: 4,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Notes
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'الملاحظة الأولى',
-                      ),
-
-                      BoxTextField(
-                        prefixIcon: null,
-                        controller:
-                        firstNoteController,
-                        keyboardType:
-                        TextInputType.text,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال الملاحظة الأولى';
-                          }
-
-                          return null;
-                        },
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        inputFormatters: const [],
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      _buildFieldLabel(
-                        ui,
-                        'الملاحظة الثانية',
-                      ),
-
-                      BoxTextField(
-                        inputFormatters: const [],
-                        controller:
-                        _secondNoteController,
-                        keyboardType:
-                        TextInputType.text,
-                        validator: (value) {
-                          return null;
-                        },
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        prefixIcon: null,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Address
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'العنوان',
-                      ),
-
-                      BoxTextField(
-                        controller:
-                        _addressController,
-                        keyboardType:
-                        TextInputType.text,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال العنوان';
-                          }
-
-                          return null;
-                        },
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                        inputFormatters: const [],
-                        prefixIcon: null,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Contact
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'التواصل',
-                      ),
-
-                      BoxTextField(
-                        inputFormatters: const [],
-                        prefixIcon: null,
-                        controller:
-                        _connectController,
-
-                        keyboardType:
-                        TextInputType.number,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'يرجى إدخال رقم التواصل';
-                          }
-
-                          return null;
-                        },
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Printed recipe count
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'عدد الوصفات المطبوعة',
-                      ),
-
-                      _buildRecipeCountField(
-                        context,
-                        state,
-                      ),
-
-                      SizedBox(
-                        height: ui.sectionSpacing,
-                      ),
-
-                      // =================================================
-                      // Employee notes
-                      // =================================================
-                      _buildFieldLabel(
-                        ui,
-                        'ملاحظات خاصة للمندوب',
-                      ),
-
-                      BoxTextField(
-                        prefixIcon: null,
-                        inputFormatters: const [],
-                        controller:
-                        _specialNotesController,
-                        keyboardType:
-                        TextInputType.text,
-                        validator: (value) {
-                          return null;
-                        },
-                        obscureText: false,
-                        maxLines: 15,
-                        minLines: 1,
-                      ),
-
-                      SizedBox(
-                        height: ui.largeSpacing,
-                      ),
-
-                      // =================================================
-                      // Images
-                      // =================================================
-                      _buildImagesSection(
-                        context,
-                        ui,
-                      ),
-
-                      SizedBox(
-                        height: ui.largeSpacing,
-                      ),
-
-                      // =================================================
-                      // Submit
-                      // =================================================
-                      _buildSubmitSection(
-                        context,
-                        ui,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         },
       ),
@@ -545,21 +496,17 @@ class _RecipesPageState extends State<RecipesPage> {
   // =============================================================
 
   Widget _buildDoctorTypeSection(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    final selectedType = context
-        .watch<RecipesBrandBloc>()
-        .insertRecipesObject
-        .type;
+    BuildContext context,
+    AppUi ui,
+  ) {
+    final selectedType =
+        context.watch<RecipesBrandBloc>().insertRecipesObject.type;
 
     return Wrap(
       alignment: WrapAlignment.center,
-      crossAxisAlignment:
-      WrapCrossAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       spacing: ui.mediumSpacing,
       runSpacing: ui.smallSpacing,
-
       children: [
         _buildTypeOption(
           context: context,
@@ -575,7 +522,6 @@ class _RecipesPageState extends State<RecipesPage> {
           label: 'الدكتورة',
           groupValue: selectedType,
         ),
-
       ],
     );
   }
@@ -591,21 +537,17 @@ class _RecipesPageState extends State<RecipesPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Radio<String>(
-          activeColor:
-          ColorManager.secondaryColor2,
+          activeColor: ColorManager.secondaryColor2,
           value: value,
           groupValue: groupValue,
           onChanged: (newValue) {
-            context
-                .read<RecipesBrandBloc>()
-                .add(
-              SelectTypeEvent(
-                newValue ?? '0',
-              ),
-            );
+            context.read<RecipesBrandBloc>().add(
+                  SelectTypeEvent(
+                    newValue ?? '0',
+                  ),
+                );
           },
         ),
-
         Text(
           label,
           style: TextStyle(
@@ -625,9 +567,9 @@ class _RecipesPageState extends State<RecipesPage> {
   // =============================================================
 
   Widget _buildFieldLabel(
-      AppUi ui,
-      String label,
-      ) {
+    AppUi ui,
+    String label,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
         bottom: ui.smallSpacing,
@@ -654,10 +596,10 @@ class _RecipesPageState extends State<RecipesPage> {
   // =============================================================
 
   Widget _buildFirstBrandField(
-      BuildContext context,
-      RecipesBrandState parentState,
-      AppUi ui,
-      ) {
+    BuildContext context,
+    RecipesBrandState parentState,
+    AppUi ui,
+  ) {
     return FormField<BrandRes>(
       validator: (value) {
         if (value == null) {
@@ -666,35 +608,21 @@ class _RecipesPageState extends State<RecipesPage> {
 
         return null;
       },
-
-      builder:
-          (FormFieldState<BrandRes> formState) {
-        final bloc =
-        context.watch<RecipesBrandBloc>();
+      builder: (FormFieldState<BrandRes> formState) {
+        final bloc = context.watch<RecipesBrandBloc>();
 
         return Column(
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DropDownRecipesSearch(
-              brandRes:
-              bloc.insertRecipesObject.brand_1,
-
-              hintText: (parentState
-              is AllRecipesLoadingState ||
-                  parentState
-                  is AllNumLoadingState)
+              brandRes: bloc.insertRecipesObject.brand_1,
+              hintText: (parentState is AllRecipesLoadingState ||
+                      parentState is AllNumLoadingState)
                   ? 'loading'
                   : widget.st == 1
-                  ? bloc
-                  .insertRecipesObject
-                  .brand_1
-                  .title_en
-                  : 'اختر المستحضر',
-
+                      ? bloc.insertRecipesObject.brand_1.title_en
+                      : 'اختر المستحضر',
               items: bloc.brandRecs,
-
               onChanged: (value) {
                 final BrandRes brand = value;
 
@@ -702,22 +630,17 @@ class _RecipesPageState extends State<RecipesPage> {
                   brand,
                 );
 
-                context
-                    .read<RecipesBrandBloc>()
-                    .add(
-                  SelectBrandEvent(
-                    brandRecipeModel:
-                    brand,
-                    index: 1,
-                  ),
-                );
+                context.read<RecipesBrandBloc>().add(
+                      SelectBrandEvent(
+                        brandRecipeModel: brand,
+                        index: 1,
+                      ),
+                    );
               },
-
               validator: (value) {
                 return null;
               },
             ),
-
             if (formState.hasError)
               Padding(
                 padding: EdgeInsets.only(
@@ -727,8 +650,7 @@ class _RecipesPageState extends State<RecipesPage> {
                   formState.errorText ?? '',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize:
-                    ui.smallTextSize,
+                    fontSize: ui.smallTextSize,
                   ),
                 ),
               ),
@@ -743,57 +665,42 @@ class _RecipesPageState extends State<RecipesPage> {
     required RecipesBrandState state,
     required int index,
   }) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    final bloc = context.watch<RecipesBrandBloc>();
 
     BrandRes? brand;
 
     switch (index) {
       case 2:
-        brand =
-            bloc.insertRecipesObject.brand_2;
+        brand = bloc.insertRecipesObject.brand_2;
         break;
       case 3:
-        brand =
-            bloc.insertRecipesObject.brand_3;
+        brand = bloc.insertRecipesObject.brand_3;
         break;
       case 4:
-        brand =
-            bloc.insertRecipesObject.brand_4;
+        brand = bloc.insertRecipesObject.brand_4;
         break;
     }
 
-    final String copiedTitle =
-        brand?.title_en ?? '';
+    final String copiedTitle = brand?.title_en ?? '';
 
     return DropDownRecipesSearch(
       brandRes: brand,
-
-      hintText:
-      (state is AllRecipesLoadingState ||
-          state is AllNumLoadingState)
+      hintText: (state is AllRecipesLoadingState || state is AllNumLoadingState)
           ? 'loading'
           : widget.st == 1
-          ? copiedTitle
-          : 'اختر المستحضر',
-
+              ? copiedTitle
+              : 'اختر المستحضر',
       items: bloc.brandRecs,
-
       onChanged: (value) {
-        final BrandRes selectedBrand =
-            value;
+        final BrandRes selectedBrand = value;
 
-        context
-            .read<RecipesBrandBloc>()
-            .add(
-          SelectBrandEvent(
-            brandRecipeModel:
-            selectedBrand,
-            index: index,
-          ),
-        );
+        context.read<RecipesBrandBloc>().add(
+              SelectBrandEvent(
+                brandRecipeModel: selectedBrand,
+                index: index,
+              ),
+            );
       },
-
       validator: (value) {
         return null;
       },
@@ -805,48 +712,36 @@ class _RecipesPageState extends State<RecipesPage> {
   // =============================================================
 
   Widget _buildRecipeCountField(
-      BuildContext context,
-      RecipesBrandState state,
-      ) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    BuildContext context,
+    RecipesBrandState state,
+  ) {
+    final bloc = context.watch<RecipesBrandBloc>();
 
     final bool isLoading =
-        state is AllRecipesLoadingState ||
-            state is AllNumLoadingState;
+        state is AllRecipesLoadingState || state is AllNumLoadingState;
 
     return DropDownNum(
       hintText: isLoading
           ? 'جاري التحميل...'
           : widget.st == 1
-          ? bloc.insertRecipesObject.total
-          : 'اختر العدد',
-
+              ? bloc.insertRecipesObject.total
+              : 'اختر العدد',
       items: bloc.numRec,
-
       onChanged: (value) {
-        context
-            .read<RecipesBrandBloc>()
-            .add(
-          SelectNumRecEvent(
-            num: value.toString(),
-          ),
-        );
+        context.read<RecipesBrandBloc>().add(
+              SelectNumRecEvent(
+                num: value.toString(),
+              ),
+            );
       },
-
       validator: (value) {
         if (value == null &&
-            context
-                .read<RecipesBrandBloc>()
-                .insertRecipesObject
-                .total ==
-                '') {
+            context.read<RecipesBrandBloc>().insertRecipesObject.total == '') {
           return 'يرجى اختيار العدد';
         }
 
         return null;
       },
-
       prefixIcon: null,
     );
   }
@@ -855,31 +750,26 @@ class _RecipesPageState extends State<RecipesPage> {
   // =============================================================
 
   Widget _buildImagesSection(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    return BlocBuilder<
-        RecipesBrandBloc,
-        RecipesBrandState>(
+    BuildContext context,
+    AppUi ui,
+  ) {
+    return BlocBuilder<RecipesBrandBloc, RecipesBrandState>(
       builder: (context, state) {
         return LayoutBuilder(
           builder: (
-              context,
-              constraints,
-              ) {
+            context,
+            constraints,
+          ) {
             final bool showSideBySide =
-                ui.isTabletLandscape &&
-                    constraints.maxWidth >= 650;
+                ui.isTabletLandscape && constraints.maxWidth >= 650;
 
-            final firstImage =
-            _buildSingleImageSection(
+            final firstImage = _buildSingleImageSection(
               context: context,
               ui: ui,
               imageNumber: 1,
             );
 
-            final secondImage =
-            _buildSingleImageSection(
+            final secondImage = _buildSingleImageSection(
               context: context,
               ui: ui,
               imageNumber: 2,
@@ -887,17 +777,14 @@ class _RecipesPageState extends State<RecipesPage> {
 
             if (showSideBySide) {
               return Row(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: firstImage,
                   ),
-
                   SizedBox(
                     width: ui.cardSpacing,
                   ),
-
                   Expanded(
                     child: secondImage,
                   ),
@@ -908,11 +795,9 @@ class _RecipesPageState extends State<RecipesPage> {
             return Column(
               children: [
                 firstImage,
-
                 SizedBox(
                   height: ui.cardSpacing,
                 ),
-
                 secondImage,
               ],
             );
@@ -927,30 +812,23 @@ class _RecipesPageState extends State<RecipesPage> {
     required AppUi ui,
     required int imageNumber,
   }) {
-    final bloc =
-    context.watch<RecipesBrandBloc>();
+    final bloc = context.watch<RecipesBrandBloc>();
 
-    final File? image =
-    imageNumber == 1
+    final File? image = imageNumber == 1
         ? bloc.insertRecipesObject.image1
         : bloc.insertRecipesObject.image2;
 
     final int checkedValue =
-    imageNumber == 1
-        ? bloc.isChecked1
-        : bloc.isChecked2;
+        imageNumber == 1 ? bloc.isChecked1 : bloc.isChecked2;
 
     return Container(
       width: double.infinity,
-
       padding: EdgeInsets.all(
         ui.cardPadding,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
         border: Border.all(
@@ -959,7 +837,6 @@ class _RecipesPageState extends State<RecipesPage> {
           ),
         ),
       ),
-
       child: Column(
         children: [
           _buildImagePicker(
@@ -969,37 +846,28 @@ class _RecipesPageState extends State<RecipesPage> {
             image: image,
             checkedValue: checkedValue,
           ),
-
           SizedBox(
             height: ui.smallSpacing,
           ),
-
           Text(
             'صورة $imageNumber',
             style: TextStyle(
               color: const Color(
                 0xFF64748B,
               ),
-              fontSize:
-              ui.bodyTextSize,
-              fontWeight:
-              FontWeight.w600,
+              fontSize: ui.bodyTextSize,
+              fontWeight: FontWeight.w600,
             ),
           ),
-
           if (widget.st == 1) ...[
             SizedBox(
-              height:
-              ui.mediumSpacing,
+              height: ui.mediumSpacing,
             ),
-
             _buildImageOptions(
               context: context,
               ui: ui,
-              imageNumber:
-              imageNumber,
-              checkedValue:
-              checkedValue,
+              imageNumber: imageNumber,
+              checkedValue: checkedValue,
             ),
           ],
         ],
@@ -1014,47 +882,36 @@ class _RecipesPageState extends State<RecipesPage> {
     required File? image,
     required int checkedValue,
   }) {
-    final double imageSize =
-    ui.isMobile ? 135 : 155;
+    final double imageSize = ui.isMobile ? 135 : 155;
 
     return AppInkWell(
-      borderRadius:
-      BorderRadius.circular(
+      borderRadius: BorderRadius.circular(
         ui.smallRadius + 2,
       ),
-
       onTap: () async {
         final File? pickedImage =
-        await context
-            .read<RecipesBrandBloc>()
-            .pickImage();
+            await context.read<RecipesBrandBloc>().pickImage();
 
         if (!context.mounted) {
           return;
         }
 
-        context
-            .read<RecipesBrandBloc>()
-            .add(
-          PickImageEvent(
-            pickedImage,
-            imageNumber,
-          ),
-        );
+        context.read<RecipesBrandBloc>().add(
+              PickImageEvent(
+                pickedImage,
+                imageNumber,
+              ),
+            );
       },
-
       child: Container(
         width: imageSize,
         height: imageSize,
-
         alignment: Alignment.center,
-
         decoration: BoxDecoration(
           color: const Color(
             0xFFF8FAFC,
           ),
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             ui.smallRadius + 2,
           ),
           border: Border.all(
@@ -1063,29 +920,23 @@ class _RecipesPageState extends State<RecipesPage> {
             ),
           ),
         ),
-
         child: image == null
             ? Icon(
-          Icons.camera_alt_outlined,
-          size: ui.iconSize + 14,
-          color: ColorManager
-              .secondaryColor,
-        )
+                Icons.camera_alt_outlined,
+                size: ui.iconSize + 14,
+                color: ColorManager.secondaryColor,
+              )
             : ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
-            ui.smallRadius + 1,
-          ),
-          child:
-          _buildSelectedImage(
-            context: context,
-            image: image,
-            checkedValue:
-            checkedValue,
-            imageSize:
-            imageSize,
-          ),
-        ),
+                borderRadius: BorderRadius.circular(
+                  ui.smallRadius + 1,
+                ),
+                child: _buildSelectedImage(
+                  context: context,
+                  image: image,
+                  checkedValue: checkedValue,
+                  imageSize: imageSize,
+                ),
+              ),
       ),
     );
   }
@@ -1114,37 +965,29 @@ class _RecipesPageState extends State<RecipesPage> {
         width: imageSize,
         height: imageSize,
         fit: BoxFit.cover,
-
         loadingBuilder: (
-            context,
-            child,
-            loadingProgress,
-            ) {
+          context,
+          child,
+          loadingProgress,
+        ) {
           if (loadingProgress == null) {
             return child;
           }
 
           return Center(
-            child:
-            CircularProgressIndicator(
-              value: loadingProgress
-                  .expectedTotalBytes !=
-                  null
-                  ? loadingProgress
-                  .cumulativeBytesLoaded /
-                  (loadingProgress
-                      .expectedTotalBytes ??
-                      1)
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      (loadingProgress.expectedTotalBytes ?? 1)
                   : null,
             ),
           );
         },
-
         errorBuilder: (
-            context,
-            error,
-            stackTrace,
-            ) {
+          context,
+          error,
+          stackTrace,
+        ) {
           return const Center(
             child: Icon(
               Icons.error_outline_rounded,
@@ -1170,29 +1013,23 @@ class _RecipesPageState extends State<RecipesPage> {
     required int imageNumber,
     required int checkedValue,
   }) {
-    final bool disabled =
-        checkedValue == 2;
+    final bool disabled = checkedValue == 2;
 
     return Column(
       children: [
         _buildImageRadio(
           context: context,
           ui: ui,
-          imageNumber:
-          imageNumber,
-          checkedValue:
-          checkedValue,
+          imageNumber: imageNumber,
+          checkedValue: checkedValue,
           optionIndex: 0,
           disabled: disabled,
         ),
-
         _buildImageRadio(
           context: context,
           ui: ui,
-          imageNumber:
-          imageNumber,
-          checkedValue:
-          checkedValue,
+          imageNumber: imageNumber,
+          checkedValue: checkedValue,
           optionIndex: 1,
           disabled: disabled,
         ),
@@ -1210,54 +1047,39 @@ class _RecipesPageState extends State<RecipesPage> {
   }) {
     return RadioListTile<int>(
       dense: true,
-      contentPadding:
-      EdgeInsets.zero,
-
-      activeColor:
-      ColorManager.secondaryColor2,
-
+      contentPadding: EdgeInsets.zero,
+      activeColor: ColorManager.secondaryColor2,
       title: Text(
         stateImage[optionIndex].type,
         maxLines: 2,
-        overflow:
-        TextOverflow.ellipsis,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: ui.bodyTextSize,
           color: const Color(
             0xFF334155,
           ),
-          fontWeight:
-          FontWeight.w500,
+          fontWeight: FontWeight.w500,
         ),
       ),
-
-      value:
-      stateImage[optionIndex].id,
-
-      groupValue:
-      checkedValue,
-
+      value: stateImage[optionIndex].id,
+      groupValue: checkedValue,
       onChanged: disabled
           ? null
           : (int? value) {
-        if (imageNumber == 1) {
-          context
-              .read<RecipesBrandBloc>()
-              .add(
-            Checkbox1Event(
-              value ?? 2,
-            ),
-          );
-        } else {
-          context
-              .read<RecipesBrandBloc>()
-              .add(
-            Checkbox2Event(
-              value ?? 2,
-            ),
-          );
-        }
-      },
+              if (imageNumber == 1) {
+                context.read<RecipesBrandBloc>().add(
+                      Checkbox1Event(
+                        value ?? 2,
+                      ),
+                    );
+              } else {
+                context.read<RecipesBrandBloc>().add(
+                      Checkbox2Event(
+                        value ?? 2,
+                      ),
+                    );
+              }
+            },
     );
   }
 
@@ -1266,33 +1088,26 @@ class _RecipesPageState extends State<RecipesPage> {
   // =============================================================
 
   Widget _buildSubmitSection(
-      BuildContext context,
-      AppUi ui,
-      ) {
-    return BlocListener<
-        RecipesBrandBloc,
-        RecipesBrandState>(
+    BuildContext context,
+    AppUi ui,
+  ) {
+    return BlocListener<RecipesBrandBloc, RecipesBrandState>(
       listener: (context, state) async {
-        if (state
-        is InsertRecipesLoadingState) {
+        if (state is InsertRecipesLoadingState) {
           loading(
             context,
           );
-        } else if (state
-        is InsertRecipesState) {
-          final bloc =
-          context.read<RecipesBrandBloc>();
+        } else if (state is InsertRecipesState) {
+          final bloc = context.read<RecipesBrandBloc>();
 
           await dismissDialog(
             context,
           );
 
           if (context.mounted) {
-            ScaffoldMessenger.of(context)
-                .clearSnackBars();
+            ScaffoldMessenger.of(context).clearSnackBars();
 
-            ScaffoldMessenger.of(context)
-                .showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
                   'تم إرسال البيانات بنجاح',
@@ -1300,8 +1115,7 @@ class _RecipesPageState extends State<RecipesPage> {
               ),
             );
 
-            Navigator.of(context)
-                .pop();
+            Navigator.of(context).pop();
           }
 
           // نفس ترتيب الحدث الأصلي بعد نجاح الإرسال
@@ -1310,8 +1124,7 @@ class _RecipesPageState extends State<RecipesPage> {
               state.num,
             ),
           );
-        } else if (state
-        is InsertRecipesErrorState) {
+        } else if (state is InsertRecipesErrorState) {
           error(
             context,
             state.failure.massage,
@@ -1319,78 +1132,57 @@ class _RecipesPageState extends State<RecipesPage> {
           );
         }
       },
-
       child: SizedBox(
         width: double.infinity,
-
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor:
-            ColorManager.medicalPrimary,
-            foregroundColor:
-            Colors.white,
+            backgroundColor: ColorManager.medicalPrimary,
+            foregroundColor: Colors.white,
             elevation: 0,
-
-            padding:
-            EdgeInsets.symmetric(
-              vertical:
-              ui.isMobile ? 14 : 16,
+            padding: EdgeInsets.symmetric(
+              vertical: ui.isMobile ? 14 : 16,
             ),
-
-            shape:
-            RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
                 ui.cardRadius - 4,
               ),
             ),
           ),
-
           onPressed: () {
-            FocusScope.of(context)
-                .unfocus();
+            FocusScope.of(context).unfocus();
 
-            if (_formKey.currentState!
-                .validate()) {
+            if (_formKey.currentState!.validate()) {
               // ===============================================
               // نفس InsertReciEvent ونفس ترتيب Arguments الأصلي
               // ===============================================
-              context
-                  .read<RecipesBrandBloc>()
-                  .add(
-                InsertReciEvent(
-                  _doctorSpController.text,
-                  firstNoteController.text,
-                  _secondNoteController.text,
-                  _addressController.text,
-                 convertArabicNumberToEnglish( _connectController.text),
-                  _specialNotesController.text,
-                  widget.docId,
-                  convertArabicNumberToEnglish( _connectController.text),
-                ),
-              );
+              context.read<RecipesBrandBloc>().add(
+                    InsertReciEvent(
+                      _doctorSpController.text,
+                      firstNoteController.text,
+                      _secondNoteController.text,
+                      _addressController.text,
+                      convertArabicNumberToEnglish(_connectController.text),
+                      _specialNotesController.text,
+                      widget.docId,
+                      convertArabicNumberToEnglish(_connectController.text),
+                    ),
+                  );
             } else {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text(
                     'يرجى تعبئة جميع الحقول المطلوبة',
                   ),
-                  backgroundColor:
-                  ColorManager
-                      .secondaryColor,
+                  backgroundColor: ColorManager.secondaryColor,
                 ),
               );
             }
           },
-
           child: Text(
             'إرسال',
             style: TextStyle(
-              fontSize:
-              ui.isMobile ? 15 : 17,
-              fontWeight:
-              FontWeight.w700,
+              fontSize: ui.isMobile ? 15 : 17,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),

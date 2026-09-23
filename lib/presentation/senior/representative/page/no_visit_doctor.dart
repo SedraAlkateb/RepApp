@@ -15,9 +15,8 @@ class NoVisitDoctor extends StatefulWidget {
 }
 
 class _NoVisitDoctorState extends State<NoVisitDoctor> {
-
   final TextEditingController searchNoteDoctorController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   void dispose() {
@@ -27,8 +26,7 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     double pageMaxWidth;
 
@@ -42,9 +40,9 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
     double countBottomSpacing;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         pageMaxWidth = 600;
 
@@ -59,9 +57,9 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
         countBottomSpacing = 10;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         pageMaxWidth = 760;
 
@@ -76,9 +74,9 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
         countBottomSpacing = 12;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         pageMaxWidth = 900;
 
@@ -97,22 +95,25 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
     // =====================================================
     // لا يوجد Scaffold
     // لأن الصفحة مستخدمة داخل TabBarView
+    // ملاحظة: ConstrainedBox(maxWidth) بتطبّق على السيرش وعلى كل عنصر
+    // بالقائمة لحالهم، مو على الـ ListView كامل، حتى يضل الـ Scrollable
+    // بعرض الشاشة الكامل ويشتغل السكرول بالماوس فوق الفراغ الجانبي بالعرض.
     // =====================================================
     return ColoredBox(
       color: const Color(
         0xFFF8FAFC,
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: pageMaxWidth,
-          ),
-          child: Column(
-            children: [
-              // =================================================
-              // Search
-              // =================================================
-              Padding(
+      child: Column(
+        children: [
+          // =================================================
+          // Search
+          // =================================================
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: pageMaxWidth,
+              ),
+              child: Padding(
                 padding: EdgeInsets.fromLTRB(
                   horizontalPadding,
                   searchTopPadding,
@@ -120,13 +121,11 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
                   searchBottomPadding,
                 ),
                 child: SearchField(
-                  searchController:
-                  searchNoteDoctorController,
+                  searchController: searchNoteDoctorController,
 
                   // نفس البحث
                   onPressed: (value) {
-                    BlocProvider.of<
-                        SeniorProfBloc>(
+                    BlocProvider.of<SeniorProfBloc>(
                       context,
                     ).add(
                       SenSearchNoVisitDoctorEvent(
@@ -136,117 +135,102 @@ class _NoVisitDoctorState extends State<NoVisitDoctor> {
                   },
                 ),
               ),
+            ),
+          ),
 
-              // =================================================
-              // Content
-              // =================================================
-              Expanded(
-                child: BlocBuilder<
-                    SeniorProfBloc,
-                    SeniorProfState>(
-                  builder: (context, state) {
-                     List<NoVisitDocModel>
-                    noVisitDoc =
-                        context
-                            .watch<
-                            SeniorProfBloc>()
-                            .noVisitDoc;
+          // =================================================
+          // Content
+          // =================================================
+          Expanded(
+            child: BlocBuilder<SeniorProfBloc, SeniorProfState>(
+              builder: (context, state) {
+                List<NoVisitDocModel> noVisitDoc =
+                    context.watch<SeniorProfBloc>().noVisitDoc;
 
-                    // ===========================================
-                    // Loading
-                    // ===========================================
-                    if (state
-                    is SenNoVisitDocLoadingState) {
-                      return loadingFullScreen(
+                // ===========================================
+                // Loading
+                // ===========================================
+                if (state is SenNoVisitDocLoadingState) {
+                  return loadingFullScreen(
+                    context,
+                  );
+                }
+                if (state is SenNoVisitDocsState) {
+                  noVisitDoc = state.noVisitDoc;
+                }
+
+                // ===========================================
+                // Empty
+                // ===========================================
+                if (state is SenNoVisitDocEmptyState || noVisitDoc.isEmpty) {
+                  return emptyFullScreen(
+                    context,
+                  );
+                }
+
+                // ===========================================
+                // Error
+                // نفس السلوك الأصلي
+                // ===========================================
+                if (state is SenNoVisitDocErrorState) {
+                  return errorFullScreen(
+                    context,
+                    func: () {
+                      BlocProvider.of<SeniorProfBloc>(
                         context,
+                      ).add(
+                        NoVisitDocEvent(
+                          156,
+                          state.planId,
+                        ),
                       );
-                    } if (state
-                    is SenNoVisitDocsState) {
-                      noVisitDoc=state.noVisitDoc;
-                    }
+                    },
+                  );
+                }
 
-                    // ===========================================
-                    // Empty
-                    // ===========================================
-                    if (state
-                    is SenNoVisitDocEmptyState ||
-                        noVisitDoc.isEmpty) {
-                      return emptyFullScreen(
-                        context,
-                      );
-                    }
-
-                    // ===========================================
-                    // Error
-                    // نفس السلوك الأصلي
-                    // ===========================================
-                    if (state
-                    is SenNoVisitDocErrorState) {
-                      return errorFullScreen(
-                        context,
-                        func: () {
-                          BlocProvider.of<
-                              SeniorProfBloc>(
-                            context,
-                          ).add(
-                            NoVisitDocEvent(
-                              156,
-                              state.planId,
+                // ===========================================
+                // Data
+                // ===========================================
+                return ListView.builder(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    listTopPadding,
+                    horizontalPadding,
+                    listBottomPadding,
+                  ),
+                  itemCount: noVisitDoc.length + 1,
+                  itemBuilder: (context, index) {
+                    // =======================================
+                    // Count Header
+                    // =======================================
+                    final Widget item = index == 0
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                              bottom: countBottomSpacing,
                             ),
+                            child: buildTotalReportsCard(noVisitDoc.length,
+                                "عدد الأطباء", "أطباء لم تتم زيارتهم"),
+                          )
+                        : NoVisitDoctorCard(
+                            data: noVisitDoc[index - 1],
                           );
-                        },
-                      );
-                    }
 
-                    // ===========================================
-                    // Data
-                    // ===========================================
-                    return ListView.builder(
-                      keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior
-                          .onDrag,
-
-                      padding:
-                      EdgeInsets.fromLTRB(
-                        horizontalPadding,
-                        listTopPadding,
-                        horizontalPadding,
-                        listBottomPadding,
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: pageMaxWidth,
+                        ),
+                        child: item,
                       ),
-
-                      itemCount:
-                      noVisitDoc.length + 1,
-
-                      itemBuilder:
-                          (context, index) {
-                        // =======================================
-                        // Count Header
-                        // =======================================
-                        if (index == 0) {
-                          return Padding(
-                            padding:
-                            EdgeInsets.only(
-                              bottom:
-                              countBottomSpacing,
-                            ),
-                            child: buildTotalReportsCard( noVisitDoc
-                                .length, "عدد الأطباء", "أطباء لم تتم زيارتهم")
-                          );
-                        }
-
-                        return NoVisitDoctorCard(
-                          data:
-                          noVisitDoc[
-                          index - 1],
-                        );
-                      },
                     );
                   },
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -266,12 +250,10 @@ class NoVisitDoctorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType =
-    AppResponsive.deviceType(context);
+    final deviceType = AppResponsive.deviceType(context);
 
     // إجمالي الزيارات المطلوبة
-    final String totalRequired =
-        data.visits ?? '0';
+    final String totalRequired = data.visits ?? '0';
 
     double cardBottomSpacing;
 
@@ -305,9 +287,9 @@ class NoVisitDoctorCard extends StatelessWidget {
     double progressHeight;
 
     switch (deviceType) {
-    // =================================================
-    // Mobile
-    // =================================================
+      // =================================================
+      // Mobile
+      // =================================================
       case AppDeviceType.mobilePortrait:
         cardBottomSpacing = 12;
 
@@ -341,9 +323,9 @@ class NoVisitDoctorCard extends StatelessWidget {
         progressHeight = 7;
         break;
 
-    // =================================================
-    // Tablet Portrait
-    // =================================================
+      // =================================================
+      // Tablet Portrait
+      // =================================================
       case AppDeviceType.tabletPortrait:
         cardBottomSpacing = 14;
 
@@ -377,9 +359,9 @@ class NoVisitDoctorCard extends StatelessWidget {
         progressHeight = 8;
         break;
 
-    // =================================================
-    // Tablet Landscape
-    // =================================================
+      // =================================================
+      // Tablet Landscape
+      // =================================================
       case AppDeviceType.tabletLandscape:
         cardBottomSpacing = 12;
 
@@ -416,30 +398,23 @@ class NoVisitDoctorCard extends StatelessWidget {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-
       child: Container(
         margin: EdgeInsets.only(
           bottom: cardBottomSpacing,
         ),
-
         decoration: BoxDecoration(
           color: Colors.white,
-
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius,
           ),
-
           border: Border.all(
             color: const Color(
               0xFFE2E8F0,
             ),
           ),
-
           boxShadow: [
             BoxShadow(
-              color:
-              Colors.black.withOpacity(
+              color: Colors.black.withOpacity(
                 0.025,
               ),
               blurRadius: 12,
@@ -450,10 +425,8 @@ class NoVisitDoctorCard extends StatelessWidget {
             ),
           ],
         ),
-
         child: ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             cardRadius - 1,
           ),
 
@@ -469,69 +442,45 @@ class NoVisitDoctorCard extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(
                   cardPadding,
                   cardPadding,
-                  cardPadding +
-                      sideBarWidth,
+                  cardPadding + sideBarWidth,
                   cardPadding,
                 ),
-
                 child: Column(
-                  mainAxisSize:
-                  MainAxisSize.min,
-
-                  crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
-
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // =========================================
                     // Header
                     // =========================================
                     Row(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // =====================================
                         // Doctor Icon
                         // =====================================
                         Container(
-                          width:
-                          iconBoxSize,
-                          height:
-                          iconBoxSize,
-
-                          alignment:
-                          Alignment.center,
-
-                          decoration:
-                          BoxDecoration(
-                            color:
-                            const Color(
+                          width: iconBoxSize,
+                          height: iconBoxSize,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(
                               0xFFF1F5F9,
                             ),
-
-                            borderRadius:
-                            BorderRadius
-                                .circular(
+                            borderRadius: BorderRadius.circular(
                               iconRadius,
                             ),
                           ),
-
                           child: Icon(
-                            Icons
-                                .person_pin_rounded,
-
-                            color:
-                            const Color(
+                            Icons.person_pin_rounded,
+                            color: const Color(
                               0xFF78909C,
                             ),
-
                             size: iconSize,
                           ),
                         ),
 
                         SizedBox(
-                          width:
-                          iconSpacing,
+                          width: iconSpacing,
                         ),
 
                         // =====================================
@@ -539,36 +488,19 @@ class NoVisitDoctorCard extends StatelessWidget {
                         // =====================================
                         Expanded(
                           child: Column(
-                            mainAxisSize:
-                            MainAxisSize.min,
-
-                            crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 data.docTitle,
-
                                 maxLines: 2,
-
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-
-                                style:
-                                TextStyle(
-                                  fontSize:
-                                  titleFontSize,
-                                  fontWeight:
-                                  FontWeight
-                                      .w700,
-
-                                  color:
-                                  const Color(
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: titleFontSize,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(
                                     0xFF1F4E79,
                                   ),
-
                                   height: 1.25,
                                 ),
                               ),
@@ -581,42 +513,24 @@ class NoVisitDoctorCard extends StatelessWidget {
                               // Specialization + Rate
                               // =================================
                               Wrap(
-                                crossAxisAlignment:
-                                WrapCrossAlignment
-                                    .center,
-
+                                crossAxisAlignment: WrapCrossAlignment.center,
                                 spacing: 8,
                                 runSpacing: 5,
-
                                 children: [
                                   Text(
                                     data.spTitle,
-
-                                    style:
-                                    TextStyle(
-                                      fontSize:
-                                      specializationFontSize,
-
-                                      color: Colors
-                                          .grey
-                                          .shade600,
-
-                                      fontWeight:
-                                      FontWeight
-                                          .w500,
+                                    style: TextStyle(
+                                      fontSize: specializationFontSize,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-
                                   _buildRateBadge(
                                     data.rate,
-                                    horizontalPadding:
-                                    rateHorizontalPadding,
-                                    verticalPadding:
-                                    rateVerticalPadding,
-                                    radius:
-                                    rateRadius,
-                                    fontSize:
-                                    rateFontSize,
+                                    horizontalPadding: rateHorizontalPadding,
+                                    verticalPadding: rateVerticalPadding,
+                                    radius: rateRadius,
+                                    fontSize: rateFontSize,
                                   ),
                                 ],
                               ),
@@ -632,21 +546,15 @@ class NoVisitDoctorCard extends StatelessWidget {
                         // Required Visits
                         // =====================================
                         _buildRequiredVisits(
-                          total:
-                          totalRequired,
-
-                          labelFontSize:
-                          requiredLabelFontSize,
-
-                          numberFontSize:
-                          requiredNumberFontSize,
+                          total: totalRequired,
+                          labelFontSize: requiredLabelFontSize,
+                          numberFontSize: requiredNumberFontSize,
                         ),
                       ],
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
@@ -660,33 +568,27 @@ class NoVisitDoctorCard extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
                     // Address
                     // =========================================
                     _buildAddressRow(
-                      iconSize:
-                      addressIconSize,
-                      fontSize:
-                      addressFontSize,
-                      spacing:
-                      addressSpacing,
+                      iconSize: addressIconSize,
+                      fontSize: addressFontSize,
+                      spacing: addressSpacing,
                     ),
 
                     SizedBox(
-                      height:
-                      sectionSpacing,
+                      height: sectionSpacing,
                     ),
 
                     // =========================================
                     // Not Started
                     // =========================================
                     _buildEmptyProgress(
-                      height:
-                      progressHeight,
+                      height: progressHeight,
                     ),
                   ],
                 ),
@@ -699,11 +601,8 @@ class NoVisitDoctorCard extends StatelessWidget {
                 top: 0,
                 bottom: 0,
                 right: 0,
-
                 child: Container(
-                  width:
-                  sideBarWidth,
-
+                  width: sideBarWidth,
                   color: const Color(
                     0xFF94A3B8,
                   ),
@@ -729,69 +628,48 @@ class NoVisitDoctorCard extends StatelessWidget {
       constraints: const BoxConstraints(
         minWidth: 58,
       ),
-
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
         vertical: 7,
       ),
-
       decoration: BoxDecoration(
         color: const Color(
           0xFFF8FAFC,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           12,
         ),
-
         border: Border.all(
           color: const Color(
             0xFFE2E8F0,
           ),
         ),
       ),
-
       child: Column(
-        mainAxisSize:
-        MainAxisSize.min,
-
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "المطلوب",
-
             style: TextStyle(
-              fontSize:
-              labelFontSize,
-
+              fontSize: labelFontSize,
               color: const Color(
                 0xFF64748B,
               ),
-
-              fontWeight:
-              FontWeight.w500,
+              fontWeight: FontWeight.w500,
             ),
           ),
-
           const SizedBox(
             height: 2,
           ),
-
           Text(
             total,
-
             style: TextStyle(
-              fontSize:
-              numberFontSize,
-
+              fontSize: numberFontSize,
               height: 1,
-
               color: const Color(
                 0xFF475569,
               ),
-
-              fontWeight:
-              FontWeight.w800,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ],
@@ -807,107 +685,75 @@ class NoVisitDoctorCard extends StatelessWidget {
     required double height,
   }) {
     return Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Container(
               width: 7,
               height: 7,
-
-              decoration:
-              const BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(
                   0xFFF59E0B,
                 ),
-
                 shape: BoxShape.circle,
               ),
             ),
-
             const SizedBox(
               width: 7,
             ),
-
             const Expanded(
               child: Text(
                 "لم يتم البدء بالزيارات بعد",
-
                 style: TextStyle(
                   fontSize: 11,
-
                   color: Color(
                     0xFFD97706,
                   ),
-
-                  fontWeight:
-                  FontWeight.w600,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-
             Container(
-              padding:
-              const EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 8,
                 vertical: 3,
               ),
-
               decoration: BoxDecoration(
                 color: const Color(
                   0xFFFFF7ED,
                 ),
-
-                borderRadius:
-                BorderRadius.circular(
+                borderRadius: BorderRadius.circular(
                   7,
                 ),
               ),
-
               child: const Text(
                 "0%",
-
                 style: TextStyle(
                   fontSize: 10,
-
                   color: Color(
                     0xFFD97706,
                   ),
-
-                  fontWeight:
-                  FontWeight.w700,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
           ],
         ),
-
         const SizedBox(
           height: 7,
         ),
-
         ClipRRect(
-          borderRadius:
-          BorderRadius.circular(
+          borderRadius: BorderRadius.circular(
             10,
           ),
-
-          child:
-          LinearProgressIndicator(
+          child: LinearProgressIndicator(
             value: 0,
-
             minHeight: height,
-
-            backgroundColor:
-            const Color(
+            backgroundColor: const Color(
               0xFFF1F5F9,
             ),
-
-            valueColor:
-            const AlwaysStoppedAnimation<
-                Color>(
+            valueColor: const AlwaysStoppedAnimation<Color>(
               Color(
                 0xFFF59E0B,
               ),
@@ -923,48 +769,34 @@ class NoVisitDoctorCard extends StatelessWidget {
   // =====================================================
 
   Widget _buildRateBadge(
-      String rate, {
-        required double horizontalPadding,
-        required double verticalPadding,
-        required double radius,
-        required double fontSize,
-      }) {
+    String rate, {
+    required double horizontalPadding,
+    required double verticalPadding,
+    required double radius,
+    required double fontSize,
+  }) {
     return Container(
-      padding:
-      EdgeInsets.symmetric(
-        horizontal:
-        horizontalPadding,
-        vertical:
-        verticalPadding,
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
       ),
-
-      decoration:
-      BoxDecoration(
+      decoration: BoxDecoration(
         color: const Color(
           0xFFE8F5E9,
         ),
-
-        borderRadius:
-        BorderRadius.circular(
+        borderRadius: BorderRadius.circular(
           radius,
         ),
       ),
-
       child: Text(
         rate,
-
         maxLines: 1,
-
         style: TextStyle(
-          fontSize:
-          fontSize,
-
+          fontSize: fontSize,
           color: const Color(
             0xFF2E7D32,
           ),
-
-          fontWeight:
-          FontWeight.w700,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -980,68 +812,41 @@ class NoVisitDoctorCard extends StatelessWidget {
     required double spacing,
   }) {
     return Row(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width:
-          iconSize + 12,
-          height:
-          iconSize + 12,
-
-          alignment:
-          Alignment.center,
-
-          decoration:
-          BoxDecoration(
+          width: iconSize + 12,
+          height: iconSize + 12,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
             color: const Color(
               0xFFEFF6FF,
             ),
-
-            borderRadius:
-            BorderRadius.circular(
+            borderRadius: BorderRadius.circular(
               8,
             ),
           ),
-
           child: Icon(
             Icons.map_outlined,
-
             size: iconSize,
-
             color: const Color(
               0xFF64B5F6,
             ),
           ),
         ),
-
         SizedBox(
           width: spacing,
         ),
-
         Expanded(
           child: Text(
-            data.address.isEmpty
-                ? "العنوان غير محدد"
-                : data.address,
-
+            data.address.isEmpty ? "العنوان غير محدد" : data.address,
             maxLines: 2,
-
-            overflow:
-            TextOverflow.ellipsis,
-
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize:
-              fontSize,
-
-              color:
-              Colors.grey.shade700,
-
+              fontSize: fontSize,
+              color: Colors.grey.shade700,
               height: 1.4,
-
-              fontWeight:
-              FontWeight.w500,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

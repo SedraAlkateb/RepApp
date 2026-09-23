@@ -1,6 +1,7 @@
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
+import 'package:domina_app/presentation/uniti/num_list.dart';
 import 'package:domina_app/presentation/uniti/string_utils_number.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -144,7 +145,15 @@ class _HosDocSearchDialogViewState extends State<_HosDocSearchDialogView> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  widget.isHospital?
+          buildTotalReportsCard(filteredItems
+              .length, "عدد المشافي والشعب", "في هذا الاختصاص")
+                  : buildTotalReportsCard(filteredItems
+                      .length, "عدد الأطباء", "في هذا الاختصاص")
 
+
+                  ,
+                  const SizedBox(height: 12),
                   // ================= Body =================
                   Expanded(
                     child: isLoading

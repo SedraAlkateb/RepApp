@@ -1,3 +1,4 @@
+import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/widget/hos_card.dart';
@@ -128,7 +129,7 @@ class _HospitalSeniorState extends State<HospitalSenior> {
                       // =================================================
                       BlocBuilder<SeniorProfBloc, SeniorProfState>(
                         builder: (context, state) {
-                          List hospitalModel =
+                          List<HospitalSpModel> hospitalModel =
                               context.watch<SeniorProfBloc>().hospital;
 
                           if (state is SenAllHospitalsState) {
@@ -153,6 +154,16 @@ class _HospitalSeniorState extends State<HospitalSenior> {
                             );
                           }
 
+                          final Map<int, List<HospitalSpModel>>
+                              groupedByHospitalId = {};
+                          for (final hospital in hospitalModel) {
+                            groupedByHospitalId
+                                .putIfAbsent(hospital.hospitalId, () => [])
+                                .add(hospital);
+                          }
+                          final List<List<HospitalSpModel>> hospitalGroups =
+                              groupedByHospitalId.values.toList();
+
                           return Column(
                             children: [
                               Padding(
@@ -161,7 +172,7 @@ class _HospitalSeniorState extends State<HospitalSenior> {
                                   vertical: headerVerticalPadding,
                                 ),
                                 child: buildTotalReportsCard(
-                                  hospitalModel.length,
+                                  hospitalGroups.length,
                                   "قائمة المشافي المسجلة",
                                   'لهذا المندوب',
                                 ),
@@ -175,10 +186,10 @@ class _HospitalSeniorState extends State<HospitalSenior> {
                                 ),
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: hospitalModel.length,
+                                itemCount: hospitalGroups.length,
                                 itemBuilder: (context, index) {
                                   return HospitalCardWidget(
-                                    hospital: hospitalModel[index],
+                                    hospitalGroup: hospitalGroups[index],
                                   );
                                 },
                               )

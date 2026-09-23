@@ -37,27 +37,32 @@ class PlacesList extends StatelessWidget {
           return emptyFullScreen(context);
         }
 
-        return Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxWidth,
-            ),
-            child: ListView.separated(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                0,
-                horizontalPadding,
-                110,
-              ),
-              physics: const BouncingScrollPhysics(),
-              itemCount: places.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 12);
-              },
-              itemBuilder: (context, index) {
-                final place = places[index];
+        // ملاحظة: بدون ConstrainedBox خارجي حول الـ ListView، حتى يضل
+        // السكرول بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد maxWidth
+        // يُطبَّق داخلياً على كل بطاقة لحالها.
+        return ListView.separated(
+          padding: EdgeInsets.fromLTRB(
+            horizontalPadding,
+            0,
+            horizontalPadding,
+            110,
+          ),
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          itemCount: places.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: 12);
+          },
+          itemBuilder: (context, index) {
+            final place = places[index];
 
-                return AnimatedPlaceCard(
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: maxWidth,
+                ),
+                child: AnimatedPlaceCard(
                   place: place,
                   onTap: () {
                     Navigator.pushNamed(
@@ -73,10 +78,10 @@ class PlacesList extends StatelessWidget {
                       ),
                     );
                   },
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         );
       },
     );

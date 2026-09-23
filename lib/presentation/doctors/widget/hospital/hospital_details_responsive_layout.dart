@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 class HospitalDetailsResponsiveLayout extends StatelessWidget {
   const HospitalDetailsResponsiveLayout({
     super.key,
-    required this.hospital,
+    required this.hospitalGroup,
   });
 
-  final HospitalSpAllModel hospital;
+  /// كل عناصر هذه القائمة تخص نفس المشفى وتختلف بالاختصاص/الشعبة (titleSp).
+  final List<HospitalSpAllModel> hospitalGroup;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,7 @@ class HospitalDetailsResponsiveLayout extends StatelessWidget {
         children: [
           Positioned.fill(
             child: HospitalDetailsContent(
-              hospital: hospital,
+              hospitalGroup: hospitalGroup,
               deviceType: deviceType,
               pageMaxWidth: pageMaxWidth,
               horizontalPadding: horizontalPadding,
@@ -102,7 +103,7 @@ class HospitalDetailsResponsiveLayout extends StatelessWidget {
                     maxWidth: pageMaxWidth,
                   ),
                   child: buildBottomButtons(
-                    hospital.id??hospital.hospitalId,
+                    hospitalGroup.first.id ?? hospitalGroup.first.hospitalId,
                   ),
                 ),
               ),

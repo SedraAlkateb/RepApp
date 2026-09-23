@@ -77,12 +77,12 @@ class _SearchHospitalState extends State<SearchHospital>
     if (cityId == null) return;
 
     context.read<SearchDoctorsBloc>().add(
-      FutureSearchHosEvent(
-        cityId,
-        searchController.text.trim(),
-        UserInfo.repId,
-      ),
-    );
+          FutureSearchHosEvent(
+            cityId,
+            searchController.text.trim(),
+            UserInfo.repId,
+          ),
+        );
   }
 
   // ===========================================================
@@ -114,18 +114,21 @@ class _SearchHospitalState extends State<SearchHospital>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: ui.pageMaxWidth,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // =================================================
-                // Search Field + City Filter + Search Button
-                // =================================================
-                Padding(
+        // ملاحظة: بدون ConstrainedBox خارجي حول المحتوى، حتى يضل السكرول
+        // بالماوس يشتغل فوق الفراغ الجانبي بالعرض؛ قيد pageMaxWidth يُطبَّق
+        // داخلياً على السيرش وعلى كل عنصر بنتائج البحث لحاله.
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // =================================================
+            // Search Field + City Filter + Search Button
+            // =================================================
+            Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: ui.pageMaxWidth,
+                ),
+                child: Padding(
                   padding: EdgeInsets.fromLTRB(
                     ui.pagePadding,
                     ui.searchTopPadding,
@@ -152,7 +155,7 @@ class _SearchHospitalState extends State<SearchHospital>
                         borderRadius: BorderRadius.circular(ui.smallRadius + 4),
                         child: AppInkWell(
                           borderRadius:
-                          BorderRadius.circular(ui.smallRadius + 4),
+                              BorderRadius.circular(ui.smallRadius + 4),
                           onTap: _triggerSearch,
                           child: Container(
                             height: 48,
@@ -169,16 +172,16 @@ class _SearchHospitalState extends State<SearchHospital>
                     ],
                   ),
                 ),
-
-                // =================================================
-                // Results Content
-                // =================================================
-                Expanded(
-                  child: _buildResultList(context),
-                ),
-              ],
+              ),
             ),
-          ),
+
+            // =================================================
+            // Results Content
+            // =================================================
+            Expanded(
+              child: _buildResultList(context),
+            ),
+          ],
         ),
       ),
     );
@@ -205,8 +208,8 @@ class _SearchHospitalState extends State<SearchHospital>
         mes: cityState.failure.massage,
         func: () {
           context.read<AllCityBloc>().add(
-            const GetAllCityEvent(),
-          );
+                const GetAllCityEvent(),
+              );
         },
       );
     }
@@ -263,12 +266,17 @@ class _SearchHospitalState extends State<SearchHospital>
                   ui.listBottomPadding,
                 ),
                 sliver: SliverToBoxAdapter(
-                  child: loadingShimmer(
-                    context,
-                    10,
-                    100,
-                    100,
-                    BorderRadius.circular(ui.cardRadius),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: ui.pageMaxWidth),
+                      child: loadingShimmer(
+                        context,
+                        10,
+                        100,
+                        100,
+                        BorderRadius.circular(ui.cardRadius),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -307,31 +315,37 @@ class _SearchHospitalState extends State<SearchHospital>
                 ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    (context, index) {
                       final hospital = state.allSearch[index];
 
-                      return _hospitalWidget(
-                        context: context,
-                        title: hospital.name,
-                        function: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return HospitalDetails(
-                                  searchHospitalModel: hospital,
-                                );
-                              },
-                            ),
-                          );
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxWidth: ui.pageMaxWidth),
+                          child: _hospitalWidget(
+                            context: context,
+                            title: hospital.name,
+                            function: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return HospitalDetails(
+                                      searchHospitalModel: hospital,
+                                    );
+                                  },
+                                ),
+                              );
 
-                          BlocProvider.of<SearchDoctorsBloc>(context).add(
-                            FutureDocHospitalEvent(
-                              int.parse(hospital.hosId),
-                              int.parse(hospital.spId),
-                            ),
-                          );
-                        },
+                              BlocProvider.of<SearchDoctorsBloc>(context).add(
+                                FutureDocHospitalEvent(
+                                  int.parse(hospital.hosId),
+                                  int.parse(hospital.spId),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       );
                     },
                     childCount: state.allSearch.length,
@@ -498,7 +512,8 @@ class _SearchHospitalState extends State<SearchHospital>
                         borderRadius: BorderRadius.circular(ui.smallRadius + 2),
                         boxShadow: [
                           BoxShadow(
-                            color: ColorManager.medicalPrimary.withOpacity(0.12),
+                            color:
+                                ColorManager.medicalPrimary.withOpacity(0.12),
                             blurRadius: 8,
                             offset: const Offset(0, 3),
                           ),

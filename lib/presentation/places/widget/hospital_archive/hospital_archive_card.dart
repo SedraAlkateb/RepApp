@@ -9,13 +9,17 @@ import 'package:flutter/material.dart';
 class HospitalArchiveCard extends StatelessWidget {
   const HospitalArchiveCard({
     super.key,
-    required this.hospital,
+    required this.hospitalGroup,
   });
 
-  final HospitalSpAllModel hospital;
+  /// كل عناصر هذه القائمة تخص نفس المشفى (نفس hospitalId)
+  /// وتختلف فقط بالاختصاص/الشعبة (titleSp).
+  final List<HospitalSpAllModel> hospitalGroup;
 
   @override
   Widget build(BuildContext context) {
+    final HospitalSpAllModel hospital = hospitalGroup.first;
+
     final deviceType = AppResponsive.deviceType(context);
 
     double padding;
@@ -94,14 +98,18 @@ class HospitalArchiveCard extends StatelessWidget {
             iconSize: iconSize,
           ),
 
-          HospitalArchiveInfoRow(
-            icon: Icons.folder_special_outlined,
-            text: hospital.titleSp ?? '',
-            fontSize: infoSize,
-            iconSize: iconSize,
+          const SizedBox(height: 14),
+
+          // الشعب/الاختصاصات التابعة لهذا المشفى
+          ...hospitalGroup.map(
+            (sp) => HospitalArchiveDepartmentRow(
+              hospitalSp: sp,
+              fontSize: infoSize,
+              iconSize: iconSize,
+            ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 4),
 
           Divider(
             height: 1,
@@ -119,7 +127,7 @@ class HospitalArchiveCard extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   Routes.hospitalDetails,
-                  arguments: hospital,
+                  arguments: hospitalGroup,
                 );
               },
               child: buildCardButton(context,
@@ -127,6 +135,84 @@ class HospitalArchiveCard extends StatelessWidget {
                 ColorManager.medicalPrimary,
                 Colors.white,
                 Icons.directions_run,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HospitalArchiveDepartmentRow extends StatelessWidget {
+  const HospitalArchiveDepartmentRow({
+    super.key,
+    required this.hospitalSp,
+    required this.fontSize,
+    required this.iconSize,
+  });
+
+  final HospitalSpAllModel hospitalSp;
+  final double fontSize;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final String titleSp = hospitalSp.titleSp?.trim() ?? '';
+
+    if (titleSp.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final int visited = hospitalSp.visited ?? 0;
+    final int remaining = (hospitalSp.visit - visited).clamp(0, hospitalSp.visit);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: ColorManager.medicalPrimary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.folder_special_outlined,
+            size: iconSize,
+            color: ColorManager.medicalPrimary,
+          ),
+
+          const SizedBox(width: 9),
+
+          Expanded(
+            child: Text(
+              titleSp,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color: ColorManager.medicalText,
+                fontSize: fontSize,
+                fontWeight: FontWeight.w600,
+                height: 1.4,
+              ),
+            ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 3,
+            ),
+            decoration: BoxDecoration(
+              color: ColorManager.medicalPrimary.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              'متبقي $remaining',
+              style: TextStyle(
+                color: ColorManager.medicalPrimary,
+                fontSize: fontSize - 2,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
