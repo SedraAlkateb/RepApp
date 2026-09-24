@@ -59,22 +59,27 @@ class PlanBrandsInfoBloc
   void _emitLoaded(Emitter<PlanBrandsInfoState> emit) {
     final search = normalizeText(_search);
 
-    // الترتيب حسب المجموع (الأكبر أولاً)، وعند التساوي يبقى الترتيب:
-    // هدف ممتلئ ← هدف صفري ← مساعد
-    final merged = <ActivePlanBrandModel>[
-      if (_activeFilters.contains(PlanBrandsInfoFilter.target))
-        ..._all.targetBrands,
-      if (_activeFilters.contains(PlanBrandsInfoFilter.zeroTarget))
-        ..._all.targetBrandsWithoutAmount,
-      if (_activeFilters.contains(PlanBrandsInfoFilter.assistant))
-        ..._all.assistantBrands,
-    ].where((value) => _matches(value, search)).toList();
+    // الترتيب: هدف ممتلئ ← هدف صفري ← مساعد ممتلئ ← مساعد فارغ،
+    // وداخل كل مجموعة حسب المجموع (الأكبر أولاً)
+    List<ActivePlanBrandModel> group(
+      PlanBrandsInfoFilter filter,
+      List<ActivePlanBrandModel> list,
+    ) {
+      if (!_activeFilters.contains(filter)) return [];
+      return list.where((value) => _matches(value, search)).toList()
+        ..sort((a, b) => b.total.compareTo(a.total));
+    }
 
-    final order = {for (var i = 0; i < merged.length; i++) merged[i]: i};
-    final brands = [...merged]..sort((a, b) {
-        final byTotal = b.total.compareTo(a.total);
-        return byTotal != 0 ? byTotal : order[a]!.compareTo(order[b]!);
-      });
+    final assistantFull = _all.assistantBrands.where((b) => b.total > 0).toList();
+    final assistantEmpty =
+        _all.assistantBrands.where((b) => b.total <= 0).toList();
+
+    final brands = <ActivePlanBrandModel>[
+      ...group(PlanBrandsInfoFilter.target, _all.targetBrands),
+      ...group(PlanBrandsInfoFilter.zeroTarget, _all.targetBrandsWithoutAmount),
+      ...group(PlanBrandsInfoFilter.assistant, assistantFull),
+      ...group(PlanBrandsInfoFilter.assistant, assistantEmpty),
+    ];
 
     emit(PlanBrandsInfoLoadedState(brands, Set.of(_activeFilters)));
   }

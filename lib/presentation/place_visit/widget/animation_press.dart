@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 // ignore_for_file: deprecated_member_use
 
@@ -10,9 +11,11 @@ class AnimatedPlaceCard extends StatefulWidget {
     super.key,
     required this.place,
     required this.onTap,
+    required this.isRep
   });
 
   final dynamic place;
+  final bool isRep;
   final VoidCallback onTap;
 
   @override
@@ -183,6 +186,8 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                   // =========================================
                   // Total Visits Badge (إجمالي زيارات المنطقة)
                   // =========================================
+
+                widget.isRep?
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 250),
                     padding: EdgeInsets.symmetric(
@@ -231,7 +236,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                         ),
                       ],
                     ),
-                  ),
+                  ):SizedBox(),
                 ],
               ),
             ),

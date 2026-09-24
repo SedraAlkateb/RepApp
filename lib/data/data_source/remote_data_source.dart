@@ -5,7 +5,7 @@ import 'package:domina_app/domain/models/models.dart';
 
 abstract class RemoteDataSource {
   Future<LoginResponse> login(LoginRequest loginRequest);
-  Future<AllPlaceBaseResponse> allPlaces(int id);
+  Future<AllPlaceBaseResponse> allPlaces(int id,{int? cityId});
   Future<AllSpcBaseResponse> allSpecializations(int repDet, {int? planId});
   Future<CheckRepResponse> checkRep(int repDet);
   Future<AllCityBaseResponse> allCity();
@@ -141,8 +141,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AllPlaceBaseResponse> allPlaces(int id) async {
-    return await _appServiceClient.allPlace(id);
+  Future<AllPlaceBaseResponse> allPlaces(int id,{int? cityId}) async {
+    return await _appServiceClient.allPlace(id,cityId:cityId);
   }
 
   @override

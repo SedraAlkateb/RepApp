@@ -44,6 +44,7 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
   AllReciUsecase allReciUsecase;
   GetRepReciUsecase getRepReciUsecase;
   GetDocHosBySpPlace getDocHosBySpPlace;
+  int lastPlaceRepId = 0;
   List<SpecDModel> specialization = [];
   List<HospitalSpModel> hospital = [];
   List<BrandModel> brand = [];
@@ -72,8 +73,9 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
       this.getDocHosBySpPlace)
       : super(SeniorProfInitial()) {
     on<SenAllPlaceEvent>((event, emit) async {
+      lastPlaceRepId = event.id;
       emit(SenAllPlaceLoadingState());
-      (await allPlaceUsecase.execute(event.id)).fold((failure) {
+      (await allPlaceUsecase.execute(event.id, cityId: event.cityId)).fold((failure) {
         emit(SenAllPlaceErrorState(failure: failure));
       }, (data) async {
         emit(SenAllPlaceState(places: data, placesSearch: data));
@@ -141,9 +143,14 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
               return true;
             }
 
-            if (normalizeText(
-              doctor.rate ?? '',
-            ).contains(search)) {
+            if (normalizeText(doctor.rate ?? '')
+                .toLowerCase()
+                .contains(search.toLowerCase())) {
+              return true;
+            }
+
+            if (normalizeText(doctor.visit ?? '')
+                .contains(search.toEnglishNumbers())) {
               return true;
             }
 
@@ -191,9 +198,13 @@ class SeniorProfBloc extends Bloc<SeniorProfEvent, SeniorProfState> {
             return true;
           }
 
-          if (normalizeText(
-            hospital.rate ?? '',
-          ).contains(search)) {
+          if (normalizeText(hospital.rate ?? '')
+              .toLowerCase()
+              .contains(search.toLowerCase())) {
+            return true;
+          }
+
+          if (hospital.visit.toString().contains(search.toEnglishNumbers())) {
             return true;
           }
 

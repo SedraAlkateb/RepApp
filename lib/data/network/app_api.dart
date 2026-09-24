@@ -17,6 +17,7 @@ abstract class AppServiceClient {
   @POST("/getAllPlace.php") //
   Future<AllPlaceBaseResponse> allPlace(
     @Part(name: "repDet") int repDet,
+      {   @Part(name: "cityId") int? cityId}
   );
   @POST("/getAllSp.php") //
   Future<AllSpcBaseResponse> allSpecializations(

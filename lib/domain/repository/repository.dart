@@ -6,7 +6,7 @@ import 'package:domina_app/domain/models/models.dart';
 abstract class Repository {
   Future<Either<Failure, LoginModel>> login(LoginRequest loginRequest);
 
-  Future<Either<Failure, List<PlaceModel>>> allPlace(int id);
+  Future<Either<Failure, List<PlaceModel>>> allPlace(int id,{int? cityId});
 
   Future<Either<Failure, List<SpecDModel>>> allSpec(int repDet, {int? planId});
 

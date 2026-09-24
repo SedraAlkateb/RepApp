@@ -131,7 +131,7 @@ class ManageFutureBloc extends Bloc<ManageFutureEvent, ManageFutureState> {
 
     on<GetPlaceEvent>((event, emit) async {
       emit(GetPlaceStatusLoadingState());
-      (await allPlaceUsecase.execute(event.id)).fold((failure) {
+      (await allPlaceUsecase.execute(event.id,cityId:event.cityId)).fold((failure) {
         emit(GetPlaceStatusErrorState(failure: failure));
       }, (data) async {
         emit(GetPlaceStatusState(data));

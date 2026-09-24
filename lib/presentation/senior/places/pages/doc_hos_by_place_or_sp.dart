@@ -12,6 +12,7 @@ import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_b
 import 'package:domina_app/presentation/senior/representative/widget/doc_card.dart';
 import 'package:domina_app/presentation/senior/representative/widget/hos_card.dart';
 import 'package:domina_app/presentation/uniti/num_list.dart';
+import 'package:domina_app/presentation/uniti/search_field.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -227,10 +228,9 @@ class _DocHosByPlaceOrSpPageState extends State<DocHosByPlaceOrSpPage>
                               ui.searchBottomPadding,
                             ),
                             child: SearchWithCityFilter(
+                              onSearch: _search,
                               searchController: searchController,
-                              onSearch: (value) {
-                                _search(value);
-                              },
+
                             ),
                           ),
                           BlocBuilder<SeniorProfBloc, SeniorProfState>(

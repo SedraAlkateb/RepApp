@@ -42,7 +42,7 @@ class FakeRemote implements RemoteDataSource {
   }
 
   @override
-  Future<AllPlaceBaseResponse> allPlaces(int id) {
+  Future<AllPlaceBaseResponse> allPlaces(int id,{int? cityId}) {
     calls++;
     return onAllPlaces!();
   }

@@ -894,7 +894,7 @@ class BrandPlanCard extends StatelessWidget {
             height: 7,
           ),
           Text(
-            'لا يوجد توزيع اختصاصات لهذه المادة',
+            'لم يأخذ منه عينات بعد',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: fontSize,

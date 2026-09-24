@@ -1,3 +1,4 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/place_visit/widget/animation_press.dart';
@@ -59,6 +60,7 @@ class PlacesArchiveList extends StatelessWidget {
                 final place = places[index];
 
                 return AnimatedPlaceCard(
+                  isRep:UserInfo.repType==7?true:false ,
                   place: place,
                   onTap: () {
                     Navigator.pushNamed(

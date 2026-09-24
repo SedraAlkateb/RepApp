@@ -52,12 +52,16 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<AllPlaceBaseResponse> allPlace(int repDet) async {
+  Future<AllPlaceBaseResponse> allPlace(int repDet, {int? cityId}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('repDet', repDet.toString()));
+    if (cityId != null) {
+      _data.fields.add(MapEntry('cityId', cityId.toString()));
+    }
     final _options = _setStreamType<AllPlaceBaseResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

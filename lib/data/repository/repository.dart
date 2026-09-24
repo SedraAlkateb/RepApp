@@ -91,9 +91,9 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, List<PlaceModel>>> allPlace(int id) => _remoteCall(
+  Future<Either<Failure, List<PlaceModel>>> allPlace(int id,{int? cityId}) => _remoteCall(
         tag: 'allPlace',
-        call: () => _remoteDataSource.allPlaces(id),
+        call: () => _remoteDataSource.allPlaces(id,cityId:cityId),
         map: (response) => response.toDomain(),
         logNoInternet: true,
       );

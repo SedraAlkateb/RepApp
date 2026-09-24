@@ -71,9 +71,20 @@ class AllCityBloc extends Bloc<AllCityEvent, AllCityState> {
         cities = data;
 
         // =====================================================
-        // أول محافظة هي الافتراضية
+        // نحافظ على المحافظة المختارة سابقاً (مشتركة بكل التطبيق)
+        // وإلا فأول محافظة هي الافتراضية
         // =====================================================
-        selectedCity = cities.isNotEmpty ? cities.first : null;
+        final int? previousId = selectedCityId;
+        CityModel? kept;
+        if (previousId != null) {
+          for (final city in cities) {
+            if (cityIdOf(city) == previousId) {
+              kept = city;
+              break;
+            }
+          }
+        }
+        selectedCity = kept ?? (cities.isNotEmpty ? cities.first : null);
 
         emit(
           GetAllCityState(

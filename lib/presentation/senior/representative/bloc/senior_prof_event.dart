@@ -5,9 +5,10 @@ abstract class SeniorProfEvent extends Equatable {}
 
 class SenAllPlaceEvent extends SeniorProfEvent {
   final int id;
+  final int? cityId;
   @override
-  SenAllPlaceEvent(this.id);
-  List<Object?> get props => [id];
+  SenAllPlaceEvent(this.id, {this.cityId});
+  List<Object?> get props => [id, cityId];
 }
 
 

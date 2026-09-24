@@ -6,7 +6,7 @@ import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/representative/bloc/senior_prof_bloc.dart';
-import 'package:domina_app/presentation/uniti/search_field.dart';
+import 'package:domina_app/presentation/senior/places/widget/city_filter_search_widget.dart';
 import 'package:domina_app/presentation/uniti/stateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +28,24 @@ class _PlaceSeniorState
   final TextEditingController searchController =
   TextEditingController();
 
+  int? _lastLoadedCityId;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadSelectedCity());
+  }
+
+  void _loadSelectedCity() {
+    if (!mounted) return;
+    final int? cityId = context.read<AllCityBloc>().selectedCityId;
+    if (cityId == null || cityId < 0 || _lastLoadedCityId == cityId) return;
+    _lastLoadedCityId = cityId;
+    searchController.clear();
+    final bloc = context.read<SeniorProfBloc>();
+    bloc.add(SenAllPlaceEvent(bloc.lastPlaceRepId, cityId: cityId));
+  }
+
   @override
   void dispose() {
     searchController.dispose();
@@ -42,7 +60,11 @@ class _PlaceSeniorState
     final double contentMaxWidth =
     ui.isTabletLandscape ? 760 : ui.pageMaxWidth;
 
-    return Scaffold(
+    return BlocListener<AllCityBloc, AllCityState>(
+      listener: (context, state) {
+        if (state is GetAllCityState) _loadSelectedCity();
+      },
+      child: Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         elevation: 0,
@@ -91,7 +113,7 @@ class _PlaceSeniorState
                     context,
                     func: () {
                       context.read<SeniorProfBloc>().add(
-                        SenAllPlaceEvent(203),
+                        SenAllPlaceEvent(context.read<SeniorProfBloc>().lastPlaceRepId, cityId: context.read<AllCityBloc>().selectedCityId),
                       );
                     },
                   );
@@ -115,9 +137,9 @@ class _PlaceSeniorState
                               ui.pagePadding,
                               ui.searchBottomPadding,
                             ),
-                            child: SearchField(
+                            child: SearchWithCityFilter(
                               searchController: searchController,
-                              onPressed: (value) {
+                              onSearch: (value) {
                                 context.read<SeniorProfBloc>().add(
                                   SearchSenAllPlaceEvent(
                                     value,
@@ -173,7 +195,7 @@ class _PlaceSeniorState
           ),
         ],
       ),
-    );
+    ));
   }
   // ===========================================================
   // Header

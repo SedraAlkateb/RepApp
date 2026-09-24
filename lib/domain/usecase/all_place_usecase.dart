@@ -9,8 +9,8 @@ import 'package:equatable/equatable.dart';
 class AllPlaceUsecase extends Equatable {
   Repository _repository;
   AllPlaceUsecase(this._repository);
-  Future<Either<Failure, List<PlaceModel>>> execute(int id) async {
-    return await _repository.allPlace(id);
+  Future<Either<Failure, List<PlaceModel>>> execute(int id, {int? cityId}) async {
+    return await _repository.allPlace(id,cityId:cityId);
   }
 
   @override

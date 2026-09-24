@@ -29,7 +29,8 @@ class ChangPlanStatusEvent extends ManageFutureEvent {
 
 class GetPlaceEvent extends ManageFutureEvent {
   final int id;
-  GetPlaceEvent(this.id);
+  final int cityId;
+  GetPlaceEvent(this.id,this.cityId);
   @override
   List<Object?> get props => [id];
 }
