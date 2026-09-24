@@ -54,6 +54,10 @@ class _CreatePlanBrandPageState
       child: BlocConsumer<
         PlanManagementBloc,
         PlanManagementState>(
+      // الـ listener يعمل فقط عند تغيّر الحالة، حتى لا يظهر popup الخطأ
+      // القديم مجدداً عند أي تحديث لاحق (كتابة كمية، بحث، ...)
+      listenWhen: (previous, current) =>
+          previous.futureStatus != current.futureStatus,
       listener: (context, state) async {
         if (state.futureStatus ==
             PlanStatus.submitSuccess) {

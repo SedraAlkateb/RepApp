@@ -59,8 +59,9 @@ class PlanBrandsInfoBloc
   void _emitLoaded(Emitter<PlanBrandsInfoState> emit) {
     final search = normalizeText(_search);
 
-    // الترتيب: هدف ممتلئ ← هدف صفري ← مساعد
-    final brands = <ActivePlanBrandModel>[
+    // الترتيب حسب المجموع (الأكبر أولاً)، وعند التساوي يبقى الترتيب:
+    // هدف ممتلئ ← هدف صفري ← مساعد
+    final merged = <ActivePlanBrandModel>[
       if (_activeFilters.contains(PlanBrandsInfoFilter.target))
         ..._all.targetBrands,
       if (_activeFilters.contains(PlanBrandsInfoFilter.zeroTarget))
@@ -68,6 +69,12 @@ class PlanBrandsInfoBloc
       if (_activeFilters.contains(PlanBrandsInfoFilter.assistant))
         ..._all.assistantBrands,
     ].where((value) => _matches(value, search)).toList();
+
+    final order = {for (var i = 0; i < merged.length; i++) merged[i]: i};
+    final brands = [...merged]..sort((a, b) {
+        final byTotal = b.total.compareTo(a.total);
+        return byTotal != 0 ? byTotal : order[a]!.compareTo(order[b]!);
+      });
 
     emit(PlanBrandsInfoLoadedState(brands, Set.of(_activeFilters)));
   }
