@@ -4,9 +4,25 @@ import 'dart:math';
 import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
+import 'package:domina_app/app/logger/app_logger.dart';
+import 'package:domina_app/crashlytics/crashlytics_service.dart';
 
 abstract class DatabaseAccessor {
   Future<Database> get database;
+}
+
+final _log = AppLogger.get('DatabaseHelper');
+
+// سجل تشخيصي يصل لـ Crashlytics عن بُعد (بالإضافة لسجل محلي وقت التطوير)،
+// حتى نعرف بالأرقام أي مسار سلكه كل مستخدم فعلياً عند فتح القاعدة، بدل
+// انتظار بلاغات يدوية. يُكتب بصمت إن لم يكن Crashlytics مسجّلاً بعد (مثلاً
+// في اختبارات الوحدة).
+void _logDiagnostic(String message) {
+  _log.info(message);
+  try {
+    GetIt.instance<CrashlyticsService>().log('[DatabaseHelper] $message');
+  } catch (_) {}
 }
 
 class DatabaseHelper implements DatabaseAccessor {
@@ -27,17 +43,34 @@ class DatabaseHelper implements DatabaseAccessor {
     return _database!;
   }
 
+  static const _keyName = 'db_encryption_key';
+
   // دالة مخصصة للحصول على مفتاح التشفير أو إنشائه إن لم يكن موجوداً
   Future<String> _getOrCreateEncryptionKey(String dbPath) async {
-    const keyName = 'db_encryption_key';
-
-    String? storedKey = await _secureStorage.read(key: keyName);
+    String? storedKey = await _secureStorage.read(key: _keyName);
 
     if (storedKey == null) {
-      // ملف القاعدة موجود لكن المفتاح غير قابل للقراءة (استعادة نسخة احتياطية أو
-      // فشل مؤقت في Keystore): لا نولّد مفتاحاً جديداً ولا نستبدل القديم، لأن ذلك
-      // يجعل بيانات المندوب (زياراته غير المرسلة) غير قابلة للاسترجاع نهائياً.
       if (await File(dbPath).exists()) {
+        _logDiagnostic(
+            'DB key missing in secure storage while $dbPath exists; checking if it is a legacy pre-encryption database');
+
+        // قد يكون الملف قاعدة بيانات قديمة من نسخة سابقة للتطبيق لم تكن تدعم
+        // التشفير أصلاً (لا يوجد لها مفتاح من الأساس)، وليس بالضرورة قاعدة
+        // مشفّرة فقد مفتاحها. نتحقق فعلياً قبل الحكم بالفشل.
+        final migratedKey = await _migrateLegacyPlaintextDatabase(dbPath);
+        if (migratedKey != null) {
+          _logDiagnostic(
+              'Legacy plaintext database migrated to encrypted successfully; original kept as backup');
+          return migratedKey;
+        }
+
+        // الملف موجود، وليس قابلاً للفتح بدون كلمة سر (أي أنه فعلاً مشفّر)،
+        // لكن مفتاحه غير موجود في التخزين الآمن (استعادة نسخة احتياطية أو فشل
+        // مؤقت في Keystore/Keychain): لا نولّد مفتاحاً جديداً ولا نستبدل
+        // القديم، لأن ذلك يجعل بيانات المندوب (زياراته غير المرسلة) غير قابلة
+        // للاسترجاع نهائياً.
+        _logDiagnostic(
+            'DB file is not openable without a password; treating as a genuinely encrypted database with a lost key');
         throw StateError(
             'Encrypted database exists but its key is unavailable in secure storage');
       }
@@ -47,11 +80,109 @@ class DatabaseHelper implements DatabaseAccessor {
       String newKey = base64Url.encode(values);
 
       // ✅ والتصحيح هنا أيضاً عند الكتابة
-      await _secureStorage.write(key: keyName, value: newKey);
+      await _secureStorage.write(key: _keyName, value: newKey);
       return newKey;
     }
 
     return storedKey;
+  }
+
+  // يحاول فتح [dbPath] بدون كلمة سر؛ إن نجح فهذه قاعدة بيانات قديمة من قبل
+  // إضافة التشفير، فنولّد لها مفتاحاً جديداً ونشفّرها في مكانها عبر
+  // sqlcipher_export دون فقدان أي بيانات. يعيد null إن كان الملف مشفّراً
+  // فعلاً (غير قابل للفتح بدون كلمة سر)، فيسلك الاستدعاء المسار القديم
+  // (رمي الخطأ بدل تخمين أو حذف أي شيء).
+  //
+  // احتياطات: (1) لا نحذف الملف الأصلي أبداً — نُبقيه إلى جانب النسخة
+  // المشفّرة الجديدة تحت اسم "...pre_encryption_backup" حتى لو نجح كل شيء،
+  // (2) نتحقق أن عدد صفوف كل جدول في النسخة الجديدة يطابق الأصل قبل اعتمادها،
+  // وإلا نتوقف دون لمس الملف الأصلي إطلاقاً.
+  Future<String?> _migrateLegacyPlaintextDatabase(String dbPath) async {
+    Database? plainDb;
+    try {
+      plainDb = await openDatabase(dbPath, readOnly: false);
+      await plainDb.rawQuery('SELECT count(*) FROM sqlite_master');
+    } catch (_) {
+      await plainDb?.close();
+      return null;
+    }
+
+    final beforeCounts = await _tableRowCounts(plainDb);
+
+    var random = Random.secure();
+    var values = List<int>.generate(32, (i) => random.nextInt(256));
+    final newKey = base64Url.encode(values);
+
+    final tmpEncryptedPath = '$dbPath.encrypting_tmp';
+    final tmpFile = File(tmpEncryptedPath);
+    if (await tmpFile.exists()) {
+      await tmpFile.delete();
+    }
+
+    try {
+      await plainDb.execute(
+          "ATTACH DATABASE '$tmpEncryptedPath' AS encrypted KEY '$newKey'");
+      await plainDb.execute("SELECT sqlcipher_export('encrypted')");
+      await plainDb.execute('DETACH DATABASE encrypted');
+      await plainDb.close();
+      plainDb = null;
+
+      // تحقّق من سلامة النسخة المشفّرة قبل أي تعديل على الملف الأصلي.
+      final encryptedDb =
+          await openDatabase(tmpEncryptedPath, password: newKey);
+      final afterCounts = await _tableRowCounts(encryptedDb);
+      await encryptedDb.close();
+
+      if (!_sameRowCounts(beforeCounts, afterCounts)) {
+        _logDiagnostic(
+            'sqlcipher_export row count mismatch, aborting migration without touching the original file: before=$beforeCounts after=$afterCounts');
+        throw StateError(
+            'sqlcipher_export row count mismatch: before=$beforeCounts after=$afterCounts');
+      }
+
+      // لا حذف نهائياً: الأصل يبقى كنسخة احتياطية دائمة على الجهاز.
+      final backupPath =
+          await _uniqueBackupPath('$dbPath.pre_encryption_backup');
+      await File(dbPath).rename(backupPath);
+      await tmpFile.rename(dbPath);
+
+      await _secureStorage.write(key: _keyName, value: newKey);
+      return newKey;
+    } catch (e) {
+      await plainDb?.close();
+      if (await tmpFile.exists()) {
+        await tmpFile.delete();
+      }
+      rethrow;
+    }
+  }
+
+  Future<String> _uniqueBackupPath(String basePath) async {
+    if (!await File(basePath).exists()) return basePath;
+    var i = 1;
+    while (await File('$basePath.$i').exists()) {
+      i++;
+    }
+    return '$basePath.$i';
+  }
+
+  Future<Map<String, int>> _tableRowCounts(Database db) async {
+    final tables = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+    final counts = <String, int>{};
+    for (final row in tables) {
+      final name = row['name'] as String;
+      final result = await db.rawQuery('SELECT COUNT(*) AS c FROM "$name"');
+      counts[name] = (result.first['c'] as int?) ?? 0;
+    }
+    return counts;
+  }
+
+  bool _sameRowCounts(Map<String, int> before, Map<String, int> after) {
+    for (final entry in before.entries) {
+      if (after[entry.key] != entry.value) return false;
+    }
+    return true;
   }
 
   Future<Database> _initDatabase() async {

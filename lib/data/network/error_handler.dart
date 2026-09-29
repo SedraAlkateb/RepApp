@@ -17,8 +17,13 @@ class ErrorHandler implements Exception {
       failure = _handleErrorSql(error);
     } else if (error is FormatException) {
       failure = Failure(0, "${error.message} ${error.source.toString()}");
+    } else if (error is StateError &&
+        error.message.contains(
+            'Encrypted database exists but its key is unavailable')) {
+      failure = Failure(
+          ResponseCode.DB_KEY_UNAVAILABLE, ResponseMassage.DB_KEY_UNAVAILABLE);
     } else {
-      failure = Failure(200, "massage${error}");
+      failure = Failure(200, error.toString());
     }
   }
 }
@@ -178,6 +183,7 @@ class ResponseCode {
   static const int DB_LOCKED = -9; //
   static const int TABLE_NOT_FOUND = -10; //
   static const int CONSTRAINT_VIOLATION = -11; //
+  static const int DB_KEY_UNAVAILABLE = -12; //
 
   static const int DEFAULT = -7;
 }
@@ -213,6 +219,8 @@ class ResponseMassage {
   static const String CACHE_ERROR = "Cache error ,Try again later";
   static const String NO_INTERNET_CONNECTION =
       "يرجى التأكد من اتصالك بالانترنت";
+  static const String DB_KEY_UNAVAILABLE =
+      "تعذّر فتح بيانات التطبيق المحفوظة على هذا الجهاز. يرجى تسجيل الدخول من جديد لإعادة مزامنة بياناتك.";
   static const String DEFAULT = "حدث خطأ, يرجى إعادة المحاولة";
 }
 
