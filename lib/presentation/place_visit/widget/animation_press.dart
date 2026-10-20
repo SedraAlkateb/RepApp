@@ -1,4 +1,3 @@
-import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 // ignore_for_file: deprecated_member_use
 
@@ -155,27 +154,18 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                   ),
 
                   // Place Title
-                  AnimatedDefaultTextStyle(
-                    duration: const Duration(
-                      milliseconds: 250,
-                    ),
-
+                  // ملاحظة: بدون AnimatedDefaultTextStyle لأنه يستبدل
+                  // DefaultTextStyle بدل ما يدمجه مع الثيم، فيضيع الخط
+                  // (Almarai) الموروث. Text العادي بيدمج ستايله مع الثيم.
+                  Text(
+                    widget.place.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-
                       fontSize: ui.cardTitleSize,
-
                       color: ColorManager.medicalPrimary,
-
                       height: 1.2,
-                    ),
-
-                    child: Text(
-                      widget.place.title,
-
-                      maxLines: 1,
-
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
 

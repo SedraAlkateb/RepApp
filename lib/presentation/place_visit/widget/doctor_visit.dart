@@ -339,8 +339,8 @@ class _DoctorVisitCard extends StatelessWidget {
                     color: const Color(0xFF475569),
                   ),
                 ),
-                RichText(
-                  text: TextSpan(
+                Text.rich(
+                  TextSpan(
                     children: [
                       TextSpan(
                         text: '${doctor.visited ?? 0}',

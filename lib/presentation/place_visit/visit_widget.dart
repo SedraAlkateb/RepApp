@@ -22,9 +22,9 @@ Widget buildDetailRow(IconData icon, String label, String? value) {
               Icon(icon, color: Colors.blueAccent, size: 22.sp),
               SizedBox(width: 12.w),
               Expanded(
-                child: RichText(
+                child: Text.rich(
                   textAlign: TextAlign.right,
-                  text: TextSpan(
+                  TextSpan(
                     style: TextStyle(fontSize: 14.sp, height: 1.4),
                     children: [
                       TextSpan(
@@ -81,13 +81,12 @@ Widget buildDetailHtmlRow(IconData icon, String label, String? value) {
               Icon(icon, color: Colors.blueAccent, size: 22.sp),
               SizedBox(width: 12.w),
               Expanded(
-                child: RichText(
+                child: Text.rich(
                   textAlign: TextAlign.right, // للمحاذاة العربية
-                  text: TextSpan(
+                  TextSpan(
                     style: TextStyle(
                         fontSize: 14.sp,
-                        height: 1.4,
-                        fontFamily: 'Almarai'), // تأكد من الخط العربي
+                        height: 1.4,), // تأكد من الخط العربي
                     children: [
                       // الجزء الخاص بالعنوان (Label)
                       TextSpan(
