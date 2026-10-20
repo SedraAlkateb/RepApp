@@ -321,20 +321,7 @@ class MyResponsiveApp extends StatelessWidget {
         return fontSize * instance.scaleText;
       },
       builder: (context, child) {
-        // جلب مساحة شريط الحالة بالأعلى والشريط السفلي دون استخدام SafeArea
-        final double bottomPadding = MediaQuery.of(context).padding.bottom;
-
-        return Container(
-          color: const Color(0xFFFFFFFF), // نفس لون خلفية التطبيق أو الـ Scaffold لديك
-                child: Padding(
-                padding: EdgeInsets.only(
-                bottom: bottomPadding,
-                ),
-          child: const MyApp(
-            key: ValueKey('app_root'),
-          ),
-        ),
-                );
+        return const MyApp(key: ValueKey('app_root'));
       },
     );
   }
