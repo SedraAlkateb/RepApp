@@ -1,7 +1,7 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/network/sqlite_factory.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/app/number_utils.dart';
+import 'package:domina_app/domain/utils/number_utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -362,7 +362,7 @@ class AppSqlApi extends AppSqlApiAbs {
   insertLogin(LoginModel loginModel) async {
     Database? mydb = await databaseHelper.database;
     Batch batch = mydb.batch();
-    batch.insert('rep', loginModel.toMap());
+    batch.insert('rep', loginModel.toMap(isLogging: UserInfo.isLogging));
     await batch.commit(noResult: true);
   }
 

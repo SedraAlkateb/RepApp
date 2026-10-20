@@ -37,23 +37,8 @@ void main() {
     return violations;
   }
 
-  test('domain لا يستورد من data (باستثناء دَين معماري موثّق سابقاً)', () {
-    const allowlist = {
-      'lib/domain/ex.dart',
-      'lib/domain/repository/repository.dart',
-      'lib/domain/usecase/all_exception_usecase.dart',
-      'lib/domain/usecase/all_read_sen_usecase.dart',
-      'lib/domain/usecase/change_rep_plan_status.dart',
-      'lib/domain/usecase/check_reci_usecase.dart',
-      'lib/domain/usecase/check_rep_usecase.dart',
-      'lib/domain/usecase/changePlanBrandType_usecase.dart',
-      'lib/domain/usecase/read_visit_usecase.dart',
-      'lib/domain/usecase/plan_brand_usecase.dart',
-      'lib/domain/usecase/visit_doctor_usecase.dart',
-      'lib/domain/usecase/visit_hospital_usecase.dart',
-      'lib/domain/usecase/update_rep_plan_brand_amount.dart',
-      'lib/domain/usecase/visit_pharmacy_usecase.dart',
-    };
+  test('domain لا يستورد من data ', () {
+    const allowlist = <String>{};
     final violations = findViolations(
       layerDir: 'lib/domain',
       forbiddenPrefixes: const ['package:domina_app/data/'],
@@ -61,6 +46,16 @@ void main() {
     );
     expect(violations, isEmpty,
         reason: 'ملفات جديدة بـ domain تستورد من data: $violations');
+  });
+
+  test('domain لا يستورد من app (الجلسة عبر SessionContext)', () {
+    final violations = findViolations(
+      layerDir: 'lib/domain',
+      forbiddenPrefixes: const ['package:domina_app/app/'],
+      allowlist: const <String>{},
+    );
+    expect(violations, isEmpty,
+        reason: 'domain يجب ألا يعتمد على طبقة app: $violations');
   });
 
   test('domain لا يستورد Flutter مباشرة', () {

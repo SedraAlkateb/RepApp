@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/domain/repository/repository.dart';
+import 'package:domina_app/domain/repository/recipes_repository.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 class InsertReciUsecase extends Equatable {
-  final Repository _repository;
+  final RecipesRepository _repository;
   InsertReciUsecase(this._repository);
   Future<Either<Failure, InsertRecResponse>> execute(
       ReciRequest reciRequest) async {

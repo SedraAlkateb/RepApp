@@ -1,5 +1,8 @@
 import 'package:domina_app/analytics/analytics_service.dart';
 import 'package:domina_app/presentation/sync/bloc/sync_bloc.dart';
+import 'package:domina_app/presentation/sync/bloc/sync_diagnostics.dart';
+import 'package:domina_app/presentation/sync/bloc/sync_downloader.dart';
+import 'package:domina_app/presentation/sync/bloc/sync_uploader.dart';
 import 'package:domina_app/domain/usecase/all_brand_plan_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_doctor_visits_sql_usecase.dart';
 import 'package:domina_app/domain/usecase/all_brands_flag_sql_usecase.dart';
@@ -190,8 +193,7 @@ Future<void> initSyncModule() async {
   ensure<UpdateFlagHospitalSqlUsecase>(
       () => UpdateFlagHospitalSqlUsecase(instance()));
 
-  ensure<SyncBloc>(() => SyncBloc(
-        analyticsService: instance<AnalyticsService>(),
+  ensure<SyncUploader>(() => SyncUploader(
         allExceptionSqlUsecase: instance(),
         allExceptionUsecase: instance(),
         getBrandsDoctorVisitsSqlUsecase: instance(),
@@ -206,6 +208,11 @@ Future<void> initSyncModule() async {
         updateFlagHospitalSqlUsecase: instance(),
         isPlanSqlUsecase: instance(),
         checkActiveBrandPlanUsecase: instance(),
+      ));
+  ensure<SyncDownloader>(() => SyncDownloader(
+        analyticsService: instance<AnalyticsService>(),
+        diagnostics: const FirebaseSyncDiagnostics(),
+        checkActiveBrandPlanUsecase: instance(),
         updateActiveSqlUsecase: instance(),
         allBrandsUsecase: instance(),
         getVisitDoctorUsecase: instance(),
@@ -219,6 +226,11 @@ Future<void> initSyncModule() async {
         allBrandsSpUsecase: instance(),
         asyncDataSqlUsecase: instance(),
         editIsLoginSqlUsecase: instance(),
+      ));
+  ensure<SyncBloc>(() => SyncBloc(
+        analyticsService: instance<AnalyticsService>(),
+        uploader: instance(),
+        downloader: instance(),
         deleteAllSqlUsecase: instance(),
       ));
 }

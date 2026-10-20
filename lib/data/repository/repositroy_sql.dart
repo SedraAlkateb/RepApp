@@ -5,7 +5,7 @@ import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:domina_app/data/network/app_sql_api.dart';
 import 'package:domina_app/data/network/error_handler.dart';
 import 'package:domina_app/domain/failure.dart';
-import 'package:domina_app/domain/ex.dart';
+import 'package:domina_app/domain/repository/exc_repository.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repository/repository_sql.dart';
 

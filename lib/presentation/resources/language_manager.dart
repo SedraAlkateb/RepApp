@@ -3,7 +3,7 @@
 import 'package:flutter/widgets.dart';
 
 // إبقاء التصدير حتى لا تتغير استيرادات طبقة العرض.
-export 'package:domina_app/app/number_utils.dart';
+export 'package:domina_app/domain/utils/number_utils.dart';
 
 enum LanguageType { ENGLISH, ARABIC }
 

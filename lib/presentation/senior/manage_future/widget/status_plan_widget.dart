@@ -1,10 +1,11 @@
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/presentation/senior/plan_review/bloc/future_rep_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void showStatusBottomSheet(BuildContext context, int repTypeI, int repPlanId) {
-  List<FlagModel> statusPlan = getAllFlags(repTypeI);
+  List<FlagModel> statusPlan = getAllFlags(repTypeI, currentRepTypeId: UserInfo.repType.i);
 
   showModalBottomSheet(
     context: context,

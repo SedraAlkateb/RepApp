@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/domain/repository/repository.dart';
+import 'package:domina_app/domain/repository/plans_repository.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 class GetPanRepsUsecase extends Equatable {
-  Repository _repository;
+  PlansRepository _repository;
   GetPanRepsUsecase(this._repository);
   Future<Either<Failure, List<PlanRepsModel>>> execute(int planId) async {
     return await _repository.getPlanReps(planId);

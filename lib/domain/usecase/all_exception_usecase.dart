@@ -1,14 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/data/responses/responses.dart';
-import 'package:domina_app/domain/repository/repository.dart';
+import 'package:domina_app/domain/repository/log_repository.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 class AllExceptionUsecase extends Equatable {
-  final Repository _repository;
+  final LogRepository _repository;
   AllExceptionUsecase(this._repository);
-  Future<Either<Failure, Message1Response>> execute(
+  Future<Either<Failure, MessageModel>> execute(
       ExceptionRequestBody exceptionRequest) async {
     return await _repository.insertLog(exceptionRequest);
   }

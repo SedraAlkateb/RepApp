@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/domain/repository/repository.dart';
+import 'package:domina_app/domain/repository/directory_repository.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 class GetDocHosBySpPlace extends Equatable {
-  final Repository _repository;
+  final DirectoryRepository _repository;
   GetDocHosBySpPlace(this._repository);
   Future<Either<Failure,DocHosByPlaceAndSp>> execute(int repDet,      {
     int? spId,

@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repository/repository_sql.dart';
+import 'package:domina_app/domain/repository/sql_plans_repository.dart';
 import 'package:equatable/equatable.dart';
 
 class UpdateOtherStatusUsecase extends Equatable {
-  final RepositorySql _repositorySql;
+  final SqlPlansRepository _repositorySql;
   UpdateOtherStatusUsecase(this._repositorySql);
   Future<Either<Failure, Null>> execute(
       int repId, int status, List<OtherBrandSpPlanModel> planBrands) async {

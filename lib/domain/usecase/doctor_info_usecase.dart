@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:domina_app/domain/repository/repository.dart';
+import 'package:domina_app/domain/repository/directory_repository.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 class DoctorInfoUsecase extends Equatable {
-  final Repository _repository;
+  final DirectoryRepository _repository;
   DoctorInfoUsecase(this._repository);
   Future<Either<Failure, DoctorModel>> execute(int id) async {
     return await _repository.getDocInfo(id);

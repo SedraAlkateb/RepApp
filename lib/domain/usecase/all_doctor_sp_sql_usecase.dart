@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repository/repository_sql.dart';
+import 'package:domina_app/domain/repository/sql_directory_repository.dart';
 import 'package:equatable/equatable.dart';
 
 class AllDoctorSpSqlUsecase extends Equatable {
-  final RepositorySql _repositorySql;
+  final SqlDirectoryRepository _repositorySql;
   AllDoctorSpSqlUsecase(this._repositorySql);
   Future<Either<Failure, List<DoctorModel>>> execute(int spId) async {
     return await _repositorySql.getDoctorBySpec(spId);

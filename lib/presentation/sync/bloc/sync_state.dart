@@ -1,4 +1,7 @@
-part of 'sync_bloc.dart';
+import 'package:domina_app/domain/failure.dart';
+import 'package:domina_app/presentation/sync/bloc/sync_event.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 enum SyncPhase { uploading, downloading, saving, cleaning }
 

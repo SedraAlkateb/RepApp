@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:domina_app/app/user_info.dart';
-import 'package:domina_app/app/number_utils.dart';
+import 'package:domina_app/domain/utils/number_utils.dart';
 
 class VisitPharmacyModel {
   int id;
@@ -18,11 +17,12 @@ class VisitPharmacyModel {
     };
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(
+      {required int repPlanId, required int representativeId}) {
     return {
       'id': id,
-      'repPlanId': UserInfo.activePlanId,
-      'representativeId': UserInfo.repId,
+      'repPlanId': repPlanId,
+      'representativeId': representativeId,
       'pharmacyId': pharmacyId,
       'VisitDate': data,
       'note': note
@@ -319,11 +319,18 @@ class VisitPharmacyRequestBody {
   List<VisitPharmacyModel> list1;
   List<VisitBrandPharmacyModel> list2;
 
-  VisitPharmacyRequestBody(this.list1, this.list2);
+  final int repPlanId;
+  final int representativeId;
+
+  VisitPharmacyRequestBody(this.list1, this.list2,
+      {required this.repPlanId, required this.representativeId});
 
   Map<String, dynamic> toJson() {
     return {
-      'list1': list1.map((e) => e.toJson()).toList(),
+      'list1': list1
+          .map((e) => e.toJson(
+              repPlanId: repPlanId, representativeId: representativeId))
+          .toList(),
       'list2': list2.map((e) => e.toJson()).toList(),
     };
   }
@@ -400,11 +407,18 @@ class VisitDoctorRequestBody {
   List<VisitDoctorModel> list1; ////
   List<VisitBrandPharmacyModel> list2;
 
-  VisitDoctorRequestBody(this.list1, this.list2);
+  final int repPlanId;
+  final int representativeId;
+
+  VisitDoctorRequestBody(this.list1, this.list2,
+      {required this.repPlanId, required this.representativeId});
 
   Map<String, dynamic> toJson() {
     return {
-      'list1': list1.map((e) => e.toJson()).toList(),
+      'list1': list1
+          .map((e) => e.toJson(
+              repPlanId: repPlanId, representativeId: representativeId))
+          .toList(),
       'list2': list2.map((e) => e.toJson()).toList(),
     };
   }
@@ -415,24 +429,51 @@ class VisitHospitalRequestBody {
   List<VisitHospitalModel> list1;
   List<VisitBrandPharmacyModel> list2;
 
-  VisitHospitalRequestBody(this.list1, this.list2);
+  final int repPlanId;
+  final int representativeId;
+
+  VisitHospitalRequestBody(this.list1, this.list2,
+      {required this.repPlanId, required this.representativeId});
 
   Map<String, dynamic> toJson() {
     return {
-      'list1': list1.map((e) => e.toJson()).toList(),
+      'list1': list1
+          .map((e) => e.toJson(
+              repPlanId: repPlanId, representativeId: representativeId))
+          .toList(),
       'list2': list2.map((e) => e.toJson()).toList(),
     };
   }
 }
 
+/// نتيجة عملية كتابة/تحديث على الخادم (بديل domain لـ Message1Response).
+class MessageModel {
+  final String? status;
+  final String? message;
+  const MessageModel({this.status, this.message});
+}
+
+class CheckReModel {
+  final String? total;
+  final bool? accepted;
+  const CheckReModel({this.total, this.accepted});
+}
+
+class CheckRepModel {
+  final bool? accepted;
+  const CheckRepModel({this.accepted});
+}
+
 class ExceptionRequestBody {
   List<ExceptionModel> list1;
 
-  ExceptionRequestBody(this.list1);
+  final int repId;
+
+  ExceptionRequestBody(this.list1, {required this.repId});
 
   Map<String, dynamic> toJson() {
     return {
-      'list1': list1.map((e) => e.toJson()).toList(),
+      'list1': list1.map((e) => e.toJson(repId: repId)).toList(),
     };
   }
 }
@@ -516,11 +557,12 @@ class VisitDoctorModel {
     };
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(
+      {required int repPlanId, required int representativeId}) {
     return {
       'id': id,
-      'repPlanId': UserInfo.activePlanId,
-      'representativeId': UserInfo.repId,
+      'repPlanId': repPlanId,
+      'representativeId': representativeId,
       'docId': doctorId,
       'visitDate': data,
       'note': science,
@@ -538,20 +580,6 @@ class VisitDoctorModel {
         map['science'],
         map['additaion'],
         map['doctorId'],
-        map['flag'],
-        map['target']);
-  }
-
-  factory VisitDoctorModel.fromMap2(Map<String, dynamic> map) {
-    return VisitDoctorModel(
-        map['id'],
-        map['data'],
-        map['kaswn'],
-        map['science'],
-        map['additaion'],
-        map['doctorId'],
-        repPlanId: UserInfo.activePlanId.toString(),
-        representativeId: UserInfo.repId.toString(),
         map['flag'],
         map['target']);
   }
@@ -607,11 +635,12 @@ class VisitHospitalModel {
     };
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(
+      {required int repPlanId, required int representativeId}) {
     return {
       'id': id,
-      'repPlanId': UserInfo.activePlanId,
-      'representativeId': UserInfo.repId,
+      'repPlanId': repPlanId,
+      'representativeId': representativeId,
       'hospitalSpId': hospitalSpId,
       'visitDate': data,
       'note': science,
@@ -1187,7 +1216,7 @@ class LoginModel {
         this.totDoc,
         this.totHos,this.groupId,});
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({required int isLogging}) {
     return {
       'samplesCount': samplesCount,
       'token': token,
@@ -1199,7 +1228,7 @@ class LoginModel {
       'otherStatus': otherStatus == null ? -5 : otherStatus,
       'name': name,
       'percentage': percentage,
-      'isLogin': UserInfo.isLogging,
+      'isLogin': isLogging,
       'endDate': endDate,
       'startDate': startDate,
       'flag': flag,
@@ -1442,9 +1471,9 @@ class ExceptionModel {
     };
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({required int repId}) {
     return {
-      'repId': UserInfo.repId,
+      'repId': repId,
       'issue': exceptionModel.toString(),
       'type': type.toString(),
       'createDate': createDate
@@ -2134,7 +2163,7 @@ class SearchHospitalNoteModel {
       this.hosId, this.name, this.spId, this.note, this.issue, this.visitDate,this.target);
 }
 
-List<FlagModel> getAllFlags(int repType) {
+List<FlagModel> getAllFlags(int repType, {required int currentRepTypeId}) {
   List<FlagModel> allFlag = [];
   if (repType == 7) {
     allFlag.addAll([
@@ -2154,7 +2183,7 @@ List<FlagModel> getAllFlags(int repType) {
       FlagModel(1),
     ]);
   }
-  if (UserInfo.repType.i == 4) {
+  if (currentRepTypeId == 4) {
     allFlag.add(
       FlagModel(4),
     );

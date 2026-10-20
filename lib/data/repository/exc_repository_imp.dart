@@ -3,10 +3,13 @@ import 'package:domina_app/data/network/app_sql_api.dart';
 import 'package:domina_app/data/network/error_handler.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
+import 'package:domina_app/domain/repository/exc_repository.dart';
 
-class ExcRepository {
+class ExcRepositoryImp implements ExcRepository {
   final AppSqlApi _databaseHelper;
-  ExcRepository(this._databaseHelper);
+  ExcRepositoryImp(this._databaseHelper);
+
+  @override
   Future<Either<Failure, Null>> exceptionApi(
       ExceptionModel exceptionModel) async {
     try {

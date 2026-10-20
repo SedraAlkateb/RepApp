@@ -471,7 +471,8 @@ class _AllRepWithFutureState extends State<AllRepWithFuture>
             DropDownChangePlan(
               key: ValueKey('rep_${rep.id}_status_${rep.flag.flag}'),
               hintText: rep.flag.name,
-              items: getAllFlags(rep.reptype.i),
+              items: getAllFlags(rep.reptype.i,
+                  currentRepTypeId: UserInfo.repType.i),
               statusColor: getColor(rep.flag.flag),
               onChanged: (x) {
                 final FlagModel xx = x as FlagModel;

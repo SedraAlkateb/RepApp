@@ -8,7 +8,7 @@ import 'package:domina_app/data/network/network_info.dart';
 import 'package:domina_app/data/repository/repositroy_sql.dart';
 import 'package:domina_app/data/repository/repository.dart';
 import 'package:domina_app/data/responses/responses.dart';
-import 'package:domina_app/domain/ex.dart';
+import 'package:domina_app/domain/repository/exc_repository.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';

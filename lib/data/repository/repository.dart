@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/data/mapper/mapper.dart';
 
 import 'package:domina_app/data/data_source/remote_data_source.dart';
@@ -7,7 +8,7 @@ import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/data/network/network_info.dart';
 import 'package:domina_app/app/logger/app_logger.dart';
 import 'package:domina_app/data/responses/responses.dart';
-import 'package:domina_app/domain/ex.dart';
+import 'package:domina_app/domain/repository/exc_repository.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:domina_app/domain/repository/repository.dart';
 
@@ -27,7 +28,8 @@ class RepositoryImp implements Repository {
       response.status == "200";
 
   void _logRemote(Failure failure, String tag) {
-    insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, tag)]));
+    insertLog(ExceptionRequestBody([ExceptionModel(failure.massage, tag)],
+        repId: UserInfo.repId));
   }
 
   void _logLocal(Failure failure, String tag) {
@@ -155,30 +157,30 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> visitPharmacy(
+  Future<Either<Failure, MessageModel>> visitPharmacy(
           VisitPharmacyRequestBody list1) =>
       _remoteCall(
         tag: 'visitPharmacy',
         call: () => _remoteDataSource.visitPharmacy(list1),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
-  Future<Either<Failure, Message1Response>> visitDoctor(
+  Future<Either<Failure, MessageModel>> visitDoctor(
           VisitDoctorRequestBody list1) =>
       _remoteCall(
         tag: 'visitDoctor',
         call: () => _remoteDataSource.visitDoctor(list1),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
-  Future<Either<Failure, Message1Response>> visitHospital(
+  Future<Either<Failure, MessageModel>> visitHospital(
           VisitHospitalRequestBody list1) =>
       _remoteCall(
         tag: 'visitHospital',
         call: () => _remoteDataSource.visitHospital(list1),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
@@ -199,12 +201,12 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> repPlanBrand(
+  Future<Either<Failure, MessageModel>> repPlanBrand(
           RepPlanBrandBody list1) =>
       _remoteCall(
         tag: 'repPlanBrand',
         call: () => _remoteDataSource.repPlanBrand(list1),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
@@ -251,10 +253,10 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, CheckReResponse>> checkRe(int repDet) => _remoteCall(
+  Future<Either<Failure, CheckReModel>> checkRe(int repDet) => _remoteCall(
         tag: 'checkRe',
         call: () => _remoteDataSource.checkRe(repDet),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
@@ -282,10 +284,10 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, CheckRepResponse>> checkRep(int repId) => _remoteCall(
+  Future<Either<Failure, CheckRepModel>> checkRep(int repId) => _remoteCall(
         tag: 'checkRep',
         call: () => _remoteDataSource.checkRep(repId),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
@@ -342,7 +344,7 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> insertLog(
+  Future<Either<Failure, MessageModel>> insertLog(
       ExceptionRequestBody list1) async {
     try {
       if (await _networkInfo.isConnected) {
@@ -350,7 +352,7 @@ class RepositoryImp implements Repository {
         if (response.status == null ||
             response.status == ApiInternalStatus.SUCCESS ||
             response.status == "200") {
-          return Right(response);
+          return Right(response.toDomain());
         } else {
           Failure failure = Failure(ApiInternalStatus.FAILURE,
               response.message ?? ResponseMassage.DEFAULT);
@@ -395,11 +397,11 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> readVisit(AsRead asRead) =>
+  Future<Either<Failure, MessageModel>> readVisit(AsRead asRead) =>
       _remoteCall(
         tag: 'readVisit',
         call: () => _remoteDataSource.readVisit(asRead),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
         log: _logLocal,
       );
 
@@ -414,12 +416,12 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> changePlanBrandType(
+  Future<Either<Failure, MessageModel>> changePlanBrandType(
           ChangePlanBrandType changePlanBrandType) =>
       _remoteCall(
         tag: 'changePlanBrandType',
         call: () => _remoteDataSource.changePlanBrandType(changePlanBrandType),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
         log: _logLocal,
       );
 
@@ -442,11 +444,11 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> readAllVisits(ReadAll readAll) =>
+  Future<Either<Failure, MessageModel>> readAllVisits(ReadAll readAll) =>
       _remoteCall(
         tag: 'readAllVisits',
         call: () => _remoteDataSource.readAllVisits(readAll),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
@@ -526,12 +528,12 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> pharmacyOrder(
+  Future<Either<Failure, MessageModel>> pharmacyOrder(
           PharmacyOrderRequestBody order) =>
       _remoteCall(
         tag: 'getInfoPlanBrandsType',
         call: () => _remoteDataSource.pharmacyOrder(order),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
         isSuccess: (response) =>
             response.status == ApiInternalStatus.SUCCESS ||
             response.message == ApiInternalStatus.SUCCESS ||
@@ -539,12 +541,12 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> changeRepPlanStatus(
+  Future<Either<Failure, MessageModel>> changeRepPlanStatus(
           int id, int status) =>
       _remoteCall(
         tag: 'docReport',
         call: () => _remoteDataSource.changeRepPlanStatus(id, status),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override
@@ -606,12 +608,12 @@ class RepositoryImp implements Repository {
       );
 
   @override
-  Future<Either<Failure, Message1Response>> updateRepPlanBrandAmount(
+  Future<Either<Failure, MessageModel>> updateRepPlanBrandAmount(
           BrandAmountRequestBody list) =>
       _remoteCall(
         tag: 'docReport',
         call: () => _remoteDataSource.updateRepPlanBrandAmount(list),
-        map: (response) => response,
+        map: (response) => response.toDomain(),
       );
 
   @override

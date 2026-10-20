@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repository/repository_sql.dart';
+import 'package:domina_app/domain/repository/sql_session_repository.dart';
 import 'package:equatable/equatable.dart';
 
 class AsyncDataSqlUsecase extends Equatable {
-  final RepositorySql _repositorySql;
+  final SqlSessionRepository _repositorySql;
   AsyncDataSqlUsecase(this._repositorySql);
   Future<Either<Failure, String>> execute(
       List<BrandModel> brands,

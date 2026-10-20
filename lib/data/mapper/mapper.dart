@@ -4,6 +4,18 @@ import 'package:domina_app/data/responses/responses.dart';
 import 'package:domina_app/domain/models/models.dart';
 import 'package:html/parser.dart';
 
+extension MessageResponseMapper on Message1Response {
+  MessageModel toDomain() => MessageModel(status: status, message: message);
+}
+
+extension CheckReResponseMapper on CheckReResponse {
+  CheckReModel toDomain() => CheckReModel(total: total, accepted: accepted);
+}
+
+extension CheckRepResponseMapper on CheckRepResponse {
+  CheckRepModel toDomain() => CheckRepModel(accepted: accepted);
+}
+
 extension VisitPharmacyRequestMapper on VisitPharmacyModel? {
   VisitPharmacyRequest toDomain() {
     return VisitPharmacyRequest(

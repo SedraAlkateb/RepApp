@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:domina_app/domain/failure.dart';
 import 'package:domina_app/domain/models/models.dart';
-import 'package:domina_app/domain/repository/repository_sql.dart';
+import 'package:domina_app/domain/repository/sql_visits_repository.dart';
 import 'package:equatable/equatable.dart';
 
 class GetPharmacyVisitsSqlUsecase extends Equatable {
-  final RepositorySql _repositorySql;
+  final SqlVisitsRepository _repositorySql;
   GetPharmacyVisitsSqlUsecase(this._repositorySql);
   Future<Either<Failure, List<VisitPharmacyModel>>> execute() async {
     return await _repositorySql.visitPharmacyAs();

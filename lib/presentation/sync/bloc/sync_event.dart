@@ -1,4 +1,5 @@
-part of 'sync_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 /// نوع العملية:
 /// - [sync]: رفع الزيارات ثم تحميل البيانات واستبدال المحلي (أو تحميل فقط
