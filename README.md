@@ -1,25 +1,61 @@
-# domina_app
+# 💊 Domina App
 
-A new Flutter project.
+**تطبيق Flutter لإدارة المندوبين الطبيين ميدانياً.**
 
-## Getting Started
+![Flutter](https://img.shields.io/badge/Flutter-Dart%203-02569B?logo=flutter)
+![State](https://img.shields.io/badge/State-BLoC-1E3A5F)
+![Architecture](https://img.shields.io/badge/Architecture-Clean-2E7D32)
+![Firebase](https://img.shields.io/badge/Firebase-Crashlytics%20%7C%20Analytics-FFCA28?logo=firebase)
+![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20iOS-lightgrey)
 
-This project is a starting point for a Flutter application.
+## ✨ ماذا يفعل؟
 
-//run this command after any edite that related to .g files
-//flutter pub run build_runner build --delete-conflicting-outputs
-//adb kill-server
-//adb start-server
-git pull origin main
-git push origin amena2
-git branch
+يساعد المندوب على تنظيم زياراته للأطباء والمستشفيات والصيدليات ومتابعة خطته، ويمنح المشرفين أدوات للمتابعة والتقارير.
 
+| 👨‍⚕️ المندوب | 📊 الإشراف والإدارة |
+|---|---|
+| أدلّة الأطباء والمستشفيات والصيدليات | تقارير الزيارات |
+| تسجيل الزيارات | إدارة ومراجعة الخطط |
+| متابعة خطة المنتجات | تقرير المخزون |
+| الوصفات | البحث وملفات المندوبين |
+| إشعارات وتنبيهات | لوحة إدارة |
 
-A few resources to get you started if this is your first Flutter project:
+## 🌟 أبرز النقاط
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Offline-First:** يعمل ميدانياً حتى مع ضعف الاتصال.
+- **بيانات محلية مشفّرة.**
+- **Clean Architecture** مع اختبارات آلية تحافظ على حدود الطبقات.
+- **مراقبة الأخطاء والاستخدام** عبر Firebase.
+- **ثنائي اللغة:** عربي (RTL) وإنجليزي.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🏗️ المعمارية
+
+![Architecture](docs/architecture.svg)
+
+```
+Page ──event──▶ BLoC ──▶ UseCase ──▶ Repository ──▶ Remote / Local
+Page ◀──state── BLoC ◀── Either<Failure, T>
+```
+
+## 🧰 التقنيات
+
+| الفئة | الأدوات |
+|---|---|
+| الحالة والـ DI | `flutter_bloc`, `get_it`, `dartz`, `freezed` |
+| الشبكة | `dio`, `retrofit` |
+| التخزين | SQLite مشفّرة، `flutter_secure_storage` |
+| الواجهة | `flutter_screenutil`, `easy_localization`, `lottie`, `shimmer` |
+| الخدمات | Firebase، إشعارات محلية |
+| CI/CD | Codemagic |
+
+## 🚀 التشغيل
+
+```bash
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter run
+```
+
+## 📸 لقطات الشاشة
+
+> أضف لقطات التطبيق في `docs/screenshots/` ثم اعرضها هنا.
