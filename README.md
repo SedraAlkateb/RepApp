@@ -58,4 +58,10 @@ flutter run
 
 ## 📸 لقطات الشاشة
 
-> أضف لقطات التطبيق في `docs/screenshots/` ثم اعرضها هنا.
+| قائمة قائد الفريق | قائمة المندوب |
+|:---:|:---:|
+| <img src="docs/screenshots/01_team_leader_menu.png" width="260"> | <img src="docs/screenshots/02_rep_menu.png" width="260"> |
+
+| قائمة المندوبين | ملف المندوب | لقطة إضافية |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/03_reps_list.png" width="260"> | <img src="docs/screenshots/04_rep_profile_full.png" width="260"> | <img src="docs/screenshots/05_screenshot.jpg" width="260"> |
