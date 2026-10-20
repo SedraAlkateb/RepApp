@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:flutter/material.dart';
 
 class DatabaseWidget extends StatelessWidget {
@@ -17,7 +18,7 @@ class DatabaseWidget extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         border: Border.all(
-          color: const Color(0xFF1A3E62),
+          color: context.palette.primary,
           width: 3,
         ),
         borderRadius: BorderRadius.circular(12),
@@ -32,7 +33,7 @@ class DatabaseWidget extends StatelessWidget {
               height: height * 0.24,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color(0xFF1A3E62),
+                  color: context.palette.primary,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(4),
@@ -41,7 +42,7 @@ class DatabaseWidget extends StatelessWidget {
                 child: Icon(
                   Icons.circle,
                   size: width * 0.08,
-                  color: const Color(0xFF1A3E62),
+                  color: context.palette.primary,
                 ),
               ),
             );

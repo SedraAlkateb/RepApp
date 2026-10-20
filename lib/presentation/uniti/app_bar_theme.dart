@@ -1,10 +1,14 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-AppBarTheme buildResponsiveAppBarTheme(BuildContext context) {
+AppBarTheme buildResponsiveAppBarTheme(
+  BuildContext context, {
+  AppPalette palette = AppPalette.light,
+}) {
   final deviceType = AppResponsive.deviceType(context);
 
   final double titleFontSize;
@@ -33,16 +37,16 @@ AppBarTheme buildResponsiveAppBarTheme(BuildContext context) {
 
   return AppBarTheme(
     toolbarHeight: toolbarHeight,
-    backgroundColor: ColorManager.white,
+    backgroundColor: palette.surface,
     elevation: 0,
     shadowColor: ColorManager.secondaryColor3,
     iconTheme: IconThemeData(
-      color: ColorManager.secondaryColor1,
+      color: palette.title,
       size: iconSize,
     ),
     titleTextStyle: getBoldStyle(
       fontSize: titleFontSize,
-      color: ColorManager.secondaryColor1,
+      color: palette.title,
     ),
   );
 }

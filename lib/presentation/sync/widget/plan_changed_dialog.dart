@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,7 @@ Future<void> showPlanChangedDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s14),
         ),
-        backgroundColor: ColorManager.white,
+        backgroundColor: context.palette.surface,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: Column(

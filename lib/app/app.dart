@@ -7,6 +7,7 @@ import 'package:domina_app/presentation/doctors/bloc/doctors_bloc.dart';
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/place_visit/bloc/visit_place_bloc.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/them_manager.dart';
 import 'package:domina_app/presentation/senior/all_city/bloc/bloc/all_city_bloc.dart';
 import 'package:domina_app/presentation/senior/edit_brand_plan/bloc/edit_brand_plan_bloc.dart';
@@ -136,6 +137,14 @@ class MyApp extends StatelessWidget {
           theme: getApplicationTheme().copyWith(
             appBarTheme: buildResponsiveAppBarTheme(context),
           ),
+          darkTheme: getDarkApplicationTheme().copyWith(
+            appBarTheme: buildResponsiveAppBarTheme(
+              context,
+              palette: AppPalette.dark,
+            ),
+          ),
+          // دائماً الوضع الفاتح مهما كان إعداد النظام (الثيم الداكن جاهز لكنه معطّل).
+          themeMode: ThemeMode.light,
         );
       }),
     );

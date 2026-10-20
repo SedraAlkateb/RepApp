@@ -6,6 +6,7 @@ import 'package:domina_app/presentation/place_visit/widget/animation_press.dart'
 import 'package:domina_app/presentation/places/bloc/place_bloc.dart';
 import 'package:domina_app/presentation/places/widget/places_search.dart';
 import 'package:domina_app/presentation/places/widget/places_sync_warning.dart';
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
@@ -67,23 +68,23 @@ class _PlacesState extends State<Places> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: ColorManager.medicalBg,
+        backgroundColor: context.palette.bg,
         drawer: DrawerPage(),
-        appBar: _buildAppBar(),
+        appBar: _buildAppBar(context),
         body: _Body(searchController: searchController),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: ColorManager.medicalBg,
+      backgroundColor: context.palette.bg,
       surfaceTintColor: Colors.transparent,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
         child: Container(
-          color: ColorManager.medicalBorder,
+          color: context.palette.border,
           height: 1,
         ),
       ),
@@ -93,7 +94,7 @@ class _PlacesState extends State<Places> {
             icon: Icon(
               Icons.menu,
               size: 30,
-              color: ColorManager.secondaryColor,
+              color: context.palette.title,
             ),
             onPressed: () {
               Scaffold.of(context).openDrawer();
@@ -350,7 +351,7 @@ class _FirstEntryDialog extends StatelessWidget {
         vertical: 24,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: ColorManager.white,
+      backgroundColor: context.palette.surface,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: Padding(
@@ -362,13 +363,13 @@ class _FirstEntryDialog extends StatelessWidget {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: ColorManager.secondaryColor1.withOpacity(0.08),
+                  color: context.palette.primary.withOpacity(0.08),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.location_on_outlined,
                   size: 34,
-                  color: ColorManager.secondaryColor1,
+                  color: context.palette.primary,
                 ),
               ),
               const SizedBox(height: 22),
@@ -378,7 +379,7 @@ class _FirstEntryDialog extends StatelessWidget {
                 style: TextStyle(
                   fontSize: titleSize,
                   fontWeight: FontWeight.bold,
-                  color: ColorManager.secondaryColor1,
+                  color: context.palette.title,
                 ),
               ),
               const SizedBox(height: 12),
@@ -389,7 +390,7 @@ class _FirstEntryDialog extends StatelessWidget {
                   fontSize: titleSize - 2,
                   height: 1.6,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: context.palette.text,
                 ),
               ),
               const SizedBox(height: 26),

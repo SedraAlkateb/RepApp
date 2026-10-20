@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 import 'package:domina_app/presentation/doctors/pages/doctor_page/doctor_details.dart';
@@ -71,14 +72,14 @@ class _VisitDoctorState extends State<VisitDoctor>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: context.palette.surface,
         elevation: 0,
         centerTitle: true,
         title: Text(
           "إجراء زيارة",
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF0D47A1)),
+          icon: Icon(Icons.arrow_back, color: context.palette.primary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -627,7 +628,7 @@ class _VisitDoctorState extends State<VisitDoctor>
     return Container(
       margin: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.palette.surface,
         borderRadius: BorderRadius.circular(25.r),
         boxShadow: [
           BoxShadow(
@@ -650,10 +651,10 @@ class _VisitDoctorState extends State<VisitDoctor>
                 buildStatBox(
                     " تمت الزياراة",
                     widget.doctorModel.visited.toString(),
-                    const Color(0xFF0D47A1)),
+                    context.palette.primary),
                 SizedBox(width: 12.w),
                 buildStatBox("إجمالي الزيارات",
-                    widget.doctorModel.visits.toString(), Colors.black),
+                    widget.doctorModel.visits.toString(), context.palette.text),
               ],
             ),
           ),

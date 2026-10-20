@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/uniti/common/state_renderer/state_renderer.dart';
 import 'package:domina_app/presentation/uniti/common/state_renderer/state_renderer_imp.dart';
@@ -82,9 +83,7 @@ class EmptyDataWidget extends StatelessWidget {
                       height: ui.iconBoxSize + 48,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: ColorManager
-                            .secondaryColor1
-                            .withOpacity(
+                        color: context.palette.title.withOpacity(
                           0.035,
                         ),
                       ),
@@ -97,15 +96,11 @@ class EmptyDataWidget extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: ColorManager
-                            .secondaryColor1
-                            .withOpacity(
+                        color: context.palette.title.withOpacity(
                           0.08,
                         ),
                         border: Border.all(
-                          color: ColorManager
-                              .secondaryColor1
-                              .withOpacity(
+                          color: context.palette.title.withOpacity(
                             0.10,
                           ),
                         ),
@@ -115,9 +110,7 @@ class EmptyDataWidget extends StatelessWidget {
                             Icons
                                 .inventory_2_outlined,
                         size: ui.iconSize + 8,
-                        color: ColorManager
-                            .secondaryColor1
-                            .withOpacity(
+                        color: context.palette.title.withOpacity(
                           0.8,
                         ),
                       ),
@@ -136,9 +129,7 @@ class EmptyDataWidget extends StatelessWidget {
                   width: 34,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: ColorManager
-                        .secondaryColor1
-                        .withOpacity(
+                    color: context.palette.title.withOpacity(
                       0.65,
                     ),
                     borderRadius:
@@ -164,9 +155,7 @@ class EmptyDataWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ui.cardTitleSize,
                     fontWeight: FontWeight.w700,
-                    color: const Color(
-                      0xFF334155,
-                    ),
+                    color: context.palette.text,
                     height: 1.35,
                   ),
                 ),
@@ -189,9 +178,7 @@ class EmptyDataWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: ui.bodyTextSize,
                       fontWeight: FontWeight.w500,
-                      color: const Color(
-                        0xFF94A3B8,
-                      ),
+                      color: context.palette.muted,
                       height: 1.55,
                     ),
                   ),
@@ -347,14 +334,10 @@ Widget loadingShimmer(
         (context, index) {
       return Shimmer.fromColors(
         baseColor:
-        const Color(
-          0xFFE2E8F0,
-        ),
+        context.palette.border,
 
         highlightColor:
-        const Color(
-          0xFFF8FAFC,
-        ),
+        context.palette.surfaceAlt,
 
         child: Container(
           margin:

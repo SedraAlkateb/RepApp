@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 // presentation
 ThemeData getApplicationTheme() {
   return ThemeData(
+    extensions: const <ThemeExtension<dynamic>>[AppPalette.light],
     scaffoldBackgroundColor: ColorManager.background,
     fontFamily: FontConstants.fontFamily1,
     tabBarTheme: TabBarThemeData(
@@ -226,6 +228,96 @@ ThemeData getApplicationTheme() {
       cursorColor: ColorManager.medicalSecondary,
       selectionColor: ColorManager.medicalSecondary.withOpacity(0.3),
       selectionHandleColor: ColorManager.medicalSecondary,
+    ),
+  );
+}
+
+
+/// الثيم الداكن: يبني فوق الثيم الفاتح (نفس الخطوط والأزرار والأحجام) ويبدّل
+/// الألوان فقط من [AppPalette.dark].
+ThemeData getDarkApplicationTheme() {
+  const p = AppPalette.dark;
+  final base = getApplicationTheme();
+
+  // ألوان النص الداكنة (كحلي/أسود) تنقلب لنص فاتح؛ الباقي (أبيض، برتقالي..) يبقى.
+  Color? remap(Color? c) {
+    if (c == null) return null;
+    if (c == ColorManager.secondaryColor1 || c == ColorManager.secondaryColor) {
+      return p.title;
+    }
+    if (c == Colors.black || c == ColorManager.black) return p.text;
+    return c;
+  }
+
+  TextStyle? style(TextStyle? s) => s?.copyWith(color: remap(s.color));
+
+  final t = base.textTheme;
+  final textTheme = t.copyWith(
+    displaySmall: style(t.displaySmall),
+    displayLarge: style(t.displayLarge),
+    headlineLarge: style(t.headlineLarge),
+    headlineMedium: style(t.headlineMedium),
+    titleMedium: style(t.titleMedium),
+    bodySmall: style(t.bodySmall),
+    bodyLarge: style(t.bodyLarge),
+    titleLarge: style(t.titleLarge),
+    labelLarge: style(t.labelLarge),
+    labelMedium: style(t.labelMedium),
+    labelSmall: style(t.labelSmall),
+    titleSmall: style(t.titleSmall),
+    bodyMedium: style(t.bodyMedium),
+  );
+
+  OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
+        borderSide: BorderSide(color: color, width: width),
+        borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
+      );
+
+  return base.copyWith(
+    extensions: const <ThemeExtension<dynamic>>[AppPalette.dark],
+    scaffoldBackgroundColor: p.bg,
+    canvasColor: p.bg,
+    cardColor: p.surface,
+    dividerColor: p.border,
+    primaryColor: p.bg,
+    colorScheme: ColorScheme.dark(
+      primary: p.primary,
+      surface: p.surface,
+      onSurface: p.text,
+      error: ColorManager.error,
+    ),
+    textTheme: textTheme,
+    iconTheme: IconThemeData(color: p.text),
+    appBarTheme: base.appBarTheme.copyWith(
+      backgroundColor: p.bg,
+      surfaceTintColor: Colors.transparent,
+      iconTheme: IconThemeData(color: p.text, size: 15.h),
+      titleTextStyle: getBoldStyle(fontSize: 20.h, color: p.title),
+    ),
+    cardTheme: base.cardTheme.copyWith(color: p.surface),
+    dialogTheme: DialogThemeData(
+      backgroundColor: p.surface,
+      surfaceTintColor: Colors.transparent,
+    ),
+    drawerTheme: DrawerThemeData(
+      backgroundColor: p.bg,
+      surfaceTintColor: Colors.transparent,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: p.surface,
+      surfaceTintColor: Colors.transparent,
+    ),
+    popupMenuTheme: PopupMenuThemeData(color: p.surface),
+    tabBarTheme: base.tabBarTheme.copyWith(
+      unselectedLabelColor: p.muted,
+      labelColor: ColorManager.white,
+    ),
+    inputDecorationTheme: base.inputDecorationTheme.copyWith(
+      fillColor: p.surface,
+      hintStyle: getRegularStyle(color: p.muted, fontSize: FontSize.s20),
+      labelStyle: getMediumStyle(color: p.muted, fontSize: FontSize.s22),
+      enabledBorder: border(p.border, AppSize.s1_5),
+      focusedBorder: border(p.primary, 2),
     ),
   );
 }

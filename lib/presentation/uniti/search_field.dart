@@ -1,4 +1,4 @@
-import 'package:domina_app/presentation/resources/color_manager.dart';
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -123,18 +123,18 @@ class _SearchFieldState extends State<SearchField> {
           onFieldSubmitted: widget.onPressed,
           style: TextStyle(
             fontSize: fontSize,
-            color: ColorManager.medicalText,
+            color: context.palette.text,
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: TextStyle(
               fontSize: fontSize,
-              color: ColorManager.medicalMuted,
+              color: context.palette.muted,
               fontWeight: FontWeight.w400,
             ),
             filled: true,
-            fillColor: ColorManager.white,
+            fillColor: context.palette.surface,
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
               horizontal: horizontalPadding,
@@ -147,7 +147,7 @@ class _SearchFieldState extends State<SearchField> {
                 if (widget.searchController.text.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.clear, size: 20),
-                    color: ColorManager.medicalMuted,
+                    color: context.palette.muted,
                     onPressed: () {
                       widget.searchController.clear();
                       if (widget.onPressed != null) {
@@ -161,7 +161,7 @@ class _SearchFieldState extends State<SearchField> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Icon(
                       Icons.search_rounded,
-                      color: ColorManager.medicalMuted,
+                      color: context.palette.muted,
                       size: iconSize,
                     ),
                   ),
@@ -174,21 +174,21 @@ class _SearchFieldState extends State<SearchField> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(
-                color: ColorManager.medicalBorder,
+                color: context.palette.border,
                 width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(
-                color: ColorManager.medicalBorder,
+                color: context.palette.border,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(
-                color: ColorManager.medicalPrimary,
+                color: context.palette.primary,
                 width: 1.5,
               ),
             ),

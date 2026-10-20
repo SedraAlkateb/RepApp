@@ -1,6 +1,7 @@
 import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
 // ignore_for_file: deprecated_member_use
 
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
   @override
   Widget build(BuildContext context) {
     final ui = AppUi.of(context);
+    final p = context.palette;
     final String totalVisits = widget.place.totalVisit?.toString() ?? '0';
 
     return PressableEffect(pressedScale: 1.0, child: GestureDetector(
@@ -69,20 +71,20 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
         ),
 
         decoration: BoxDecoration(
-          color: isPressed ? ColorManager.medicalBg : Colors.white,
+          color: isPressed ? p.bg : p.surface,
 
           borderRadius: BorderRadius.circular(
             ui.cardRadius,
           ),
 
           border: Border.all(
-            color: isPressed ? Colors.transparent : const Color(0xFFE2E8F0),
+            color: isPressed ? Colors.transparent : p.border,
           ),
 
           boxShadow: [
             BoxShadow(
               color: isPressed
-                  ? ColorManager.medicalPrimary.withOpacity(0.12)
+                  ? p.primary.withOpacity(0.12)
                   : Colors.black.withOpacity(0.03),
 
               blurRadius: 12,
@@ -111,7 +113,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
               decoration: BoxDecoration(
                 color: isPressed
                     ? ColorManager.medicalPrimary
-                    : ColorManager.medicalPrimary.withOpacity(0.08),
+                    : p.primary.withOpacity(0.08),
 
                 borderRadius: BorderRadius.circular(
                   ui.smallRadius + 4,
@@ -123,7 +125,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
 
                 size: ui.iconSize,
 
-                color: isPressed ? Colors.white : ColorManager.medicalPrimary,
+                color: isPressed ? Colors.white : p.primary,
               ),
             ),
 
@@ -144,7 +146,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                     'اسم المنطقة',
                     style: TextStyle(
                       fontSize: ui.smallTextSize,
-                      color: const Color(0xFF94A3B8),
+                      color: p.muted,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -164,7 +166,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: ui.cardTitleSize,
-                      color: ColorManager.medicalPrimary,
+                      color: p.primary,
                       height: 1.2,
                     ),
                   ),
@@ -186,15 +188,15 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                     ),
                     decoration: BoxDecoration(
                       color: isPressed
-                          ? Colors.white
-                          : const Color(0xFFEFF6FF), // أزرق هادئ
+                          ? p.surface
+                          : p.infoBg, // أزرق هادئ
                       borderRadius: BorderRadius.circular(
                         ui.smallRadius,
                       ),
                       border: Border.all(
                         color: isPressed
                             ? Colors.transparent
-                            : const Color(0xFFDBEAFE),
+                            : p.infoBorder,
                       ),
                     ),
                     child: Row(
@@ -203,7 +205,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                         Icon(
                           Icons.analytics_outlined,
                           size: ui.smallIconSize,
-                          color: const Color(0xFF2563EB),
+                          color: p.infoText,
                         ),
                         SizedBox(
                           width: ui.smallSpacing / 2,
@@ -213,7 +215,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                           style: TextStyle(
                             fontSize: ui.smallTextSize,
                             fontWeight: FontWeight.w500,
-                            color: const Color(0xFF3B82F6),
+                            color: p.infoText,
                           ),
                         ),
                         Text(
@@ -221,7 +223,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
                           style: TextStyle(
                             fontSize: ui.smallTextSize + 1,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF1D4ED8),
+                            color: p.infoText,
                           ),
                         ),
                       ],
@@ -254,14 +256,14 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
 
                 decoration: BoxDecoration(
                   color: isPressed
-                      ? Colors.white
-                      : const Color(0xFFF8FAFC),
+                      ? p.surface
+                      : p.surfaceAlt,
 
                   borderRadius: BorderRadius.circular(
                     ui.smallRadius,
                   ),
                   border: Border.all(
-                    color: const Color(0xFFF1F5F9),
+                    color: p.border,
                   ),
                 ),
 
@@ -270,7 +272,7 @@ class _AnimatedPlaceCardState extends State<AnimatedPlaceCard> {
 
                   size: ui.smallIconSize - 2,
 
-                  color: ColorManager.medicalMuted,
+                  color: p.muted,
                 ),
               ),
             ),

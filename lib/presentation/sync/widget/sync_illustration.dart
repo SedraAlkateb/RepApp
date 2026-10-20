@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/sync/widget/database_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -16,8 +17,8 @@ class SyncIllustration extends StatelessWidget {
       width: size,
       height: size,
       child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Color(0xFFF8F9FB),
+        decoration: BoxDecoration(
+          color: context.palette.surfaceAlt,
           shape: BoxShape.circle,
         ),
         child: Center(
@@ -29,7 +30,7 @@ class SyncIllustration extends StatelessWidget {
               Icon(
                 LucideIcons.user,
                 size: size * 0.30,
-                color: const Color(0xFF1A3E62),
+                color: context.palette.primary,
               ),
 
               SizedBox(width: size * 0.05),

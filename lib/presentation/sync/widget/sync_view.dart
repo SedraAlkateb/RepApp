@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/responsive/app_ui.dart';
 import 'package:domina_app/presentation/sync/bloc/sync_bloc.dart';
 import 'package:domina_app/presentation/sync/widget/sync_illustration.dart';
@@ -51,7 +52,7 @@ class SyncView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ui.isMobile ? 17 : 21,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0D47A1),
+                    color: context.palette.primary,
                     height: 1.5,
                   ),
                 ),
