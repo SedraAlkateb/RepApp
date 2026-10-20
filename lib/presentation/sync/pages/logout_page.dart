@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/presentation/resources/routes_manager.dart';
 import 'package:domina_app/presentation/sync/bloc/sync_bloc.dart';
@@ -29,7 +30,7 @@ class LogoutPage extends StatelessWidget {
             // بعد الحذف الإجباري لا رجوع؛ وأثناء التنفيذ لا رجوع.
             canPop: !withoutUpload && !busy,
             child: Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: context.palette.bg,
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
                 surfaceTintColor: Colors.transparent,
@@ -39,8 +40,8 @@ class LogoutPage extends StatelessWidget {
                   if (!withoutUpload && !busy)
                     IconButton(
                       onPressed: () => Navigator.maybePop(context),
-                      icon: const Icon(Icons.arrow_forward,
-                          color: Color(0xFF0D47A1)),
+                      icon: Icon(Icons.arrow_forward,
+                          color: context.palette.primary),
                     ),
                   const SizedBox(width: 8),
                 ],

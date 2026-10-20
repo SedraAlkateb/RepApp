@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 // ignore_for_file: deprecated_member_use
 
 import 'package:domina_app/presentation/place_visit/bloc/visit_place_bloc.dart';
@@ -41,7 +42,7 @@ class PlaceVisitPage extends StatelessWidget {
                 elevation: 0,
                 scrolledUnderElevation: 0,
                 surfaceTintColor: Colors.transparent,
-                backgroundColor: Colors.white,
+                backgroundColor: context.palette.surface,
                 pinned: false,
                 floating: true,
                 snap: true,
@@ -55,7 +56,7 @@ class PlaceVisitPage extends StatelessWidget {
                   icon: Icon(
                     Icons.arrow_back_rounded,
                     size: ui.isMobile ? 24 : 27,
-                    color: ColorManager.medicalPrimary,
+                    color: context.palette.primary,
                   ),
                 ),
                 title: Text(
@@ -65,7 +66,7 @@ class PlaceVisitPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ui.isMobile ? 18 : 21,
                     fontWeight: FontWeight.w700,
-                    color: ColorManager.medicalPrimary,
+                    color: context.palette.primary,
                   ),
                 ),
               ),
@@ -92,7 +93,7 @@ class PlaceVisitPage extends StatelessWidget {
                           4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.palette.surface,
                           borderRadius: BorderRadius.circular(
                             16,
                           ),

@@ -45,10 +45,10 @@ Widget buildDetailRow(
         // Text
         // =================================================
         Expanded(
-          child: RichText(
+          child: Text.rich(
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
-            text: TextSpan(
+            TextSpan(
               style: TextStyle(
                 fontSize: ui.bodyTextSize,
                 color: const Color(0xFF475569),

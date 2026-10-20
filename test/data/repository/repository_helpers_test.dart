@@ -81,6 +81,7 @@ class FakeExc implements ExcRepository {
   }
 }
 
+
 class FakeSqlApi implements AppSqlApi {
   Future<List<BrandModel>> Function()? onGetBrands;
   Object? clearError;

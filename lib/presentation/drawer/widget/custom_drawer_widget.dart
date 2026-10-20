@@ -1,6 +1,7 @@
 import 'package:domina_app/app/user_info.dart';
 import 'package:domina_app/presentation/drawer/model/drawer_model.dart';
 import 'package:domina_app/presentation/drawer/pages/drawer_launcher.dart';
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:flutter/material.dart';
@@ -203,6 +204,7 @@ class CustomAppDrawer extends StatelessWidget {
       child: Column(
         children: [
           _buildHeader(
+            context,
             headerTopPadding: headerTopPadding,
             headerBottomPadding: headerBottomPadding,
             headerHorizontalPadding: headerHorizontalPadding,
@@ -243,8 +245,8 @@ class CustomAppDrawer extends StatelessWidget {
                   ),
                 ),
 
-                const Divider(
-                  color: Colors.black12,
+                Divider(
+                  color: context.palette.border,
                   thickness: 0.5,
                 ),
 
@@ -287,7 +289,8 @@ class CustomAppDrawer extends StatelessWidget {
   // Header
   // =====================================================
 
-  Widget _buildHeader({
+  Widget _buildHeader(
+    BuildContext context, {
     required double headerTopPadding,
     required double headerBottomPadding,
     required double headerHorizontalPadding,
@@ -320,11 +323,11 @@ class CustomAppDrawer extends StatelessWidget {
         left: headerHorizontalPadding,
         right: headerHorizontalPadding,
       ),
-      decoration: const BoxDecoration(
-        color: ColorManager.medicalBg,
+      decoration: BoxDecoration(
+        color: context.palette.bg,
         border: Border(
           bottom: BorderSide(
-            color: Colors.black12,
+            color: context.palette.border,
           ),
         ),
       ),
@@ -346,7 +349,7 @@ class CustomAppDrawer extends StatelessWidget {
             style: TextStyle(
               fontSize: nameFontSize,
               fontWeight: FontWeight.bold,
-              color: ColorManager.secondaryColor1,
+              color: context.palette.title,
             ),
           ),
           SizedBox(
@@ -360,7 +363,7 @@ class CustomAppDrawer extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: roleFontSize,
-              color: Colors.grey[700],
+              color: context.palette.muted,
             ),
           ),
          if(UserInfo.repType.i==7)...[
@@ -372,7 +375,7 @@ class CustomAppDrawer extends StatelessWidget {
              textAlign: TextAlign.center,
              style: TextStyle(
                fontSize: roleFontSize,
-               color: Colors.grey[700],
+               color: context.palette.muted,
              ),
            ),
          ],
@@ -405,7 +408,7 @@ class CustomAppDrawer extends StatelessWidget {
                 Icon(
                   Icons.assignment_turned_in_outlined,
                   size: chipIconSize,
-                  color: ColorManager.primary1,
+                  color: _chipColor(context),
                 ),
 
                 SizedBox(
@@ -428,7 +431,7 @@ class CustomAppDrawer extends StatelessWidget {
                         style: TextStyle(
                           fontSize: chipFontSize,
                           fontWeight: FontWeight.w600,
-                          color: ColorManager.primary1,
+                          color: _chipColor(context),
                         ),
                       );
                     },
@@ -448,6 +451,7 @@ class CustomAppDrawer extends StatelessWidget {
             ),
 
             _buildStatsSection(
+              context,
               horizontalPadding: statsHorizontalPadding,
               verticalPadding: statsVerticalPadding,
               gap: statsGap,
@@ -507,13 +511,13 @@ class CustomAppDrawer extends StatelessWidget {
         ListTile(
           leading: Icon(
             item.icon,
-            color: item.color ?? const Color(0xFF546E7A),
+            color: item.color ?? context.palette.muted,
             size: iconSize,
           ),
           title: Text(
             item.title,
             style: TextStyle(
-              color: item.color ?? const Color(0xFF37474F),
+              color: item.color ?? context.palette.text,
               fontSize: fontSize,
               fontWeight: FontWeight.w500,
             ),
@@ -553,7 +557,8 @@ class CustomAppDrawer extends StatelessWidget {
   // Stats Section
   // =====================================================
 
-  Widget _buildStatsSection({
+  Widget _buildStatsSection(
+    BuildContext context, {
     required double horizontalPadding,
     required double verticalPadding,
     required double gap,
@@ -570,6 +575,7 @@ class CustomAppDrawer extends StatelessWidget {
       child: Row(
         children: [
           _buildStatCard(
+            context,
             "المشافي",
             "${UserInfo.numOfHospitalVisit}\/${UserInfo.totHos}",
             true,
@@ -584,6 +590,7 @@ class CustomAppDrawer extends StatelessWidget {
           ),
 
           _buildStatCard(
+            context,
             "الأطباء",
             "${UserInfo.numOfDoctorVisit}\/${UserInfo.totDoc}",
             false,
@@ -602,6 +609,7 @@ class CustomAppDrawer extends StatelessWidget {
   // =====================================================
 
   Widget _buildStatCard(
+      BuildContext context,
       String title,
       String count,
       bool showDot, {
@@ -616,12 +624,12 @@ class CustomAppDrawer extends StatelessWidget {
           vertical: verticalPadding,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.palette.surface,
           borderRadius: BorderRadius.circular(
             radius,
           ),
           border: Border.all(
-            color: Colors.grey[200]!,
+            color: context.palette.border,
           ),
         ),
         child: Column(
@@ -655,7 +663,7 @@ class CustomAppDrawer extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: titleFontSize,
-                      color: Colors.grey[600],
+                      color: context.palette.muted,
                     ),
                   ),
                 ),
@@ -671,7 +679,7 @@ class CustomAppDrawer extends StatelessWidget {
               style: TextStyle(
                 fontSize: countFontSize,
                 fontWeight: FontWeight.bold,
-                color: ColorManager.secondaryColor1,
+                color: context.palette.title,
               ),
             ),
           ],
@@ -679,4 +687,10 @@ class CustomAppDrawer extends StatelessWidget {
       ),
     );
   }
+
+  /// لون نص/أيقونة شارة الوصفات: الكحلي بالفاتح، الأزرق الفاتح بالداكن.
+  Color _chipColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? context.palette.infoText
+          : ColorManager.primary1;
 }

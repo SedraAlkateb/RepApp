@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 // ignore_for_file: deprecated_member_use
 
 import 'package:domina_app/presentation/uniti/animation/pressable_effect.dart';
@@ -205,7 +206,7 @@ class _DoctorVisitCard extends StatelessWidget {
         ui.cardPadding,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.palette.surface,
         borderRadius: BorderRadius.circular(
           ui.cardRadius,
         ),
@@ -254,7 +255,7 @@ class _DoctorVisitCard extends StatelessWidget {
                 child: Icon(
                   Icons.person_outline_rounded,
                   size: ui.iconSize,
-                  color: ColorManager.medicalPrimary,
+                  color: context.palette.primary,
                 ),
               ),
 
@@ -280,7 +281,7 @@ class _DoctorVisitCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: ui.cardTitleSize,
                               fontWeight: FontWeight.w700,
-                              color: ColorManager.medicalPrimary,
+                              color: context.palette.primary,
                               height: 1.3,
                             ),
                           ),
@@ -291,6 +292,7 @@ class _DoctorVisitCard extends StatelessWidget {
                         Flexible(
                           flex: 0,
                           child: _buildSpecializationBadge(
+                            context,
                             doctor.spTitle,
                           ),
                         ),
@@ -315,10 +317,10 @@ class _DoctorVisitCard extends StatelessWidget {
               vertical: 8,
             ),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
+              color: context.palette.surfaceAlt,
               borderRadius: BorderRadius.circular(ui.smallRadius),
               border: Border.all(
-                color: const Color(0xFFCBD5E1),
+                color: context.palette.border,
                 width: 0.8,
               ),
             ),
@@ -328,7 +330,7 @@ class _DoctorVisitCard extends StatelessWidget {
                 Icon(
                   Icons.assignment_turned_in_outlined,
                   size: ui.smallIconSize,
-                  color: ColorManager.medicalPrimary,
+                  color: context.palette.primary,
                 ),
                 SizedBox(width: ui.smallSpacing),
                 Text(
@@ -336,18 +338,18 @@ class _DoctorVisitCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ui.bodyTextSize,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF475569),
+                    color: context.palette.muted,
                   ),
                 ),
-                RichText(
-                  text: TextSpan(
+                Text.rich(
+                  TextSpan(
                     children: [
                       TextSpan(
                         text: '${doctor.visited ?? 0}',
                         style: TextStyle(
                           fontSize: ui.bodyTextSize,
                           fontWeight: FontWeight.bold,
-                          color: ColorManager.medicalPrimary,
+                          color: context.palette.primary,
                         ),
                       ),
                       TextSpan(
@@ -355,7 +357,7 @@ class _DoctorVisitCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: ui.bodyTextSize,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF64748B),
+                          color: context.palette.muted,
                         ),
                       ),
                     ],
@@ -489,6 +491,7 @@ class _DoctorVisitCard extends StatelessWidget {
   // ===========================================================
 
   Widget _buildSpecializationBadge(
+    BuildContext context,
     String specialization,
   ) {
     return Container(
@@ -512,7 +515,7 @@ class _DoctorVisitCard extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: ColorManager.medicalPrimary,
+          color: context.palette.primary,
           fontSize: ui.smallTextSize,
           fontWeight: FontWeight.w600,
         ),

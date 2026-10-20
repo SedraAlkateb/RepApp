@@ -277,9 +277,7 @@ class _BrandPlanOtherPageState extends State<BrandPlanOtherPage>
                         BrandAmountModel(
                           widget.otherBrandSpPlanModel.specModel.sumDoctor,
                           widget.otherBrandSpPlanModel.specModel.sumHospital,
-                          widget.otherBrandSpPlanModel.specModel.sumDoctor +
-                              widget
-                                  .otherBrandSpPlanModel.specModel.sumHospital,
+                          0
                         ),
                         UserInfo.samplesCount,
                         repPlanId: UserInfo.activePlanId,

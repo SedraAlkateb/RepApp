@@ -1,5 +1,5 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/resources/assets_manager.dart';
-import 'package:domina_app/presentation/resources/color_manager.dart';
 import 'package:domina_app/presentation/resources/responsive/app_responsive.dart';
 import 'package:domina_app/presentation/resources/style_manage.dart';
 import 'package:domina_app/presentation/resources/values_manager.dart';
@@ -118,9 +118,11 @@ class StateRenderer extends StatelessWidget {
     return Center(
       child: Padding(
         padding: EdgeInsets.all(AppPaddingH.p8),
-        child: Text(
-          message ?? "",
-          style: getRegularStyle(color: ColorManager.black, fontSize: 18.h),
+        child: Builder(
+          builder: (context) => Text(
+            message ?? "",
+            style: getRegularStyle(color: context.palette.text, fontSize: 18.h),
+          ),
         ),
       ),
     );
@@ -180,7 +182,7 @@ class StateRenderer extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
 
-                  color: ColorManager.white,
+                  color: context.palette.surface,
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(AppSize.s14),
                   boxShadow: const [BoxShadow(color: Colors.black26)]),

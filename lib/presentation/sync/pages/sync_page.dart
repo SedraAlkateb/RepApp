@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/app/app.dart';
 import 'package:domina_app/app/di/di.dart';
 import 'package:domina_app/app/user_info.dart';
@@ -42,7 +43,7 @@ class _SyncScaffold extends StatelessWidget {
         return PopScope(
           canPop: !downloadOnly && !busy && canLeave,
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: context.palette.bg,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -55,14 +56,14 @@ class _SyncScaffold extends StatelessWidget {
                     onPressed: () => context
                         .read<SyncBloc>()
                         .add(const SyncStartEvent(SyncMode.forcedLogout)),
-                    icon: const Icon(Icons.arrow_forward,
-                        color: Color(0xFF0D47A1)),
+                    icon: Icon(Icons.arrow_forward,
+                        color: context.palette.primary),
                   )
                 else if (!downloadOnly && !busy && canLeave)
                   IconButton(
                     onPressed: () => Navigator.maybePop(context),
-                    icon: const Icon(Icons.arrow_forward,
-                        color: Color(0xFF0D47A1)),
+                    icon: Icon(Icons.arrow_forward,
+                        color: context.palette.primary),
                   ),
                 const SizedBox(width: 8),
               ],

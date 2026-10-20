@@ -1,3 +1,4 @@
+import 'package:domina_app/presentation/resources/app_palette.dart';
 import 'package:domina_app/presentation/sync/bloc/sync_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,8 +62,8 @@ class SyncProgress extends StatelessWidget {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 8,
-                  color: const Color(0xFF0D47A1),
-                  backgroundColor: const Color(0xFFE3EAF5),
+                  color: context.palette.primary,
+                  backgroundColor: context.palette.border,
                 ),
               ),
             ],
@@ -85,8 +86,8 @@ class _StepRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = status == _StepStatus.pending
-        ? Colors.grey.shade500
-        : const Color(0xFF0D47A1);
+        ? context.palette.muted
+        : context.palette.primary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -122,7 +123,7 @@ class _StepRow extends StatelessWidget {
           ),
           if (detail != null)
             Text(detail!,
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
+                style: TextStyle(fontSize: 14, color: context.palette.muted)),
         ],
       ),
     );
